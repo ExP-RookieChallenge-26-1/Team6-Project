@@ -1,0 +1,11 @@
+{
+  "build_mode_used": "full",
+  "files_total": 0,
+  "files_parsed": 0,
+  "changed_cs_files": 0,
+  "added_cs_files": 0,
+  "deleted_cs_files": 0,
+  "rebuild_reasons": [
+    "기존 .ai-context가 없음"
+  ]
+}

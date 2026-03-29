@@ -1,0 +1,96 @@
+name: AI Review Pipeline On Push
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+      - develop
+    paths-ignore:
+      - '.ai-context/**'
+
+permissions:
+  contents: write
+
+jobs:
+  collect-ai-commits:
+    if: github.actor != 'github-actions[bot]' && !contains(github.event.head_commit.message, '[skip ai-context]')
+    runs-on: ubuntu-latest
+    outputs:
+      should_run: ${{ steps.filter.outputs.should_run }}
+      filtered_shas: ${{ steps.filter.outputs.filtered_shas }}
+    steps:
+      - name: Filter pushed commits with [AI] prefix
+        id: filter
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          import os
+
+          event_path = os.environ["GITHUB_EVENT_PATH"]
+
+          with open(event_path, "r", encoding="utf-8") as f:
+              event = json.load(f)
+
+          commits = event.get("commits", [])
+          matched = []
+
+          for commit in commits:
+              message = commit.get("message", "")
+              title = message.splitlines()[0] if message else ""
+              sha = commit.get("id", "")
+
+              print(f"[DEBUG] title={title}")
+              print(f"[DEBUG] sha={sha}")
+
+              if title.startswith("[AI]"):
+                  matched.append(sha)
+
+          should_run = "true" if matched else "false"
+          filtered_shas_json = json.dumps(matched, ensure_ascii=False)
+
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as out:
+              out.write(f"should_run={should_run}\n")
+              out.write(f"filtered_shas={filtered_shas_json}\n")
+
+          print(f"[RESULT] should_run={should_run}")
+          print(f"[RESULT] filtered_shas={filtered_shas_json}")
+          PY
+
+  build-context:
+    if: github.actor != 'github-actions[bot]' && !contains(github.event.head_commit.message, '[skip ai-context]')
+    uses: ExP-RookieChallenge-26-1/club-automation/.github/workflows/ai-build-project-context.yml@main
+    with:
+      target_branches: '["main","dev","develop"]'
+      build_mode: "auto"
+      force_rebuild: false
+      context_dir: ".ai-context"
+      full_rebuild_changed_files_threshold: 15
+      full_rebuild_new_files_threshold: 8
+      commit_context_files: true
+
+  call-ai-feedback:
+    if: github.actor != 'github-actions[bot]' && !contains(github.event.head_commit.message, '[skip ai-context]') && needs.collect-ai-commits.outputs.should_run == 'true'
+    needs:
+      - collect-ai-commits
+      - build-context
+    uses: ExP-RookieChallenge-26-1/club-automation/.github/workflows/ai-push-feedback.yml@main
+    with:
+      target_branches: '["main","dev","develop"]'
+      max_files: 10
+      max_patch_chars: 4000
+      filtered_commit_shas: ${{ needs.collect-ai-commits.outputs.filtered_shas }}
+    secrets:
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+
+  call-merge-summary:
+    if: github.actor != 'github-actions[bot]' && !contains(github.event.head_commit.message, '[skip ai-context]')
+    needs: build-context
+    uses: ExP-RookieChallenge-26-1/club-automation/.github/workflows/ai-merge-summary.yml@main
+    with:
+      target_branches: '["main","dev","develop"]'
+      max_files: 10
+      max_patch_chars: 4000
+    secrets:
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}

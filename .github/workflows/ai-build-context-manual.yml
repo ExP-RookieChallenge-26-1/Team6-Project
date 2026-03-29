@@ -1,0 +1,33 @@
+name: AI Build Context Manual
+
+on:
+  workflow_dispatch:
+    inputs:
+      build_mode:
+        description: "full 또는 incremental"
+        required: true
+        type: choice
+        default: full
+        options:
+          - full
+          - incremental
+      force_rebuild:
+        description: "무조건 전체 재생성"
+        required: true
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+
+jobs:
+  build-context:
+    uses: ExP-RookieChallenge-26-1/club-automation/.github/workflows/ai-build-project-context.yml@main
+    with:
+      target_branches: '["main","dev","develop"]'
+      build_mode: ${{ inputs.build_mode }}
+      force_rebuild: ${{ inputs.force_rebuild }}
+      context_dir: ".ai-context"
+      full_rebuild_changed_files_threshold: 15
+      full_rebuild_new_files_threshold: 8
+      commit_context_files: true

@@ -1,1 +1,628 @@
-[]
+[
+  {
+    "file_id": "MineFind/Cell.cs",
+    "path": "MineFind/Cell.cs",
+    "file_name": "Cell.cs",
+    "content_hash": "599163223f38f9da6fd0a3c3a777b60bbe2e3d59",
+    "size": 609,
+    "line_count": 27,
+    "namespace": "",
+    "using_list": [
+      "TMPro",
+      "UnityEngine"
+    ],
+    "classes": [
+      {
+        "name": "Cell",
+        "kind": "class",
+        "access": "public",
+        "base_types": [
+          "MonoBehaviour"
+        ],
+        "interfaces": [],
+        "attributes": [],
+        "is_partial": false,
+        "is_generic": false
+      }
+    ],
+    "main_class_name": "Cell",
+    "unity_type": "MonoBehaviour",
+    "methods": [
+      "SetText"
+    ],
+    "fields": [],
+    "properties": [],
+    "events": [],
+    "unity_messages": [],
+    "has_update": false,
+    "has_fixed_update": false,
+    "has_late_update": false,
+    "has_awake": false,
+    "has_start": false,
+    "has_on_enable": false,
+    "has_on_disable": false,
+    "serialize_field_count": 0,
+    "public_field_count": 0,
+    "get_component_count": 0,
+    "find_call_count": 0,
+    "new_keyword_count": 0,
+    "coroutine_count": 0,
+    "singleton_candidate": false,
+    "dont_destroy_on_load": false,
+    "referenced_types": [
+      "TMPro",
+      "UnityEngine",
+      "TMP_Text",
+      "SetText"
+    ],
+    "component_access_types": [],
+    "created_types": [],
+    "singleton_access_types": [],
+    "string_literals": [
+      "M",
+      "value"
+    ],
+    "numeric_literals": [],
+    "guessed_roles": [
+      "ui",
+      "save-load",
+      "runtime"
+    ],
+    "summary_signals": [
+      "런타임 컴포넌트",
+      "UI 관련 로직 포함",
+      "저장/불러오기 관련 로직 포함"
+    ]
+  },
+  {
+    "file_id": "MineFind/CellMaker.cs",
+    "path": "MineFind/CellMaker.cs",
+    "file_name": "CellMaker.cs",
+    "content_hash": "75810f4fce7c24ea1f7282dbd9e08599cea8a584",
+    "size": 7639,
+    "line_count": 201,
+    "namespace": "",
+    "using_list": [
+      "UnityEngine"
+    ],
+    "classes": [
+      {
+        "name": "CellMaker",
+        "kind": "class",
+        "access": "public",
+        "base_types": [
+          "MonoBehaviour"
+        ],
+        "interfaces": [],
+        "attributes": [],
+        "is_partial": false,
+        "is_generic": false
+      }
+    ],
+    "main_class_name": "CellMaker",
+    "unity_type": "MonoBehaviour",
+    "methods": [
+      "Vector2Int",
+      "GameStart",
+      "Vector3",
+      "GetAroundMineCount",
+      "OpenCell",
+      "RemoveCover",
+      "IsOpened",
+      "IsMine",
+      "IsInRange"
+    ],
+    "fields": [
+      {
+        "name": "mapMaker",
+        "type": "MapMaker",
+        "access": "public",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "inGameLogic",
+        "type": "InGameLogic",
+        "access": "public",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "Cells",
+        "type": "Cell[,]",
+        "access": "public",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "Covers",
+        "type": "Cover[,]",
+        "access": "public",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "count",
+        "type": "int",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      }
+    ],
+    "properties": [],
+    "events": [],
+    "unity_messages": [],
+    "has_update": false,
+    "has_fixed_update": false,
+    "has_late_update": false,
+    "has_awake": false,
+    "has_start": false,
+    "has_on_enable": false,
+    "has_on_disable": false,
+    "serialize_field_count": 0,
+    "public_field_count": 4,
+    "get_component_count": 3,
+    "find_call_count": 0,
+    "new_keyword_count": 4,
+    "coroutine_count": 0,
+    "singleton_candidate": false,
+    "dont_destroy_on_load": false,
+    "referenced_types": [
+      "MapMaker",
+      "InGameLogic",
+      "Cell[,]",
+      "Cover[,]",
+      "int",
+      "UnityEngine",
+      "MapMakor",
+      "Cell",
+      "Cover",
+      "Vector2Int",
+      "MapSize",
+      "Cells",
+      "Covers",
+      "GameStart",
+      "GetComponent",
+      "MakeMap",
+      "Vector3",
+      "Instantiate",
+      "Quaternion",
+      "Map",
+      "Type",
+      "Mine",
+      "SetText",
+      "GetAroundMineCount",
+      "ToString",
+      "Init",
+      "OpenCell",
+      "RemoveCover",
+      "Destroy",
+      "IsOpened",
+      "IsMine",
+      "IsInRange"
+    ],
+    "component_access_types": [
+      "MapMaker",
+      "Cell",
+      "Cover"
+    ],
+    "created_types": [
+      "Vector2Int",
+      "Vector3"
+    ],
+    "singleton_access_types": [],
+    "string_literals": [
+      "ȭ�鿡 ���̴� ������Ʈ ���� �� ����",
+      "M",
+      "centerX",
+      "centerY",
+      "x",
+      "y",
+      "coverObject"
+    ],
+    "numeric_literals": [
+      2,
+      3,
+      4,
+      5,
+      10,
+      0.5,
+      8
+    ],
+    "guessed_roles": [
+      "runtime",
+      "player",
+      "save-load"
+    ],
+    "summary_signals": [
+      "런타임 컴포넌트",
+      "저장/불러오기 관련 로직 포함",
+      "컴포넌트 조회 사용"
+    ]
+  },
+  {
+    "file_id": "MineFind/Cover.cs",
+    "path": "MineFind/Cover.cs",
+    "file_name": "Cover.cs",
+    "content_hash": "1d037cf3bf1bef8a351eafe4d04b3e5e589259ec",
+    "size": 5121,
+    "line_count": 155,
+    "namespace": "",
+    "using_list": [
+      "UnityEngine",
+      "UnityEngine.EventSystems"
+    ],
+    "classes": [
+      {
+        "name": "Cover",
+        "kind": "class",
+        "access": "public",
+        "base_types": [
+          "MonoBehaviour",
+          "IPointerClickHandler"
+        ],
+        "interfaces": [
+          "IPointerClickHandler"
+        ],
+        "attributes": [],
+        "is_partial": false,
+        "is_generic": false
+      }
+    ],
+    "main_class_name": "Cover",
+    "unity_type": "MonoBehaviour",
+    "methods": [
+      "Init",
+      "OnPointerClick",
+      "Refresh"
+    ],
+    "fields": [
+      {
+        "name": "x",
+        "type": "int",
+        "access": "public",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "y",
+        "type": "int",
+        "access": "public",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "state",
+        "type": "CoverState",
+        "access": "public",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "cellMaker",
+        "type": "CellMaker",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "isOpened",
+        "type": "bool",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      }
+    ],
+    "properties": [],
+    "events": [],
+    "unity_messages": [],
+    "has_update": false,
+    "has_fixed_update": false,
+    "has_late_update": false,
+    "has_awake": false,
+    "has_start": false,
+    "has_on_enable": false,
+    "has_on_disable": false,
+    "serialize_field_count": 0,
+    "public_field_count": 3,
+    "get_component_count": 0,
+    "find_call_count": 0,
+    "new_keyword_count": 0,
+    "coroutine_count": 0,
+    "singleton_candidate": false,
+    "dont_destroy_on_load": false,
+    "referenced_types": [
+      "int",
+      "CoverState",
+      "CellMaker",
+      "bool",
+      "UnityEngine",
+      "EventSystems",
+      "Normal",
+      "Flag",
+      "Memo",
+      "InGameLogic",
+      "IPointerClickHandler",
+      "Sprite",
+      "SpriteRenderer",
+      "Covers",
+      "Init",
+      "Refresh",
+      "EventSystem",
+      "OnPointerClick",
+      "PointerEventData",
+      "InputButton",
+      "Left",
+      "OpenCell",
+      "Right"
+    ],
+    "component_access_types": [],
+    "created_types": [],
+    "singleton_access_types": [],
+    "string_literals": [
+      "�Է� ó�� + ǥ�� ����",
+      "Sprite",
+      "x",
+      "y",
+      "cellMaker",
+      "eventData"
+    ],
+    "numeric_literals": [
+      2,
+      3,
+      4
+    ],
+    "guessed_roles": [
+      "ui",
+      "player",
+      "data",
+      "save-load",
+      "runtime"
+    ],
+    "summary_signals": [
+      "런타임 컴포넌트",
+      "UI 관련 로직 포함",
+      "저장/불러오기 관련 로직 포함"
+    ]
+  },
+  {
+    "file_id": "MineFind/InGameLogic.cs",
+    "path": "MineFind/InGameLogic.cs",
+    "file_name": "InGameLogic.cs",
+    "content_hash": "c880bf7bf288e650483c588aa910e9d6002c4a74",
+    "size": 5243,
+    "line_count": 128,
+    "namespace": "",
+    "using_list": [
+      "UnityEngine",
+      "System.Collections.Generic"
+    ],
+    "classes": [
+      {
+        "name": "InGameLogic",
+        "kind": "class",
+        "access": "public",
+        "base_types": [
+          "MonoBehaviour"
+        ],
+        "interfaces": [],
+        "attributes": [],
+        "is_partial": false,
+        "is_generic": false
+      }
+    ],
+    "main_class_name": "InGameLogic",
+    "unity_type": "MonoBehaviour",
+    "methods": [
+      "Init",
+      "OpenCell",
+      "OpenEmptyArea",
+      "Vector2Int"
+    ],
+    "fields": [
+      {
+        "name": "cellMaker",
+        "type": "CellMaker",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "nextX",
+        "type": "int",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "nextY",
+        "type": "int",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      }
+    ],
+    "properties": [],
+    "events": [],
+    "unity_messages": [],
+    "has_update": false,
+    "has_fixed_update": false,
+    "has_late_update": false,
+    "has_awake": false,
+    "has_start": false,
+    "has_on_enable": false,
+    "has_on_disable": false,
+    "serialize_field_count": 0,
+    "public_field_count": 0,
+    "get_component_count": 0,
+    "find_call_count": 0,
+    "new_keyword_count": 3,
+    "coroutine_count": 0,
+    "singleton_candidate": false,
+    "dont_destroy_on_load": false,
+    "referenced_types": [
+      "CellMaker",
+      "int",
+      "UnityEngine",
+      "System",
+      "Collections",
+      "Generic",
+      "Init",
+      "OpenCell",
+      "IsInRange",
+      "IsOpened",
+      "IsMine",
+      "RemoveCover",
+      "Log",
+      "GetAroundMineCount",
+      "OpenEmptyArea",
+      "BFS",
+      "Vector2Int",
+      "Enqueue",
+      "Count",
+      "Dequeue"
+    ],
+    "component_access_types": [],
+    "created_types": [
+      "Queue",
+      "Vector2Int"
+    ],
+    "singleton_access_types": [],
+    "string_literals": [
+      "cellMaker",
+      "x",
+      "y",
+      "���� ����",
+      "startX",
+      "startY"
+    ],
+    "numeric_literals": [
+      2,
+      3,
+      4,
+      5,
+      8
+    ],
+    "guessed_roles": [
+      "runtime",
+      "player"
+    ],
+    "summary_signals": [
+      "런타임 컴포넌트"
+    ]
+  },
+  {
+    "file_id": "MineFind/MapMaker.cs",
+    "path": "MineFind/MapMaker.cs",
+    "file_name": "MapMaker.cs",
+    "content_hash": "0c5b815e33acd6d7d6fc6358329cc68cfc6fadf4",
+    "size": 4238,
+    "line_count": 111,
+    "namespace": "",
+    "using_list": [
+      "System.Collections.Generic",
+      "UnityEngine"
+    ],
+    "classes": [
+      {
+        "name": "MapMaker",
+        "kind": "class",
+        "access": "public",
+        "base_types": [
+          "MonoBehaviour"
+        ],
+        "interfaces": [],
+        "attributes": [],
+        "is_partial": false,
+        "is_generic": false
+      }
+    ],
+    "main_class_name": "MapMaker",
+    "unity_type": "MonoBehaviour",
+    "methods": [
+      "SetTypeRandom",
+      "Vector2Int",
+      "MakeMap"
+    ],
+    "fields": [
+      {
+        "name": "Map",
+        "type": "Type[,]",
+        "access": "public",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "mineCount",
+        "type": "int",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      }
+    ],
+    "properties": [],
+    "events": [],
+    "unity_messages": [],
+    "has_update": false,
+    "has_fixed_update": false,
+    "has_late_update": false,
+    "has_awake": false,
+    "has_start": false,
+    "has_on_enable": false,
+    "has_on_disable": false,
+    "serialize_field_count": 0,
+    "public_field_count": 1,
+    "get_component_count": 0,
+    "find_call_count": 0,
+    "new_keyword_count": 3,
+    "coroutine_count": 0,
+    "singleton_candidate": false,
+    "dont_destroy_on_load": false,
+    "referenced_types": [
+      "Type[,]",
+      "int",
+      "System",
+      "Collections",
+      "Generic",
+      "UnityEngine",
+      "Mine",
+      "None",
+      "Type",
+      "Map",
+      "SetTypeRandom",
+      "Vector2Int",
+      "Add",
+      "Count",
+      "RemoveAt",
+      "Log",
+      "ToString",
+      "MakeMap"
+    ],
+    "component_access_types": [],
+    "created_types": [
+      "List",
+      "Vector2Int"
+    ],
+    "singleton_access_types": [],
+    "string_literals": [
+      "���� ������ ����",
+      "type",
+      "amount",
+      "size",
+      " ��ġ �Ϸ� : ",
+      "�� ��ġ",
+      "mineCount"
+    ],
+    "numeric_literals": [
+      2,
+      3
+    ],
+    "guessed_roles": [
+      "player",
+      "runtime"
+    ],
+    "summary_signals": [
+      "런타임 컴포넌트"
+    ]
+  }
+]

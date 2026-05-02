@@ -2,56 +2,161 @@
   "project_name": "unknown",
   "language": "C#",
   "engine_guess": "Unity",
-  "total_cs_files": 5,
-  "mono_behaviour_files": 5,
-  "scriptable_object_files": 0,
-  "files_with_update": 0,
+  "total_cs_files": 56,
+  "mono_behaviour_files": 12,
+  "scriptable_object_files": 3,
+  "files_with_update": 1,
   "files_with_fixed_update": 0,
   "files_with_late_update": 0,
   "singleton_candidates": 0,
-  "manager_like_classes": 0,
-  "ui_related_classes": 2,
-  "save_load_related_classes": 3,
+  "manager_like_classes": 14,
+  "ui_related_classes": 19,
+  "save_load_related_classes": 10,
   "role_counts": {
-    "ui": 2,
-    "save-load": 3,
-    "runtime": 5,
-    "player": 4,
-    "data": 1
+    "ui": 19,
+    "save-load": 10,
+    "runtime": 18,
+    "player": 35,
+    "data": 22,
+    "combat": 42,
+    "manager": 13,
+    "scene": 1,
+    "network": 2
   },
   "high_coupling_classes": [
     {
-      "class_name": "CellMaker",
-      "file_id": "MineFind/CellMaker.cs",
-      "relation_count": 38,
-      "referenced_type_count": 32
+      "class_name": "CombatUiBuilder",
+      "file_id": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
+      "relation_count": 218,
+      "referenced_type_count": 200
     },
     {
-      "class_name": "Cover",
-      "file_id": "MineFind/Cover.cs",
-      "relation_count": 25,
-      "referenced_type_count": 23
+      "class_name": "CombatUiView",
+      "file_id": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
+      "relation_count": 213,
+      "referenced_type_count": 200
     },
     {
-      "class_name": "InGameLogic",
-      "file_id": "MineFind/InGameLogic.cs",
-      "relation_count": 23,
-      "referenced_type_count": 20
+      "class_name": "CombatUiViewTests",
+      "file_id": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
+      "relation_count": 184,
+      "referenced_type_count": 175
     },
     {
-      "class_name": "MapMaker",
-      "file_id": "MineFind/MapMaker.cs",
-      "relation_count": 21,
-      "referenced_type_count": 18
+      "class_name": "CombatManager",
+      "file_id": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
+      "relation_count": 183,
+      "referenced_type_count": 173
     },
     {
-      "class_name": "Cell",
-      "file_id": "MineFind/Cell.cs",
-      "relation_count": 5,
-      "referenced_type_count": 4
+      "class_name": "CombatUiContractTests",
+      "file_id": "Project 2048/Assets/Tests/EditMode/CombatUiContractTests.cs",
+      "relation_count": 106,
+      "referenced_type_count": 104
+    },
+    {
+      "class_name": "Board2048Manager",
+      "file_id": "Project 2048/Assets/Scripts/Board2048/Board2048Manager.cs",
+      "relation_count": 83,
+      "referenced_type_count": 79
+    },
+    {
+      "class_name": "CombatManagerTests",
+      "file_id": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
+      "relation_count": 65,
+      "referenced_type_count": 64
+    },
+    {
+      "class_name": "EnemyAiBrainTests",
+      "file_id": "Project 2048/Assets/Tests/EditMode/EnemyAiBrainTests.cs",
+      "relation_count": 63,
+      "referenced_type_count": 61
+    },
+    {
+      "class_name": "PrototypeCombatBootstrap",
+      "file_id": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatBootstrap.cs",
+      "relation_count": 57,
+      "referenced_type_count": 54
+    },
+    {
+      "class_name": "PrototypeCombatTextTests",
+      "file_id": "Project 2048/Assets/Tests/EditMode/PrototypeCombatTextTests.cs",
+      "relation_count": 51,
+      "referenced_type_count": 51
     }
   ],
   "high_risk_classes": [
+    {
+      "file_id": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
+      "class_name": "CombatUiBuilder",
+      "risk_flags": [
+        "high-coupling",
+        "getcomponent-heavy",
+        "find-heavy",
+        "magic-number-heavy",
+        "large-class",
+        "save-load-sensitive",
+        "ui-runtime-mixed",
+        "state-owner"
+      ],
+      "risk_reasons": [
+        "참조 타입 또는 관계 수가 많음",
+        "GetComponent/TryGetComponent 호출이 많음",
+        "Find 계열 탐색 사용",
+        "숫자 리터럴이 많아 의미 파악이 어려울 수 있음",
+        "파일/메서드/필드 수가 많아 책임이 커질 가능성",
+        "저장/불러오기 관련 로직 포함",
+        "UI와 런타임 책임이 한 파일에 섞였을 가능성",
+        "상태 중심 또는 관리 중심 클래스일 가능성"
+      ],
+      "risk_score": 95
+    },
+    {
+      "file_id": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
+      "class_name": "CombatUiView",
+      "risk_flags": [
+        "update-heavy",
+        "high-coupling",
+        "public-field-heavy",
+        "getcomponent-heavy",
+        "magic-number-heavy",
+        "large-class",
+        "ui-runtime-mixed",
+        "state-owner"
+      ],
+      "risk_reasons": [
+        "Unity 업데이트 루프 사용",
+        "참조 타입 또는 관계 수가 많음",
+        "public 필드 노출 수가 많음",
+        "GetComponent/TryGetComponent 호출이 많음",
+        "숫자 리터럴이 많아 의미 파악이 어려울 수 있음",
+        "파일/메서드/필드 수가 많아 책임이 커질 가능성",
+        "UI와 런타임 책임이 한 파일에 섞였을 가능성",
+        "상태 중심 또는 관리 중심 클래스일 가능성"
+      ],
+      "risk_score": 91
+    },
+    {
+      "file_id": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatBootstrap.cs",
+      "class_name": "PrototypeCombatBootstrap",
+      "risk_flags": [
+        "high-coupling",
+        "find-heavy",
+        "init-order-sensitive",
+        "save-load-sensitive",
+        "ui-runtime-mixed",
+        "state-owner"
+      ],
+      "risk_reasons": [
+        "참조 타입 또는 관계 수가 많음",
+        "Find 계열 탐색 사용",
+        "초기화 순서에 민감할 가능성",
+        "저장/불러오기 관련 로직 포함",
+        "UI와 런타임 책임이 한 파일에 섞였을 가능성",
+        "상태 중심 또는 관리 중심 클래스일 가능성"
+      ],
+      "risk_score": 70
+    },
     {
       "file_id": "MineFind/CellMaker.cs",
       "class_name": "CellMaker",
@@ -74,6 +179,44 @@
       "risk_score": 68
     },
     {
+      "file_id": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
+      "class_name": "CombatManager",
+      "risk_flags": [
+        "high-coupling",
+        "large-class",
+        "init-order-sensitive",
+        "ui-runtime-mixed",
+        "state-owner"
+      ],
+      "risk_reasons": [
+        "참조 타입 또는 관계 수가 많음",
+        "파일/메서드/필드 수가 많아 책임이 커질 가능성",
+        "초기화 순서에 민감할 가능성",
+        "UI와 런타임 책임이 한 파일에 섞였을 가능성",
+        "상태 중심 또는 관리 중심 클래스일 가능성"
+      ],
+      "risk_score": 61
+    },
+    {
+      "file_id": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
+      "class_name": "CombatUiViewTests",
+      "risk_flags": [
+        "high-coupling",
+        "magic-number-heavy",
+        "large-class",
+        "ui-runtime-mixed",
+        "state-owner"
+      ],
+      "risk_reasons": [
+        "참조 타입 또는 관계 수가 많음",
+        "숫자 리터럴이 많아 의미 파악이 어려울 수 있음",
+        "파일/메서드/필드 수가 많아 책임이 커질 가능성",
+        "UI와 런타임 책임이 한 파일에 섞였을 가능성",
+        "상태 중심 또는 관리 중심 클래스일 가능성"
+      ],
+      "risk_score": 59
+    },
+    {
       "file_id": "MineFind/Cover.cs",
       "class_name": "Cover",
       "risk_flags": [
@@ -93,47 +236,63 @@
       "risk_score": 58
     },
     {
-      "file_id": "MineFind/InGameLogic.cs",
-      "class_name": "InGameLogic",
+      "file_id": "Project 2048/Assets/Scripts/Prototype/BoardCellView.cs",
+      "class_name": "BoardCellView",
       "risk_flags": [
         "high-coupling",
-        "state-owner"
-      ],
-      "risk_reasons": [
-        "참조 타입 또는 관계 수가 많음",
-        "상태 중심 또는 관리 중심 클래스일 가능성"
-      ],
-      "risk_score": 26
-    },
-    {
-      "file_id": "MineFind/MapMaker.cs",
-      "class_name": "MapMaker",
-      "risk_flags": [
-        "high-coupling",
-        "state-owner"
-      ],
-      "risk_reasons": [
-        "참조 타입 또는 관계 수가 많음",
-        "상태 중심 또는 관리 중심 클래스일 가능성"
-      ],
-      "risk_score": 26
-    },
-    {
-      "file_id": "MineFind/Cell.cs",
-      "class_name": "Cell",
-      "risk_flags": [
+        "magic-number-heavy",
         "save-load-sensitive",
-        "ui-runtime-mixed"
+        "ui-runtime-mixed",
+        "state-owner"
       ],
       "risk_reasons": [
+        "참조 타입 또는 관계 수가 많음",
+        "숫자 리터럴이 많아 의미 파악이 어려울 수 있음",
         "저장/불러오기 관련 로직 포함",
-        "UI와 런타임 책임이 한 파일에 섞였을 가능성"
+        "UI와 런타임 책임이 한 파일에 섞였을 가능성",
+        "상태 중심 또는 관리 중심 클래스일 가능성"
       ],
-      "risk_score": 22
+      "risk_score": 56
+    },
+    {
+      "file_id": "Project 2048/Assets/Tests/EditMode/PrototypeCombatFactoryTests.cs",
+      "class_name": "PrototypeCombatFactoryTests",
+      "risk_flags": [
+        "high-coupling",
+        "magic-number-heavy",
+        "save-load-sensitive",
+        "ui-runtime-mixed",
+        "state-owner"
+      ],
+      "risk_reasons": [
+        "참조 타입 또는 관계 수가 많음",
+        "숫자 리터럴이 많아 의미 파악이 어려울 수 있음",
+        "저장/불러오기 관련 로직 포함",
+        "UI와 런타임 책임이 한 파일에 섞였을 가능성",
+        "상태 중심 또는 관리 중심 클래스일 가능성"
+      ],
+      "risk_score": 56
+    },
+    {
+      "file_id": "Project 2048/Assets/Scripts/Board2048/Board2048Manager.cs",
+      "class_name": "Board2048Manager",
+      "risk_flags": [
+        "high-coupling",
+        "large-class",
+        "ui-runtime-mixed",
+        "state-owner"
+      ],
+      "risk_reasons": [
+        "참조 타입 또는 관계 수가 많음",
+        "파일/메서드/필드 수가 많아 책임이 커질 가능성",
+        "UI와 런타임 책임이 한 파일에 섞였을 가능성",
+        "상태 중심 또는 관리 중심 클래스일 가능성"
+      ],
+      "risk_score": 51
     }
   ],
   "common_patterns": [
-    "MonoBehaviour 중심 구조",
+    "Manager 성격 클래스 다수",
     "고결합 클래스 존재"
   ]
 }

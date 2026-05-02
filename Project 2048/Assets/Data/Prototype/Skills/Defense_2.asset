@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e39edfbbdac2c064e877e5f3f784bab9, type: 3}
+  m_Name: Defense_2
+  m_EditorClassIdentifier: Game.Core::Project2048.Skills.SkillSO
+  skillId: defense_2
+  skillName: "2\uB2E8\uACC4 \uBC29\uC5B4"
+  skillType: 1
+  cost: 8
+  power: 4
+  targetAttackModifier: 0
+  selfDefenseBonus: 2
+  icon: {fileID: 0}
+  description: "\uBC29\uC5B4\uB3C4\uB97C \uC5BB\uACE0 \uC774\uD6C4 \uD68D\uB4DD \uBC29\uC5B4\uB3C4\uB97C
+    \uC99D\uAC00\uC2DC\uD0A8\uB2E4."

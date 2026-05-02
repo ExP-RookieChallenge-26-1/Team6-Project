@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5d4448f93dfa1c4c8ee4774c46926d9, type: 3}
+  m_Name: PrototypePlayer
+  m_EditorClassIdentifier: Game.Core::Project2048.Combat.PlayerSO
+  maxHp: 30
+  attackPower: 2
+  boardMoveCountBonus: 0
+  portrait: {fileID: 21300000, guid: 88d5b555c597a3a4e857f7ce12f2c858, type: 3}
+  startingSkills:
+  - {fileID: 11400000, guid: cd7501a97bb22e741a43179d1b3771d3, type: 2}
+  - {fileID: 11400000, guid: 98a8d0cce1fbc5e429a506f26be1122e, type: 2}
+  - {fileID: 11400000, guid: ced275c3ac4587d4f9f513c34c461400, type: 2}
+  - {fileID: 11400000, guid: 00966bf157b01874e90775ed704b2b9b, type: 2}
+  - {fileID: 11400000, guid: 991d8b41bd0c53a4485cb7c4c3088530, type: 2}
+  - {fileID: 11400000, guid: 3f5d0a715916847418ab39e5b398d3eb, type: 2}

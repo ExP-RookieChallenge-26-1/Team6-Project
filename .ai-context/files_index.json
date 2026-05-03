@@ -6456,6 +6456,429 @@
     ]
   },
   {
+    "file_id": "Project 2048/Assets/Scripts/UI/ConfirmPopup.cs",
+    "path": "Project 2048/Assets/Scripts/UI/ConfirmPopup.cs",
+    "file_name": "ConfirmPopup.cs",
+    "content_hash": "b0d89fc87c9c4c77e91f6e3be2a3411460dc20f8",
+    "size": 1252,
+    "line_count": 51,
+    "namespace": "",
+    "using_list": [
+      "System",
+      "UnityEngine",
+      "UnityEngine.UI",
+      "TMPro"
+    ],
+    "classes": [
+      {
+        "name": "ConfirmPopup",
+        "kind": "class",
+        "access": "public",
+        "base_types": [
+          "MonoBehaviour"
+        ],
+        "interfaces": [],
+        "attributes": [],
+        "is_partial": false,
+        "is_generic": false
+      }
+    ],
+    "main_class_name": "ConfirmPopup",
+    "unity_type": "MonoBehaviour",
+    "methods": [
+      "Awake",
+      "Show",
+      "OnYesClicked",
+      "OnNoClicked"
+    ],
+    "fields": [
+      {
+        "name": "onYesAction",
+        "type": "Action",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "onNoAction",
+        "type": "Action",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      }
+    ],
+    "properties": [],
+    "events": [],
+    "unity_messages": [
+      "Awake"
+    ],
+    "has_update": false,
+    "has_fixed_update": false,
+    "has_late_update": false,
+    "has_awake": true,
+    "has_start": false,
+    "has_on_enable": false,
+    "has_on_disable": false,
+    "serialize_field_count": 0,
+    "public_field_count": 0,
+    "get_component_count": 0,
+    "find_call_count": 0,
+    "new_keyword_count": 0,
+    "coroutine_count": 0,
+    "singleton_candidate": false,
+    "dont_destroy_on_load": false,
+    "referenced_types": [
+      "System",
+      "UnityEngine",
+      "UI",
+      "TMPro",
+      "TextMeshProUGUI",
+      "CheckMessage",
+      "Button",
+      "Awake",
+      "AddListener",
+      "OnYesClicked",
+      "OnNoClicked",
+      "SetActive",
+      "Show",
+      "Invoke"
+    ],
+    "component_access_types": [],
+    "created_types": [],
+    "singleton_access_types": [],
+    "string_literals": [],
+    "numeric_literals": [],
+    "guessed_roles": [
+      "ui",
+      "runtime",
+      "combat",
+      "save-load"
+    ],
+    "summary_signals": [
+      "런타임 컴포넌트",
+      "UI 관련 로직 포함",
+      "전투 계열 로직 포함",
+      "저장/불러오기 관련 로직 포함"
+    ]
+  },
+  {
+    "file_id": "Project 2048/Assets/Scripts/UI/FadeController.cs",
+    "path": "Project 2048/Assets/Scripts/UI/FadeController.cs",
+    "file_name": "FadeController.cs",
+    "content_hash": "f0fad02fa57d060d36ab824bcfe96504fa9ffeef",
+    "size": 1163,
+    "line_count": 50,
+    "namespace": "",
+    "using_list": [
+      "System",
+      "System.Collections",
+      "UnityEngine",
+      "UnityEngine.UI"
+    ],
+    "classes": [
+      {
+        "name": "FadeController",
+        "kind": "class",
+        "access": "public",
+        "base_types": [
+          "MonoBehaviour"
+        ],
+        "interfaces": [],
+        "attributes": [],
+        "is_partial": false,
+        "is_generic": false
+      }
+    ],
+    "main_class_name": "FadeController",
+    "unity_type": "MonoBehaviour",
+    "methods": [
+      "Awake",
+      "FadeOut",
+      "FadeIn",
+      "FadeRoutine",
+      "SetAlpha"
+    ],
+    "fields": [
+      {
+        "name": "elapsed",
+        "type": "float",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "c",
+        "type": "Color",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      }
+    ],
+    "properties": [],
+    "events": [],
+    "unity_messages": [
+      "Awake"
+    ],
+    "has_update": false,
+    "has_fixed_update": false,
+    "has_late_update": false,
+    "has_awake": true,
+    "has_start": false,
+    "has_on_enable": false,
+    "has_on_disable": false,
+    "serialize_field_count": 0,
+    "public_field_count": 0,
+    "get_component_count": 0,
+    "find_call_count": 0,
+    "new_keyword_count": 0,
+    "coroutine_count": 3,
+    "singleton_candidate": false,
+    "dont_destroy_on_load": false,
+    "referenced_types": [
+      "float",
+      "Color",
+      "System",
+      "Collections",
+      "UnityEngine",
+      "UI",
+      "Image",
+      "Awake",
+      "SetAlpha",
+      "FadeOut",
+      "StartCoroutine",
+      "FadeRoutine",
+      "FadeIn",
+      "Lerp",
+      "Invoke"
+    ],
+    "component_access_types": [],
+    "created_types": [],
+    "singleton_access_types": [],
+    "string_literals": [],
+    "numeric_literals": [
+      1,
+      0
+    ],
+    "guessed_roles": [
+      "runtime",
+      "ui",
+      "save-load"
+    ],
+    "summary_signals": [
+      "런타임 컴포넌트",
+      "UI 관련 로직 포함",
+      "저장/불러오기 관련 로직 포함"
+    ]
+  },
+  {
+    "file_id": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "path": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "file_name": "MainMenuController.cs",
+    "content_hash": "e58f1680117d5b38bd863871c6771cc10cd8e5a3",
+    "size": 1811,
+    "line_count": 67,
+    "namespace": "",
+    "using_list": [
+      "UnityEngine",
+      "UnityEngine.SceneManagement",
+      "UnityEngine.UI",
+      "UnityEngine.EventSystems"
+    ],
+    "classes": [
+      {
+        "name": "MainMenuController",
+        "kind": "class",
+        "access": "public",
+        "base_types": [
+          "MonoBehaviour"
+        ],
+        "interfaces": [],
+        "attributes": [],
+        "is_partial": false,
+        "is_generic": false
+      }
+    ],
+    "main_class_name": "MainMenuController",
+    "unity_type": "MonoBehaviour",
+    "methods": [
+      "Awake",
+      "OnNewGameClicked",
+      "StartNewGame",
+      "OnLoadGameClicked",
+      "OnSettingClicked",
+      "OnQuitClicked",
+      "QuitGame",
+      "LateUpdate"
+    ],
+    "fields": [
+      {
+        "name": "GameSceneName",
+        "type": "string",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      }
+    ],
+    "properties": [],
+    "events": [],
+    "unity_messages": [
+      "Awake",
+      "LateUpdate"
+    ],
+    "has_update": false,
+    "has_fixed_update": false,
+    "has_late_update": true,
+    "has_awake": true,
+    "has_start": false,
+    "has_on_enable": false,
+    "has_on_disable": false,
+    "serialize_field_count": 0,
+    "public_field_count": 0,
+    "get_component_count": 0,
+    "find_call_count": 0,
+    "new_keyword_count": 0,
+    "coroutine_count": 0,
+    "singleton_candidate": false,
+    "dont_destroy_on_load": false,
+    "referenced_types": [
+      "string",
+      "UnityEngine",
+      "SceneManagement",
+      "UI",
+      "EventSystems",
+      "Button",
+      "ConfirmPopup",
+      "SettingPopup",
+      "FadeController",
+      "GameSceneName",
+      "SampleScene",
+      "Awake",
+      "AddListener",
+      "OnNewGameClicked",
+      "OnLoadGameClicked",
+      "OnSettingClicked",
+      "OnQuitClicked",
+      "Show",
+      "StartNewGame",
+      "FadeOut",
+      "SceneManager",
+      "LoadScene",
+      "Log",
+      "Open",
+      "QuitGame",
+      "UNITY_EDITOR",
+      "UnityEditor",
+      "EditorApplication",
+      "Application",
+      "Quit",
+      "LateUpdate",
+      "EventSystem",
+      "SetSelectedGameObject"
+    ],
+    "component_access_types": [],
+    "created_types": [],
+    "singleton_access_types": [],
+    "string_literals": [
+      "SampleScene",
+      "���� �Ͻðڽ��ϱ�?",
+      "�̾��ϱ� Ŭ����",
+      "�����Ͻðڽ��ϱ�?"
+    ],
+    "numeric_literals": [],
+    "guessed_roles": [
+      "runtime",
+      "scene",
+      "ui",
+      "save-load",
+      "manager"
+    ],
+    "summary_signals": [
+      "런타임 컴포넌트",
+      "UI 관련 로직 포함",
+      "저장/불러오기 관련 로직 포함"
+    ]
+  },
+  {
+    "file_id": "Project 2048/Assets/Scripts/UI/SettingPopup.cs",
+    "path": "Project 2048/Assets/Scripts/UI/SettingPopup.cs",
+    "file_name": "SettingPopup.cs",
+    "content_hash": "e65fb9d8b5424eb0e0d3e59dbf75ecdc2bdbb548",
+    "size": 558,
+    "line_count": 26,
+    "namespace": "",
+    "using_list": [
+      "UnityEngine",
+      "UnityEngine.UI"
+    ],
+    "classes": [
+      {
+        "name": "SettingPopup",
+        "kind": "class",
+        "access": "public",
+        "base_types": [
+          "MonoBehaviour"
+        ],
+        "interfaces": [],
+        "attributes": [],
+        "is_partial": false,
+        "is_generic": false
+      }
+    ],
+    "main_class_name": "SettingPopup",
+    "unity_type": "MonoBehaviour",
+    "methods": [
+      "Awake",
+      "Open",
+      "Close"
+    ],
+    "fields": [],
+    "properties": [],
+    "events": [],
+    "unity_messages": [
+      "Awake"
+    ],
+    "has_update": false,
+    "has_fixed_update": false,
+    "has_late_update": false,
+    "has_awake": true,
+    "has_start": false,
+    "has_on_enable": false,
+    "has_on_disable": false,
+    "serialize_field_count": 0,
+    "public_field_count": 0,
+    "get_component_count": 0,
+    "find_call_count": 0,
+    "new_keyword_count": 0,
+    "coroutine_count": 0,
+    "singleton_candidate": false,
+    "dont_destroy_on_load": false,
+    "referenced_types": [
+      "UnityEngine",
+      "UI",
+      "Button",
+      "Awake",
+      "AddListener",
+      "Close",
+      "SetActive",
+      "Open"
+    ],
+    "component_access_types": [],
+    "created_types": [],
+    "singleton_access_types": [],
+    "string_literals": [],
+    "numeric_literals": [],
+    "guessed_roles": [
+      "ui",
+      "runtime",
+      "save-load"
+    ],
+    "summary_signals": [
+      "런타임 컴포넌트",
+      "UI 관련 로직 포함",
+      "저장/불러오기 관련 로직 포함"
+    ]
+  },
+  {
     "file_id": "Project 2048/Assets/Tests/EditMode/ActionCostWalletTests.cs",
     "path": "Project 2048/Assets/Tests/EditMode/ActionCostWalletTests.cs",
     "file_name": "ActionCostWalletTests.cs",

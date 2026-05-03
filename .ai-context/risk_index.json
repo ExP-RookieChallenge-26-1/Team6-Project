@@ -92,6 +92,27 @@
     "risk_score": 68
   },
   {
+    "file_id": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "class_name": "MainMenuController",
+    "risk_flags": [
+      "update-heavy",
+      "high-coupling",
+      "init-order-sensitive",
+      "save-load-sensitive",
+      "ui-runtime-mixed",
+      "state-owner"
+    ],
+    "risk_reasons": [
+      "Unity 업데이트 루프 사용",
+      "참조 타입 또는 관계 수가 많음",
+      "초기화 순서에 민감할 가능성",
+      "저장/불러오기 관련 로직 포함",
+      "UI와 런타임 책임이 한 파일에 섞였을 가능성",
+      "상태 중심 또는 관리 중심 클래스일 가능성"
+    ],
+    "risk_score": 68
+  },
+  {
     "file_id": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "class_name": "CombatManager",
     "risk_flags": [
@@ -270,6 +291,40 @@
       "상태 중심 또는 관리 중심 클래스일 가능성"
     ],
     "risk_score": 44
+  },
+  {
+    "file_id": "Project 2048/Assets/Scripts/UI/ConfirmPopup.cs",
+    "class_name": "ConfirmPopup",
+    "risk_flags": [
+      "init-order-sensitive",
+      "save-load-sensitive",
+      "ui-runtime-mixed",
+      "state-owner"
+    ],
+    "risk_reasons": [
+      "초기화 순서에 민감할 가능성",
+      "저장/불러오기 관련 로직 포함",
+      "UI와 런타임 책임이 한 파일에 섞였을 가능성",
+      "상태 중심 또는 관리 중심 클래스일 가능성"
+    ],
+    "risk_score": 40
+  },
+  {
+    "file_id": "Project 2048/Assets/Scripts/UI/FadeController.cs",
+    "class_name": "FadeController",
+    "risk_flags": [
+      "init-order-sensitive",
+      "save-load-sensitive",
+      "ui-runtime-mixed",
+      "state-owner"
+    ],
+    "risk_reasons": [
+      "초기화 순서에 민감할 가능성",
+      "저장/불러오기 관련 로직 포함",
+      "UI와 런타임 책임이 한 파일에 섞였을 가능성",
+      "상태 중심 또는 관리 중심 클래스일 가능성"
+    ],
+    "risk_score": 40
   },
   {
     "file_id": "Project 2048/Assets/Scripts/Combat/PlayerCombatController.cs",
@@ -573,6 +628,19 @@
   {
     "file_id": "MineFind/Cell.cs",
     "class_name": "Cell",
+    "risk_flags": [
+      "save-load-sensitive",
+      "ui-runtime-mixed"
+    ],
+    "risk_reasons": [
+      "저장/불러오기 관련 로직 포함",
+      "UI와 런타임 책임이 한 파일에 섞였을 가능성"
+    ],
+    "risk_score": 22
+  },
+  {
+    "file_id": "Project 2048/Assets/Scripts/UI/SettingPopup.cs",
+    "class_name": "SettingPopup",
     "risk_flags": [
       "save-load-sensitive",
       "ui-runtime-mixed"

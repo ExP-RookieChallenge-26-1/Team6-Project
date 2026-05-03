@@ -2,25 +2,25 @@
   "project_name": "unknown",
   "language": "C#",
   "engine_guess": "Unity",
-  "total_cs_files": 56,
-  "mono_behaviour_files": 12,
+  "total_cs_files": 60,
+  "mono_behaviour_files": 16,
   "scriptable_object_files": 3,
   "files_with_update": 1,
   "files_with_fixed_update": 0,
-  "files_with_late_update": 0,
+  "files_with_late_update": 1,
   "singleton_candidates": 0,
-  "manager_like_classes": 14,
-  "ui_related_classes": 19,
-  "save_load_related_classes": 10,
+  "manager_like_classes": 15,
+  "ui_related_classes": 23,
+  "save_load_related_classes": 14,
   "role_counts": {
-    "ui": 19,
-    "save-load": 10,
-    "runtime": 18,
+    "ui": 23,
+    "save-load": 14,
+    "runtime": 22,
     "player": 35,
     "data": 22,
-    "combat": 42,
-    "manager": 13,
-    "scene": 1,
+    "combat": 43,
+    "manager": 14,
+    "scene": 2,
     "network": 2
   },
   "high_coupling_classes": [
@@ -179,6 +179,27 @@
       "risk_score": 68
     },
     {
+      "file_id": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+      "class_name": "MainMenuController",
+      "risk_flags": [
+        "update-heavy",
+        "high-coupling",
+        "init-order-sensitive",
+        "save-load-sensitive",
+        "ui-runtime-mixed",
+        "state-owner"
+      ],
+      "risk_reasons": [
+        "Unity 업데이트 루프 사용",
+        "참조 타입 또는 관계 수가 많음",
+        "초기화 순서에 민감할 가능성",
+        "저장/불러오기 관련 로직 포함",
+        "UI와 런타임 책임이 한 파일에 섞였을 가능성",
+        "상태 중심 또는 관리 중심 클래스일 가능성"
+      ],
+      "risk_score": 68
+    },
+    {
       "file_id": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
       "class_name": "CombatManager",
       "risk_flags": [
@@ -272,23 +293,6 @@
         "상태 중심 또는 관리 중심 클래스일 가능성"
       ],
       "risk_score": 56
-    },
-    {
-      "file_id": "Project 2048/Assets/Scripts/Board2048/Board2048Manager.cs",
-      "class_name": "Board2048Manager",
-      "risk_flags": [
-        "high-coupling",
-        "large-class",
-        "ui-runtime-mixed",
-        "state-owner"
-      ],
-      "risk_reasons": [
-        "참조 타입 또는 관계 수가 많음",
-        "파일/메서드/필드 수가 많아 책임이 커질 가능성",
-        "UI와 런타임 책임이 한 파일에 섞였을 가능성",
-        "상태 중심 또는 관리 중심 클래스일 가능성"
-      ],
-      "risk_score": 51
     }
   ],
   "common_patterns": [

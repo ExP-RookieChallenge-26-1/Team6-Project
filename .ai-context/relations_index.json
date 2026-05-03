@@ -10843,6 +10843,524 @@
     "strength": 1
   },
   {
+    "from_file": "Project 2048/Assets/Scripts/UI/ConfirmPopup.cs",
+    "from_class": "ConfirmPopup",
+    "to_type": "MonoBehaviour",
+    "relation_type": "inherits",
+    "strength": 4
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/ConfirmPopup.cs",
+    "from_class": "ConfirmPopup",
+    "to_type": "AddListener",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/ConfirmPopup.cs",
+    "from_class": "ConfirmPopup",
+    "to_type": "Awake",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/ConfirmPopup.cs",
+    "from_class": "ConfirmPopup",
+    "to_type": "Button",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/ConfirmPopup.cs",
+    "from_class": "ConfirmPopup",
+    "to_type": "CheckMessage",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/ConfirmPopup.cs",
+    "from_class": "ConfirmPopup",
+    "to_type": "Invoke",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/ConfirmPopup.cs",
+    "from_class": "ConfirmPopup",
+    "to_type": "OnNoClicked",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/ConfirmPopup.cs",
+    "from_class": "ConfirmPopup",
+    "to_type": "OnYesClicked",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/ConfirmPopup.cs",
+    "from_class": "ConfirmPopup",
+    "to_type": "SetActive",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/ConfirmPopup.cs",
+    "from_class": "ConfirmPopup",
+    "to_type": "Show",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/ConfirmPopup.cs",
+    "from_class": "ConfirmPopup",
+    "to_type": "System",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/ConfirmPopup.cs",
+    "from_class": "ConfirmPopup",
+    "to_type": "TextMeshProUGUI",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/ConfirmPopup.cs",
+    "from_class": "ConfirmPopup",
+    "to_type": "TMPro",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/ConfirmPopup.cs",
+    "from_class": "ConfirmPopup",
+    "to_type": "UI",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/ConfirmPopup.cs",
+    "from_class": "ConfirmPopup",
+    "to_type": "UnityEngine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/FadeController.cs",
+    "from_class": "FadeController",
+    "to_type": "MonoBehaviour",
+    "relation_type": "inherits",
+    "strength": 4
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/FadeController.cs",
+    "from_class": "FadeController",
+    "to_type": "Awake",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/FadeController.cs",
+    "from_class": "FadeController",
+    "to_type": "Collections",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/FadeController.cs",
+    "from_class": "FadeController",
+    "to_type": "Color",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/FadeController.cs",
+    "from_class": "FadeController",
+    "to_type": "FadeIn",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/FadeController.cs",
+    "from_class": "FadeController",
+    "to_type": "FadeOut",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/FadeController.cs",
+    "from_class": "FadeController",
+    "to_type": "FadeRoutine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/FadeController.cs",
+    "from_class": "FadeController",
+    "to_type": "float",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/FadeController.cs",
+    "from_class": "FadeController",
+    "to_type": "Image",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/FadeController.cs",
+    "from_class": "FadeController",
+    "to_type": "Invoke",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/FadeController.cs",
+    "from_class": "FadeController",
+    "to_type": "Lerp",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/FadeController.cs",
+    "from_class": "FadeController",
+    "to_type": "SetAlpha",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/FadeController.cs",
+    "from_class": "FadeController",
+    "to_type": "StartCoroutine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/FadeController.cs",
+    "from_class": "FadeController",
+    "to_type": "System",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/FadeController.cs",
+    "from_class": "FadeController",
+    "to_type": "UI",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/FadeController.cs",
+    "from_class": "FadeController",
+    "to_type": "UnityEngine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "from_class": "MainMenuController",
+    "to_type": "MonoBehaviour",
+    "relation_type": "inherits",
+    "strength": 4
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "from_class": "MainMenuController",
+    "to_type": "AddListener",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "from_class": "MainMenuController",
+    "to_type": "Application",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "from_class": "MainMenuController",
+    "to_type": "Awake",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "from_class": "MainMenuController",
+    "to_type": "Button",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "from_class": "MainMenuController",
+    "to_type": "ConfirmPopup",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "from_class": "MainMenuController",
+    "to_type": "EditorApplication",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "from_class": "MainMenuController",
+    "to_type": "EventSystem",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "from_class": "MainMenuController",
+    "to_type": "EventSystems",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "from_class": "MainMenuController",
+    "to_type": "FadeController",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "from_class": "MainMenuController",
+    "to_type": "FadeOut",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "from_class": "MainMenuController",
+    "to_type": "GameSceneName",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "from_class": "MainMenuController",
+    "to_type": "LateUpdate",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "from_class": "MainMenuController",
+    "to_type": "LoadScene",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "from_class": "MainMenuController",
+    "to_type": "Log",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "from_class": "MainMenuController",
+    "to_type": "OnLoadGameClicked",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "from_class": "MainMenuController",
+    "to_type": "OnNewGameClicked",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "from_class": "MainMenuController",
+    "to_type": "OnQuitClicked",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "from_class": "MainMenuController",
+    "to_type": "OnSettingClicked",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "from_class": "MainMenuController",
+    "to_type": "Open",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "from_class": "MainMenuController",
+    "to_type": "Quit",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "from_class": "MainMenuController",
+    "to_type": "QuitGame",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "from_class": "MainMenuController",
+    "to_type": "SampleScene",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "from_class": "MainMenuController",
+    "to_type": "SceneManagement",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "from_class": "MainMenuController",
+    "to_type": "SceneManager",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "from_class": "MainMenuController",
+    "to_type": "SetSelectedGameObject",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "from_class": "MainMenuController",
+    "to_type": "SettingPopup",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "from_class": "MainMenuController",
+    "to_type": "Show",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "from_class": "MainMenuController",
+    "to_type": "StartNewGame",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "from_class": "MainMenuController",
+    "to_type": "string",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "from_class": "MainMenuController",
+    "to_type": "UI",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "from_class": "MainMenuController",
+    "to_type": "UNITY_EDITOR",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "from_class": "MainMenuController",
+    "to_type": "UnityEditor",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "from_class": "MainMenuController",
+    "to_type": "UnityEngine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/SettingPopup.cs",
+    "from_class": "SettingPopup",
+    "to_type": "MonoBehaviour",
+    "relation_type": "inherits",
+    "strength": 4
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/SettingPopup.cs",
+    "from_class": "SettingPopup",
+    "to_type": "AddListener",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/SettingPopup.cs",
+    "from_class": "SettingPopup",
+    "to_type": "Awake",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/SettingPopup.cs",
+    "from_class": "SettingPopup",
+    "to_type": "Button",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/SettingPopup.cs",
+    "from_class": "SettingPopup",
+    "to_type": "Close",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/SettingPopup.cs",
+    "from_class": "SettingPopup",
+    "to_type": "Open",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/SettingPopup.cs",
+    "from_class": "SettingPopup",
+    "to_type": "SetActive",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/SettingPopup.cs",
+    "from_class": "SettingPopup",
+    "to_type": "UI",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/SettingPopup.cs",
+    "from_class": "SettingPopup",
+    "to_type": "UnityEngine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
     "from_file": "Project 2048/Assets/Tests/EditMode/ActionCostWalletTests.cs",
     "from_class": "ActionCostWalletTests",
     "to_type": "ActionCostWallet",

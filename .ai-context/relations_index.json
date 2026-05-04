@@ -13589,6 +13589,13 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
+    "to_type": "RectTransform",
+    "relation_type": "component-access",
+    "strength": 3
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
+    "from_class": "CombatUiViewTests",
     "to_type": "StatusEffectTooltipTarget",
     "relation_type": "component-access",
     "strength": 3
@@ -13694,7 +13701,7 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
-    "to_type": "ApplyDefenseBonus",
+    "to_type": "ApplyFear",
     "relation_type": "uses",
     "strength": 1
   },
@@ -13793,6 +13800,13 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
     "to_type": "Board2048",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
+    "from_class": "CombatUiViewTests",
+    "to_type": "BoardHp",
     "relation_type": "uses",
     "strength": 1
   },
@@ -14254,6 +14268,13 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
+    "to_type": "FloatingStatusLayer",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
+    "from_class": "CombatUiViewTests",
     "to_type": "Framework",
     "relation_type": "uses",
     "strength": 1
@@ -14626,6 +14647,13 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
     "to_type": "PlayerBattleStatusEffects",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
+    "from_class": "CombatUiViewTests",
+    "to_type": "PlayerBoardStatusEffects",
     "relation_type": "uses",
     "strength": 1
   },

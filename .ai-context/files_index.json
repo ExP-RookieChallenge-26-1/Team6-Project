@@ -6903,15 +6903,16 @@
     "file_id": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
     "path": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
     "file_name": "MainMenuController.cs",
-    "content_hash": "59841ad237dd701e164889266955574891c8c9a7",
-    "size": 1787,
-    "line_count": 68,
+    "content_hash": "c5e00c1597c7401c088443f316d8a2459cc155de",
+    "size": 1813,
+    "line_count": 69,
     "namespace": "",
     "using_list": [
       "UnityEngine",
       "UnityEngine.EventSystems",
       "UnityEngine.SceneManagement",
-      "UnityEngine.UI"
+      "UnityEngine.UI",
+      "Project2048.Core"
     ],
     "classes": [
       {
@@ -6975,6 +6976,8 @@
       "EventSystems",
       "SceneManagement",
       "UI",
+      "Project2048",
+      "Core",
       "Button",
       "ConfirmPopup",
       "SettingPopup",
@@ -6990,8 +6993,8 @@
       "Show",
       "StartNewGame",
       "FadeOut",
-      "SceneManager",
-      "LoadScene",
+      "GameManager",
+      "Instance",
       "Log",
       "Open",
       "QuitGame",
@@ -7006,7 +7009,9 @@
     ],
     "component_access_types": [],
     "created_types": [],
-    "singleton_access_types": [],
+    "singleton_access_types": [
+      "GameManager"
+    ],
     "string_literals": [
       "BattleScene",
       "새로 하시겠습니까?",
@@ -7016,10 +7021,10 @@
     "numeric_literals": [],
     "guessed_roles": [
       "runtime",
-      "scene",
       "ui",
+      "manager",
       "save-load",
-      "manager"
+      "scene"
     ],
     "summary_signals": [
       "런타임 컴포넌트",

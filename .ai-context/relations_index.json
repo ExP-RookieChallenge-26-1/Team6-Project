@@ -11370,6 +11370,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
     "from_class": "MainMenuController",
+    "to_type": "GameManager",
+    "relation_type": "singleton-access",
+    "strength": 4
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "from_class": "MainMenuController",
     "to_type": "AddListener",
     "relation_type": "uses",
     "strength": 1
@@ -11412,6 +11419,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
     "from_class": "MainMenuController",
+    "to_type": "Core",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "from_class": "MainMenuController",
     "to_type": "EditorApplication",
     "relation_type": "uses",
     "strength": 1
@@ -11447,6 +11461,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
     "from_class": "MainMenuController",
+    "to_type": "GameManager",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "from_class": "MainMenuController",
     "to_type": "GameSceneName",
     "relation_type": "uses",
     "strength": 1
@@ -11454,14 +11475,14 @@
   {
     "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
     "from_class": "MainMenuController",
-    "to_type": "LateUpdate",
+    "to_type": "Instance",
     "relation_type": "uses",
     "strength": 1
   },
   {
     "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
     "from_class": "MainMenuController",
-    "to_type": "LoadScene",
+    "to_type": "LateUpdate",
     "relation_type": "uses",
     "strength": 1
   },
@@ -11510,6 +11531,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
     "from_class": "MainMenuController",
+    "to_type": "Project2048",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "from_class": "MainMenuController",
     "to_type": "Quit",
     "relation_type": "uses",
     "strength": 1
@@ -11525,13 +11553,6 @@
     "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
     "from_class": "MainMenuController",
     "to_type": "SceneManagement",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
-    "from_class": "MainMenuController",
-    "to_type": "SceneManager",
     "relation_type": "uses",
     "strength": 1
   },

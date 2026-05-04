@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ed2436f25ed56b49a1653db6550e50c, type: 3}
+  m_Name: PrototypeStoryData
+  m_EditorClassIdentifier: Game.Core::Project2048.Story.StoryDataSO
+  steps:
+  - text: "\uC8FC\uC778\uACF5 : \uBB58\uD558\uBA74 \uB418\uC8E0?"
+  - text: "\uC0C1\uAD00 : \uC801\uC744 \uC8FD\uC5EC"
+  - text: "\uC8FC\uC778\uACF5 : \uC54C\uACA0\uC2B5\uB2C8\uB2E4."

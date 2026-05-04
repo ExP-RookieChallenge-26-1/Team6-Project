@@ -3803,6 +3803,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "from_class": "CombatManager",
+    "to_type": "FearStacks",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
+    "from_class": "CombatManager",
     "to_type": "FirstOrDefault",
     "relation_type": "uses",
     "strength": 1
@@ -3930,6 +3937,13 @@
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "from_class": "CombatManager",
     "to_type": "HandlePlayerHpChanged",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
+    "from_class": "CombatManager",
+    "to_type": "HandlePlayerStatusEffectsChanged",
     "relation_type": "uses",
     "strength": 1
   },
@@ -4182,6 +4196,13 @@
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "from_class": "CombatManager",
     "to_type": "OnPhaseChanged",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
+    "from_class": "CombatManager",
+    "to_type": "OnStatusEffectsChanged",
     "relation_type": "uses",
     "strength": 1
   },
@@ -4874,6 +4895,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatSnapshot.cs",
     "from_class": "CombatSnapshot",
+    "to_type": "FearStacks",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/CombatSnapshot.cs",
+    "from_class": "CombatSnapshot",
     "to_type": "Generic",
     "relation_type": "uses",
     "strength": 1
@@ -5182,6 +5210,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Combat/PlayerCombatController.cs",
     "from_class": "PlayerCombatController",
+    "to_type": "ApplyFear",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/PlayerCombatController.cs",
+    "from_class": "PlayerCombatController",
     "to_type": "ArgumentNullException",
     "relation_type": "uses",
     "strength": 1
@@ -5204,6 +5239,13 @@
     "from_file": "Project 2048/Assets/Scripts/Combat/PlayerCombatController.cs",
     "from_class": "PlayerCombatController",
     "to_type": "BoardMoveCountBonus",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/PlayerCombatController.cs",
+    "from_class": "PlayerCombatController",
+    "to_type": "CeilToInt",
     "relation_type": "uses",
     "strength": 1
   },
@@ -5253,6 +5295,13 @@
     "from_file": "Project 2048/Assets/Scripts/Combat/PlayerCombatController.cs",
     "from_class": "PlayerCombatController",
     "to_type": "DefenseBonus",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/PlayerCombatController.cs",
+    "from_class": "PlayerCombatController",
+    "to_type": "FearStacks",
     "relation_type": "uses",
     "strength": 1
   },
@@ -5337,6 +5386,13 @@
     "from_file": "Project 2048/Assets/Scripts/Combat/PlayerCombatController.cs",
     "from_class": "PlayerCombatController",
     "to_type": "OnHpChanged",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/PlayerCombatController.cs",
+    "from_class": "PlayerCombatController",
+    "to_type": "OnStatusEffectsChanged",
     "relation_type": "uses",
     "strength": 1
   },
@@ -5568,6 +5624,1721 @@
     "from_file": "Project 2048/Assets/Scripts/Combat/TurnController.cs",
     "from_class": "TurnController",
     "to_type": "TurnCount",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/FlowController.cs",
+    "from_class": "FlowController",
+    "to_type": "MonoBehaviour",
+    "relation_type": "inherits",
+    "strength": 4
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/FlowController.cs",
+    "from_class": "FlowController",
+    "to_type": "ContinueGame",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/FlowController.cs",
+    "from_class": "FlowController",
+    "to_type": "Core",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/FlowController.cs",
+    "from_class": "FlowController",
+    "to_type": "Flow",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/FlowController.cs",
+    "from_class": "FlowController",
+    "to_type": "GameContext",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/FlowController.cs",
+    "from_class": "FlowController",
+    "to_type": "GameState",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/FlowController.cs",
+    "from_class": "FlowController",
+    "to_type": "Initialized",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/FlowController.cs",
+    "from_class": "FlowController",
+    "to_type": "InitializeDefaultPlayer",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/FlowController.cs",
+    "from_class": "FlowController",
+    "to_type": "Invoke",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/FlowController.cs",
+    "from_class": "FlowController",
+    "to_type": "Load",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/FlowController.cs",
+    "from_class": "FlowController",
+    "to_type": "Loading",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/FlowController.cs",
+    "from_class": "FlowController",
+    "to_type": "LogError",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/FlowController.cs",
+    "from_class": "FlowController",
+    "to_type": "OnGameStarted",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/FlowController.cs",
+    "from_class": "FlowController",
+    "to_type": "OnLoadingStarted",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/FlowController.cs",
+    "from_class": "FlowController",
+    "to_type": "OnNewGameStoryStarted",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/FlowController.cs",
+    "from_class": "FlowController",
+    "to_type": "PlayerManager",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/FlowController.cs",
+    "from_class": "FlowController",
+    "to_type": "Playing",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/FlowController.cs",
+    "from_class": "FlowController",
+    "to_type": "PrepareNewSaveSlot",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/FlowController.cs",
+    "from_class": "FlowController",
+    "to_type": "Project2048",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/FlowController.cs",
+    "from_class": "FlowController",
+    "to_type": "ResetScore",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/FlowController.cs",
+    "from_class": "FlowController",
+    "to_type": "Save",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/FlowController.cs",
+    "from_class": "FlowController",
+    "to_type": "SaveLoadManager",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/FlowController.cs",
+    "from_class": "FlowController",
+    "to_type": "ScoreManager",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/FlowController.cs",
+    "from_class": "FlowController",
+    "to_type": "SetGameState",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/FlowController.cs",
+    "from_class": "FlowController",
+    "to_type": "SetNewGame",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/FlowController.cs",
+    "from_class": "FlowController",
+    "to_type": "SetRunActive",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/FlowController.cs",
+    "from_class": "FlowController",
+    "to_type": "SetScore",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/FlowController.cs",
+    "from_class": "FlowController",
+    "to_type": "SetStageId",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/FlowController.cs",
+    "from_class": "FlowController",
+    "to_type": "StartGameAfterStory",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/FlowController.cs",
+    "from_class": "FlowController",
+    "to_type": "Story",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/FlowController.cs",
+    "from_class": "FlowController",
+    "to_type": "System",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/FlowController.cs",
+    "from_class": "FlowController",
+    "to_type": "UnityEngine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/GameContext.cs",
+    "from_class": "GameContext",
+    "to_type": "bool",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/GameContext.cs",
+    "from_class": "GameContext",
+    "to_type": "Core",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/GameContext.cs",
+    "from_class": "GameContext",
+    "to_type": "CurrentGameState",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/GameContext.cs",
+    "from_class": "GameContext",
+    "to_type": "CurrentSaveSlotId",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/GameContext.cs",
+    "from_class": "GameContext",
+    "to_type": "CurrentScore",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/GameContext.cs",
+    "from_class": "GameContext",
+    "to_type": "CurrentStageId",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/GameContext.cs",
+    "from_class": "GameContext",
+    "to_type": "GameState",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/GameContext.cs",
+    "from_class": "GameContext",
+    "to_type": "int",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/GameContext.cs",
+    "from_class": "GameContext",
+    "to_type": "Invoke",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/GameContext.cs",
+    "from_class": "GameContext",
+    "to_type": "IsRunActive",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/GameContext.cs",
+    "from_class": "GameContext",
+    "to_type": "Loading",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/GameContext.cs",
+    "from_class": "GameContext",
+    "to_type": "MainMenu",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/GameContext.cs",
+    "from_class": "GameContext",
+    "to_type": "OnGameStateChanged",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/GameContext.cs",
+    "from_class": "GameContext",
+    "to_type": "OnRunActiveChanged",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/GameContext.cs",
+    "from_class": "GameContext",
+    "to_type": "OnScoreChanged",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/GameContext.cs",
+    "from_class": "GameContext",
+    "to_type": "OnStageIdChanged",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/GameContext.cs",
+    "from_class": "GameContext",
+    "to_type": "Paused",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/GameContext.cs",
+    "from_class": "GameContext",
+    "to_type": "Playing",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/GameContext.cs",
+    "from_class": "GameContext",
+    "to_type": "Project2048",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/GameContext.cs",
+    "from_class": "GameContext",
+    "to_type": "Result",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/GameContext.cs",
+    "from_class": "GameContext",
+    "to_type": "SetGameState",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/GameContext.cs",
+    "from_class": "GameContext",
+    "to_type": "SetRunActive",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/GameContext.cs",
+    "from_class": "GameContext",
+    "to_type": "SetScore",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/GameContext.cs",
+    "from_class": "GameContext",
+    "to_type": "SetStageId",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/GameContext.cs",
+    "from_class": "GameContext",
+    "to_type": "Story",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/GameContext.cs",
+    "from_class": "GameContext",
+    "to_type": "string",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/GameContext.cs",
+    "from_class": "GameContext",
+    "to_type": "System",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/GameContext.cs",
+    "from_class": "GameContext",
+    "to_type": "UnityEngine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/GameManager.cs",
+    "from_class": "GameManager",
+    "to_type": "FlowController",
+    "relation_type": "component-access",
+    "strength": 3
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/GameManager.cs",
+    "from_class": "GameManager",
+    "to_type": "GameContext",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/GameManager.cs",
+    "from_class": "GameManager",
+    "to_type": "MonoBehaviour",
+    "relation_type": "inherits",
+    "strength": 4
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/GameManager.cs",
+    "from_class": "GameManager",
+    "to_type": "Awake",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/GameManager.cs",
+    "from_class": "GameManager",
+    "to_type": "Core",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/GameManager.cs",
+    "from_class": "GameManager",
+    "to_type": "Destroy",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/GameManager.cs",
+    "from_class": "GameManager",
+    "to_type": "DontDestroyOnLoad",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/GameManager.cs",
+    "from_class": "GameManager",
+    "to_type": "Flow",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/GameManager.cs",
+    "from_class": "GameManager",
+    "to_type": "FlowController",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/GameManager.cs",
+    "from_class": "GameManager",
+    "to_type": "GameContext",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/GameManager.cs",
+    "from_class": "GameManager",
+    "to_type": "GetComponent",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/GameManager.cs",
+    "from_class": "GameManager",
+    "to_type": "Initialized",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/GameManager.cs",
+    "from_class": "GameManager",
+    "to_type": "Instance",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/GameManager.cs",
+    "from_class": "GameManager",
+    "to_type": "LogError",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/GameManager.cs",
+    "from_class": "GameManager",
+    "to_type": "Project2048",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/GameManager.cs",
+    "from_class": "GameManager",
+    "to_type": "SetNewGame",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/GameManager.cs",
+    "from_class": "GameManager",
+    "to_type": "StartNewGame",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/GameManager.cs",
+    "from_class": "GameManager",
+    "to_type": "StartSaveGame",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/GameManager.cs",
+    "from_class": "GameManager",
+    "to_type": "UnityEngine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/LoadingFlowBinder.cs",
+    "from_class": "LoadingFlowBinder",
+    "to_type": "FlowController",
+    "relation_type": "component-access",
+    "strength": 3
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/LoadingFlowBinder.cs",
+    "from_class": "LoadingFlowBinder",
+    "to_type": "SceneFlowManager",
+    "relation_type": "component-access",
+    "strength": 3
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/LoadingFlowBinder.cs",
+    "from_class": "LoadingFlowBinder",
+    "to_type": "MonoBehaviour",
+    "relation_type": "inherits",
+    "strength": 4
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/LoadingFlowBinder.cs",
+    "from_class": "LoadingFlowBinder",
+    "to_type": "Awake",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/LoadingFlowBinder.cs",
+    "from_class": "LoadingFlowBinder",
+    "to_type": "Flow",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/LoadingFlowBinder.cs",
+    "from_class": "LoadingFlowBinder",
+    "to_type": "FlowController",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/LoadingFlowBinder.cs",
+    "from_class": "LoadingFlowBinder",
+    "to_type": "GetComponent",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/LoadingFlowBinder.cs",
+    "from_class": "LoadingFlowBinder",
+    "to_type": "GetComponentInChildren",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/LoadingFlowBinder.cs",
+    "from_class": "LoadingFlowBinder",
+    "to_type": "Hide",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/LoadingFlowBinder.cs",
+    "from_class": "LoadingFlowBinder",
+    "to_type": "LoadingUI",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/LoadingFlowBinder.cs",
+    "from_class": "LoadingFlowBinder",
+    "to_type": "OnDisable",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/LoadingFlowBinder.cs",
+    "from_class": "LoadingFlowBinder",
+    "to_type": "OnEnable",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/LoadingFlowBinder.cs",
+    "from_class": "LoadingFlowBinder",
+    "to_type": "OnLoadingStarted",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/LoadingFlowBinder.cs",
+    "from_class": "LoadingFlowBinder",
+    "to_type": "OnLoadProgressChanged",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/LoadingFlowBinder.cs",
+    "from_class": "LoadingFlowBinder",
+    "to_type": "OnSceneLoadCompleted",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/LoadingFlowBinder.cs",
+    "from_class": "LoadingFlowBinder",
+    "to_type": "Project2048",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/LoadingFlowBinder.cs",
+    "from_class": "LoadingFlowBinder",
+    "to_type": "SceneFlowManager",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/LoadingFlowBinder.cs",
+    "from_class": "LoadingFlowBinder",
+    "to_type": "SetProgress",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/LoadingFlowBinder.cs",
+    "from_class": "LoadingFlowBinder",
+    "to_type": "Show",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/LoadingFlowBinder.cs",
+    "from_class": "LoadingFlowBinder",
+    "to_type": "UI",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/LoadingFlowBinder.cs",
+    "from_class": "LoadingFlowBinder",
+    "to_type": "UnityEngine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/LoadingUI.cs",
+    "from_class": "LoadingUI",
+    "to_type": "MonoBehaviour",
+    "relation_type": "inherits",
+    "strength": 4
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/LoadingUI.cs",
+    "from_class": "LoadingUI",
+    "to_type": "ApplyProgress",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/LoadingUI.cs",
+    "from_class": "LoadingUI",
+    "to_type": "Awake",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/LoadingUI.cs",
+    "from_class": "LoadingUI",
+    "to_type": "Canvas",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/LoadingUI.cs",
+    "from_class": "LoadingUI",
+    "to_type": "Clamp01",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/LoadingUI.cs",
+    "from_class": "LoadingUI",
+    "to_type": "Collections",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/LoadingUI.cs",
+    "from_class": "LoadingUI",
+    "to_type": "Coroutine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/LoadingUI.cs",
+    "from_class": "LoadingUI",
+    "to_type": "float",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/LoadingUI.cs",
+    "from_class": "LoadingUI",
+    "to_type": "GetComponentInParent",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/LoadingUI.cs",
+    "from_class": "LoadingUI",
+    "to_type": "GetRoot",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/LoadingUI.cs",
+    "from_class": "LoadingUI",
+    "to_type": "Hide",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/LoadingUI.cs",
+    "from_class": "LoadingUI",
+    "to_type": "HideWhenProgressCompletes",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/LoadingUI.cs",
+    "from_class": "LoadingUI",
+    "to_type": "MoveTowards",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/LoadingUI.cs",
+    "from_class": "LoadingUI",
+    "to_type": "Project2048",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/LoadingUI.cs",
+    "from_class": "LoadingUI",
+    "to_type": "RoundToInt",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/LoadingUI.cs",
+    "from_class": "LoadingUI",
+    "to_type": "SetActive",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/LoadingUI.cs",
+    "from_class": "LoadingUI",
+    "to_type": "SetProgress",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/LoadingUI.cs",
+    "from_class": "LoadingUI",
+    "to_type": "Show",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/LoadingUI.cs",
+    "from_class": "LoadingUI",
+    "to_type": "Slider",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/LoadingUI.cs",
+    "from_class": "LoadingUI",
+    "to_type": "StartCoroutine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/LoadingUI.cs",
+    "from_class": "LoadingUI",
+    "to_type": "StopCoroutine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/LoadingUI.cs",
+    "from_class": "LoadingUI",
+    "to_type": "System",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/LoadingUI.cs",
+    "from_class": "LoadingUI",
+    "to_type": "TMP_Text",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/LoadingUI.cs",
+    "from_class": "LoadingUI",
+    "to_type": "TMPro",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/LoadingUI.cs",
+    "from_class": "LoadingUI",
+    "to_type": "UI",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/LoadingUI.cs",
+    "from_class": "LoadingUI",
+    "to_type": "UnityEngine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/LoadingUI.cs",
+    "from_class": "LoadingUI",
+    "to_type": "Update",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/LoadingUI.cs",
+    "from_class": "LoadingUI",
+    "to_type": "UpdateProgressText",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/SceneFlowManager.cs",
+    "from_class": "SceneFlowManager",
+    "to_type": "FlowController",
+    "relation_type": "component-access",
+    "strength": 3
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/SceneFlowManager.cs",
+    "from_class": "SceneFlowManager",
+    "to_type": "WaitForSecondsRealtime",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/SceneFlowManager.cs",
+    "from_class": "SceneFlowManager",
+    "to_type": "MonoBehaviour",
+    "relation_type": "inherits",
+    "strength": 4
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/SceneFlowManager.cs",
+    "from_class": "SceneFlowManager",
+    "to_type": "Awake",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/SceneFlowManager.cs",
+    "from_class": "SceneFlowManager",
+    "to_type": "BattleScene",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/SceneFlowManager.cs",
+    "from_class": "SceneFlowManager",
+    "to_type": "Clamp01",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/SceneFlowManager.cs",
+    "from_class": "SceneFlowManager",
+    "to_type": "Collections",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/SceneFlowManager.cs",
+    "from_class": "SceneFlowManager",
+    "to_type": "Flow",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/SceneFlowManager.cs",
+    "from_class": "SceneFlowManager",
+    "to_type": "FlowController",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/SceneFlowManager.cs",
+    "from_class": "SceneFlowManager",
+    "to_type": "GetComponent",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/SceneFlowManager.cs",
+    "from_class": "SceneFlowManager",
+    "to_type": "InGameSceneName",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/SceneFlowManager.cs",
+    "from_class": "SceneFlowManager",
+    "to_type": "Invoke",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/SceneFlowManager.cs",
+    "from_class": "SceneFlowManager",
+    "to_type": "IsNullOrWhiteSpace",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/SceneFlowManager.cs",
+    "from_class": "SceneFlowManager",
+    "to_type": "LoadInGame",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/SceneFlowManager.cs",
+    "from_class": "SceneFlowManager",
+    "to_type": "LoadMainMenu",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/SceneFlowManager.cs",
+    "from_class": "SceneFlowManager",
+    "to_type": "LoadScene",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/SceneFlowManager.cs",
+    "from_class": "SceneFlowManager",
+    "to_type": "LoadSceneAsync",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/SceneFlowManager.cs",
+    "from_class": "SceneFlowManager",
+    "to_type": "LoadStory",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/SceneFlowManager.cs",
+    "from_class": "SceneFlowManager",
+    "to_type": "LogError",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/SceneFlowManager.cs",
+    "from_class": "SceneFlowManager",
+    "to_type": "MainMenu",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/SceneFlowManager.cs",
+    "from_class": "SceneFlowManager",
+    "to_type": "MainMenuSceneName",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/SceneFlowManager.cs",
+    "from_class": "SceneFlowManager",
+    "to_type": "OnDisable",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/SceneFlowManager.cs",
+    "from_class": "SceneFlowManager",
+    "to_type": "OnEnable",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/SceneFlowManager.cs",
+    "from_class": "SceneFlowManager",
+    "to_type": "OnGameStarted",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/SceneFlowManager.cs",
+    "from_class": "SceneFlowManager",
+    "to_type": "OnLoadProgressChanged",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/SceneFlowManager.cs",
+    "from_class": "SceneFlowManager",
+    "to_type": "OnNewGameStoryStarted",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/SceneFlowManager.cs",
+    "from_class": "SceneFlowManager",
+    "to_type": "OnSceneLoadCompleted",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/SceneFlowManager.cs",
+    "from_class": "SceneFlowManager",
+    "to_type": "Project2048",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/SceneFlowManager.cs",
+    "from_class": "SceneFlowManager",
+    "to_type": "Scene",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/SceneFlowManager.cs",
+    "from_class": "SceneFlowManager",
+    "to_type": "SceneManagement",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/SceneFlowManager.cs",
+    "from_class": "SceneFlowManager",
+    "to_type": "SceneManager",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/SceneFlowManager.cs",
+    "from_class": "SceneFlowManager",
+    "to_type": "StartCoroutine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/SceneFlowManager.cs",
+    "from_class": "SceneFlowManager",
+    "to_type": "StoryScene",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/SceneFlowManager.cs",
+    "from_class": "SceneFlowManager",
+    "to_type": "StorySceneName",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/SceneFlowManager.cs",
+    "from_class": "SceneFlowManager",
+    "to_type": "string",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/SceneFlowManager.cs",
+    "from_class": "SceneFlowManager",
+    "to_type": "System",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/SceneFlowManager.cs",
+    "from_class": "SceneFlowManager",
+    "to_type": "UnityEngine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/SceneFlowManager.cs",
+    "from_class": "SceneFlowManager",
+    "to_type": "WaitForSecondsRealtime",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/ScoreManager.cs",
+    "from_class": "ScoreManager",
+    "to_type": "MonoBehaviour",
+    "relation_type": "inherits",
+    "strength": 4
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/ScoreManager.cs",
+    "from_class": "ScoreManager",
+    "to_type": "CalculateStageScore",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/ScoreManager.cs",
+    "from_class": "ScoreManager",
+    "to_type": "Combat",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/ScoreManager.cs",
+    "from_class": "ScoreManager",
+    "to_type": "CombatResult",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/ScoreManager.cs",
+    "from_class": "ScoreManager",
+    "to_type": "Project2048",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/ScoreManager.cs",
+    "from_class": "ScoreManager",
+    "to_type": "Score",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/ScoreManager.cs",
+    "from_class": "ScoreManager",
+    "to_type": "Start",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/ScoreManager.cs",
+    "from_class": "ScoreManager",
+    "to_type": "UnityEngine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/ScoreManager.cs",
+    "from_class": "ScoreManager",
+    "to_type": "Update",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/StoryController.cs",
+    "from_class": "StoryController",
+    "to_type": "MonoBehaviour",
+    "relation_type": "inherits",
+    "strength": 4
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/StoryController.cs",
+    "from_class": "StoryController",
+    "to_type": "Count",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/StoryController.cs",
+    "from_class": "StoryController",
+    "to_type": "FinishStory",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/StoryController.cs",
+    "from_class": "StoryController",
+    "to_type": "Invoke",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/StoryController.cs",
+    "from_class": "StoryController",
+    "to_type": "Next",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/StoryController.cs",
+    "from_class": "StoryController",
+    "to_type": "OnStoryFinished",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/StoryController.cs",
+    "from_class": "StoryController",
+    "to_type": "OnStoryStepChanged",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/StoryController.cs",
+    "from_class": "StoryController",
+    "to_type": "Project2048",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/StoryController.cs",
+    "from_class": "StoryController",
+    "to_type": "ShowCurrentStep",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/StoryController.cs",
+    "from_class": "StoryController",
+    "to_type": "Skip",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/StoryController.cs",
+    "from_class": "StoryController",
+    "to_type": "Start",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/StoryController.cs",
+    "from_class": "StoryController",
+    "to_type": "StartStory",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/StoryController.cs",
+    "from_class": "StoryController",
+    "to_type": "Story",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/StoryController.cs",
+    "from_class": "StoryController",
+    "to_type": "StoryDataSO",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/StoryController.cs",
+    "from_class": "StoryController",
+    "to_type": "StoryStep",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/StoryController.cs",
+    "from_class": "StoryController",
+    "to_type": "System",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/StoryController.cs",
+    "from_class": "StoryController",
+    "to_type": "UI",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/StoryController.cs",
+    "from_class": "StoryController",
+    "to_type": "UnityEngine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/StoryDataSO.cs",
+    "from_class": "StoryDataSO",
+    "to_type": "ScriptableObject",
+    "relation_type": "inherits",
+    "strength": 4
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/StoryDataSO.cs",
+    "from_class": "StoryDataSO",
+    "to_type": "Collections",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/StoryDataSO.cs",
+    "from_class": "StoryDataSO",
+    "to_type": "CreateAssetMenu",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/StoryDataSO.cs",
+    "from_class": "StoryDataSO",
+    "to_type": "Data",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/StoryDataSO.cs",
+    "from_class": "StoryDataSO",
+    "to_type": "Game",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/StoryDataSO.cs",
+    "from_class": "StoryDataSO",
+    "to_type": "Generic",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/StoryDataSO.cs",
+    "from_class": "StoryDataSO",
+    "to_type": "Project2048",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/StoryDataSO.cs",
+    "from_class": "StoryDataSO",
+    "to_type": "Story",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/StoryDataSO.cs",
+    "from_class": "StoryDataSO",
+    "to_type": "StoryStep",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/StoryDataSO.cs",
+    "from_class": "StoryDataSO",
+    "to_type": "System",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/StoryDataSO.cs",
+    "from_class": "StoryDataSO",
+    "to_type": "UnityEngine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/StoryFlowBinder.cs",
+    "from_class": "StoryFlowBinder",
+    "to_type": "StoryController",
+    "relation_type": "component-access",
+    "strength": 3
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/StoryFlowBinder.cs",
+    "from_class": "StoryFlowBinder",
+    "to_type": "MonoBehaviour",
+    "relation_type": "inherits",
+    "strength": 4
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/StoryFlowBinder.cs",
+    "from_class": "StoryFlowBinder",
+    "to_type": "GameManager",
+    "relation_type": "singleton-access",
+    "strength": 4
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/StoryFlowBinder.cs",
+    "from_class": "StoryFlowBinder",
+    "to_type": "Awake",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/StoryFlowBinder.cs",
+    "from_class": "StoryFlowBinder",
+    "to_type": "Core",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/StoryFlowBinder.cs",
+    "from_class": "StoryFlowBinder",
+    "to_type": "Flow",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/StoryFlowBinder.cs",
+    "from_class": "StoryFlowBinder",
+    "to_type": "FlowController",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/StoryFlowBinder.cs",
+    "from_class": "StoryFlowBinder",
+    "to_type": "GameManager",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/StoryFlowBinder.cs",
+    "from_class": "StoryFlowBinder",
+    "to_type": "GetComponent",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/StoryFlowBinder.cs",
+    "from_class": "StoryFlowBinder",
+    "to_type": "Instance",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/StoryFlowBinder.cs",
+    "from_class": "StoryFlowBinder",
+    "to_type": "OnDisable",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/StoryFlowBinder.cs",
+    "from_class": "StoryFlowBinder",
+    "to_type": "OnEnable",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/StoryFlowBinder.cs",
+    "from_class": "StoryFlowBinder",
+    "to_type": "OnStoryFinished",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/StoryFlowBinder.cs",
+    "from_class": "StoryFlowBinder",
+    "to_type": "Project2048",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/StoryFlowBinder.cs",
+    "from_class": "StoryFlowBinder",
+    "to_type": "StartGameAfterStory",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/StoryFlowBinder.cs",
+    "from_class": "StoryFlowBinder",
+    "to_type": "Story",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/StoryFlowBinder.cs",
+    "from_class": "StoryFlowBinder",
+    "to_type": "StoryController",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/StoryFlowBinder.cs",
+    "from_class": "StoryFlowBinder",
+    "to_type": "UnityEngine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/StoryStep.cs",
+    "from_class": "StoryStep",
+    "to_type": "Project2048",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/StoryStep.cs",
+    "from_class": "StoryStep",
+    "to_type": "Serializable",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/StoryStep.cs",
+    "from_class": "StoryStep",
+    "to_type": "Story",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/StoryStep.cs",
+    "from_class": "StoryStep",
+    "to_type": "string",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/StoryStep.cs",
+    "from_class": "StoryStep",
+    "to_type": "System",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/StoryTextView.cs",
+    "from_class": "StoryTextView",
+    "to_type": "TMP_Text",
+    "relation_type": "component-access",
+    "strength": 3
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/StoryTextView.cs",
+    "from_class": "StoryTextView",
+    "to_type": "MonoBehaviour",
+    "relation_type": "inherits",
+    "strength": 4
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/StoryTextView.cs",
+    "from_class": "StoryTextView",
+    "to_type": "Awake",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/StoryTextView.cs",
+    "from_class": "StoryTextView",
+    "to_type": "Empty",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/StoryTextView.cs",
+    "from_class": "StoryTextView",
+    "to_type": "GetComponent",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/StoryTextView.cs",
+    "from_class": "StoryTextView",
+    "to_type": "GetComponentInParent",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/StoryTextView.cs",
+    "from_class": "StoryTextView",
+    "to_type": "HandleStoryStepChanged",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/StoryTextView.cs",
+    "from_class": "StoryTextView",
+    "to_type": "OnDisable",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/StoryTextView.cs",
+    "from_class": "StoryTextView",
+    "to_type": "OnEnable",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/StoryTextView.cs",
+    "from_class": "StoryTextView",
+    "to_type": "OnStoryStepChanged",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/StoryTextView.cs",
+    "from_class": "StoryTextView",
+    "to_type": "Project2048",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/StoryTextView.cs",
+    "from_class": "StoryTextView",
+    "to_type": "SetText",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/StoryTextView.cs",
+    "from_class": "StoryTextView",
+    "to_type": "Story",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/StoryTextView.cs",
+    "from_class": "StoryTextView",
+    "to_type": "StoryController",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/StoryTextView.cs",
+    "from_class": "StoryTextView",
+    "to_type": "StoryStep",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/StoryTextView.cs",
+    "from_class": "StoryTextView",
+    "to_type": "TMP_Text",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/StoryTextView.cs",
+    "from_class": "StoryTextView",
+    "to_type": "TMPro",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/StoryTextView.cs",
+    "from_class": "StoryTextView",
+    "to_type": "UnityEngine",
     "relation_type": "uses",
     "strength": 1
   },
@@ -6505,7 +8276,7 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyIntentSystem.cs",
     "from_class": "EnemyIntentSystem",
-    "to_type": "ApplyDefenseBonus",
+    "to_type": "ApplyFear",
     "relation_type": "uses",
     "strength": 1
   },
@@ -12819,7 +14590,7 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiContractTests.cs",
     "from_class": "CombatUiContractTests",
-    "to_type": "ApplyDefenseBonus",
+    "to_type": "ApplyFear",
     "relation_type": "uses",
     "strength": 1
   },
@@ -12848,6 +14619,13 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiContractTests.cs",
     "from_class": "CombatUiContractTests",
     "to_type": "Basic",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiContractTests.cs",
+    "from_class": "CombatUiContractTests",
+    "to_type": "Block",
     "relation_type": "uses",
     "strength": 1
   },
@@ -13050,13 +14828,6 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiContractTests.cs",
     "from_class": "CombatUiContractTests",
-    "to_type": "DefenseBonus",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiContractTests.cs",
-    "from_class": "CombatUiContractTests",
     "to_type": "Description",
     "relation_type": "uses",
     "strength": 1
@@ -13219,6 +14990,13 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiContractTests.cs",
     "from_class": "CombatUiContractTests",
     "to_type": "GreaterThan",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiContractTests.cs",
+    "from_class": "CombatUiContractTests",
+    "to_type": "Guard",
     "relation_type": "uses",
     "strength": 1
   },
@@ -13435,7 +15213,7 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiContractTests.cs",
     "from_class": "CombatUiContractTests",
-    "to_type": "RequestEndPlayerTurn_FearDebuff_EmitsVfxCueAndReducesDefenseGain",
+    "to_type": "RequestEndPlayerTurn_FearDebuff_EmitsVfxCueAndHalvesDefenseGain",
     "relation_type": "uses",
     "strength": 1
   },
@@ -13443,6 +15221,13 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiContractTests.cs",
     "from_class": "CombatUiContractTests",
     "to_type": "RequestEndPlayerTurn_PreparesNextIntentForNextPlayerTurnSnapshot",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiContractTests.cs",
+    "from_class": "CombatUiContractTests",
+    "to_type": "RequestUseSkill",
     "relation_type": "uses",
     "strength": 1
   },
@@ -15682,14 +17467,14 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/EnemyDebuffTests.cs",
     "from_class": "EnemyDebuffTests",
-    "to_type": "ApplyDefenseBonus",
+    "to_type": "Assert",
     "relation_type": "uses",
     "strength": 1
   },
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/EnemyDebuffTests.cs",
     "from_class": "EnemyDebuffTests",
-    "to_type": "Assert",
+    "to_type": "Block",
     "relation_type": "uses",
     "strength": 1
   },
@@ -15746,13 +17531,6 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/EnemyDebuffTests.cs",
     "from_class": "EnemyDebuffTests",
     "to_type": "DebuffType",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/EnemyDebuffTests.cs",
-    "from_class": "EnemyDebuffTests",
-    "to_type": "DefenseBonus",
     "relation_type": "uses",
     "strength": 1
   },
@@ -15829,7 +17607,14 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/EnemyDebuffTests.cs",
     "from_class": "EnemyDebuffTests",
-    "to_type": "FearIntent_AppliesNegativeDefenseBonus_ToPlayer",
+    "to_type": "FearIntent_HalvesFutureBlockGain_WithCeiling",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/EnemyDebuffTests.cs",
+    "from_class": "EnemyDebuffTests",
+    "to_type": "FearStacks",
     "relation_type": "uses",
     "strength": 1
   },
@@ -15837,6 +17622,13 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/EnemyDebuffTests.cs",
     "from_class": "EnemyDebuffTests",
     "to_type": "Framework",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/EnemyDebuffTests.cs",
+    "from_class": "EnemyDebuffTests",
+    "to_type": "GainBlockWithBonus",
     "relation_type": "uses",
     "strength": 1
   },

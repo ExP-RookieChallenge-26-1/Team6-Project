@@ -2,25 +2,26 @@
   "project_name": "unknown",
   "language": "C#",
   "engine_guess": "Unity",
-  "total_cs_files": 62,
-  "mono_behaviour_files": 17,
-  "scriptable_object_files": 3,
-  "files_with_update": 1,
+  "total_cs_files": 74,
+  "mono_behaviour_files": 26,
+  "scriptable_object_files": 4,
+  "files_with_update": 3,
   "files_with_fixed_update": 0,
   "files_with_late_update": 1,
-  "singleton_candidates": 0,
-  "manager_like_classes": 15,
-  "ui_related_classes": 25,
-  "save_load_related_classes": 14,
+  "singleton_candidates": 1,
+  "manager_like_classes": 21,
+  "ui_related_classes": 29,
+  "save_load_related_classes": 23,
   "role_counts": {
-    "ui": 25,
-    "save-load": 14,
-    "runtime": 23,
-    "player": 35,
-    "data": 23,
-    "combat": 43,
-    "manager": 14,
-    "scene": 3,
+    "ui": 29,
+    "save-load": 23,
+    "runtime": 32,
+    "player": 37,
+    "data": 25,
+    "combat": 45,
+    "manager": 20,
+    "inventory": 2,
+    "scene": 5,
     "network": 2
   },
   "high_coupling_classes": [
@@ -45,14 +46,14 @@
     {
       "class_name": "CombatManager",
       "file_id": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
-      "relation_count": 198,
-      "referenced_type_count": 188
+      "relation_count": 201,
+      "referenced_type_count": 191
     },
     {
       "class_name": "CombatUiContractTests",
       "file_id": "Project 2048/Assets/Tests/EditMode/CombatUiContractTests.cs",
-      "relation_count": 119,
-      "referenced_type_count": 117
+      "relation_count": 121,
+      "referenced_type_count": 119
     },
     {
       "class_name": "Board2048Manager",
@@ -81,8 +82,8 @@
     {
       "class_name": "CombatSnapshot",
       "file_id": "Project 2048/Assets/Scripts/Combat/CombatSnapshot.cs",
-      "relation_count": 51,
-      "referenced_type_count": 51
+      "relation_count": 52,
+      "referenced_type_count": 52
     }
   ],
   "high_risk_classes": [
@@ -137,6 +138,29 @@
         "상태 중심 또는 관리 중심 클래스일 가능성"
       ],
       "risk_score": 95
+    },
+    {
+      "file_id": "Project 2048/Assets/Scripts/Core/LoadingUI.cs",
+      "class_name": "LoadingUI",
+      "risk_flags": [
+        "update-heavy",
+        "high-coupling",
+        "magic-number-heavy",
+        "init-order-sensitive",
+        "save-load-sensitive",
+        "ui-runtime-mixed",
+        "state-owner"
+      ],
+      "risk_reasons": [
+        "Unity 업데이트 루프 사용",
+        "참조 타입 또는 관계 수가 많음",
+        "숫자 리터럴이 많아 의미 파악이 어려울 수 있음",
+        "초기화 순서에 민감할 가능성",
+        "저장/불러오기 관련 로직 포함",
+        "UI와 런타임 책임이 한 파일에 섞였을 가능성",
+        "상태 중심 또는 관리 중심 클래스일 가능성"
+      ],
+      "risk_score": 76
     },
     {
       "file_id": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
@@ -261,42 +285,23 @@
       "risk_score": 58
     },
     {
-      "file_id": "Project 2048/Assets/Scripts/Prototype/BoardCellView.cs",
-      "class_name": "BoardCellView",
+      "file_id": "Project 2048/Assets/Scripts/Core/LoadingFlowBinder.cs",
+      "class_name": "LoadingFlowBinder",
       "risk_flags": [
         "high-coupling",
-        "magic-number-heavy",
+        "init-order-sensitive",
         "save-load-sensitive",
         "ui-runtime-mixed",
         "state-owner"
       ],
       "risk_reasons": [
         "참조 타입 또는 관계 수가 많음",
-        "숫자 리터럴이 많아 의미 파악이 어려울 수 있음",
+        "초기화 순서에 민감할 가능성",
         "저장/불러오기 관련 로직 포함",
         "UI와 런타임 책임이 한 파일에 섞였을 가능성",
         "상태 중심 또는 관리 중심 클래스일 가능성"
       ],
-      "risk_score": 56
-    },
-    {
-      "file_id": "Project 2048/Assets/Tests/EditMode/PrototypeCombatFactoryTests.cs",
-      "class_name": "PrototypeCombatFactoryTests",
-      "risk_flags": [
-        "high-coupling",
-        "magic-number-heavy",
-        "save-load-sensitive",
-        "ui-runtime-mixed",
-        "state-owner"
-      ],
-      "risk_reasons": [
-        "참조 타입 또는 관계 수가 많음",
-        "숫자 리터럴이 많아 의미 파악이 어려울 수 있음",
-        "저장/불러오기 관련 로직 포함",
-        "UI와 런타임 책임이 한 파일에 섞였을 가능성",
-        "상태 중심 또는 관리 중심 클래스일 가능성"
-      ],
-      "risk_score": 56
+      "risk_score": 58
     }
   ],
   "common_patterns": [

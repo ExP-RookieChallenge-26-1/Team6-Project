@@ -1762,9 +1762,9 @@
     "file_id": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "path": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "file_name": "CombatManager.cs",
-    "content_hash": "f0c6d542835bf93cea8940a821295a04d5914f32",
-    "size": 24909,
-    "line_count": 755,
+    "content_hash": "9448f383281159c13f5b0d16d9c045b51c72b8ea",
+    "size": 25216,
+    "line_count": 762,
     "namespace": "Project2048.Combat",
     "using_list": [
       "System",
@@ -1835,6 +1835,7 @@
       "HandlePlayerHpChanged",
       "HandlePlayerBlockChanged",
       "HandlePlayerDefenseBonusChanged",
+      "HandlePlayerStatusEffectsChanged",
       "HandleEnemyHpChanged",
       "HandleEnemyBlockChanged",
       "HandleEnemyIntentChanged",
@@ -2169,6 +2170,8 @@
       "HandlePlayerBlockChanged",
       "OnDefenseBonusChanged",
       "HandlePlayerDefenseBonusChanged",
+      "OnStatusEffectsChanged",
+      "HandlePlayerStatusEffectsChanged",
       "HandleEnemyHpChanged",
       "HandleEnemyBlockChanged",
       "OnIntentChanged",
@@ -2179,6 +2182,7 @@
       "AttackPower",
       "Block",
       "DefenseBonus",
+      "FearStacks",
       "StatusEffects",
       "BuildPlayerStatusEffects",
       "EnemyCombatSnapshot",
@@ -2195,9 +2199,9 @@
       "Description",
       "IsBuff",
       "IconText",
-      "Abs",
       "CountDarknessStacks",
       "AttackModifier",
+      "Abs",
       "PendingObstacleCount",
       "GetLength",
       "IsObstacle",
@@ -2239,7 +2243,7 @@
       "방+",
       "fear",
       "공포",
-      "방어도 획득량이 {value} 감소합니다.",
+      "방어도 획득량이 절반으로 감소합니다. 소수점은 올림 처리됩니다.",
       "공",
       "darkness",
       "암흑"
@@ -2505,9 +2509,9 @@
     "file_id": "Project 2048/Assets/Scripts/Combat/CombatSnapshot.cs",
     "path": "Project 2048/Assets/Scripts/Combat/CombatSnapshot.cs",
     "file_name": "CombatSnapshot.cs",
-    "content_hash": "51c6c6f6378796a19902f12ed7814cb4fb349b96",
-    "size": 3019,
-    "line_count": 94,
+    "content_hash": "2e78a548608143d353ff522fcd941ac2fcd4e96b",
+    "size": 3063,
+    "line_count": 95,
     "namespace": "Project2048.Combat",
     "using_list": [
       "System",
@@ -2681,6 +2685,11 @@
       },
       {
         "access": "public",
+        "type": "int",
+        "name": "FearStacks"
+      },
+      {
+        "access": "public",
         "type": "List<CombatStatusEffectSnapshot>",
         "name": "StatusEffects"
       },
@@ -2841,6 +2850,7 @@
       "AttackPower",
       "Block",
       "DefenseBonus",
+      "FearStacks",
       "StatusEffects",
       "EnemyIndex",
       "DisplayName",
@@ -2948,9 +2958,9 @@
     "file_id": "Project 2048/Assets/Scripts/Combat/PlayerCombatController.cs",
     "path": "Project 2048/Assets/Scripts/Combat/PlayerCombatController.cs",
     "file_name": "PlayerCombatController.cs",
-    "content_hash": "301f534ba6bff36dffe51bc321647a85851108be",
-    "size": 3138,
-    "line_count": 116,
+    "content_hash": "49b5ed22082edb8d37da421c16899e06bce43216",
+    "size": 3657,
+    "line_count": 136,
     "namespace": "Project2048.Combat",
     "using_list": [
       "System",
@@ -2982,6 +2992,7 @@
       "AddBlock",
       "GainBlockWithBonus",
       "ApplyDefenseBonus",
+      "ApplyFear",
       "ClearBlock"
     ],
     "fields": [],
@@ -3015,6 +3026,11 @@
         "access": "public",
         "type": "int",
         "name": "DefenseBonus"
+      },
+      {
+        "access": "public",
+        "type": "int",
+        "name": "FearStacks"
       },
       {
         "access": "public",
@@ -3056,12 +3072,14 @@
       "AttackPower",
       "Block",
       "DefenseBonus",
+      "FearStacks",
       "BoardMoveCountBonus",
       "IsDead",
       "IReadOnlyList",
       "OnHpChanged",
       "OnBlockChanged",
       "OnDefenseBonusChanged",
+      "OnStatusEffectsChanged",
       "Init",
       "ArgumentNullException",
       "Max",
@@ -3072,7 +3090,9 @@
       "TakeDamage",
       "AddBlock",
       "GainBlockWithBonus",
+      "CeilToInt",
       "ApplyDefenseBonus",
+      "ApplyFear",
       "ClearBlock"
     ],
     "component_access_types": [],
@@ -3081,7 +3101,9 @@
     ],
     "singleton_access_types": [],
     "string_literals": [],
-    "numeric_literals": [],
+    "numeric_literals": [
+      0.5
+    ],
     "guessed_roles": [
       "combat",
       "player",
@@ -3289,6 +3311,1308 @@
     ],
     "summary_signals": [
       "전투 계열 로직 포함"
+    ]
+  },
+  {
+    "file_id": "Project 2048/Assets/Scripts/Core/FlowController.cs",
+    "path": "Project 2048/Assets/Scripts/Core/FlowController.cs",
+    "file_name": "FlowController.cs",
+    "content_hash": "fb55d1c6280d2507e1c090a5172dc5612035d594",
+    "size": 2613,
+    "line_count": 87,
+    "namespace": "Project2048.Flow",
+    "using_list": [
+      "Project2048.Core",
+      "System",
+      "UnityEngine"
+    ],
+    "classes": [
+      {
+        "name": "FlowController",
+        "kind": "class",
+        "access": "public",
+        "base_types": [
+          "MonoBehaviour"
+        ],
+        "interfaces": [],
+        "attributes": [],
+        "is_partial": false,
+        "is_generic": false
+      }
+    ],
+    "main_class_name": "FlowController",
+    "unity_type": "MonoBehaviour",
+    "methods": [
+      "Initialized",
+      "SetNewGame",
+      "ContinueGame",
+      "StartGameAfterStory"
+    ],
+    "fields": [
+      {
+        "name": "gameContext",
+        "type": "GameContext",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      }
+    ],
+    "properties": [],
+    "events": [],
+    "unity_messages": [],
+    "has_update": false,
+    "has_fixed_update": false,
+    "has_late_update": false,
+    "has_awake": false,
+    "has_start": false,
+    "has_on_enable": false,
+    "has_on_disable": false,
+    "serialize_field_count": 0,
+    "public_field_count": 0,
+    "get_component_count": 0,
+    "find_call_count": 0,
+    "new_keyword_count": 0,
+    "coroutine_count": 0,
+    "singleton_candidate": false,
+    "dont_destroy_on_load": false,
+    "referenced_types": [
+      "GameContext",
+      "Project2048",
+      "Core",
+      "System",
+      "UnityEngine",
+      "Flow",
+      "OnLoadingStarted",
+      "OnNewGameStoryStarted",
+      "OnGameStarted",
+      "Initialized",
+      "SetNewGame",
+      "LogError",
+      "Invoke",
+      "SetGameState",
+      "GameState",
+      "Loading",
+      "SetStageId",
+      "SetScore",
+      "SetRunActive",
+      "PlayerManager",
+      "InitializeDefaultPlayer",
+      "ScoreManager",
+      "ResetScore",
+      "SaveLoadManager",
+      "PrepareNewSaveSlot",
+      "Story",
+      "ContinueGame",
+      "Load",
+      "Playing",
+      "StartGameAfterStory",
+      "Save"
+    ],
+    "component_access_types": [],
+    "created_types": [],
+    "singleton_access_types": [],
+    "string_literals": [
+      "GameContext is not initialized",
+      "ù ��������"
+    ],
+    "numeric_literals": [],
+    "guessed_roles": [
+      "save-load",
+      "runtime",
+      "player",
+      "inventory",
+      "manager"
+    ],
+    "summary_signals": [
+      "런타임 컴포넌트",
+      "인벤토리 계열 로직 포함",
+      "저장/불러오기 관련 로직 포함"
+    ]
+  },
+  {
+    "file_id": "Project 2048/Assets/Scripts/Core/GameContext.cs",
+    "path": "Project 2048/Assets/Scripts/Core/GameContext.cs",
+    "file_name": "GameContext.cs",
+    "content_hash": "f3649b744a44606fd71e1e48a2b1f68569f27aac",
+    "size": 1481,
+    "line_count": 59,
+    "namespace": "Project2048.Core",
+    "using_list": [
+      "System",
+      "UnityEngine"
+    ],
+    "classes": [
+      {
+        "name": "GameContext",
+        "kind": "class",
+        "access": "public",
+        "base_types": [],
+        "interfaces": [],
+        "attributes": [],
+        "is_partial": false,
+        "is_generic": false
+      }
+    ],
+    "main_class_name": "GameContext",
+    "unity_type": "None",
+    "methods": [
+      "SetStageId",
+      "SetScore",
+      "SetRunActive",
+      "SetGameState"
+    ],
+    "fields": [
+      {
+        "name": "currentGameState",
+        "type": "GameState",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "currentStageId",
+        "type": "string",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "currentScore",
+        "type": "int",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "currentSaveSlotId",
+        "type": "int",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "isRunActive",
+        "type": "bool",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      }
+    ],
+    "properties": [],
+    "events": [],
+    "unity_messages": [],
+    "has_update": false,
+    "has_fixed_update": false,
+    "has_late_update": false,
+    "has_awake": false,
+    "has_start": false,
+    "has_on_enable": false,
+    "has_on_disable": false,
+    "serialize_field_count": 0,
+    "public_field_count": 0,
+    "get_component_count": 0,
+    "find_call_count": 0,
+    "new_keyword_count": 0,
+    "coroutine_count": 0,
+    "singleton_candidate": false,
+    "dont_destroy_on_load": false,
+    "referenced_types": [
+      "GameState",
+      "string",
+      "int",
+      "bool",
+      "System",
+      "UnityEngine",
+      "Project2048",
+      "Core",
+      "MainMenu",
+      "Loading",
+      "Story",
+      "Playing",
+      "Paused",
+      "Result",
+      "CurrentGameState",
+      "CurrentStageId",
+      "CurrentScore",
+      "CurrentSaveSlotId",
+      "IsRunActive",
+      "OnGameStateChanged",
+      "OnStageIdChanged",
+      "OnScoreChanged",
+      "OnRunActiveChanged",
+      "SetStageId",
+      "SetScore",
+      "Invoke",
+      "SetRunActive",
+      "SetGameState"
+    ],
+    "component_access_types": [],
+    "created_types": [],
+    "singleton_access_types": [],
+    "string_literals": [],
+    "numeric_literals": [],
+    "guessed_roles": [
+      "save-load",
+      "inventory"
+    ],
+    "summary_signals": [
+      "인벤토리 계열 로직 포함",
+      "저장/불러오기 관련 로직 포함"
+    ]
+  },
+  {
+    "file_id": "Project 2048/Assets/Scripts/Core/GameManager.cs",
+    "path": "Project 2048/Assets/Scripts/Core/GameManager.cs",
+    "file_name": "GameManager.cs",
+    "content_hash": "16bfc1bb4aceaedfb338497703ca70eebefcccb9",
+    "size": 1273,
+    "line_count": 56,
+    "namespace": "Project2048.Core",
+    "using_list": [
+      "UnityEngine",
+      "Project2048.Flow"
+    ],
+    "classes": [
+      {
+        "name": "GameManager",
+        "kind": "class",
+        "access": "public",
+        "base_types": [
+          "MonoBehaviour"
+        ],
+        "interfaces": [],
+        "attributes": [],
+        "is_partial": false,
+        "is_generic": false
+      }
+    ],
+    "main_class_name": "GameManager",
+    "unity_type": "MonoBehaviour",
+    "methods": [
+      "Awake",
+      "GameContext",
+      "StartNewGame",
+      "StartSaveGame"
+    ],
+    "fields": [
+      {
+        "name": "gameContext",
+        "type": "GameContext",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      }
+    ],
+    "properties": [
+      {
+        "access": "internal",
+        "type": "GameManager",
+        "name": "Instance"
+      }
+    ],
+    "events": [],
+    "unity_messages": [
+      "Awake"
+    ],
+    "has_update": false,
+    "has_fixed_update": false,
+    "has_late_update": false,
+    "has_awake": true,
+    "has_start": false,
+    "has_on_enable": false,
+    "has_on_disable": false,
+    "serialize_field_count": 0,
+    "public_field_count": 0,
+    "get_component_count": 1,
+    "find_call_count": 0,
+    "new_keyword_count": 1,
+    "coroutine_count": 0,
+    "singleton_candidate": true,
+    "dont_destroy_on_load": true,
+    "referenced_types": [
+      "GameContext",
+      "UnityEngine",
+      "Project2048",
+      "Flow",
+      "Core",
+      "Instance",
+      "FlowController",
+      "Awake",
+      "Destroy",
+      "DontDestroyOnLoad",
+      "GetComponent",
+      "LogError",
+      "Initialized",
+      "StartNewGame",
+      "SetNewGame",
+      "StartSaveGame"
+    ],
+    "component_access_types": [
+      "FlowController"
+    ],
+    "created_types": [
+      "GameContext"
+    ],
+    "singleton_access_types": [],
+    "string_literals": [
+      "FlowController is not assigned."
+    ],
+    "numeric_literals": [],
+    "guessed_roles": [
+      "manager",
+      "save-load",
+      "runtime"
+    ],
+    "summary_signals": [
+      "런타임 컴포넌트",
+      "싱글톤 후보",
+      "저장/불러오기 관련 로직 포함",
+      "컴포넌트 조회 사용"
+    ]
+  },
+  {
+    "file_id": "Project 2048/Assets/Scripts/Core/LoadingFlowBinder.cs",
+    "path": "Project 2048/Assets/Scripts/Core/LoadingFlowBinder.cs",
+    "file_name": "LoadingFlowBinder.cs",
+    "content_hash": "5d698cedc8530fc6dc2a63cf1f351760a8e906a1",
+    "size": 1480,
+    "line_count": 48,
+    "namespace": "Project2048.Flow",
+    "using_list": [
+      "Project2048.UI",
+      "UnityEngine"
+    ],
+    "classes": [
+      {
+        "name": "LoadingFlowBinder",
+        "kind": "class",
+        "access": "public",
+        "base_types": [
+          "MonoBehaviour"
+        ],
+        "interfaces": [],
+        "attributes": [],
+        "is_partial": false,
+        "is_generic": false
+      }
+    ],
+    "main_class_name": "LoadingFlowBinder",
+    "unity_type": "MonoBehaviour",
+    "methods": [
+      "Awake",
+      "OnEnable",
+      "OnDisable"
+    ],
+    "fields": [],
+    "properties": [],
+    "events": [],
+    "unity_messages": [
+      "Awake",
+      "OnEnable",
+      "OnDisable"
+    ],
+    "has_update": false,
+    "has_fixed_update": false,
+    "has_late_update": false,
+    "has_awake": true,
+    "has_start": false,
+    "has_on_enable": true,
+    "has_on_disable": true,
+    "serialize_field_count": 0,
+    "public_field_count": 0,
+    "get_component_count": 2,
+    "find_call_count": 0,
+    "new_keyword_count": 0,
+    "coroutine_count": 0,
+    "singleton_candidate": false,
+    "dont_destroy_on_load": false,
+    "referenced_types": [
+      "Project2048",
+      "UI",
+      "UnityEngine",
+      "Flow",
+      "FlowController",
+      "SceneFlowManager",
+      "LoadingUI",
+      "Awake",
+      "GetComponent",
+      "GetComponentInChildren",
+      "OnEnable",
+      "OnLoadingStarted",
+      "Show",
+      "OnLoadProgressChanged",
+      "SetProgress",
+      "OnSceneLoadCompleted",
+      "Hide",
+      "OnDisable"
+    ],
+    "component_access_types": [
+      "FlowController",
+      "SceneFlowManager"
+    ],
+    "created_types": [],
+    "singleton_access_types": [],
+    "string_literals": [],
+    "numeric_literals": [],
+    "guessed_roles": [
+      "runtime",
+      "save-load",
+      "ui",
+      "manager",
+      "scene"
+    ],
+    "summary_signals": [
+      "런타임 컴포넌트",
+      "UI 관련 로직 포함",
+      "저장/불러오기 관련 로직 포함",
+      "컴포넌트 조회 사용"
+    ]
+  },
+  {
+    "file_id": "Project 2048/Assets/Scripts/Core/LoadingUI.cs",
+    "path": "Project 2048/Assets/Scripts/Core/LoadingUI.cs",
+    "file_name": "LoadingUI.cs",
+    "content_hash": "d6a329e815f9dc9c71f25866b95ee8d08e4ce482",
+    "size": 3528,
+    "line_count": 135,
+    "namespace": "Project2048.UI",
+    "using_list": [
+      "System.Collections",
+      "UnityEngine",
+      "TMPro",
+      "UnityEngine.UI"
+    ],
+    "classes": [
+      {
+        "name": "LoadingUI",
+        "kind": "class",
+        "access": "public",
+        "base_types": [
+          "MonoBehaviour"
+        ],
+        "interfaces": [],
+        "attributes": [],
+        "is_partial": false,
+        "is_generic": false
+      }
+    ],
+    "main_class_name": "LoadingUI",
+    "unity_type": "MonoBehaviour",
+    "methods": [
+      "Awake",
+      "Update",
+      "Show",
+      "Hide",
+      "SetProgress",
+      "ApplyProgress",
+      "UpdateProgressText",
+      "GetRoot",
+      "HideWhenProgressCompletes"
+    ],
+    "fields": [
+      {
+        "name": "targetProgress",
+        "type": "float",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "displayedProgress",
+        "type": "float",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "hideRoutine",
+        "type": "Coroutine",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      }
+    ],
+    "properties": [],
+    "events": [],
+    "unity_messages": [
+      "Awake",
+      "Update"
+    ],
+    "has_update": true,
+    "has_fixed_update": false,
+    "has_late_update": false,
+    "has_awake": true,
+    "has_start": false,
+    "has_on_enable": false,
+    "has_on_disable": false,
+    "serialize_field_count": 0,
+    "public_field_count": 0,
+    "get_component_count": 0,
+    "find_call_count": 0,
+    "new_keyword_count": 0,
+    "coroutine_count": 2,
+    "singleton_candidate": false,
+    "dont_destroy_on_load": false,
+    "referenced_types": [
+      "float",
+      "Coroutine",
+      "System",
+      "Collections",
+      "UnityEngine",
+      "TMPro",
+      "UI",
+      "Project2048",
+      "Slider",
+      "TMP_Text",
+      "Canvas",
+      "Awake",
+      "GetComponentInParent",
+      "Hide",
+      "Update",
+      "GetRoot",
+      "MoveTowards",
+      "ApplyProgress",
+      "Show",
+      "StopCoroutine",
+      "SetActive",
+      "StartCoroutine",
+      "HideWhenProgressCompletes",
+      "SetProgress",
+      "Clamp01",
+      "UpdateProgressText",
+      "RoundToInt"
+    ],
+    "component_access_types": [],
+    "created_types": [],
+    "singleton_access_types": [],
+    "string_literals": [
+      "{Mathf.RoundToInt(progress * 100f)}%"
+    ],
+    "numeric_literals": [
+      10000,
+      1.5,
+      0,
+      1,
+      100,
+      0.999
+    ],
+    "guessed_roles": [
+      "ui",
+      "runtime",
+      "save-load",
+      "player"
+    ],
+    "summary_signals": [
+      "런타임 컴포넌트",
+      "Update 기반 처리 존재",
+      "UI 관련 로직 포함",
+      "저장/불러오기 관련 로직 포함"
+    ]
+  },
+  {
+    "file_id": "Project 2048/Assets/Scripts/Core/SceneFlowManager.cs",
+    "path": "Project 2048/Assets/Scripts/Core/SceneFlowManager.cs",
+    "file_name": "SceneFlowManager.cs",
+    "content_hash": "ccabefaabddd0cdf6a971a2d052867cd7a2aba31",
+    "size": 2774,
+    "line_count": 102,
+    "namespace": "Project2048.Flow",
+    "using_list": [
+      "System",
+      "System.Collections",
+      "UnityEngine",
+      "UnityEngine.SceneManagement"
+    ],
+    "classes": [
+      {
+        "name": "SceneFlowManager",
+        "kind": "class",
+        "access": "public",
+        "base_types": [
+          "MonoBehaviour"
+        ],
+        "interfaces": [],
+        "attributes": [],
+        "is_partial": false,
+        "is_generic": false
+      }
+    ],
+    "main_class_name": "SceneFlowManager",
+    "unity_type": "MonoBehaviour",
+    "methods": [
+      "Awake",
+      "OnEnable",
+      "OnDisable",
+      "LoadMainMenu",
+      "LoadStory",
+      "LoadInGame",
+      "LoadScene",
+      "LoadSceneAsync",
+      "WaitForSecondsRealtime"
+    ],
+    "fields": [
+      {
+        "name": "MainMenuSceneName",
+        "type": "string",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "StorySceneName",
+        "type": "string",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "InGameSceneName",
+        "type": "string",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "startTime",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "break",
+        "type": "yield",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "elapsedTime",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "remainingTime",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      }
+    ],
+    "properties": [],
+    "events": [],
+    "unity_messages": [
+      "Awake",
+      "OnEnable",
+      "OnDisable"
+    ],
+    "has_update": false,
+    "has_fixed_update": false,
+    "has_late_update": false,
+    "has_awake": true,
+    "has_start": false,
+    "has_on_enable": true,
+    "has_on_disable": true,
+    "serialize_field_count": 0,
+    "public_field_count": 0,
+    "get_component_count": 1,
+    "find_call_count": 0,
+    "new_keyword_count": 1,
+    "coroutine_count": 2,
+    "singleton_candidate": false,
+    "dont_destroy_on_load": false,
+    "referenced_types": [
+      "string",
+      "System",
+      "Collections",
+      "UnityEngine",
+      "SceneManagement",
+      "Project2048",
+      "Flow",
+      "MainMenuSceneName",
+      "MainMenu",
+      "StorySceneName",
+      "StoryScene",
+      "InGameSceneName",
+      "BattleScene",
+      "FlowController",
+      "OnLoadProgressChanged",
+      "OnSceneLoadCompleted",
+      "Awake",
+      "GetComponent",
+      "OnEnable",
+      "OnNewGameStoryStarted",
+      "LoadStory",
+      "OnGameStarted",
+      "LoadInGame",
+      "OnDisable",
+      "LoadMainMenu",
+      "LoadScene",
+      "IsNullOrWhiteSpace",
+      "LogError",
+      "Scene",
+      "StartCoroutine",
+      "LoadSceneAsync",
+      "SceneManager",
+      "Clamp01",
+      "Invoke",
+      "WaitForSecondsRealtime"
+    ],
+    "component_access_types": [
+      "FlowController"
+    ],
+    "created_types": [
+      "WaitForSecondsRealtime"
+    ],
+    "singleton_access_types": [],
+    "string_literals": [
+      "MainMenu",
+      "StoryScene",
+      "BattleScene",
+      "Scene name is empty.",
+      "Scene load failed: {sceneName}"
+    ],
+    "numeric_literals": [
+      2,
+      0.9,
+      0,
+      1
+    ],
+    "guessed_roles": [
+      "scene",
+      "runtime",
+      "save-load",
+      "combat",
+      "manager"
+    ],
+    "summary_signals": [
+      "런타임 컴포넌트",
+      "전투 계열 로직 포함",
+      "저장/불러오기 관련 로직 포함",
+      "컴포넌트 조회 사용"
+    ]
+  },
+  {
+    "file_id": "Project 2048/Assets/Scripts/Core/ScoreManager.cs",
+    "path": "Project 2048/Assets/Scripts/Core/ScoreManager.cs",
+    "file_name": "ScoreManager.cs",
+    "content_hash": "196bfc17d166be755ee966e088c56f49ebff727f",
+    "size": 430,
+    "line_count": 28,
+    "namespace": "Project2048.Score",
+    "using_list": [
+      "Project2048.Combat",
+      "UnityEngine"
+    ],
+    "classes": [
+      {
+        "name": "ScoreManager",
+        "kind": "class",
+        "access": "public",
+        "base_types": [
+          "MonoBehaviour"
+        ],
+        "interfaces": [],
+        "attributes": [],
+        "is_partial": false,
+        "is_generic": false
+      }
+    ],
+    "main_class_name": "ScoreManager",
+    "unity_type": "MonoBehaviour",
+    "methods": [
+      "Start",
+      "Update",
+      "CalculateStageScore"
+    ],
+    "fields": [],
+    "properties": [],
+    "events": [],
+    "unity_messages": [
+      "Start",
+      "Update"
+    ],
+    "has_update": true,
+    "has_fixed_update": false,
+    "has_late_update": false,
+    "has_awake": false,
+    "has_start": true,
+    "has_on_enable": false,
+    "has_on_disable": false,
+    "serialize_field_count": 0,
+    "public_field_count": 0,
+    "get_component_count": 0,
+    "find_call_count": 0,
+    "new_keyword_count": 0,
+    "coroutine_count": 0,
+    "singleton_candidate": false,
+    "dont_destroy_on_load": false,
+    "referenced_types": [
+      "Project2048",
+      "Combat",
+      "UnityEngine",
+      "Score",
+      "Start",
+      "Update",
+      "CalculateStageScore",
+      "CombatResult"
+    ],
+    "component_access_types": [],
+    "created_types": [],
+    "singleton_access_types": [],
+    "string_literals": [],
+    "numeric_literals": [],
+    "guessed_roles": [
+      "runtime",
+      "combat",
+      "manager"
+    ],
+    "summary_signals": [
+      "런타임 컴포넌트",
+      "Update 기반 처리 존재",
+      "전투 계열 로직 포함"
+    ]
+  },
+  {
+    "file_id": "Project 2048/Assets/Scripts/Core/StoryController.cs",
+    "path": "Project 2048/Assets/Scripts/Core/StoryController.cs",
+    "file_name": "StoryController.cs",
+    "content_hash": "4c231d7dd65a6aa7fe6a9c50d3c0b596afbef296",
+    "size": 2003,
+    "line_count": 84,
+    "namespace": "Project2048.Story",
+    "using_list": [
+      "System",
+      "UnityEngine"
+    ],
+    "classes": [
+      {
+        "name": "StoryController",
+        "kind": "class",
+        "access": "public",
+        "base_types": [
+          "MonoBehaviour"
+        ],
+        "interfaces": [],
+        "attributes": [],
+        "is_partial": false,
+        "is_generic": false
+      }
+    ],
+    "main_class_name": "StoryController",
+    "unity_type": "MonoBehaviour",
+    "methods": [
+      "Start",
+      "StartStory",
+      "Next",
+      "ShowCurrentStep",
+      "Skip",
+      "FinishStory"
+    ],
+    "fields": [
+      {
+        "name": "currentStory",
+        "type": "StoryDataSO",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      }
+    ],
+    "properties": [],
+    "events": [],
+    "unity_messages": [
+      "Start"
+    ],
+    "has_update": false,
+    "has_fixed_update": false,
+    "has_late_update": false,
+    "has_awake": false,
+    "has_start": true,
+    "has_on_enable": false,
+    "has_on_disable": false,
+    "serialize_field_count": 0,
+    "public_field_count": 0,
+    "get_component_count": 0,
+    "find_call_count": 0,
+    "new_keyword_count": 0,
+    "coroutine_count": 0,
+    "singleton_candidate": false,
+    "dont_destroy_on_load": false,
+    "referenced_types": [
+      "StoryDataSO",
+      "System",
+      "UnityEngine",
+      "Project2048",
+      "Story",
+      "StoryStep",
+      "OnStoryStepChanged",
+      "OnStoryFinished",
+      "Start",
+      "StartStory",
+      "Count",
+      "FinishStory",
+      "ShowCurrentStep",
+      "Next",
+      "UI",
+      "Invoke",
+      "Skip"
+    ],
+    "component_access_types": [],
+    "created_types": [],
+    "singleton_access_types": [],
+    "string_literals": [],
+    "numeric_literals": [],
+    "guessed_roles": [
+      "runtime",
+      "ui",
+      "data",
+      "save-load"
+    ],
+    "summary_signals": [
+      "런타임 컴포넌트",
+      "UI 관련 로직 포함",
+      "저장/불러오기 관련 로직 포함"
+    ]
+  },
+  {
+    "file_id": "Project 2048/Assets/Scripts/Core/StoryDataSO.cs",
+    "path": "Project 2048/Assets/Scripts/Core/StoryDataSO.cs",
+    "file_name": "StoryDataSO.cs",
+    "content_hash": "fc82e35a1dd8e4882f846c56a51c3244a2ebd85a",
+    "size": 244,
+    "line_count": 12,
+    "namespace": "Project2048.Story",
+    "using_list": [
+      "System.Collections.Generic",
+      "UnityEngine"
+    ],
+    "classes": [
+      {
+        "name": "StoryDataSO",
+        "kind": "class",
+        "access": "public",
+        "base_types": [
+          "ScriptableObject"
+        ],
+        "interfaces": [],
+        "attributes": [],
+        "is_partial": false,
+        "is_generic": false
+      }
+    ],
+    "main_class_name": "StoryDataSO",
+    "unity_type": "ScriptableObject",
+    "methods": [],
+    "fields": [],
+    "properties": [],
+    "events": [],
+    "unity_messages": [],
+    "has_update": false,
+    "has_fixed_update": false,
+    "has_late_update": false,
+    "has_awake": false,
+    "has_start": false,
+    "has_on_enable": false,
+    "has_on_disable": false,
+    "serialize_field_count": 0,
+    "public_field_count": 0,
+    "get_component_count": 0,
+    "find_call_count": 0,
+    "new_keyword_count": 0,
+    "coroutine_count": 0,
+    "singleton_candidate": false,
+    "dont_destroy_on_load": false,
+    "referenced_types": [
+      "System",
+      "Collections",
+      "Generic",
+      "UnityEngine",
+      "Project2048",
+      "Story",
+      "CreateAssetMenu",
+      "Game",
+      "Data",
+      "StoryStep"
+    ],
+    "component_access_types": [],
+    "created_types": [],
+    "singleton_access_types": [],
+    "string_literals": [
+      "Game/Story Data"
+    ],
+    "numeric_literals": [],
+    "guessed_roles": [
+      "data"
+    ],
+    "summary_signals": [
+      "데이터 자산 중심 구조"
+    ]
+  },
+  {
+    "file_id": "Project 2048/Assets/Scripts/Core/StoryFlowBinder.cs",
+    "path": "Project 2048/Assets/Scripts/Core/StoryFlowBinder.cs",
+    "file_name": "StoryFlowBinder.cs",
+    "content_hash": "0d22fb149a2fba1b90b277a37a202c53f54ee771",
+    "size": 1048,
+    "line_count": 44,
+    "namespace": "Project2048.Story",
+    "using_list": [
+      "Project2048.Core",
+      "Project2048.Flow",
+      "UnityEngine"
+    ],
+    "classes": [
+      {
+        "name": "StoryFlowBinder",
+        "kind": "class",
+        "access": "public",
+        "base_types": [
+          "MonoBehaviour"
+        ],
+        "interfaces": [],
+        "attributes": [],
+        "is_partial": false,
+        "is_generic": false
+      }
+    ],
+    "main_class_name": "StoryFlowBinder",
+    "unity_type": "MonoBehaviour",
+    "methods": [
+      "Awake",
+      "OnEnable",
+      "OnDisable"
+    ],
+    "fields": [
+      {
+        "name": "flowController",
+        "type": "FlowController",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      }
+    ],
+    "properties": [],
+    "events": [],
+    "unity_messages": [
+      "Awake",
+      "OnEnable",
+      "OnDisable"
+    ],
+    "has_update": false,
+    "has_fixed_update": false,
+    "has_late_update": false,
+    "has_awake": true,
+    "has_start": false,
+    "has_on_enable": true,
+    "has_on_disable": true,
+    "serialize_field_count": 0,
+    "public_field_count": 0,
+    "get_component_count": 1,
+    "find_call_count": 0,
+    "new_keyword_count": 0,
+    "coroutine_count": 0,
+    "singleton_candidate": false,
+    "dont_destroy_on_load": false,
+    "referenced_types": [
+      "FlowController",
+      "Project2048",
+      "Core",
+      "Flow",
+      "UnityEngine",
+      "Story",
+      "StoryController",
+      "Awake",
+      "GetComponent",
+      "GameManager",
+      "Instance",
+      "OnEnable",
+      "OnStoryFinished",
+      "StartGameAfterStory",
+      "OnDisable"
+    ],
+    "component_access_types": [
+      "StoryController"
+    ],
+    "created_types": [],
+    "singleton_access_types": [
+      "GameManager"
+    ],
+    "string_literals": [],
+    "numeric_literals": [],
+    "guessed_roles": [
+      "runtime",
+      "manager",
+      "save-load"
+    ],
+    "summary_signals": [
+      "런타임 컴포넌트",
+      "저장/불러오기 관련 로직 포함",
+      "컴포넌트 조회 사용"
+    ]
+  },
+  {
+    "file_id": "Project 2048/Assets/Scripts/Core/StoryStep.cs",
+    "path": "Project 2048/Assets/Scripts/Core/StoryStep.cs",
+    "file_name": "StoryStep.cs",
+    "content_hash": "943696fa168f2c067fa9f1a437f006e7353b6ae6",
+    "size": 133,
+    "line_count": 11,
+    "namespace": "Project2048.Story",
+    "using_list": [
+      "System"
+    ],
+    "classes": [
+      {
+        "name": "StoryStep",
+        "kind": "class",
+        "access": "public",
+        "base_types": [],
+        "interfaces": [],
+        "attributes": [],
+        "is_partial": false,
+        "is_generic": false
+      }
+    ],
+    "main_class_name": "StoryStep",
+    "unity_type": "None",
+    "methods": [],
+    "fields": [
+      {
+        "name": "text",
+        "type": "string",
+        "access": "public",
+        "serialized": false,
+        "is_static": false
+      }
+    ],
+    "properties": [],
+    "events": [],
+    "unity_messages": [],
+    "has_update": false,
+    "has_fixed_update": false,
+    "has_late_update": false,
+    "has_awake": false,
+    "has_start": false,
+    "has_on_enable": false,
+    "has_on_disable": false,
+    "serialize_field_count": 0,
+    "public_field_count": 1,
+    "get_component_count": 0,
+    "find_call_count": 0,
+    "new_keyword_count": 0,
+    "coroutine_count": 0,
+    "singleton_candidate": false,
+    "dont_destroy_on_load": false,
+    "referenced_types": [
+      "string",
+      "System",
+      "Project2048",
+      "Story",
+      "Serializable"
+    ],
+    "component_access_types": [],
+    "created_types": [],
+    "singleton_access_types": [],
+    "string_literals": [],
+    "numeric_literals": [],
+    "guessed_roles": [],
+    "summary_signals": []
+  },
+  {
+    "file_id": "Project 2048/Assets/Scripts/Core/StoryTextView.cs",
+    "path": "Project 2048/Assets/Scripts/Core/StoryTextView.cs",
+    "file_name": "StoryTextView.cs",
+    "content_hash": "cbe4a7a41d5c36b59149c4c664996127cc15f83b",
+    "size": 1189,
+    "line_count": 53,
+    "namespace": "Project2048.Story",
+    "using_list": [
+      "TMPro",
+      "UnityEngine"
+    ],
+    "classes": [
+      {
+        "name": "StoryTextView",
+        "kind": "class",
+        "access": "public",
+        "base_types": [
+          "MonoBehaviour"
+        ],
+        "interfaces": [],
+        "attributes": [],
+        "is_partial": false,
+        "is_generic": false
+      }
+    ],
+    "main_class_name": "StoryTextView",
+    "unity_type": "MonoBehaviour",
+    "methods": [
+      "Awake",
+      "OnEnable",
+      "OnDisable",
+      "HandleStoryStepChanged",
+      "SetText"
+    ],
+    "fields": [],
+    "properties": [],
+    "events": [],
+    "unity_messages": [
+      "Awake",
+      "OnEnable",
+      "OnDisable"
+    ],
+    "has_update": false,
+    "has_fixed_update": false,
+    "has_late_update": false,
+    "has_awake": true,
+    "has_start": false,
+    "has_on_enable": true,
+    "has_on_disable": true,
+    "serialize_field_count": 0,
+    "public_field_count": 0,
+    "get_component_count": 1,
+    "find_call_count": 0,
+    "new_keyword_count": 0,
+    "coroutine_count": 0,
+    "singleton_candidate": false,
+    "dont_destroy_on_load": false,
+    "referenced_types": [
+      "TMPro",
+      "UnityEngine",
+      "Project2048",
+      "Story",
+      "StoryController",
+      "TMP_Text",
+      "Awake",
+      "GetComponentInParent",
+      "GetComponent",
+      "OnEnable",
+      "OnStoryStepChanged",
+      "HandleStoryStepChanged",
+      "OnDisable",
+      "StoryStep",
+      "SetText",
+      "Empty"
+    ],
+    "component_access_types": [
+      "TMP_Text"
+    ],
+    "created_types": [],
+    "singleton_access_types": [],
+    "string_literals": [],
+    "numeric_literals": [],
+    "guessed_roles": [
+      "runtime",
+      "ui",
+      "save-load"
+    ],
+    "summary_signals": [
+      "런타임 컴포넌트",
+      "UI 관련 로직 포함",
+      "저장/불러오기 관련 로직 포함",
+      "컴포넌트 조회 사용"
     ]
   },
   {
@@ -4040,8 +5364,8 @@
     "file_id": "Project 2048/Assets/Scripts/Enemy/EnemyIntentSystem.cs",
     "path": "Project 2048/Assets/Scripts/Enemy/EnemyIntentSystem.cs",
     "file_name": "EnemyIntentSystem.cs",
-    "content_hash": "314c36b115f735f5a80455d98b43fc574ac88476",
-    "size": 3449,
+    "content_hash": "6ed3188f290ed25abb13c08af22603c9e44a2615",
+    "size": 3440,
     "line_count": 103,
     "namespace": "Project2048.Enemy",
     "using_list": [
@@ -4154,7 +5478,7 @@
       "ApplyDebuff",
       "DebuffType",
       "Fear",
-      "ApplyDefenseBonus",
+      "ApplyFear",
       "Darkness",
       "QueueObstacles"
     ],
@@ -6037,9 +7361,9 @@
     "file_id": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatText.cs",
     "path": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatText.cs",
     "file_name": "PrototypeCombatText.cs",
-    "content_hash": "b95b2485645bbb0f656f3df172e8bc2738d0ab4b",
-    "size": 4694,
-    "line_count": 144,
+    "content_hash": "7970713dee18b46a7e9fab7bdad945499326c7b5",
+    "size": 4562,
+    "line_count": 142,
     "namespace": "Project2048.Prototype",
     "using_list": [
       "Project2048.Combat",
@@ -6157,7 +7481,6 @@
     "string_literals": [
       "보유 코스트: {cost}",
       "체력 {currentHp}/{maxHp}",
-      "{hp} / 방어 {block}",
       "최근 행동: 대기",
       "최근 행동: {description}",
       "적 턴\\n행동 대기 중",
@@ -6174,7 +7497,8 @@
       "암흑",
       "공포",
       "디버프",
-      "공포: 방어 획득 -{cue.Value}"
+      "공포: 방어도 획득 절반",
+      "암흑: 방해 블록 +{cue.Value}"
     ],
     "numeric_literals": [
       100,
@@ -7605,9 +8929,9 @@
     "file_id": "Project 2048/Assets/Tests/EditMode/CombatUiContractTests.cs",
     "path": "Project 2048/Assets/Tests/EditMode/CombatUiContractTests.cs",
     "file_name": "CombatUiContractTests.cs",
-    "content_hash": "64a329e298e9ed305aa2d4a81acfb1d804265623",
-    "size": 19239,
-    "line_count": 487,
+    "content_hash": "542d914e829177219f1206ae79f9dbce90dc9500",
+    "size": 19697,
+    "line_count": 494,
     "namespace": "Project2048.Tests",
     "using_list": [
       "System.Collections.Generic",
@@ -7640,7 +8964,7 @@
       "RequestEndPlayerTurn_EmitsEnemyActionDescription",
       "RequestEndPlayerTurn_DebuffIntent_EmitsSpecificIntentName",
       "RequestEndPlayerTurn_PreparesNextIntentForNextPlayerTurnSnapshot",
-      "RequestEndPlayerTurn_FearDebuff_EmitsVfxCueAndReducesDefenseGain",
+      "RequestEndPlayerTurn_FearDebuff_EmitsVfxCueAndHalvesDefenseGain",
       "RequestEndPlayerTurn_DarknessDebuff_EmitsVfxCueAndPlacesObstaclesOnNextBoard",
       "GetSnapshot_ExposesBuffAndDebuffStatusEffectsForHpUi",
       "GameObject",
@@ -7714,7 +9038,7 @@
     "public_field_count": 0,
     "get_component_count": 0,
     "find_call_count": 0,
-    "new_keyword_count": 31,
+    "new_keyword_count": 32,
     "coroutine_count": 0,
     "singleton_candidate": false,
     "dont_destroy_on_load": false,
@@ -7800,34 +9124,36 @@
       "Darkness",
       "RequestEndPlayerTurn_PreparesNextIntentForNextPlayerTurnSnapshot",
       "Intent",
-      "RequestEndPlayerTurn_FearDebuff_EmitsVfxCueAndReducesDefenseGain",
+      "RequestEndPlayerTurn_FearDebuff_EmitsVfxCueAndHalvesDefenseGain",
+      "Guard",
+      "SkillSO",
       "Fear",
       "LastVfxCue",
       "Value",
       "Sequence",
       "GreaterThan",
-      "DefenseBonus",
-      "RequestEndPlayerTurn_DarknessDebuff_EmitsVfxCueAndPlacesObstaclesOnNextBoard",
-      "CountObstacles",
-      "GetSnapshot_ExposesBuffAndDebuffStatusEffectsForHpUi",
-      "ApplyDefenseBonus",
-      "ApplyAttackModifier",
-      "Board2048Manager",
-      "ObstacleValue",
       "StatusEffects",
       "Has",
       "Some",
       "Matches",
       "CombatStatusEffectSnapshot",
       "Id",
-      "IsBuff",
       "Description",
       "Contains",
+      "RequestUseSkill",
+      "Block",
+      "RequestEndPlayerTurn_DarknessDebuff_EmitsVfxCueAndPlacesObstaclesOnNextBoard",
+      "CountObstacles",
+      "GetSnapshot_ExposesBuffAndDebuffStatusEffectsForHpUi",
+      "ApplyFear",
+      "ApplyAttackModifier",
+      "Board2048Manager",
+      "ObstacleValue",
+      "IsBuff",
       "Component",
       "Add",
       "AddComponent",
       "PlayerSO",
-      "SkillSO",
       "CreateInstance",
       "EnemyAiActionBias",
       "Balanced",
@@ -7857,13 +9183,13 @@
       "플레이어: Basic Attack",
       "Slime: 공격",
       "Slime: 암흑",
+      "guard",
+      "Guard",
       "fear",
+      "절반",
       "공포",
-      "방어도",
       "darkness",
-      "암흑",
-      "attack-up",
-      "공격 강화"
+      "암흑"
     ],
     "numeric_literals": [
       5,
@@ -8544,9 +9870,9 @@
     "file_id": "Project 2048/Assets/Tests/EditMode/EnemyDebuffTests.cs",
     "path": "Project 2048/Assets/Tests/EditMode/EnemyDebuffTests.cs",
     "file_name": "EnemyDebuffTests.cs",
-    "content_hash": "6667625e785c3528bb86be5b1d24089273589ab4",
-    "size": 4298,
-    "line_count": 125,
+    "content_hash": "d6739a2f1fcb9dfb124abead830645613d7cb864",
+    "size": 4388,
+    "line_count": 126,
     "namespace": "Project2048.Tests",
     "using_list": [
       "NUnit.Framework",
@@ -8570,7 +9896,7 @@
     "main_class_name": "EnemyDebuffTests",
     "unity_type": "None",
     "methods": [
-      "FearIntent_AppliesNegativeDefenseBonus_ToPlayer",
+      "FearIntent_HalvesFutureBlockGain_WithCeiling",
       "GameObject",
       "EnemyIntentSystem",
       "DarknessIntent_QueuesObstacles_OnBoardManager",
@@ -8614,14 +9940,13 @@
       "Object",
       "Tests",
       "Test",
-      "FearIntent_AppliesNegativeDefenseBonus_ToPlayer",
+      "FearIntent_HalvesFutureBlockGain_WithCeiling",
       "Player",
       "AddComponent",
       "PlayerCombatController",
       "CreateInstance",
       "PlayerSO",
       "Init",
-      "ApplyDefenseBonus",
       "EnemyController",
       "EnemySO",
       "SetIntent",
@@ -8634,9 +9959,11 @@
       "ExecuteIntent",
       "Assert",
       "That",
-      "DefenseBonus",
+      "FearStacks",
       "Is",
       "EqualTo",
+      "GainBlockWithBonus",
+      "Block",
       "DestroyImmediate",
       "DarknessIntent_QueuesObstacles_OnBoardManager",
       "Darkness",
@@ -8659,9 +9986,10 @@
     ],
     "numeric_literals": [
       20,
-      3,
       10,
       2,
+      5,
+      3,
       4
     ],
     "guessed_roles": [
@@ -9022,8 +10350,8 @@
     "file_id": "Project 2048/Assets/Tests/EditMode/PrototypeCombatTextTests.cs",
     "path": "Project 2048/Assets/Tests/EditMode/PrototypeCombatTextTests.cs",
     "file_name": "PrototypeCombatTextTests.cs",
-    "content_hash": "c3a02a4c3a15a9b62bfdf1968670fecb82801cb1",
-    "size": 4724,
+    "content_hash": "2456b9cf34d1a4ba32f895eeb41424cc76ae9936",
+    "size": 4687,
     "line_count": 125,
     "namespace": "Project2048.Tests",
     "using_list": [
@@ -9147,13 +10475,13 @@
       "슬라임: 공격",
       "적 턴\\n슬라임: 공격",
       "적 턴\\n행동 대기 중",
-      "공포: 방어 획득 -2",
+      "공포: 방어도 획득 절반",
       "암흑: 방해 블록 +3",
       "그림자 짐승",
       "AI: 공격 몰빵 / 암흑->공포 / 강화",
       "그림자 짐승\\nAI: 공격 몰빵 / 암흑->공포 / 강화",
       "체력 18/32",
-      "체력 32/32 / 방어 5",
+      "체력 32/32",
       "체력 16/20"
     ],
     "numeric_literals": [

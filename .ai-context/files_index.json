@@ -1762,9 +1762,9 @@
     "file_id": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "path": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "file_name": "CombatManager.cs",
-    "content_hash": "70fdad12ba115f6d731343ed039f6719b56f7ec1",
-    "size": 21027,
-    "line_count": 645,
+    "content_hash": "f0c6d542835bf93cea8940a821295a04d5914f32",
+    "size": 24909,
+    "line_count": 755,
     "namespace": "Project2048.Combat",
     "using_list": [
       "System",
@@ -1836,10 +1836,14 @@
       "HandlePlayerBlockChanged",
       "HandlePlayerDefenseBonusChanged",
       "HandleEnemyHpChanged",
+      "HandleEnemyBlockChanged",
       "HandleEnemyIntentChanged",
       "NotifyStateChanged",
       "BuildPlayerSnapshot",
       "BuildEnemySnapshots",
+      "BuildPlayerStatusEffects",
+      "BuildEnemyStatusEffects",
+      "CountDarknessStacks",
       "BuildSkillSnapshots",
       "GetSkillDisplayName",
       "GetEnemyDisplayName",
@@ -1957,6 +1961,20 @@
         "access": "internal",
         "serialized": false,
         "is_static": false
+      },
+      {
+        "name": "isBuff",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "stacks",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
       }
     ],
     "properties": [
@@ -1997,7 +2015,7 @@
     "public_field_count": 0,
     "get_component_count": 0,
     "find_call_count": 0,
-    "new_keyword_count": 20,
+    "new_keyword_count": 26,
     "coroutine_count": 2,
     "singleton_candidate": false,
     "dont_destroy_on_load": false,
@@ -2152,6 +2170,7 @@
       "OnDefenseBonusChanged",
       "HandlePlayerDefenseBonusChanged",
       "HandleEnemyHpChanged",
+      "HandleEnemyBlockChanged",
       "OnIntentChanged",
       "HandleEnemyIntentChanged",
       "PlayerCombatSnapshot",
@@ -2160,6 +2179,8 @@
       "AttackPower",
       "Block",
       "DefenseBonus",
+      "StatusEffects",
+      "BuildPlayerStatusEffects",
       "EnemyCombatSnapshot",
       "Add",
       "EnemyIndex",
@@ -2168,6 +2189,18 @@
       "GetAiProfileLabel",
       "Empty",
       "Intent",
+      "BuildEnemyStatusEffects",
+      "CombatStatusEffectSnapshot",
+      "Id",
+      "Description",
+      "IsBuff",
+      "IconText",
+      "Abs",
+      "CountDarknessStacks",
+      "AttackModifier",
+      "PendingObstacleCount",
+      "GetLength",
+      "IsObstacle",
       "SkillSnapshot",
       "SkillId",
       "Power",
@@ -2200,12 +2233,16 @@
       "적 턴 시작",
       "플레이어",
       "{GetEnemyDisplayName(enemy)}: {FormatEnemyIntent(intent)}",
-      "행동 없음",
-      "방어",
-      "공격",
-      "암흑",
+      "defense-up",
+      "방어 강화",
+      "방어도 획득량이 {player.DefenseBonus} 증가합니다.",
+      "방+",
+      "fear",
       "공포",
-      "디버프"
+      "방어도 획득량이 {value} 감소합니다.",
+      "공",
+      "darkness",
+      "암흑"
     ],
     "numeric_literals": [
       0,
@@ -2468,9 +2505,9 @@
     "file_id": "Project 2048/Assets/Scripts/Combat/CombatSnapshot.cs",
     "path": "Project 2048/Assets/Scripts/Combat/CombatSnapshot.cs",
     "file_name": "CombatSnapshot.cs",
-    "content_hash": "da30f0c01c26ea7e8b213d37b9e48ea11da90d94",
-    "size": 2513,
-    "line_count": 81,
+    "content_hash": "51c6c6f6378796a19902f12ed7814cb4fb349b96",
+    "size": 3019,
+    "line_count": 94,
     "namespace": "Project2048.Combat",
     "using_list": [
       "System",
@@ -2511,6 +2548,16 @@
       },
       {
         "name": "EnemyCombatSnapshot",
+        "kind": "class",
+        "access": "public",
+        "base_types": [],
+        "interfaces": [],
+        "attributes": [],
+        "is_partial": false,
+        "is_generic": false
+      },
+      {
+        "name": "CombatStatusEffectSnapshot",
         "kind": "class",
         "access": "public",
         "base_types": [],
@@ -2634,6 +2681,11 @@
       },
       {
         "access": "public",
+        "type": "List<CombatStatusEffectSnapshot>",
+        "name": "StatusEffects"
+      },
+      {
+        "access": "public",
         "type": "int",
         "name": "EnemyIndex"
       },
@@ -2671,6 +2723,41 @@
         "access": "public",
         "type": "EnemyIntent",
         "name": "Intent"
+      },
+      {
+        "access": "public",
+        "type": "List<CombatStatusEffectSnapshot>",
+        "name": "StatusEffects"
+      },
+      {
+        "access": "public",
+        "type": "string",
+        "name": "Id"
+      },
+      {
+        "access": "public",
+        "type": "string",
+        "name": "DisplayName"
+      },
+      {
+        "access": "public",
+        "type": "string",
+        "name": "Description"
+      },
+      {
+        "access": "public",
+        "type": "int",
+        "name": "Value"
+      },
+      {
+        "access": "public",
+        "type": "bool",
+        "name": "IsBuff"
+      },
+      {
+        "access": "public",
+        "type": "string",
+        "name": "IconText"
       },
       {
         "access": "public",
@@ -2754,11 +2841,16 @@
       "AttackPower",
       "Block",
       "DefenseBonus",
+      "StatusEffects",
       "EnemyIndex",
       "DisplayName",
       "IsDead",
       "AiProfileLabel",
       "Intent",
+      "Id",
+      "Description",
+      "IsBuff",
+      "IconText",
       "SkillId",
       "Cost",
       "Power"
@@ -3661,9 +3753,9 @@
     "file_id": "Project 2048/Assets/Scripts/Enemy/EnemyController.cs",
     "path": "Project 2048/Assets/Scripts/Enemy/EnemyController.cs",
     "file_name": "EnemyController.cs",
-    "content_hash": "b4f7c032f12b6ba86b13dad414b0a1bf114b30c8",
-    "size": 2495,
-    "line_count": 91,
+    "content_hash": "592c7df743981b0bda66016d5e0a0e0cb02725ee",
+    "size": 2874,
+    "line_count": 106,
     "namespace": "Project2048.Enemy",
     "using_list": [
       "System",
@@ -3690,6 +3782,7 @@
       "ArgumentNullException",
       "TakeDamage",
       "AddBlock",
+      "ClearBlock",
       "SetIntent",
       "ApplyAttackModifier",
       "RefreshIntentPreview"
@@ -3768,6 +3861,7 @@
       "IsDead",
       "CurrentIntent",
       "OnHpChanged",
+      "OnBlockChanged",
       "OnIntentChanged",
       "OnDead",
       "Init",
@@ -3776,6 +3870,7 @@
       "Invoke",
       "TakeDamage",
       "AddBlock",
+      "ClearBlock",
       "SetIntent",
       "Clone",
       "RefreshIntentPreview",
@@ -4614,9 +4709,9 @@
     "file_id": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "path": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "file_name": "CombatUiView.cs",
-    "content_hash": "7432d51ebe93128070446a9497fcdc0e9e30f1c2",
-    "size": 45524,
-    "line_count": 1237,
+    "content_hash": "14bebe0e4a964af4f8c088ac5a6699a1b5992f18",
+    "size": 57096,
+    "line_count": 1509,
     "namespace": "Project2048.Prototype",
     "using_list": [
       "System.Collections",
@@ -4688,6 +4783,15 @@
       "EnsureHpBarDefaults",
       "ConfigureHpBarFill",
       "SetHpBarValue",
+      "SetBlockIndicator",
+      "EnsureBlockIcon",
+      "EnsureStatusEffectsRoot",
+      "RenderStatusEffects",
+      "CreateStatusEffectChip",
+      "EnsureStatusTooltip",
+      "ShowStatusTooltip",
+      "Vector3",
+      "HideStatusTooltip",
       "EnsureAudioDefaults",
       "FindChildByName",
       "PlaySoundCues",
@@ -4964,6 +5068,34 @@
         "is_static": false
       },
       {
+        "name": "hpRoot",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "hpRoot",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "hasEffects",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "ownerRect",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
         "name": "root",
         "type": "var",
         "access": "internal",
@@ -5007,9 +5139,9 @@
     "has_on_disable": false,
     "serialize_field_count": 0,
     "public_field_count": 3,
-    "get_component_count": 14,
-    "find_call_count": 0,
-    "new_keyword_count": 22,
+    "get_component_count": 30,
+    "find_call_count": 1,
+    "new_keyword_count": 51,
     "coroutine_count": 4,
     "singleton_candidate": false,
     "dont_destroy_on_load": false,
@@ -5163,6 +5295,9 @@
       "EnemyIndex",
       "SetHpBarValue",
       "FormatPlayerHp",
+      "SetBlockIndicator",
+      "RenderStatusEffects",
+      "StatusEffects",
       "FormatActionDescription",
       "LastActionDescription",
       "Sprite",
@@ -5210,15 +5345,15 @@
       "ValueText",
       "GetCellTextColor",
       "Vector2Int",
-      "TransformPoint",
-      "InverseTransformPoint",
-      "Find",
-      "BoardAnimationOverlay"
+      "TransformPoint"
     ],
     "component_access_types": [
       "Image",
       "RectTransform",
       "TextMeshProUGUI",
+      "Outline",
+      "HorizontalLayoutGroup",
+      "StatusEffectTooltipTarget",
       "AudioSource",
       "T",
       "CanvasGroup"
@@ -5228,6 +5363,7 @@
       "WaitForSecondsRealtime",
       "GameObject",
       "Vector2",
+      "Vector3",
       "Vector2Int",
       "Color"
     ],
@@ -5288,7 +5424,8 @@
       "Update 기반 처리 존재",
       "UI 관련 로직 포함",
       "전투 계열 로직 포함",
-      "컴포넌트 조회 사용"
+      "컴포넌트 조회 사용",
+      "Find 계열 탐색 사용"
     ]
   },
   {
@@ -6180,6 +6317,110 @@
     "summary_signals": [
       "UI 관련 로직 포함",
       "전투 계열 로직 포함"
+    ]
+  },
+  {
+    "file_id": "Project 2048/Assets/Scripts/Prototype/StatusEffectTooltipTarget.cs",
+    "path": "Project 2048/Assets/Scripts/Prototype/StatusEffectTooltipTarget.cs",
+    "file_name": "StatusEffectTooltipTarget.cs",
+    "content_hash": "9418469684bb92811788b00853e76b386a155bef",
+    "size": 936,
+    "line_count": 34,
+    "namespace": "Project2048.Prototype",
+    "using_list": [
+      "System",
+      "UnityEngine",
+      "UnityEngine.EventSystems"
+    ],
+    "classes": [
+      {
+        "name": "StatusEffectTooltipTarget",
+        "kind": "class",
+        "access": "public",
+        "base_types": [
+          "MonoBehaviour",
+          "IPointerEnterHandler",
+          "IPointerExitHandler"
+        ],
+        "interfaces": [
+          "IPointerEnterHandler",
+          "IPointerExitHandler"
+        ],
+        "attributes": [],
+        "is_partial": false,
+        "is_generic": false
+      }
+    ],
+    "main_class_name": "StatusEffectTooltipTarget",
+    "unity_type": "MonoBehaviour",
+    "methods": [
+      "Initialize",
+      "OnPointerEnter",
+      "OnPointerExit"
+    ],
+    "fields": [
+      {
+        "name": "description",
+        "type": "string",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "hideTooltip",
+        "type": "Action",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      }
+    ],
+    "properties": [],
+    "events": [],
+    "unity_messages": [],
+    "has_update": false,
+    "has_fixed_update": false,
+    "has_late_update": false,
+    "has_awake": false,
+    "has_start": false,
+    "has_on_enable": false,
+    "has_on_disable": false,
+    "serialize_field_count": 0,
+    "public_field_count": 0,
+    "get_component_count": 0,
+    "find_call_count": 0,
+    "new_keyword_count": 0,
+    "coroutine_count": 0,
+    "singleton_candidate": false,
+    "dont_destroy_on_load": false,
+    "referenced_types": [
+      "string",
+      "System",
+      "UnityEngine",
+      "EventSystems",
+      "Project2048",
+      "Prototype",
+      "IPointerEnterHandler",
+      "IPointerExitHandler",
+      "RectTransform",
+      "Initialize",
+      "OnPointerEnter",
+      "PointerEventData",
+      "Invoke",
+      "OnPointerExit"
+    ],
+    "component_access_types": [],
+    "created_types": [],
+    "singleton_access_types": [],
+    "string_literals": [],
+    "numeric_literals": [],
+    "guessed_roles": [
+      "ui",
+      "data",
+      "runtime"
+    ],
+    "summary_signals": [
+      "런타임 컴포넌트",
+      "UI 관련 로직 포함"
     ]
   },
   {
@@ -7197,9 +7438,9 @@
     "file_id": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
     "path": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
     "file_name": "CombatManagerTests.cs",
-    "content_hash": "7c733fde33224adbdbff4390fd4a90542c068eb0",
-    "size": 8367,
-    "line_count": 232,
+    "content_hash": "edf7465f79355cde4d62b97ed826d6f1abc6fd44",
+    "size": 10435,
+    "line_count": 292,
     "namespace": "Project2048.Tests",
     "using_list": [
       "System.Collections.Generic",
@@ -7230,6 +7471,7 @@
       "RequestEndPlayerTurn_ExecutesEnemyAttack_AndStartsNextPlayerTurn",
       "DefenseSkill_WithSelfDefenseBonus_AccumulatesAndAppliesToFutureBlock",
       "RequestEndPlayerTurn_ClearsPlayerBlock_WhenNextPlayerTurnStarts",
+      "RequestEndPlayerTurn_ClearsEnemyBlock_WhenThatEnemyStartsNextOwnTurn",
       "GameObject",
       "CreatePlayerData",
       "CreateEnemyData",
@@ -7258,7 +7500,7 @@
     "public_field_count": 0,
     "get_component_count": 0,
     "find_call_count": 0,
-    "new_keyword_count": 13,
+    "new_keyword_count": 16,
     "coroutine_count": 0,
     "singleton_candidate": false,
     "dont_destroy_on_load": false,
@@ -7320,13 +7562,14 @@
       "Block",
       "DefenseBonus",
       "RequestEndPlayerTurn_ClearsPlayerBlock_WhenNextPlayerTurnStarts",
+      "RequestEndPlayerTurn_ClearsEnemyBlock_WhenThatEnemyStartsNextOwnTurn",
+      "EnemyIntent",
+      "EnemyIntentType",
       "Component",
       "Add",
       "AddComponent",
       "PlayerSO",
-      "CreateInstance",
-      "EnemyIntent",
-      "EnemyIntentType"
+      "CreateInstance"
     ],
     "component_access_types": [],
     "created_types": [
@@ -7369,9 +7612,9 @@
     "file_id": "Project 2048/Assets/Tests/EditMode/CombatUiContractTests.cs",
     "path": "Project 2048/Assets/Tests/EditMode/CombatUiContractTests.cs",
     "file_name": "CombatUiContractTests.cs",
-    "content_hash": "dfd18125a4fd736c9f8838a5323a4113ecd0f48a",
-    "size": 17098,
-    "line_count": 440,
+    "content_hash": "64a329e298e9ed305aa2d4a81acfb1d804265623",
+    "size": 19239,
+    "line_count": 487,
     "namespace": "Project2048.Tests",
     "using_list": [
       "System.Collections.Generic",
@@ -7406,6 +7649,7 @@
       "RequestEndPlayerTurn_PreparesNextIntentForNextPlayerTurnSnapshot",
       "RequestEndPlayerTurn_FearDebuff_EmitsVfxCueAndReducesDefenseGain",
       "RequestEndPlayerTurn_DarknessDebuff_EmitsVfxCueAndPlacesObstaclesOnNextBoard",
+      "GetSnapshot_ExposesBuffAndDebuffStatusEffectsForHpUi",
       "GameObject",
       "CreatePlayerData",
       "CreateEnemyData",
@@ -7477,7 +7721,7 @@
     "public_field_count": 0,
     "get_component_count": 0,
     "find_call_count": 0,
-    "new_keyword_count": 29,
+    "new_keyword_count": 31,
     "coroutine_count": 0,
     "singleton_candidate": false,
     "dont_destroy_on_load": false,
@@ -7572,6 +7816,20 @@
       "DefenseBonus",
       "RequestEndPlayerTurn_DarknessDebuff_EmitsVfxCueAndPlacesObstaclesOnNextBoard",
       "CountObstacles",
+      "GetSnapshot_ExposesBuffAndDebuffStatusEffectsForHpUi",
+      "ApplyDefenseBonus",
+      "ApplyAttackModifier",
+      "Board2048Manager",
+      "ObstacleValue",
+      "StatusEffects",
+      "Has",
+      "Some",
+      "Matches",
+      "CombatStatusEffectSnapshot",
+      "Id",
+      "IsBuff",
+      "Description",
+      "Contains",
       "Component",
       "Add",
       "AddComponent",
@@ -7584,7 +7842,6 @@
       "FearThenDarkness",
       "EnemyAiStrength",
       "Normal",
-      "Board2048Manager",
       "IsObstacle"
     ],
     "component_access_types": [],
@@ -7606,7 +7863,14 @@
       "2048 진행",
       "플레이어: Basic Attack",
       "Slime: 공격",
-      "Slime: 암흑"
+      "Slime: 암흑",
+      "fear",
+      "공포",
+      "방어도",
+      "darkness",
+      "암흑",
+      "attack-up",
+      "공격 강화"
     ],
     "numeric_literals": [
       5,
@@ -7637,9 +7901,9 @@
     "file_id": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "path": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "file_name": "CombatUiViewTests.cs",
-    "content_hash": "a03e3336b27f03def63041fce6dc2b3a5bde423d",
-    "size": 16667,
-    "line_count": 407,
+    "content_hash": "6cfefea6ba82445a762b7f4e304e4f2c5ba1e55f",
+    "size": 19996,
+    "line_count": 470,
     "namespace": "Project2048.Tests",
     "using_list": [
       "NUnit.Framework",
@@ -7679,6 +7943,7 @@
       "Vector2",
       "Initialize_WithMissingSerializedBattleReferences_WiresEnemyHpAndIntentByName",
       "Color",
+      "Initialize_BuildsBlockAndStatusEffectUiAroundHpBars",
       "Initialize_ConfiguresAudioSourceForAudibleUiSfx",
       "Initialize_PreservesPositiveInspectorSoundVolumeScale",
       "AudioRouter_EmitsHitAndMergeCuesFromCombatChanges",
@@ -7719,9 +7984,9 @@
     "has_on_disable": false,
     "serialize_field_count": 0,
     "public_field_count": 0,
-    "get_component_count": 2,
+    "get_component_count": 7,
     "find_call_count": 0,
-    "new_keyword_count": 40,
+    "new_keyword_count": 44,
     "coroutine_count": 0,
     "singleton_candidate": false,
     "dont_destroy_on_load": false,
@@ -7823,9 +8088,35 @@
       "Fear",
       "RequestUseSkillById",
       "RequestEndPlayerTurn",
+      "Initialize_BuildsBlockAndStatusEffectUiAroundHpBars",
+      "Slime",
+      "AddBlock",
+      "ApplyDefenseBonus",
+      "ApplyAttackModifier",
+      "GetComponent",
+      "Outline",
+      "Not",
+      "Null",
+      "True",
+      "BlockIcon",
+      "TMPro",
+      "TMP_Text",
+      "PlayerBattleStatusEffects",
+      "StatusEffect_fear",
+      "EnemyStatusEffects",
+      "StatusEffect_attack",
+      "StatusEffectTooltipTarget",
+      "IPointerEnterHandler",
+      "OnPointerEnter",
+      "StatusTooltip",
+      "GetComponentInChildren",
+      "Does",
+      "Contain",
+      "IPointerExitHandler",
+      "OnPointerExit",
+      "False",
       "Initialize_ConfiguresAudioSourceForAudibleUiSfx",
       "AudioSource",
-      "False",
       "GetPrivateField",
       "Initialize_PreservesPositiveInspectorSoundVolumeScale",
       "AudioRouter_EmitsHitAndMergeCuesFromCombatChanges",
@@ -7839,8 +8130,6 @@
       "EnemyCombatSnapshot",
       "EnemyIndex",
       "GetSnapshotCues",
-      "Does",
-      "Contain",
       "PrototypeCombatSoundCue",
       "PlayerHit",
       "EnemyHit",
@@ -7873,16 +8162,11 @@
       "FindFirstObjectByType",
       "FindObjectsInactive",
       "Include",
-      "Not",
-      "Null",
       "SerializedObject",
       "FindProperty",
       "Image",
       "RectTransform",
       "SetParent",
-      "GetComponent",
-      "TMPro",
-      "TMP_Text",
       "TextMeshProUGUI",
       "PlayerSO",
       "SkillSO",
@@ -7903,6 +8187,8 @@
       "Left"
     ],
     "component_access_types": [
+      "Outline",
+      "StatusEffectTooltipTarget",
       "Image"
     ],
     "created_types": [

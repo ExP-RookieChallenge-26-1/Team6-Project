@@ -1,7 +1,7 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using UnityEngine.EventSystems;
 
 public class MainMenuController : MonoBehaviour
 {
@@ -13,7 +13,7 @@ public class MainMenuController : MonoBehaviour
     [SerializeField] private SettingPopup settingPopup;
     [SerializeField] private FadeController fadeController;
 
-    private const string GameSceneName = "SampleScene";
+    private const string GameSceneName = "BattleScene";
 
     private void Awake()
     {
@@ -25,7 +25,7 @@ public class MainMenuController : MonoBehaviour
 
     private void OnNewGameClicked()
     {
-        confirmPopup.Show("»õ·Î ÇÏ½Ã°Ú½À´Ï±î?", StartNewGame, null);
+        confirmPopup.Show("ìƒˆë¡œ í•˜ì‹œê² ìŠµë‹ˆê¹Œ?", StartNewGame, null);
     }
 
     private void StartNewGame()
@@ -35,7 +35,7 @@ public class MainMenuController : MonoBehaviour
 
     private void OnLoadGameClicked()
     {
-        Debug.Log("ÀÌ¾îÇÏ±â Å¬¸¯µÊ");
+        Debug.Log("ì´ì–´í•˜ê¸° í´ë¦­ë¨");
     }
 
     private void OnSettingClicked()
@@ -45,7 +45,7 @@ public class MainMenuController : MonoBehaviour
 
     private void OnQuitClicked()
     {
-        confirmPopup.Show("Á¾·áÇÏ½Ã°Ú½À´Ï±î?", QuitGame, null);
+        confirmPopup.Show("ì¢…ë£Œí•˜ì‹œê² ìŠµë‹ˆê¹Œ?", QuitGame, null);
     }
 
     private void QuitGame()

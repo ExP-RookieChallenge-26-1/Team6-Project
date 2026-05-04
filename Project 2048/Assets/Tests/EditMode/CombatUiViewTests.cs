@@ -300,9 +300,9 @@ namespace Project2048.Tests
         }
 
         [Test]
-        public void SampleScene_CombatUiView_HasInspectorAudioReferences()
+        public void BattleScene_CombatUiView_HasInspectorAudioReferences()
         {
-            EditorSceneManager.OpenScene("Assets/Scenes/SampleScene.unity");
+            EditorSceneManager.OpenScene("Assets/Scenes/BattleScene.unity");
             var view = Object.FindFirstObjectByType<CombatUiView>(FindObjectsInactive.Include);
 
             Assert.That(view, Is.Not.Null);

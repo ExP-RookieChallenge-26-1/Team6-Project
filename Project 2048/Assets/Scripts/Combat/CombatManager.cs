@@ -336,6 +336,7 @@ namespace Project2048.Combat
 
         private bool ResolveEnemyAction(EnemyController enemy)
         {
+            enemy.ClearBlock();
             var intent = enemy.CurrentIntent?.Clone();
             lastActionDescription = $"{GetEnemyDisplayName(enemy)}: {FormatEnemyIntent(intent)}";
             ExecuteEnemyIntent(enemy, intent);
@@ -450,6 +451,7 @@ namespace Project2048.Combat
             player.OnHpChanged += HandlePlayerHpChanged;
             player.OnBlockChanged += HandlePlayerBlockChanged;
             player.OnDefenseBonusChanged += HandlePlayerDefenseBonusChanged;
+            player.OnStatusEffectsChanged += HandlePlayerStatusEffectsChanged;
             playerEventsBound = true;
         }
 
@@ -461,8 +463,10 @@ namespace Project2048.Combat
             }
 
             enemy.OnHpChanged -= HandleEnemyHpChanged;
+            enemy.OnBlockChanged -= HandleEnemyBlockChanged;
             enemy.OnIntentChanged -= HandleEnemyIntentChanged;
             enemy.OnHpChanged += HandleEnemyHpChanged;
+            enemy.OnBlockChanged += HandleEnemyBlockChanged;
             enemy.OnIntentChanged += HandleEnemyIntentChanged;
         }
 
@@ -473,6 +477,7 @@ namespace Project2048.Combat
                 player.OnHpChanged -= HandlePlayerHpChanged;
                 player.OnBlockChanged -= HandlePlayerBlockChanged;
                 player.OnDefenseBonusChanged -= HandlePlayerDefenseBonusChanged;
+                player.OnStatusEffectsChanged -= HandlePlayerStatusEffectsChanged;
                 playerEventsBound = false;
             }
 
@@ -484,6 +489,7 @@ namespace Project2048.Combat
                 }
 
                 enemy.OnHpChanged -= HandleEnemyHpChanged;
+                enemy.OnBlockChanged -= HandleEnemyBlockChanged;
                 enemy.OnIntentChanged -= HandleEnemyIntentChanged;
             }
         }
@@ -503,7 +509,17 @@ namespace Project2048.Combat
             NotifyStateChanged();
         }
 
+        private void HandlePlayerStatusEffectsChanged()
+        {
+            NotifyStateChanged();
+        }
+
         private void HandleEnemyHpChanged(int _, int __)
+        {
+            NotifyStateChanged();
+        }
+
+        private void HandleEnemyBlockChanged(int _)
         {
             NotifyStateChanged();
         }
@@ -537,6 +553,8 @@ namespace Project2048.Combat
                 AttackPower = player.AttackPower,
                 Block = player.Block,
                 DefenseBonus = player.DefenseBonus,
+                FearStacks = player.FearStacks,
+                StatusEffects = BuildPlayerStatusEffects(),
             };
         }
 
@@ -564,10 +582,109 @@ namespace Project2048.Combat
                     IsDead = enemy.IsDead,
                     AiProfileLabel = enemy.Data != null ? enemy.Data.GetAiProfileLabel() : string.Empty,
                     Intent = enemy.CurrentIntent?.Clone(),
+                    StatusEffects = BuildEnemyStatusEffects(enemy),
                 });
             }
 
             return snapshots;
+        }
+
+        private List<CombatStatusEffectSnapshot> BuildPlayerStatusEffects()
+        {
+            var effects = new List<CombatStatusEffectSnapshot>();
+            if (player == null)
+            {
+                return effects;
+            }
+
+            if (player.DefenseBonus > 0)
+            {
+                effects.Add(new CombatStatusEffectSnapshot
+                {
+                    Id = "defense-up",
+                    DisplayName = "방어 강화",
+                    Description = $"방어도 획득량이 {player.DefenseBonus} 증가합니다.",
+                    Value = player.DefenseBonus,
+                    IsBuff = true,
+                    IconText = "방+",
+                });
+            }
+            if (player.FearStacks > 0)
+            {
+                effects.Add(new CombatStatusEffectSnapshot
+                {
+                    Id = "fear",
+                    DisplayName = "공포",
+                    Description = "방어도 획득량이 절반으로 감소합니다. 소수점은 올림 처리됩니다.",
+                    Value = player.FearStacks,
+                    IsBuff = false,
+                    IconText = "공",
+                });
+            }
+
+            var darknessStacks = CountDarknessStacks();
+            if (darknessStacks > 0)
+            {
+                effects.Add(new CombatStatusEffectSnapshot
+                {
+                    Id = "darkness",
+                    DisplayName = "암흑",
+                    Description = $"보드에 방해 블록이 {darknessStacks}개 남아 있습니다.",
+                    Value = darknessStacks,
+                    IsBuff = false,
+                    IconText = "암",
+                });
+            }
+
+            return effects;
+        }
+
+        private static List<CombatStatusEffectSnapshot> BuildEnemyStatusEffects(EnemyController enemy)
+        {
+            var effects = new List<CombatStatusEffectSnapshot>();
+            if (enemy == null || enemy.AttackModifier == 0)
+            {
+                return effects;
+            }
+
+            var isBuff = enemy.AttackModifier > 0;
+            var value = Mathf.Abs(enemy.AttackModifier);
+            effects.Add(new CombatStatusEffectSnapshot
+            {
+                Id = isBuff ? "attack-up" : "attack-down",
+                DisplayName = isBuff ? "공격 강화" : "공격 약화",
+                Description = isBuff
+                    ? $"공격 의도 피해가 {value} 증가합니다."
+                    : $"공격 의도 피해가 {value} 감소합니다.",
+                Value = value,
+                IsBuff = isBuff,
+                IconText = isBuff ? "공+" : "공-",
+            });
+
+            return effects;
+        }
+
+        private int CountDarknessStacks()
+        {
+            var stacks = BoardManager != null ? BoardManager.PendingObstacleCount : 0;
+            var board = BoardManager?.GetBoardSnapshot();
+            if (board == null)
+            {
+                return stacks;
+            }
+
+            for (var row = 0; row < board.GetLength(0); row++)
+            {
+                for (var col = 0; col < board.GetLength(1); col++)
+                {
+                    if (Board2048Manager.IsObstacle(board[row, col]))
+                    {
+                        stacks++;
+                    }
+                }
+            }
+
+            return stacks;
         }
 
         private List<SkillSnapshot> BuildSkillSnapshots()

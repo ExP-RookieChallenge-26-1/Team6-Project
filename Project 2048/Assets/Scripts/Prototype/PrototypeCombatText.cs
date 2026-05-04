@@ -18,14 +18,12 @@ namespace Project2048.Prototype
 
         public static string FormatEnemyHp(int currentHp, int maxHp, int block)
         {
-            var hp = FormatHp(currentHp, maxHp);
-            return block > 0 ? $"{hp} / 방어 {block}" : hp;
+            return FormatHp(currentHp, maxHp);
         }
 
         public static string FormatPlayerHp(int currentHp, int maxHp, int block)
         {
-            var hp = FormatHp(currentHp, maxHp);
-            return block > 0 ? $"{hp} / 방어 {block}" : hp;
+            return FormatHp(currentHp, maxHp);
         }
 
         public static string FormatActionDescription(string description)
@@ -111,7 +109,7 @@ namespace Project2048.Prototype
 
             return cue.DebuffType switch
             {
-                DebuffType.Fear => $"공포: 방어 획득 -{cue.Value}",
+                DebuffType.Fear => "공포: 방어도 획득 절반",
                 DebuffType.Darkness => $"암흑: 방해 블록 +{cue.Value}",
                 _ => $"디버프: {cue.Value}",
             };

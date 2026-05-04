@@ -42,6 +42,10 @@ namespace Project2048.Prototype
         [SerializeField] private TMP_Text playerBattleHpText;
         [SerializeField] private Image enemyHpBarFill;
         [SerializeField] private TMP_Text enemyHpText;
+        [SerializeField] private RectTransform playerBattleStatusEffectsRoot;
+        [SerializeField] private RectTransform enemyStatusEffectsRoot;
+        [SerializeField] private GameObject statusTooltip;
+        [SerializeField] private TMP_Text statusTooltipText;
         [SerializeField] private TMP_Text actionDescriptionText;
 
         [Header("Bottom panels")]
@@ -52,6 +56,7 @@ namespace Project2048.Prototype
         [Header("Board panel")]
         [SerializeField] private Image hpBarFill;
         [SerializeField] private TMP_Text hpText;
+        [SerializeField] private RectTransform playerBoardStatusEffectsRoot;
         [SerializeField] private TMP_Text turnLimitText;
         [SerializeField] private List<BoardCellView> boardCells = new();
         [SerializeField] private BoardSwipeHandler boardSwipeHandler;
@@ -102,6 +107,11 @@ namespace Project2048.Prototype
         [SerializeField] private Color playerHpFillColor = new(0.18f, 0.86f, 0.34f, 1f);
         [SerializeField] private Color enemyHpFillColor = new(0.88f, 0.14f, 0.14f, 1f);
         [SerializeField] private Color hpBarBackgroundColor = new(0.08f, 0.09f, 0.10f, 1f);
+        [SerializeField] private Color blockFrameColor = new(0.66f, 0.70f, 0.74f, 1f);
+        [SerializeField] private Color blockIconColor = new(0.42f, 0.46f, 0.50f, 0.95f);
+        [SerializeField] private Color buffStatusColor = new(0.20f, 0.46f, 0.30f, 0.95f);
+        [SerializeField] private Color debuffStatusColor = new(0.46f, 0.16f, 0.20f, 0.95f);
+        [SerializeField] private Color statusTooltipColor = new(0.06f, 0.07f, 0.08f, 0.96f);
 
         private PrototypeCombatBootstrap bootstrap;
         private CombatManager combatManager;
@@ -407,6 +417,9 @@ namespace Project2048.Prototype
                 playerBattleHpText.text = PrototypeCombatText.FormatPlayerHp(player.CurrentHp, player.MaxHp, player.Block);
             }
 
+            SetBlockIndicator(playerBattleHpBarFill, player?.Block ?? 0);
+            RenderStatusEffects(playerBattleStatusEffectsRoot, player?.StatusEffects);
+
             if (enemyHpBarFill != null && enemy != null && enemy.MaxHp > 0)
             {
                 SetHpBarValue(enemyHpBarFill, enemy.CurrentHp, enemy.MaxHp);
@@ -416,6 +429,9 @@ namespace Project2048.Prototype
             {
                 enemyHpText.text = PrototypeCombatText.FormatEnemyHp(enemy.CurrentHp, enemy.MaxHp, enemy.Block);
             }
+
+            SetBlockIndicator(enemyHpBarFill, enemy?.Block ?? 0);
+            RenderStatusEffects(enemyStatusEffectsRoot, enemy?.StatusEffects);
 
             if (actionDescriptionText != null)
             {
@@ -497,6 +513,9 @@ namespace Project2048.Prototype
             {
                 hpText.text = PrototypeCombatText.FormatPlayerHp(player.CurrentHp, player.MaxHp, player.Block);
             }
+
+            SetBlockIndicator(hpBarFill, player?.Block ?? 0);
+            RenderStatusEffects(playerBoardStatusEffectsRoot, player?.StatusEffects);
 
             // Turn limit.
             if (turnLimitText != null)
@@ -848,8 +867,13 @@ namespace Project2048.Prototype
             playerBattleHpText ??= FindNestedComponentByName<TMP_Text>("PlayerBattleHp", "Text");
             enemyHpBarFill ??= FindNestedComponentByName<Image>("EnemyHp", "Fill");
             enemyHpText ??= FindNestedComponentByName<TMP_Text>("EnemyHp", "Text");
+            playerBattleStatusEffectsRoot ??= FindComponentInChildrenByName<RectTransform>("PlayerBattleStatusEffects");
+            enemyStatusEffectsRoot ??= FindComponentInChildrenByName<RectTransform>("EnemyStatusEffects");
+            statusTooltip ??= FindChildByName("StatusTooltip")?.gameObject;
+            statusTooltipText ??= FindNestedComponentByName<TMP_Text>("StatusTooltip", "Text");
             hpBarFill ??= FindComponentInChildrenByName<Image>("HpBarFill");
             hpText ??= FindComponentInChildrenByName<TMP_Text>("HpText");
+            playerBoardStatusEffectsRoot ??= FindComponentInChildrenByName<RectTransform>("PlayerBoardStatusEffects");
             actionDescriptionText ??= FindComponentInChildrenByName<TMP_Text>("ActionDescriptionText");
             enemyTurnText ??= FindComponentInChildrenByName<TMP_Text>("EnemyTurnText");
         }
@@ -859,6 +883,10 @@ namespace Project2048.Prototype
             ConfigureHpBarFill(playerBattleHpBarFill, playerHpFillColor, hpBarBackgroundColor);
             ConfigureHpBarFill(enemyHpBarFill, enemyHpFillColor, hpBarBackgroundColor);
             ConfigureHpBarFill(hpBarFill, playerHpFillColor, hpBarBackgroundColor);
+            playerBoardStatusEffectsRoot ??= EnsureStatusEffectsRoot(hpBarFill, "PlayerBoardStatusEffects");
+            playerBattleStatusEffectsRoot ??= EnsureStatusEffectsRoot(playerBattleHpBarFill, "PlayerBattleStatusEffects");
+            enemyStatusEffectsRoot ??= EnsureStatusEffectsRoot(enemyHpBarFill, "EnemyStatusEffects");
+            EnsureStatusTooltip();
         }
 
         private static void ConfigureHpBarFill(Image fillImage, Color fillColor, Color backgroundColor)
@@ -901,6 +929,256 @@ namespace Project2048.Prototype
             rectTransform.anchorMax = new Vector2(ratio, 1f);
             rectTransform.offsetMin = Vector2.zero;
             rectTransform.offsetMax = Vector2.zero;
+        }
+
+        private void SetBlockIndicator(Image fillImage, int block)
+        {
+            var hpRoot = fillImage != null ? fillImage.transform.parent as RectTransform : null;
+            if (hpRoot == null)
+            {
+                return;
+            }
+
+            var outline = hpRoot.GetComponent<Outline>();
+            if (outline == null)
+            {
+                outline = hpRoot.gameObject.AddComponent<Outline>();
+            }
+
+            outline.effectColor = blockFrameColor;
+            outline.effectDistance = new Vector2(2f, -2f);
+            outline.useGraphicAlpha = false;
+            outline.enabled = block > 0;
+
+            var icon = EnsureBlockIcon(hpRoot);
+            icon.gameObject.SetActive(block > 0);
+            if (block <= 0)
+            {
+                return;
+            }
+
+            var label = icon.GetComponentInChildren<TMP_Text>(true);
+            if (label != null)
+            {
+                label.text = block.ToString();
+            }
+        }
+
+        private RectTransform EnsureBlockIcon(RectTransform hpRoot)
+        {
+            var existing = hpRoot.Find("BlockIcon") as RectTransform;
+            if (existing != null)
+            {
+                return existing;
+            }
+
+            var iconObject = new GameObject("BlockIcon", typeof(RectTransform), typeof(Image));
+            iconObject.transform.SetParent(hpRoot, false);
+            var icon = iconObject.GetComponent<RectTransform>();
+            icon.anchorMin = new Vector2(1f, 0.5f);
+            icon.anchorMax = new Vector2(1f, 0.5f);
+            icon.pivot = new Vector2(0f, 0.5f);
+            icon.anchoredPosition = new Vector2(8f, 0f);
+            icon.sizeDelta = new Vector2(34f, 24f);
+
+            var image = iconObject.GetComponent<Image>();
+            image.color = blockIconColor;
+            image.raycastTarget = false;
+
+            var textObject = new GameObject("Text", typeof(RectTransform), typeof(TextMeshProUGUI));
+            textObject.transform.SetParent(icon, false);
+            var textRect = textObject.GetComponent<RectTransform>();
+            textRect.anchorMin = Vector2.zero;
+            textRect.anchorMax = Vector2.one;
+            textRect.offsetMin = Vector2.zero;
+            textRect.offsetMax = Vector2.zero;
+
+            var label = textObject.GetComponent<TextMeshProUGUI>();
+            label.alignment = TextAlignmentOptions.Center;
+            label.fontSize = 16f;
+            label.fontStyle = FontStyles.Bold;
+            label.color = Color.white;
+            label.textWrappingMode = TextWrappingModes.NoWrap;
+            label.raycastTarget = false;
+            if (actionDescriptionText != null && actionDescriptionText.font != null)
+            {
+                label.font = actionDescriptionText.font;
+            }
+
+            return icon;
+        }
+
+        private RectTransform EnsureStatusEffectsRoot(Image fillImage, string rootName)
+        {
+            var hpRoot = fillImage != null ? fillImage.transform.parent as RectTransform : null;
+            if (hpRoot == null)
+            {
+                return null;
+            }
+
+            var existing = hpRoot.Find(rootName) as RectTransform;
+            if (existing != null)
+            {
+                return existing;
+            }
+
+            var rootObject = new GameObject(rootName, typeof(RectTransform), typeof(HorizontalLayoutGroup));
+            rootObject.transform.SetParent(hpRoot, false);
+            var root = rootObject.GetComponent<RectTransform>();
+            root.anchorMin = new Vector2(0f, 0f);
+            root.anchorMax = new Vector2(1f, 0f);
+            root.pivot = new Vector2(0.5f, 1f);
+            root.anchoredPosition = new Vector2(0f, -6f);
+            root.sizeDelta = new Vector2(0f, 26f);
+
+            var layout = rootObject.GetComponent<HorizontalLayoutGroup>();
+            layout.spacing = 4f;
+            layout.childAlignment = TextAnchor.MiddleLeft;
+            layout.childControlWidth = false;
+            layout.childControlHeight = false;
+            layout.childForceExpandWidth = false;
+            layout.childForceExpandHeight = false;
+
+            return root;
+        }
+
+        private void RenderStatusEffects(RectTransform root, IReadOnlyList<CombatStatusEffectSnapshot> effects)
+        {
+            if (root == null)
+            {
+                return;
+            }
+
+            for (var i = root.childCount - 1; i >= 0; i--)
+            {
+                DestroyAnimationObject(root.GetChild(i).gameObject);
+            }
+
+            var hasEffects = effects != null && effects.Count > 0;
+            root.gameObject.SetActive(hasEffects);
+            if (!hasEffects)
+            {
+                return;
+            }
+
+            foreach (var effect in effects)
+            {
+                CreateStatusEffectChip(root, effect);
+            }
+        }
+
+        private void CreateStatusEffectChip(RectTransform root, CombatStatusEffectSnapshot effect)
+        {
+            if (effect == null || string.IsNullOrWhiteSpace(effect.Id))
+            {
+                return;
+            }
+
+            var chipObject = new GameObject($"StatusEffect_{effect.Id}", typeof(RectTransform), typeof(Image), typeof(StatusEffectTooltipTarget));
+            chipObject.transform.SetParent(root, false);
+            var chipRect = chipObject.GetComponent<RectTransform>();
+            chipRect.sizeDelta = new Vector2(54f, 24f);
+
+            var image = chipObject.GetComponent<Image>();
+            image.color = effect.IsBuff ? buffStatusColor : debuffStatusColor;
+            image.raycastTarget = true;
+
+            var labelObject = new GameObject("Text", typeof(RectTransform), typeof(TextMeshProUGUI));
+            labelObject.transform.SetParent(chipObject.transform, false);
+            var labelRect = labelObject.GetComponent<RectTransform>();
+            labelRect.anchorMin = Vector2.zero;
+            labelRect.anchorMax = Vector2.one;
+            labelRect.offsetMin = new Vector2(4f, 0f);
+            labelRect.offsetMax = new Vector2(-4f, 0f);
+
+            var label = labelObject.GetComponent<TextMeshProUGUI>();
+            label.text = string.IsNullOrWhiteSpace(effect.IconText) ? effect.DisplayName : effect.IconText;
+            label.alignment = TextAlignmentOptions.Center;
+            label.fontSize = 14f;
+            label.fontStyle = FontStyles.Bold;
+            label.color = Color.white;
+            label.textWrappingMode = TextWrappingModes.NoWrap;
+            label.raycastTarget = false;
+            if (actionDescriptionText != null && actionDescriptionText.font != null)
+            {
+                label.font = actionDescriptionText.font;
+            }
+
+            chipObject.GetComponent<StatusEffectTooltipTarget>()
+                .Initialize(effect.Description, ShowStatusTooltip, HideStatusTooltip);
+        }
+
+        private void EnsureStatusTooltip()
+        {
+            if (statusTooltip == null)
+            {
+                statusTooltip = new GameObject("StatusTooltip", typeof(RectTransform), typeof(Image));
+                statusTooltip.transform.SetParent(transform, false);
+                var rect = statusTooltip.GetComponent<RectTransform>();
+                rect.anchorMin = new Vector2(0.5f, 0.5f);
+                rect.anchorMax = new Vector2(0.5f, 0.5f);
+                rect.pivot = new Vector2(0.5f, 0f);
+                rect.anchoredPosition = new Vector2(0f, 48f);
+                rect.sizeDelta = new Vector2(320f, 56f);
+            }
+
+            if (!statusTooltip.TryGetComponent<Image>(out var image))
+            {
+                image = statusTooltip.AddComponent<Image>();
+            }
+
+            image.color = statusTooltipColor;
+            image.raycastTarget = false;
+
+            if (statusTooltipText == null)
+            {
+                var textObject = new GameObject("Text", typeof(RectTransform), typeof(TextMeshProUGUI));
+                textObject.transform.SetParent(statusTooltip.transform, false);
+                var textRect = textObject.GetComponent<RectTransform>();
+                textRect.anchorMin = Vector2.zero;
+                textRect.anchorMax = Vector2.one;
+                textRect.offsetMin = new Vector2(10f, 6f);
+                textRect.offsetMax = new Vector2(-10f, -6f);
+                statusTooltipText = textObject.GetComponent<TextMeshProUGUI>();
+            }
+
+            statusTooltipText.alignment = TextAlignmentOptions.Center;
+            statusTooltipText.fontSize = 15f;
+            statusTooltipText.color = Color.white;
+            statusTooltipText.textWrappingMode = TextWrappingModes.Normal;
+            if (actionDescriptionText != null && actionDescriptionText.font != null)
+            {
+                statusTooltipText.font = actionDescriptionText.font;
+            }
+
+            statusTooltip.SetActive(false);
+        }
+
+        private void ShowStatusTooltip(string description, RectTransform source)
+        {
+            if (statusTooltip == null || statusTooltipText == null)
+            {
+                return;
+            }
+
+            statusTooltipText.text = string.IsNullOrWhiteSpace(description) ? string.Empty : description;
+            var ownerRect = transform as RectTransform;
+            if (source != null && ownerRect != null && statusTooltip.transform is RectTransform tooltipRect)
+            {
+                var worldPosition = source.TransformPoint(source.rect.center);
+                var localPosition = ownerRect.InverseTransformPoint(worldPosition);
+                tooltipRect.anchoredPosition = localPosition + new Vector3(0f, 28f, 0f);
+            }
+
+            statusTooltip.SetActive(true);
+        }
+
+        private void HideStatusTooltip()
+        {
+            if (statusTooltip != null)
+            {
+                statusTooltip.SetActive(false);
+            }
         }
 
         private void EnsureAudioDefaults()

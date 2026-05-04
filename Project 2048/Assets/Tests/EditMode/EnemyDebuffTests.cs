@@ -10,7 +10,7 @@ namespace Project2048.Tests
     public class EnemyDebuffTests
     {
         [Test]
-        public void FearIntent_AppliesNegativeDefenseBonus_ToPlayer()
+        public void FearIntent_HalvesFutureBlockGain_WithCeiling()
         {
             var playerObject = new GameObject("Player");
             try
@@ -20,7 +20,6 @@ namespace Project2048.Tests
                 playerData.maxHp = 20;
                 playerData.attackPower = 1;
                 player.Init(playerData);
-                player.ApplyDefenseBonus(3);
 
                 var enemyObject = new GameObject("Enemy");
                 try
@@ -39,7 +38,9 @@ namespace Project2048.Tests
 
                     new EnemyIntentSystem().ExecuteIntent(enemy, player);
 
-                    Assert.That(player.DefenseBonus, Is.EqualTo(1));
+                    Assert.That(player.FearStacks, Is.EqualTo(2));
+                    Assert.That(player.GainBlockWithBonus(5), Is.EqualTo(3));
+                    Assert.That(player.Block, Is.EqualTo(3));
 
                     Object.DestroyImmediate(enemyData);
                 }

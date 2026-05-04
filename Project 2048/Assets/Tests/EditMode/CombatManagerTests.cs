@@ -183,6 +183,66 @@ namespace Project2048.Tests
             Assert.That(player.Block, Is.EqualTo(0));
         }
 
+        [Test]
+        public void RequestEndPlayerTurn_ClearsEnemyBlock_WhenThatEnemyStartsNextOwnTurn()
+        {
+            var manager = CreateGameObject<CombatManager>("CombatManager");
+            var player = CreateGameObject<PlayerCombatController>("Player");
+            var enemy = CreateGameObject<EnemyController>("Enemy");
+            var playerData = CreatePlayerData(maxHp: 20, attackPower: 2);
+            var enemyData = CreateEnemyData(maxHp: 10, attackValue: 0);
+            enemyData.intentPattern = new List<EnemyIntent>
+            {
+                new()
+                {
+                    intentType = EnemyIntentType.Defense,
+                    value = 5,
+                },
+                new()
+                {
+                    intentType = EnemyIntentType.Attack,
+                    value = 0,
+                },
+            };
+
+            manager.SetCombatants(player, new[] { enemy });
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new List<EnemySO> { enemyData },
+                boardMoveCount = 1,
+            });
+
+            manager.BoardManager.SetBoardState(
+                new[,]
+                {
+                    { 64, 0, 0, 0 },
+                    { 0, 0, 0, 0 },
+                    { 0, 0, 0, 0 },
+                    { 0, 0, 0, 0 },
+                },
+                0);
+            manager.ResolveBoardPhase();
+            manager.RequestEndPlayerTurn();
+
+            Assert.That(enemy.Block, Is.EqualTo(5));
+
+            manager.BoardManager.SetBoardState(
+                new[,]
+                {
+                    { 64, 0, 0, 0 },
+                    { 0, 0, 0, 0 },
+                    { 0, 0, 0, 0 },
+                    { 0, 0, 0, 0 },
+                },
+                0);
+            manager.ResolveBoardPhase();
+            manager.RequestEndPlayerTurn();
+
+            Assert.That(enemy.Block, Is.EqualTo(0));
+            Assert.That(manager.CurrentPhase, Is.EqualTo(CombatPhase.BoardPhase));
+        }
+
         private T CreateGameObject<T>(string name)
             where T : Component
         {

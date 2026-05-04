@@ -16,6 +16,7 @@ namespace Project2048.Enemy
         public EnemyIntent CurrentIntent { get; private set; }
 
         public event Action<int, int> OnHpChanged;
+        public event Action<int> OnBlockChanged;
         public event Action<EnemyIntent> OnIntentChanged;
         public event Action<EnemyController> OnDead;
 
@@ -30,6 +31,7 @@ namespace Project2048.Enemy
             CurrentIntent = null;
 
             OnHpChanged?.Invoke(CurrentHp, MaxHp);
+            OnBlockChanged?.Invoke(Block);
             OnIntentChanged?.Invoke(CurrentIntent);
         }
 
@@ -42,6 +44,7 @@ namespace Project2048.Enemy
             CurrentHp = Mathf.Max(0, CurrentHp - remainingDamage);
 
             OnHpChanged?.Invoke(CurrentHp, MaxHp);
+            OnBlockChanged?.Invoke(Block);
 
             if (CurrentHp <= 0)
             {
@@ -57,6 +60,18 @@ namespace Project2048.Enemy
             }
 
             Block += amount;
+            OnBlockChanged?.Invoke(Block);
+        }
+
+        public void ClearBlock()
+        {
+            if (Block == 0)
+            {
+                return;
+            }
+
+            Block = 0;
+            OnBlockChanged?.Invoke(Block);
         }
 
         public void SetIntent(EnemyIntent intent)

@@ -175,6 +175,76 @@ namespace Project2048.Tests
         }
 
         [Test]
+        public void Initialize_BuildsBlockAndStatusEffectUiAroundHpBars()
+        {
+            var viewObject = CreateOwnedGameObject("CombatView");
+            var view = viewObject.AddComponent<CombatUiView>();
+            var playerBattleHp = CreateImageChild(viewObject.transform, "PlayerBattleHp");
+            CreateImageChild(playerBattleHp.transform, "Fill");
+            CreateTextChild(playerBattleHp.transform, "Text");
+            var enemyHp = CreateImageChild(viewObject.transform, "EnemyHp");
+            CreateImageChild(enemyHp.transform, "Fill");
+            CreateTextChild(enemyHp.transform, "Text");
+            var boardHp = CreateImageChild(viewObject.transform, "BoardHp");
+            CreateImageChild(boardHp.transform, "HpBarFill");
+            var boardHpRoot = boardHp.transform;
+
+            var manager = CreateOwnedGameObject("CombatManager").AddComponent<CombatManager>();
+            var player = CreateOwnedGameObject("Player").AddComponent<PlayerCombatController>();
+            var enemy = CreateOwnedGameObject("Enemy").AddComponent<EnemyController>();
+            var bootstrap = CreateOwnedGameObject("Bootstrap").AddComponent<PrototypeCombatBootstrap>();
+            SetPrivateField(bootstrap, "combatManager", manager);
+
+            var playerData = CreatePlayerData(20, 0);
+            var enemyData = CreateEnemyData("Slime", 10, 0);
+            manager.SetCombatants(player, new[] { enemy });
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new System.Collections.Generic.List<EnemySO> { enemyData },
+                boardMoveCount = 1,
+            });
+
+            player.AddBlock(3);
+            player.ApplyFear(2);
+            enemy.AddBlock(4);
+            enemy.ApplyAttackModifier(2);
+
+            view.Initialize(bootstrap);
+
+            var playerOutline = playerBattleHp.GetComponent<Outline>();
+            Assert.That(playerOutline, Is.Not.Null);
+            Assert.That(playerOutline.enabled, Is.True);
+            Assert.That(playerBattleHp.transform.Find("BlockIcon/Text").GetComponent<TMPro.TMP_Text>().text, Is.EqualTo("3"));
+            Assert.That(boardHpRoot.GetComponent<Outline>().enabled, Is.True);
+            Assert.That(boardHpRoot.Find("BlockIcon/Text").GetComponent<TMPro.TMP_Text>().text, Is.EqualTo("3"));
+
+            var enemyOutline = enemyHp.GetComponent<Outline>();
+            Assert.That(enemyOutline, Is.Not.Null);
+            Assert.That(enemyOutline.enabled, Is.True);
+            Assert.That(enemyHp.transform.Find("BlockIcon/Text").GetComponent<TMPro.TMP_Text>().text, Is.EqualTo("4"));
+
+            var fearChip = playerBattleHp.transform.Find("PlayerBattleStatusEffects/StatusEffect_fear");
+            var boardFearChip = boardHpRoot.Find("PlayerBoardStatusEffects/StatusEffect_fear");
+            var attackChip = enemyHp.transform.Find("EnemyStatusEffects/StatusEffect_attack-up");
+            Assert.That(fearChip, Is.Not.Null);
+            Assert.That(boardFearChip, Is.Not.Null);
+            Assert.That(attackChip, Is.Not.Null);
+
+            var tooltipTarget = fearChip.GetComponent<StatusEffectTooltipTarget>();
+            Assert.That(tooltipTarget, Is.InstanceOf<IPointerEnterHandler>());
+            ((IPointerEnterHandler)tooltipTarget).OnPointerEnter(new PointerEventData(null));
+
+            var tooltip = viewObject.transform.Find("StatusTooltip");
+            Assert.That(tooltip, Is.Not.Null);
+            Assert.That(tooltip.gameObject.activeSelf, Is.True);
+            Assert.That(tooltip.GetComponentInChildren<TMPro.TMP_Text>(true).text, Does.Contain("방어도"));
+
+            ((IPointerExitHandler)tooltipTarget).OnPointerExit(new PointerEventData(null));
+            Assert.That(tooltip.gameObject.activeSelf, Is.False);
+        }
+
+        [Test]
         public void Initialize_ConfiguresAudioSourceForAudibleUiSfx()
         {
             var viewObject = CreateOwnedGameObject("CombatView");

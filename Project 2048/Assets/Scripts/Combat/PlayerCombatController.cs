@@ -15,6 +15,7 @@ namespace Project2048.Combat
         public int AttackPower { get; private set; }
         public int Block { get; private set; }
         public int DefenseBonus { get; private set; }
+        public int FearStacks { get; private set; }
         public int BoardMoveCountBonus { get; private set; }
         public bool IsDead => CurrentHp <= 0;
         public IReadOnlyList<SkillSO> Skills => skills;
@@ -22,6 +23,7 @@ namespace Project2048.Combat
         public event Action<int, int> OnHpChanged;
         public event Action<int> OnBlockChanged;
         public event Action<int> OnDefenseBonusChanged;
+        public event Action OnStatusEffectsChanged;
 
         public void Init(PlayerSO data)
         {
@@ -37,11 +39,13 @@ namespace Project2048.Combat
             BoardMoveCountBonus = Mathf.Max(0, data.boardMoveCountBonus);
             Block = 0;
             DefenseBonus = 0;
+            FearStacks = 0;
 
             SetSkills(data.startingSkills);
             OnHpChanged?.Invoke(CurrentHp, MaxHp);
             OnBlockChanged?.Invoke(Block);
             OnDefenseBonusChanged?.Invoke(DefenseBonus);
+            OnStatusEffectsChanged?.Invoke();
         }
 
         public void SetSkills(IEnumerable<SkillSO> nextSkills)
@@ -81,6 +85,11 @@ namespace Project2048.Combat
         public int GainBlockWithBonus(int baseAmount)
         {
             var total = Mathf.Max(0, baseAmount + DefenseBonus);
+            if (FearStacks > 0)
+            {
+                total = Mathf.CeilToInt(total * 0.5f);
+            }
+
             if (total > 0)
             {
                 Block += total;
@@ -99,6 +108,17 @@ namespace Project2048.Combat
 
             DefenseBonus += amount;
             OnDefenseBonusChanged?.Invoke(DefenseBonus);
+        }
+
+        public void ApplyFear(int amount)
+        {
+            if (amount <= 0)
+            {
+                return;
+            }
+
+            FearStacks += amount;
+            OnStatusEffectsChanged?.Invoke();
         }
 
         public void ClearBlock()

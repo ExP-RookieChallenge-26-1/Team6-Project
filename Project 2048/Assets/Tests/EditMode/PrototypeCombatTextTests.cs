@@ -72,7 +72,7 @@ namespace Project2048.Tests
             {
                 DebuffType = DebuffType.Fear,
                 Value = 2,
-            }), Is.EqualTo("공포: 방어 획득 -2"));
+            }), Is.EqualTo("공포: 방어도 획득 절반"));
 
             Assert.That(PrototypeCombatText.FormatDebuffVfxLabel(new CombatVfxCue
             {
@@ -93,14 +93,14 @@ namespace Project2048.Tests
         public void FormatEnemyHp_ShowsBlockWhenEnemyIsDefending()
         {
             Assert.That(PrototypeCombatText.FormatEnemyHp(18, 32, 0), Is.EqualTo("체력 18/32"));
-            Assert.That(PrototypeCombatText.FormatEnemyHp(32, 32, 5), Is.EqualTo("체력 32/32 / 방어 5"));
+            Assert.That(PrototypeCombatText.FormatEnemyHp(32, 32, 5), Is.EqualTo("체력 32/32"));
         }
 
         [Test]
         public void FormatPlayerHp_ShowsBlockWhenDamageWouldBeAbsorbed()
         {
             Assert.That(PrototypeCombatText.FormatPlayerHp(16, 20, 0), Is.EqualTo("체력 16/20"));
-            Assert.That(PrototypeCombatText.FormatPlayerHp(20, 20, 3), Is.EqualTo("체력 20/20 / 방어 3"));
+            Assert.That(PrototypeCombatText.FormatPlayerHp(20, 20, 3), Is.EqualTo("체력 20/20"));
         }
 
         [Test]
@@ -110,8 +110,8 @@ namespace Project2048.Tests
                 PrototypeCombatText.FormatEnemyHeader(
                     "그림자 짐승",
                     "AI: 방어 몰빵 / 공포->암흑 / 일반",
-                    "체력 32/32 / 방어 3"),
-                Is.EqualTo("그림자 짐승\nAI: 방어 몰빵 / 공포->암흑 / 일반\n체력 32/32 / 방어 3"));
+                    "체력 32/32"),
+                Is.EqualTo("그림자 짐승\nAI: 방어 몰빵 / 공포->암흑 / 일반\n체력 32/32"));
         }
 
         [Test]

@@ -53,6 +53,8 @@ namespace Project2048.Combat
         public int AttackPower { get; set; }
         public int Block { get; set; }
         public int DefenseBonus { get; set; }
+        public int FearStacks { get; set; }
+        public List<CombatStatusEffectSnapshot> StatusEffects { get; set; } = new();
     }
 
     [Serializable]
@@ -66,6 +68,18 @@ namespace Project2048.Combat
         public bool IsDead { get; set; }
         public string AiProfileLabel { get; set; }
         public EnemyIntent Intent { get; set; }
+        public List<CombatStatusEffectSnapshot> StatusEffects { get; set; } = new();
+    }
+
+    [Serializable]
+    public class CombatStatusEffectSnapshot
+    {
+        public string Id { get; set; }
+        public string DisplayName { get; set; }
+        public string Description { get; set; }
+        public int Value { get; set; }
+        public bool IsBuff { get; set; }
+        public string IconText { get; set; }
     }
 
     [Serializable]

@@ -89,7 +89,7 @@ namespace Project2048.Enemy
                     if (intent.value > 0)
                     {
                         // 공포는 이후 방어 스킬로 얻는 방어량을 낮춘다.
-                        player.ApplyDefenseBonus(-intent.value);
+                        player.ApplyFear(intent.value);
                     }
                     break;
                 case DebuffType.Darkness:

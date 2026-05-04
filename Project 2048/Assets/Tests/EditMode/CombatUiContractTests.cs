@@ -274,12 +274,14 @@ namespace Project2048.Tests
         }
 
         [Test]
-        public void RequestEndPlayerTurn_FearDebuff_EmitsVfxCueAndReducesDefenseGain()
+        public void RequestEndPlayerTurn_FearDebuff_EmitsVfxCueAndHalvesDefenseGain()
         {
             var manager = CreateGameObject<CombatManager>("CombatManager");
             var player = CreateGameObject<PlayerCombatController>("Player");
             var enemy = CreateGameObject<EnemyController>("Enemy");
+            var defenseSkill = CreateSkill("guard", "Guard", SkillType.Defense, cost: 0, power: 5);
             var playerData = CreatePlayerData(maxHp: 20, attackPower: 2);
+            playerData.startingSkills = new List<SkillSO> { defenseSkill };
             var enemyData = CreateEnemyData("Slime", maxHp: 10, attackValue: 4);
             enemyData.intentPattern = new List<EnemyIntent>
             {
@@ -318,7 +320,12 @@ namespace Project2048.Tests
             Assert.That(latestSnapshot.LastVfxCue.DebuffType, Is.EqualTo(DebuffType.Fear));
             Assert.That(latestSnapshot.LastVfxCue.Value, Is.EqualTo(2));
             Assert.That(latestSnapshot.LastVfxCue.Sequence, Is.GreaterThan(0));
-            Assert.That(latestSnapshot.Player.DefenseBonus, Is.EqualTo(-2));
+            Assert.That(latestSnapshot.Player.StatusEffects, Has.Some.Matches<CombatStatusEffectSnapshot>(
+                effect => effect.Id == "fear" && effect.Description.Contains("절반")));
+
+            manager.ResolveBoardPhase();
+            Assert.That(manager.RequestUseSkill(defenseSkill, null), Is.True);
+            Assert.That(player.Block, Is.EqualTo(3));
         }
 
         [Test]
@@ -366,6 +373,53 @@ namespace Project2048.Tests
             Assert.That(latestSnapshot.LastVfxCue.DebuffType, Is.EqualTo(DebuffType.Darkness));
             Assert.That(latestSnapshot.LastVfxCue.Value, Is.EqualTo(2));
             Assert.That(CountObstacles(latestSnapshot.Board), Is.EqualTo(2));
+        }
+
+        [Test]
+        public void GetSnapshot_ExposesBuffAndDebuffStatusEffectsForHpUi()
+        {
+            var manager = CreateGameObject<CombatManager>("CombatManager");
+            var player = CreateGameObject<PlayerCombatController>("Player");
+            var enemy = CreateGameObject<EnemyController>("Enemy");
+            var playerData = CreatePlayerData(maxHp: 20, attackPower: 2);
+            var enemyData = CreateEnemyData("Slime", maxHp: 10, attackValue: 4);
+
+            manager.SetCombatants(player, new[] { enemy });
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new List<EnemySO> { enemyData },
+                boardMoveCount = 1,
+            });
+
+            player.ApplyFear(2);
+            enemy.ApplyAttackModifier(3);
+            manager.BoardManager.SetBoardState(new[,]
+            {
+                { Board2048Manager.ObstacleValue, 0, 0, 0 },
+                { 0, 0, 0, 0 },
+                { 0, 0, 0, 0 },
+                { 0, 0, 0, 0 },
+            }, 1);
+
+            var snapshot = manager.GetSnapshot();
+
+            Assert.That(snapshot.Player.StatusEffects, Has.Some.Matches<CombatStatusEffectSnapshot>(
+                effect => effect.Id == "fear" &&
+                          effect.DisplayName == "공포" &&
+                          !effect.IsBuff &&
+                          effect.Value == 2 &&
+                          effect.Description.Contains("절반")));
+            Assert.That(snapshot.Player.StatusEffects, Has.Some.Matches<CombatStatusEffectSnapshot>(
+                effect => effect.Id == "darkness" &&
+                          effect.DisplayName == "암흑" &&
+                          !effect.IsBuff &&
+                          effect.Value == 1));
+            Assert.That(snapshot.Enemies[0].StatusEffects, Has.Some.Matches<CombatStatusEffectSnapshot>(
+                effect => effect.Id == "attack-up" &&
+                          effect.DisplayName == "공격 강화" &&
+                          effect.IsBuff &&
+                          effect.Value == 3));
         }
 
         private T CreateGameObject<T>(string name)

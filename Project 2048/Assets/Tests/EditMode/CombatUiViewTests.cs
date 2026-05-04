@@ -224,12 +224,19 @@ namespace Project2048.Tests
             Assert.That(enemyOutline.enabled, Is.True);
             Assert.That(enemyHp.transform.Find("BlockIcon/Text").GetComponent<TMPro.TMP_Text>().text, Is.EqualTo("4"));
 
-            var fearChip = playerBattleHp.transform.Find("PlayerBattleStatusEffects/StatusEffect_fear");
-            var boardFearChip = boardHpRoot.Find("PlayerBoardStatusEffects/StatusEffect_fear");
-            var attackChip = enemyHp.transform.Find("EnemyStatusEffects/StatusEffect_attack-up");
+            var statusLayer = viewObject.transform.Find("FloatingStatusLayer");
+            Assert.That(statusLayer, Is.Not.Null);
+
+            var fearChip = statusLayer.Find("PlayerBattleStatusEffects/StatusEffect_fear");
+            var boardFearChip = statusLayer.Find("PlayerBoardStatusEffects/StatusEffect_fear");
+            var attackChip = statusLayer.Find("EnemyStatusEffects/StatusEffect_attack-up");
             Assert.That(fearChip, Is.Not.Null);
             Assert.That(boardFearChip, Is.Not.Null);
             Assert.That(attackChip, Is.Not.Null);
+
+            var fearChipRect = fearChip.GetComponent<RectTransform>();
+            Assert.That(fearChipRect.sizeDelta.x, Is.EqualTo(fearChipRect.sizeDelta.y).Within(0.001f));
+            Assert.That(fearChipRect.sizeDelta.x, Is.GreaterThanOrEqualTo(28f));
 
             var tooltipTarget = fearChip.GetComponent<StatusEffectTooltipTarget>();
             Assert.That(tooltipTarget, Is.InstanceOf<IPointerEnterHandler>());

@@ -1,9 +1,9 @@
 {
   "version": 1,
-  "generated_at": "2026-05-04T15:37:38.915Z",
+  "generated_at": "2026-05-04T15:59:24.144Z",
   "generator": "ai-context-builder-v1",
   "source_branch": "main",
-  "source_commit_sha": "96eca079a94d41153ad55efd02fde890137116ba",
+  "source_commit_sha": "2eb4fb273e08393c30fb8b5f94b107bca307a8d8",
   "build_mode_requested": "auto",
   "build_mode_used": "incremental",
   "rebuild_reasons": [],

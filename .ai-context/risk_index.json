@@ -626,6 +626,19 @@
     "risk_score": 26
   },
   {
+    "file_id": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "class_name": "MainMenuControllerTests",
+    "risk_flags": [
+      "high-coupling",
+      "state-owner"
+    ],
+    "risk_reasons": [
+      "참조 타입 또는 관계 수가 많음",
+      "상태 중심 또는 관리 중심 클래스일 가능성"
+    ],
+    "risk_score": 26
+  },
+  {
     "file_id": "MineFind/Cell.cs",
     "class_name": "Cell",
     "risk_flags": [

@@ -11090,6 +11090,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
     "from_class": "MainMenuController",
+    "to_type": "BattleScene",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "from_class": "MainMenuController",
     "to_type": "Button",
     "relation_type": "uses",
     "strength": 1
@@ -11210,13 +11217,6 @@
     "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
     "from_class": "MainMenuController",
     "to_type": "QuitGame",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
-    "from_class": "MainMenuController",
-    "to_type": "SampleScene",
     "relation_type": "uses",
     "strength": 1
   },
@@ -13323,6 +13323,20 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
+    "to_type": "BattleScene",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
+    "from_class": "CombatUiViewTests",
+    "to_type": "BattleScene_CombatUiView_HasInspectorAudioReferences",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
+    "from_class": "CombatUiViewTests",
     "to_type": "BindingFlags",
     "relation_type": "uses",
     "strength": 1
@@ -14227,20 +14241,6 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
     "to_type": "Right",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
-    "from_class": "CombatUiViewTests",
-    "to_type": "SampleScene",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
-    "from_class": "CombatUiViewTests",
-    "to_type": "SampleScene_CombatUiView_HasInspectorAudioReferences",
     "relation_type": "uses",
     "strength": 1
   },
@@ -15354,6 +15354,265 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/EnemyDebuffTests.cs",
     "from_class": "EnemyDebuffTests",
     "to_type": "UnityEngine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
+    "to_type": "Assert",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
+    "to_type": "Assets",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
+    "to_type": "BindingFlags",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
+    "to_type": "Contain",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
+    "to_type": "Does",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
+    "to_type": "EditorBuildSettings",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
+    "to_type": "File",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
+    "to_type": "Framework",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
+    "to_type": "GameSceneName",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
+    "to_type": "GetField",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
+    "to_type": "GetFileNameWithoutExtension",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
+    "to_type": "GetRawConstantValue",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
+    "to_type": "IO",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
+    "to_type": "Is",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
+    "to_type": "Linq",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
+    "to_type": "MainMenuController",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
+    "to_type": "NewGameSceneName_IsEnabledInBuildSettings",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
+    "to_type": "NonPublic",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
+    "to_type": "Not",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
+    "to_type": "Null",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
+    "to_type": "NUnit",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
+    "to_type": "Path",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
+    "to_type": "Project2048",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
+    "to_type": "ReadAllText",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
+    "to_type": "Reflection",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
+    "to_type": "Scripts",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
+    "to_type": "Select",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
+    "to_type": "SourceText_KeepsKoreanMenuMessagesReadable",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
+    "to_type": "Static",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
+    "to_type": "System",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
+    "to_type": "Test",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
+    "to_type": "Tests",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
+    "to_type": "That",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
+    "to_type": "ToArray",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
+    "to_type": "UI",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
+    "to_type": "UnityEditor",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
+    "to_type": "Where",
     "relation_type": "uses",
     "strength": 1
   },

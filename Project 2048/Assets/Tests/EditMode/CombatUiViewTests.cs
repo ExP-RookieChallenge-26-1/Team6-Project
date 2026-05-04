@@ -224,15 +224,28 @@ namespace Project2048.Tests
             Assert.That(enemyOutline.enabled, Is.True);
             Assert.That(enemyHp.transform.Find("BlockIcon/Text").GetComponent<TMPro.TMP_Text>().text, Is.EqualTo("4"));
 
-            var statusLayer = viewObject.transform.Find("FloatingStatusLayer");
-            Assert.That(statusLayer, Is.Not.Null);
+            Assert.That(viewObject.transform.Find("FloatingStatusLayer"), Is.Null);
 
-            var fearChip = statusLayer.Find("PlayerBattleStatusEffects/StatusEffect_fear");
-            var boardFearChip = statusLayer.Find("PlayerBoardStatusEffects/StatusEffect_fear");
-            var attackChip = statusLayer.Find("EnemyStatusEffects/StatusEffect_attack-up");
+            var fearRoot = playerBattleHp.transform.Find("PlayerBattleStatusEffects");
+            var boardFearRoot = boardHpRoot.Find("PlayerBoardStatusEffects");
+            var attackRoot = enemyHp.transform.Find("EnemyStatusEffects");
+            Assert.That(fearRoot, Is.Not.Null);
+            Assert.That(boardFearRoot, Is.Not.Null);
+            Assert.That(attackRoot, Is.Not.Null);
+
+            Assert.That(fearRoot.GetComponent<RectTransform>().anchoredPosition.y, Is.LessThan(0f));
+            Assert.That(boardFearRoot.GetComponent<RectTransform>().anchoredPosition.y, Is.LessThan(0f));
+            Assert.That(attackRoot.GetComponent<RectTransform>().anchoredPosition.y, Is.LessThan(0f));
+
+            var fearChip = fearRoot.Find("StatusEffect_fear");
+            var boardFearChip = boardFearRoot.Find("StatusEffect_fear");
+            var attackChip = attackRoot.Find("StatusEffect_attack-up");
             Assert.That(fearChip, Is.Not.Null);
             Assert.That(boardFearChip, Is.Not.Null);
             Assert.That(attackChip, Is.Not.Null);
+            Assert.That(fearChip.GetComponentInChildren<TMPro.TMP_Text>(true), Is.Null);
+            Assert.That(boardFearChip.GetComponentInChildren<TMPro.TMP_Text>(true), Is.Null);
+            Assert.That(attackChip.GetComponentInChildren<TMPro.TMP_Text>(true), Is.Null);
 
             var fearChipRect = fearChip.GetComponent<RectTransform>();
             Assert.That(fearChipRect.sizeDelta.x, Is.EqualTo(fearChipRect.sizeDelta.y).Within(0.001f));

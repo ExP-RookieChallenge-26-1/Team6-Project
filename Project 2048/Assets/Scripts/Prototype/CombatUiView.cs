@@ -44,7 +44,6 @@ namespace Project2048.Prototype
         [SerializeField] private TMP_Text enemyHpText;
         [SerializeField] private RectTransform playerBattleStatusEffectsRoot;
         [SerializeField] private RectTransform enemyStatusEffectsRoot;
-        [SerializeField] private RectTransform floatingStatusLayer;
         [SerializeField] private GameObject statusTooltip;
         [SerializeField] private TMP_Text statusTooltipText;
         [SerializeField] private TMP_Text actionDescriptionText;
@@ -419,7 +418,7 @@ namespace Project2048.Prototype
             }
 
             SetBlockIndicator(playerBattleHpBarFill, player?.Block ?? 0);
-            RenderStatusEffects(playerBattleStatusEffectsRoot, playerBattleHpBarFill, player?.StatusEffects);
+            RenderStatusEffects(playerBattleStatusEffectsRoot, player?.StatusEffects);
 
             if (enemyHpBarFill != null && enemy != null && enemy.MaxHp > 0)
             {
@@ -432,7 +431,7 @@ namespace Project2048.Prototype
             }
 
             SetBlockIndicator(enemyHpBarFill, enemy?.Block ?? 0);
-            RenderStatusEffects(enemyStatusEffectsRoot, enemyHpBarFill, enemy?.StatusEffects);
+            RenderStatusEffects(enemyStatusEffectsRoot, enemy?.StatusEffects);
 
             if (actionDescriptionText != null)
             {
@@ -516,7 +515,7 @@ namespace Project2048.Prototype
             }
 
             SetBlockIndicator(hpBarFill, player?.Block ?? 0);
-            RenderStatusEffects(playerBoardStatusEffectsRoot, hpBarFill, player?.StatusEffects);
+            RenderStatusEffects(playerBoardStatusEffectsRoot, player?.StatusEffects);
 
             // Turn limit.
             if (turnLimitText != null)
@@ -870,7 +869,6 @@ namespace Project2048.Prototype
             enemyHpText ??= FindNestedComponentByName<TMP_Text>("EnemyHp", "Text");
             playerBattleStatusEffectsRoot ??= FindComponentInChildrenByName<RectTransform>("PlayerBattleStatusEffects");
             enemyStatusEffectsRoot ??= FindComponentInChildrenByName<RectTransform>("EnemyStatusEffects");
-            floatingStatusLayer ??= FindComponentInChildrenByName<RectTransform>("FloatingStatusLayer");
             statusTooltip ??= FindChildByName("StatusTooltip")?.gameObject;
             statusTooltipText ??= FindNestedComponentByName<TMP_Text>("StatusTooltip", "Text");
             hpBarFill ??= FindComponentInChildrenByName<Image>("HpBarFill");
@@ -885,10 +883,9 @@ namespace Project2048.Prototype
             ConfigureHpBarFill(playerBattleHpBarFill, playerHpFillColor, hpBarBackgroundColor);
             ConfigureHpBarFill(enemyHpBarFill, enemyHpFillColor, hpBarBackgroundColor);
             ConfigureHpBarFill(hpBarFill, playerHpFillColor, hpBarBackgroundColor);
-            EnsureFloatingStatusLayer();
-            playerBoardStatusEffectsRoot ??= EnsureStatusEffectsRoot(hpBarFill, "PlayerBoardStatusEffects");
-            playerBattleStatusEffectsRoot ??= EnsureStatusEffectsRoot(playerBattleHpBarFill, "PlayerBattleStatusEffects");
-            enemyStatusEffectsRoot ??= EnsureStatusEffectsRoot(enemyHpBarFill, "EnemyStatusEffects");
+            playerBoardStatusEffectsRoot = EnsureStatusEffectsRoot(hpBarFill, "PlayerBoardStatusEffects") ?? playerBoardStatusEffectsRoot;
+            playerBattleStatusEffectsRoot = EnsureStatusEffectsRoot(playerBattleHpBarFill, "PlayerBattleStatusEffects") ?? playerBattleStatusEffectsRoot;
+            enemyStatusEffectsRoot = EnsureStatusEffectsRoot(enemyHpBarFill, "EnemyStatusEffects") ?? enemyStatusEffectsRoot;
             EnsureStatusTooltip();
         }
 
@@ -936,7 +933,7 @@ namespace Project2048.Prototype
 
         private void SetBlockIndicator(Image fillImage, int block)
         {
-            var hpRoot = fillImage != null ? fillImage.transform.parent as RectTransform : null;
+            var hpRoot = ResolveHpRoot(fillImage);
             if (hpRoot == null)
             {
                 return;
@@ -1011,61 +1008,36 @@ namespace Project2048.Prototype
             return icon;
         }
 
-        private RectTransform EnsureFloatingStatusLayer()
+        private static RectTransform ResolveHpRoot(Image fillImage)
         {
-            if (floatingStatusLayer != null)
+            if (fillImage == null)
             {
-                floatingStatusLayer.SetAsLastSibling();
-                return floatingStatusLayer;
+                return null;
             }
 
-            var existing = FindChildByName("FloatingStatusLayer") as RectTransform;
-            if (existing != null)
-            {
-                floatingStatusLayer = existing;
-                floatingStatusLayer.SetAsLastSibling();
-                return floatingStatusLayer;
-            }
-
-            var layerObject = new GameObject("FloatingStatusLayer", typeof(RectTransform));
-            layerObject.transform.SetParent(transform, false);
-            floatingStatusLayer = layerObject.GetComponent<RectTransform>();
-            floatingStatusLayer.anchorMin = Vector2.zero;
-            floatingStatusLayer.anchorMax = Vector2.one;
-            floatingStatusLayer.offsetMin = Vector2.zero;
-            floatingStatusLayer.offsetMax = Vector2.zero;
-            floatingStatusLayer.SetAsLastSibling();
-            return floatingStatusLayer;
+            return fillImage.transform.parent as RectTransform ?? fillImage.rectTransform;
         }
 
         private RectTransform EnsureStatusEffectsRoot(Image fillImage, string rootName)
         {
-            var hpRoot = fillImage != null ? fillImage.transform.parent as RectTransform : null;
+            var hpRoot = ResolveHpRoot(fillImage);
             if (hpRoot == null)
             {
                 return null;
             }
 
-            var layer = EnsureFloatingStatusLayer();
-            if (layer == null)
-            {
-                return null;
-            }
-
-            var existing = layer.Find(rootName) as RectTransform;
+            var existing = hpRoot.Find(rootName) as RectTransform;
             if (existing != null)
             {
-                PositionStatusEffectsRoot(existing, fillImage);
+                ConfigureStatusEffectsRoot(existing);
+                existing.SetAsLastSibling();
                 return existing;
             }
 
             var rootObject = new GameObject(rootName, typeof(RectTransform), typeof(HorizontalLayoutGroup));
-            rootObject.transform.SetParent(layer, false);
+            rootObject.transform.SetParent(hpRoot, false);
             var root = rootObject.GetComponent<RectTransform>();
-            root.anchorMin = new Vector2(0.5f, 0.5f);
-            root.anchorMax = new Vector2(0.5f, 0.5f);
-            root.pivot = new Vector2(0f, 1f);
-            root.sizeDelta = new Vector2(160f, 32f);
+            ConfigureStatusEffectsRoot(root);
 
             var layout = rootObject.GetComponent<HorizontalLayoutGroup>();
             layout.spacing = 4f;
@@ -1075,29 +1047,26 @@ namespace Project2048.Prototype
             layout.childForceExpandWidth = false;
             layout.childForceExpandHeight = false;
 
-            PositionStatusEffectsRoot(root, fillImage);
+            root.SetAsLastSibling();
             return root;
         }
 
-        private void PositionStatusEffectsRoot(RectTransform root, Image fillImage)
+        private static void ConfigureStatusEffectsRoot(RectTransform root)
         {
-            var layer = EnsureFloatingStatusLayer();
-            var hpRoot = fillImage != null ? fillImage.transform.parent as RectTransform : null;
-            if (root == null || layer == null || hpRoot == null)
+            if (root == null)
             {
                 return;
             }
 
-            var corners = new Vector3[4];
-            hpRoot.GetWorldCorners(corners);
-            var bottomLeft = corners[0];
-            var localPosition = layer.InverseTransformPoint(bottomLeft);
-            root.anchoredPosition = localPosition + new Vector3(0f, -6f, 0f);
+            root.anchorMin = new Vector2(0f, 0f);
+            root.anchorMax = new Vector2(0f, 0f);
+            root.pivot = new Vector2(0f, 1f);
+            root.anchoredPosition = new Vector2(0f, -6f);
+            root.sizeDelta = new Vector2(160f, 32f);
         }
 
         private void RenderStatusEffects(
             RectTransform root,
-            Image fillImage,
             IReadOnlyList<CombatStatusEffectSnapshot> effects)
         {
             if (root == null)
@@ -1105,7 +1074,7 @@ namespace Project2048.Prototype
                 return;
             }
 
-            PositionStatusEffectsRoot(root, fillImage);
+            ConfigureStatusEffectsRoot(root);
 
             for (var i = root.childCount - 1; i >= 0; i--)
             {
@@ -1140,27 +1109,6 @@ namespace Project2048.Prototype
             var image = chipObject.GetComponent<Image>();
             image.color = effect.IsBuff ? buffStatusColor : debuffStatusColor;
             image.raycastTarget = true;
-
-            var labelObject = new GameObject("Text", typeof(RectTransform), typeof(TextMeshProUGUI));
-            labelObject.transform.SetParent(chipObject.transform, false);
-            var labelRect = labelObject.GetComponent<RectTransform>();
-            labelRect.anchorMin = Vector2.zero;
-            labelRect.anchorMax = Vector2.one;
-            labelRect.offsetMin = new Vector2(4f, 0f);
-            labelRect.offsetMax = new Vector2(-4f, 0f);
-
-            var label = labelObject.GetComponent<TextMeshProUGUI>();
-            label.text = string.IsNullOrWhiteSpace(effect.IconText) ? effect.DisplayName : effect.IconText;
-            label.alignment = TextAlignmentOptions.Center;
-            label.fontSize = 13f;
-            label.fontStyle = FontStyles.Bold;
-            label.color = Color.white;
-            label.textWrappingMode = TextWrappingModes.NoWrap;
-            label.raycastTarget = false;
-            if (actionDescriptionText != null && actionDescriptionText.font != null)
-            {
-                label.font = actionDescriptionText.font;
-            }
 
             chipObject.GetComponent<StatusEffectTooltipTarget>()
                 .Initialize(effect.Description, ShowStatusTooltip, HideStatusTooltip);

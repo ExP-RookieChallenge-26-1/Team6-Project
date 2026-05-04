@@ -2,11 +2,12 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Project2048.Core;
 
 public class MainMenuController : MonoBehaviour
 {
     [SerializeField] private Button newGameButton;
-    [SerializeField] private Button loadGameButton;
+    //[SerializeField] private Button loadGameButton;
     [SerializeField] private Button settingButton;
     [SerializeField] private Button quitButton;
     [SerializeField] private ConfirmPopup confirmPopup;
@@ -18,7 +19,7 @@ public class MainMenuController : MonoBehaviour
     private void Awake()
     {
         newGameButton.onClick.AddListener(OnNewGameClicked);
-        loadGameButton.onClick.AddListener(OnLoadGameClicked);
+        //loadGameButton.onClick.AddListener(OnLoadGameClicked);
         settingButton.onClick.AddListener(OnSettingClicked);
         quitButton.onClick.AddListener(OnQuitClicked);
     }
@@ -30,7 +31,7 @@ public class MainMenuController : MonoBehaviour
 
     private void StartNewGame()
     {
-        fadeController.FadeOut(() => SceneManager.LoadScene(GameSceneName));
+        fadeController.FadeOut(() => GameManager.Instance.StartNewGame());
     }
 
     private void OnLoadGameClicked()

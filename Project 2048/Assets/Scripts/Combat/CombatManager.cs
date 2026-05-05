@@ -5,6 +5,7 @@ using System.Linq;
 using Project2048.Board2048;
 using Project2048.Cost;
 using Project2048.Enemy;
+using Project2048.Rewards;
 using Project2048.Skills;
 using UnityEngine;
 
@@ -112,6 +113,7 @@ namespace Project2048.Combat
             UnbindEntityEvents();
 
             player.Init(currentSetup.playerData);
+            ApplyRunProgressToPlayer();
             BindPlayerEvents();
 
             for (var index = 0; index < currentSetup.enemyDataList.Count; index++)
@@ -223,6 +225,23 @@ namespace Project2048.Combat
             return BoardManager.Move(direction);
         }
 
+        [ContextMenu("Refresh Combatant Data From ScriptableObjects")]
+        public void RefreshCombatantDataFromScriptableObjects()
+        {
+            EnsureRuntimeState();
+            player?.RefreshFromData();
+
+            foreach (var enemy in enemies)
+            {
+                enemy?.RefreshFromData();
+            }
+
+            if (CurrentPhase != CombatPhase.None)
+            {
+                NotifyStateChanged();
+            }
+        }
+
         public void RequestEndPlayerTurn()
         {
             EnsureRuntimeState();
@@ -253,7 +272,10 @@ namespace Project2048.Combat
             ChangePhase(CombatPhase.BoardPhase);
 
             // 이번 턴에 2048을 움직일 수 있는 횟수다. 0이 되면 보드 전체가 코스트로 바뀐다.
-            var moveCount = Mathf.Max(0, currentSetup.boardMoveCount + player.BoardMoveCountBonus);
+            var runMoveBonus = currentSetup.runProgress != null
+                ? currentSetup.runProgress.ExtraBoardMoveCount
+                : 0;
+            var moveCount = Mathf.Max(0, currentSetup.boardMoveCount + player.BoardMoveCountBonus + runMoveBonus);
             BoardManager.InitBoard(moveCount);
         }
 
@@ -359,6 +381,7 @@ namespace Project2048.Combat
             }
 
             ChangePhase(CombatPhase.Victory);
+            currentSetup.runProgress?.CapturePlayer(player);
             OnCombatVictory?.Invoke(BuildCombatResult());
             return true;
         }
@@ -371,8 +394,26 @@ namespace Project2048.Combat
             }
 
             ChangePhase(CombatPhase.Defeat);
+            currentSetup.runProgress?.CapturePlayer(player);
             OnCombatDefeat?.Invoke();
             return true;
+        }
+
+        private void ApplyRunProgressToPlayer()
+        {
+            if (currentSetup.runProgress == null || player == null)
+            {
+                return;
+            }
+
+            if (currentSetup.runProgress.HasCurrentHp)
+            {
+                player.SetCurrentHpForRun(currentSetup.runProgress.ResolveStartingHp(player.MaxHp));
+            }
+            else
+            {
+                currentSetup.runProgress.CapturePlayer(player);
+            }
         }
 
         private CombatResult BuildCombatResult()

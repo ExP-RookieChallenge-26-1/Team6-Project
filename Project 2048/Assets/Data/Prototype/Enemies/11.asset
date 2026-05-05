@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6115ca39d511d049965aae02efc3f23, type: 3}
+  m_Name: "다층 갑각"
+  m_EditorClassIdentifier: Game.Core::Project2048.Enemy.EnemySO
+  enemyName: "\uB2E4\uCE35 \uAC11\uAC01"
+  maxHp: 38
+  attackPower: 4
+  defensePower: 6
+  debuffPower: 1
+  difficultyScore: 1
+  portrait: {fileID: 21300000, guid: d7f23d1b3a65bfa4e8226ec3e3d99c1d, type: 3}
+  intentPattern: []
+  aiActionBias: 2
+  aiDebuffPattern: 1
+  aiStrength: 0
+  aiDebuffInterval: 4

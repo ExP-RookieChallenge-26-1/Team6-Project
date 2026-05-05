@@ -1,0 +1,200 @@
+[
+  {
+    "id": "m01_blue_ear_stalker",
+    "name": "푸른귀 들쥐",
+    "hp": 32,
+    "atk": 6,
+    "def": 2,
+    "debuff": 1,
+    "diff": 1,
+    "bias": "AttackHeavy",
+    "pattern": "FearThenDarkness",
+    "strength": "Normal",
+    "interval": 3,
+    "assetPath": "Assets/Art/Monsters/Cutouts/m01_blue_ear_stalker.png",
+    "size": [
+      563,
+      403
+    ]
+  },
+  {
+    "id": "m02_masked_wisp",
+    "name": "거짓된 미소",
+    "hp": 30,
+    "atk": 4,
+    "def": 4,
+    "debuff": 2,
+    "diff": 1,
+    "bias": "Balanced",
+    "pattern": "DarknessThenFear",
+    "strength": "Normal",
+    "interval": 3,
+    "assetPath": "Assets/Art/Monsters/Cutouts/m02_masked_wisp.png",
+    "size": [
+      409,
+      380
+    ]
+  },
+  {
+    "id": "m03_spiral_horn_shepherd",
+    "name": "나선뿔 목동",
+    "hp": 46,
+    "atk": 5,
+    "def": 6,
+    "debuff": 2,
+    "diff": 2,
+    "bias": "DefenseHeavy",
+    "pattern": "FearThenDarkness",
+    "strength": "Enhanced",
+    "interval": 3,
+    "assetPath": "Assets/Art/Monsters/Cutouts/m03_spiral_horn_shepherd.png",
+    "size": [
+      370,
+      640
+    ]
+  },
+  {
+    "id": "m04_one_eye_tallhorn",
+    "name": "외눈 추적자",
+    "hp": 34,
+    "atk": 6,
+    "def": 3,
+    "debuff": 2,
+    "diff": 1,
+    "bias": "AttackHeavy",
+    "pattern": "DarknessThenFear",
+    "strength": "Normal",
+    "interval": 3,
+    "assetPath": "Assets/Art/Monsters/Cutouts/m04_one_eye_tallhorn.png",
+    "size": [
+      378,
+      825
+    ]
+  },
+  {
+    "id": "m05_coiled_whisperer",
+    "name": "속박된 전율",
+    "hp": 40,
+    "atk": 5,
+    "def": 5,
+    "debuff": 2,
+    "diff": 2,
+    "bias": "Balanced",
+    "pattern": "FearThenDarkness",
+    "strength": "Enhanced",
+    "interval": 3,
+    "assetPath": "Assets/Art/Monsters/Cutouts/m05_coiled_whisperer.png",
+    "size": [
+      275,
+      654
+    ]
+  },
+  {
+    "id": "m06_shellback_pursuer",
+    "name": "다층 갑각",
+    "hp": 38,
+    "atk": 4,
+    "def": 6,
+    "debuff": 1,
+    "diff": 1,
+    "bias": "DefenseHeavy",
+    "pattern": "DarknessThenFear",
+    "strength": "Normal",
+    "interval": 4,
+    "assetPath": "Assets/Art/Monsters/Cutouts/m06_shellback_pursuer.png",
+    "size": [
+      465,
+      305
+    ]
+  },
+  {
+    "id": "m07_spiral_tail_beast",
+    "name": "소용돌이치는 혼돈",
+    "hp": 36,
+    "atk": 5,
+    "def": 5,
+    "debuff": 1,
+    "diff": 1,
+    "bias": "DefenseHeavy",
+    "pattern": "FearThenDarkness",
+    "strength": "Normal",
+    "interval": 3,
+    "assetPath": "Assets/Art/Monsters/Cutouts/m07_spiral_tail_beast.png",
+    "size": [
+      487,
+      384
+    ]
+  },
+  {
+    "id": "m08_deep_serpent",
+    "name": "물결치는 역병",
+    "hp": 42,
+    "atk": 7,
+    "def": 3,
+    "debuff": 2,
+    "diff": 2,
+    "bias": "AttackHeavy",
+    "pattern": "FearThenDarkness",
+    "strength": "Enhanced",
+    "interval": 2,
+    "assetPath": "Assets/Art/Monsters/Cutouts/m08_deep_serpent.png",
+    "size": [
+      515,
+      500
+    ]
+  },
+  {
+    "id": "m10_blueheart_raven",
+    "name": "푸른심장",
+    "hp": 40,
+    "atk": 5,
+    "def": 4,
+    "debuff": 2,
+    "diff": 2,
+    "bias": "Balanced",
+    "pattern": "DarknessThenFear",
+    "strength": "Enhanced",
+    "interval": 3,
+    "assetPath": "Assets/Art/Monsters/Cutouts/m10_blueheart_raven.png",
+    "size": [
+      530,
+      465
+    ]
+  },
+  {
+    "id": "m11_cane_blackcat",
+    "name": "카르민느",
+    "hp": 42,
+    "atk": 7,
+    "def": 3,
+    "debuff": 2,
+    "diff": 2,
+    "bias": "AttackHeavy",
+    "pattern": "DarknessThenFear",
+    "strength": "Enhanced",
+    "interval": 2,
+    "assetPath": "Assets/Art/Monsters/Cutouts/m11_cane_blackcat.png",
+    "size": [
+      400,
+      615
+    ]
+  },
+  {
+    "id": "m14_inverted_bat_doll",
+    "name": "네크릴라",
+    "hp": 44,
+    "atk": 5,
+    "def": 6,
+    "debuff": 2,
+    "diff": 2,
+    "bias": "DefenseHeavy",
+    "pattern": "DarknessThenFear",
+    "strength": "Enhanced",
+    "interval": 3,
+    "assetPath": "Assets/Art/Monsters/Cutouts/m14_inverted_bat_doll.png",
+    "size": [
+      360,
+      540
+    ]
+  }
+]

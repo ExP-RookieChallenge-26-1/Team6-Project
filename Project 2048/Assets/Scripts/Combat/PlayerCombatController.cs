@@ -25,6 +25,11 @@ namespace Project2048.Combat
         public event Action<int> OnDefenseBonusChanged;
         public event Action OnStatusEffectsChanged;
 
+        private void OnDestroy()
+        {
+            UnbindDataValidation();
+        }
+
         public void Init(PlayerSO data)
         {
             if (data == null)
@@ -32,7 +37,9 @@ namespace Project2048.Combat
                 throw new ArgumentNullException(nameof(data));
             }
 
+            UnbindDataValidation();
             Data = data;
+            BindDataValidation();
             MaxHp = Mathf.Max(1, data.maxHp);
             CurrentHp = MaxHp;
             AttackPower = Mathf.Max(0, data.attackPower);
@@ -46,6 +53,28 @@ namespace Project2048.Combat
             OnBlockChanged?.Invoke(Block);
             OnDefenseBonusChanged?.Invoke(DefenseBonus);
             OnStatusEffectsChanged?.Invoke();
+        }
+
+        public void RefreshFromData()
+        {
+            if (Data == null)
+            {
+                return;
+            }
+
+            MaxHp = Mathf.Max(1, Data.maxHp);
+            CurrentHp = Mathf.Clamp(CurrentHp, 0, MaxHp);
+            AttackPower = Mathf.Max(0, Data.attackPower);
+            BoardMoveCountBonus = Mathf.Max(0, Data.boardMoveCountBonus);
+            SetSkills(Data.startingSkills);
+
+            OnHpChanged?.Invoke(CurrentHp, MaxHp);
+        }
+
+        public void SetCurrentHpForRun(int currentHp)
+        {
+            CurrentHp = Mathf.Clamp(currentHp, 0, MaxHp);
+            OnHpChanged?.Invoke(CurrentHp, MaxHp);
         }
 
         public void SetSkills(IEnumerable<SkillSO> nextSkills)
@@ -69,6 +98,29 @@ namespace Project2048.Combat
 
             OnHpChanged?.Invoke(CurrentHp, MaxHp);
             OnBlockChanged?.Invoke(Block);
+        }
+
+        public int RestoreHp(int amount)
+        {
+            if (amount <= 0 || MaxHp <= 0)
+            {
+                return 0;
+            }
+
+            var before = CurrentHp;
+            CurrentHp = Mathf.Clamp(CurrentHp + amount, 0, MaxHp);
+            if (CurrentHp != before)
+            {
+                OnHpChanged?.Invoke(CurrentHp, MaxHp);
+            }
+
+            return CurrentHp - before;
+        }
+
+        public int RestoreHpByMaxHpPercent(float percentOfMaxHp)
+        {
+            var amount = Mathf.CeilToInt(MaxHp * Mathf.Clamp01(percentOfMaxHp));
+            return RestoreHp(amount);
         }
 
         public void AddBlock(int amount)
@@ -130,6 +182,27 @@ namespace Project2048.Combat
 
             Block = 0;
             OnBlockChanged?.Invoke(Block);
+        }
+
+        private void BindDataValidation()
+        {
+            if (Data != null)
+            {
+                Data.OnRuntimeValidated += HandleDataValidated;
+            }
+        }
+
+        private void UnbindDataValidation()
+        {
+            if (Data != null)
+            {
+                Data.OnRuntimeValidated -= HandleDataValidated;
+            }
+        }
+
+        private void HandleDataValidated(PlayerSO _)
+        {
+            RefreshFromData();
         }
     }
 }

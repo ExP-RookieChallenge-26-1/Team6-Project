@@ -1,5 +1,6 @@
 using Project2048.Combat;
 using Project2048.Enemy;
+using Project2048.Rewards;
 using Project2048.Skills;
 
 namespace Project2048.Prototype
@@ -130,6 +131,46 @@ namespace Project2048.Prototype
             return snapshot.Phase == CombatPhase.Victory
                 ? $"얻은 스코어 : {CalculatePrototypeScore(snapshot)}"
                 : $"스코어 : {CalculatePrototypeScore(snapshot)}";
+        }
+
+        public static string FormatResultDescription(CombatSnapshot snapshot, int totalScore)
+        {
+            if (snapshot == null)
+            {
+                return string.Empty;
+            }
+
+            return snapshot.Phase == CombatPhase.Victory
+                ? $"총점 : {totalScore}"
+                : $"최종 점수 : {totalScore}";
+        }
+
+        public static string FormatRewardTitle(BattleRewardSO reward)
+        {
+            return reward != null && !string.IsNullOrWhiteSpace(reward.mothDisplayName)
+                ? reward.mothDisplayName
+                : "나방";
+        }
+
+        public static string FormatRewardDescription(BattleRewardSO reward)
+        {
+            return reward != null && !string.IsNullOrWhiteSpace(reward.encounterText)
+                ? reward.encounterText
+                : "조력자가 다음 전투를 준비할 기회를 줍니다.";
+        }
+
+        public static string FormatRestReward(BattleRewardSO reward)
+        {
+            var percent = reward != null
+                ? UnityEngine.Mathf.RoundToInt(UnityEngine.Mathf.Clamp01(reward.healPercentOfMaxHp) * 100f)
+                : 30;
+            return $"휴식 : 최대 체력의 {percent}%를 회복합니다";
+        }
+
+        public static string FormatEnhanceReward(BattleRewardSO reward)
+        {
+            var count = reward != null ? UnityEngine.Mathf.Max(0, reward.extraBoardMoveCount) : 1;
+            return $"강화 : 제한 단수가 {count}회 증가합니다";
         }
 
         private static int CalculatePrototypeScore(CombatSnapshot snapshot)

@@ -23,6 +23,7 @@ namespace Project2048.PrototypeEditor
     {
         private const string KoreanFontAssetPath = "Assets/Fonts/MaruBuri-Regular SDF.asset";
         private const string DataFolder = "Assets/Data/Prototype";
+        private const string EnemyFolder = DataFolder + "/Enemies";
         private const string SkillFolder = DataFolder + "/Skills";
         private const string PlayerSpritePath = "Assets/Art/Prototype/PrototypePlayerCutout.png";
         private const string EnemySpritePath = "Assets/Art/Prototype/PrototypeEnemyCutout.png";
@@ -101,6 +102,7 @@ namespace Project2048.PrototypeEditor
         {
             EnsureFolder("Assets", "Data");
             EnsureFolder("Assets/Data", "Prototype");
+            EnsureFolder(DataFolder, "Enemies");
             EnsureFolder(DataFolder, "Skills");
 
             var attack1 = CreateOrLoadAsset<SkillSO>(SkillFolder + "/Attack_1.asset");
@@ -126,8 +128,9 @@ namespace Project2048.PrototypeEditor
             player.portrait = LoadSprite(PlayerSpritePath) ?? player.portrait;
             EditorUtility.SetDirty(player);
 
-            var enemy = CreateOrLoadAsset<EnemySO>(DataFolder + "/PrototypeEnemy.asset");
-            enemy.enemyName = "그림자 짐승";
+            var enemy = CreateOrLoadAsset<EnemySO>(EnemyFolder + "/01.asset");
+            enemy.name = "그림자 늑대";
+            enemy.enemyName = "그림자 늑대";
             enemy.maxHp = 32;
             enemy.attackPower = 5;
             enemy.defensePower = 3;
@@ -255,7 +258,7 @@ namespace Project2048.PrototypeEditor
             refs.EnemyPortrait.raycastTarget = false;
             SetAnchor(refs.EnemyPortrait.rectTransform, new Vector2(0.74f, 0.24f), new Vector2(390, 390), Vector2.zero);
 
-            refs.EnemyNameText = CreateLabel(parent, "EnemyNameText", "그림자 짐승", 32, TextAlignmentOptions.Center, font);
+            refs.EnemyNameText = CreateLabel(parent, "EnemyNameText", "그림자 늑대", 32, TextAlignmentOptions.Center, font);
             SetAnchor(refs.EnemyNameText.rectTransform, new Vector2(0.74f, 0.58f), new Vector2(360, 60), Vector2.zero);
 
             refs.IntentBubble = CreateImage(parent, "IntentBubble", new Color(0.65f, 0.10f, 0.10f, 1f));

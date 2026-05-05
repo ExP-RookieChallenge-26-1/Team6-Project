@@ -85,8 +85,8 @@ namespace Project2048.Tests
         public void FormatEnemyHeader_ShowsAiProfileAboveEnemy()
         {
             Assert.That(
-                PrototypeCombatText.FormatEnemyHeader("그림자 짐승", "AI: 공격 몰빵 / 암흑->공포 / 강화"),
-                Is.EqualTo("그림자 짐승\nAI: 공격 몰빵 / 암흑->공포 / 강화"));
+                PrototypeCombatText.FormatEnemyHeader("그림자 늑대", "AI: 공격 몰빵 / 암흑->공포 / 강화"),
+                Is.EqualTo("그림자 늑대\nAI: 공격 몰빵 / 암흑->공포 / 강화"));
         }
 
         [Test]
@@ -108,10 +108,10 @@ namespace Project2048.Tests
         {
             Assert.That(
                 PrototypeCombatText.FormatEnemyHeader(
-                    "그림자 짐승",
+                    "그림자 늑대",
                     "AI: 방어 몰빵 / 공포->암흑 / 일반",
                     "체력 32/32"),
-                Is.EqualTo("그림자 짐승\nAI: 방어 몰빵 / 공포->암흑 / 일반\n체력 32/32"));
+                Is.EqualTo("그림자 늑대\nAI: 방어 몰빵 / 공포->암흑 / 일반\n체력 32/32"));
         }
 
         [Test]

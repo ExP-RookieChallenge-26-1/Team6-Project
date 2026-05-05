@@ -233,7 +233,7 @@ namespace Project2048.Tests
             Assert.That(boardFearRoot, Is.Not.Null);
             Assert.That(attackRoot, Is.Not.Null);
 
-            Assert.That(fearRoot.GetComponent<RectTransform>().anchoredPosition.y, Is.LessThan(0f));
+            Assert.That(fearRoot.GetComponent<RectTransform>().anchoredPosition.y, Is.GreaterThan(0f));
             Assert.That(boardFearRoot.GetComponent<RectTransform>().anchoredPosition.y, Is.LessThan(0f));
             Assert.That(attackRoot.GetComponent<RectTransform>().anchoredPosition.y, Is.LessThan(0f));
 
@@ -262,6 +262,73 @@ namespace Project2048.Tests
 
             ((IPointerExitHandler)tooltipTarget).OnPointerExit(new PointerEventData(null));
             Assert.That(tooltip.gameObject.activeSelf, Is.False);
+        }
+
+        [Test]
+        public void EnemyDebuffIntent_RendersDebuffOnPlayerSideOnly()
+        {
+            var viewObject = CreateOwnedGameObject("CombatView");
+            var view = viewObject.AddComponent<CombatUiView>();
+            var playerBattleHp = CreateImageChild(viewObject.transform, "PlayerBattleHp");
+            CreateImageChild(playerBattleHp.transform, "Fill");
+            CreateTextChild(playerBattleHp.transform, "Text");
+            var enemyHp = CreateImageChild(viewObject.transform, "EnemyHp");
+            CreateImageChild(enemyHp.transform, "Fill");
+            CreateTextChild(enemyHp.transform, "Text");
+            var boardHp = CreateImageChild(viewObject.transform, "BoardHp");
+            CreateImageChild(boardHp.transform, "HpBarFill");
+            CreateTextChild(viewObject.transform, "HpText");
+
+            var manager = CreateOwnedGameObject("CombatManager").AddComponent<CombatManager>();
+            var player = CreateOwnedGameObject("Player").AddComponent<PlayerCombatController>();
+            var enemy = CreateOwnedGameObject("Enemy").AddComponent<EnemyController>();
+            var bootstrap = CreateOwnedGameObject("Bootstrap").AddComponent<PrototypeCombatBootstrap>();
+            SetPrivateField(bootstrap, "combatManager", manager);
+
+            var playerData = CreatePlayerData(20, 0);
+            var enemyData = CreateEnemyData("Debuffer", 10, 0);
+            enemyData.intentPattern = new System.Collections.Generic.List<EnemyIntent>
+            {
+                new()
+                {
+                    intentType = EnemyIntentType.Debuff,
+                    debuffType = DebuffType.Fear,
+                    value = 2,
+                },
+            };
+
+            manager.SetCombatants(player, new[] { enemy });
+            manager.EnemyTurnDelaySeconds = 0f;
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new System.Collections.Generic.List<EnemySO> { enemyData },
+                boardMoveCount = 1,
+            });
+            manager.BoardManager.SetBoardState(new[,]
+            {
+                { 64, 0, 0, 0 },
+                { 0, 0, 0, 0 },
+                { 0, 0, 0, 0 },
+                { 0, 0, 0, 0 },
+            }, 0);
+            manager.ResolveBoardPhase();
+
+            view.Initialize(bootstrap);
+            manager.RequestEndPlayerTurn();
+
+            var playerBattleStatusRoot = playerBattleHp.transform.Find("PlayerBattleStatusEffects");
+            var playerBoardStatusRoot = boardHp.transform.Find("PlayerBoardStatusEffects");
+            var enemyStatusRoot = enemyHp.transform.Find("EnemyStatusEffects");
+
+            Assert.That(playerBattleStatusRoot, Is.Not.Null);
+            Assert.That(playerBoardStatusRoot, Is.Not.Null);
+            Assert.That(enemyStatusRoot, Is.Not.Null);
+            Assert.That(playerBattleStatusRoot.GetComponent<RectTransform>().anchoredPosition.y, Is.GreaterThan(0f));
+            Assert.That(playerBattleStatusRoot.Find("StatusEffect_fear"), Is.Not.Null);
+            Assert.That(playerBoardStatusRoot.Find("StatusEffect_fear"), Is.Not.Null);
+            Assert.That(enemyStatusRoot.Find("StatusEffect_fear"), Is.Null);
+            Assert.That(enemyStatusRoot.gameObject.activeSelf, Is.False);
         }
 
         [Test]

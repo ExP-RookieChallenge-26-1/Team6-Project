@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6115ca39d511d049965aae02efc3f23, type: 3}
+  m_Name: "외눈 추적자"
+  m_EditorClassIdentifier: Game.Core::Project2048.Enemy.EnemySO
+  enemyName: "\uC678\uB208 \uCD94\uC801\uC790"
+  maxHp: 34
+  attackPower: 6
+  defensePower: 3
+  debuffPower: 2
+  difficultyScore: 1
+  portrait: {fileID: 21300000, guid: 1c2a79710dab0d04d9c087425a25b6e5, type: 3}
+  intentPattern: []
+  aiActionBias: 1
+  aiDebuffPattern: 1
+  aiStrength: 0
+  aiDebuffInterval: 3

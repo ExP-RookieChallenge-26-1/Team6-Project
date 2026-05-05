@@ -20,9 +20,16 @@ namespace Project2048.Enemy
         public event Action<EnemyIntent> OnIntentChanged;
         public event Action<EnemyController> OnDead;
 
+        private void OnDestroy()
+        {
+            UnbindDataValidation();
+        }
+
         public void Init(EnemySO data)
         {
+            UnbindDataValidation();
             Data = data ?? throw new ArgumentNullException(nameof(data));
+            BindDataValidation();
             MaxHp = Mathf.Max(1, data.maxHp);
             CurrentHp = MaxHp;
             Block = 0;
@@ -33,6 +40,20 @@ namespace Project2048.Enemy
             OnHpChanged?.Invoke(CurrentHp, MaxHp);
             OnBlockChanged?.Invoke(Block);
             OnIntentChanged?.Invoke(CurrentIntent);
+        }
+
+        public void RefreshFromData()
+        {
+            if (Data == null)
+            {
+                return;
+            }
+
+            MaxHp = Mathf.Max(1, Data.maxHp);
+            CurrentHp = Mathf.Clamp(CurrentHp, 0, MaxHp);
+
+            OnHpChanged?.Invoke(CurrentHp, MaxHp);
+            RefreshIntentPreview();
         }
 
         public void TakeDamage(int damage)
@@ -100,6 +121,27 @@ namespace Project2048.Enemy
             }
 
             OnIntentChanged?.Invoke(CurrentIntent);
+        }
+
+        private void BindDataValidation()
+        {
+            if (Data != null)
+            {
+                Data.OnRuntimeValidated += HandleDataValidated;
+            }
+        }
+
+        private void UnbindDataValidation()
+        {
+            if (Data != null)
+            {
+                Data.OnRuntimeValidated -= HandleDataValidated;
+            }
+        }
+
+        private void HandleDataValidated(EnemySO _)
+        {
+            RefreshFromData();
         }
     }
 }

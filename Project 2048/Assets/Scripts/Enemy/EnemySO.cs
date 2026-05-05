@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -23,6 +24,8 @@ namespace Project2048.Enemy
         public EnemyAiStrength aiStrength = EnemyAiStrength.Normal;
         public int aiDebuffInterval = 3;
 
+        public event Action<EnemySO> OnRuntimeValidated;
+
         public string GetAiProfileLabel()
         {
             return EnemyAiProfileFormatter.Format(aiActionBias, aiDebuffPattern, aiStrength);
@@ -36,6 +39,10 @@ namespace Project2048.Enemy
             debuffPower = Mathf.Max(0, debuffPower);
             difficultyScore = Mathf.Max(0, difficultyScore);
             aiDebuffInterval = Mathf.Max(0, aiDebuffInterval);
+            if (Application.isPlaying)
+            {
+                OnRuntimeValidated?.Invoke(this);
+            }
         }
     }
 }

@@ -10,7 +10,7 @@ namespace Project2048.Tests
     public class EnemyDebuffTests
     {
         [Test]
-        public void FearIntent_HalvesFutureBlockGain_WithCeiling()
+        public void FearIntent_ReducesFutureBlockGainByFixedAmount()
         {
             var playerObject = new GameObject("Player");
             try
@@ -38,9 +38,11 @@ namespace Project2048.Tests
 
                     new EnemyIntentSystem().ExecuteIntent(enemy, player);
 
-                    Assert.That(player.FearStacks, Is.EqualTo(2));
-                    Assert.That(player.GainBlockWithBonus(5), Is.EqualTo(3));
-                    Assert.That(player.Block, Is.EqualTo(3));
+                    Assert.That(player.FearStacks, Is.EqualTo(6));
+                    Assert.That(player.GainBlockWithBonus(8), Is.EqualTo(2));
+                    Assert.That(player.Block, Is.EqualTo(2));
+                    Assert.That(player.GainBlockWithBonus(5), Is.EqualTo(0));
+                    Assert.That(player.Block, Is.EqualTo(2));
 
                     Object.DestroyImmediate(enemyData);
                 }

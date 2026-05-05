@@ -7,6 +7,8 @@ namespace Project2048.Combat
 {
     public class PlayerCombatController : MonoBehaviour
     {
+        public const int FearDefenseGainPenalty = 6;
+
         [SerializeField] private List<SkillSO> skills = new();
 
         public PlayerSO Data { get; private set; }
@@ -136,12 +138,7 @@ namespace Project2048.Combat
 
         public int GainBlockWithBonus(int baseAmount)
         {
-            var total = Mathf.Max(0, baseAmount + DefenseBonus);
-            if (FearStacks > 0)
-            {
-                total = Mathf.CeilToInt(total * 0.5f);
-            }
-
+            var total = Mathf.Max(0, baseAmount + DefenseBonus - FearStacks);
             if (total > 0)
             {
                 Block += total;
@@ -169,7 +166,23 @@ namespace Project2048.Combat
                 return;
             }
 
-            FearStacks += amount;
+            if (FearStacks == FearDefenseGainPenalty)
+            {
+                return;
+            }
+
+            FearStacks = FearDefenseGainPenalty;
+            OnStatusEffectsChanged?.Invoke();
+        }
+
+        public void ClearFear()
+        {
+            if (FearStacks == 0)
+            {
+                return;
+            }
+
+            FearStacks = 0;
             OnStatusEffectsChanged?.Invoke();
         }
 

@@ -229,6 +229,7 @@ RequestEndPlayerTurn()
 - 시작 스킬 목록을 가진다.
 - 피해를 받을 때 방어도를 먼저 깎고 남은 피해를 HP에 적용한다.
 - 방어 스킬 사용 시 방어 보너스를 반영한다.
+- 공포가 걸려 있으면 이번 턴 방어도 획득량을 고정으로 6 줄인다.
 
 연결:
 
@@ -238,7 +239,8 @@ RequestEndPlayerTurn()
 
 조심할 점:
 
-- 턴이 새로 시작되면 `CombatManager.StartPlayerTurn()`에서 방어도만 지운다.
+- 다음 플레이어 턴이 시작되면 `CombatManager.StartPlayerTurn()`에서 현재 방어도만 지운다.
+- 공포는 적 턴에 적용되어 다음 플레이어 턴 동안 유지되고, 플레이어가 `RequestEndPlayerTurn()`으로 턴을 넘기면 지워진다.
 - 방어 보너스는 별도 값이라 턴 시작 때 자동으로 지워지지 않는다.
 
 ### `Assets/Scripts/Combat/PlayerSO.cs`
@@ -830,6 +832,7 @@ UI가 전투 내부 객체를 직접 잡지 않고 snapshot/command만으로 전
 - `RequestEndPlayerTurn` 후 적 행동 문구가 snapshot에 반영된다.
 - 적 턴이 끝나면 다음 플레이어 턴 snapshot에 다음 인텐트가 반영된다.
 - 공포/암흑 디버프가 실행되면 `LastVfxCue`가 snapshot에 실린다.
+- 공포는 플레이어 상태효과에만 표시되고 적 상태효과에는 표시되지 않는다.
 - 암흑 디버프 후 다음 보드에 방해 블록이 배치된다.
 
 ### `Assets/Tests/EditMode/CombatUiViewTests.cs`
@@ -910,6 +913,7 @@ UI가 전투 내부 객체를 직접 잡지 않고 snapshot/command만으로 전
 - 적 머리 위 표시 문구에 AI 타입이 함께 나온다.
 - 적 HP 문구에 방어도 표시가 함께 나온다.
 - 공포/암흑 임시 VFX 문구가 한국어로 나온다.
+- 플레이어 전투 HP 상태효과 루트는 `PlayerBattleStatusEffects` 기준 y -39 위치에 생성된다.
 - 최근 행동과 결과 제목 문구가 맞다.
 
 ### `Assets/Tests/EditMode/PrototypeCombatUiStateTests.cs`

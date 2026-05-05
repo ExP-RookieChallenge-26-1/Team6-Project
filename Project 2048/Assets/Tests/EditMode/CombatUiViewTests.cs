@@ -233,9 +233,9 @@ namespace Project2048.Tests
             Assert.That(boardFearRoot, Is.Not.Null);
             Assert.That(attackRoot, Is.Not.Null);
 
-            Assert.That(fearRoot.GetComponent<RectTransform>().anchoredPosition.y, Is.GreaterThan(0f));
-            Assert.That(boardFearRoot.GetComponent<RectTransform>().anchoredPosition.y, Is.LessThan(0f));
-            Assert.That(attackRoot.GetComponent<RectTransform>().anchoredPosition.y, Is.LessThan(0f));
+            Assert.That(fearRoot.GetComponent<RectTransform>().anchoredPosition.y, Is.EqualTo(-39f).Within(0.001f));
+            Assert.That(boardFearRoot.GetComponent<RectTransform>().anchoredPosition.y, Is.EqualTo(-6f).Within(0.001f));
+            Assert.That(attackRoot.GetComponent<RectTransform>().anchoredPosition.y, Is.EqualTo(-6f).Within(0.001f));
 
             var fearChip = fearRoot.Find("StatusEffect_fear");
             var boardFearChip = boardFearRoot.Find("StatusEffect_fear");
@@ -324,7 +324,7 @@ namespace Project2048.Tests
             Assert.That(playerBattleStatusRoot, Is.Not.Null);
             Assert.That(playerBoardStatusRoot, Is.Not.Null);
             Assert.That(enemyStatusRoot, Is.Not.Null);
-            Assert.That(playerBattleStatusRoot.GetComponent<RectTransform>().anchoredPosition.y, Is.GreaterThan(0f));
+            Assert.That(playerBattleStatusRoot.GetComponent<RectTransform>().anchoredPosition.y, Is.EqualTo(-39f).Within(0.001f));
             Assert.That(playerBattleStatusRoot.Find("StatusEffect_fear"), Is.Not.Null);
             Assert.That(playerBoardStatusRoot.Find("StatusEffect_fear"), Is.Not.Null);
             Assert.That(enemyStatusRoot.Find("StatusEffect_fear"), Is.Null);

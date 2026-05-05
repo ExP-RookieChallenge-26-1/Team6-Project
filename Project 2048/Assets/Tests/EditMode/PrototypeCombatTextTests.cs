@@ -71,8 +71,8 @@ namespace Project2048.Tests
             Assert.That(PrototypeCombatText.FormatDebuffVfxLabel(new CombatVfxCue
             {
                 DebuffType = DebuffType.Fear,
-                Value = 2,
-            }), Is.EqualTo("공포: 방어도 획득 절반"));
+                Value = 6,
+            }), Is.EqualTo("공포: 방어도 획득 -6"));
 
             Assert.That(PrototypeCombatText.FormatDebuffVfxLabel(new CombatVfxCue
             {

@@ -282,12 +282,6 @@ namespace Project2048.Prototype
             BindButton(reloadSceneButton, () => SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex));
             BindButton(rewardRestButton, () => rewardManager?.ChooseRest(combatManager != null ? combatManager.Player : null));
             BindButton(rewardEnhanceButton, () => rewardManager?.ChooseEnhance(combatManager != null ? combatManager.Player : null));
-
-            // Sub-panels' clicks should refresh the rendering so visuals reflect category swaps.
-            if (uiState != null)
-            {
-                // Re-render after every button-click via lambda wrapper.
-            }
         }
 
         private void BindButton(Button button, System.Action handler)
@@ -590,7 +584,6 @@ namespace Project2048.Prototype
                 return;
             }
 
-            // HP bar/text.
             var player = snapshot.Player;
             if (hpBarFill != null && player != null && player.MaxHp > 0)
             {
@@ -605,13 +598,11 @@ namespace Project2048.Prototype
             SetBlockIndicator(hpBarFill, player?.Block ?? 0);
             RenderStatusEffects(playerBoardStatusEffectsRoot, player?.StatusEffects);
 
-            // Turn limit.
             if (turnLimitText != null)
             {
                 turnLimitText.text = PrototypeCombatText.FormatRemainingMoves(snapshot.RemainingBoardMoves);
             }
 
-            // Cells.
             for (var i = 0; i < boardCells.Count && i < 16; i++)
             {
                 var row = i / 4;
@@ -1146,11 +1137,11 @@ namespace Project2048.Prototype
                 return;
             }
 
-            var placeAboveHpBar = root.name == "PlayerBattleStatusEffects";
+            var isPlayerBattleStatusRoot = root.name == "PlayerBattleStatusEffects";
             root.anchorMin = new Vector2(0f, 0f);
             root.anchorMax = new Vector2(0f, 0f);
-            root.pivot = placeAboveHpBar ? new Vector2(0f, 0f) : new Vector2(0f, 1f);
-            root.anchoredPosition = placeAboveHpBar ? new Vector2(0f, 6f) : new Vector2(0f, -6f);
+            root.pivot = new Vector2(0f, 1f);
+            root.anchoredPosition = isPlayerBattleStatusRoot ? new Vector2(0f, -39f) : new Vector2(0f, -6f);
             root.sizeDelta = new Vector2(160f, 32f);
         }
 

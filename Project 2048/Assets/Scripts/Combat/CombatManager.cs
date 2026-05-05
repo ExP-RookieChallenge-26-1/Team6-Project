@@ -251,6 +251,8 @@ namespace Project2048.Combat
             }
 
             // 플레이 화면에서는 적 턴 패널을 잠깐 보여주고, EditMode 테스트처럼 비활성 상태에서는 즉시 해결한다.
+            player.ClearFear();
+
             if (enemyTurnDelaySeconds > 0f && isActiveAndEnabled)
             {
                 lastActionDescription = "적 턴 시작";
@@ -324,7 +326,9 @@ namespace Project2048.Combat
                 {
                     Sequence = ++vfxCueSequence,
                     DebuffType = intent.debuffType,
-                    Value = intent.value,
+                    Value = intent.debuffType == DebuffType.Fear
+                        ? PlayerCombatController.FearDefenseGainPenalty
+                        : intent.value,
                     SourceName = GetEnemyDisplayName(enemy),
                     TargetName = "플레이어",
                 };
@@ -656,7 +660,7 @@ namespace Project2048.Combat
                 {
                     Id = "fear",
                     DisplayName = "공포",
-                    Description = "방어도 획득량이 절반으로 감소합니다. 소수점은 올림 처리됩니다.",
+                    Description = $"방어도 획득량이 {player.FearStacks} 감소합니다.",
                     Value = player.FearStacks,
                     IsBuff = false,
                     IconText = "공",

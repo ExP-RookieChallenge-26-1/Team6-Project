@@ -274,12 +274,12 @@ namespace Project2048.Tests
         }
 
         [Test]
-        public void RequestEndPlayerTurn_FearDebuff_EmitsVfxCueAndHalvesDefenseGain()
+        public void RequestEndPlayerTurn_FearDebuff_EmitsVfxCueAndReducesDefenseGainBySix()
         {
             var manager = CreateGameObject<CombatManager>("CombatManager");
             var player = CreateGameObject<PlayerCombatController>("Player");
             var enemy = CreateGameObject<EnemyController>("Enemy");
-            var defenseSkill = CreateSkill("guard", "Guard", SkillType.Defense, cost: 0, power: 5);
+            var defenseSkill = CreateSkill("guard", "Guard", SkillType.Defense, cost: 0, power: 8);
             var playerData = CreatePlayerData(maxHp: 20, attackPower: 2);
             playerData.startingSkills = new List<SkillSO> { defenseSkill };
             var enemyData = CreateEnemyData("Slime", maxHp: 10, attackValue: 4);
@@ -290,6 +290,11 @@ namespace Project2048.Tests
                     intentType = EnemyIntentType.Debuff,
                     debuffType = DebuffType.Fear,
                     value = 2,
+                },
+                new EnemyIntent
+                {
+                    intentType = EnemyIntentType.Defense,
+                    value = 0,
                 },
             };
 
@@ -318,14 +323,21 @@ namespace Project2048.Tests
             Assert.That(latestSnapshot, Is.Not.Null);
             Assert.That(latestSnapshot.LastVfxCue, Is.Not.Null);
             Assert.That(latestSnapshot.LastVfxCue.DebuffType, Is.EqualTo(DebuffType.Fear));
-            Assert.That(latestSnapshot.LastVfxCue.Value, Is.EqualTo(2));
+            Assert.That(latestSnapshot.LastVfxCue.Value, Is.EqualTo(6));
             Assert.That(latestSnapshot.LastVfxCue.Sequence, Is.GreaterThan(0));
             Assert.That(latestSnapshot.Player.StatusEffects, Has.Some.Matches<CombatStatusEffectSnapshot>(
-                effect => effect.Id == "fear" && effect.Description.Contains("절반")));
+                effect => effect.Id == "fear" && effect.Value == 6 && effect.Description.Contains("6")));
+            Assert.That(latestSnapshot.Enemies[0].StatusEffects, Has.None.Matches<CombatStatusEffectSnapshot>(
+                effect => effect.Id == "fear"));
 
             manager.ResolveBoardPhase();
             Assert.That(manager.RequestUseSkill(defenseSkill, null), Is.True);
-            Assert.That(player.Block, Is.EqualTo(3));
+            Assert.That(player.Block, Is.EqualTo(2));
+
+            manager.RequestEndPlayerTurn();
+            manager.ResolveBoardPhase();
+            Assert.That(manager.RequestUseSkill(defenseSkill, null), Is.True);
+            Assert.That(player.Block, Is.EqualTo(8));
         }
 
         [Test]
@@ -408,8 +420,8 @@ namespace Project2048.Tests
                 effect => effect.Id == "fear" &&
                           effect.DisplayName == "공포" &&
                           !effect.IsBuff &&
-                          effect.Value == 2 &&
-                          effect.Description.Contains("절반")));
+                          effect.Value == 6 &&
+                          effect.Description.Contains("6")));
             Assert.That(snapshot.Player.StatusEffects, Has.Some.Matches<CombatStatusEffectSnapshot>(
                 effect => effect.Id == "darkness" &&
                           effect.DisplayName == "암흑" &&

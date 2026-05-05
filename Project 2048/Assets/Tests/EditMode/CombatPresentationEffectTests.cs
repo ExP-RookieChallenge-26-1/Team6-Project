@@ -58,6 +58,22 @@ namespace Project2048.Tests
         }
 
         [Test]
+        public void CombatEffectBinding_NormalizesPitchRangeAndStoresVfxOffset()
+        {
+            var effect = new CombatEffectBinding
+            {
+                minPitch = 1.2f,
+                maxPitch = 0.8f,
+                localOffset = new Vector3(0.2f, 1.1f, 0f),
+            };
+
+            Assert.That(effect.EffectiveMinPitch, Is.EqualTo(0.8f).Within(0.001f));
+            Assert.That(effect.EffectiveMaxPitch, Is.EqualTo(1.2f).Within(0.001f));
+            Assert.That(effect.ResolvePitch(), Is.InRange(0.8f, 1.2f));
+            Assert.That(effect.localOffset, Is.EqualTo(new Vector3(0.2f, 1.1f, 0f)));
+        }
+
+        [Test]
         public void BoardTileEffectProfile_UsesSpecificMergeEffectBeforeFallback()
         {
             var profile = ScriptableObject.CreateInstance<BoardTileEffectProfileSO>();

@@ -17,12 +17,18 @@ MonoBehaviour:
     vfxPrefab: {fileID: 0}
     animationClip: {fileID: 0}
     volumeScale: 1
+    minPitch: 1
+    maxPitch: 1
+    localOffset: {x: 0, y: 0, z: 0}
     autoDestroySeconds: 1.25
   defaultMergeEffect:
     sfxClip: {fileID: 0}
     vfxPrefab: {fileID: 0}
     animationClip: {fileID: 0}
     volumeScale: 1
+    minPitch: 1
+    maxPitch: 1
+    localOffset: {x: 0, y: 0, z: 0}
     autoDestroySeconds: 1.25
   mergeEffects:
   - tileValue: 2
@@ -31,6 +37,9 @@ MonoBehaviour:
       vfxPrefab: {fileID: 0}
       animationClip: {fileID: 0}
       volumeScale: 1
+      minPitch: 1
+      maxPitch: 1
+      localOffset: {x: 0, y: 0, z: 0}
       autoDestroySeconds: 1.25
   - tileValue: 4
     effect:
@@ -38,6 +47,9 @@ MonoBehaviour:
       vfxPrefab: {fileID: 0}
       animationClip: {fileID: 0}
       volumeScale: 1
+      minPitch: 1
+      maxPitch: 1
+      localOffset: {x: 0, y: 0, z: 0}
       autoDestroySeconds: 1.25
   - tileValue: 8
     effect:
@@ -45,6 +57,9 @@ MonoBehaviour:
       vfxPrefab: {fileID: 0}
       animationClip: {fileID: 0}
       volumeScale: 1
+      minPitch: 1
+      maxPitch: 1
+      localOffset: {x: 0, y: 0, z: 0}
       autoDestroySeconds: 1.25
   - tileValue: 16
     effect:
@@ -52,6 +67,9 @@ MonoBehaviour:
       vfxPrefab: {fileID: 0}
       animationClip: {fileID: 0}
       volumeScale: 1
+      minPitch: 1
+      maxPitch: 1
+      localOffset: {x: 0, y: 0, z: 0}
       autoDestroySeconds: 1.25
   - tileValue: 32
     effect:
@@ -59,6 +77,9 @@ MonoBehaviour:
       vfxPrefab: {fileID: 0}
       animationClip: {fileID: 0}
       volumeScale: 1
+      minPitch: 1
+      maxPitch: 1
+      localOffset: {x: 0, y: 0, z: 0}
       autoDestroySeconds: 1.25
   - tileValue: 64
     effect:
@@ -66,6 +87,9 @@ MonoBehaviour:
       vfxPrefab: {fileID: 0}
       animationClip: {fileID: 0}
       volumeScale: 1
+      minPitch: 1
+      maxPitch: 1
+      localOffset: {x: 0, y: 0, z: 0}
       autoDestroySeconds: 1.25
   - tileValue: 128
     effect:
@@ -73,6 +97,9 @@ MonoBehaviour:
       vfxPrefab: {fileID: 0}
       animationClip: {fileID: 0}
       volumeScale: 1
+      minPitch: 1
+      maxPitch: 1
+      localOffset: {x: 0, y: 0, z: 0}
       autoDestroySeconds: 1.25
   - tileValue: 256
     effect:
@@ -80,6 +107,9 @@ MonoBehaviour:
       vfxPrefab: {fileID: 0}
       animationClip: {fileID: 0}
       volumeScale: 1
+      minPitch: 1
+      maxPitch: 1
+      localOffset: {x: 0, y: 0, z: 0}
       autoDestroySeconds: 1.25
   - tileValue: 512
     effect:
@@ -87,6 +117,9 @@ MonoBehaviour:
       vfxPrefab: {fileID: 0}
       animationClip: {fileID: 0}
       volumeScale: 1
+      minPitch: 1
+      maxPitch: 1
+      localOffset: {x: 0, y: 0, z: 0}
       autoDestroySeconds: 1.25
   - tileValue: 1024
     effect:
@@ -94,6 +127,9 @@ MonoBehaviour:
       vfxPrefab: {fileID: 0}
       animationClip: {fileID: 0}
       volumeScale: 1
+      minPitch: 1
+      maxPitch: 1
+      localOffset: {x: 0, y: 0, z: 0}
       autoDestroySeconds: 1.25
   - tileValue: 2048
     effect:
@@ -101,4 +137,7 @@ MonoBehaviour:
       vfxPrefab: {fileID: 0}
       animationClip: {fileID: 0}
       volumeScale: 1
+      minPitch: 1
+      maxPitch: 1
+      localOffset: {x: 0, y: 0, z: 0}
       autoDestroySeconds: 1.25

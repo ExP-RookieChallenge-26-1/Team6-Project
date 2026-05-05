@@ -1483,8 +1483,7 @@ namespace Project2048.Prototype
                 return false;
             }
 
-            audioSource.PlayOneShot(effect.sfxClip, soundVolumeScale * effect.EffectiveVolumeScale);
-            return true;
+            return CombatEffectAudioPlayer.PlayOneShot(audioSource, effect, soundVolumeScale, transform);
         }
 
         private void SpawnBoardEffectPrefab(CombatEffectBinding effect, Vector2Int boardPosition)
@@ -1506,17 +1505,18 @@ namespace Project2048.Prototype
                         rect.anchorMin = new Vector2(0.5f, 0.5f);
                         rect.anchorMax = new Vector2(0.5f, 0.5f);
                         rect.pivot = new Vector2(0.5f, 0.5f);
-                        rect.anchoredPosition = center;
+                        rect.anchoredPosition = center + new Vector2(effect.localOffset.x, effect.localOffset.y);
                     }
                     else
                     {
-                        instance.transform.localPosition = center;
+                        instance.transform.localPosition = new Vector3(center.x, center.y, 0f) + effect.localOffset;
                     }
                 }
             }
             else
             {
                 instance = Instantiate(effect.vfxPrefab, transform);
+                instance.transform.localPosition += effect.localOffset;
             }
 
             var lifetime = effect.EffectiveAutoDestroySeconds;

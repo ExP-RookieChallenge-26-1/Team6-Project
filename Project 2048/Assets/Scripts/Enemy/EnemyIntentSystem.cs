@@ -88,12 +88,10 @@ namespace Project2048.Enemy
                 case DebuffType.Fear:
                     if (intent.value > 0)
                     {
-                        // 공포는 이후 방어 스킬로 얻는 방어량을 낮춘다.
                         player.ApplyFear(intent.value);
                     }
                     break;
                 case DebuffType.Darkness:
-                    // 암흑은 다음 보드 시작 시 방해 블록을 예약한다.
                     boardManager?.QueueObstacles(intent.value);
                     break;
             }

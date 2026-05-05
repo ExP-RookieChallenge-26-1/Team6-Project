@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f6115ca39d511d049965aae02efc3f23, type: 3}
-  m_Name: PrototypeEnemy
+  m_Name: "네크릴라"
   m_EditorClassIdentifier: Game.Core::Project2048.Enemy.EnemySO
-  enemyName: "\uADF8\uB9BC\uC790 \uC9D0\uC2B9"
-  maxHp: 32
+  enemyName: "\uB124\uD06C\uB9B4\uB77C"
+  maxHp: 44
   attackPower: 5
-  defensePower: 3
-  debuffPower: 1
-  difficultyScore: 1
-  portrait: {fileID: 21300000, guid: 9b586e4f05c3de942954e470d5a45be7, type: 3}
+  defensePower: 6
+  debuffPower: 2
+  difficultyScore: 2
+  portrait: {fileID: 21300000, guid: 291cf8f99c0e25248befb8a9f3b770c9, type: 3}
   intentPattern: []
-  aiActionBias: 0
-  aiDebuffPattern: 0
-  aiStrength: 0
+  aiActionBias: 2
+  aiDebuffPattern: 1
+  aiStrength: 1
   aiDebuffInterval: 3

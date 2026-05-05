@@ -4,6 +4,8 @@ using System.Linq;
 using Project2048.Board2048;
 using Project2048.Combat;
 using Project2048.Enemy;
+using Project2048.Rewards;
+using Project2048.Score;
 using Project2048.Skills;
 using TMPro;
 using UnityEngine;
@@ -25,6 +27,7 @@ namespace Project2048.Prototype
         public const float BoardTransitionDurationSeconds = 0.14f;
         public const float BoardToActionPanelDelaySeconds = 0.45f;
         public const float CombatVfxDurationSeconds = 0.65f;
+        public const float EnemyDeathFadeDurationSeconds = 0.6f;
         private const float DefaultSoundVolumeScale = 3f;
         private const float UiSfxDistance = 10000f;
 
@@ -85,6 +88,17 @@ namespace Project2048.Prototype
         [SerializeField] private Button restartButton;
         [SerializeField] private Button reloadSceneButton;
 
+        [Header("Reward overlay")]
+        [SerializeField] private RewardManager rewardManager;
+        [SerializeField] private ScoreManager scoreManager;
+        [SerializeField] private GameObject rewardOverlay;
+        [SerializeField] private TMP_Text rewardTitleText;
+        [SerializeField] private TMP_Text rewardDescriptionText;
+        [SerializeField] private TMP_Text rewardRestText;
+        [SerializeField] private TMP_Text rewardEnhanceText;
+        [SerializeField] private Button rewardRestButton;
+        [SerializeField] private Button rewardEnhanceButton;
+
         [Header("Audio")]
         // Temporary prototype SFX hookup. Final audio ownership should replace
         // these inspector clips or remove this layer without touching combat core.
@@ -122,21 +136,35 @@ namespace Project2048.Prototype
         private BoardTransition pendingBoardTransition;
         private Coroutine boardAnimationCoroutine;
         private Coroutine combatVfxCoroutine;
+        private Coroutine enemyDeathFadeCoroutine;
         private bool boardTransitionAnimating;
+        private bool lastEnemyWasDead;
         private int lastPlayedCombatVfxSequence;
         private RectTransform combatVfxPulseRect;
         private Vector3 combatVfxOriginalScale = Vector3.one;
+
+        private void Awake()
+        {
+            if (Application.isPlaying)
+            {
+                HideRuntimeOverlays();
+            }
+        }
 
         public void Initialize(PrototypeCombatBootstrap owner)
         {
             bootstrap = owner;
             UnbindCombatEvents();
             combatManager = owner != null ? owner.CombatManager : null;
+            rewardManager = owner != null ? owner.RewardManager : rewardManager;
+            scoreManager = owner != null ? owner.ScoreManager : scoreManager;
 
             ResolveMissingReferences();
             EnsureHpBarDefaults();
             EnsureAudioDefaults();
             WireButtons();
+            BindRewardEvents();
+            HideRuntimeOverlays();
 
             if (combatManager == null)
             {
@@ -152,6 +180,8 @@ namespace Project2048.Prototype
             }
 
             snapshot = combatManager.GetSnapshot();
+            lastEnemyWasDead = snapshot?.Enemies?.FirstOrDefault()?.IsDead ?? false;
+            SetEnemyPortraitAlpha(lastEnemyWasDead ? 0f : 1f);
             audioRouter.Reset(snapshot);
             uiState.Sync(snapshot);
             Render();
@@ -168,10 +198,13 @@ namespace Project2048.Prototype
 
             ClearBoardAnimationOverlay();
             ClearCombatVfx();
+            ClearEnemyDeathFade();
         }
 
         private void UnbindCombatEvents()
         {
+            UnbindRewardEvents();
+
             if (combatManager == null)
             {
                 return;
@@ -247,12 +280,8 @@ namespace Project2048.Prototype
 
             BindButton(restartButton, () => bootstrap?.RestartCombat());
             BindButton(reloadSceneButton, () => SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex));
-
-            // Sub-panels' clicks should refresh the rendering so visuals reflect category swaps.
-            if (uiState != null)
-            {
-                // Re-render after every button-click via lambda wrapper.
-            }
+            BindButton(rewardRestButton, () => rewardManager?.ChooseRest(combatManager != null ? combatManager.Player : null));
+            BindButton(rewardEnhanceButton, () => rewardManager?.ChooseEnhance(combatManager != null ? combatManager.Player : null));
         }
 
         private void BindButton(Button button, System.Action handler)
@@ -289,11 +318,15 @@ namespace Project2048.Prototype
         private void HandleCombatStateChanged(CombatSnapshot nextSnapshot)
         {
             var soundCues = audioRouter.GetSnapshotCues(nextSnapshot);
+            var nextEnemyDead = nextSnapshot?.Enemies?.FirstOrDefault()?.IsDead ?? false;
+            var enemyJustDied = !lastEnemyWasDead && nextEnemyDead;
             snapshot = nextSnapshot;
             uiState.Sync(snapshot);
             Render();
             PlaySoundCues(soundCues);
             PlayCombatVfxIfNeeded(snapshot.LastVfxCue);
+            PlayEnemyDeathFadeIfNeeded(enemyJustDied, nextEnemyDead);
+            lastEnemyWasDead = nextEnemyDead;
 
             if (pendingBoardTransition != null && uiState.ScreenMode == PrototypeCombatScreenMode.Board)
             {
@@ -308,6 +341,46 @@ namespace Project2048.Prototype
         {
             PlaySoundCues(audioRouter.GetBoardTransitionCues(transition));
             pendingBoardTransition = transition;
+        }
+
+        private void BindRewardEvents()
+        {
+            if (rewardManager == null)
+            {
+                return;
+            }
+
+            rewardManager.OnRewardOffered -= HandleRewardOffered;
+            rewardManager.OnRewardClaimed -= HandleRewardClaimed;
+            rewardManager.OnRewardOffered += HandleRewardOffered;
+            rewardManager.OnRewardClaimed += HandleRewardClaimed;
+        }
+
+        private void UnbindRewardEvents()
+        {
+            if (rewardManager == null)
+            {
+                return;
+            }
+
+            rewardManager.OnRewardOffered -= HandleRewardOffered;
+            rewardManager.OnRewardClaimed -= HandleRewardClaimed;
+        }
+
+        private void HandleRewardOffered(BattleRewardSO _)
+        {
+            Render();
+        }
+
+        private void HandleRewardClaimed(RewardChoiceResult _)
+        {
+            if (combatManager != null)
+            {
+                snapshot = combatManager.GetSnapshot();
+                uiState.Sync(snapshot);
+            }
+
+            Render();
         }
 
         private void Render()
@@ -405,6 +478,11 @@ namespace Project2048.Prototype
                 {
                     enemyPortrait.sprite = sprite;
                 }
+
+                if (!enemy.IsDead && enemyDeathFadeCoroutine == null)
+                {
+                    SetEnemyPortraitAlpha(1f);
+                }
             }
 
             if (playerBattleHpBarFill != null && player != null && player.MaxHp > 0)
@@ -464,9 +542,11 @@ namespace Project2048.Prototype
 
         private void RenderPanelVisibility()
         {
+            var rewardReplacementVisible = IsRewardReplacementVisible();
             if (boardPanel != null)
             {
-                boardPanel.SetActive(uiState.ScreenMode == PrototypeCombatScreenMode.Board || boardTransitionAnimating);
+                boardPanel.SetActive(!rewardReplacementVisible &&
+                    (uiState.ScreenMode == PrototypeCombatScreenMode.Board || boardTransitionAnimating));
             }
 
             // 마지막 보드 이동 애니메이션이 끝나기 전에 액션 패널로 바뀌면 타일이 끊겨 보인다.
@@ -474,14 +554,16 @@ namespace Project2048.Prototype
             var deferPanelSwapForBoardAnimation = boardTransitionAnimating && uiState.ScreenMode != PrototypeCombatScreenMode.Board;
             if (actionPanel != null)
             {
-                actionPanel.SetActive(!deferPanelSwapForBoardAnimation && (
+                actionPanel.SetActive(!rewardReplacementVisible && !deferPanelSwapForBoardAnimation && (
                     uiState.ScreenMode == PrototypeCombatScreenMode.ActionCategory ||
                     uiState.ScreenMode == PrototypeCombatScreenMode.ActionSkills));
             }
 
             if (enemyTurnPanel != null)
             {
-                enemyTurnPanel.SetActive(!deferPanelSwapForBoardAnimation && uiState.ScreenMode == PrototypeCombatScreenMode.EnemyTurn);
+                enemyTurnPanel.SetActive(!rewardReplacementVisible &&
+                    !deferPanelSwapForBoardAnimation &&
+                    uiState.ScreenMode == PrototypeCombatScreenMode.EnemyTurn);
             }
 
             if (categoryView != null)
@@ -502,7 +584,6 @@ namespace Project2048.Prototype
                 return;
             }
 
-            // HP bar/text.
             var player = snapshot.Player;
             if (hpBarFill != null && player != null && player.MaxHp > 0)
             {
@@ -517,13 +598,11 @@ namespace Project2048.Prototype
             SetBlockIndicator(hpBarFill, player?.Block ?? 0);
             RenderStatusEffects(playerBoardStatusEffectsRoot, player?.StatusEffects);
 
-            // Turn limit.
             if (turnLimitText != null)
             {
                 turnLimitText.text = PrototypeCombatText.FormatRemainingMoves(snapshot.RemainingBoardMoves);
             }
 
-            // Cells.
             for (var i = 0; i < boardCells.Count && i < 16; i++)
             {
                 var row = i / 4;
@@ -1029,7 +1108,7 @@ namespace Project2048.Prototype
             var existing = hpRoot.Find(rootName) as RectTransform;
             if (existing != null)
             {
-                ConfigureStatusEffectsRoot(existing);
+                EnsureStatusEffectsLayout(existing, preserveExistingLayout: true);
                 existing.SetAsLastSibling();
                 return existing;
             }
@@ -1039,16 +1118,44 @@ namespace Project2048.Prototype
             var root = rootObject.GetComponent<RectTransform>();
             ConfigureStatusEffectsRoot(root);
 
-            var layout = rootObject.GetComponent<HorizontalLayoutGroup>();
+            ConfigureStatusEffectsLayout(rootObject.GetComponent<HorizontalLayoutGroup>());
+            root.SetAsLastSibling();
+            return root;
+        }
+
+        private static void EnsureStatusEffectsLayout(RectTransform root, bool preserveExistingLayout)
+        {
+            if (root == null)
+            {
+                return;
+            }
+
+            var layout = root.GetComponent<HorizontalLayoutGroup>();
+            if (layout == null)
+            {
+                layout = root.gameObject.AddComponent<HorizontalLayoutGroup>();
+                preserveExistingLayout = false;
+            }
+
+            if (!preserveExistingLayout)
+            {
+                ConfigureStatusEffectsLayout(layout);
+            }
+        }
+
+        private static void ConfigureStatusEffectsLayout(HorizontalLayoutGroup layout)
+        {
+            if (layout == null)
+            {
+                return;
+            }
+
             layout.spacing = 4f;
             layout.childAlignment = TextAnchor.MiddleLeft;
             layout.childControlWidth = false;
             layout.childControlHeight = false;
             layout.childForceExpandWidth = false;
             layout.childForceExpandHeight = false;
-
-            root.SetAsLastSibling();
-            return root;
         }
 
         private static void ConfigureStatusEffectsRoot(RectTransform root)
@@ -1058,10 +1165,11 @@ namespace Project2048.Prototype
                 return;
             }
 
+            var isPlayerBattleStatusRoot = root.name == "PlayerBattleStatusEffects";
             root.anchorMin = new Vector2(0f, 0f);
             root.anchorMax = new Vector2(0f, 0f);
             root.pivot = new Vector2(0f, 1f);
-            root.anchoredPosition = new Vector2(0f, -6f);
+            root.anchoredPosition = isPlayerBattleStatusRoot ? new Vector2(0f, -39f) : new Vector2(0f, -6f);
             root.sizeDelta = new Vector2(160f, 32f);
         }
 
@@ -1074,7 +1182,7 @@ namespace Project2048.Prototype
                 return;
             }
 
-            ConfigureStatusEffectsRoot(root);
+            EnsureStatusEffectsLayout(root, preserveExistingLayout: true);
 
             for (var i = root.childCount - 1; i >= 0; i--)
             {
@@ -1302,13 +1410,26 @@ namespace Project2048.Prototype
 
         private void RenderOverlay()
         {
+            var rewardVisible = IsRewardReplacementVisible();
+
+            if (rewardOverlay != null)
+            {
+                rewardOverlay.SetActive(rewardVisible);
+            }
+
+            if (rewardVisible)
+            {
+                RenderRewardOverlay();
+            }
+
             if (resultOverlay == null)
             {
                 return;
             }
 
             var visible = snapshot != null &&
-                (snapshot.Phase == CombatPhase.Victory || snapshot.Phase == CombatPhase.Defeat);
+                (snapshot.Phase == CombatPhase.Victory || snapshot.Phase == CombatPhase.Defeat) &&
+                !rewardVisible;
             resultOverlay.SetActive(visible);
 
             if (!visible)
@@ -1323,11 +1444,58 @@ namespace Project2048.Prototype
 
             if (resultDescriptionText != null)
             {
-                resultDescriptionText.text = PrototypeCombatText.FormatResultDescription(snapshot);
+                resultDescriptionText.text = scoreManager != null
+                    ? PrototypeCombatText.FormatResultDescription(snapshot, scoreManager.TotalScore)
+                    : PrototypeCombatText.FormatResultDescription(snapshot);
             }
 
             SetButtonLabel(restartButton, snapshot.Phase == CombatPhase.Victory ? "이어 하기" : "다시 하기");
             SetButtonLabel(reloadSceneButton, "종료");
+        }
+
+        private bool IsRewardReplacementVisible()
+        {
+            return snapshot != null &&
+                snapshot.Phase == CombatPhase.Victory &&
+                rewardManager != null &&
+                rewardManager.HasUnclaimedReward;
+        }
+
+        private void HideRuntimeOverlays()
+        {
+            if (rewardOverlay != null)
+            {
+                rewardOverlay.SetActive(false);
+            }
+
+            if (resultOverlay != null)
+            {
+                resultOverlay.SetActive(false);
+            }
+        }
+
+        private void RenderRewardOverlay()
+        {
+            var reward = rewardManager != null ? rewardManager.PendingReward : null;
+            if (rewardTitleText != null)
+            {
+                rewardTitleText.text = PrototypeCombatText.FormatRewardTitle(reward);
+            }
+
+            if (rewardDescriptionText != null)
+            {
+                rewardDescriptionText.text = PrototypeCombatText.FormatRewardDescription(reward);
+            }
+
+            if (rewardRestText != null)
+            {
+                rewardRestText.text = PrototypeCombatText.FormatRestReward(reward);
+            }
+
+            if (rewardEnhanceText != null)
+            {
+                rewardEnhanceText.text = PrototypeCombatText.FormatEnhanceReward(reward);
+            }
         }
 
         private void PlayCombatVfxIfNeeded(CombatVfxCue cue)
@@ -1474,6 +1642,84 @@ namespace Project2048.Prototype
             {
                 DestroyAnimationObject(existing.gameObject);
             }
+        }
+
+        private void PlayEnemyDeathFadeIfNeeded(bool enemyJustDied, bool nextEnemyDead)
+        {
+            if ((enemyJustDied || nextEnemyDead) &&
+                enemyPortrait != null &&
+                enemyDeathFadeCoroutine == null &&
+                enemyPortrait.color.a > 0.001f)
+            {
+                PlayEnemyDeathFade();
+                return;
+            }
+
+            if (!nextEnemyDead && enemyPortrait != null)
+            {
+                ClearEnemyDeathFade();
+                SetEnemyPortraitAlpha(1f);
+            }
+        }
+
+        private void PlayEnemyDeathFade()
+        {
+            if (enemyPortrait == null)
+            {
+                return;
+            }
+
+            ClearEnemyDeathFade();
+            if (!Application.isPlaying || !isActiveAndEnabled)
+            {
+                SetEnemyPortraitAlpha(0f);
+                return;
+            }
+
+            enemyDeathFadeCoroutine = StartCoroutine(EnemyDeathFadeRoutine());
+        }
+
+        private IEnumerator EnemyDeathFadeRoutine()
+        {
+            var fromAlpha = enemyPortrait != null ? Mathf.Clamp01(enemyPortrait.color.a) : 1f;
+            var startTime = Time.realtimeSinceStartup;
+            while (true)
+            {
+                var elapsed = Time.realtimeSinceStartup - startTime;
+                var t = Mathf.Clamp01(elapsed / EnemyDeathFadeDurationSeconds);
+                SetEnemyPortraitAlpha(Mathf.Lerp(fromAlpha, 0f, t));
+
+                if (t >= 1f)
+                {
+                    break;
+                }
+
+                yield return null;
+            }
+
+            SetEnemyPortraitAlpha(0f);
+            enemyDeathFadeCoroutine = null;
+        }
+
+        private void ClearEnemyDeathFade()
+        {
+            if (enemyDeathFadeCoroutine != null)
+            {
+                StopCoroutine(enemyDeathFadeCoroutine);
+                enemyDeathFadeCoroutine = null;
+            }
+        }
+
+        private void SetEnemyPortraitAlpha(float alpha)
+        {
+            if (enemyPortrait == null)
+            {
+                return;
+            }
+
+            var color = enemyPortrait.color;
+            color.a = Mathf.Clamp01(alpha);
+            enemyPortrait.color = color;
         }
 
         private static void SetButtonLabel(Button button, string label)

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Project2048.Skills;
 using UnityEngine;
@@ -13,11 +14,17 @@ namespace Project2048.Combat
         public Sprite portrait;
         public List<SkillSO> startingSkills = new();
 
+        public event Action<PlayerSO> OnRuntimeValidated;
+
         private void OnValidate()
         {
             maxHp = Mathf.Max(1, maxHp);
             attackPower = Mathf.Max(0, attackPower);
             boardMoveCountBonus = Mathf.Max(0, boardMoveCountBonus);
+            if (Application.isPlaying)
+            {
+                OnRuntimeValidated?.Invoke(this);
+            }
         }
     }
 }

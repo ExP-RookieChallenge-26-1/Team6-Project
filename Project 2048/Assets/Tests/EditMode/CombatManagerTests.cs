@@ -243,6 +243,46 @@ namespace Project2048.Tests
             Assert.That(manager.CurrentPhase, Is.EqualTo(CombatPhase.BoardPhase));
         }
 
+        [Test]
+        public void RefreshCombatantDataFromScriptableObjects_ReappliesChangedSoStatsDuringCombat()
+        {
+            var manager = CreateGameObject<CombatManager>("CombatManager");
+            var player = CreateGameObject<PlayerCombatController>("Player");
+            var enemy = CreateGameObject<EnemyController>("Enemy");
+            var playerData = CreatePlayerData(maxHp: 20, attackPower: 2);
+            var enemyData = CreateEnemyData(maxHp: 10, attackValue: 4);
+            CombatSnapshot refreshedSnapshot = null;
+
+            manager.SetCombatants(player, new[] { enemy });
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new List<EnemySO> { enemyData },
+                boardMoveCount = 1,
+            });
+
+            player.TakeDamage(5);
+            enemy.TakeDamage(6);
+            playerData.maxHp = 12;
+            playerData.attackPower = 9;
+            playerData.boardMoveCountBonus = 2;
+            enemyData.maxHp = 3;
+
+            manager.OnCombatStateChanged += snapshot => refreshedSnapshot = snapshot;
+            manager.RefreshCombatantDataFromScriptableObjects();
+
+            Assert.That(player.MaxHp, Is.EqualTo(12));
+            Assert.That(player.CurrentHp, Is.EqualTo(12));
+            Assert.That(player.AttackPower, Is.EqualTo(9));
+            Assert.That(player.BoardMoveCountBonus, Is.EqualTo(2));
+            Assert.That(enemy.MaxHp, Is.EqualTo(3));
+            Assert.That(enemy.CurrentHp, Is.EqualTo(3));
+            Assert.That(refreshedSnapshot, Is.Not.Null);
+            Assert.That(refreshedSnapshot.Player.MaxHp, Is.EqualTo(12));
+            Assert.That(refreshedSnapshot.Player.AttackPower, Is.EqualTo(9));
+            Assert.That(refreshedSnapshot.Enemies[0].MaxHp, Is.EqualTo(3));
+        }
+
         private T CreateGameObject<T>(string name)
             where T : Component
         {

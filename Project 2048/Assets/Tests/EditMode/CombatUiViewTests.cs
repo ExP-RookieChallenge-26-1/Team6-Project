@@ -233,9 +233,9 @@ namespace Project2048.Tests
             Assert.That(boardFearRoot, Is.Not.Null);
             Assert.That(attackRoot, Is.Not.Null);
 
-            Assert.That(fearRoot.GetComponent<RectTransform>().anchoredPosition.y, Is.LessThan(0f));
-            Assert.That(boardFearRoot.GetComponent<RectTransform>().anchoredPosition.y, Is.LessThan(0f));
-            Assert.That(attackRoot.GetComponent<RectTransform>().anchoredPosition.y, Is.LessThan(0f));
+            Assert.That(fearRoot.GetComponent<RectTransform>().anchoredPosition.y, Is.EqualTo(-39f).Within(0.001f));
+            Assert.That(boardFearRoot.GetComponent<RectTransform>().anchoredPosition.y, Is.EqualTo(-6f).Within(0.001f));
+            Assert.That(attackRoot.GetComponent<RectTransform>().anchoredPosition.y, Is.EqualTo(-6f).Within(0.001f));
 
             var fearChip = fearRoot.Find("StatusEffect_fear");
             var boardFearChip = boardFearRoot.Find("StatusEffect_fear");
@@ -262,6 +262,124 @@ namespace Project2048.Tests
 
             ((IPointerExitHandler)tooltipTarget).OnPointerExit(new PointerEventData(null));
             Assert.That(tooltip.gameObject.activeSelf, Is.False);
+        }
+
+        [Test]
+        public void Initialize_PreservesSceneAuthoredPlayerBattleStatusEffectsRootPosition()
+        {
+            var viewObject = CreateOwnedGameObject("CombatView");
+            var view = viewObject.AddComponent<CombatUiView>();
+            var playerBattleHp = CreateImageChild(viewObject.transform, "PlayerBattleHp");
+            CreateImageChild(playerBattleHp.transform, "Fill");
+            CreateTextChild(playerBattleHp.transform, "Text");
+            var enemyHp = CreateImageChild(viewObject.transform, "EnemyHp");
+            CreateImageChild(enemyHp.transform, "Fill");
+            CreateTextChild(enemyHp.transform, "Text");
+            var boardHp = CreateImageChild(viewObject.transform, "BoardHp");
+            CreateImageChild(boardHp.transform, "HpBarFill");
+
+            var authoredRoot = new GameObject("PlayerBattleStatusEffects", typeof(RectTransform), typeof(HorizontalLayoutGroup));
+            authoredRoot.transform.SetParent(playerBattleHp.transform, false);
+            ownedObjects.Add(authoredRoot);
+            var authoredRect = authoredRoot.GetComponent<RectTransform>();
+            authoredRect.anchorMin = new Vector2(0f, 0f);
+            authoredRect.anchorMax = new Vector2(0f, 0f);
+            authoredRect.pivot = new Vector2(0f, 1f);
+            authoredRect.anchoredPosition = new Vector2(17f, -84f);
+            authoredRect.sizeDelta = new Vector2(180f, 36f);
+            CreateImageChild(authoredRoot.transform, "StatusEffectIconSample");
+
+            var manager = CreateOwnedGameObject("CombatManager").AddComponent<CombatManager>();
+            var player = CreateOwnedGameObject("Player").AddComponent<PlayerCombatController>();
+            var enemy = CreateOwnedGameObject("Enemy").AddComponent<EnemyController>();
+            var bootstrap = CreateOwnedGameObject("Bootstrap").AddComponent<PrototypeCombatBootstrap>();
+            SetPrivateField(bootstrap, "combatManager", manager);
+
+            var playerData = CreatePlayerData(20, 0);
+            var enemyData = CreateEnemyData("Slime", 10, 0);
+            manager.SetCombatants(player, new[] { enemy });
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new System.Collections.Generic.List<EnemySO> { enemyData },
+                boardMoveCount = 1,
+            });
+
+            player.ApplyFear(2);
+
+            view.Initialize(bootstrap);
+
+            Assert.That(authoredRect.anchoredPosition.x, Is.EqualTo(17f).Within(0.001f));
+            Assert.That(authoredRect.anchoredPosition.y, Is.EqualTo(-84f).Within(0.001f));
+            Assert.That(authoredRect.sizeDelta.x, Is.EqualTo(180f).Within(0.001f));
+            Assert.That(authoredRoot.transform.Find("StatusEffect_fear"), Is.Not.Null);
+        }
+
+        [Test]
+        public void EnemyDebuffIntent_RendersDebuffOnPlayerSideOnly()
+        {
+            var viewObject = CreateOwnedGameObject("CombatView");
+            var view = viewObject.AddComponent<CombatUiView>();
+            var playerBattleHp = CreateImageChild(viewObject.transform, "PlayerBattleHp");
+            CreateImageChild(playerBattleHp.transform, "Fill");
+            CreateTextChild(playerBattleHp.transform, "Text");
+            var enemyHp = CreateImageChild(viewObject.transform, "EnemyHp");
+            CreateImageChild(enemyHp.transform, "Fill");
+            CreateTextChild(enemyHp.transform, "Text");
+            var boardHp = CreateImageChild(viewObject.transform, "BoardHp");
+            CreateImageChild(boardHp.transform, "HpBarFill");
+            CreateTextChild(viewObject.transform, "HpText");
+
+            var manager = CreateOwnedGameObject("CombatManager").AddComponent<CombatManager>();
+            var player = CreateOwnedGameObject("Player").AddComponent<PlayerCombatController>();
+            var enemy = CreateOwnedGameObject("Enemy").AddComponent<EnemyController>();
+            var bootstrap = CreateOwnedGameObject("Bootstrap").AddComponent<PrototypeCombatBootstrap>();
+            SetPrivateField(bootstrap, "combatManager", manager);
+
+            var playerData = CreatePlayerData(20, 0);
+            var enemyData = CreateEnemyData("Debuffer", 10, 0);
+            enemyData.intentPattern = new System.Collections.Generic.List<EnemyIntent>
+            {
+                new()
+                {
+                    intentType = EnemyIntentType.Debuff,
+                    debuffType = DebuffType.Fear,
+                    value = 2,
+                },
+            };
+
+            manager.SetCombatants(player, new[] { enemy });
+            manager.EnemyTurnDelaySeconds = 0f;
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new System.Collections.Generic.List<EnemySO> { enemyData },
+                boardMoveCount = 1,
+            });
+            manager.BoardManager.SetBoardState(new[,]
+            {
+                { 64, 0, 0, 0 },
+                { 0, 0, 0, 0 },
+                { 0, 0, 0, 0 },
+                { 0, 0, 0, 0 },
+            }, 0);
+            manager.ResolveBoardPhase();
+
+            view.Initialize(bootstrap);
+            manager.RequestEndPlayerTurn();
+
+            var playerBattleStatusRoot = playerBattleHp.transform.Find("PlayerBattleStatusEffects");
+            var playerBoardStatusRoot = boardHp.transform.Find("PlayerBoardStatusEffects");
+            var enemyStatusRoot = enemyHp.transform.Find("EnemyStatusEffects");
+
+            Assert.That(playerBattleStatusRoot, Is.Not.Null);
+            Assert.That(playerBoardStatusRoot, Is.Not.Null);
+            Assert.That(enemyStatusRoot, Is.Not.Null);
+            Assert.That(playerBattleStatusRoot.GetComponent<RectTransform>().anchoredPosition.y, Is.EqualTo(-39f).Within(0.001f));
+            Assert.That(playerBattleStatusRoot.Find("StatusEffect_fear"), Is.Not.Null);
+            Assert.That(playerBoardStatusRoot.Find("StatusEffect_fear"), Is.Not.Null);
+            Assert.That(enemyStatusRoot.Find("StatusEffect_fear"), Is.Null);
+            Assert.That(enemyStatusRoot.gameObject.activeSelf, Is.False);
         }
 
         [Test]
@@ -393,7 +511,7 @@ namespace Project2048.Tests
         public void BattleScene_CombatUiView_HasInspectorAudioReferences()
         {
             EditorSceneManager.OpenScene("Assets/Scenes/BattleScene.unity");
-            var view = Object.FindFirstObjectByType<CombatUiView>(FindObjectsInactive.Include);
+            var view = Object.FindAnyObjectByType<CombatUiView>(FindObjectsInactive.Include);
 
             Assert.That(view, Is.Not.Null);
 
@@ -404,6 +522,70 @@ namespace Project2048.Tests
             Assert.That(serializedView.FindProperty("boardMoveClip"), Is.Not.Null);
             Assert.That(serializedView.FindProperty("boardMergeClip"), Is.Not.Null);
             Assert.That(serializedView.FindProperty("soundVolumeScale").floatValue, Is.EqualTo(3f).Within(0.001f));
+        }
+
+        [Test]
+        public void BattleScene_CombatUiView_HasSceneAuthoredStatusAndBlockObjectsOnBottomHpBars()
+        {
+            EditorSceneManager.OpenScene("Assets/Scenes/BattleScene.unity");
+            var view = Object.FindAnyObjectByType<CombatUiView>(FindObjectsInactive.Include);
+
+            Assert.That(view, Is.Not.Null);
+
+            var serializedView = new SerializedObject(view);
+            var root = serializedView.FindProperty("playerBattleStatusEffectsRoot").objectReferenceValue as RectTransform;
+            Assert.That(root, Is.Not.Null);
+            Assert.That(root.name, Is.EqualTo("PlayerBattleStatusEffects"));
+            Assert.That(root.parent != null ? root.parent.name : null, Is.EqualTo("PlayerBattleHp"));
+            Assert.That(root.Find("StatusEffectIconSample"), Is.Not.Null);
+
+            var blockIcon = root.parent.Find("BlockIcon") as RectTransform;
+            Assert.That(blockIcon, Is.Not.Null);
+            Assert.That(blockIcon.gameObject.activeSelf, Is.True);
+            Assert.That(blockIcon.Find("Text"), Is.Not.Null);
+
+            var boardRoot = serializedView.FindProperty("playerBoardStatusEffectsRoot").objectReferenceValue as RectTransform;
+            Assert.That(boardRoot, Is.Not.Null);
+            Assert.That(boardRoot.name, Is.EqualTo("PlayerBoardStatusEffects"));
+            Assert.That(boardRoot.parent != null ? boardRoot.parent.name : null, Is.EqualTo("HpBarBg"));
+            Assert.That(boardRoot.Find("StatusEffectIconSample"), Is.Not.Null);
+
+            var boardBlockIcon = boardRoot.parent.Find("BlockIcon") as RectTransform;
+            Assert.That(boardBlockIcon, Is.Not.Null);
+            Assert.That(boardBlockIcon.gameObject.activeSelf, Is.True);
+            Assert.That(boardBlockIcon.Find("Text"), Is.Not.Null);
+
+            var enemyStatusRoot = serializedView.FindProperty("enemyStatusEffectsRoot").objectReferenceValue as RectTransform;
+            Assert.That(enemyStatusRoot, Is.Not.Null);
+            Assert.That(enemyStatusRoot.name, Is.EqualTo("EnemyStatusEffects"));
+            Assert.That(enemyStatusRoot.parent != null ? enemyStatusRoot.parent.name : null, Is.EqualTo("EnemyHp"));
+            Assert.That(enemyStatusRoot.Find("StatusEffectIconSample"), Is.Not.Null);
+
+            var enemyBlockIcon = enemyStatusRoot.parent.Find("BlockIcon") as RectTransform;
+            Assert.That(enemyBlockIcon, Is.Not.Null);
+            Assert.That(enemyBlockIcon.gameObject.activeSelf, Is.True);
+            Assert.That(enemyBlockIcon.Find("Text"), Is.Not.Null);
+
+            var layout = root.GetComponent<HorizontalLayoutGroup>();
+            Assert.That(layout, Is.Not.Null);
+            Assert.That(layout.spacing, Is.EqualTo(4f).Within(0.001f));
+            Assert.That(layout.childAlignment, Is.EqualTo(TextAnchor.MiddleLeft));
+            Assert.That(layout.childForceExpandWidth, Is.False);
+            Assert.That(layout.childForceExpandHeight, Is.False);
+
+            var boardLayout = boardRoot.GetComponent<HorizontalLayoutGroup>();
+            Assert.That(boardLayout, Is.Not.Null);
+            Assert.That(boardLayout.spacing, Is.EqualTo(4f).Within(0.001f));
+            Assert.That(boardLayout.childAlignment, Is.EqualTo(TextAnchor.MiddleLeft));
+            Assert.That(boardLayout.childForceExpandWidth, Is.False);
+            Assert.That(boardLayout.childForceExpandHeight, Is.False);
+
+            var enemyLayout = enemyStatusRoot.GetComponent<HorizontalLayoutGroup>();
+            Assert.That(enemyLayout, Is.Not.Null);
+            Assert.That(enemyLayout.spacing, Is.EqualTo(4f).Within(0.001f));
+            Assert.That(enemyLayout.childAlignment, Is.EqualTo(TextAnchor.MiddleLeft));
+            Assert.That(enemyLayout.childForceExpandWidth, Is.False);
+            Assert.That(enemyLayout.childForceExpandHeight, Is.False);
         }
 
         private GameObject CreateOwnedGameObject(string name)

@@ -5,6 +5,7 @@ using System.Linq;
 using Project2048.Board2048;
 using Project2048.Cost;
 using Project2048.Enemy;
+using Project2048.Rewards;
 using Project2048.Skills;
 using UnityEngine;
 
@@ -112,6 +113,7 @@ namespace Project2048.Combat
             UnbindEntityEvents();
 
             player.Init(currentSetup.playerData);
+            ApplyRunProgressToPlayer();
             BindPlayerEvents();
 
             for (var index = 0; index < currentSetup.enemyDataList.Count; index++)
@@ -223,6 +225,23 @@ namespace Project2048.Combat
             return BoardManager.Move(direction);
         }
 
+        [ContextMenu("Refresh Combatant Data From ScriptableObjects")]
+        public void RefreshCombatantDataFromScriptableObjects()
+        {
+            EnsureRuntimeState();
+            player?.RefreshFromData();
+
+            foreach (var enemy in enemies)
+            {
+                enemy?.RefreshFromData();
+            }
+
+            if (CurrentPhase != CombatPhase.None)
+            {
+                NotifyStateChanged();
+            }
+        }
+
         public void RequestEndPlayerTurn()
         {
             EnsureRuntimeState();
@@ -232,6 +251,8 @@ namespace Project2048.Combat
             }
 
             // 플레이 화면에서는 적 턴 패널을 잠깐 보여주고, EditMode 테스트처럼 비활성 상태에서는 즉시 해결한다.
+            player.ClearFear();
+
             if (enemyTurnDelaySeconds > 0f && isActiveAndEnabled)
             {
                 lastActionDescription = "적 턴 시작";
@@ -253,7 +274,10 @@ namespace Project2048.Combat
             ChangePhase(CombatPhase.BoardPhase);
 
             // 이번 턴에 2048을 움직일 수 있는 횟수다. 0이 되면 보드 전체가 코스트로 바뀐다.
-            var moveCount = Mathf.Max(0, currentSetup.boardMoveCount + player.BoardMoveCountBonus);
+            var runMoveBonus = currentSetup.runProgress != null
+                ? currentSetup.runProgress.ExtraBoardMoveCount
+                : 0;
+            var moveCount = Mathf.Max(0, currentSetup.boardMoveCount + player.BoardMoveCountBonus + runMoveBonus);
             BoardManager.InitBoard(moveCount);
         }
 
@@ -302,7 +326,9 @@ namespace Project2048.Combat
                 {
                     Sequence = ++vfxCueSequence,
                     DebuffType = intent.debuffType,
-                    Value = intent.value,
+                    Value = intent.debuffType == DebuffType.Fear
+                        ? PlayerCombatController.FearDefenseGainPenalty
+                        : intent.value,
                     SourceName = GetEnemyDisplayName(enemy),
                     TargetName = "플레이어",
                 };
@@ -359,6 +385,7 @@ namespace Project2048.Combat
             }
 
             ChangePhase(CombatPhase.Victory);
+            currentSetup.runProgress?.CapturePlayer(player);
             OnCombatVictory?.Invoke(BuildCombatResult());
             return true;
         }
@@ -371,8 +398,26 @@ namespace Project2048.Combat
             }
 
             ChangePhase(CombatPhase.Defeat);
+            currentSetup.runProgress?.CapturePlayer(player);
             OnCombatDefeat?.Invoke();
             return true;
+        }
+
+        private void ApplyRunProgressToPlayer()
+        {
+            if (currentSetup.runProgress == null || player == null)
+            {
+                return;
+            }
+
+            if (currentSetup.runProgress.HasCurrentHp)
+            {
+                player.SetCurrentHpForRun(currentSetup.runProgress.ResolveStartingHp(player.MaxHp));
+            }
+            else
+            {
+                currentSetup.runProgress.CapturePlayer(player);
+            }
         }
 
         private CombatResult BuildCombatResult()
@@ -615,7 +660,7 @@ namespace Project2048.Combat
                 {
                     Id = "fear",
                     DisplayName = "공포",
-                    Description = "방어도 획득량이 절반으로 감소합니다. 소수점은 올림 처리됩니다.",
+                    Description = $"방어도 획득량이 {player.FearStacks} 감소합니다.",
                     Value = player.FearStacks,
                     IsBuff = false,
                     IconText = "공",

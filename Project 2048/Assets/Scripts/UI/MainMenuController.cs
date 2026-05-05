@@ -1,8 +1,7 @@
+using Project2048.Core;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using Project2048.Core;
 
 public class MainMenuController : MonoBehaviour
 {
@@ -26,7 +25,7 @@ public class MainMenuController : MonoBehaviour
 
     private void OnNewGameClicked()
     {
-        confirmPopup.Show("새로 하시겠습니까?", StartNewGame, null);
+        confirmPopup.Show("새로 시작하시겠습니까?", StartNewGame, null);
     }
 
     private void StartNewGame()

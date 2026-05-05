@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0a78af296a09024caf241aa0587e358, type: 3}
+  m_Name: MothBasicReward
+  m_EditorClassIdentifier: Game.Core::Project2048.Rewards.BattleRewardSO
+  rewardId: moth-basic
+  mothDisplayName: "\uB098\uBC29"
+  healPercentOfMaxHp: 0.3
+  extraBoardMoveCount: 1
+  encounterText: "\uC870\uB825\uC790\uAC00 \uB2E4\uC74C \uC804\uD22C\uB97C \uC900\uBE44\uD560
+    \uAE30\uD68C\uB97C \uC90D\uB2C8\uB2E4."

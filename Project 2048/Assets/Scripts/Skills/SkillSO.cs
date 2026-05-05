@@ -1,3 +1,4 @@
+using Project2048.Presentation;
 using UnityEngine;
 
 namespace Project2048.Skills
@@ -13,6 +14,7 @@ namespace Project2048.Skills
         public int targetAttackModifier;
         public int selfDefenseBonus;
         public Sprite icon;
+        public CombatEffectBinding activationEffect = new();
         [TextArea] public string description;
 
         private void OnValidate()

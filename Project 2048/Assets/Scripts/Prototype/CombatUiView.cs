@@ -4,6 +4,7 @@ using System.Linq;
 using Project2048.Board2048;
 using Project2048.Combat;
 using Project2048.Enemy;
+using Project2048.Presentation;
 using Project2048.Rewards;
 using Project2048.Score;
 using Project2048.Skills;
@@ -103,6 +104,7 @@ namespace Project2048.Prototype
         // Temporary prototype SFX hookup. Final audio ownership should replace
         // these inspector clips or remove this layer without touching combat core.
         [SerializeField] private AudioSource audioSource;
+        [SerializeField] private BoardTileEffectProfileSO boardTileEffectProfile;
         [SerializeField] private AudioClip playerHitClip;
         [SerializeField] private AudioClip enemyHitClip;
         [SerializeField] private AudioClip boardMoveClip;
@@ -339,7 +341,9 @@ namespace Project2048.Prototype
 
         private void HandleBoardTransitioned(BoardTransition transition)
         {
-            PlaySoundCues(audioRouter.GetBoardTransitionCues(transition));
+            var playedProfileAudio = PlayBoardTileEffectCues(audioRouter.GetBoardTileEffectCues(transition));
+            PlayFallbackBoardSoundCues(audioRouter.GetBoardTransitionCues(transition), playedProfileAudio);
+
             pendingBoardTransition = transition;
         }
 
@@ -1405,6 +1409,120 @@ namespace Project2048.Prototype
             if (clip != null)
             {
                 audioSource.PlayOneShot(clip, soundVolumeScale);
+            }
+        }
+
+        private (bool Move, bool Merge) PlayBoardTileEffectCues(IReadOnlyList<BoardTileEffectCue> cues)
+        {
+            if (cues == null || cues.Count == 0 || boardTileEffectProfile == null)
+            {
+                return (false, false);
+            }
+
+            var playedMoveAudio = false;
+            var playedMergeAudio = false;
+            foreach (var cue in cues)
+            {
+                var effect = ResolveBoardTileEffect(cue);
+                if (effect == null)
+                {
+                    continue;
+                }
+
+                var playedAudio = PlayEffectAudio(effect);
+                if (playedAudio && cue.CueType == BoardTileEffectCueType.Move)
+                {
+                    playedMoveAudio = true;
+                }
+                else if (playedAudio && cue.CueType == BoardTileEffectCueType.Merge)
+                {
+                    playedMergeAudio = true;
+                }
+
+                SpawnBoardEffectPrefab(effect, cue.Position);
+            }
+
+            return (playedMoveAudio, playedMergeAudio);
+        }
+
+        private void PlayFallbackBoardSoundCues(
+            IReadOnlyList<PrototypeCombatSoundCue> cues,
+            (bool Move, bool Merge) playedProfileAudio)
+        {
+            if (cues == null || cues.Count == 0)
+            {
+                return;
+            }
+
+            foreach (var cue in cues)
+            {
+                if ((cue == PrototypeCombatSoundCue.BoardMove && playedProfileAudio.Move) ||
+                    (cue == PrototypeCombatSoundCue.BoardMerge && playedProfileAudio.Merge))
+                {
+                    continue;
+                }
+
+                PlaySoundCue(cue);
+            }
+        }
+
+        private CombatEffectBinding ResolveBoardTileEffect(BoardTileEffectCue cue)
+        {
+            return cue.CueType switch
+            {
+                BoardTileEffectCueType.Move => boardTileEffectProfile.ResolveMoveEffect(),
+                BoardTileEffectCueType.Merge => boardTileEffectProfile.ResolveMergeEffect(cue.TileValue),
+                _ => null,
+            };
+        }
+
+        private bool PlayEffectAudio(CombatEffectBinding effect)
+        {
+            if (effect?.sfxClip == null || audioSource == null)
+            {
+                return false;
+            }
+
+            audioSource.PlayOneShot(effect.sfxClip, soundVolumeScale * effect.EffectiveVolumeScale);
+            return true;
+        }
+
+        private void SpawnBoardEffectPrefab(CombatEffectBinding effect, Vector2Int boardPosition)
+        {
+            if (effect?.vfxPrefab == null)
+            {
+                return;
+            }
+
+            var overlay = ResolveBoardAnimationOverlay();
+            GameObject instance;
+            if (overlay != null)
+            {
+                instance = Instantiate(effect.vfxPrefab, overlay);
+                if (TryGetCellCenter(boardPosition, out var center))
+                {
+                    if (instance.transform is RectTransform rect)
+                    {
+                        rect.anchorMin = new Vector2(0.5f, 0.5f);
+                        rect.anchorMax = new Vector2(0.5f, 0.5f);
+                        rect.pivot = new Vector2(0.5f, 0.5f);
+                        rect.anchoredPosition = center;
+                    }
+                    else
+                    {
+                        instance.transform.localPosition = center;
+                    }
+                }
+            }
+            else
+            {
+                instance = Instantiate(effect.vfxPrefab, transform);
+            }
+
+            var lifetime = effect.EffectiveAutoDestroySeconds;
+            if (lifetime > 0f)
+            {
+                Destroy(instance, lifetime);
             }
         }
 

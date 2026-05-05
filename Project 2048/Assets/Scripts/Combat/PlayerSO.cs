@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Project2048.Presentation;
 using Project2048.Skills;
 using UnityEngine;
 
@@ -13,8 +14,14 @@ namespace Project2048.Combat
         public int boardMoveCountBonus;
         public Sprite portrait;
         public List<SkillSO> startingSkills = new();
+        public List<CombatantActionEffectBinding> actionEffects = new();
 
         public event Action<PlayerSO> OnRuntimeValidated;
+
+        public CombatEffectBinding FindActionEffect(string actionId)
+        {
+            return CombatantActionEffectBinding.Find(actionEffects, actionId);
+        }
 
         private void OnValidate()
         {

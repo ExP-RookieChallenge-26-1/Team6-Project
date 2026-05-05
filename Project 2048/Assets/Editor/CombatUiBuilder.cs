@@ -25,6 +25,7 @@ namespace Project2048.PrototypeEditor
         private const string DataFolder = "Assets/Data/Prototype";
         private const string EnemyFolder = DataFolder + "/Enemies";
         private const string SkillFolder = DataFolder + "/Skills";
+        private const string BattleScenePath = "Assets/Scenes/BattleScene.unity";
         private const string PlayerSpritePath = "Assets/Art/Prototype/PrototypePlayerCutout.png";
         private const string EnemySpritePath = "Assets/Art/Prototype/PrototypeEnemyCutout.png";
 
@@ -52,6 +53,41 @@ namespace Project2048.PrototypeEditor
             AssetDatabase.SaveAssets();
             EditorSceneManager.SaveScene(EditorSceneManager.GetActiveScene());
             Debug.Log("Combat UI scene, prototype combat data, and bindings generated.");
+        }
+
+        [MenuItem("Project2048/Ensure Combat Status Effect Roots")]
+        public static void EnsureCombatStatusEffectRoots()
+        {
+            var scene = EditorSceneManager.OpenScene(BattleScenePath);
+            var view = Object.FindAnyObjectByType<CombatUiView>(FindObjectsInactive.Include);
+            if (view == null)
+            {
+                Debug.LogWarning("CombatUiView was not found in BattleScene.");
+                return;
+            }
+
+            var so = new SerializedObject(view);
+            var playerBattleHpFill = so.FindProperty("playerBattleHpBarFill")?.objectReferenceValue as Image;
+            var playerBattleHpRoot = playerBattleHpFill != null
+                ? playerBattleHpFill.transform.parent as RectTransform
+                : GameObject.Find("PlayerBattleHp")?.GetComponent<RectTransform>();
+            if (playerBattleHpRoot == null)
+            {
+                Debug.LogWarning("PlayerBattleHp root was not found in BattleScene.");
+                return;
+            }
+
+            var playerStatusRoot = EnsureStatusEffectAuthoringRoot(
+                playerBattleHpRoot,
+                "PlayerBattleStatusEffects",
+                new Vector2(0f, -39f));
+            SetRef(so, "playerBattleStatusEffectsRoot", playerStatusRoot);
+            so.ApplyModifiedPropertiesWithoutUndo();
+
+            EditorUtility.SetDirty(view);
+            EditorSceneManager.MarkSceneDirty(scene);
+            EditorSceneManager.SaveScene(scene);
+            Debug.Log("Combat status effect roots ensured.");
         }
 
         private static Canvas EnsureCanvas()
@@ -267,6 +303,10 @@ namespace Project2048.PrototypeEditor
             SetStretch(refs.IntentBubbleText.rectTransform, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
 
             CreateStatusBar(parent, "PlayerBattleHp", new Vector2(0.22f, 0.06f), new Vector2(230, 24), new Color(0.06f, 0.18f, 0.08f, 1f), new Color(0.12f, 0.86f, 0.28f, 1f), font, out refs.PlayerBattleHpFill, out refs.PlayerBattleHpText);
+            refs.PlayerBattleStatusEffectsRoot = EnsureStatusEffectAuthoringRoot(
+                refs.PlayerBattleHpFill.transform.parent as RectTransform,
+                "PlayerBattleStatusEffects",
+                new Vector2(0f, -39f));
             CreateStatusBar(parent, "EnemyHp", new Vector2(0.74f, 0.06f), new Vector2(340, 26), new Color(0.20f, 0.04f, 0.04f, 1f), new Color(0.92f, 0.12f, 0.12f, 1f), font, out refs.EnemyHpFill, out refs.EnemyHpText);
 
             var strike = CreateLabel(parent, "PrototypeVfxText", "*", 76, TextAlignmentOptions.Center, font);
@@ -602,6 +642,7 @@ namespace Project2048.PrototypeEditor
             SetRef(so, "playerBattleHpText", refs.PlayerBattleHpText);
             SetRef(so, "enemyHpBarFill", refs.EnemyHpFill);
             SetRef(so, "enemyHpText", refs.EnemyHpText);
+            SetRef(so, "playerBattleStatusEffectsRoot", refs.PlayerBattleStatusEffectsRoot);
             SetRef(so, "actionDescriptionText", refs.ActionDescriptionText);
             SetRef(so, "boardPanel", refs.BoardPanel);
             SetRef(so, "actionPanel", refs.ActionPanel);
@@ -656,6 +697,82 @@ namespace Project2048.PrototypeEditor
             }
         }
 
+        private static RectTransform EnsureStatusEffectAuthoringRoot(
+            RectTransform hpRoot,
+            string rootName,
+            Vector2 anchoredPosition)
+        {
+            if (hpRoot == null)
+            {
+                return null;
+            }
+
+            var root = hpRoot.Find(rootName) as RectTransform;
+            var createdRoot = root == null;
+            if (root == null)
+            {
+                var rootObject = new GameObject(rootName, typeof(RectTransform), typeof(HorizontalLayoutGroup));
+                rootObject.transform.SetParent(hpRoot, false);
+                root = rootObject.GetComponent<RectTransform>();
+                root.anchorMin = new Vector2(0f, 0f);
+                root.anchorMax = new Vector2(0f, 0f);
+                root.pivot = new Vector2(0f, 1f);
+                root.anchoredPosition = anchoredPosition;
+                root.sizeDelta = new Vector2(160f, 32f);
+            }
+
+            var layout = root.GetComponent<HorizontalLayoutGroup>();
+            if (layout == null)
+            {
+                layout = root.gameObject.AddComponent<HorizontalLayoutGroup>();
+                createdRoot = true;
+            }
+
+            if (createdRoot)
+            {
+                ConfigureStatusEffectAuthoringLayout(layout);
+            }
+
+            EnsureStatusEffectIconSample(root);
+            root.SetAsLastSibling();
+            EditorUtility.SetDirty(root);
+            return root;
+        }
+
+        private static void ConfigureStatusEffectAuthoringLayout(HorizontalLayoutGroup layout)
+        {
+            layout.spacing = 4f;
+            layout.childAlignment = TextAnchor.MiddleLeft;
+            layout.childControlWidth = false;
+            layout.childControlHeight = false;
+            layout.childForceExpandWidth = false;
+            layout.childForceExpandHeight = false;
+        }
+
+        private static void EnsureStatusEffectIconSample(RectTransform root)
+        {
+            var sample = root.Find("StatusEffectIconSample") as RectTransform;
+            if (sample == null)
+            {
+                var sampleObject = new GameObject("StatusEffectIconSample", typeof(RectTransform), typeof(Image), typeof(LayoutElement));
+                sampleObject.transform.SetParent(root, false);
+                sample = sampleObject.GetComponent<RectTransform>();
+                sample.sizeDelta = new Vector2(32f, 32f);
+
+                var image = sampleObject.GetComponent<Image>();
+                image.color = new Color(0.46f, 0.16f, 0.20f, 0.95f);
+                image.raycastTarget = false;
+
+                var layoutElement = sampleObject.GetComponent<LayoutElement>();
+                layoutElement.preferredWidth = 32f;
+                layoutElement.preferredHeight = 32f;
+                layoutElement.minWidth = 32f;
+                layoutElement.minHeight = 32f;
+            }
+
+            EditorUtility.SetDirty(sample);
+        }
+
         private sealed class ViewRefs
         {
             public readonly List<BoardCellView> Cells = new();
@@ -668,7 +785,7 @@ namespace Project2048.PrototypeEditor
             public TMP_Text TurnCounterText, IntentHeaderText, EnemyNameText, IntentBubbleText;
             public TMP_Text HpText, TurnLimitText, PlayerBattleHpText, EnemyHpText, ActionDescriptionText;
             public Image PlayerPortrait, EnemyPortrait, IntentBubble, HpBarFill, PlayerBattleHpFill, EnemyHpFill;
-            public RectTransform BoardAnimationOverlay;
+            public RectTransform BoardAnimationOverlay, PlayerBattleStatusEffectsRoot;
         }
     }
 }

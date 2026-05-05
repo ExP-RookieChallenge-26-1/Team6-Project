@@ -1108,7 +1108,7 @@ namespace Project2048.Prototype
             var existing = hpRoot.Find(rootName) as RectTransform;
             if (existing != null)
             {
-                ConfigureStatusEffectsRoot(existing);
+                EnsureStatusEffectsLayout(existing, preserveExistingLayout: true);
                 existing.SetAsLastSibling();
                 return existing;
             }
@@ -1118,16 +1118,44 @@ namespace Project2048.Prototype
             var root = rootObject.GetComponent<RectTransform>();
             ConfigureStatusEffectsRoot(root);
 
-            var layout = rootObject.GetComponent<HorizontalLayoutGroup>();
+            ConfigureStatusEffectsLayout(rootObject.GetComponent<HorizontalLayoutGroup>());
+            root.SetAsLastSibling();
+            return root;
+        }
+
+        private static void EnsureStatusEffectsLayout(RectTransform root, bool preserveExistingLayout)
+        {
+            if (root == null)
+            {
+                return;
+            }
+
+            var layout = root.GetComponent<HorizontalLayoutGroup>();
+            if (layout == null)
+            {
+                layout = root.gameObject.AddComponent<HorizontalLayoutGroup>();
+                preserveExistingLayout = false;
+            }
+
+            if (!preserveExistingLayout)
+            {
+                ConfigureStatusEffectsLayout(layout);
+            }
+        }
+
+        private static void ConfigureStatusEffectsLayout(HorizontalLayoutGroup layout)
+        {
+            if (layout == null)
+            {
+                return;
+            }
+
             layout.spacing = 4f;
             layout.childAlignment = TextAnchor.MiddleLeft;
             layout.childControlWidth = false;
             layout.childControlHeight = false;
             layout.childForceExpandWidth = false;
             layout.childForceExpandHeight = false;
-
-            root.SetAsLastSibling();
-            return root;
         }
 
         private static void ConfigureStatusEffectsRoot(RectTransform root)
@@ -1154,7 +1182,7 @@ namespace Project2048.Prototype
                 return;
             }
 
-            ConfigureStatusEffectsRoot(root);
+            EnsureStatusEffectsLayout(root, preserveExistingLayout: true);
 
             for (var i = root.childCount - 1; i >= 0; i--)
             {

@@ -324,6 +324,7 @@ intentPattern이 비어 있음
 - 보드 입력은 `RequestBoardMove`로 보낸다.
 - 스킬 버튼은 `RequestUseSkillById`로 보낸다.
 - 턴 종료 버튼은 `RequestEndPlayerTurn`으로 보낸다.
+- 플레이어 전투 HP 디버프 아이콘 위치는 `BattleScene`의 `PlayerBattleStatusEffects` RectTransform에서 조절한다. 씬에는 위치 조정용 `StatusEffectIconSample` 예시 아이콘이 있다.
 
 정식 UI를 새로 만들 때도 전투 코어와의 연결 방식은 이것을 유지하면 된다.
 

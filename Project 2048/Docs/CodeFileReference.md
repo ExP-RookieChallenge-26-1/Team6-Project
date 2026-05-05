@@ -913,7 +913,7 @@ UI가 전투 내부 객체를 직접 잡지 않고 snapshot/command만으로 전
 - 적 머리 위 표시 문구에 AI 타입이 함께 나온다.
 - 적 HP 문구에 방어도 표시가 함께 나온다.
 - 공포/암흑 임시 VFX 문구가 한국어로 나온다.
-- 플레이어 전투 HP 상태효과 루트는 `PlayerBattleStatusEffects` 기준 y -39 위치에 생성된다.
+- 플레이어 전투 HP 상태효과 루트는 `BattleScene`의 `PlayerBattleStatusEffects` RectTransform을 우선 쓰고, 씬에 없을 때만 y -39 위치에 생성된다.
 - 최근 행동과 결과 제목 문구가 맞다.
 
 ### `Assets/Tests/EditMode/PrototypeCombatUiStateTests.cs`

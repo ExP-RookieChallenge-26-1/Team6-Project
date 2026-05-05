@@ -67,6 +67,7 @@ namespace Project2048.PrototypeEditor
             }
 
             var so = new SerializedObject(view);
+            var font = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(KoreanFontAssetPath);
             var playerBattleHpFill = so.FindProperty("playerBattleHpBarFill")?.objectReferenceValue as Image;
             var playerBattleHpRoot = playerBattleHpFill != null
                 ? playerBattleHpFill.transform.parent as RectTransform
@@ -81,7 +82,44 @@ namespace Project2048.PrototypeEditor
                 playerBattleHpRoot,
                 "PlayerBattleStatusEffects",
                 new Vector2(0f, -39f));
+            EnsureBlockIconAuthoring(playerBattleHpRoot, font);
             SetRef(so, "playerBattleStatusEffectsRoot", playerStatusRoot);
+
+            var playerBoardHpFill = so.FindProperty("hpBarFill")?.objectReferenceValue as Image;
+            var playerBoardHpRoot = playerBoardHpFill != null
+                ? playerBoardHpFill.transform.parent as RectTransform
+                : GameObject.Find("HpBarBg")?.GetComponent<RectTransform>();
+            if (playerBoardHpRoot == null)
+            {
+                Debug.LogWarning("HpBarBg root was not found in BattleScene.");
+            }
+            else
+            {
+                var playerBoardStatusRoot = EnsureStatusEffectAuthoringRoot(
+                    playerBoardHpRoot,
+                    "PlayerBoardStatusEffects",
+                    new Vector2(0f, -6f));
+                EnsureBlockIconAuthoring(playerBoardHpRoot, font);
+                SetRef(so, "playerBoardStatusEffectsRoot", playerBoardStatusRoot);
+            }
+
+            var enemyHpFill = so.FindProperty("enemyHpBarFill")?.objectReferenceValue as Image;
+            var enemyHpRoot = enemyHpFill != null
+                ? enemyHpFill.transform.parent as RectTransform
+                : GameObject.Find("EnemyHp")?.GetComponent<RectTransform>();
+            if (enemyHpRoot == null)
+            {
+                Debug.LogWarning("EnemyHp root was not found in BattleScene.");
+            }
+            else
+            {
+                var enemyStatusRoot = EnsureStatusEffectAuthoringRoot(
+                    enemyHpRoot,
+                    "EnemyStatusEffects",
+                    new Vector2(0f, -6f));
+                EnsureBlockIconAuthoring(enemyHpRoot, font);
+                SetRef(so, "enemyStatusEffectsRoot", enemyStatusRoot);
+            }
             so.ApplyModifiedPropertiesWithoutUndo();
 
             EditorUtility.SetDirty(view);
@@ -307,7 +345,13 @@ namespace Project2048.PrototypeEditor
                 refs.PlayerBattleHpFill.transform.parent as RectTransform,
                 "PlayerBattleStatusEffects",
                 new Vector2(0f, -39f));
+            EnsureBlockIconAuthoring(refs.PlayerBattleHpFill.transform.parent as RectTransform, font);
             CreateStatusBar(parent, "EnemyHp", new Vector2(0.74f, 0.06f), new Vector2(340, 26), new Color(0.20f, 0.04f, 0.04f, 1f), new Color(0.92f, 0.12f, 0.12f, 1f), font, out refs.EnemyHpFill, out refs.EnemyHpText);
+            refs.EnemyStatusEffectsRoot = EnsureStatusEffectAuthoringRoot(
+                refs.EnemyHpFill.transform.parent as RectTransform,
+                "EnemyStatusEffects",
+                new Vector2(0f, -6f));
+            EnsureBlockIconAuthoring(refs.EnemyHpFill.transform.parent as RectTransform, font);
 
             var strike = CreateLabel(parent, "PrototypeVfxText", "*", 76, TextAlignmentOptions.Center, font);
             strike.color = new Color(1f, 0.92f, 0.30f, 1f);
@@ -336,6 +380,11 @@ namespace Project2048.PrototypeEditor
             refs.HpBarFill.fillMethod = Image.FillMethod.Horizontal;
             refs.HpBarFill.fillOrigin = 0;
             SetStretch(refs.HpBarFill.rectTransform, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
+            refs.PlayerBoardStatusEffectsRoot = EnsureStatusEffectAuthoringRoot(
+                hpBg.rectTransform,
+                "PlayerBoardStatusEffects",
+                new Vector2(0f, -6f));
+            EnsureBlockIconAuthoring(hpBg.rectTransform, font);
 
             refs.HpText = CreateLabel(boardRect, "HpText", "체력 30/30", 24, TextAlignmentOptions.Left, font);
             SetAnchor(refs.HpText.rectTransform, new Vector2(0.25f, 0.96f), new Vector2(360, 42), Vector2.zero);
@@ -643,12 +692,14 @@ namespace Project2048.PrototypeEditor
             SetRef(so, "enemyHpBarFill", refs.EnemyHpFill);
             SetRef(so, "enemyHpText", refs.EnemyHpText);
             SetRef(so, "playerBattleStatusEffectsRoot", refs.PlayerBattleStatusEffectsRoot);
+            SetRef(so, "enemyStatusEffectsRoot", refs.EnemyStatusEffectsRoot);
             SetRef(so, "actionDescriptionText", refs.ActionDescriptionText);
             SetRef(so, "boardPanel", refs.BoardPanel);
             SetRef(so, "actionPanel", refs.ActionPanel);
             SetRef(so, "enemyTurnPanel", refs.EnemyTurnPanel);
             SetRef(so, "hpBarFill", refs.HpBarFill);
             SetRef(so, "hpText", refs.HpText);
+            SetRef(so, "playerBoardStatusEffectsRoot", refs.PlayerBoardStatusEffectsRoot);
             SetRef(so, "turnLimitText", refs.TurnLimitText);
             SetListRef(so, "boardCells", refs.Cells);
             SetRef(so, "boardSwipeHandler", refs.SwipeHandler);
@@ -773,6 +824,62 @@ namespace Project2048.PrototypeEditor
             EditorUtility.SetDirty(sample);
         }
 
+        private static RectTransform EnsureBlockIconAuthoring(RectTransform hpRoot, TMP_FontAsset font)
+        {
+            if (hpRoot == null)
+            {
+                return null;
+            }
+
+            var icon = hpRoot.Find("BlockIcon") as RectTransform;
+            if (icon == null)
+            {
+                var iconObject = new GameObject("BlockIcon", typeof(RectTransform), typeof(Image));
+                iconObject.transform.SetParent(hpRoot, false);
+                icon = iconObject.GetComponent<RectTransform>();
+                icon.anchorMin = new Vector2(1f, 0.5f);
+                icon.anchorMax = new Vector2(1f, 0.5f);
+                icon.pivot = new Vector2(0f, 0.5f);
+                icon.anchoredPosition = new Vector2(8f, 0f);
+                icon.sizeDelta = new Vector2(34f, 24f);
+            }
+
+            var image = icon.GetComponent<Image>() ?? icon.gameObject.AddComponent<Image>();
+            image.color = new Color(0.42f, 0.46f, 0.5f, 0.95f);
+            image.raycastTarget = false;
+
+            var text = icon.Find("Text") as RectTransform;
+            if (text == null)
+            {
+                var textObject = new GameObject("Text", typeof(RectTransform), typeof(TextMeshProUGUI));
+                textObject.transform.SetParent(icon, false);
+                text = textObject.GetComponent<RectTransform>();
+            }
+
+            text.anchorMin = Vector2.zero;
+            text.anchorMax = Vector2.one;
+            text.offsetMin = Vector2.zero;
+            text.offsetMax = Vector2.zero;
+
+            var label = text.GetComponent<TextMeshProUGUI>() ?? text.gameObject.AddComponent<TextMeshProUGUI>();
+            label.alignment = TextAlignmentOptions.Center;
+            label.fontSize = 16f;
+            label.fontStyle = FontStyles.Bold;
+            label.color = Color.white;
+            label.text = "0";
+            label.textWrappingMode = TextWrappingModes.NoWrap;
+            label.raycastTarget = false;
+            if (font != null)
+            {
+                label.font = font;
+            }
+
+            icon.gameObject.SetActive(true);
+            EditorUtility.SetDirty(icon);
+            EditorUtility.SetDirty(text);
+            return icon;
+        }
+
         private sealed class ViewRefs
         {
             public readonly List<BoardCellView> Cells = new();
@@ -785,7 +892,7 @@ namespace Project2048.PrototypeEditor
             public TMP_Text TurnCounterText, IntentHeaderText, EnemyNameText, IntentBubbleText;
             public TMP_Text HpText, TurnLimitText, PlayerBattleHpText, EnemyHpText, ActionDescriptionText;
             public Image PlayerPortrait, EnemyPortrait, IntentBubble, HpBarFill, PlayerBattleHpFill, EnemyHpFill;
-            public RectTransform BoardAnimationOverlay, PlayerBattleStatusEffectsRoot;
+            public RectTransform BoardAnimationOverlay, PlayerBattleStatusEffectsRoot, PlayerBoardStatusEffectsRoot, EnemyStatusEffectsRoot;
         }
     }
 }

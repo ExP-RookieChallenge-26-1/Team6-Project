@@ -525,7 +525,7 @@ namespace Project2048.Tests
         }
 
         [Test]
-        public void BattleScene_CombatUiView_HasSceneAuthoredPlayerBattleStatusEffectsRoot()
+        public void BattleScene_CombatUiView_HasSceneAuthoredStatusAndBlockObjectsOnBottomHpBars()
         {
             EditorSceneManager.OpenScene("Assets/Scenes/BattleScene.unity");
             var view = Object.FindAnyObjectByType<CombatUiView>(FindObjectsInactive.Include);
@@ -539,12 +539,53 @@ namespace Project2048.Tests
             Assert.That(root.parent != null ? root.parent.name : null, Is.EqualTo("PlayerBattleHp"));
             Assert.That(root.Find("StatusEffectIconSample"), Is.Not.Null);
 
+            var blockIcon = root.parent.Find("BlockIcon") as RectTransform;
+            Assert.That(blockIcon, Is.Not.Null);
+            Assert.That(blockIcon.gameObject.activeSelf, Is.True);
+            Assert.That(blockIcon.Find("Text"), Is.Not.Null);
+
+            var boardRoot = serializedView.FindProperty("playerBoardStatusEffectsRoot").objectReferenceValue as RectTransform;
+            Assert.That(boardRoot, Is.Not.Null);
+            Assert.That(boardRoot.name, Is.EqualTo("PlayerBoardStatusEffects"));
+            Assert.That(boardRoot.parent != null ? boardRoot.parent.name : null, Is.EqualTo("HpBarBg"));
+            Assert.That(boardRoot.Find("StatusEffectIconSample"), Is.Not.Null);
+
+            var boardBlockIcon = boardRoot.parent.Find("BlockIcon") as RectTransform;
+            Assert.That(boardBlockIcon, Is.Not.Null);
+            Assert.That(boardBlockIcon.gameObject.activeSelf, Is.True);
+            Assert.That(boardBlockIcon.Find("Text"), Is.Not.Null);
+
+            var enemyStatusRoot = serializedView.FindProperty("enemyStatusEffectsRoot").objectReferenceValue as RectTransform;
+            Assert.That(enemyStatusRoot, Is.Not.Null);
+            Assert.That(enemyStatusRoot.name, Is.EqualTo("EnemyStatusEffects"));
+            Assert.That(enemyStatusRoot.parent != null ? enemyStatusRoot.parent.name : null, Is.EqualTo("EnemyHp"));
+            Assert.That(enemyStatusRoot.Find("StatusEffectIconSample"), Is.Not.Null);
+
+            var enemyBlockIcon = enemyStatusRoot.parent.Find("BlockIcon") as RectTransform;
+            Assert.That(enemyBlockIcon, Is.Not.Null);
+            Assert.That(enemyBlockIcon.gameObject.activeSelf, Is.True);
+            Assert.That(enemyBlockIcon.Find("Text"), Is.Not.Null);
+
             var layout = root.GetComponent<HorizontalLayoutGroup>();
             Assert.That(layout, Is.Not.Null);
             Assert.That(layout.spacing, Is.EqualTo(4f).Within(0.001f));
             Assert.That(layout.childAlignment, Is.EqualTo(TextAnchor.MiddleLeft));
             Assert.That(layout.childForceExpandWidth, Is.False);
             Assert.That(layout.childForceExpandHeight, Is.False);
+
+            var boardLayout = boardRoot.GetComponent<HorizontalLayoutGroup>();
+            Assert.That(boardLayout, Is.Not.Null);
+            Assert.That(boardLayout.spacing, Is.EqualTo(4f).Within(0.001f));
+            Assert.That(boardLayout.childAlignment, Is.EqualTo(TextAnchor.MiddleLeft));
+            Assert.That(boardLayout.childForceExpandWidth, Is.False);
+            Assert.That(boardLayout.childForceExpandHeight, Is.False);
+
+            var enemyLayout = enemyStatusRoot.GetComponent<HorizontalLayoutGroup>();
+            Assert.That(enemyLayout, Is.Not.Null);
+            Assert.That(enemyLayout.spacing, Is.EqualTo(4f).Within(0.001f));
+            Assert.That(enemyLayout.childAlignment, Is.EqualTo(TextAnchor.MiddleLeft));
+            Assert.That(enemyLayout.childForceExpandWidth, Is.False);
+            Assert.That(enemyLayout.childForceExpandHeight, Is.False);
         }
 
         private GameObject CreateOwnedGameObject(string name)

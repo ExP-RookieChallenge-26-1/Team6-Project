@@ -814,6 +814,13 @@
   {
     "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
     "from_class": "CombatUiBuilder",
+    "to_type": "HorizontalLayoutGroup",
+    "relation_type": "component-access",
+    "strength": 3
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
+    "from_class": "CombatUiBuilder",
     "to_type": "Image",
     "relation_type": "component-access",
     "strength": 3
@@ -822,6 +829,13 @@
     "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
     "from_class": "CombatUiBuilder",
     "to_type": "InputSystemUIInputModule",
+    "relation_type": "component-access",
+    "strength": 3
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
+    "from_class": "CombatUiBuilder",
+    "to_type": "LayoutElement",
     "relation_type": "component-access",
     "strength": 3
   },
@@ -1017,28 +1031,14 @@
   {
     "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
     "from_class": "CombatUiBuilder",
+    "to_type": "BattleScenePath",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
+    "from_class": "CombatUiBuilder",
     "to_type": "BindViewReferences",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
-    "from_class": "CombatUiBuilder",
-    "to_type": "BoardAnimationOverlay",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
-    "from_class": "CombatUiBuilder",
-    "to_type": "BoardCellView",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
-    "from_class": "CombatUiBuilder",
-    "to_type": "BoardGrid",
     "relation_type": "uses",
     "strength": 1
   },
@@ -1052,21 +1052,7 @@
   {
     "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
     "from_class": "CombatUiBuilder",
-    "to_type": "BoardPhaseTitle",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
-    "from_class": "CombatUiBuilder",
     "to_type": "BoardSwipeHandler",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
-    "from_class": "CombatUiBuilder",
-    "to_type": "Bold",
     "relation_type": "uses",
     "strength": 1
   },
@@ -1150,13 +1136,6 @@
   {
     "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
     "from_class": "CombatUiBuilder",
-    "to_type": "Cell_",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
-    "from_class": "CombatUiBuilder",
     "to_type": "Center",
     "relation_type": "uses",
     "strength": 1
@@ -1207,13 +1186,6 @@
     "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
     "from_class": "CombatUiBuilder",
     "to_type": "ConfigureSkill",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
-    "from_class": "CombatUiBuilder",
-    "to_type": "Constraint",
     "relation_type": "uses",
     "strength": 1
   },
@@ -1346,7 +1318,14 @@
   {
     "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
     "from_class": "CombatUiBuilder",
-    "to_type": "Empty",
+    "to_type": "Effect",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
+    "from_class": "CombatUiBuilder",
+    "to_type": "Enemies",
     "relation_type": "uses",
     "strength": 1
   },
@@ -1382,6 +1361,13 @@
     "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
     "from_class": "CombatUiBuilder",
     "to_type": "EnemyDebuffPattern",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
+    "from_class": "CombatUiBuilder",
+    "to_type": "EnemyFolder",
     "relation_type": "uses",
     "strength": 1
   },
@@ -1444,7 +1430,42 @@
   {
     "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
     "from_class": "CombatUiBuilder",
+    "to_type": "EnemyStatusEffects",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
+    "from_class": "CombatUiBuilder",
+    "to_type": "EnemyStatusEffectsRoot",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
+    "from_class": "CombatUiBuilder",
+    "to_type": "Ensure",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
+    "from_class": "CombatUiBuilder",
+    "to_type": "EnsureBlockIconAuthoring",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
+    "from_class": "CombatUiBuilder",
     "to_type": "EnsureCanvas",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
+    "from_class": "CombatUiBuilder",
+    "to_type": "EnsureCombatStatusEffectRoots",
     "relation_type": "uses",
     "strength": 1
   },
@@ -1479,6 +1500,13 @@
   {
     "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
     "from_class": "CombatUiBuilder",
+    "to_type": "EnsureStatusEffectAuthoringRoot",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
+    "from_class": "CombatUiBuilder",
     "to_type": "EventSystem",
     "relation_type": "uses",
     "strength": 1
@@ -1494,13 +1522,6 @@
     "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
     "from_class": "CombatUiBuilder",
     "to_type": "FearThenDarkness",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
-    "from_class": "CombatUiBuilder",
-    "to_type": "FillBoardGrid",
     "relation_type": "uses",
     "strength": 1
   },
@@ -1549,21 +1570,7 @@
   {
     "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
     "from_class": "CombatUiBuilder",
-    "to_type": "FixedColumnCount",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
-    "from_class": "CombatUiBuilder",
     "to_type": "Fonts",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
-    "from_class": "CombatUiBuilder",
-    "to_type": "FontStyles",
     "relation_type": "uses",
     "strength": 1
   },
@@ -1620,13 +1627,6 @@
     "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
     "from_class": "CombatUiBuilder",
     "to_type": "GraphicRaycaster",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
-    "from_class": "CombatUiBuilder",
-    "to_type": "GridLayoutGroup",
     "relation_type": "uses",
     "strength": 1
   },
@@ -1759,6 +1759,13 @@
   {
     "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
     "from_class": "CombatUiBuilder",
+    "to_type": "LogWarning",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
+    "from_class": "CombatUiBuilder",
     "to_type": "MarkSceneDirty",
     "relation_type": "uses",
     "strength": 1
@@ -1787,13 +1794,6 @@
   {
     "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
     "from_class": "CombatUiBuilder",
-    "to_type": "MiddleCenter",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
-    "from_class": "CombatUiBuilder",
     "to_type": "Mode",
     "relation_type": "uses",
     "strength": 1
@@ -1816,6 +1816,13 @@
     "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
     "from_class": "CombatUiBuilder",
     "to_type": "One",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
+    "from_class": "CombatUiBuilder",
+    "to_type": "OpenScene",
     "relation_type": "uses",
     "strength": 1
   },
@@ -1858,6 +1865,34 @@
     "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
     "from_class": "CombatUiBuilder",
     "to_type": "PlayerBattleHpText",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
+    "from_class": "CombatUiBuilder",
+    "to_type": "PlayerBattleStatusEffects",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
+    "from_class": "CombatUiBuilder",
+    "to_type": "PlayerBattleStatusEffectsRoot",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
+    "from_class": "CombatUiBuilder",
+    "to_type": "PlayerBoardStatusEffects",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
+    "from_class": "CombatUiBuilder",
+    "to_type": "PlayerBoardStatusEffectsRoot",
     "relation_type": "uses",
     "strength": 1
   },
@@ -1914,13 +1949,6 @@
     "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
     "from_class": "CombatUiBuilder",
     "to_type": "PrototypeEditor",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
-    "from_class": "CombatUiBuilder",
-    "to_type": "PrototypeEnemy",
     "relation_type": "uses",
     "strength": 1
   },
@@ -1990,7 +2018,7 @@
   {
     "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
     "from_class": "CombatUiBuilder",
-    "to_type": "Right",
+    "to_type": "Roots",
     "relation_type": "uses",
     "strength": 1
   },
@@ -2039,6 +2067,13 @@
   {
     "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
     "from_class": "CombatUiBuilder",
+    "to_type": "Scenes",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
+    "from_class": "CombatUiBuilder",
     "to_type": "ScreenMatchMode",
     "relation_type": "uses",
     "strength": 1
@@ -2074,14 +2109,14 @@
   {
     "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
     "from_class": "CombatUiBuilder",
-    "to_type": "SetAsLastSibling",
+    "to_type": "SetDirty",
     "relation_type": "uses",
     "strength": 1
   },
   {
     "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
     "from_class": "CombatUiBuilder",
-    "to_type": "SetDirty",
+    "to_type": "SetRef",
     "relation_type": "uses",
     "strength": 1
   },
@@ -2144,21 +2179,14 @@
   {
     "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
     "from_class": "CombatUiBuilder",
+    "to_type": "Status",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
+    "from_class": "CombatUiBuilder",
     "to_type": "string",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
-    "from_class": "CombatUiBuilder",
-    "to_type": "SwipeArea",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
-    "from_class": "CombatUiBuilder",
-    "to_type": "SwipeHandler",
     "relation_type": "uses",
     "strength": 1
   },
@@ -2173,13 +2201,6 @@
     "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
     "from_class": "CombatUiBuilder",
     "to_type": "TextAlignmentOptions",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
-    "from_class": "CombatUiBuilder",
-    "to_type": "TextAnchor",
     "relation_type": "uses",
     "strength": 1
   },
@@ -2298,14 +2319,693 @@
   {
     "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
     "from_class": "CombatUiBuilder",
-    "to_type": "Value",
+    "to_type": "Vector2",
     "relation_type": "uses",
     "strength": 1
   },
   {
-    "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
-    "from_class": "CombatUiBuilder",
-    "to_type": "Vector2",
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "EnemySeed",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "List",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "SerializedObject",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "ActionBias",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "Add",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "ApplyModifiedProperties",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "Art",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "AssetDatabase",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "AssetImporter",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "AssetNumber",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "Assets",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "AttackHeavy",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "AttackPower",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "Balanced",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "BindSceneEnemyPool",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "Build",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "BuildSelectedMonsterEnemyAssets",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "Built",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "ClearArray",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "Collections",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "ConfigureEnemy",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "ConfigureSpriteImporter",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "Count",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "CreateAsset",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "CreateFolder",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "CreateInstance",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "CreateOrUpdateEnemy",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "Cutouts",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "DarknessThenFear",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "Data",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "DebuffInterval",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "DebuffPattern",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "DebuffPower",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "DefenseHeavy",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "DefensePower",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "DifficultyScore",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "DisplayName",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "EditorSceneManager",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "EditorUtility",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "Enemies",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "Enemy",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "EnemyAiActionBias",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "EnemyAiStrength",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "EnemyDebuffPattern",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "EnemyFolder",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "EnemyIntent",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "EnemySO",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "Enhanced",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "EnsureFolder",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "ExistingWolfPath",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "FearThenDarkness",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "FindAnyObjectByType",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "FindObjectsInactive",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "FindProperty",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "Generic",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "GetActiveScene",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "GetArrayElementAtIndex",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "GetAtPath",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "GetSelectedSeeds",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "Id",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "Include",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "InsertArrayElementAtIndex",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "int",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "IReadOnlyList",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "IsValidFolder",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "LoadAssetAtPath",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "Log",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "MarkSceneDirty",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "MaxHp",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "MenuItem",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "Monster",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "Monsters",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "Normal",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "Object",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "PortraitPath",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "Project2048",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "Prototype",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "PrototypeCombatBootstrap",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "PrototypeEditor",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "SaveAndReimport",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "SaveAssets",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "SaveScene",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "SceneManagement",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "Selected",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "SerializedObject",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "SetDirty",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "Sprite",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "SpriteImportMode",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "Strength",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "string",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "System",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "TextureImporter",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "TextureImporterCompression",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "TextureImporterType",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "Uncompressed",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "UNITY_EDITOR",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "UnityEditor",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
+    "from_class": "SelectedMonsterRosterBuilder",
+    "to_type": "UnityEngine",
     "relation_type": "uses",
     "strength": 1
   },
@@ -3264,6 +3964,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "from_class": "CombatManager",
+    "to_type": "ApplyRunProgressToPlayer",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
+    "from_class": "CombatManager",
     "to_type": "ArgumentNullException",
     "relation_type": "uses",
     "strength": 1
@@ -3425,6 +4132,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "from_class": "CombatManager",
+    "to_type": "CapturePlayer",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
+    "from_class": "CombatManager",
     "to_type": "ChangePhase",
     "relation_type": "uses",
     "strength": 1
@@ -3460,6 +4174,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "from_class": "CombatManager",
+    "to_type": "ClearFear",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
+    "from_class": "CombatManager",
     "to_type": "Clone",
     "relation_type": "uses",
     "strength": 1
@@ -3475,6 +4196,13 @@
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "from_class": "CombatManager",
     "to_type": "Combat",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
+    "from_class": "CombatManager",
+    "to_type": "Combatant",
     "relation_type": "uses",
     "strength": 1
   },
@@ -3524,6 +4252,13 @@
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "from_class": "CombatManager",
     "to_type": "CombatVfxCue",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
+    "from_class": "CombatManager",
+    "to_type": "ContextMenu",
     "relation_type": "uses",
     "strength": 1
   },
@@ -3607,13 +4342,6 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "from_class": "CombatManager",
-    "to_type": "Darkness",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
-    "from_class": "CombatManager",
     "to_type": "Data",
     "relation_type": "uses",
     "strength": 1
@@ -3636,13 +4364,6 @@
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "from_class": "CombatManager",
     "to_type": "Defeat",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
-    "from_class": "CombatManager",
-    "to_type": "Defense",
     "relation_type": "uses",
     "strength": 1
   },
@@ -3796,7 +4517,21 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "from_class": "CombatManager",
+    "to_type": "ExtraBoardMoveCount",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
+    "from_class": "CombatManager",
     "to_type": "Fear",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
+    "from_class": "CombatManager",
+    "to_type": "FearDefenseGainPenalty",
     "relation_type": "uses",
     "strength": 1
   },
@@ -3818,6 +4553,13 @@
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "from_class": "CombatManager",
     "to_type": "FormatEnemyIntent",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
+    "from_class": "CombatManager",
+    "to_type": "From",
     "relation_type": "uses",
     "strength": 1
   },
@@ -3950,6 +4692,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "from_class": "CombatManager",
+    "to_type": "HasCurrentHp",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
+    "from_class": "CombatManager",
     "to_type": "HP",
     "relation_type": "uses",
     "strength": 1
@@ -4035,13 +4784,6 @@
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "from_class": "CombatManager",
     "to_type": "IsNullOrWhiteSpace",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
-    "from_class": "CombatManager",
-    "to_type": "IsObstacle",
     "relation_type": "uses",
     "strength": 1
   },
@@ -4251,13 +4993,6 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "from_class": "CombatManager",
-    "to_type": "Power",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
-    "from_class": "CombatManager",
     "to_type": "PrepareEnemyIntents",
     "relation_type": "uses",
     "strength": 1
@@ -4266,6 +5001,27 @@
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "from_class": "CombatManager",
     "to_type": "Project2048",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
+    "from_class": "CombatManager",
+    "to_type": "Refresh",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
+    "from_class": "CombatManager",
+    "to_type": "RefreshCombatantDataFromScriptableObjects",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
+    "from_class": "CombatManager",
+    "to_type": "RefreshFromData",
     "relation_type": "uses",
     "strength": 1
   },
@@ -4335,6 +5091,27 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "from_class": "CombatManager",
+    "to_type": "ResolveStartingHp",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
+    "from_class": "CombatManager",
+    "to_type": "Rewards",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
+    "from_class": "CombatManager",
+    "to_type": "ScriptableObjects",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
+    "from_class": "CombatManager",
     "to_type": "Sequence",
     "relation_type": "uses",
     "strength": 1
@@ -4356,6 +5133,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "from_class": "CombatManager",
+    "to_type": "SetCurrentHpForRun",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
+    "from_class": "CombatManager",
     "to_type": "SetNextIntent",
     "relation_type": "uses",
     "strength": 1
@@ -4370,21 +5154,7 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "from_class": "CombatManager",
-    "to_type": "SkillId",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
-    "from_class": "CombatManager",
     "to_type": "Skills",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
-    "from_class": "CombatManager",
-    "to_type": "SkillSnapshot",
     "relation_type": "uses",
     "strength": 1
   },
@@ -4483,13 +5253,6 @@
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "from_class": "CombatManager",
     "to_type": "ToList",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
-    "from_class": "CombatManager",
-    "to_type": "ToString",
     "relation_type": "uses",
     "strength": 1
   },
@@ -4721,6 +5484,20 @@
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatSetup.cs",
     "from_class": "CombatSetup",
     "to_type": "Project2048",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/CombatSetup.cs",
+    "from_class": "CombatSetup",
+    "to_type": "Rewards",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/CombatSetup.cs",
+    "from_class": "CombatSetup",
+    "to_type": "RunProgress",
     "relation_type": "uses",
     "strength": 1
   },
@@ -5231,6 +6008,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Combat/PlayerCombatController.cs",
     "from_class": "PlayerCombatController",
+    "to_type": "BindDataValidation",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/PlayerCombatController.cs",
+    "from_class": "PlayerCombatController",
     "to_type": "Block",
     "relation_type": "uses",
     "strength": 1
@@ -5252,6 +6036,20 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Combat/PlayerCombatController.cs",
     "from_class": "PlayerCombatController",
+    "to_type": "Clamp",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/PlayerCombatController.cs",
+    "from_class": "PlayerCombatController",
+    "to_type": "Clamp01",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/PlayerCombatController.cs",
+    "from_class": "PlayerCombatController",
     "to_type": "Clear",
     "relation_type": "uses",
     "strength": 1
@@ -5260,6 +6058,13 @@
     "from_file": "Project 2048/Assets/Scripts/Combat/PlayerCombatController.cs",
     "from_class": "PlayerCombatController",
     "to_type": "ClearBlock",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/PlayerCombatController.cs",
+    "from_class": "PlayerCombatController",
+    "to_type": "ClearFear",
     "relation_type": "uses",
     "strength": 1
   },
@@ -5301,6 +6106,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Combat/PlayerCombatController.cs",
     "from_class": "PlayerCombatController",
+    "to_type": "FearDefenseGainPenalty",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/PlayerCombatController.cs",
+    "from_class": "PlayerCombatController",
     "to_type": "FearStacks",
     "relation_type": "uses",
     "strength": 1
@@ -5316,6 +6128,13 @@
     "from_file": "Project 2048/Assets/Scripts/Combat/PlayerCombatController.cs",
     "from_class": "PlayerCombatController",
     "to_type": "Generic",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/PlayerCombatController.cs",
+    "from_class": "PlayerCombatController",
+    "to_type": "HandleDataValidated",
     "relation_type": "uses",
     "strength": 1
   },
@@ -5385,7 +6204,21 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Combat/PlayerCombatController.cs",
     "from_class": "PlayerCombatController",
+    "to_type": "OnDestroy",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/PlayerCombatController.cs",
+    "from_class": "PlayerCombatController",
     "to_type": "OnHpChanged",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/PlayerCombatController.cs",
+    "from_class": "PlayerCombatController",
+    "to_type": "OnRuntimeValidated",
     "relation_type": "uses",
     "strength": 1
   },
@@ -5407,6 +6240,34 @@
     "from_file": "Project 2048/Assets/Scripts/Combat/PlayerCombatController.cs",
     "from_class": "PlayerCombatController",
     "to_type": "Project2048",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/PlayerCombatController.cs",
+    "from_class": "PlayerCombatController",
+    "to_type": "RefreshFromData",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/PlayerCombatController.cs",
+    "from_class": "PlayerCombatController",
+    "to_type": "RestoreHp",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/PlayerCombatController.cs",
+    "from_class": "PlayerCombatController",
+    "to_type": "RestoreHpByMaxHpPercent",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/PlayerCombatController.cs",
+    "from_class": "PlayerCombatController",
+    "to_type": "SetCurrentHpForRun",
     "relation_type": "uses",
     "strength": 1
   },
@@ -5448,6 +6309,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Combat/PlayerCombatController.cs",
     "from_class": "PlayerCombatController",
+    "to_type": "UnbindDataValidation",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/PlayerCombatController.cs",
+    "from_class": "PlayerCombatController",
     "to_type": "UnityEngine",
     "relation_type": "uses",
     "strength": 1
@@ -5458,6 +6326,13 @@
     "to_type": "ScriptableObject",
     "relation_type": "inherits",
     "strength": 4
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/PlayerSO.cs",
+    "from_class": "PlayerSO",
+    "to_type": "Application",
+    "relation_type": "uses",
+    "strength": 1
   },
   {
     "from_file": "Project 2048/Assets/Scripts/Combat/PlayerSO.cs",
@@ -5504,7 +6379,21 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Combat/PlayerSO.cs",
     "from_class": "PlayerSO",
+    "to_type": "Invoke",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/PlayerSO.cs",
+    "from_class": "PlayerSO",
     "to_type": "Max",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/PlayerSO.cs",
+    "from_class": "PlayerSO",
+    "to_type": "OnRuntimeValidated",
     "relation_type": "uses",
     "strength": 1
   },
@@ -6799,6 +7688,27 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Core/ScoreManager.cs",
     "from_class": "ScoreManager",
+    "to_type": "AddStageScore",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/ScoreManager.cs",
+    "from_class": "ScoreManager",
+    "to_type": "BestScore",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/ScoreManager.cs",
+    "from_class": "ScoreManager",
+    "to_type": "BindCombat",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/ScoreManager.cs",
+    "from_class": "ScoreManager",
     "to_type": "CalculateStageScore",
     "relation_type": "uses",
     "strength": 1
@@ -6813,7 +7723,98 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Core/ScoreManager.cs",
     "from_class": "ScoreManager",
+    "to_type": "CombatManager",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/ScoreManager.cs",
+    "from_class": "ScoreManager",
     "to_type": "CombatResult",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/ScoreManager.cs",
+    "from_class": "ScoreManager",
+    "to_type": "DefaultLeaderboardKey",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/ScoreManager.cs",
+    "from_class": "ScoreManager",
+    "to_type": "GetInt",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/ScoreManager.cs",
+    "from_class": "ScoreManager",
+    "to_type": "HandleCombatDefeat",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/ScoreManager.cs",
+    "from_class": "ScoreManager",
+    "to_type": "HandleCombatVictory",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/ScoreManager.cs",
+    "from_class": "ScoreManager",
+    "to_type": "IsNullOrWhiteSpace",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/ScoreManager.cs",
+    "from_class": "ScoreManager",
+    "to_type": "LocalLeaderboard",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/ScoreManager.cs",
+    "from_class": "ScoreManager",
+    "to_type": "LocalLeaderboardKey",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/ScoreManager.cs",
+    "from_class": "ScoreManager",
+    "to_type": "Max",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/ScoreManager.cs",
+    "from_class": "ScoreManager",
+    "to_type": "OnCombatDefeat",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/ScoreManager.cs",
+    "from_class": "ScoreManager",
+    "to_type": "OnCombatVictory",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/ScoreManager.cs",
+    "from_class": "ScoreManager",
+    "to_type": "OnDestroy",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/ScoreManager.cs",
+    "from_class": "ScoreManager",
+    "to_type": "PlayerPrefs",
     "relation_type": "uses",
     "strength": 1
   },
@@ -6827,6 +7828,27 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Core/ScoreManager.cs",
     "from_class": "ScoreManager",
+    "to_type": "RecordGameOverScore",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/ScoreManager.cs",
+    "from_class": "ScoreManager",
+    "to_type": "ResetScore",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/ScoreManager.cs",
+    "from_class": "ScoreManager",
+    "to_type": "Save",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/ScoreManager.cs",
+    "from_class": "ScoreManager",
     "to_type": "Score",
     "relation_type": "uses",
     "strength": 1
@@ -6834,7 +7856,35 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Core/ScoreManager.cs",
     "from_class": "ScoreManager",
-    "to_type": "Start",
+    "to_type": "ScoreRuleSO",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/ScoreManager.cs",
+    "from_class": "ScoreManager",
+    "to_type": "SetInt",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/ScoreManager.cs",
+    "from_class": "ScoreManager",
+    "to_type": "string",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/ScoreManager.cs",
+    "from_class": "ScoreManager",
+    "to_type": "TotalScore",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/ScoreManager.cs",
+    "from_class": "ScoreManager",
+    "to_type": "UnbindCombat",
     "relation_type": "uses",
     "strength": 1
   },
@@ -6846,9 +7896,93 @@
     "strength": 1
   },
   {
-    "from_file": "Project 2048/Assets/Scripts/Core/ScoreManager.cs",
-    "from_class": "ScoreManager",
-    "to_type": "Update",
+    "from_file": "Project 2048/Assets/Scripts/Core/ScoreRuleSO.cs",
+    "from_class": "ScoreRuleSO",
+    "to_type": "ScriptableObject",
+    "relation_type": "inherits",
+    "strength": 4
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/ScoreRuleSO.cs",
+    "from_class": "ScoreRuleSO",
+    "to_type": "CalculateStageScore",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/ScoreRuleSO.cs",
+    "from_class": "ScoreRuleSO",
+    "to_type": "Combat",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/ScoreRuleSO.cs",
+    "from_class": "ScoreRuleSO",
+    "to_type": "CombatResult",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/ScoreRuleSO.cs",
+    "from_class": "ScoreRuleSO",
+    "to_type": "CreateAssetMenu",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/ScoreRuleSO.cs",
+    "from_class": "ScoreRuleSO",
+    "to_type": "Game",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/ScoreRuleSO.cs",
+    "from_class": "ScoreRuleSO",
+    "to_type": "int",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/ScoreRuleSO.cs",
+    "from_class": "ScoreRuleSO",
+    "to_type": "Max",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/ScoreRuleSO.cs",
+    "from_class": "ScoreRuleSO",
+    "to_type": "OnValidate",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/ScoreRuleSO.cs",
+    "from_class": "ScoreRuleSO",
+    "to_type": "Project2048",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/ScoreRuleSO.cs",
+    "from_class": "ScoreRuleSO",
+    "to_type": "Rule",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/ScoreRuleSO.cs",
+    "from_class": "ScoreRuleSO",
+    "to_type": "Score",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/ScoreRuleSO.cs",
+    "from_class": "ScoreRuleSO",
+    "to_type": "UnityEngine",
     "relation_type": "uses",
     "strength": 1
   },
@@ -7968,7 +9102,21 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyController.cs",
     "from_class": "EnemyController",
+    "to_type": "BindDataValidation",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyController.cs",
+    "from_class": "EnemyController",
     "to_type": "Block",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyController.cs",
+    "from_class": "EnemyController",
+    "to_type": "Clamp",
     "relation_type": "uses",
     "strength": 1
   },
@@ -8038,6 +9186,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyController.cs",
     "from_class": "EnemyController",
+    "to_type": "HandleDataValidated",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyController.cs",
+    "from_class": "EnemyController",
     "to_type": "Init",
     "relation_type": "uses",
     "strength": 1
@@ -8094,6 +9249,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyController.cs",
     "from_class": "EnemyController",
+    "to_type": "OnDestroy",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyController.cs",
+    "from_class": "EnemyController",
     "to_type": "OnHpChanged",
     "relation_type": "uses",
     "strength": 1
@@ -8108,7 +9270,21 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyController.cs",
     "from_class": "EnemyController",
+    "to_type": "OnRuntimeValidated",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyController.cs",
+    "from_class": "EnemyController",
     "to_type": "Project2048",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyController.cs",
+    "from_class": "EnemyController",
+    "to_type": "RefreshFromData",
     "relation_type": "uses",
     "strength": 1
   },
@@ -8137,6 +9313,13 @@
     "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyController.cs",
     "from_class": "EnemyController",
     "to_type": "TakeDamage",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyController.cs",
+    "from_class": "EnemyController",
+    "to_type": "UnbindDataValidation",
     "relation_type": "uses",
     "strength": 1
   },
@@ -8577,6 +9760,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Enemy/EnemySO.cs",
     "from_class": "EnemySO",
+    "to_type": "Application",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Enemy/EnemySO.cs",
+    "from_class": "EnemySO",
     "to_type": "Balanced",
     "relation_type": "uses",
     "strength": 1
@@ -8682,6 +9872,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Enemy/EnemySO.cs",
     "from_class": "EnemySO",
+    "to_type": "Invoke",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Enemy/EnemySO.cs",
+    "from_class": "EnemySO",
     "to_type": "Max",
     "relation_type": "uses",
     "strength": 1
@@ -8690,6 +9887,13 @@
     "from_file": "Project 2048/Assets/Scripts/Enemy/EnemySO.cs",
     "from_class": "EnemySO",
     "to_type": "Normal",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Enemy/EnemySO.cs",
+    "from_class": "EnemySO",
+    "to_type": "OnRuntimeValidated",
     "relation_type": "uses",
     "strength": 1
   },
@@ -9389,13 +10593,6 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
-    "to_type": "After",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
-    "from_class": "CombatUiView",
     "to_type": "AiProfileLabel",
     "relation_type": "uses",
     "strength": 1
@@ -9403,7 +10600,7 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
-    "to_type": "AnimatedTile",
+    "to_type": "Application",
     "relation_type": "uses",
     "strength": 1
   },
@@ -9438,6 +10635,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
+    "to_type": "Awake",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
+    "from_class": "CombatUiView",
     "to_type": "Battle",
     "relation_type": "uses",
     "strength": 1
@@ -9445,7 +10649,21 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
+    "to_type": "BattleRewardSO",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
+    "from_class": "CombatUiView",
     "to_type": "BindButton",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
+    "from_class": "CombatUiView",
+    "to_type": "BindRewardEvents",
     "relation_type": "uses",
     "strength": 1
   },
@@ -9515,13 +10733,6 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
-    "to_type": "Bold",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
-    "from_class": "CombatUiView",
     "to_type": "bool",
     "relation_type": "uses",
     "strength": 1
@@ -9557,14 +10768,14 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
-    "to_type": "Cells",
+    "to_type": "ChooseEnhance",
     "relation_type": "uses",
     "strength": 1
   },
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
-    "to_type": "Center",
+    "to_type": "ChooseRest",
     "relation_type": "uses",
     "strength": 1
   },
@@ -9593,6 +10804,13 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
     "to_type": "ClearCombatVfx",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
+    "from_class": "CombatUiView",
+    "to_type": "ClearEnemyDeathFade",
     "relation_type": "uses",
     "strength": 1
   },
@@ -9690,13 +10908,6 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
-    "to_type": "DestroyAnimationObject",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
-    "from_class": "CombatUiView",
     "to_type": "Direction",
     "relation_type": "uses",
     "strength": 1
@@ -9726,6 +10937,13 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
     "to_type": "Enemy",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
+    "from_class": "CombatUiView",
+    "to_type": "EnemyDeathFadeDurationSeconds",
     "relation_type": "uses",
     "strength": 1
   },
@@ -9789,13 +11007,6 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
     "to_type": "float",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
-    "from_class": "CombatUiView",
-    "to_type": "FontStyles",
     "relation_type": "uses",
     "strength": 1
   },
@@ -9879,27 +11090,6 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
-    "to_type": "GetCellColor",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
-    "from_class": "CombatUiView",
-    "to_type": "GetCellTextColor",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
-    "from_class": "CombatUiView",
-    "to_type": "GetComponent",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
-    "from_class": "CombatUiView",
     "to_type": "GetIntentBubbleColor",
     "relation_type": "uses",
     "strength": 1
@@ -9942,6 +11132,20 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
+    "to_type": "HandleRewardClaimed",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
+    "from_class": "CombatUiView",
+    "to_type": "HandleRewardOffered",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
+    "from_class": "CombatUiView",
     "to_type": "HandleSwipe",
     "relation_type": "uses",
     "strength": 1
@@ -9949,7 +11153,7 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
-    "to_type": "HP",
+    "to_type": "HideRuntimeOverlays",
     "relation_type": "uses",
     "strength": 1
   },
@@ -9999,6 +11203,13 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
     "to_type": "IsDead",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
+    "from_class": "CombatUiView",
+    "to_type": "IsRewardReplacementVisible",
     "relation_type": "uses",
     "strength": 1
   },
@@ -10082,13 +11293,6 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
-    "to_type": "NoWrap",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
-    "from_class": "CombatUiView",
     "to_type": "OnBoardTransitioned",
     "relation_type": "uses",
     "strength": 1
@@ -10104,6 +11308,20 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
     "to_type": "OnDestroy",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
+    "from_class": "CombatUiView",
+    "to_type": "OnRewardClaimed",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
+    "from_class": "CombatUiView",
+    "to_type": "OnRewardOffered",
     "relation_type": "uses",
     "strength": 1
   },
@@ -10139,6 +11357,13 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
     "to_type": "PlayCombatVfxIfNeeded",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
+    "from_class": "CombatUiView",
+    "to_type": "PlayEnemyDeathFadeIfNeeded",
     "relation_type": "uses",
     "strength": 1
   },
@@ -10209,13 +11434,6 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
     "to_type": "PulseTransitionTargets",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
-    "from_class": "CombatUiView",
-    "to_type": "Re",
     "relation_type": "uses",
     "strength": 1
   },
@@ -10369,6 +11587,34 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
+    "to_type": "Reward",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
+    "from_class": "CombatUiView",
+    "to_type": "RewardChoiceResult",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
+    "from_class": "CombatUiView",
+    "to_type": "RewardManager",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
+    "from_class": "CombatUiView",
+    "to_type": "Rewards",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
+    "from_class": "CombatUiView",
     "to_type": "Right",
     "relation_type": "uses",
     "strength": 1
@@ -10384,6 +11630,20 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
     "to_type": "SceneManager",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
+    "from_class": "CombatUiView",
+    "to_type": "Score",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
+    "from_class": "CombatUiView",
+    "to_type": "ScoreManager",
     "relation_type": "uses",
     "strength": 1
   },
@@ -10418,14 +11678,14 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
-    "to_type": "SetHpBarValue",
+    "to_type": "SetEnemyPortraitAlpha",
     "relation_type": "uses",
     "strength": 1
   },
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
-    "to_type": "SetParent",
+    "to_type": "SetHpBarValue",
     "relation_type": "uses",
     "strength": 1
   },
@@ -10516,13 +11776,6 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
-    "to_type": "Sub",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
-    "from_class": "CombatUiView",
     "to_type": "Sync",
     "relation_type": "uses",
     "strength": 1
@@ -10538,20 +11791,6 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
     "to_type": "Temporary",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
-    "from_class": "CombatUiView",
-    "to_type": "TextAlignmentOptions",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
-    "from_class": "CombatUiView",
-    "to_type": "TextMeshProUGUI",
     "relation_type": "uses",
     "strength": 1
   },
@@ -10621,20 +11860,6 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
-    "to_type": "ToString",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
-    "from_class": "CombatUiView",
-    "to_type": "TransformPoint",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
-    "from_class": "CombatUiView",
     "to_type": "TryGetCellCenter",
     "relation_type": "uses",
     "strength": 1
@@ -10643,13 +11868,6 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
     "to_type": "TryGetComponent",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
-    "from_class": "CombatUiView",
-    "to_type": "Turn",
     "relation_type": "uses",
     "strength": 1
   },
@@ -10691,6 +11909,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
+    "to_type": "UnbindRewardEvents",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
+    "from_class": "CombatUiView",
     "to_type": "UnityEngine",
     "relation_type": "uses",
     "strength": 1
@@ -10719,21 +11944,7 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
-    "to_type": "ValueText",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
-    "from_class": "CombatUiView",
     "to_type": "Vector2",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
-    "from_class": "CombatUiView",
-    "to_type": "Vector2Int",
     "relation_type": "uses",
     "strength": 1
   },
@@ -10747,14 +11958,371 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
-    "to_type": "WaitForSecondsRealtime",
+    "to_type": "WireButtons",
     "relation_type": "uses",
     "strength": 1
   },
   {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
-    "from_class": "CombatUiView",
-    "to_type": "WireButtons",
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "SpriteRenderer",
+    "relation_type": "component-access",
+    "strength": 3
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "MonoBehaviour",
+    "relation_type": "inherits",
+    "strength": 4
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "Application",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "BackgroundSprite",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "bool",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "Clamp01",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "ClearEnemyDeathFade",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "Collections",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "Combat",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "CombatManager",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "CombatSnapshot",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "Coroutine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "Count",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "Data",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "Enemies",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "Enemy",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "EnemyDeathFadeDurationSeconds",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "EnemyDeathFadeRoutine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "EnemyIndex",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "EnemySprite",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "Find",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "FindRendererByName",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "FirstOrDefault",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "float",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "GetComponent",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "GetSnapshot",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "HandleCombatStateChanged",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "Initialize",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "IsDead",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "Lerp",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "Linq",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "OnCombatStateChanged",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "OnDestroy",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "PlayEnemyDeathFade",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "PlayEnemyDeathFadeIfNeeded",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "Player",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "PlayerSprite",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "Project2048",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "Prototype",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "PrototypeCombatBootstrap",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "Render",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "RenderBackground",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "ResolveEnemySprite",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "ResolveMissingReferences",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "SetEnemyRendererAlpha",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "Sprite",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "SpriteRenderer",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "StartCoroutine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "StopCoroutine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "System",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "UnbindCombatEvents",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "UnityEngine",
     "relation_type": "uses",
     "strength": 1
   },
@@ -11118,6 +12686,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatBootstrap.cs",
     "from_class": "PrototypeCombatBootstrap",
+    "to_type": "BindCombat",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatBootstrap.cs",
+    "from_class": "PrototypeCombatBootstrap",
     "to_type": "Collections",
     "relation_type": "uses",
     "strength": 1
@@ -11139,6 +12714,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatBootstrap.cs",
     "from_class": "PrototypeCombatBootstrap",
+    "to_type": "CombatPhase",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatBootstrap.cs",
+    "from_class": "PrototypeCombatBootstrap",
     "to_type": "CombatSetup",
     "relation_type": "uses",
     "strength": 1
@@ -11147,6 +12729,13 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatBootstrap.cs",
     "from_class": "PrototypeCombatBootstrap",
     "to_type": "CombatUiView",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatBootstrap.cs",
+    "from_class": "PrototypeCombatBootstrap",
+    "to_type": "CombatWorldSpriteView",
     "relation_type": "uses",
     "strength": 1
   },
@@ -11168,6 +12757,20 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatBootstrap.cs",
     "from_class": "PrototypeCombatBootstrap",
     "to_type": "CreateRandomPrototypeEnemy",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatBootstrap.cs",
+    "from_class": "PrototypeCombatBootstrap",
+    "to_type": "CurrentPhase",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatBootstrap.cs",
+    "from_class": "PrototypeCombatBootstrap",
+    "to_type": "Defeat",
     "relation_type": "uses",
     "strength": 1
   },
@@ -11279,6 +12882,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatBootstrap.cs",
     "from_class": "PrototypeCombatBootstrap",
+    "to_type": "GetComponentInChildren",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatBootstrap.cs",
+    "from_class": "PrototypeCombatBootstrap",
     "to_type": "Include",
     "relation_type": "uses",
     "strength": 1
@@ -11384,7 +12994,63 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatBootstrap.cs",
     "from_class": "PrototypeCombatBootstrap",
+    "to_type": "Reset",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatBootstrap.cs",
+    "from_class": "PrototypeCombatBootstrap",
+    "to_type": "ResetScore",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatBootstrap.cs",
+    "from_class": "PrototypeCombatBootstrap",
     "to_type": "RestartCombat",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatBootstrap.cs",
+    "from_class": "PrototypeCombatBootstrap",
+    "to_type": "RewardManager",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatBootstrap.cs",
+    "from_class": "PrototypeCombatBootstrap",
+    "to_type": "Rewards",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatBootstrap.cs",
+    "from_class": "PrototypeCombatBootstrap",
+    "to_type": "RewardTableSO",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatBootstrap.cs",
+    "from_class": "PrototypeCombatBootstrap",
+    "to_type": "RunProgress",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatBootstrap.cs",
+    "from_class": "PrototypeCombatBootstrap",
+    "to_type": "Score",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatBootstrap.cs",
+    "from_class": "PrototypeCombatBootstrap",
+    "to_type": "ScoreManager",
     "relation_type": "uses",
     "strength": 1
   },
@@ -11965,7 +13631,21 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatText.cs",
     "from_class": "PrototypeCombatText",
+    "to_type": "BattleRewardSO",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatText.cs",
+    "from_class": "PrototypeCombatText",
     "to_type": "CalculatePrototypeScore",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatText.cs",
+    "from_class": "PrototypeCombatText",
+    "to_type": "Clamp01",
     "relation_type": "uses",
     "strength": 1
   },
@@ -12140,6 +13820,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatText.cs",
     "from_class": "PrototypeCombatText",
+    "to_type": "FormatEnhanceReward",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatText.cs",
+    "from_class": "PrototypeCombatText",
     "to_type": "FormatHp",
     "relation_type": "uses",
     "strength": 1
@@ -12168,6 +13855,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatText.cs",
     "from_class": "PrototypeCombatText",
+    "to_type": "FormatRestReward",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatText.cs",
+    "from_class": "PrototypeCombatText",
     "to_type": "FormatResultDescription",
     "relation_type": "uses",
     "strength": 1
@@ -12176,6 +13870,20 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatText.cs",
     "from_class": "PrototypeCombatText",
     "to_type": "FormatResultTitle",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatText.cs",
+    "from_class": "PrototypeCombatText",
+    "to_type": "FormatRewardDescription",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatText.cs",
+    "from_class": "PrototypeCombatText",
+    "to_type": "FormatRewardTitle",
     "relation_type": "uses",
     "strength": 1
   },
@@ -12197,6 +13905,13 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatText.cs",
     "from_class": "PrototypeCombatText",
     "to_type": "IsNullOrWhiteSpace",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatText.cs",
+    "from_class": "PrototypeCombatText",
+    "to_type": "Max",
     "relation_type": "uses",
     "strength": 1
   },
@@ -12231,6 +13946,20 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatText.cs",
     "from_class": "PrototypeCombatText",
+    "to_type": "Rewards",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatText.cs",
+    "from_class": "PrototypeCombatText",
+    "to_type": "RoundToInt",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatText.cs",
+    "from_class": "PrototypeCombatText",
     "to_type": "Skills",
     "relation_type": "uses",
     "strength": 1
@@ -12253,6 +13982,13 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatText.cs",
     "from_class": "PrototypeCombatText",
     "to_type": "ToString",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatText.cs",
+    "from_class": "PrototypeCombatText",
+    "to_type": "UnityEngine",
     "relation_type": "uses",
     "strength": 1
   },
@@ -12637,6 +14373,860 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/StatusEffectTooltipTarget.cs",
     "from_class": "StatusEffectTooltipTarget",
+    "to_type": "UnityEngine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/BattleRewardSO.cs",
+    "from_class": "BattleRewardSO",
+    "to_type": "ScriptableObject",
+    "relation_type": "inherits",
+    "strength": 4
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/BattleRewardSO.cs",
+    "from_class": "BattleRewardSO",
+    "to_type": "Battle",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/BattleRewardSO.cs",
+    "from_class": "BattleRewardSO",
+    "to_type": "Clamp01",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/BattleRewardSO.cs",
+    "from_class": "BattleRewardSO",
+    "to_type": "CreateAssetMenu",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/BattleRewardSO.cs",
+    "from_class": "BattleRewardSO",
+    "to_type": "Game",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/BattleRewardSO.cs",
+    "from_class": "BattleRewardSO",
+    "to_type": "int",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/BattleRewardSO.cs",
+    "from_class": "BattleRewardSO",
+    "to_type": "Max",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/BattleRewardSO.cs",
+    "from_class": "BattleRewardSO",
+    "to_type": "OnValidate",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/BattleRewardSO.cs",
+    "from_class": "BattleRewardSO",
+    "to_type": "Project2048",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/BattleRewardSO.cs",
+    "from_class": "BattleRewardSO",
+    "to_type": "Reward",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/BattleRewardSO.cs",
+    "from_class": "BattleRewardSO",
+    "to_type": "Rewards",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/BattleRewardSO.cs",
+    "from_class": "BattleRewardSO",
+    "to_type": "string",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/BattleRewardSO.cs",
+    "from_class": "BattleRewardSO",
+    "to_type": "TextArea",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/BattleRewardSO.cs",
+    "from_class": "BattleRewardSO",
+    "to_type": "UnityEngine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardChoiceKind.cs",
+    "from_class": "RewardChoiceKind",
+    "to_type": "Enhance",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardChoiceKind.cs",
+    "from_class": "RewardChoiceKind",
+    "to_type": "None",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardChoiceKind.cs",
+    "from_class": "RewardChoiceKind",
+    "to_type": "Project2048",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardChoiceKind.cs",
+    "from_class": "RewardChoiceKind",
+    "to_type": "Rest",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardChoiceKind.cs",
+    "from_class": "RewardChoiceKind",
+    "to_type": "RewardChoiceKind",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardChoiceKind.cs",
+    "from_class": "RewardChoiceKind",
+    "to_type": "Rewards",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardChoiceResult.cs",
+    "from_class": "RewardChoiceResult",
+    "to_type": "AppliedAmount",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardChoiceResult.cs",
+    "from_class": "RewardChoiceResult",
+    "to_type": "BattleRewardSO",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardChoiceResult.cs",
+    "from_class": "RewardChoiceResult",
+    "to_type": "CurrentHp",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardChoiceResult.cs",
+    "from_class": "RewardChoiceResult",
+    "to_type": "ExtraBoardMoveCount",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardChoiceResult.cs",
+    "from_class": "RewardChoiceResult",
+    "to_type": "int",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardChoiceResult.cs",
+    "from_class": "RewardChoiceResult",
+    "to_type": "Kind",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardChoiceResult.cs",
+    "from_class": "RewardChoiceResult",
+    "to_type": "Project2048",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardChoiceResult.cs",
+    "from_class": "RewardChoiceResult",
+    "to_type": "Reward",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardChoiceResult.cs",
+    "from_class": "RewardChoiceResult",
+    "to_type": "RewardChoiceKind",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardChoiceResult.cs",
+    "from_class": "RewardChoiceResult",
+    "to_type": "Rewards",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardChoiceResult.cs",
+    "from_class": "RewardChoiceResult",
+    "to_type": "Serializable",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardChoiceResult.cs",
+    "from_class": "RewardChoiceResult",
+    "to_type": "System",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
+    "from_class": "RewardManager",
+    "to_type": "RunProgress",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
+    "from_class": "RewardManager",
+    "to_type": "MonoBehaviour",
+    "relation_type": "inherits",
+    "strength": 4
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
+    "from_class": "RewardManager",
+    "to_type": "AddBoardMoveCount",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
+    "from_class": "RewardManager",
+    "to_type": "Application",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
+    "from_class": "RewardManager",
+    "to_type": "AppliedAmount",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
+    "from_class": "RewardManager",
+    "to_type": "BattleRewardSO",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
+    "from_class": "RewardManager",
+    "to_type": "BindCombat",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
+    "from_class": "RewardManager",
+    "to_type": "bool",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
+    "from_class": "RewardManager",
+    "to_type": "CapturePlayer",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
+    "from_class": "RewardManager",
+    "to_type": "ChooseEnhance",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
+    "from_class": "RewardManager",
+    "to_type": "ChooseRest",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
+    "from_class": "RewardManager",
+    "to_type": "Combat",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
+    "from_class": "RewardManager",
+    "to_type": "CombatManager",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
+    "from_class": "RewardManager",
+    "to_type": "CombatResult",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
+    "from_class": "RewardManager",
+    "to_type": "CompleteChoice",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
+    "from_class": "RewardManager",
+    "to_type": "CreateInstance",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
+    "from_class": "RewardManager",
+    "to_type": "CurrentHp",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
+    "from_class": "RewardManager",
+    "to_type": "Destroy",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
+    "from_class": "RewardManager",
+    "to_type": "DestroyImmediate",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
+    "from_class": "RewardManager",
+    "to_type": "DontSave",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
+    "from_class": "RewardManager",
+    "to_type": "Enhance",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
+    "from_class": "RewardManager",
+    "to_type": "ExtraBoardMoveCount",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
+    "from_class": "RewardManager",
+    "to_type": "HandleCombatDefeat",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
+    "from_class": "RewardManager",
+    "to_type": "HandleCombatVictory",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
+    "from_class": "RewardManager",
+    "to_type": "HasPendingReward",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
+    "from_class": "RewardManager",
+    "to_type": "HasUnclaimedReward",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
+    "from_class": "RewardManager",
+    "to_type": "HealByMaxHpPercent",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
+    "from_class": "RewardManager",
+    "to_type": "HideFlags",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
+    "from_class": "RewardManager",
+    "to_type": "Initialize",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
+    "from_class": "RewardManager",
+    "to_type": "Invoke",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
+    "from_class": "RewardManager",
+    "to_type": "Kind",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
+    "from_class": "RewardManager",
+    "to_type": "LastChoiceResult",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
+    "from_class": "RewardManager",
+    "to_type": "OfferReward",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
+    "from_class": "RewardManager",
+    "to_type": "OnCombatDefeat",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
+    "from_class": "RewardManager",
+    "to_type": "OnCombatVictory",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
+    "from_class": "RewardManager",
+    "to_type": "OnDestroy",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
+    "from_class": "RewardManager",
+    "to_type": "OnRewardClaimed",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
+    "from_class": "RewardManager",
+    "to_type": "OnRewardOffered",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
+    "from_class": "RewardManager",
+    "to_type": "PendingReward",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
+    "from_class": "RewardManager",
+    "to_type": "Player",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
+    "from_class": "RewardManager",
+    "to_type": "PlayerCombatController",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
+    "from_class": "RewardManager",
+    "to_type": "Project2048",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
+    "from_class": "RewardManager",
+    "to_type": "ResolveReward",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
+    "from_class": "RewardManager",
+    "to_type": "Rest",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
+    "from_class": "RewardManager",
+    "to_type": "RestoreHpByMaxHpPercent",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
+    "from_class": "RewardManager",
+    "to_type": "Reward",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
+    "from_class": "RewardManager",
+    "to_type": "RewardChoiceKind",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
+    "from_class": "RewardManager",
+    "to_type": "RewardChoiceResult",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
+    "from_class": "RewardManager",
+    "to_type": "Rewards",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
+    "from_class": "RewardManager",
+    "to_type": "RewardTableSO",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
+    "from_class": "RewardManager",
+    "to_type": "RunProgress",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
+    "from_class": "RewardManager",
+    "to_type": "SelectReward",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
+    "from_class": "RewardManager",
+    "to_type": "System",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
+    "from_class": "RewardManager",
+    "to_type": "UnbindCombat",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
+    "from_class": "RewardManager",
+    "to_type": "UnityEngine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardTableSO.cs",
+    "from_class": "RewardTableSO",
+    "to_type": "ScriptableObject",
+    "relation_type": "inherits",
+    "strength": 4
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardTableSO.cs",
+    "from_class": "RewardTableSO",
+    "to_type": "BattleRewardSO",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardTableSO.cs",
+    "from_class": "RewardTableSO",
+    "to_type": "Collections",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardTableSO.cs",
+    "from_class": "RewardTableSO",
+    "to_type": "Combat",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardTableSO.cs",
+    "from_class": "RewardTableSO",
+    "to_type": "CombatResult",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardTableSO.cs",
+    "from_class": "RewardTableSO",
+    "to_type": "CreateAssetMenu",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardTableSO.cs",
+    "from_class": "RewardTableSO",
+    "to_type": "Game",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardTableSO.cs",
+    "from_class": "RewardTableSO",
+    "to_type": "Generic",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardTableSO.cs",
+    "from_class": "RewardTableSO",
+    "to_type": "Project2048",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardTableSO.cs",
+    "from_class": "RewardTableSO",
+    "to_type": "Reward",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardTableSO.cs",
+    "from_class": "RewardTableSO",
+    "to_type": "Rewards",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardTableSO.cs",
+    "from_class": "RewardTableSO",
+    "to_type": "SelectReward",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardTableSO.cs",
+    "from_class": "RewardTableSO",
+    "to_type": "System",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardTableSO.cs",
+    "from_class": "RewardTableSO",
+    "to_type": "Table",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardTableSO.cs",
+    "from_class": "RewardTableSO",
+    "to_type": "UnityEngine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RunProgress.cs",
+    "from_class": "RunProgress",
+    "to_type": "AddBoardMoveCount",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RunProgress.cs",
+    "from_class": "RunProgress",
+    "to_type": "CapturePlayer",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RunProgress.cs",
+    "from_class": "RunProgress",
+    "to_type": "CeilToInt",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RunProgress.cs",
+    "from_class": "RunProgress",
+    "to_type": "Clamp",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RunProgress.cs",
+    "from_class": "RunProgress",
+    "to_type": "Clamp01",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RunProgress.cs",
+    "from_class": "RunProgress",
+    "to_type": "Combat",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RunProgress.cs",
+    "from_class": "RunProgress",
+    "to_type": "CurrentHp",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RunProgress.cs",
+    "from_class": "RunProgress",
+    "to_type": "ExtraBoardMoveCount",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RunProgress.cs",
+    "from_class": "RunProgress",
+    "to_type": "HasCurrentHp",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RunProgress.cs",
+    "from_class": "RunProgress",
+    "to_type": "HealByMaxHpPercent",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RunProgress.cs",
+    "from_class": "RunProgress",
+    "to_type": "Max",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RunProgress.cs",
+    "from_class": "RunProgress",
+    "to_type": "MaxHp",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RunProgress.cs",
+    "from_class": "RunProgress",
+    "to_type": "PlayerCombatController",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RunProgress.cs",
+    "from_class": "RunProgress",
+    "to_type": "Project2048",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RunProgress.cs",
+    "from_class": "RunProgress",
+    "to_type": "Reset",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RunProgress.cs",
+    "from_class": "RunProgress",
+    "to_type": "ResolveStartingHp",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RunProgress.cs",
+    "from_class": "RunProgress",
+    "to_type": "Rewards",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RunProgress.cs",
+    "from_class": "RunProgress",
+    "to_type": "Serializable",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RunProgress.cs",
+    "from_class": "RunProgress",
+    "to_type": "System",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RunProgress.cs",
+    "from_class": "RunProgress",
     "to_type": "UnityEngine",
     "relation_type": "uses",
     "strength": 1
@@ -13317,13 +15907,6 @@
     "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
     "from_class": "MainMenuController",
     "to_type": "QuitGame",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
-    "from_class": "MainMenuController",
-    "to_type": "SceneManagement",
     "relation_type": "uses",
     "strength": 1
   },
@@ -14107,6 +16690,13 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
     "from_class": "CombatManagerTests",
+    "to_type": "AttackPower",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
+    "from_class": "CombatManagerTests",
     "to_type": "Block",
     "relation_type": "uses",
     "strength": 1
@@ -14122,6 +16712,13 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
     "from_class": "CombatManagerTests",
     "to_type": "BoardManager",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
+    "from_class": "CombatManagerTests",
+    "to_type": "BoardMoveCountBonus",
     "relation_type": "uses",
     "strength": 1
   },
@@ -14171,6 +16768,13 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
     "from_class": "CombatManagerTests",
     "to_type": "CombatSetup",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
+    "from_class": "CombatManagerTests",
+    "to_type": "CombatSnapshot",
     "relation_type": "uses",
     "strength": 1
   },
@@ -14261,6 +16865,13 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
     "from_class": "CombatManagerTests",
+    "to_type": "Enemies",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
+    "from_class": "CombatManagerTests",
     "to_type": "Enemy",
     "relation_type": "uses",
     "strength": 1
@@ -14324,6 +16935,27 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
     "from_class": "CombatManagerTests",
+    "to_type": "MaxHp",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
+    "from_class": "CombatManagerTests",
+    "to_type": "Not",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
+    "from_class": "CombatManagerTests",
+    "to_type": "Null",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
+    "from_class": "CombatManagerTests",
     "to_type": "NUnit",
     "relation_type": "uses",
     "strength": 1
@@ -14332,6 +16964,13 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
     "from_class": "CombatManagerTests",
     "to_type": "Object",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
+    "from_class": "CombatManagerTests",
+    "to_type": "OnCombatStateChanged",
     "relation_type": "uses",
     "strength": 1
   },
@@ -14367,6 +17006,20 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
     "from_class": "CombatManagerTests",
     "to_type": "Project2048",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
+    "from_class": "CombatManagerTests",
+    "to_type": "RefreshCombatantDataFromScriptableObjects",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
+    "from_class": "CombatManagerTests",
+    "to_type": "RefreshCombatantDataFromScriptableObjects_ReappliesChangedSoStatsDuringCombat",
     "relation_type": "uses",
     "strength": 1
   },
@@ -14465,6 +17118,13 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
     "from_class": "CombatManagerTests",
     "to_type": "System",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
+    "from_class": "CombatManagerTests",
+    "to_type": "TakeDamage",
     "relation_type": "uses",
     "strength": 1
   },
@@ -15080,6 +17740,13 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiContractTests.cs",
     "from_class": "CombatUiContractTests",
+    "to_type": "None",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiContractTests.cs",
+    "from_class": "CombatUiContractTests",
     "to_type": "Normal",
     "relation_type": "uses",
     "strength": 1
@@ -15213,7 +17880,7 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiContractTests.cs",
     "from_class": "CombatUiContractTests",
-    "to_type": "RequestEndPlayerTurn_FearDebuff_EmitsVfxCueAndHalvesDefenseGain",
+    "to_type": "RequestEndPlayerTurn_FearDebuff_EmitsVfxCueAndReducesDefenseGainBySix",
     "relation_type": "uses",
     "strength": 1
   },
@@ -15377,6 +18044,13 @@
     "to_type": "Value",
     "relation_type": "uses",
     "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
+    "from_class": "CombatUiViewTests",
+    "to_type": "HorizontalLayoutGroup",
+    "relation_type": "component-access",
+    "strength": 3
   },
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
@@ -15584,6 +18258,13 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
+    "to_type": "BattleScene_CombatUiView_HasSceneAuthoredStatusAndBlockObjectsOnBottomHpBars",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
+    "from_class": "CombatUiViewTests",
     "to_type": "BindingFlags",
     "relation_type": "uses",
     "strength": 1
@@ -15613,6 +18294,13 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
     "to_type": "BoardHp",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
+    "from_class": "CombatUiViewTests",
+    "to_type": "BoardManager",
     "relation_type": "uses",
     "strength": 1
   },
@@ -15857,6 +18545,13 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
+    "to_type": "Debuffer",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
+    "from_class": "CombatUiViewTests",
     "to_type": "DebuffType",
     "relation_type": "uses",
     "strength": 1
@@ -15934,6 +18629,13 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
+    "to_type": "EnemyDebuffIntent_RendersDebuffOnPlayerSideOnly",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
+    "from_class": "CombatUiViewTests",
     "to_type": "EnemyHit",
     "relation_type": "uses",
     "strength": 1
@@ -15990,6 +18692,13 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
+    "to_type": "EnemyTurnDelaySeconds",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
+    "from_class": "CombatUiViewTests",
     "to_type": "EqualTo",
     "relation_type": "uses",
     "strength": 1
@@ -16032,20 +18741,6 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
-    "to_type": "Filled",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
-    "from_class": "CombatUiViewTests",
-    "to_type": "FillMethod",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
-    "from_class": "CombatUiViewTests",
     "to_type": "Find",
     "relation_type": "uses",
     "strength": 1
@@ -16053,7 +18748,7 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
-    "to_type": "FindFirstObjectByType",
+    "to_type": "FindAnyObjectByType",
     "relation_type": "uses",
     "strength": 1
   },
@@ -16151,13 +18846,6 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
-    "to_type": "GetValue",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
-    "from_class": "CombatUiViewTests",
     "to_type": "GreaterThanOrEqualTo",
     "relation_type": "uses",
     "strength": 1
@@ -16172,7 +18860,14 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
-    "to_type": "Horizontal",
+    "to_type": "HorizontalLayoutGroup",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
+    "from_class": "CombatUiViewTests",
+    "to_type": "HpBarBg",
     "relation_type": "uses",
     "strength": 1
   },
@@ -16229,6 +18924,13 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
     "to_type": "Initialize_PreservesPositiveInspectorSoundVolumeScale",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
+    "from_class": "CombatUiViewTests",
+    "to_type": "Initialize_PreservesSceneAuthoredPlayerBattleStatusEffectsRootPosition",
     "relation_type": "uses",
     "strength": 1
   },
@@ -16319,20 +19021,6 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
-    "to_type": "Left",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
-    "from_class": "CombatUiViewTests",
-    "to_type": "LessThan",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
-    "from_class": "CombatUiViewTests",
     "to_type": "MaxHp",
     "relation_type": "uses",
     "strength": 1
@@ -16340,14 +19028,14 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
-    "to_type": "Movements",
+    "to_type": "MiddleLeft",
     "relation_type": "uses",
     "strength": 1
   },
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
-    "to_type": "NonPublic",
+    "to_type": "Movements",
     "relation_type": "uses",
     "strength": 1
   },
@@ -16418,13 +19106,6 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
     "to_type": "OpenScene",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
-    "from_class": "CombatUiViewTests",
-    "to_type": "OriginHorizontal",
     "relation_type": "uses",
     "strength": 1
   },
@@ -16613,6 +19294,13 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
+    "to_type": "SetBoardState",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
+    "from_class": "CombatUiViewTests",
     "to_type": "SetCombatants",
     "relation_type": "uses",
     "strength": 1
@@ -16635,13 +19323,6 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
     "to_type": "SetPrivateField",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
-    "from_class": "CombatUiViewTests",
-    "to_type": "SetValue",
     "relation_type": "uses",
     "strength": 1
   },
@@ -16691,6 +19372,13 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
     "to_type": "StatusEffect_fear",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
+    "from_class": "CombatUiViewTests",
+    "to_type": "StatusEffectIconSample",
     "relation_type": "uses",
     "strength": 1
   },
@@ -16753,6 +19441,13 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
+    "to_type": "TextAnchor",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
+    "from_class": "CombatUiViewTests",
     "to_type": "TextMeshProUGUI",
     "relation_type": "uses",
     "strength": 1
@@ -16789,13 +19484,6 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
     "to_type": "True",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
-    "from_class": "CombatUiViewTests",
-    "to_type": "Type",
     "relation_type": "uses",
     "strength": 1
   },
@@ -17607,7 +20295,7 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/EnemyDebuffTests.cs",
     "from_class": "EnemyDebuffTests",
-    "to_type": "FearIntent_HalvesFutureBlockGain_WithCeiling",
+    "to_type": "FearIntent_ReducesFutureBlockGainByFixedAmount",
     "relation_type": "uses",
     "strength": 1
   },
@@ -17754,7 +20442,63 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
     "from_class": "MainMenuControllerTests",
+    "to_type": "Canvas",
+    "relation_type": "component-access",
+    "strength": 3
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
+    "to_type": "CanvasScaler",
+    "relation_type": "component-access",
+    "strength": 3
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
+    "to_type": "RawImage",
+    "relation_type": "component-access",
+    "strength": 3
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
+    "to_type": "SerializedObject",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
+    "to_type": "Vector2",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
+    "to_type": "Art",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
     "to_type": "Assert",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
+    "to_type": "AssertSerializedReference",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
+    "to_type": "AssetDatabase",
     "relation_type": "uses",
     "strength": 1
   },
@@ -17769,6 +20513,20 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
     "from_class": "MainMenuControllerTests",
     "to_type": "BindingFlags",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
+    "to_type": "Canvas",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
+    "to_type": "CanvasScaler",
     "relation_type": "uses",
     "strength": 1
   },
@@ -17796,7 +20554,56 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
     "from_class": "MainMenuControllerTests",
+    "to_type": "EditorSceneManager",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
+    "to_type": "EqualTo",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
+    "to_type": "False",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
     "to_type": "File",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
+    "to_type": "Find",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
+    "to_type": "FindFirstObjectByType",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
+    "to_type": "FindObjectsInactive",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
+    "to_type": "FindProperty",
     "relation_type": "uses",
     "strength": 1
   },
@@ -17811,6 +20618,20 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
     "from_class": "MainMenuControllerTests",
     "to_type": "GameSceneName",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
+    "to_type": "GetAssetPath",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
+    "to_type": "GetComponent",
     "relation_type": "uses",
     "strength": 1
   },
@@ -17838,6 +20659,20 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
     "from_class": "MainMenuControllerTests",
+    "to_type": "GetSiblingIndex",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
+    "to_type": "Include",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
     "to_type": "IO",
     "relation_type": "uses",
     "strength": 1
@@ -17859,7 +20694,63 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
     "from_class": "MainMenuControllerTests",
+    "to_type": "LoadAssetAtPath",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
+    "to_type": "MainMenu",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
+    "to_type": "MainMenu1",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
+    "to_type": "MainMenuBackground",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
+    "to_type": "MainMenuBackgroundPlaceholder",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
+    "to_type": "MainMenuCanvas",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
     "to_type": "MainMenuController",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
+    "to_type": "MainMenuReplacementScene_IsNotImported",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
+    "to_type": "MainMenuScene_UsesSceneAuthoredUiBindings",
     "relation_type": "uses",
     "strength": 1
   },
@@ -17901,6 +20792,27 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
     "from_class": "MainMenuControllerTests",
+    "to_type": "Object",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
+    "to_type": "OpenScene",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
+    "to_type": "OpenSceneMode",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
     "to_type": "Path",
     "relation_type": "uses",
     "strength": 1
@@ -17915,6 +20827,13 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
     "from_class": "MainMenuControllerTests",
+    "to_type": "RawImage",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
     "to_type": "ReadAllText",
     "relation_type": "uses",
     "strength": 1
@@ -17922,7 +20841,49 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
     "from_class": "MainMenuControllerTests",
+    "to_type": "RectTransform",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
     "to_type": "Reflection",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
+    "to_type": "ScaleMode",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
+    "to_type": "ScaleWithScreenSize",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
+    "to_type": "SceneAsset",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
+    "to_type": "SceneManagement",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
+    "to_type": "Scenes",
     "relation_type": "uses",
     "strength": 1
   },
@@ -17943,6 +20904,20 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
     "from_class": "MainMenuControllerTests",
+    "to_type": "SerializedObject",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
+    "to_type": "SettingPopup",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
     "to_type": "SourceText_KeepsKoreanMenuMessagesReadable",
     "relation_type": "uses",
     "strength": 1
@@ -17951,6 +20926,13 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
     "from_class": "MainMenuControllerTests",
     "to_type": "Static",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
+    "to_type": "string",
     "relation_type": "uses",
     "strength": 1
   },
@@ -17992,6 +20974,13 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
     "from_class": "MainMenuControllerTests",
+    "to_type": "True",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
     "to_type": "UI",
     "relation_type": "uses",
     "strength": 1
@@ -18006,7 +20995,28 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
     "from_class": "MainMenuControllerTests",
+    "to_type": "UnityEngine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
+    "to_type": "Vector2",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
     "to_type": "Where",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
+    "to_type": "Within",
     "relation_type": "uses",
     "strength": 1
   },
@@ -19162,6 +22172,1595 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/PrototypeCombatUiStateTests.cs",
     "from_class": "PrototypeCombatUiStateTests",
     "to_type": "That",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "Button",
+    "relation_type": "component-access",
+    "strength": 3
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "Canvas",
+    "relation_type": "component-access",
+    "strength": 3
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "Image",
+    "relation_type": "component-access",
+    "strength": 3
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "SpriteRenderer",
+    "relation_type": "component-access",
+    "strength": 3
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "TMP_Text",
+    "relation_type": "component-access",
+    "strength": 3
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "GameObject",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "Rect",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "RunProgress",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "SerializedObject",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "Texture2D",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "Vector2",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "WaitForSecondsRealtime",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "BindingFlags",
+    "relation_type": "singleton-access",
+    "strength": 4
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "ActionPanel",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "Add",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "AddBoardMoveCount",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "AddComponent",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "AppliedAmount",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "Art",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "Assert",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "AssetDatabase",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "Assets",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "Attack",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "Background",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "BackgroundSprite",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "BattleRewardSO",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "BattleScene",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "BattleScene_RewardOverlayAndManagers_AreSceneAuthored",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "BattleSceneGreyBackground",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "BindCombat",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "BindingFlags",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "BoardManager",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "BoardPanel",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "Bootstrap",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "Bootstrap_WithMissingRewardAndScoreSceneReferences_DoesNotCreateRuntimeManagers",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "BottomPanel",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "Button",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "Canvas",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "CapturePlayer",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "ChooseEnhance",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "ChooseRest",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "Clear",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "Collections",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "Color",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "Combat",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "CombatCanvas",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "CombatDefeat_WhenEnemyKillsPlayer_RaisesDefeatAndDoesNotOfferReward",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "CombatManager",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "CombatPhase",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "CombatResult",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "CombatSetup",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "CombatSetup_WithRunProgress_AddsExtraBoardMovesForNextCombat",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "CombatUiView",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "CombatUiView_EnemyDeath_FadesEnemyPortrait",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "CombatUiView_VictoryShowsRewardOverlayUntilRewardChoiceIsClaimed",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "CombatView",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "CombatWorldSpriteView",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "CombatWorldSpriteView_EnemyDeath_FadesEnemyRenderer",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "CombatWorldSpriteView_Initialize_AssignsSpritesFromCombatData",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "Component",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "Create",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "CreateButtonChild",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "CreateEnemyData",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "CreateGameObject",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "CreateInstance",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "CreateOwnedGameObject",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "CreatePlayerData",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "CreateReward",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "CreateRewardTable",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "CreateSkill",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "CreateSprite",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "CreateTextChild",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "CurrentHp",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "CurrentPhase",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "Defeat",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "DestroyImmediate",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "EditorSceneManager",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "Enemies",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "Enemy",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "EnemyController",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "EnemyDeathFadeDurationSeconds",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "EnemyIntent",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "EnemyIntentType",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "EnemyPortrait",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "EnemySO",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "EnemySprite",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "Enhance",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "EnhanceButton",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "EnhanceText",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "EnsureRuntimeObjects",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "EqualTo",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "ExtraBoardMoveCount",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "False",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "Find",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "FindAnyObjectByType",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "FindObjectsInactive",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "FindProperty",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "Framework",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "Generic",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "GetAssetPath",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "GetComponent",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "GetField",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "GetMethod",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "GetSnapshot",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "GetType",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "HasPendingReward",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "Image",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "Include",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "Init",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "Initialize",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "Instance",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "Invoke",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "InvokePrivateMethod",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "Is",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "IsDead",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "Kind",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "LessThanOrEqualTo",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "MoveCount",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "NonPublic",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "Not",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "Null",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "NUnit",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "Object",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "OfferReward",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "OnCombatDefeat",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "OpenScene",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "Player",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "PlayerCombatController",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "PlayerPortrait",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "PlayerSO",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "PlayerSprite",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "Project2048",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "Prototype",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "PrototypeCombatBootstrap",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "Rect",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "RectTransform",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "Reflection",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "RenderMode",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "RequestEndPlayerTurn",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "RequestUseSkill",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "ResolveBoardPhase",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "Rest",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "RestButton",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "RestText",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "ResultOverlay",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "RewardChoiceKind",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "RewardDescription",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "RewardManager",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "RewardManager_EnhanceChoice_AddsRunMoveCount_WithoutMutatingPlayerSo",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "RewardManager_RestChoice_HealsByMaxHpPercent_AndStoresRunHp",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "RewardOverlay",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "Rewards",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "RewardTableSO",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "RewardTitle",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "RunProgress",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "SceneManagement",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "Scenes",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "Score",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "ScoreManager",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "ScreenSpaceOverlay",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "SerializedObject",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "SetBoardState",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "SetCombatants",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "SetParent",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "SetPrivateField",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "SetValue",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "Skills",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "SkillSO",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "SkillType",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "Sprite",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "SpriteRenderer",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "StartCombat",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "System",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "TakeDamage",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "TearDown",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "Test",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "Tests",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "TestTools",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "TextMeshProUGUI",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "Texture",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "Texture2D",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "That",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "TMP_Text",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "TMPro",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "True",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "UI",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "UnityEditor",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "UnityEngine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "UnityTest",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "Vector2",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "WaitForSecondsRealtime",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "Within",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "WorldSpriteView",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/ScoreManagerTests.cs",
+    "from_class": "ScoreManagerTests",
+    "to_type": "GameObject",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/ScoreManagerTests.cs",
+    "from_class": "ScoreManagerTests",
+    "to_type": "AddComponent",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/ScoreManagerTests.cs",
+    "from_class": "ScoreManagerTests",
+    "to_type": "AddStageScore",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/ScoreManagerTests.cs",
+    "from_class": "ScoreManagerTests",
+    "to_type": "AddStageScore_AccumulatesTotalScore",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/ScoreManagerTests.cs",
+    "from_class": "ScoreManagerTests",
+    "to_type": "Assert",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/ScoreManagerTests.cs",
+    "from_class": "ScoreManagerTests",
+    "to_type": "BestScore",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/ScoreManagerTests.cs",
+    "from_class": "ScoreManagerTests",
+    "to_type": "CalculateStageScore",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/ScoreManagerTests.cs",
+    "from_class": "ScoreManagerTests",
+    "to_type": "CalculateStageScore_UsesDifficultyMovesOverCostAndTurnPenalty",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/ScoreManagerTests.cs",
+    "from_class": "ScoreManagerTests",
+    "to_type": "Combat",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/ScoreManagerTests.cs",
+    "from_class": "ScoreManagerTests",
+    "to_type": "CombatResult",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/ScoreManagerTests.cs",
+    "from_class": "ScoreManagerTests",
+    "to_type": "DeleteKey",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/ScoreManagerTests.cs",
+    "from_class": "ScoreManagerTests",
+    "to_type": "DestroyImmediate",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/ScoreManagerTests.cs",
+    "from_class": "ScoreManagerTests",
+    "to_type": "EqualTo",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/ScoreManagerTests.cs",
+    "from_class": "ScoreManagerTests",
+    "to_type": "Framework",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/ScoreManagerTests.cs",
+    "from_class": "ScoreManagerTests",
+    "to_type": "GetInt",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/ScoreManagerTests.cs",
+    "from_class": "ScoreManagerTests",
+    "to_type": "Is",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/ScoreManagerTests.cs",
+    "from_class": "ScoreManagerTests",
+    "to_type": "LeaderboardKey",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/ScoreManagerTests.cs",
+    "from_class": "ScoreManagerTests",
+    "to_type": "LocalLeaderboardKey",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/ScoreManagerTests.cs",
+    "from_class": "ScoreManagerTests",
+    "to_type": "NUnit",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/ScoreManagerTests.cs",
+    "from_class": "ScoreManagerTests",
+    "to_type": "Object",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/ScoreManagerTests.cs",
+    "from_class": "ScoreManagerTests",
+    "to_type": "PlayerPrefs",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/ScoreManagerTests.cs",
+    "from_class": "ScoreManagerTests",
+    "to_type": "Project2048",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/ScoreManagerTests.cs",
+    "from_class": "ScoreManagerTests",
+    "to_type": "RecordGameOverScore",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/ScoreManagerTests.cs",
+    "from_class": "ScoreManagerTests",
+    "to_type": "RecordGameOverScore_WritesBestScoreToLocalLeaderboard",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/ScoreManagerTests.cs",
+    "from_class": "ScoreManagerTests",
+    "to_type": "Score",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/ScoreManagerTests.cs",
+    "from_class": "ScoreManagerTests",
+    "to_type": "ScoreManager",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/ScoreManagerTests.cs",
+    "from_class": "ScoreManagerTests",
+    "to_type": "string",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/ScoreManagerTests.cs",
+    "from_class": "ScoreManagerTests",
+    "to_type": "TearDown",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/ScoreManagerTests.cs",
+    "from_class": "ScoreManagerTests",
+    "to_type": "Test",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/ScoreManagerTests.cs",
+    "from_class": "ScoreManagerTests",
+    "to_type": "Tests",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/ScoreManagerTests.cs",
+    "from_class": "ScoreManagerTests",
+    "to_type": "That",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/ScoreManagerTests.cs",
+    "from_class": "ScoreManagerTests",
+    "to_type": "TotalScore",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/ScoreManagerTests.cs",
+    "from_class": "ScoreManagerTests",
+    "to_type": "True",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/ScoreManagerTests.cs",
+    "from_class": "ScoreManagerTests",
+    "to_type": "UnityEngine",
     "relation_type": "uses",
     "strength": 1
   }

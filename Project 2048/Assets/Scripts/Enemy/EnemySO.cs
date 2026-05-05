@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Project2048.Presentation;
 using UnityEngine;
 
 namespace Project2048.Enemy
@@ -14,6 +15,7 @@ namespace Project2048.Enemy
         public int debuffPower = 1;
         public int difficultyScore = 1;
         public Sprite portrait;
+        public List<CombatantActionEffectBinding> actionEffects = new();
 
         // 값이 있으면 AI 브레인보다 이 고정 순서를 우선한다. 보스처럼 정확한 패턴이 필요한 적에게 쓴다.
         public List<EnemyIntent> intentPattern = new();
@@ -29,6 +31,11 @@ namespace Project2048.Enemy
         public string GetAiProfileLabel()
         {
             return EnemyAiProfileFormatter.Format(aiActionBias, aiDebuffPattern, aiStrength);
+        }
+
+        public CombatEffectBinding FindActionEffect(string actionId)
+        {
+            return CombatantActionEffectBinding.Find(actionEffects, actionId);
         }
 
         private void OnValidate()

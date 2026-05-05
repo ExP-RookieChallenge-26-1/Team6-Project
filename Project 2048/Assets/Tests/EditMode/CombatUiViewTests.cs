@@ -517,6 +517,7 @@ namespace Project2048.Tests
 
             var serializedView = new SerializedObject(view);
             Assert.That(serializedView.FindProperty("audioSource").objectReferenceValue, Is.Not.Null);
+            Assert.That(serializedView.FindProperty("boardTileEffectProfile").objectReferenceValue, Is.Not.Null);
             Assert.That(serializedView.FindProperty("playerHitClip"), Is.Not.Null);
             Assert.That(serializedView.FindProperty("enemyHitClip"), Is.Not.Null);
             Assert.That(serializedView.FindProperty("boardMoveClip"), Is.Not.Null);

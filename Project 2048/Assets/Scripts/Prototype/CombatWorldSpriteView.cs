@@ -2,6 +2,7 @@ using System.Collections;
 using System.Linq;
 using Project2048.Combat;
 using Project2048.Enemy;
+using Project2048.Presentation;
 using UnityEngine;
 
 namespace Project2048.Prototype
@@ -15,6 +16,9 @@ namespace Project2048.Prototype
         [SerializeField] private SpriteRenderer playerRenderer;
         [SerializeField] private SpriteRenderer enemyRenderer;
         [SerializeField] private Sprite defaultBackgroundSprite;
+        [SerializeField] private AudioSource audioSource;
+        [SerializeField] private Animator playerAnimator;
+        [SerializeField] private Animator enemyAnimator;
 
         private CombatManager combatManager;
         private CombatSnapshot snapshot;
@@ -62,11 +66,15 @@ namespace Project2048.Prototype
 
         private void HandleCombatStateChanged(CombatSnapshot nextSnapshot)
         {
+            var playerWasHit = PlayerWasHit(snapshot, nextSnapshot);
+            var enemyWasHit = EnemyWasHit(snapshot, nextSnapshot);
             var nextEnemyDead = nextSnapshot?.Enemies?.FirstOrDefault()?.IsDead ?? false;
             var enemyJustDied = !lastEnemyWasDead && nextEnemyDead;
 
             snapshot = nextSnapshot;
             Render(snapshot);
+            PlayPlayerActionEffectIfNeeded(playerWasHit);
+            PlayEnemyActionEffectIfNeeded(enemyWasHit, enemyJustDied);
             PlayEnemyDeathFadeIfNeeded(enemyJustDied, nextEnemyDead);
             lastEnemyWasDead = nextEnemyDead;
         }
@@ -90,6 +98,87 @@ namespace Project2048.Prototype
             if (enemyIsAlive && enemyDeathFadeCoroutine == null)
             {
                 SetEnemyRendererAlpha(1f);
+            }
+        }
+
+        private void PlayPlayerActionEffectIfNeeded(bool playerWasHit)
+        {
+            if (!playerWasHit)
+            {
+                return;
+            }
+
+            PlayCombatantActionEffect(
+                combatManager?.Player?.Data?.FindActionEffect(CombatActionIds.Hit),
+                playerRenderer != null ? playerRenderer.transform : transform,
+                playerAnimator);
+        }
+
+        private void PlayEnemyActionEffectIfNeeded(bool enemyWasHit, bool enemyJustDied)
+        {
+            var enemyData = ResolveCurrentEnemyData();
+            if (enemyJustDied)
+            {
+                PlayCombatantActionEffect(
+                    enemyData?.FindActionEffect(CombatActionIds.Death),
+                    enemyRenderer != null ? enemyRenderer.transform : transform,
+                    enemyAnimator);
+                return;
+            }
+
+            if (!enemyWasHit)
+            {
+                return;
+            }
+
+            PlayCombatantActionEffect(
+                enemyData?.FindActionEffect(CombatActionIds.Hit),
+                enemyRenderer != null ? enemyRenderer.transform : transform,
+                enemyAnimator);
+        }
+
+        private EnemySO ResolveCurrentEnemyData()
+        {
+            var enemyIndex = snapshot?.Enemies?.FirstOrDefault()?.EnemyIndex ?? 0;
+            var enemies = combatManager?.Enemies;
+            if (enemies == null || enemyIndex < 0 || enemyIndex >= enemies.Count)
+            {
+                return null;
+            }
+
+            return enemies[enemyIndex]?.Data;
+        }
+
+        private void PlayCombatantActionEffect(CombatEffectBinding effect, Transform anchor, Animator animator)
+        {
+            if (effect == null || !effect.HasAnyAsset)
+            {
+                return;
+            }
+
+            if (effect.sfxClip != null)
+            {
+                EnsureAudioSource();
+                if (audioSource != null)
+                {
+                    audioSource.PlayOneShot(effect.sfxClip, effect.EffectiveVolumeScale);
+                }
+            }
+
+            if (effect.vfxPrefab != null)
+            {
+                var parent = anchor != null ? anchor : transform;
+                var instance = Instantiate(effect.vfxPrefab, parent.position, Quaternion.identity, parent);
+                var lifetime = effect.EffectiveAutoDestroySeconds;
+                if (lifetime > 0f)
+                {
+                    Destroy(instance, lifetime);
+                }
+            }
+
+            if (effect.animationClip != null && animator != null && animator.runtimeAnimatorController != null)
+            {
+                animator.Play(effect.animationClip.name, 0, 0f);
             }
         }
 
@@ -208,12 +297,62 @@ namespace Project2048.Prototype
             {
                 enemyRenderer = FindRendererByName("EnemySprite");
             }
+
+            if (playerAnimator == null && playerRenderer != null)
+            {
+                playerAnimator = playerRenderer.GetComponent<Animator>();
+            }
+
+            if (enemyAnimator == null && enemyRenderer != null)
+            {
+                enemyAnimator = enemyRenderer.GetComponent<Animator>();
+            }
+        }
+
+        private void EnsureAudioSource()
+        {
+            if (audioSource == null)
+            {
+                audioSource = GetComponent<AudioSource>();
+            }
+
+            if (audioSource == null)
+            {
+                audioSource = gameObject.AddComponent<AudioSource>();
+            }
+
+            audioSource.playOnAwake = false;
+            audioSource.spatialBlend = 0f;
         }
 
         private static SpriteRenderer FindRendererByName(string objectName)
         {
             var target = GameObject.Find(objectName);
             return target != null ? target.GetComponent<SpriteRenderer>() : null;
+        }
+
+        private static bool PlayerWasHit(CombatSnapshot previous, CombatSnapshot next)
+        {
+            if (previous?.Player == null || next?.Player == null)
+            {
+                return false;
+            }
+
+            return next.Player.CurrentHp < previous.Player.CurrentHp ||
+                next.Player.Block < previous.Player.Block;
+        }
+
+        private static bool EnemyWasHit(CombatSnapshot previous, CombatSnapshot next)
+        {
+            var previousEnemy = previous?.Enemies?.FirstOrDefault();
+            var nextEnemy = next?.Enemies?.FirstOrDefault();
+            if (previousEnemy == null || nextEnemy == null)
+            {
+                return false;
+            }
+
+            return nextEnemy.CurrentHp < previousEnemy.CurrentHp ||
+                nextEnemy.Block < previousEnemy.Block;
         }
     }
 }

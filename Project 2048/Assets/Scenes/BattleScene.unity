@@ -1387,6 +1387,7 @@ MonoBehaviour:
   rewardRestButton: {fileID: 2117684744}
   rewardEnhanceButton: {fileID: 1190682138}
   audioSource: {fileID: 227428885}
+  boardTileEffectProfile: {fileID: 11400000, guid: 0ef3757e7d4b44fda65208813e9dfeaf, type: 2}
   playerHitClip: {fileID: 8300000, guid: 7e9ee6dc04a5d40d1a5dfc4beb9865e7, type: 3}
   enemyHitClip: {fileID: 8300000, guid: a0ca8964c08d54c5dbebf245bdc474ca, type: 3}
   boardMoveClip: {fileID: 8300000, guid: fe0b1f9aeb45b41b089175aeeabd5d95, type: 3}

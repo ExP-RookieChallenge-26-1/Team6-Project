@@ -10453,7 +10453,35 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Presentation/CombatEffectBinding.cs",
     "from_class": "CombatEffectBinding",
+    "to_type": "GameObject",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/CombatEffectBinding.cs",
+    "from_class": "CombatEffectBinding",
+    "to_type": "Abs",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/CombatEffectBinding.cs",
+    "from_class": "CombatEffectBinding",
+    "to_type": "AddComponent",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/CombatEffectBinding.cs",
+    "from_class": "CombatEffectBinding",
     "to_type": "AnimationClip",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/CombatEffectBinding.cs",
+    "from_class": "CombatEffectBinding",
+    "to_type": "Approximately",
     "relation_type": "uses",
     "strength": 1
   },
@@ -10467,7 +10495,49 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Presentation/CombatEffectBinding.cs",
     "from_class": "CombatEffectBinding",
+    "to_type": "AudioSource",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/CombatEffectBinding.cs",
+    "from_class": "CombatEffectBinding",
+    "to_type": "CombatEffectAudio",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/CombatEffectBinding.cs",
+    "from_class": "CombatEffectBinding",
+    "to_type": "CopyAudioSourceSettings",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/CombatEffectBinding.cs",
+    "from_class": "CombatEffectBinding",
+    "to_type": "Destroy",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/CombatEffectBinding.cs",
+    "from_class": "CombatEffectBinding",
     "to_type": "EffectiveAutoDestroySeconds",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/CombatEffectBinding.cs",
+    "from_class": "CombatEffectBinding",
+    "to_type": "EffectiveMaxPitch",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/CombatEffectBinding.cs",
+    "from_class": "CombatEffectBinding",
+    "to_type": "EffectiveMinPitch",
     "relation_type": "uses",
     "strength": 1
   },
@@ -10502,6 +10572,20 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Presentation/CombatEffectBinding.cs",
     "from_class": "CombatEffectBinding",
+    "to_type": "Object",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/CombatEffectBinding.cs",
+    "from_class": "CombatEffectBinding",
+    "to_type": "PlayOneShot",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/CombatEffectBinding.cs",
+    "from_class": "CombatEffectBinding",
     "to_type": "Presentation",
     "relation_type": "uses",
     "strength": 1
@@ -10516,7 +10600,21 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Presentation/CombatEffectBinding.cs",
     "from_class": "CombatEffectBinding",
+    "to_type": "ResolvePitch",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/CombatEffectBinding.cs",
+    "from_class": "CombatEffectBinding",
     "to_type": "Serializable",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/CombatEffectBinding.cs",
+    "from_class": "CombatEffectBinding",
+    "to_type": "SetParent",
     "relation_type": "uses",
     "strength": 1
   },
@@ -10531,6 +10629,13 @@
     "from_file": "Project 2048/Assets/Scripts/Presentation/CombatEffectBinding.cs",
     "from_class": "CombatEffectBinding",
     "to_type": "UnityEngine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/CombatEffectBinding.cs",
+    "from_class": "CombatEffectBinding",
+    "to_type": "Vector3",
     "relation_type": "uses",
     "strength": 1
   },
@@ -12672,6 +12777,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
+    "to_type": "CombatEffectAudioPlayer",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
     "to_type": "CombatEffectBinding",
     "relation_type": "uses",
     "strength": 1
@@ -12736,13 +12848,6 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
     "to_type": "EffectiveAutoDestroySeconds",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
-    "from_class": "CombatWorldSpriteView",
-    "to_type": "EffectiveVolumeScale",
     "relation_type": "uses",
     "strength": 1
   },
@@ -18153,6 +18258,13 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
     "from_class": "CombatPresentationEffectTests",
+    "to_type": "Vector3",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
     "to_type": "Add",
     "relation_type": "uses",
     "strength": 1
@@ -18265,6 +18377,13 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
     "from_class": "CombatPresentationEffectTests",
+    "to_type": "CombatEffectBinding_NormalizesPitchRangeAndStoresVfxOffset",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
     "to_type": "Count",
     "relation_type": "uses",
     "strength": 1
@@ -18301,6 +18420,20 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
     "from_class": "CombatPresentationEffectTests",
     "to_type": "DestroyImmediate",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "EffectiveMaxPitch",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "EffectiveMinPitch",
     "relation_type": "uses",
     "strength": 1
   },
@@ -18371,6 +18504,13 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
     "from_class": "CombatPresentationEffectTests",
     "to_type": "GetBoardTileEffectCues",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "InRange",
     "relation_type": "uses",
     "strength": 1
   },
@@ -18489,6 +18629,13 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
     "from_class": "CombatPresentationEffectTests",
+    "to_type": "ResolvePitch",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
     "to_type": "ResultValue",
     "relation_type": "uses",
     "strength": 1
@@ -18567,6 +18714,20 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
     "from_class": "CombatPresentationEffectTests",
     "to_type": "Vector2Int",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "Vector3",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "Within",
     "relation_type": "uses",
     "strength": 1
   },

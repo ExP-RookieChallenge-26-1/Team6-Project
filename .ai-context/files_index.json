@@ -6779,9 +6779,9 @@
     "file_id": "Project 2048/Assets/Scripts/Presentation/CombatEffectBinding.cs",
     "path": "Project 2048/Assets/Scripts/Presentation/CombatEffectBinding.cs",
     "file_name": "CombatEffectBinding.cs",
-    "content_hash": "5373e4433ab858b451256fb0469fe3ffcafd7c3f",
-    "size": 623,
-    "line_count": 20,
+    "content_hash": "93c612c30a312e912585db6c9185b744dcb8b74b",
+    "size": 3090,
+    "line_count": 82,
     "namespace": "Project2048.Presentation",
     "using_list": [
       "System",
@@ -6797,11 +6797,26 @@
         "attributes": [],
         "is_partial": false,
         "is_generic": false
+      },
+      {
+        "name": "CombatEffectAudioPlayer",
+        "kind": "class",
+        "access": "internal",
+        "base_types": [],
+        "interfaces": [],
+        "attributes": [],
+        "is_partial": false,
+        "is_generic": false
       }
     ],
     "main_class_name": "CombatEffectBinding",
     "unity_type": "None",
-    "methods": [],
+    "methods": [
+      "ResolvePitch",
+      "PlayOneShot",
+      "GameObject",
+      "CopyAudioSourceSettings"
+    ],
     "fields": [
       {
         "name": "sfxClip",
@@ -6823,6 +6838,27 @@
         "access": "public",
         "serialized": false,
         "is_static": false
+      },
+      {
+        "name": "localOffset",
+        "type": "Vector3",
+        "access": "public",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "min",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "max",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
       }
     ],
     "properties": [],
@@ -6836,16 +6872,17 @@
     "has_on_enable": false,
     "has_on_disable": false,
     "serialize_field_count": 0,
-    "public_field_count": 3,
+    "public_field_count": 4,
     "get_component_count": 0,
     "find_call_count": 0,
-    "new_keyword_count": 0,
+    "new_keyword_count": 1,
     "coroutine_count": 0,
     "singleton_candidate": false,
     "dont_destroy_on_load": false,
     "referenced_types": [
       "AudioClip",
       "AnimationClip",
+      "Vector3",
       "System",
       "UnityEngine",
       "Project2048",
@@ -6855,19 +6892,40 @@
       "HasAnyAsset",
       "EffectiveVolumeScale",
       "Max",
-      "EffectiveAutoDestroySeconds"
+      "EffectiveMinPitch",
+      "EffectiveMaxPitch",
+      "EffectiveAutoDestroySeconds",
+      "ResolvePitch",
+      "Approximately",
+      "PlayOneShot",
+      "AudioSource",
+      "CombatEffectAudio",
+      "SetParent",
+      "AddComponent",
+      "CopyAudioSourceSettings",
+      "Abs",
+      "Object",
+      "Destroy"
     ],
     "component_access_types": [],
-    "created_types": [],
+    "created_types": [
+      "GameObject"
+    ],
     "singleton_access_types": [],
-    "string_literals": [],
+    "string_literals": [
+      "CombatEffectAudio"
+    ],
     "numeric_literals": [
       0,
       1,
-      1.25
+      0.01,
+      1.25,
+      0.1
     ],
     "guessed_roles": [
-      "combat"
+      "player",
+      "combat",
+      "runtime"
     ],
     "summary_signals": [
       "전투 계열 로직 포함"
@@ -7178,8 +7236,8 @@
     "file_id": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "path": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "file_name": "CombatUiView.cs",
-    "content_hash": "1fedc0659636a60aed9130db23a08d37a6e7d65d",
-    "size": 69300,
+    "content_hash": "58370d71cc2bdeb159403046b3bdc72cb2435268",
+    "size": 69460,
     "line_count": 1885,
     "namespace": "Project2048.Prototype",
     "using_list": [
@@ -7712,7 +7770,7 @@
     "public_field_count": 4,
     "get_component_count": 29,
     "find_call_count": 1,
-    "new_keyword_count": 52,
+    "new_keyword_count": 54,
     "coroutine_count": 6,
     "singleton_candidate": false,
     "dont_destroy_on_load": false,
@@ -8003,9 +8061,9 @@
     "file_id": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "path": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "file_name": "CombatWorldSpriteView.cs",
-    "content_hash": "bb6249472b389f99f4a25a9164ffc2e571091444",
-    "size": 11429,
-    "line_count": 359,
+    "content_hash": "05dd4dbe4bc943cd4b55fd39010bcff24d3aac62",
+    "size": 11504,
+    "line_count": 360,
     "namespace": "Project2048.Prototype",
     "using_list": [
       "System.Collections",
@@ -8222,8 +8280,8 @@
       "CombatEffectBinding",
       "HasAnyAsset",
       "EnsureAudioSource",
+      "CombatEffectAudioPlayer",
       "PlayOneShot",
-      "EffectiveVolumeScale",
       "Instantiate",
       "Quaternion",
       "EffectiveAutoDestroySeconds",
@@ -11186,9 +11244,9 @@
     "file_id": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
     "path": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
     "file_name": "CombatPresentationEffectTests.cs",
-    "content_hash": "3c1ae0bf51e0f8531c07f2a6b87443754f6b5924",
-    "size": 4103,
-    "line_count": 122,
+    "content_hash": "4c458cb4a27d36dcfc71ea2d937a117d9c6d3cfa",
+    "size": 4750,
+    "line_count": 138,
     "namespace": "Project2048.Tests",
     "using_list": [
       "System.Collections.Generic",
@@ -11219,6 +11277,8 @@
       "CreateOwnedGameObject",
       "GameObject",
       "EnemySo_ResolvesActionEffectByActionId",
+      "CombatEffectBinding_NormalizesPitchRangeAndStoresVfxOffset",
+      "Vector3",
       "BoardTileEffectProfile_UsesSpecificMergeEffectBeforeFallback",
       "AudioRouter_BuildsTileEffectCuesForEachMoveAndEachMergedResult",
       "PrototypeCombatAudioRouter",
@@ -11240,7 +11300,7 @@
     "public_field_count": 0,
     "get_component_count": 0,
     "find_call_count": 0,
-    "new_keyword_count": 15,
+    "new_keyword_count": 18,
     "coroutine_count": 0,
     "singleton_candidate": false,
     "dont_destroy_on_load": false,
@@ -11280,6 +11340,14 @@
       "Null",
       "EffectiveVolumeScale",
       "Zero",
+      "CombatEffectBinding_NormalizesPitchRangeAndStoresVfxOffset",
+      "Vector3",
+      "EffectiveMinPitch",
+      "EqualTo",
+      "Within",
+      "EffectiveMaxPitch",
+      "ResolvePitch",
+      "InRange",
       "BoardTileEffectProfile_UsesSpecificMergeEffectBeforeFallback",
       "BoardTileEffectProfileSO",
       "DefaultMergeVfx",
@@ -11302,7 +11370,6 @@
       "CueType",
       "BoardTileEffectCueType",
       "Move",
-      "EqualTo",
       "Merge",
       "TileValue",
       "Position"
@@ -11310,6 +11377,7 @@
     "component_access_types": [],
     "created_types": [
       "GameObject",
+      "Vector3",
       "PrototypeCombatAudioRouter",
       "BoardTransition",
       "Vector2Int"
@@ -11322,6 +11390,12 @@
     ],
     "numeric_literals": [
       2,
+      1.2,
+      0.8,
+      0.2,
+      1.1,
+      0,
+      0.001,
       2048,
       128,
       2,

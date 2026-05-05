@@ -3522,13 +3522,14 @@
     "file_id": "Project 2048/Assets/Scripts/Combat/PlayerSO.cs",
     "path": "Project 2048/Assets/Scripts/Combat/PlayerSO.cs",
     "file_name": "PlayerSO.cs",
-    "content_hash": "81eb015c2b7a51dd701aaa38a25fcbdedce73a38",
-    "size": 818,
-    "line_count": 31,
+    "content_hash": "fd4d9db039634ea8659c395762a0b985bdabcce5",
+    "size": 1092,
+    "line_count": 38,
     "namespace": "Project2048.Combat",
     "using_list": [
       "System",
       "System.Collections.Generic",
+      "Project2048.Presentation",
       "Project2048.Skills",
       "UnityEngine"
     ],
@@ -3549,6 +3550,7 @@
     "main_class_name": "PlayerSO",
     "unity_type": "ScriptableObject",
     "methods": [
+      "FindActionEffect",
       "OnValidate"
     ],
     "fields": [
@@ -3594,7 +3596,7 @@
     "serialize_field_count": 0,
     "public_field_count": 4,
     "get_component_count": 0,
-    "find_call_count": 0,
+    "find_call_count": 1,
     "new_keyword_count": 0,
     "coroutine_count": 0,
     "singleton_candidate": false,
@@ -3606,6 +3608,7 @@
       "Collections",
       "Generic",
       "Project2048",
+      "Presentation",
       "Skills",
       "UnityEngine",
       "Combat",
@@ -3613,7 +3616,11 @@
       "Game",
       "Player",
       "SkillSO",
+      "CombatantActionEffectBinding",
       "OnRuntimeValidated",
+      "CombatEffectBinding",
+      "FindActionEffect",
+      "Find",
       "OnValidate",
       "Max",
       "Application",
@@ -3637,7 +3644,8 @@
     ],
     "summary_signals": [
       "데이터 자산 중심 구조",
-      "전투 계열 로직 포함"
+      "전투 계열 로직 포함",
+      "Find 계열 탐색 사용"
     ]
   },
   {
@@ -6158,13 +6166,14 @@
     "file_id": "Project 2048/Assets/Scripts/Enemy/EnemySO.cs",
     "path": "Project 2048/Assets/Scripts/Enemy/EnemySO.cs",
     "file_name": "EnemySO.cs",
-    "content_hash": "5d8de24ef2091390b65f3c9319694576a9e86701",
-    "size": 1716,
-    "line_count": 49,
+    "content_hash": "c1ea5ed32d33bb4e16d08d13660119f989ee4ff3",
+    "size": 1990,
+    "line_count": 56,
     "namespace": "Project2048.Enemy",
     "using_list": [
       "System",
       "System.Collections.Generic",
+      "Project2048.Presentation",
       "UnityEngine"
     ],
     "classes": [
@@ -6185,6 +6194,7 @@
     "unity_type": "ScriptableObject",
     "methods": [
       "GetAiProfileLabel",
+      "FindActionEffect",
       "OnValidate"
     ],
     "fields": [
@@ -6279,7 +6289,7 @@
     "serialize_field_count": 0,
     "public_field_count": 11,
     "get_component_count": 0,
-    "find_call_count": 0,
+    "find_call_count": 1,
     "new_keyword_count": 0,
     "coroutine_count": 0,
     "singleton_candidate": false,
@@ -6294,11 +6304,13 @@
       "System",
       "Collections",
       "Generic",
-      "UnityEngine",
       "Project2048",
+      "Presentation",
+      "UnityEngine",
       "Enemy",
       "CreateAssetMenu",
       "Game",
+      "CombatantActionEffectBinding",
       "AI",
       "EnemyIntent",
       "Balanced",
@@ -6308,6 +6320,9 @@
       "GetAiProfileLabel",
       "EnemyAiProfileFormatter",
       "Format",
+      "CombatEffectBinding",
+      "FindActionEffect",
+      "Find",
       "OnValidate",
       "Max",
       "Application",
@@ -6329,6 +6344,532 @@
     ],
     "summary_signals": [
       "데이터 자산 중심 구조",
+      "전투 계열 로직 포함",
+      "Find 계열 탐색 사용"
+    ]
+  },
+  {
+    "file_id": "Project 2048/Assets/Scripts/Presentation/BoardTileEffectCue.cs",
+    "path": "Project 2048/Assets/Scripts/Presentation/BoardTileEffectCue.cs",
+    "file_name": "BoardTileEffectCue.cs",
+    "content_hash": "696be2dd764f7c5be2db6d98f2918abd07ebe9b1",
+    "size": 590,
+    "line_count": 27,
+    "namespace": "Project2048.Presentation",
+    "using_list": [
+      "System",
+      "UnityEngine"
+    ],
+    "classes": [
+      {
+        "name": "BoardTileEffectCue",
+        "kind": "struct",
+        "access": "internal",
+        "base_types": [],
+        "interfaces": [],
+        "attributes": [],
+        "is_partial": false,
+        "is_generic": false
+      }
+    ],
+    "main_class_name": "BoardTileEffectCue",
+    "unity_type": "None",
+    "methods": [
+      "BoardTileEffectCue"
+    ],
+    "fields": [],
+    "properties": [
+      {
+        "access": "public",
+        "type": "BoardTileEffectCueType",
+        "name": "CueType"
+      },
+      {
+        "access": "public",
+        "type": "int",
+        "name": "TileValue"
+      },
+      {
+        "access": "public",
+        "type": "Vector2Int",
+        "name": "Position"
+      }
+    ],
+    "events": [],
+    "unity_messages": [],
+    "has_update": false,
+    "has_fixed_update": false,
+    "has_late_update": false,
+    "has_awake": false,
+    "has_start": false,
+    "has_on_enable": false,
+    "has_on_disable": false,
+    "serialize_field_count": 0,
+    "public_field_count": 0,
+    "get_component_count": 0,
+    "find_call_count": 0,
+    "new_keyword_count": 0,
+    "coroutine_count": 0,
+    "singleton_candidate": false,
+    "dont_destroy_on_load": false,
+    "referenced_types": [
+      "BoardTileEffectCueType",
+      "int",
+      "Vector2Int",
+      "System",
+      "UnityEngine",
+      "Project2048",
+      "Presentation",
+      "Move",
+      "Merge",
+      "Serializable",
+      "CueType",
+      "TileValue",
+      "Position"
+    ],
+    "component_access_types": [],
+    "created_types": [],
+    "singleton_access_types": [],
+    "string_literals": [],
+    "numeric_literals": [],
+    "guessed_roles": [
+      "player"
+    ],
+    "summary_signals": []
+  },
+  {
+    "file_id": "Project 2048/Assets/Scripts/Presentation/BoardTileEffectProfileSO.cs",
+    "path": "Project 2048/Assets/Scripts/Presentation/BoardTileEffectProfileSO.cs",
+    "file_name": "BoardTileEffectProfileSO.cs",
+    "content_hash": "8d039b4ebf1574c81660833fbc203f62dc7f3c9d",
+    "size": 1998,
+    "line_count": 76,
+    "namespace": "Project2048.Presentation",
+    "using_list": [
+      "System",
+      "System.Collections.Generic",
+      "UnityEngine"
+    ],
+    "classes": [
+      {
+        "name": "BoardTileEffectProfileSO",
+        "kind": "class",
+        "access": "public",
+        "base_types": [
+          "ScriptableObject"
+        ],
+        "interfaces": [],
+        "attributes": [],
+        "is_partial": false,
+        "is_generic": false
+      },
+      {
+        "name": "BoardTileMergeEffectBinding",
+        "kind": "class",
+        "access": "public",
+        "base_types": [],
+        "interfaces": [],
+        "attributes": [],
+        "is_partial": false,
+        "is_generic": false
+      }
+    ],
+    "main_class_name": "BoardTileEffectProfileSO",
+    "unity_type": "ScriptableObject",
+    "methods": [
+      "ResolveMoveEffect",
+      "ResolveMergeEffect",
+      "OnValidate",
+      "Normalize",
+      "NearestPowerOfTwo"
+    ],
+    "fields": [
+      {
+        "name": "tileValue",
+        "type": "int",
+        "access": "public",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "power",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      }
+    ],
+    "properties": [],
+    "events": [],
+    "unity_messages": [],
+    "has_update": false,
+    "has_fixed_update": false,
+    "has_late_update": false,
+    "has_awake": false,
+    "has_start": false,
+    "has_on_enable": false,
+    "has_on_disable": false,
+    "serialize_field_count": 0,
+    "public_field_count": 1,
+    "get_component_count": 0,
+    "find_call_count": 0,
+    "new_keyword_count": 1,
+    "coroutine_count": 0,
+    "singleton_candidate": false,
+    "dont_destroy_on_load": false,
+    "referenced_types": [
+      "int",
+      "System",
+      "Collections",
+      "Generic",
+      "UnityEngine",
+      "Project2048",
+      "Presentation",
+      "CreateAssetMenu",
+      "Game",
+      "Board",
+      "Tile",
+      "Effect",
+      "Profile",
+      "CombatEffectBinding",
+      "ResolveMoveEffect",
+      "ResolveMergeEffect",
+      "HasAnyAsset",
+      "OnValidate",
+      "Normalize",
+      "Serializable",
+      "Clamp",
+      "NearestPowerOfTwo",
+      "Max"
+    ],
+    "component_access_types": [],
+    "created_types": [
+      "List"
+    ],
+    "singleton_access_types": [],
+    "string_literals": [
+      "Game/Presentation/Board Tile Effect Profile"
+    ],
+    "numeric_literals": [
+      2,
+      2048
+    ],
+    "guessed_roles": [
+      "data",
+      "player",
+      "combat"
+    ],
+    "summary_signals": [
+      "데이터 자산 중심 구조",
+      "전투 계열 로직 포함"
+    ]
+  },
+  {
+    "file_id": "Project 2048/Assets/Scripts/Presentation/CombatActionIds.cs",
+    "path": "Project 2048/Assets/Scripts/Presentation/CombatActionIds.cs",
+    "file_name": "CombatActionIds.cs",
+    "content_hash": "67b760a971f285f5b6c01275640121cde4260eed",
+    "size": 434,
+    "line_count": 14,
+    "namespace": "Project2048.Presentation",
+    "using_list": [],
+    "classes": [
+      {
+        "name": "CombatActionIds",
+        "kind": "class",
+        "access": "internal",
+        "base_types": [],
+        "interfaces": [],
+        "attributes": [],
+        "is_partial": false,
+        "is_generic": false
+      }
+    ],
+    "main_class_name": "CombatActionIds",
+    "unity_type": "None",
+    "methods": [],
+    "fields": [
+      {
+        "name": "Idle",
+        "type": "string",
+        "access": "public",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "Attack",
+        "type": "string",
+        "access": "public",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "Defend",
+        "type": "string",
+        "access": "public",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "Hit",
+        "type": "string",
+        "access": "public",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "Death",
+        "type": "string",
+        "access": "public",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "DebuffFear",
+        "type": "string",
+        "access": "public",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "DebuffDarkness",
+        "type": "string",
+        "access": "public",
+        "serialized": false,
+        "is_static": false
+      }
+    ],
+    "properties": [],
+    "events": [],
+    "unity_messages": [],
+    "has_update": false,
+    "has_fixed_update": false,
+    "has_late_update": false,
+    "has_awake": false,
+    "has_start": false,
+    "has_on_enable": false,
+    "has_on_disable": false,
+    "serialize_field_count": 0,
+    "public_field_count": 7,
+    "get_component_count": 0,
+    "find_call_count": 0,
+    "new_keyword_count": 0,
+    "coroutine_count": 0,
+    "singleton_candidate": false,
+    "dont_destroy_on_load": false,
+    "referenced_types": [
+      "string",
+      "Project2048",
+      "Presentation",
+      "Idle",
+      "Attack",
+      "Defend",
+      "Hit",
+      "Death",
+      "DebuffFear",
+      "DebuffDarkness"
+    ],
+    "component_access_types": [],
+    "created_types": [],
+    "singleton_access_types": [],
+    "string_literals": [
+      "idle",
+      "attack",
+      "defend",
+      "hit",
+      "death",
+      "debuff_fear",
+      "debuff_darkness"
+    ],
+    "numeric_literals": [],
+    "guessed_roles": [
+      "combat"
+    ],
+    "summary_signals": [
+      "전투 계열 로직 포함"
+    ]
+  },
+  {
+    "file_id": "Project 2048/Assets/Scripts/Presentation/CombatantActionEffectBinding.cs",
+    "path": "Project 2048/Assets/Scripts/Presentation/CombatantActionEffectBinding.cs",
+    "file_name": "CombatantActionEffectBinding.cs",
+    "content_hash": "ca6f383e5276349d459360fddc19e97521207466",
+    "size": 1018,
+    "line_count": 39,
+    "namespace": "Project2048.Presentation",
+    "using_list": [
+      "System",
+      "System.Collections.Generic",
+      "UnityEngine"
+    ],
+    "classes": [
+      {
+        "name": "CombatantActionEffectBinding",
+        "kind": "class",
+        "access": "public",
+        "base_types": [],
+        "interfaces": [],
+        "attributes": [],
+        "is_partial": false,
+        "is_generic": false
+      }
+    ],
+    "main_class_name": "CombatantActionEffectBinding",
+    "unity_type": "None",
+    "methods": [
+      "Find"
+    ],
+    "fields": [
+      {
+        "name": "actionId",
+        "type": "string",
+        "access": "public",
+        "serialized": false,
+        "is_static": false
+      }
+    ],
+    "properties": [],
+    "events": [],
+    "unity_messages": [],
+    "has_update": false,
+    "has_fixed_update": false,
+    "has_late_update": false,
+    "has_awake": false,
+    "has_start": false,
+    "has_on_enable": false,
+    "has_on_disable": false,
+    "serialize_field_count": 0,
+    "public_field_count": 1,
+    "get_component_count": 0,
+    "find_call_count": 0,
+    "new_keyword_count": 0,
+    "coroutine_count": 0,
+    "singleton_candidate": false,
+    "dont_destroy_on_load": false,
+    "referenced_types": [
+      "string",
+      "System",
+      "Collections",
+      "Generic",
+      "UnityEngine",
+      "Project2048",
+      "Presentation",
+      "Serializable",
+      "CombatEffectBinding",
+      "Find",
+      "IsNullOrWhiteSpace",
+      "Equals",
+      "Trim",
+      "StringComparison",
+      "OrdinalIgnoreCase"
+    ],
+    "component_access_types": [],
+    "created_types": [],
+    "singleton_access_types": [],
+    "string_literals": [],
+    "numeric_literals": [],
+    "guessed_roles": [
+      "combat"
+    ],
+    "summary_signals": [
+      "전투 계열 로직 포함"
+    ]
+  },
+  {
+    "file_id": "Project 2048/Assets/Scripts/Presentation/CombatEffectBinding.cs",
+    "path": "Project 2048/Assets/Scripts/Presentation/CombatEffectBinding.cs",
+    "file_name": "CombatEffectBinding.cs",
+    "content_hash": "5373e4433ab858b451256fb0469fe3ffcafd7c3f",
+    "size": 623,
+    "line_count": 20,
+    "namespace": "Project2048.Presentation",
+    "using_list": [
+      "System",
+      "UnityEngine"
+    ],
+    "classes": [
+      {
+        "name": "CombatEffectBinding",
+        "kind": "class",
+        "access": "public",
+        "base_types": [],
+        "interfaces": [],
+        "attributes": [],
+        "is_partial": false,
+        "is_generic": false
+      }
+    ],
+    "main_class_name": "CombatEffectBinding",
+    "unity_type": "None",
+    "methods": [],
+    "fields": [
+      {
+        "name": "sfxClip",
+        "type": "AudioClip",
+        "access": "public",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "vfxPrefab",
+        "type": "GameObject",
+        "access": "public",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "animationClip",
+        "type": "AnimationClip",
+        "access": "public",
+        "serialized": false,
+        "is_static": false
+      }
+    ],
+    "properties": [],
+    "events": [],
+    "unity_messages": [],
+    "has_update": false,
+    "has_fixed_update": false,
+    "has_late_update": false,
+    "has_awake": false,
+    "has_start": false,
+    "has_on_enable": false,
+    "has_on_disable": false,
+    "serialize_field_count": 0,
+    "public_field_count": 3,
+    "get_component_count": 0,
+    "find_call_count": 0,
+    "new_keyword_count": 0,
+    "coroutine_count": 0,
+    "singleton_candidate": false,
+    "dont_destroy_on_load": false,
+    "referenced_types": [
+      "AudioClip",
+      "AnimationClip",
+      "System",
+      "UnityEngine",
+      "Project2048",
+      "Presentation",
+      "Serializable",
+      "Min",
+      "HasAnyAsset",
+      "EffectiveVolumeScale",
+      "Max",
+      "EffectiveAutoDestroySeconds"
+    ],
+    "component_access_types": [],
+    "created_types": [],
+    "singleton_access_types": [],
+    "string_literals": [],
+    "numeric_literals": [
+      0,
+      1,
+      1.25
+    ],
+    "guessed_roles": [
+      "combat"
+    ],
+    "summary_signals": [
       "전투 계열 로직 포함"
     ]
   },
@@ -6637,9 +7178,9 @@
     "file_id": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "path": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "file_name": "CombatUiView.cs",
-    "content_hash": "5243b9654a439d5b987990184e6e45c5c5406581",
-    "size": 65266,
-    "line_count": 1767,
+    "content_hash": "1fedc0659636a60aed9130db23a08d37a6e7d65d",
+    "size": 69300,
+    "line_count": 1885,
     "namespace": "Project2048.Prototype",
     "using_list": [
       "System.Collections",
@@ -6648,6 +7189,7 @@
       "Project2048.Board2048",
       "Project2048.Combat",
       "Project2048.Enemy",
+      "Project2048.Presentation",
       "Project2048.Rewards",
       "Project2048.Score",
       "Project2048.Skills",
@@ -6735,6 +7277,10 @@
       "FindChildByName",
       "PlaySoundCues",
       "PlaySoundCue",
+      "PlayFallbackBoardSoundCues",
+      "ResolveBoardTileEffect",
+      "PlayEffectAudio",
+      "SpawnBoardEffectPrefab",
       "RenderOverlay",
       "IsRewardReplacementVisible",
       "HideRuntimeOverlays",
@@ -7064,6 +7610,34 @@
         "is_static": false
       },
       {
+        "name": "playedMoveAudio",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "playedMergeAudio",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "instance",
+        "type": "GameObject",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "lifetime",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
         "name": "reward",
         "type": "var",
         "access": "internal",
@@ -7138,7 +7712,7 @@
     "public_field_count": 4,
     "get_component_count": 29,
     "find_call_count": 1,
-    "new_keyword_count": 49,
+    "new_keyword_count": 52,
     "coroutine_count": 6,
     "singleton_candidate": false,
     "dont_destroy_on_load": false,
@@ -7161,6 +7735,7 @@
       "Board2048",
       "Combat",
       "Enemy",
+      "Presentation",
       "Rewards",
       "Score",
       "Skills",
@@ -7197,6 +7772,7 @@
       "SFX",
       "Final",
       "AudioSource",
+      "BoardTileEffectProfileSO",
       "AudioClip",
       "Theme",
       "Color",
@@ -7270,6 +7846,9 @@
       "LastVfxCue",
       "PlayEnemyDeathFadeIfNeeded",
       "PlayBoardTransition",
+      "PlayBoardTileEffectCues",
+      "GetBoardTileEffectCues",
+      "PlayFallbackBoardSoundCues",
       "GetBoardTransitionCues",
       "OnRewardOffered",
       "HandleRewardOffered",
@@ -7337,12 +7916,7 @@
       "To",
       "Value",
       "TryGetCellCenter",
-      "GetCell",
-      "CreateAnimatedTile",
-      "Add",
-      "SmoothStep",
-      "Clamp01",
-      "LerpUnclamped"
+      "GetCell"
     ],
     "component_access_types": [
       "Image",
@@ -7429,15 +8003,16 @@
     "file_id": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "path": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "file_name": "CombatWorldSpriteView.cs",
-    "content_hash": "90d30fd9327b5ce90512021f3d9fa29267d478cf",
-    "size": 6641,
-    "line_count": 220,
+    "content_hash": "bb6249472b389f99f4a25a9164ffc2e571091444",
+    "size": 11429,
+    "line_count": 359,
     "namespace": "Project2048.Prototype",
     "using_list": [
       "System.Collections",
       "System.Linq",
       "Project2048.Combat",
       "Project2048.Enemy",
+      "Project2048.Presentation",
       "UnityEngine"
     ],
     "classes": [
@@ -7462,6 +8037,10 @@
       "UnbindCombatEvents",
       "HandleCombatStateChanged",
       "Render",
+      "PlayPlayerActionEffectIfNeeded",
+      "PlayEnemyActionEffectIfNeeded",
+      "ResolveCurrentEnemyData",
+      "PlayCombatantActionEffect",
       "RenderBackground",
       "ResolveEnemySprite",
       "PlayEnemyDeathFadeIfNeeded",
@@ -7470,7 +8049,10 @@
       "ClearEnemyDeathFade",
       "SetEnemyRendererAlpha",
       "ResolveMissingReferences",
-      "FindRendererByName"
+      "EnsureAudioSource",
+      "FindRendererByName",
+      "PlayerWasHit",
+      "EnemyWasHit"
     ],
     "fields": [
       {
@@ -7523,6 +8105,27 @@
         "is_static": false
       },
       {
+        "name": "parent",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "lifetime",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "enemies",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
         "name": "startTime",
         "type": "var",
         "access": "internal",
@@ -7558,7 +8161,7 @@
     "has_on_disable": false,
     "serialize_field_count": 0,
     "public_field_count": 1,
-    "get_component_count": 1,
+    "get_component_count": 4,
     "find_call_count": 1,
     "new_keyword_count": 0,
     "coroutine_count": 2,
@@ -7576,12 +8179,15 @@
       "Project2048",
       "Combat",
       "Enemy",
+      "Presentation",
       "UnityEngine",
       "Prototype",
       "EnemyDeathFadeDurationSeconds",
       "PrototypeCombatBootstrap",
       "SpriteRenderer",
       "Sprite",
+      "AudioSource",
+      "Animator",
       "Initialize",
       "UnbindCombatEvents",
       "ResolveMissingReferences",
@@ -7596,12 +8202,33 @@
       "SetEnemyRendererAlpha",
       "OnDestroy",
       "ClearEnemyDeathFade",
+      "PlayerWasHit",
+      "EnemyWasHit",
+      "PlayPlayerActionEffectIfNeeded",
+      "PlayEnemyActionEffectIfNeeded",
       "PlayEnemyDeathFadeIfNeeded",
       "Player",
       "Data",
       "ResolveEnemySprite",
+      "PlayCombatantActionEffect",
+      "FindActionEffect",
+      "CombatActionIds",
+      "Hit",
+      "ResolveCurrentEnemyData",
+      "Death",
+      "EnemySO",
       "EnemyIndex",
       "Count",
+      "CombatEffectBinding",
+      "HasAnyAsset",
+      "EnsureAudioSource",
+      "PlayOneShot",
+      "EffectiveVolumeScale",
+      "Instantiate",
+      "Quaternion",
+      "EffectiveAutoDestroySeconds",
+      "Destroy",
+      "Play",
       "PlayEnemyDeathFade",
       "Application",
       "StartCoroutine",
@@ -7613,10 +8240,15 @@
       "BackgroundSprite",
       "PlayerSprite",
       "EnemySprite",
+      "GetComponent",
+      "AddComponent",
       "Find",
-      "GetComponent"
+      "CurrentHp",
+      "Block"
     ],
     "component_access_types": [
+      "Animator",
+      "AudioSource",
       "SpriteRenderer"
     ],
     "created_types": [],
@@ -7635,8 +8267,8 @@
     "guessed_roles": [
       "combat",
       "runtime",
-      "player",
       "manager",
+      "player",
       "data"
     ],
     "summary_signals": [
@@ -7650,21 +8282,33 @@
     "file_id": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatAudioRouter.cs",
     "path": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatAudioRouter.cs",
     "file_name": "PrototypeCombatAudioRouter.cs",
-    "content_hash": "f57d9ec67f47691de3aea6ab2fe9e40ab224133d",
-    "size": 3480,
-    "line_count": 114,
+    "content_hash": "d7cc14fe015c2a2e8e781e5e84dc97acfddd4273",
+    "size": 5065,
+    "line_count": 161,
     "namespace": "Project2048.Prototype",
     "using_list": [
       "System.Collections.Generic",
       "System.Linq",
       "Project2048.Board2048",
-      "Project2048.Combat"
+      "Project2048.Combat",
+      "Project2048.Presentation",
+      "UnityEngine"
     ],
     "classes": [
       {
         "name": "PrototypeCombatAudioRouter",
         "kind": "class",
         "access": "public",
+        "base_types": [],
+        "interfaces": [],
+        "attributes": [],
+        "is_partial": false,
+        "is_generic": false
+      },
+      {
+        "name": "MergeTargetKey",
+        "kind": "struct",
+        "access": "internal",
         "base_types": [],
         "interfaces": [],
         "attributes": [],
@@ -7678,6 +8322,9 @@
       "Reset",
       "GetSnapshotCues",
       "GetBoardTransitionCues",
+      "GetBoardTileEffectCues",
+      "BoardTileEffectCue",
+      "MergeTargetKey",
       "PlayerWasHit",
       "EnemyWasHit"
     ],
@@ -7690,7 +8337,18 @@
         "is_static": false
       }
     ],
-    "properties": [],
+    "properties": [
+      {
+        "access": "private",
+        "type": "Vector2Int",
+        "name": "Position"
+      },
+      {
+        "access": "private",
+        "type": "int",
+        "name": "ResultValue"
+      }
+    ],
     "events": [],
     "unity_messages": [],
     "has_update": false,
@@ -7704,12 +8362,14 @@
     "public_field_count": 0,
     "get_component_count": 0,
     "find_call_count": 0,
-    "new_keyword_count": 2,
+    "new_keyword_count": 7,
     "coroutine_count": 0,
     "singleton_candidate": false,
     "dont_destroy_on_load": false,
     "referenced_types": [
       "CombatSnapshot",
+      "Vector2Int",
+      "int",
       "System",
       "Collections",
       "Generic",
@@ -7717,6 +8377,8 @@
       "Project2048",
       "Board2048",
       "Combat",
+      "Presentation",
+      "UnityEngine",
       "Prototype",
       "Temporary",
       "CombatUiView",
@@ -7743,6 +8405,15 @@
       "Array",
       "Empty",
       "IsMergeParticipant",
+      "BoardTileEffectCue",
+      "GetBoardTileEffectCues",
+      "Count",
+      "Value",
+      "BoardTileEffectCueType",
+      "Move",
+      "To",
+      "ResultValue",
+      "Merge",
       "Player",
       "CurrentHp",
       "Phase",
@@ -7751,11 +8422,15 @@
       "Block",
       "Enemies",
       "FirstOrDefault",
-      "EnemyIndex"
+      "EnemyIndex",
+      "Position"
     ],
     "component_access_types": [],
     "created_types": [
-      "List"
+      "List",
+      "HashSet",
+      "BoardTileEffectCue",
+      "MergeTargetKey"
     ],
     "singleton_access_types": [],
     "string_literals": [
@@ -9381,11 +10056,12 @@
     "file_id": "Project 2048/Assets/Scripts/Skills/SkillSO.cs",
     "path": "Project 2048/Assets/Scripts/Skills/SkillSO.cs",
     "file_name": "SkillSO.cs",
-    "content_hash": "4eaf4d816a1e9293cb90e264ac807a9c33a707be",
-    "size": 594,
-    "line_count": 25,
+    "content_hash": "c71629702478ab07c785f43200c4a68da91f9aa8",
+    "size": 687,
+    "line_count": 27,
     "namespace": "Project2048.Skills",
     "using_list": [
+      "Project2048.Presentation",
       "UnityEngine"
     ],
     "classes": [
@@ -9488,12 +10164,14 @@
       "SkillType",
       "int",
       "Sprite",
-      "UnityEngine",
       "Project2048",
+      "Presentation",
+      "UnityEngine",
       "Skills",
       "CreateAssetMenu",
       "Game",
       "Skill",
+      "CombatEffectBinding",
       "TextArea",
       "OnValidate",
       "Max"
@@ -9506,8 +10184,8 @@
     ],
     "numeric_literals": [],
     "guessed_roles": [
-      "data",
-      "combat"
+      "combat",
+      "data"
     ],
     "summary_signals": [
       "데이터 자산 중심 구조",
@@ -10505,6 +11183,163 @@
     ]
   },
   {
+    "file_id": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "path": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "file_name": "CombatPresentationEffectTests.cs",
+    "content_hash": "3c1ae0bf51e0f8531c07f2a6b87443754f6b5924",
+    "size": 4103,
+    "line_count": 122,
+    "namespace": "Project2048.Tests",
+    "using_list": [
+      "System.Collections.Generic",
+      "System.Linq",
+      "NUnit.Framework",
+      "Project2048.Board2048",
+      "Project2048.Enemy",
+      "Project2048.Presentation",
+      "Project2048.Prototype",
+      "UnityEngine"
+    ],
+    "classes": [
+      {
+        "name": "CombatPresentationEffectTests",
+        "kind": "class",
+        "access": "public",
+        "base_types": [],
+        "interfaces": [],
+        "attributes": [],
+        "is_partial": false,
+        "is_generic": false
+      }
+    ],
+    "main_class_name": "CombatPresentationEffectTests",
+    "unity_type": "None",
+    "methods": [
+      "TearDown",
+      "CreateOwnedGameObject",
+      "GameObject",
+      "EnemySo_ResolvesActionEffectByActionId",
+      "BoardTileEffectProfile_UsesSpecificMergeEffectBeforeFallback",
+      "AudioRouter_BuildsTileEffectCuesForEachMoveAndEachMergedResult",
+      "PrototypeCombatAudioRouter",
+      "BoardTransition",
+      "Vector2Int"
+    ],
+    "fields": [],
+    "properties": [],
+    "events": [],
+    "unity_messages": [],
+    "has_update": false,
+    "has_fixed_update": false,
+    "has_late_update": false,
+    "has_awake": false,
+    "has_start": false,
+    "has_on_enable": false,
+    "has_on_disable": false,
+    "serialize_field_count": 0,
+    "public_field_count": 0,
+    "get_component_count": 0,
+    "find_call_count": 0,
+    "new_keyword_count": 15,
+    "coroutine_count": 0,
+    "singleton_candidate": false,
+    "dont_destroy_on_load": false,
+    "referenced_types": [
+      "System",
+      "Collections",
+      "Generic",
+      "Linq",
+      "NUnit",
+      "Framework",
+      "Project2048",
+      "Board2048",
+      "Enemy",
+      "Presentation",
+      "Prototype",
+      "UnityEngine",
+      "Tests",
+      "Object",
+      "TearDown",
+      "DestroyImmediate",
+      "Clear",
+      "CreateOwnedGameObject",
+      "Add",
+      "Test",
+      "EnemySo_ResolvesActionEffectByActionId",
+      "CreateInstance",
+      "EnemySO",
+      "CombatEffectBinding",
+      "CombatantActionEffectBinding",
+      "CombatActionIds",
+      "Attack",
+      "Assert",
+      "That",
+      "FindActionEffect",
+      "Is",
+      "SameAs",
+      "Null",
+      "EffectiveVolumeScale",
+      "Zero",
+      "BoardTileEffectProfile_UsesSpecificMergeEffectBeforeFallback",
+      "BoardTileEffectProfileSO",
+      "DefaultMergeVfx",
+      "Merge2048Vfx",
+      "BoardTileMergeEffectBinding",
+      "ResolveMergeEffect",
+      "AudioRouter_BuildsTileEffectCuesForEachMoveAndEachMergedResult",
+      "PrototypeCombatAudioRouter",
+      "BoardTransition",
+      "Movements",
+      "BoardTileMovement",
+      "Value",
+      "From",
+      "Vector2Int",
+      "To",
+      "IsMergeParticipant",
+      "ResultValue",
+      "GetBoardTileEffectCues",
+      "Count",
+      "CueType",
+      "BoardTileEffectCueType",
+      "Move",
+      "EqualTo",
+      "Merge",
+      "TileValue",
+      "Position"
+    ],
+    "component_access_types": [],
+    "created_types": [
+      "GameObject",
+      "PrototypeCombatAudioRouter",
+      "BoardTransition",
+      "Vector2Int"
+    ],
+    "singleton_access_types": [],
+    "string_literals": [
+      " missing ",
+      "DefaultMergeVfx",
+      "Merge2048Vfx"
+    ],
+    "numeric_literals": [
+      2,
+      2048,
+      128,
+      2,
+      4
+    ],
+    "guessed_roles": [
+      "combat",
+      "data",
+      "ui",
+      "player",
+      "manager"
+    ],
+    "summary_signals": [
+      "UI 관련 로직 포함",
+      "전투 계열 로직 포함"
+    ]
+  },
+  {
     "file_id": "Project 2048/Assets/Tests/EditMode/CombatUiContractTests.cs",
     "path": "Project 2048/Assets/Tests/EditMode/CombatUiContractTests.cs",
     "file_name": "CombatUiContractTests.cs",
@@ -10801,9 +11636,9 @@
     "file_id": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "path": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "file_name": "CombatUiViewTests.cs",
-    "content_hash": "d6f5f60508b32dc457a9a9d4193006ee97527ad9",
-    "size": 31792,
-    "line_count": 679,
+    "content_hash": "34ede01620ee7bf98d355b958d9645c62f8424b1",
+    "size": 31906,
+    "line_count": 680,
     "namespace": "Project2048.Tests",
     "using_list": [
       "NUnit.Framework",

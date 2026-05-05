@@ -161,7 +161,7 @@ namespace Project2048.Prototype
                 EnsureAudioSource();
                 if (audioSource != null)
                 {
-                    audioSource.PlayOneShot(effect.sfxClip, effect.EffectiveVolumeScale);
+                    CombatEffectAudioPlayer.PlayOneShot(audioSource, effect, 1f, transform);
                 }
             }
 
@@ -169,6 +169,7 @@ namespace Project2048.Prototype
             {
                 var parent = anchor != null ? anchor : transform;
                 var instance = Instantiate(effect.vfxPrefab, parent.position, Quaternion.identity, parent);
+                instance.transform.localPosition += effect.localOffset;
                 var lifetime = effect.EffectiveAutoDestroySeconds;
                 if (lifetime > 0f)
                 {

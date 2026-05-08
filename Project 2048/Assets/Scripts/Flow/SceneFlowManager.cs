@@ -9,7 +9,7 @@ namespace Project2048.Flow
     {
         private const string MainMenuSceneName = "MainMenu";
         private const string StorySceneName = "StoryScene";
-        private const string InGameSceneName = "BattleScene";
+        private const string BattleSceneName = "BattleScene";
 
         [SerializeField] private FlowController flowController;
         [SerializeField] private float minimumLoadingSeconds = 2f;
@@ -29,8 +29,9 @@ namespace Project2048.Flow
                 return;
             }
 
-            flowController.OnNewGameStoryStarted += LoadStory;
-            flowController.OnGameStarted += LoadInGame;
+            flowController.OnMainMenuSceneLoadRequested += LoadMainMenu;
+            flowController.OnStorySceneLoadRequested += LoadStory;
+            flowController.OnBattleSceneLoadRequested += LoadBattle;
         }
 
         private void OnDisable()
@@ -40,8 +41,9 @@ namespace Project2048.Flow
                 return;
             }
 
-            flowController.OnNewGameStoryStarted -= LoadStory;
-            flowController.OnGameStarted -= LoadInGame;
+            flowController.OnMainMenuSceneLoadRequested -= LoadMainMenu;
+            flowController.OnStorySceneLoadRequested -= LoadStory;
+            flowController.OnBattleSceneLoadRequested -= LoadBattle;
         }
 
         public void LoadMainMenu()
@@ -54,9 +56,9 @@ namespace Project2048.Flow
             LoadScene(StorySceneName);
         }
 
-        public void LoadInGame()
+        public void LoadBattle()
         {
-            LoadScene(InGameSceneName);
+            LoadScene(BattleSceneName);
         }
 
         public void LoadScene(string sceneName)

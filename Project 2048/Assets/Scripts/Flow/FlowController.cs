@@ -1,4 +1,4 @@
-using Project2048.Core;
+癤퓎sing Project2048.Core;
 using System;
 using UnityEngine;
 
@@ -9,7 +9,9 @@ namespace Project2048.Flow
         private GameContext gameContext;
 
         public event Action OnLoadingStarted;
-        public event Action OnNewGameStoryStarted;
+        public event Action OnMainMenuSceneLoadRequested;
+        public event Action OnStorySceneLoadRequested;
+        public event Action OnBattleSceneLoadRequested;
         public event Action OnGameStarted;
 
         public void Initialized(GameContext context)
@@ -28,17 +30,15 @@ namespace Project2048.Flow
             OnLoadingStarted?.Invoke();
 
             gameContext.SetGameState(GameContext.GameState.Loading);
-            // gameContext.SetStageId("첫 스테이지");    첫 스테이지 정해지면 설정
+            // TODO: Set first stage ID when stage data is ready.
             gameContext.SetScore(0);
             gameContext.SetRunActive(true);
 
-            // 나중에 PlayerManager.InitializeDefaultPlayer();
-            // 나중에 ScoreManager.ResetScore();
-            // 나중에 SaveLoadManager.PrepareNewSaveSlot();
+            // TODO: PlayerManager.InitializeDefaultPlayer();
+            // TODO: SaveLoadManager.PrepareNewSaveSlot();
 
             gameContext.SetGameState(GameContext.GameState.Story);
-
-            OnNewGameStoryStarted?.Invoke();
+            OnStorySceneLoadRequested?.Invoke();
         }
 
         public void ContinueGame()
@@ -53,18 +53,13 @@ namespace Project2048.Flow
 
             gameContext.SetGameState(GameContext.GameState.Loading);
 
-            // 나중에 SaveLoadManager.Load();
-            // 로드 성공 시 GameContext에 저장 데이터 반영
-            // gameContext.SetStageId(saveData.currentStageId);
-            // gameContext.SetScore(saveData.currentScore);
-            // gameContext.SetRunActive(true);
+            // TODO: SaveLoadManager.Load();
+            // TODO: Restore GameContext from save data.
 
-            gameContext.SetGameState(GameContext.GameState.Playing);
-
-            OnGameStarted?.Invoke();
+            OnBattleSceneLoadRequested?.Invoke();
         }
 
-        public void StartGameAfterStory()
+        public void CompleteOpeningStory()
         {
             if (gameContext == null)
             {
@@ -76,11 +71,34 @@ namespace Project2048.Flow
 
             gameContext.SetGameState(GameContext.GameState.Loading);
 
-            // 나중에 스토리 완료 저장이 필요하면 여기서 SaveLoadManager.Save();
+            // TODO: Save story checkpoint if needed.
+
+            OnBattleSceneLoadRequested?.Invoke();
+        }
+
+        public void CompleteBattleSceneLoad()
+        {
+            if (gameContext == null)
+            {
+                Debug.LogError("GameContext is not initialized");
+                return;
+            }
 
             gameContext.SetGameState(GameContext.GameState.Playing);
-
             OnGameStarted?.Invoke();
+        }
+
+        public void RequestMainMenu()
+        {
+            if (gameContext == null)
+            {
+                Debug.LogError("GameContext is not initialized");
+                return;
+            }
+
+            OnLoadingStarted?.Invoke();
+            gameContext.SetGameState(GameContext.GameState.Loading);
+            OnMainMenuSceneLoadRequested?.Invoke();
         }
     }
 }

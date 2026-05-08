@@ -27,7 +27,7 @@ namespace Project2048.Story
                 return;
             }
 
-            storyController.OnStoryFinished += flowController.StartGameAfterStory;
+            storyController.OnStoryFinished += flowController.CompleteOpeningStory;
         }
 
         private void OnDisable()
@@ -37,7 +37,7 @@ namespace Project2048.Story
                 return;
             }
 
-            storyController.OnStoryFinished -= flowController.StartGameAfterStory;
+            storyController.OnStoryFinished -= flowController.CompleteOpeningStory;
         }
     }
 }

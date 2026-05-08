@@ -100,7 +100,7 @@
     "risk_score": 83
   },
   {
-    "file_id": "Project 2048/Assets/Scripts/Core/LoadingUI.cs",
+    "file_id": "Project 2048/Assets/Scripts/UI/Loading/LoadingUI.cs",
     "class_name": "LoadingUI",
     "risk_flags": [
       "update-heavy",
@@ -279,7 +279,7 @@
     "risk_score": 58
   },
   {
-    "file_id": "Project 2048/Assets/Scripts/Core/LoadingFlowBinder.cs",
+    "file_id": "Project 2048/Assets/Scripts/Flow/Binder/LoadingFlowBinder.cs",
     "class_name": "LoadingFlowBinder",
     "risk_flags": [
       "high-coupling",
@@ -421,23 +421,6 @@
     "risk_score": 48
   },
   {
-    "file_id": "Project 2048/Assets/Scripts/Core/SceneFlowManager.cs",
-    "class_name": "SceneFlowManager",
-    "risk_flags": [
-      "high-coupling",
-      "init-order-sensitive",
-      "save-load-sensitive",
-      "state-owner"
-    ],
-    "risk_reasons": [
-      "참조 타입 또는 관계 수가 많음",
-      "초기화 순서에 민감할 가능성",
-      "저장/불러오기 관련 로직 포함",
-      "상태 중심 또는 관리 중심 클래스일 가능성"
-    ],
-    "risk_score": 48
-  },
-  {
     "file_id": "Project 2048/Assets/Scripts/Enemy/EnemySO.cs",
     "class_name": "EnemySO",
     "risk_flags": [
@@ -450,6 +433,23 @@
       "참조 타입 또는 관계 수가 많음",
       "public 필드 노출 수가 많음",
       "Find 계열 탐색 사용",
+      "상태 중심 또는 관리 중심 클래스일 가능성"
+    ],
+    "risk_score": 48
+  },
+  {
+    "file_id": "Project 2048/Assets/Scripts/Flow/SceneFlowManager.cs",
+    "class_name": "SceneFlowManager",
+    "risk_flags": [
+      "high-coupling",
+      "init-order-sensitive",
+      "save-load-sensitive",
+      "state-owner"
+    ],
+    "risk_reasons": [
+      "참조 타입 또는 관계 수가 많음",
+      "초기화 순서에 민감할 가능성",
+      "저장/불러오기 관련 로직 포함",
       "상태 중심 또는 관리 중심 클래스일 가능성"
     ],
     "risk_score": 48
@@ -572,25 +572,8 @@
     "risk_score": 41
   },
   {
-    "file_id": "Project 2048/Assets/Scripts/Core/StoryController.cs",
+    "file_id": "Project 2048/Assets/Scripts/Story/StoryController.cs",
     "class_name": "StoryController",
-    "risk_flags": [
-      "init-order-sensitive",
-      "save-load-sensitive",
-      "ui-runtime-mixed",
-      "state-owner"
-    ],
-    "risk_reasons": [
-      "초기화 순서에 민감할 가능성",
-      "저장/불러오기 관련 로직 포함",
-      "UI와 런타임 책임이 한 파일에 섞였을 가능성",
-      "상태 중심 또는 관리 중심 클래스일 가능성"
-    ],
-    "risk_score": 40
-  },
-  {
-    "file_id": "Project 2048/Assets/Scripts/Core/StoryTextView.cs",
-    "class_name": "StoryTextView",
     "risk_flags": [
       "init-order-sensitive",
       "save-load-sensitive",
@@ -640,19 +623,21 @@
     "risk_score": 40
   },
   {
-    "file_id": "Project 2048/Assets/Scripts/Core/FlowController.cs",
-    "class_name": "FlowController",
+    "file_id": "Project 2048/Assets/Scripts/UI/Story/StoryTextView.cs",
+    "class_name": "StoryTextView",
     "risk_flags": [
-      "high-coupling",
+      "init-order-sensitive",
       "save-load-sensitive",
+      "ui-runtime-mixed",
       "state-owner"
     ],
     "risk_reasons": [
-      "참조 타입 또는 관계 수가 많음",
+      "초기화 순서에 민감할 가능성",
       "저장/불러오기 관련 로직 포함",
+      "UI와 런타임 책임이 한 파일에 섞였을 가능성",
       "상태 중심 또는 관리 중심 클래스일 가능성"
     ],
-    "risk_score": 38
+    "risk_score": 40
   },
   {
     "file_id": "Project 2048/Assets/Scripts/Core/GameContext.cs",
@@ -670,8 +655,8 @@
     "risk_score": 38
   },
   {
-    "file_id": "Project 2048/Assets/Scripts/Core/ScoreManager.cs",
-    "class_name": "ScoreManager",
+    "file_id": "Project 2048/Assets/Scripts/Flow/FlowController.cs",
+    "class_name": "FlowController",
     "risk_flags": [
       "high-coupling",
       "save-load-sensitive",
@@ -717,6 +702,21 @@
   {
     "file_id": "Project 2048/Assets/Scripts/Rewards/RunProgress.cs",
     "class_name": "RunProgress",
+    "risk_flags": [
+      "high-coupling",
+      "save-load-sensitive",
+      "state-owner"
+    ],
+    "risk_reasons": [
+      "참조 타입 또는 관계 수가 많음",
+      "저장/불러오기 관련 로직 포함",
+      "상태 중심 또는 관리 중심 클래스일 가능성"
+    ],
+    "risk_score": 38
+  },
+  {
+    "file_id": "Project 2048/Assets/Scripts/Score/ScoreManager.cs",
+    "class_name": "ScoreManager",
     "risk_flags": [
       "high-coupling",
       "save-load-sensitive",
@@ -895,7 +895,22 @@
     "risk_score": 34
   },
   {
-    "file_id": "Project 2048/Assets/Scripts/Core/StoryFlowBinder.cs",
+    "file_id": "Project 2048/Assets/Scripts/Flow/Binder/BattleSceneBinder.cs",
+    "class_name": "BattleSceneBinder",
+    "risk_flags": [
+      "init-order-sensitive",
+      "save-load-sensitive",
+      "state-owner"
+    ],
+    "risk_reasons": [
+      "초기화 순서에 민감할 가능성",
+      "저장/불러오기 관련 로직 포함",
+      "상태 중심 또는 관리 중심 클래스일 가능성"
+    ],
+    "risk_score": 30
+  },
+  {
+    "file_id": "Project 2048/Assets/Scripts/Flow/Binder/StoryFlowBinder.cs",
     "class_name": "StoryFlowBinder",
     "risk_flags": [
       "init-order-sensitive",
@@ -1040,19 +1055,6 @@
     "risk_score": 18
   },
   {
-    "file_id": "Project 2048/Assets/Scripts/Core/ScoreRuleSO.cs",
-    "class_name": "ScoreRuleSO",
-    "risk_flags": [
-      "public-field-heavy",
-      "state-owner"
-    ],
-    "risk_reasons": [
-      "public 필드 노출 수가 많음",
-      "상태 중심 또는 관리 중심 클래스일 가능성"
-    ],
-    "risk_score": 18
-  },
-  {
     "file_id": "Project 2048/Assets/Scripts/Prototype/StatusEffectTooltipTarget.cs",
     "class_name": "StatusEffectTooltipTarget",
     "risk_flags": [
@@ -1081,6 +1083,19 @@
   {
     "file_id": "Project 2048/Assets/Scripts/Rewards/RewardChoiceResult.cs",
     "class_name": "RewardChoiceResult",
+    "risk_flags": [
+      "public-field-heavy",
+      "state-owner"
+    ],
+    "risk_reasons": [
+      "public 필드 노출 수가 많음",
+      "상태 중심 또는 관리 중심 클래스일 가능성"
+    ],
+    "risk_score": 18
+  },
+  {
+    "file_id": "Project 2048/Assets/Scripts/Score/ScoreRuleSO.cs",
+    "class_name": "ScoreRuleSO",
     "risk_flags": [
       "public-field-heavy",
       "state-owner"
@@ -1123,6 +1138,17 @@
     ],
     "risk_reasons": [
       "public 필드 노출 수가 많음"
+    ],
+    "risk_score": 10
+  },
+  {
+    "file_id": "Project 2048/Assets/Scripts/Flow/StageFlowController.cs",
+    "class_name": "StageFlowController",
+    "risk_flags": [
+      "update-heavy"
+    ],
+    "risk_reasons": [
+      "Unity 업데이트 루프 사용"
     ],
     "risk_score": 10
   },
@@ -1254,20 +1280,6 @@
     "risk_score": 0
   },
   {
-    "file_id": "Project 2048/Assets/Scripts/Core/StoryDataSO.cs",
-    "class_name": "StoryDataSO",
-    "risk_flags": [],
-    "risk_reasons": [],
-    "risk_score": 0
-  },
-  {
-    "file_id": "Project 2048/Assets/Scripts/Core/StoryStep.cs",
-    "class_name": "StoryStep",
-    "risk_flags": [],
-    "risk_reasons": [],
-    "risk_score": 0
-  },
-  {
     "file_id": "Project 2048/Assets/Scripts/Enemy/DebuffType.cs",
     "class_name": "DebuffType",
     "risk_flags": [],
@@ -1312,6 +1324,20 @@
   {
     "file_id": "Project 2048/Assets/Scripts/Skills/SkillType.cs",
     "class_name": "SkillType",
+    "risk_flags": [],
+    "risk_reasons": [],
+    "risk_score": 0
+  },
+  {
+    "file_id": "Project 2048/Assets/Scripts/Story/StoryDataSO.cs",
+    "class_name": "StoryDataSO",
+    "risk_flags": [],
+    "risk_reasons": [],
+    "risk_score": 0
+  },
+  {
+    "file_id": "Project 2048/Assets/Scripts/Story/StoryStep.cs",
+    "class_name": "StoryStep",
     "risk_flags": [],
     "risk_reasons": [],
     "risk_score": 0

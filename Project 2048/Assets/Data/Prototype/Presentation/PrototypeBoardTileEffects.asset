@@ -16,9 +16,9 @@ MonoBehaviour:
     sfxClip: {fileID: 8300000, guid: e04e91deba7e4114085d278b240f6bcc, type: 3}
     vfxPrefab: {fileID: 0}
     animationClip: {fileID: 0}
-    volumeScale: 0.08
+    volumeScale: 0.3
     minPitch: 0.9
-    maxPitch: 1.3
+    maxPitch: 1.2
     localOffset: {x: 0, y: 0, z: 0}
     autoDestroySeconds: 1.25
   mergeEffects:

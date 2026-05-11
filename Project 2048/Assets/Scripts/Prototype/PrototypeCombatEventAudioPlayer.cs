@@ -15,7 +15,6 @@ namespace Project2048.Prototype
 
         [SerializeField] private AudioSource audioSource;
         [SerializeField] private PrototypeCombatEventAudioProfileSO eventAudioProfile;
-        [SerializeField] private float volumeScale = 1f;
 
         private CombatManager combatManager;
         private RewardManager rewardManager;
@@ -127,7 +126,7 @@ namespace Project2048.Prototype
             var effect = eventAudioProfile != null ? eventAudioProfile.Resolve(cue) : null;
             if (effect?.sfxClip != null && audioSource != null)
             {
-                CombatEffectAudioPlayer.PlayOneShot(audioSource, effect, volumeScale, transform);
+                CombatEffectAudioPlayer.PlayOneShot(audioSource, effect, 1f, transform);
             }
         }
 
@@ -151,10 +150,6 @@ namespace Project2048.Prototype
             audioSource.minDistance = EventSfxDistance;
             audioSource.maxDistance = EventSfxDistance;
             audioSource.rolloffMode = AudioRolloffMode.Linear;
-            if (volumeScale <= 0f)
-            {
-                volumeScale = 1f;
-            }
         }
     }
 }

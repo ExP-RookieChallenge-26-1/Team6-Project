@@ -1388,7 +1388,6 @@ MonoBehaviour:
   rewardEnhanceButton: {fileID: 1190682138}
   audioSource: {fileID: 227428885}
   boardTileEffectProfile: {fileID: 11400000, guid: 0ef3757e7d4b44fda65208813e9dfeaf, type: 2}
-  soundVolumeScale: 3
   emptyCellColor: {r: 0.1, g: 0.1, b: 0.1, a: 1}
   filledCellColor: {r: 0.2, g: 0.2, b: 0.22, a: 1}
   highlightCellColor: {r: 0.92, g: 0.9, b: 0.85, a: 1}
@@ -10012,7 +10011,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.PrototypeCombatEventAudioPlayer
   audioSource: {fileID: 1494109879}
   eventAudioProfile: {fileID: 11400000, guid: a2f9f6d2c7b84af4a84a1d7db4123f24, type: 2}
-  volumeScale: 1
 --- !u!82 &1494109879
 AudioSource:
   m_ObjectHideFlags: 0

@@ -29,7 +29,6 @@ namespace Project2048.Prototype
         public const float BoardToActionPanelDelaySeconds = 0.45f;
         public const float CombatVfxDurationSeconds = 0.65f;
         public const float EnemyDeathFadeDurationSeconds = 0.6f;
-        private const float DefaultSoundVolumeScale = 3f;
         private const float UiSfxDistance = 10000f;
 
         [Header("Top bar")]
@@ -103,7 +102,6 @@ namespace Project2048.Prototype
         [Header("Board effects")]
         [SerializeField] private AudioSource audioSource;
         [SerializeField] private BoardTileEffectProfileSO boardTileEffectProfile;
-        [SerializeField] private float soundVolumeScale = DefaultSoundVolumeScale;
 
         [Header("Theme")]
         [SerializeField] private Color emptyCellColor = new(0.10f, 0.10f, 0.10f, 1f);
@@ -1309,11 +1307,6 @@ namespace Project2048.Prototype
             audioSource.maxDistance = UiSfxDistance;
             audioSource.minDistance = UiSfxDistance;
             audioSource.rolloffMode = AudioRolloffMode.Linear;
-            if (soundVolumeScale <= 0f)
-            {
-                soundVolumeScale = DefaultSoundVolumeScale;
-            }
-
         }
 
         private Transform FindChildByName(string childName)
@@ -1402,7 +1395,7 @@ namespace Project2048.Prototype
                 return false;
             }
 
-            return CombatEffectAudioPlayer.PlayOneShot(audioSource, effect, soundVolumeScale, transform);
+            return CombatEffectAudioPlayer.PlayOneShot(audioSource, effect, 1f, transform);
         }
 
         private void SpawnBoardEffectPrefab(CombatEffectBinding effect, Vector2Int boardPosition)

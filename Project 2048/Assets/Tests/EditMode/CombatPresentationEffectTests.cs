@@ -107,7 +107,7 @@ namespace Project2048.Tests
         }
 
         [Test]
-        public void AudioRouter_BuildsTileEffectCuesForEachMoveAndEachMergedResult()
+        public void AudioRouter_BuildsOneMoveCuePerBoardMoveAndEachMergedResult()
         {
             var router = new PrototypeCombatAudioRouter();
             var transition = new BoardTransition();
@@ -130,7 +130,7 @@ namespace Project2048.Tests
 
             var cues = router.GetBoardTileEffectCues(transition);
 
-            Assert.That(cues.Count(cue => cue.CueType == BoardTileEffectCueType.Move), Is.EqualTo(2));
+            Assert.That(cues.Count(cue => cue.CueType == BoardTileEffectCueType.Move), Is.EqualTo(1));
             Assert.That(cues.Count(cue => cue.CueType == BoardTileEffectCueType.Merge), Is.EqualTo(1));
 
             var mergeCue = cues.Single(cue => cue.CueType == BoardTileEffectCueType.Merge);
@@ -422,6 +422,7 @@ namespace Project2048.Tests
             Assert.That(serializedPlayer.FindProperty("defeatClip"), Is.Null);
             Assert.That(serializedPlayer.FindProperty("restRewardClip"), Is.Null);
             Assert.That(serializedPlayer.FindProperty("enhanceRewardClip"), Is.Null);
+            Assert.That(serializedPlayer.FindProperty("volumeScale"), Is.Null);
         }
 
         [Test]

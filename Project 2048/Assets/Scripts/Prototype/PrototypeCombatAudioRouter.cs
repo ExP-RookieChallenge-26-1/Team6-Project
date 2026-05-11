@@ -29,6 +29,7 @@ namespace Project2048.Prototype
 
             var cues = new List<BoardTileEffectCue>();
             var mergedTargets = new HashSet<MergeTargetKey>();
+            var addedMoveCue = false;
             foreach (var movement in transition.Movements)
             {
                 if (movement == null || movement.Value <= 0)
@@ -36,7 +37,11 @@ namespace Project2048.Prototype
                     continue;
                 }
 
-                cues.Add(new BoardTileEffectCue(BoardTileEffectCueType.Move, movement.Value, movement.To));
+                if (!addedMoveCue)
+                {
+                    cues.Add(new BoardTileEffectCue(BoardTileEffectCueType.Move, movement.Value, movement.To));
+                    addedMoveCue = true;
+                }
 
                 if (!movement.IsMergeParticipant || movement.ResultValue <= 0)
                 {

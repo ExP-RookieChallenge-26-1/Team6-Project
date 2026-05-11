@@ -403,20 +403,6 @@ namespace Project2048.Tests
             Assert.That(source.mute, Is.False);
             Assert.That(source.minDistance, Is.GreaterThanOrEqualTo(1000f));
             Assert.That(source.maxDistance, Is.GreaterThanOrEqualTo(1000f));
-            Assert.That((float)GetPrivateField(view, "soundVolumeScale"), Is.EqualTo(3f).Within(0.001f));
-        }
-
-        [Test]
-        public void Initialize_PreservesPositiveInspectorSoundVolumeScale()
-        {
-            var viewObject = CreateOwnedGameObject("CombatView");
-            viewObject.AddComponent<AudioSource>();
-            var view = viewObject.AddComponent<CombatUiView>();
-            SetPrivateField(view, "soundVolumeScale", 1.5f);
-
-            view.Initialize(null);
-
-            Assert.That((float)GetPrivateField(view, "soundVolumeScale"), Is.EqualTo(1.5f).Within(0.001f));
         }
 
         [Test]
@@ -434,7 +420,7 @@ namespace Project2048.Tests
             Assert.That(serializedView.FindProperty("enemyHitClip"), Is.Null);
             Assert.That(serializedView.FindProperty("boardMoveClip"), Is.Null);
             Assert.That(serializedView.FindProperty("boardMergeClip"), Is.Null);
-            Assert.That(serializedView.FindProperty("soundVolumeScale").floatValue, Is.EqualTo(3f).Within(0.001f));
+            Assert.That(serializedView.FindProperty("soundVolumeScale"), Is.Null);
         }
 
         [Test]

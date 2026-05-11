@@ -9926,6 +9926,7 @@ GameObject:
   - component: {fileID: 1494109876}
   - component: {fileID: 1494109878}
   - component: {fileID: 1494109879}
+  - component: {fileID: 1494109880}
   m_Layer: 0
   m_Name: PrototypeCombatEntry
   m_TagString: Untagged
@@ -10109,6 +10110,19 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &1494109880
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1494109875}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 185f8b68674413e468d76e4c83a98546, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Game.Core::Project2048.Flow.BattleSceneBinder
+  flowController: {fileID: 0}
 --- !u!1 &1500872069
 GameObject:
   m_ObjectHideFlags: 0

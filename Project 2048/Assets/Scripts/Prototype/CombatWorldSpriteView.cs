@@ -11,6 +11,11 @@ namespace Project2048.Prototype
     public class CombatWorldSpriteView : MonoBehaviour
     {
         public const float EnemyDeathFadeDurationSeconds = 0.6f;
+        public const float EnemyAppearIntroDurationSeconds = 0.45f;
+
+        private const float EnemyAppearIntroRightOffset = 2.25f;
+        private const float EnemyAppearIntroJumpHeight = 0.7f;
+        private const float EnemyAppearIntroScalePop = 0.08f;
 
         [SerializeField] private PrototypeCombatBootstrap bootstrap;
         [SerializeField] private SpriteRenderer backgroundRenderer;
@@ -24,6 +29,10 @@ namespace Project2048.Prototype
         private CombatManager combatManager;
         private CombatSnapshot snapshot;
         private Coroutine enemyDeathFadeCoroutine;
+        private Coroutine enemyAppearIntroCoroutine;
+        private Vector3 enemyRendererRestLocalPosition;
+        private Vector3 enemyRendererRestLocalScale = Vector3.one;
+        private bool hasEnemyRendererRestTransform;
         private bool lastEnemyWasDead;
 
         public void Initialize(PrototypeCombatBootstrap owner)
@@ -33,6 +42,7 @@ namespace Project2048.Prototype
             combatManager = owner != null ? owner.CombatManager : null;
 
             ResolveMissingReferences();
+            CacheEnemyRendererRestTransform();
             RenderBackground();
 
             if (combatManager == null)
@@ -55,6 +65,7 @@ namespace Project2048.Prototype
         {
             UnbindCombatEvents();
             ClearEnemyDeathFade();
+            ClearEnemyAppearIntro();
         }
 
         private void UnbindCombatEvents()
@@ -72,6 +83,7 @@ namespace Project2048.Prototype
         {
             var playerWasHit = PlayerWasHit(snapshot, nextSnapshot);
             var enemyWasHit = EnemyWasHit(snapshot, nextSnapshot);
+            var enemyUsedDefense = EnemyUsedDefense(snapshot, nextSnapshot);
             var enemyAppeared = EnemyAppeared(snapshot, nextSnapshot);
             var nextEnemyDead = nextSnapshot?.Enemies?.FirstOrDefault()?.IsDead ?? false;
             var enemyJustDied = !lastEnemyWasDead && nextEnemyDead;
@@ -81,6 +93,7 @@ namespace Project2048.Prototype
             PlayEnemyAppearEffectIfNeeded(enemyAppeared);
             PlayPlayerActionEffectIfNeeded(playerWasHit);
             PlayEnemyActionEffectIfNeeded(enemyWasHit, enemyJustDied);
+            PlayEnemyDefenseEffectIfNeeded(enemyUsedDefense);
             PlayEnemyDeathFadeIfNeeded(enemyJustDied, nextEnemyDead);
             lastEnemyWasDead = nextEnemyDead;
         }
@@ -118,7 +131,7 @@ namespace Project2048.Prototype
 
             enemyRenderer.sprite = ResolveEnemySprite(currentSnapshot);
             var enemyIsAlive = !(currentSnapshot?.Enemies?.FirstOrDefault()?.IsDead ?? false);
-            if (enemyIsAlive && enemyDeathFadeCoroutine == null)
+            if (enemyIsAlive && enemyDeathFadeCoroutine == null && enemyAppearIntroCoroutine == null)
             {
                 SetEnemyRendererAlpha(1f);
             }
@@ -144,10 +157,7 @@ namespace Project2048.Prototype
                 return;
             }
 
-            PlayCombatantActionEffect(
-                ResolveCurrentEnemyData()?.FindActionEffect(CombatActionIds.Appear),
-                enemyRenderer != null ? enemyRenderer.transform : transform,
-                enemyAnimator);
+            PlayEnemyAppearIntro(ResolveCurrentEnemyData()?.FindActionEffect(CombatActionIds.Appear));
         }
 
         private void PlayEnemyActionEffectIfNeeded(bool enemyWasHit, bool enemyJustDied)
@@ -169,6 +179,19 @@ namespace Project2048.Prototype
 
             PlayCombatantActionEffect(
                 enemyData?.FindActionEffect(CombatActionIds.Hit),
+                enemyRenderer != null ? enemyRenderer.transform : transform,
+                enemyAnimator);
+        }
+
+        private void PlayEnemyDefenseEffectIfNeeded(bool enemyUsedDefense)
+        {
+            if (!enemyUsedDefense)
+            {
+                return;
+            }
+
+            PlayCombatantActionEffect(
+                ResolveCurrentEnemyData()?.FindActionEffect(CombatActionIds.Defend),
                 enemyRenderer != null ? enemyRenderer.transform : transform,
                 enemyAnimator);
         }
@@ -219,6 +242,63 @@ namespace Project2048.Prototype
             }
         }
 
+        private void PlayEnemyAppearIntro(CombatEffectBinding effect)
+        {
+            if (enemyRenderer == null)
+            {
+                PlayCombatantActionEffect(effect, transform, enemyAnimator);
+                return;
+            }
+
+            CacheEnemyRendererRestTransform();
+            ClearEnemyAppearIntro(restoreTransform: false);
+
+            if (!Application.isPlaying || !isActiveAndEnabled)
+            {
+                RestoreEnemyRendererTransform();
+                PlayCombatantActionEffect(effect, enemyRenderer.transform, enemyAnimator);
+                return;
+            }
+
+            enemyAppearIntroCoroutine = StartCoroutine(EnemyAppearIntroRoutine(effect));
+        }
+
+        private IEnumerator EnemyAppearIntroRoutine(CombatEffectBinding effect)
+        {
+            var targetPosition = enemyRendererRestLocalPosition;
+            var baseScale = enemyRendererRestLocalScale;
+            var startPosition = targetPosition + (Vector3.right * EnemyAppearIntroRightOffset);
+            var startTime = Time.realtimeSinceStartup;
+
+            enemyRenderer.transform.localPosition = startPosition;
+            enemyRenderer.transform.localScale = baseScale * (1f - EnemyAppearIntroScalePop);
+            SetEnemyRendererAlpha(1f);
+
+            while (true)
+            {
+                var elapsed = Time.realtimeSinceStartup - startTime;
+                var t = Mathf.Clamp01(elapsed / EnemyAppearIntroDurationSeconds);
+                var eased = 1f - Mathf.Pow(1f - t, 3f);
+                var position = Vector3.Lerp(startPosition, targetPosition, eased);
+                position.y += Mathf.Sin(t * Mathf.PI) * EnemyAppearIntroJumpHeight;
+                enemyRenderer.transform.localPosition = position;
+
+                var scalePop = 1f + Mathf.Sin(t * Mathf.PI) * EnemyAppearIntroScalePop;
+                enemyRenderer.transform.localScale = baseScale * scalePop;
+
+                if (t >= 1f)
+                {
+                    break;
+                }
+
+                yield return null;
+            }
+
+            RestoreEnemyRendererTransform();
+            enemyAppearIntroCoroutine = null;
+            PlayCombatantActionEffect(effect, enemyRenderer.transform, enemyAnimator);
+        }
+
         private void RenderBackground()
         {
             if (backgroundRenderer != null && defaultBackgroundSprite != null)
@@ -264,6 +344,7 @@ namespace Project2048.Prototype
                 return;
             }
 
+            ClearEnemyAppearIntro(restoreTransform: true);
             ClearEnemyDeathFade();
             if (!Application.isPlaying || !isActiveAndEnabled)
             {
@@ -304,6 +385,43 @@ namespace Project2048.Prototype
                 StopCoroutine(enemyDeathFadeCoroutine);
                 enemyDeathFadeCoroutine = null;
             }
+        }
+
+        private void ClearEnemyAppearIntro(bool restoreTransform = false)
+        {
+            if (enemyAppearIntroCoroutine != null)
+            {
+                StopCoroutine(enemyAppearIntroCoroutine);
+                enemyAppearIntroCoroutine = null;
+            }
+
+            if (restoreTransform)
+            {
+                RestoreEnemyRendererTransform();
+            }
+        }
+
+        private void CacheEnemyRendererRestTransform()
+        {
+            if (enemyRenderer == null || hasEnemyRendererRestTransform)
+            {
+                return;
+            }
+
+            enemyRendererRestLocalPosition = enemyRenderer.transform.localPosition;
+            enemyRendererRestLocalScale = enemyRenderer.transform.localScale;
+            hasEnemyRendererRestTransform = true;
+        }
+
+        private void RestoreEnemyRendererTransform()
+        {
+            if (enemyRenderer == null || !hasEnemyRendererRestTransform)
+            {
+                return;
+            }
+
+            enemyRenderer.transform.localPosition = enemyRendererRestLocalPosition;
+            enemyRenderer.transform.localScale = enemyRendererRestLocalScale;
         }
 
         private void SetEnemyRendererAlpha(float alpha)
@@ -390,6 +508,20 @@ namespace Project2048.Prototype
 
             return nextEnemy.CurrentHp < previousEnemy.CurrentHp ||
                 nextEnemy.Block < previousEnemy.Block;
+        }
+
+        private static bool EnemyUsedDefense(CombatSnapshot previous, CombatSnapshot next)
+        {
+            var previousEnemy = previous?.Enemies?.FirstOrDefault();
+            var nextEnemy = next?.Enemies?.FirstOrDefault();
+            if (previousEnemy == null || nextEnemy == null || nextEnemy.IsDead)
+            {
+                return false;
+            }
+
+            return next.Phase == CombatPhase.EnemyTurn &&
+                nextEnemy.Intent?.intentType == EnemyIntentType.Defense &&
+                nextEnemy.Block > previousEnemy.Block;
         }
 
         private static bool EnemyAppeared(CombatSnapshot previous, CombatSnapshot next)

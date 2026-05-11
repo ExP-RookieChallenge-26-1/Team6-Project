@@ -371,7 +371,11 @@ CombatManager.OnPlayerSkillUsed
 -> SkillSO.activationEffect
 
 몬스터 등장
+-> 로딩 UI 종료
+-> BattleSceneBinder가 FlowController.OnGameStarted 발생
+-> PrototypeCombatBootstrap이 전투 시작
 -> CombatWorldSpriteView
+-> 오른쪽 진입 점프 인트로
 -> EnemySO.actionEffects[actionId = "appear"]
 
 BoardTransition
@@ -381,6 +385,8 @@ BoardTransition
 ```
 
 보드 병합은 `defaultMergeEffect` fallback을 쓰지 않는다. 현재 지원하는 타일 값은 `PrototypeBoardTileEffects.asset`의 `mergeEffects`에 모두 명시해야 한다.
+
+몬스터 등장 사운드는 로딩 중에 재생하지 않는다. `BattleSceneBinder`가 `LoadingUI.IsVisible`이 꺼질 때까지 기다린 뒤 `FlowController.CompleteBattleSceneLoad()`를 호출하고, `PrototypeCombatBootstrap`은 `FlowController.OnGameStarted`를 받은 뒤 전투를 시작한다. 그 다음 `CombatWorldSpriteView`가 적 스프라이트를 화면 오른쪽에서 점프하듯 들어오게 한 뒤 `EnemySO.actionEffects`의 `appear` effect를 재생한다.
 
 | 사운드 | 데이터 위치 |
 |---|---|
@@ -413,6 +419,7 @@ BoardTransition
 | 스킬 코스트/위력 | `SkillSO` |
 | 스킬 사용 사운드 | `SkillSO.activationEffect` |
 | 몬스터 등장 사운드 | `EnemySO.actionEffects`의 `appear` |
+| 몬스터 등장 연출 시간 | `CombatWorldSpriteView.EnemyAppearIntroDurationSeconds` |
 | 전투 승패/보상 선택 사운드 | `PrototypeCombatEventAudioProfile.asset` |
 | 보드 이동/병합 사운드 | `PrototypeBoardTileEffects.asset` |
 | 적 턴 대기 시간 | `CombatManager.EnemyTurnDelaySeconds` |

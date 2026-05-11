@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f6115ca39d511d049965aae02efc3f23, type: 3}
-  m_Name: "물결치는 역병"
+  m_Name: 06
   m_EditorClassIdentifier: Game.Core::Project2048.Enemy.EnemySO
   enemyName: "\uBB3C\uACB0\uCE58\uB294 \uC5ED\uBCD1"
   maxHp: 42
@@ -22,7 +22,17 @@ MonoBehaviour:
   actionEffects:
   - actionId: appear
     effect:
-      sfxClip: {fileID: 8300000, guid: 1d994d948240c984d8da3bb962630c5b, type: 3}
+      sfxClip: {fileID: 8300000, guid: 33deb699fd95e5e4093d5d0659fd35c6, type: 3}
+      vfxPrefab: {fileID: 0}
+      animationClip: {fileID: 0}
+      volumeScale: 0.78
+      minPitch: 0.72
+      maxPitch: 0.86
+      localOffset: {x: 0, y: 0, z: 0}
+      autoDestroySeconds: 1.25
+  - actionId: defend
+    effect:
+      sfxClip: {fileID: 8300000, guid: 4806a612105a8b74ab54ad19a7060ec3, type: 3}
       vfxPrefab: {fileID: 0}
       animationClip: {fileID: 0}
       volumeScale: 1

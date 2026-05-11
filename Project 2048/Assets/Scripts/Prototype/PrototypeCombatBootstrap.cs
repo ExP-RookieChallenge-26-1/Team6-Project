@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using Project2048.Combat;
+using Project2048.Core;
 using Project2048.Enemy;
+using Project2048.Flow;
 using Project2048.Rewards;
 using Project2048.Score;
 using UnityEngine;
@@ -15,6 +17,7 @@ namespace Project2048.Prototype
         [SerializeField] private CombatUiView combatUiView;
         [SerializeField] private CombatWorldSpriteView combatWorldSpriteView;
         [SerializeField] private PrototypeCombatEventAudioPlayer combatEventAudioPlayer;
+        [SerializeField] private FlowController flowController;
         [SerializeField] private RewardManager rewardManager;
         [SerializeField] private ScoreManager scoreManager;
         [SerializeField] private PlayerSO playerData;
@@ -42,19 +45,39 @@ namespace Project2048.Prototype
 
         private void Awake()
         {
+            ResolveFlowController();
             EnsureRuntimeObjects();
+        }
+
+        private void OnEnable()
+        {
+            ResolveFlowController();
+            BindFlowEvents();
+        }
+
+        private void OnDisable()
+        {
+            UnbindFlowEvents();
         }
 
         private void Start()
         {
-            if (autoStartOnPlay)
+            if (!autoStartOnPlay)
             {
-                StartPrototypeCombat();
+                return;
             }
+
+            if (flowController != null)
+            {
+                return;
+            }
+
+            StartPrototypeCombat();
         }
 
         private void OnDestroy()
         {
+            UnbindFlowEvents();
             runtimeLoadout?.Dispose();
             runtimeLoadout = null;
             DestroyRuntimeRandomEnemy();
@@ -101,6 +124,59 @@ namespace Project2048.Prototype
                 boardMoveCount = boardMoveCount,
                 runProgress = runProgress,
             });
+        }
+
+        private void HandleGameStarted()
+        {
+            if (autoStartOnPlay)
+            {
+                StartPrototypeCombat();
+            }
+        }
+
+        private void BindFlowEvents()
+        {
+            if (flowController == null)
+            {
+                return;
+            }
+
+            flowController.OnGameStarted -= HandleGameStarted;
+            flowController.OnGameStarted += HandleGameStarted;
+        }
+
+        private void UnbindFlowEvents()
+        {
+            if (flowController == null)
+            {
+                return;
+            }
+
+            flowController.OnGameStarted -= HandleGameStarted;
+        }
+
+        private void ResolveFlowController()
+        {
+            if (flowController != null)
+            {
+                return;
+            }
+
+            if (GameManager.Instance != null)
+            {
+                flowController = GameManager.Instance.FlowController;
+            }
+
+            if (flowController != null)
+            {
+                return;
+            }
+
+#if UNITY_2023_1_OR_NEWER
+            flowController = Object.FindAnyObjectByType<FlowController>(FindObjectsInactive.Include);
+#else
+            flowController = Object.FindObjectOfType<FlowController>(true);
+#endif
         }
 
         private EnemySO SelectEnemyData(EnemySO fallback)

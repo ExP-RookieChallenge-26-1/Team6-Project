@@ -1,16 +1,21 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Project2048.Board2048;
 using Project2048.Combat;
+using Project2048.Core;
 using Project2048.Enemy;
+using Project2048.Flow;
 using Project2048.Presentation;
 using Project2048.Prototype;
 using Project2048.Rewards;
 using Project2048.Skills;
+using Project2048.UI;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.TestTools;
 
 namespace Project2048.Tests
 {
@@ -209,8 +214,8 @@ namespace Project2048.Tests
             Assert.That(audioPlayer.LastPlayedCue, Is.EqualTo(PrototypeCombatEventSoundCue.Defeat));
         }
 
-        [Test]
-        public void CombatWorldSpriteView_StartCombat_PlaysEnemyAppearEffectFromEnemySo()
+        [UnityTest]
+        public IEnumerator CombatWorldSpriteView_StartCombat_PlaysEnemyIntroBeforeAppearEffectFromEnemySo()
         {
             var viewObject = CreateOwnedGameObject("WorldSpriteView");
             var view = viewObject.AddComponent<CombatWorldSpriteView>();
@@ -249,7 +254,63 @@ namespace Project2048.Tests
                 boardMoveCount = 1,
             });
 
+            Assert.That(viewObject.transform.Find("CombatEffectAudio"), Is.Null);
+            Assert.That(enemyRenderer.transform.localPosition.x, Is.GreaterThan(0f));
+
+            yield return new WaitForSecondsRealtime(CombatWorldSpriteView.EnemyAppearIntroDurationSeconds + 0.1f);
+
             Assert.That(viewObject.transform.Find("CombatEffectAudio"), Is.Not.Null);
+            Assert.That(enemyRenderer.transform.localPosition, Is.EqualTo(Vector3.zero));
+        }
+
+        [UnityTest]
+        public IEnumerator PrototypeCombatBootstrap_AutoStart_WaitsForFlowGameStarted()
+        {
+            var flow = CreateOwnedGameObject("Flow").AddComponent<FlowController>();
+            var bootstrap = CreateOwnedGameObject("Bootstrap").AddComponent<PrototypeCombatBootstrap>();
+            var playerData = CreatePlayerData(maxHp: 20, attackPower: 2);
+            var enemyData = CreateEnemyData(maxHp: 10, attackValue: 0);
+
+            flow.Initialized(new GameContext());
+            SetPrivateField(bootstrap, "playerData", playerData);
+            SetPrivateField(bootstrap, "enemyData", enemyData);
+            SetPrivateField(bootstrap, "randomizeEnemyOnStart", false);
+
+            yield return null;
+
+            Assert.That(bootstrap.CombatManager.CurrentPhase, Is.EqualTo(CombatPhase.None));
+
+            flow.CompleteBattleSceneLoad();
+            yield return null;
+
+            Assert.That(bootstrap.CombatManager.CurrentPhase, Is.EqualTo(CombatPhase.BoardPhase));
+        }
+
+        [UnityTest]
+        public IEnumerator BattleSceneBinder_CompletesBattleLoadAfterLoadingUiHides()
+        {
+            var flow = CreateOwnedGameObject("Flow").AddComponent<FlowController>();
+            var loadingComponentObject = CreateOwnedGameObject("LoadingUI");
+            var loadingUI = loadingComponentObject.AddComponent<LoadingUI>();
+            var loadingRoot = CreateOwnedGameObject("LoadingRoot");
+            var binder = CreateOwnedGameObject("BattleSceneBinder").AddComponent<BattleSceneBinder>();
+            var gameStarted = false;
+
+            flow.Initialized(new GameContext());
+            flow.OnGameStarted += () => gameStarted = true;
+            loadingRoot.SetActive(true);
+            SetPrivateField(loadingUI, "root", loadingRoot);
+            SetPrivateField(binder, "flowController", flow);
+
+            yield return null;
+            yield return null;
+
+            Assert.That(gameStarted, Is.False);
+
+            loadingRoot.SetActive(false);
+            yield return null;
+
+            Assert.That(gameStarted, Is.True);
         }
 
         [Test]
@@ -292,6 +353,59 @@ namespace Project2048.Tests
         }
 
         [Test]
+        public void CombatWorldSpriteView_EnemyDefenseIntent_PlaysDefendEffectFromEnemySo()
+        {
+            var viewObject = CreateOwnedGameObject("WorldSpriteView");
+            var view = viewObject.AddComponent<CombatWorldSpriteView>();
+            var enemyRenderer = CreateOwnedGameObject("EnemySprite").AddComponent<SpriteRenderer>();
+            var manager = CreateOwnedGameObject("CombatManager").AddComponent<CombatManager>();
+            var player = CreateOwnedGameObject("Player").AddComponent<PlayerCombatController>();
+            var enemy = CreateOwnedGameObject("Enemy").AddComponent<EnemyController>();
+            var bootstrap = CreateOwnedGameObject("Bootstrap").AddComponent<PrototypeCombatBootstrap>();
+            var playerData = CreatePlayerData(maxHp: 20, attackPower: 2);
+            var enemyData = CreateEnemyData(maxHp: 10, attackValue: 0);
+            var defendClip = AudioClip.Create("EnemyDefend", 512, 1, 44100, false);
+            ownedObjects.Add(defendClip);
+            enemyData.intentPattern = new List<EnemyIntent>
+            {
+                new()
+                {
+                    intentType = EnemyIntentType.Defense,
+                    value = 5,
+                },
+            };
+            enemyData.actionEffects = new List<CombatantActionEffectBinding>
+            {
+                new()
+                {
+                    actionId = CombatActionIds.Defend,
+                    effect = new CombatEffectBinding
+                    {
+                        sfxClip = defendClip,
+                    },
+                },
+            };
+
+            SetPrivateField(view, "enemyRenderer", enemyRenderer);
+            SetPrivateField(bootstrap, "combatManager", manager);
+
+            manager.SetCombatants(player, new[] { enemy });
+            view.Initialize(bootstrap);
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new List<EnemySO> { enemyData },
+                boardMoveCount = 1,
+            });
+            manager.ResolveBoardPhase();
+
+            manager.RequestEndPlayerTurn();
+
+            Assert.That(enemy.Block, Is.EqualTo(5));
+            Assert.That(viewObject.transform.Find("CombatEffectAudio"), Is.Not.Null);
+        }
+
+        [Test]
         public void BattleScene_CombatEventAudioPlayer_UsesEventAudioProfileAsset()
         {
             EditorSceneManager.OpenScene("Assets/Scenes/BattleScene.unity");
@@ -308,6 +422,18 @@ namespace Project2048.Tests
             Assert.That(serializedPlayer.FindProperty("defeatClip"), Is.Null);
             Assert.That(serializedPlayer.FindProperty("restRewardClip"), Is.Null);
             Assert.That(serializedPlayer.FindProperty("enhanceRewardClip"), Is.Null);
+        }
+
+        [Test]
+        public void BattleScene_HasBattleSceneBinderForLoadingCompletion()
+        {
+            EditorSceneManager.OpenScene("Assets/Scenes/BattleScene.unity");
+
+            var binder = Object.FindAnyObjectByType<BattleSceneBinder>(FindObjectsInactive.Include);
+            var bootstrap = Object.FindAnyObjectByType<PrototypeCombatBootstrap>(FindObjectsInactive.Include);
+
+            Assert.That(binder, Is.Not.Null);
+            Assert.That(bootstrap, Is.Not.Null);
         }
 
         [Test]
@@ -334,6 +460,23 @@ namespace Project2048.Tests
                 var path = AssetDatabase.GUIDToAssetPath(guid);
                 var enemy = AssetDatabase.LoadAssetAtPath<EnemySO>(path);
                 var effect = enemy != null ? enemy.FindActionEffect(CombatActionIds.Appear) : null;
+
+                Assert.That(effect, Is.Not.Null, path);
+                Assert.That(effect.sfxClip, Is.Not.Null, path);
+            }
+        }
+
+        [Test]
+        public void PrototypeEnemyAssets_HaveDefendActionEffectClips()
+        {
+            var enemyGuids = AssetDatabase.FindAssets("t:EnemySO", new[] { "Assets/Data/Prototype/Enemies" });
+
+            Assert.That(enemyGuids.Length, Is.GreaterThanOrEqualTo(12));
+            foreach (var guid in enemyGuids)
+            {
+                var path = AssetDatabase.GUIDToAssetPath(guid);
+                var enemy = AssetDatabase.LoadAssetAtPath<EnemySO>(path);
+                var effect = enemy != null ? enemy.FindActionEffect(CombatActionIds.Defend) : null;
 
                 Assert.That(effect, Is.Not.Null, path);
                 Assert.That(effect.sfxClip, Is.Not.Null, path);

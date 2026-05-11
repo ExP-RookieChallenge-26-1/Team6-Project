@@ -3,6 +3,7 @@ using System.Linq;
 using Project2048.Combat;
 using Project2048.Enemy;
 using Project2048.Presentation;
+using Project2048.Skills;
 using UnityEngine;
 
 namespace Project2048.Prototype
@@ -41,6 +42,8 @@ namespace Project2048.Prototype
 
             combatManager.OnCombatStateChanged -= HandleCombatStateChanged;
             combatManager.OnCombatStateChanged += HandleCombatStateChanged;
+            combatManager.OnPlayerSkillUsed -= HandlePlayerSkillUsed;
+            combatManager.OnPlayerSkillUsed += HandlePlayerSkillUsed;
 
             snapshot = combatManager.GetSnapshot();
             lastEnemyWasDead = snapshot?.Enemies?.FirstOrDefault()?.IsDead ?? false;
@@ -62,21 +65,41 @@ namespace Project2048.Prototype
             }
 
             combatManager.OnCombatStateChanged -= HandleCombatStateChanged;
+            combatManager.OnPlayerSkillUsed -= HandlePlayerSkillUsed;
         }
 
         private void HandleCombatStateChanged(CombatSnapshot nextSnapshot)
         {
             var playerWasHit = PlayerWasHit(snapshot, nextSnapshot);
             var enemyWasHit = EnemyWasHit(snapshot, nextSnapshot);
+            var enemyAppeared = EnemyAppeared(snapshot, nextSnapshot);
             var nextEnemyDead = nextSnapshot?.Enemies?.FirstOrDefault()?.IsDead ?? false;
             var enemyJustDied = !lastEnemyWasDead && nextEnemyDead;
 
             snapshot = nextSnapshot;
             Render(snapshot);
+            PlayEnemyAppearEffectIfNeeded(enemyAppeared);
             PlayPlayerActionEffectIfNeeded(playerWasHit);
             PlayEnemyActionEffectIfNeeded(enemyWasHit, enemyJustDied);
             PlayEnemyDeathFadeIfNeeded(enemyJustDied, nextEnemyDead);
             lastEnemyWasDead = nextEnemyDead;
+        }
+
+        private void HandlePlayerSkillUsed(SkillSO skill, EnemyController target)
+        {
+            if (skill?.activationEffect == null || !skill.activationEffect.HasAnyAsset)
+            {
+                return;
+            }
+
+            var isAttack = skill.skillType == SkillType.Attack;
+            var anchor = isAttack && target != null && enemyRenderer != null
+                ? enemyRenderer.transform
+                : playerRenderer != null
+                    ? playerRenderer.transform
+                    : transform;
+            var animator = isAttack ? enemyAnimator : playerAnimator;
+            PlayCombatantActionEffect(skill.activationEffect, anchor, animator);
         }
 
         private void Render(CombatSnapshot currentSnapshot)
@@ -112,6 +135,19 @@ namespace Project2048.Prototype
                 combatManager?.Player?.Data?.FindActionEffect(CombatActionIds.Hit),
                 playerRenderer != null ? playerRenderer.transform : transform,
                 playerAnimator);
+        }
+
+        private void PlayEnemyAppearEffectIfNeeded(bool enemyAppeared)
+        {
+            if (!enemyAppeared)
+            {
+                return;
+            }
+
+            PlayCombatantActionEffect(
+                ResolveCurrentEnemyData()?.FindActionEffect(CombatActionIds.Appear),
+                enemyRenderer != null ? enemyRenderer.transform : transform,
+                enemyAnimator);
         }
 
         private void PlayEnemyActionEffectIfNeeded(bool enemyWasHit, bool enemyJustDied)
@@ -354,6 +390,22 @@ namespace Project2048.Prototype
 
             return nextEnemy.CurrentHp < previousEnemy.CurrentHp ||
                 nextEnemy.Block < previousEnemy.Block;
+        }
+
+        private static bool EnemyAppeared(CombatSnapshot previous, CombatSnapshot next)
+        {
+            var nextEnemy = next?.Enemies?.FirstOrDefault();
+            if (nextEnemy == null || nextEnemy.IsDead)
+            {
+                return false;
+            }
+
+            var previousEnemy = previous?.Enemies?.FirstOrDefault();
+            return previousEnemy == null ||
+                previousEnemy.IsDead ||
+                previous.Phase == CombatPhase.Victory ||
+                previous.Phase == CombatPhase.Defeat ||
+                previousEnemy.EnemyIndex != nextEnemy.EnemyIndex;
         }
     }
 }

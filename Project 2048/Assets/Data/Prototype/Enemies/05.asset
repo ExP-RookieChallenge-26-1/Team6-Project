@@ -19,6 +19,17 @@ MonoBehaviour:
   debuffPower: 1
   difficultyScore: 1
   portrait: {fileID: 21300000, guid: fdb3bec36b17a2b42875f8907b17dc72, type: 3}
+  actionEffects:
+  - actionId: appear
+    effect:
+      sfxClip: {fileID: 8300000, guid: 33deb699fd95e5e4093d5d0659fd35c6, type: 3}
+      vfxPrefab: {fileID: 0}
+      animationClip: {fileID: 0}
+      volumeScale: 1
+      minPitch: 1
+      maxPitch: 1
+      localOffset: {x: 0, y: 0, z: 0}
+      autoDestroySeconds: 1.25
   intentPattern: []
   aiActionBias: 1
   aiDebuffPattern: 0

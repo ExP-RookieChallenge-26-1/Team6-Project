@@ -13,19 +13,10 @@ MonoBehaviour:
   m_Name: PrototypeBoardTileEffects
   m_EditorClassIdentifier:
   moveEffect:
-    sfxClip: {fileID: 0}
+    sfxClip: {fileID: 8300000, guid: e04e91deba7e4114085d278b240f6bcc, type: 3}
     vfxPrefab: {fileID: 0}
     animationClip: {fileID: 0}
-    volumeScale: 1
-    minPitch: 1
-    maxPitch: 1
-    localOffset: {x: 0, y: 0, z: 0}
-    autoDestroySeconds: 1.25
-  defaultMergeEffect:
-    sfxClip: {fileID: 0}
-    vfxPrefab: {fileID: 0}
-    animationClip: {fileID: 0}
-    volumeScale: 1
+    volumeScale: 0.7
     minPitch: 1
     maxPitch: 1
     localOffset: {x: 0, y: 0, z: 0}
@@ -33,111 +24,111 @@ MonoBehaviour:
   mergeEffects:
   - tileValue: 2
     effect:
-      sfxClip: {fileID: 0}
+      sfxClip: {fileID: 8300000, guid: b181add82fa76fe4c933ec174771b40b, type: 3}
       vfxPrefab: {fileID: 0}
       animationClip: {fileID: 0}
       volumeScale: 1
-      minPitch: 1
-      maxPitch: 1
+      minPitch: 1.08
+      maxPitch: 1.08
       localOffset: {x: 0, y: 0, z: 0}
       autoDestroySeconds: 1.25
   - tileValue: 4
     effect:
-      sfxClip: {fileID: 0}
+      sfxClip: {fileID: 8300000, guid: b181add82fa76fe4c933ec174771b40b, type: 3}
       vfxPrefab: {fileID: 0}
       animationClip: {fileID: 0}
-      volumeScale: 1
-      minPitch: 1
-      maxPitch: 1
+      volumeScale: 1.05
+      minPitch: 1.04
+      maxPitch: 1.04
       localOffset: {x: 0, y: 0, z: 0}
       autoDestroySeconds: 1.25
   - tileValue: 8
     effect:
-      sfxClip: {fileID: 0}
+      sfxClip: {fileID: 8300000, guid: b181add82fa76fe4c933ec174771b40b, type: 3}
       vfxPrefab: {fileID: 0}
       animationClip: {fileID: 0}
-      volumeScale: 1
+      volumeScale: 1.1
       minPitch: 1
       maxPitch: 1
       localOffset: {x: 0, y: 0, z: 0}
       autoDestroySeconds: 1.25
   - tileValue: 16
     effect:
-      sfxClip: {fileID: 0}
+      sfxClip: {fileID: 8300000, guid: b181add82fa76fe4c933ec174771b40b, type: 3}
       vfxPrefab: {fileID: 0}
       animationClip: {fileID: 0}
-      volumeScale: 1
-      minPitch: 1
-      maxPitch: 1
+      volumeScale: 1.17
+      minPitch: 0.96
+      maxPitch: 0.96
       localOffset: {x: 0, y: 0, z: 0}
       autoDestroySeconds: 1.25
   - tileValue: 32
     effect:
-      sfxClip: {fileID: 0}
+      sfxClip: {fileID: 8300000, guid: b181add82fa76fe4c933ec174771b40b, type: 3}
       vfxPrefab: {fileID: 0}
       animationClip: {fileID: 0}
-      volumeScale: 1
-      minPitch: 1
-      maxPitch: 1
+      volumeScale: 1.25
+      minPitch: 0.92
+      maxPitch: 0.92
       localOffset: {x: 0, y: 0, z: 0}
       autoDestroySeconds: 1.25
   - tileValue: 64
     effect:
-      sfxClip: {fileID: 0}
+      sfxClip: {fileID: 8300000, guid: b181add82fa76fe4c933ec174771b40b, type: 3}
       vfxPrefab: {fileID: 0}
       animationClip: {fileID: 0}
-      volumeScale: 1
-      minPitch: 1
-      maxPitch: 1
+      volumeScale: 1.35
+      minPitch: 0.88
+      maxPitch: 0.88
       localOffset: {x: 0, y: 0, z: 0}
       autoDestroySeconds: 1.25
   - tileValue: 128
     effect:
-      sfxClip: {fileID: 0}
+      sfxClip: {fileID: 8300000, guid: b181add82fa76fe4c933ec174771b40b, type: 3}
       vfxPrefab: {fileID: 0}
       animationClip: {fileID: 0}
-      volumeScale: 1
-      minPitch: 1
-      maxPitch: 1
+      volumeScale: 1.48
+      minPitch: 0.84
+      maxPitch: 0.84
       localOffset: {x: 0, y: 0, z: 0}
       autoDestroySeconds: 1.25
   - tileValue: 256
     effect:
-      sfxClip: {fileID: 0}
+      sfxClip: {fileID: 8300000, guid: b181add82fa76fe4c933ec174771b40b, type: 3}
       vfxPrefab: {fileID: 0}
       animationClip: {fileID: 0}
-      volumeScale: 1
-      minPitch: 1
-      maxPitch: 1
+      volumeScale: 1.62
+      minPitch: 0.8
+      maxPitch: 0.8
       localOffset: {x: 0, y: 0, z: 0}
       autoDestroySeconds: 1.25
   - tileValue: 512
     effect:
-      sfxClip: {fileID: 0}
+      sfxClip: {fileID: 8300000, guid: b181add82fa76fe4c933ec174771b40b, type: 3}
       vfxPrefab: {fileID: 0}
       animationClip: {fileID: 0}
-      volumeScale: 1
-      minPitch: 1
-      maxPitch: 1
+      volumeScale: 1.78
+      minPitch: 0.76
+      maxPitch: 0.76
       localOffset: {x: 0, y: 0, z: 0}
       autoDestroySeconds: 1.25
   - tileValue: 1024
     effect:
-      sfxClip: {fileID: 0}
+      sfxClip: {fileID: 8300000, guid: b181add82fa76fe4c933ec174771b40b, type: 3}
       vfxPrefab: {fileID: 0}
       animationClip: {fileID: 0}
-      volumeScale: 1
-      minPitch: 1
-      maxPitch: 1
+      volumeScale: 1.96
+      minPitch: 0.72
+      maxPitch: 0.72
       localOffset: {x: 0, y: 0, z: 0}
       autoDestroySeconds: 1.25
   - tileValue: 2048
     effect:
-      sfxClip: {fileID: 0}
+      sfxClip: {fileID: 8300000, guid: b181add82fa76fe4c933ec174771b40b, type: 3}
       vfxPrefab: {fileID: 0}
       animationClip: {fileID: 0}
-      volumeScale: 1
-      minPitch: 1
-      maxPitch: 1
+      volumeScale: 2.15
+      minPitch: 0.68
+      maxPitch: 0.68
       localOffset: {x: 0, y: 0, z: 0}
       autoDestroySeconds: 1.25

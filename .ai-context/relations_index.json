@@ -4594,13 +4594,6 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "from_class": "CombatManager",
-    "to_type": "GetLength",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
-    "from_class": "CombatManager",
     "to_type": "GetSkillDisplayName",
     "relation_type": "uses",
     "strength": 1
@@ -4938,6 +4931,13 @@
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "from_class": "CombatManager",
     "to_type": "OnPhaseChanged",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
+    "from_class": "CombatManager",
+    "to_type": "OnPlayerSkillUsed",
     "relation_type": "uses",
     "strength": 1
   },
@@ -8402,6 +8402,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Flow/Binder/BattleSceneBinder.cs",
     "from_class": "BattleSceneBinder",
+    "to_type": "Collections",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Flow/Binder/BattleSceneBinder.cs",
+    "from_class": "BattleSceneBinder",
     "to_type": "CompleteBattleSceneLoad",
     "relation_type": "uses",
     "strength": 1
@@ -8410,6 +8417,34 @@
     "from_file": "Project 2048/Assets/Scripts/Flow/Binder/BattleSceneBinder.cs",
     "from_class": "BattleSceneBinder",
     "to_type": "Core",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Flow/Binder/BattleSceneBinder.cs",
+    "from_class": "BattleSceneBinder",
+    "to_type": "FindAnyObjectByType",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Flow/Binder/BattleSceneBinder.cs",
+    "from_class": "BattleSceneBinder",
+    "to_type": "FindLoadingUI",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Flow/Binder/BattleSceneBinder.cs",
+    "from_class": "BattleSceneBinder",
+    "to_type": "FindObjectOfType",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Flow/Binder/BattleSceneBinder.cs",
+    "from_class": "BattleSceneBinder",
+    "to_type": "FindObjectsInactive",
     "relation_type": "uses",
     "strength": 1
   },
@@ -8437,6 +8472,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Flow/Binder/BattleSceneBinder.cs",
     "from_class": "BattleSceneBinder",
+    "to_type": "Include",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Flow/Binder/BattleSceneBinder.cs",
+    "from_class": "BattleSceneBinder",
     "to_type": "Instance",
     "relation_type": "uses",
     "strength": 1
@@ -8444,7 +8486,28 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Flow/Binder/BattleSceneBinder.cs",
     "from_class": "BattleSceneBinder",
+    "to_type": "IsVisible",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Flow/Binder/BattleSceneBinder.cs",
+    "from_class": "BattleSceneBinder",
+    "to_type": "LoadingUI",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Flow/Binder/BattleSceneBinder.cs",
+    "from_class": "BattleSceneBinder",
     "to_type": "LogError",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Flow/Binder/BattleSceneBinder.cs",
+    "from_class": "BattleSceneBinder",
+    "to_type": "Object",
     "relation_type": "uses",
     "strength": 1
   },
@@ -8459,6 +8522,27 @@
     "from_file": "Project 2048/Assets/Scripts/Flow/Binder/BattleSceneBinder.cs",
     "from_class": "BattleSceneBinder",
     "to_type": "Start",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Flow/Binder/BattleSceneBinder.cs",
+    "from_class": "BattleSceneBinder",
+    "to_type": "System",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Flow/Binder/BattleSceneBinder.cs",
+    "from_class": "BattleSceneBinder",
+    "to_type": "UI",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Flow/Binder/BattleSceneBinder.cs",
+    "from_class": "BattleSceneBinder",
+    "to_type": "UNITY_2023_1_OR_NEWER",
     "relation_type": "uses",
     "strength": 1
   },
@@ -9578,6 +9662,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Presentation/CombatActionIds.cs",
     "from_class": "CombatActionIds",
+    "to_type": "Appear",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/CombatActionIds.cs",
+    "from_class": "CombatActionIds",
     "to_type": "Attack",
     "relation_type": "uses",
     "strength": 1
@@ -10579,6 +10670,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
+    "to_type": "Add",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
+    "from_class": "CombatUiView",
     "to_type": "AddListener",
     "relation_type": "uses",
     "strength": 1
@@ -10586,7 +10684,21 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
+    "to_type": "After",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
+    "from_class": "CombatUiView",
     "to_type": "AiProfileLabel",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
+    "from_class": "CombatUiView",
+    "to_type": "AnimatedTile",
     "relation_type": "uses",
     "strength": 1
   },
@@ -10601,20 +10713,6 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
     "to_type": "Attack",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
-    "from_class": "CombatUiView",
-    "to_type": "Audio",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
-    "from_class": "CombatUiView",
-    "to_type": "AudioClip",
     "relation_type": "uses",
     "strength": 1
   },
@@ -10782,6 +10880,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
+    "to_type": "Clamp01",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
+    "from_class": "CombatUiView",
     "to_type": "ClearBoardAnimationOverlay",
     "relation_type": "uses",
     "strength": 1
@@ -10866,6 +10971,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
+    "to_type": "CreateAnimatedTile",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
+    "from_class": "CombatUiView",
     "to_type": "CurrentHp",
     "relation_type": "uses",
     "strength": 1
@@ -10880,14 +10992,14 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
-    "to_type": "DefaultSoundVolumeScale",
+    "to_type": "Defense",
     "relation_type": "uses",
     "strength": 1
   },
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
-    "to_type": "Defense",
+    "to_type": "DestroyAnimationObject",
     "relation_type": "uses",
     "strength": 1
   },
@@ -10958,13 +11070,6 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
     "to_type": "EnsureHpBarDefaults",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
-    "from_class": "CombatUiView",
-    "to_type": "Final",
     "relation_type": "uses",
     "strength": 1
   },
@@ -11069,14 +11174,14 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
-    "to_type": "GetBoardTransitionCues",
+    "to_type": "GetCell",
     "relation_type": "uses",
     "strength": 1
   },
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
-    "to_type": "GetCell",
+    "to_type": "GetComponent",
     "relation_type": "uses",
     "strength": 1
   },
@@ -11091,13 +11196,6 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
     "to_type": "GetSnapshot",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
-    "from_class": "CombatUiView",
-    "to_type": "GetSnapshotCues",
     "relation_type": "uses",
     "strength": 1
   },
@@ -11237,6 +11335,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
+    "to_type": "LerpUnclamped",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
+    "from_class": "CombatUiView",
     "to_type": "Linq",
     "relation_type": "uses",
     "strength": 1
@@ -11364,20 +11469,6 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
     "to_type": "Player",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
-    "from_class": "CombatUiView",
-    "to_type": "PlayFallbackBoardSoundCues",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
-    "from_class": "CombatUiView",
-    "to_type": "PlaySoundCues",
     "relation_type": "uses",
     "strength": 1
   },
@@ -11559,13 +11650,6 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
-    "to_type": "Reset",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
-    "from_class": "CombatUiView",
     "to_type": "ResolveBoardAnimationOverlay",
     "relation_type": "uses",
     "strength": 1
@@ -11699,14 +11783,14 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
-    "to_type": "SetValue",
+    "to_type": "SetParent",
     "relation_type": "uses",
     "strength": 1
   },
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
-    "to_type": "SFX",
+    "to_type": "SetValue",
     "relation_type": "uses",
     "strength": 1
   },
@@ -11735,6 +11819,13 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
     "to_type": "SkillType",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
+    "from_class": "CombatUiView",
+    "to_type": "SmoothStep",
     "relation_type": "uses",
     "strength": 1
   },
@@ -11784,13 +11875,6 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
     "to_type": "System",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
-    "from_class": "CombatUiView",
-    "to_type": "Temporary",
     "relation_type": "uses",
     "strength": 1
   },
@@ -11958,6 +12042,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
+    "to_type": "WaitForSecondsRealtime",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
+    "from_class": "CombatUiView",
     "to_type": "WireButtons",
     "relation_type": "uses",
     "strength": 1
@@ -12007,7 +12098,21 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
+    "to_type": "Appear",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
     "to_type": "Application",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "Attack",
     "relation_type": "uses",
     "strength": 1
   },
@@ -12042,7 +12147,21 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
+    "to_type": "CacheEnemyRendererRestTransform",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
     "to_type": "Clamp01",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "ClearEnemyAppearIntro",
     "relation_type": "uses",
     "strength": 1
   },
@@ -12098,6 +12217,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
+    "to_type": "CombatPhase",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
     "to_type": "CombatSnapshot",
     "relation_type": "uses",
     "strength": 1
@@ -12140,6 +12266,27 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
+    "to_type": "Defeat",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "Defend",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "Defense",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
     "to_type": "Destroy",
     "relation_type": "uses",
     "strength": 1
@@ -12168,6 +12315,55 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
+    "to_type": "EnemyAppeared",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "EnemyAppearIntroDurationSeconds",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "EnemyAppearIntroJumpHeight",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "EnemyAppearIntroRightOffset",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "EnemyAppearIntroRoutine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "EnemyAppearIntroScalePop",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "EnemyController",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
     "to_type": "EnemyDeathFadeDurationSeconds",
     "relation_type": "uses",
     "strength": 1
@@ -12189,6 +12385,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
+    "to_type": "EnemyIntentType",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
     "to_type": "EnemySO",
     "relation_type": "uses",
     "strength": 1
@@ -12197,6 +12400,20 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
     "to_type": "EnemySprite",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "EnemyTurn",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "EnemyUsedDefense",
     "relation_type": "uses",
     "strength": 1
   },
@@ -12273,6 +12490,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
+    "to_type": "HandlePlayerSkillUsed",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
     "to_type": "HasAnyAsset",
     "relation_type": "uses",
     "strength": 1
@@ -12295,6 +12519,13 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
     "to_type": "Instantiate",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "Intent",
     "relation_type": "uses",
     "strength": 1
   },
@@ -12336,6 +12567,27 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
+    "to_type": "OnPlayerSkillUsed",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "Phase",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "PI",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
     "to_type": "Play",
     "relation_type": "uses",
     "strength": 1
@@ -12357,6 +12609,20 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
+    "to_type": "PlayEnemyAppearEffectIfNeeded",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "PlayEnemyAppearIntro",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
     "to_type": "PlayEnemyDeathFade",
     "relation_type": "uses",
     "strength": 1
@@ -12365,6 +12631,13 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
     "to_type": "PlayEnemyDeathFadeIfNeeded",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "PlayEnemyDefenseEffectIfNeeded",
     "relation_type": "uses",
     "strength": 1
   },
@@ -12400,6 +12673,13 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
     "to_type": "PlayPlayerActionEffectIfNeeded",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "Pow",
     "relation_type": "uses",
     "strength": 1
   },
@@ -12476,7 +12756,42 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
+    "to_type": "RestoreEnemyRendererTransform",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
     "to_type": "SetEnemyRendererAlpha",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "Sin",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "Skills",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "SkillSO",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "SkillType",
     "relation_type": "uses",
     "strength": 1
   },
@@ -12530,6 +12845,20 @@
     "strength": 1
   },
   {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "Vector3",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "Victory",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
     "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatAudioRouter.cs",
     "from_class": "PrototypeCombatAudioRouter",
     "to_type": "BoardTileEffectCue",
@@ -12567,13 +12896,6 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatAudioRouter.cs",
     "from_class": "PrototypeCombatAudioRouter",
-    "to_type": "Any",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatAudioRouter.cs",
-    "from_class": "PrototypeCombatAudioRouter",
     "to_type": "Array",
     "relation_type": "uses",
     "strength": 1
@@ -12581,28 +12903,7 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatAudioRouter.cs",
     "from_class": "PrototypeCombatAudioRouter",
-    "to_type": "Block",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatAudioRouter.cs",
-    "from_class": "PrototypeCombatAudioRouter",
     "to_type": "Board2048",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatAudioRouter.cs",
-    "from_class": "PrototypeCombatAudioRouter",
-    "to_type": "BoardMerge",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatAudioRouter.cs",
-    "from_class": "PrototypeCombatAudioRouter",
-    "to_type": "BoardMove",
     "relation_type": "uses",
     "strength": 1
   },
@@ -12637,34 +12938,6 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatAudioRouter.cs",
     "from_class": "PrototypeCombatAudioRouter",
-    "to_type": "Combat",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatAudioRouter.cs",
-    "from_class": "PrototypeCombatAudioRouter",
-    "to_type": "CombatPhase",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatAudioRouter.cs",
-    "from_class": "PrototypeCombatAudioRouter",
-    "to_type": "CombatSnapshot",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatAudioRouter.cs",
-    "from_class": "PrototypeCombatAudioRouter",
-    "to_type": "CombatUiView",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatAudioRouter.cs",
-    "from_class": "PrototypeCombatAudioRouter",
     "to_type": "Converts",
     "relation_type": "uses",
     "strength": 1
@@ -12679,7 +12952,7 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatAudioRouter.cs",
     "from_class": "PrototypeCombatAudioRouter",
-    "to_type": "CurrentHp",
+    "to_type": "Defeat",
     "relation_type": "uses",
     "strength": 1
   },
@@ -12687,48 +12960,6 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatAudioRouter.cs",
     "from_class": "PrototypeCombatAudioRouter",
     "to_type": "Empty",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatAudioRouter.cs",
-    "from_class": "PrototypeCombatAudioRouter",
-    "to_type": "Enemies",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatAudioRouter.cs",
-    "from_class": "PrototypeCombatAudioRouter",
-    "to_type": "EnemyHit",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatAudioRouter.cs",
-    "from_class": "PrototypeCombatAudioRouter",
-    "to_type": "EnemyIndex",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatAudioRouter.cs",
-    "from_class": "PrototypeCombatAudioRouter",
-    "to_type": "EnemyTurn",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatAudioRouter.cs",
-    "from_class": "PrototypeCombatAudioRouter",
-    "to_type": "EnemyWasHit",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatAudioRouter.cs",
-    "from_class": "PrototypeCombatAudioRouter",
-    "to_type": "FirstOrDefault",
     "relation_type": "uses",
     "strength": 1
   },
@@ -12743,20 +12974,6 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatAudioRouter.cs",
     "from_class": "PrototypeCombatAudioRouter",
     "to_type": "GetBoardTileEffectCues",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatAudioRouter.cs",
-    "from_class": "PrototypeCombatAudioRouter",
-    "to_type": "GetBoardTransitionCues",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatAudioRouter.cs",
-    "from_class": "PrototypeCombatAudioRouter",
-    "to_type": "GetSnapshotCues",
     "relation_type": "uses",
     "strength": 1
   },
@@ -12791,13 +13008,6 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatAudioRouter.cs",
     "from_class": "PrototypeCombatAudioRouter",
-    "to_type": "Linq",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatAudioRouter.cs",
-    "from_class": "PrototypeCombatAudioRouter",
     "to_type": "Merge",
     "relation_type": "uses",
     "strength": 1
@@ -12819,28 +13029,7 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatAudioRouter.cs",
     "from_class": "PrototypeCombatAudioRouter",
-    "to_type": "Phase",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatAudioRouter.cs",
-    "from_class": "PrototypeCombatAudioRouter",
-    "to_type": "Player",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatAudioRouter.cs",
-    "from_class": "PrototypeCombatAudioRouter",
-    "to_type": "PlayerHit",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatAudioRouter.cs",
-    "from_class": "PrototypeCombatAudioRouter",
-    "to_type": "PlayerWasHit",
+    "to_type": "None",
     "relation_type": "uses",
     "strength": 1
   },
@@ -12875,14 +13064,7 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatAudioRouter.cs",
     "from_class": "PrototypeCombatAudioRouter",
-    "to_type": "PrototypeCombatSoundCue",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatAudioRouter.cs",
-    "from_class": "PrototypeCombatAudioRouter",
-    "to_type": "Reset",
+    "to_type": "PrototypeCombatEventSoundCue",
     "relation_type": "uses",
     "strength": 1
   },
@@ -12896,7 +13078,14 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatAudioRouter.cs",
     "from_class": "PrototypeCombatAudioRouter",
-    "to_type": "SFX",
+    "to_type": "RewardEnhance",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatAudioRouter.cs",
+    "from_class": "PrototypeCombatAudioRouter",
+    "to_type": "RewardRest",
     "relation_type": "uses",
     "strength": 1
   },
@@ -12904,20 +13093,6 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatAudioRouter.cs",
     "from_class": "PrototypeCombatAudioRouter",
     "to_type": "System",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatAudioRouter.cs",
-    "from_class": "PrototypeCombatAudioRouter",
-    "to_type": "Temporary",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatAudioRouter.cs",
-    "from_class": "PrototypeCombatAudioRouter",
-    "to_type": "These",
     "relation_type": "uses",
     "strength": 1
   },
@@ -12957,6 +13132,13 @@
     "strength": 1
   },
   {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatAudioRouter.cs",
+    "from_class": "PrototypeCombatAudioRouter",
+    "to_type": "Victory",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
     "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatBootstrap.cs",
     "from_class": "PrototypeCombatBootstrap",
     "to_type": "GameObject",
@@ -12975,6 +13157,13 @@
     "from_class": "PrototypeCombatBootstrap",
     "to_type": "MonoBehaviour",
     "relation_type": "inherits",
+    "strength": 4
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatBootstrap.cs",
+    "from_class": "PrototypeCombatBootstrap",
+    "to_type": "GameManager",
+    "relation_type": "singleton-access",
     "strength": 4
   },
   {
@@ -13015,6 +13204,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatBootstrap.cs",
     "from_class": "PrototypeCombatBootstrap",
+    "to_type": "BindFlowEvents",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatBootstrap.cs",
+    "from_class": "PrototypeCombatBootstrap",
     "to_type": "Collections",
     "relation_type": "uses",
     "strength": 1
@@ -13023,6 +13219,13 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatBootstrap.cs",
     "from_class": "PrototypeCombatBootstrap",
     "to_type": "Combat",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatBootstrap.cs",
+    "from_class": "PrototypeCombatBootstrap",
+    "to_type": "CombatEventAudioPlayer",
     "relation_type": "uses",
     "strength": 1
   },
@@ -13058,6 +13261,13 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatBootstrap.cs",
     "from_class": "PrototypeCombatBootstrap",
     "to_type": "CombatWorldSpriteView",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatBootstrap.cs",
+    "from_class": "PrototypeCombatBootstrap",
+    "to_type": "Core",
     "relation_type": "uses",
     "strength": 1
   },
@@ -13197,6 +13407,27 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatBootstrap.cs",
     "from_class": "PrototypeCombatBootstrap",
+    "to_type": "Flow",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatBootstrap.cs",
+    "from_class": "PrototypeCombatBootstrap",
+    "to_type": "FlowController",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatBootstrap.cs",
+    "from_class": "PrototypeCombatBootstrap",
+    "to_type": "GameManager",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatBootstrap.cs",
+    "from_class": "PrototypeCombatBootstrap",
     "to_type": "Generic",
     "relation_type": "uses",
     "strength": 1
@@ -13211,6 +13442,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatBootstrap.cs",
     "from_class": "PrototypeCombatBootstrap",
+    "to_type": "HandleGameStarted",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatBootstrap.cs",
+    "from_class": "PrototypeCombatBootstrap",
     "to_type": "Include",
     "relation_type": "uses",
     "strength": 1
@@ -13219,6 +13457,13 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatBootstrap.cs",
     "from_class": "PrototypeCombatBootstrap",
     "to_type": "Initialize",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatBootstrap.cs",
+    "from_class": "PrototypeCombatBootstrap",
+    "to_type": "Instance",
     "relation_type": "uses",
     "strength": 1
   },
@@ -13247,6 +13492,27 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatBootstrap.cs",
     "from_class": "PrototypeCombatBootstrap",
     "to_type": "OnDestroy",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatBootstrap.cs",
+    "from_class": "PrototypeCombatBootstrap",
+    "to_type": "OnDisable",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatBootstrap.cs",
+    "from_class": "PrototypeCombatBootstrap",
+    "to_type": "OnEnable",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatBootstrap.cs",
+    "from_class": "PrototypeCombatBootstrap",
+    "to_type": "OnGameStarted",
     "relation_type": "uses",
     "strength": 1
   },
@@ -13295,6 +13561,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatBootstrap.cs",
     "from_class": "PrototypeCombatBootstrap",
+    "to_type": "PrototypeCombatEventAudioPlayer",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatBootstrap.cs",
+    "from_class": "PrototypeCombatBootstrap",
     "to_type": "PrototypeCombatFactory",
     "relation_type": "uses",
     "strength": 1
@@ -13324,6 +13597,13 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatBootstrap.cs",
     "from_class": "PrototypeCombatBootstrap",
     "to_type": "ResetScore",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatBootstrap.cs",
+    "from_class": "PrototypeCombatBootstrap",
+    "to_type": "ResolveFlowController",
     "relation_type": "uses",
     "strength": 1
   },
@@ -13442,6 +13722,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatBootstrap.cs",
     "from_class": "PrototypeCombatBootstrap",
+    "to_type": "UnbindFlowEvents",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatBootstrap.cs",
+    "from_class": "PrototypeCombatBootstrap",
     "to_type": "UNITY_2023_1_OR_NEWER",
     "relation_type": "uses",
     "strength": 1
@@ -13450,6 +13737,489 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatBootstrap.cs",
     "from_class": "PrototypeCombatBootstrap",
     "to_type": "UnityEngine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioPlayer.cs",
+    "from_class": "PrototypeCombatEventAudioPlayer",
+    "to_type": "AudioSource",
+    "relation_type": "component-access",
+    "strength": 3
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioPlayer.cs",
+    "from_class": "PrototypeCombatEventAudioPlayer",
+    "to_type": "MonoBehaviour",
+    "relation_type": "inherits",
+    "strength": 4
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioPlayer.cs",
+    "from_class": "PrototypeCombatEventAudioPlayer",
+    "to_type": "AddComponent",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioPlayer.cs",
+    "from_class": "PrototypeCombatEventAudioPlayer",
+    "to_type": "AudioRolloffMode",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioPlayer.cs",
+    "from_class": "PrototypeCombatEventAudioPlayer",
+    "to_type": "AudioSource",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioPlayer.cs",
+    "from_class": "PrototypeCombatEventAudioPlayer",
+    "to_type": "Awake",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioPlayer.cs",
+    "from_class": "PrototypeCombatEventAudioPlayer",
+    "to_type": "BindCombat",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioPlayer.cs",
+    "from_class": "PrototypeCombatEventAudioPlayer",
+    "to_type": "BindReward",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioPlayer.cs",
+    "from_class": "PrototypeCombatEventAudioPlayer",
+    "to_type": "Combat",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioPlayer.cs",
+    "from_class": "PrototypeCombatEventAudioPlayer",
+    "to_type": "CombatEffectAudioPlayer",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioPlayer.cs",
+    "from_class": "PrototypeCombatEventAudioPlayer",
+    "to_type": "CombatManager",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioPlayer.cs",
+    "from_class": "PrototypeCombatEventAudioPlayer",
+    "to_type": "CombatResult",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioPlayer.cs",
+    "from_class": "PrototypeCombatEventAudioPlayer",
+    "to_type": "Defeat",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioPlayer.cs",
+    "from_class": "PrototypeCombatEventAudioPlayer",
+    "to_type": "Enhance",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioPlayer.cs",
+    "from_class": "PrototypeCombatEventAudioPlayer",
+    "to_type": "EnsureAudioDefaults",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioPlayer.cs",
+    "from_class": "PrototypeCombatEventAudioPlayer",
+    "to_type": "EventSfxDistance",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioPlayer.cs",
+    "from_class": "PrototypeCombatEventAudioPlayer",
+    "to_type": "float",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioPlayer.cs",
+    "from_class": "PrototypeCombatEventAudioPlayer",
+    "to_type": "GetComponent",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioPlayer.cs",
+    "from_class": "PrototypeCombatEventAudioPlayer",
+    "to_type": "HandleCombatDefeat",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioPlayer.cs",
+    "from_class": "PrototypeCombatEventAudioPlayer",
+    "to_type": "HandleCombatVictory",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioPlayer.cs",
+    "from_class": "PrototypeCombatEventAudioPlayer",
+    "to_type": "HandleRewardClaimed",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioPlayer.cs",
+    "from_class": "PrototypeCombatEventAudioPlayer",
+    "to_type": "Initialize",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioPlayer.cs",
+    "from_class": "PrototypeCombatEventAudioPlayer",
+    "to_type": "Kind",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioPlayer.cs",
+    "from_class": "PrototypeCombatEventAudioPlayer",
+    "to_type": "LastPlayedCue",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioPlayer.cs",
+    "from_class": "PrototypeCombatEventAudioPlayer",
+    "to_type": "Linear",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioPlayer.cs",
+    "from_class": "PrototypeCombatEventAudioPlayer",
+    "to_type": "OnCombatDefeat",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioPlayer.cs",
+    "from_class": "PrototypeCombatEventAudioPlayer",
+    "to_type": "OnCombatVictory",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioPlayer.cs",
+    "from_class": "PrototypeCombatEventAudioPlayer",
+    "to_type": "OnDestroy",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioPlayer.cs",
+    "from_class": "PrototypeCombatEventAudioPlayer",
+    "to_type": "OnRewardClaimed",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioPlayer.cs",
+    "from_class": "PrototypeCombatEventAudioPlayer",
+    "to_type": "PlayCue",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioPlayer.cs",
+    "from_class": "PrototypeCombatEventAudioPlayer",
+    "to_type": "PlayOneShot",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioPlayer.cs",
+    "from_class": "PrototypeCombatEventAudioPlayer",
+    "to_type": "Plays",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioPlayer.cs",
+    "from_class": "PrototypeCombatEventAudioPlayer",
+    "to_type": "Presentation",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioPlayer.cs",
+    "from_class": "PrototypeCombatEventAudioPlayer",
+    "to_type": "Project2048",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioPlayer.cs",
+    "from_class": "PrototypeCombatEventAudioPlayer",
+    "to_type": "Prototype",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioPlayer.cs",
+    "from_class": "PrototypeCombatEventAudioPlayer",
+    "to_type": "PrototypeCombatBootstrap",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioPlayer.cs",
+    "from_class": "PrototypeCombatEventAudioPlayer",
+    "to_type": "PrototypeCombatEventAudioProfileSO",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioPlayer.cs",
+    "from_class": "PrototypeCombatEventAudioPlayer",
+    "to_type": "PrototypeCombatEventSoundCue",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioPlayer.cs",
+    "from_class": "PrototypeCombatEventAudioPlayer",
+    "to_type": "Resolve",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioPlayer.cs",
+    "from_class": "PrototypeCombatEventAudioPlayer",
+    "to_type": "Rest",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioPlayer.cs",
+    "from_class": "PrototypeCombatEventAudioPlayer",
+    "to_type": "RewardChoiceKind",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioPlayer.cs",
+    "from_class": "PrototypeCombatEventAudioPlayer",
+    "to_type": "RewardChoiceResult",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioPlayer.cs",
+    "from_class": "PrototypeCombatEventAudioPlayer",
+    "to_type": "RewardEnhance",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioPlayer.cs",
+    "from_class": "PrototypeCombatEventAudioPlayer",
+    "to_type": "RewardManager",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioPlayer.cs",
+    "from_class": "PrototypeCombatEventAudioPlayer",
+    "to_type": "RewardRest",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioPlayer.cs",
+    "from_class": "PrototypeCombatEventAudioPlayer",
+    "to_type": "Rewards",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioPlayer.cs",
+    "from_class": "PrototypeCombatEventAudioPlayer",
+    "to_type": "UI",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioPlayer.cs",
+    "from_class": "PrototypeCombatEventAudioPlayer",
+    "to_type": "UnbindCombat",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioPlayer.cs",
+    "from_class": "PrototypeCombatEventAudioPlayer",
+    "to_type": "UnbindReward",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioPlayer.cs",
+    "from_class": "PrototypeCombatEventAudioPlayer",
+    "to_type": "UnityEngine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioPlayer.cs",
+    "from_class": "PrototypeCombatEventAudioPlayer",
+    "to_type": "Victory",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioProfileSO.cs",
+    "from_class": "PrototypeCombatEventAudioProfileSO",
+    "to_type": "ScriptableObject",
+    "relation_type": "inherits",
+    "strength": 4
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioProfileSO.cs",
+    "from_class": "PrototypeCombatEventAudioProfileSO",
+    "to_type": "Audio",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioProfileSO.cs",
+    "from_class": "PrototypeCombatEventAudioProfileSO",
+    "to_type": "Combat",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioProfileSO.cs",
+    "from_class": "PrototypeCombatEventAudioProfileSO",
+    "to_type": "CombatEffectBinding",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioProfileSO.cs",
+    "from_class": "PrototypeCombatEventAudioProfileSO",
+    "to_type": "CreateAssetMenu",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioProfileSO.cs",
+    "from_class": "PrototypeCombatEventAudioProfileSO",
+    "to_type": "Defeat",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioProfileSO.cs",
+    "from_class": "PrototypeCombatEventAudioProfileSO",
+    "to_type": "Event",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioProfileSO.cs",
+    "from_class": "PrototypeCombatEventAudioProfileSO",
+    "to_type": "Game",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioProfileSO.cs",
+    "from_class": "PrototypeCombatEventAudioProfileSO",
+    "to_type": "Presentation",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioProfileSO.cs",
+    "from_class": "PrototypeCombatEventAudioProfileSO",
+    "to_type": "Profile",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioProfileSO.cs",
+    "from_class": "PrototypeCombatEventAudioProfileSO",
+    "to_type": "Project2048",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioProfileSO.cs",
+    "from_class": "PrototypeCombatEventAudioProfileSO",
+    "to_type": "Prototype",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioProfileSO.cs",
+    "from_class": "PrototypeCombatEventAudioProfileSO",
+    "to_type": "PrototypeCombatEventSoundCue",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioProfileSO.cs",
+    "from_class": "PrototypeCombatEventAudioProfileSO",
+    "to_type": "Resolve",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioProfileSO.cs",
+    "from_class": "PrototypeCombatEventAudioProfileSO",
+    "to_type": "RewardEnhance",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioProfileSO.cs",
+    "from_class": "PrototypeCombatEventAudioProfileSO",
+    "to_type": "RewardRest",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioProfileSO.cs",
+    "from_class": "PrototypeCombatEventAudioProfileSO",
+    "to_type": "UnityEngine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioProfileSO.cs",
+    "from_class": "PrototypeCombatEventAudioProfileSO",
+    "to_type": "Victory",
     "relation_type": "uses",
     "strength": 1
   },
@@ -16690,6 +17460,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/UI/Loading/LoadingUI.cs",
     "from_class": "LoadingUI",
+    "to_type": "IsVisible",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/Loading/LoadingUI.cs",
+    "from_class": "LoadingUI",
     "to_type": "MoveTowards",
     "relation_type": "uses",
     "strength": 1
@@ -18398,7 +19175,21 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
     "from_class": "CombatPresentationEffectTests",
+    "to_type": "CombatUiView",
+    "relation_type": "component-access",
+    "strength": 3
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
     "to_type": "BoardTransition",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "GameContext",
     "relation_type": "creates",
     "strength": 2
   },
@@ -18419,6 +19210,20 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
     "from_class": "CombatPresentationEffectTests",
+    "to_type": "RunProgress",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "SerializedObject",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
     "to_type": "Vector2Int",
     "relation_type": "creates",
     "strength": 2
@@ -18433,7 +19238,35 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
     "from_class": "CombatPresentationEffectTests",
+    "to_type": "WaitForSecondsRealtime",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "BindingFlags",
+    "relation_type": "singleton-access",
+    "strength": 4
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
     "to_type": "Add",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "AddComponent",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "Appear",
     "relation_type": "uses",
     "strength": 1
   },
@@ -18447,6 +19280,20 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
     "from_class": "CombatPresentationEffectTests",
+    "to_type": "AssetDatabase",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "Assets",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
     "to_type": "Attack",
     "relation_type": "uses",
     "strength": 1
@@ -18454,7 +19301,77 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
     "from_class": "CombatPresentationEffectTests",
-    "to_type": "AudioRouter_BuildsTileEffectCuesForEachMoveAndEachMergedResult",
+    "to_type": "AudioClip",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "AudioRouter_BuildsOneMoveCuePerBoardMoveAndEachMergedResult",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "BattleRewardSO",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "BattleScene",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "BattleScene_CombatEventAudioPlayer_UsesEventAudioProfileAsset",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "BattleScene_HasBattleSceneBinderForLoadingCompletion",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "BattleSceneBinder",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "BattleSceneBinder_CompletesBattleLoadAfterLoadingUiHides",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "BindCombat",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "BindingFlags",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "Block",
     "relation_type": "uses",
     "strength": 1
   },
@@ -18468,6 +19385,20 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
     "from_class": "CombatPresentationEffectTests",
+    "to_type": "BoardManager",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "BoardPhase",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
     "to_type": "BoardTileEffectCueType",
     "relation_type": "uses",
     "strength": 1
@@ -18475,7 +19406,7 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
     "from_class": "CombatPresentationEffectTests",
-    "to_type": "BoardTileEffectProfile_UsesSpecificMergeEffectBeforeFallback",
+    "to_type": "BoardTileEffectProfile_UsesExplicitMergeEffectOnly",
     "relation_type": "uses",
     "strength": 1
   },
@@ -18510,6 +19441,20 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
     "from_class": "CombatPresentationEffectTests",
+    "to_type": "Bootstrap",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "ChooseEnhance",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
     "to_type": "Clear",
     "relation_type": "uses",
     "strength": 1
@@ -18518,6 +19463,13 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
     "from_class": "CombatPresentationEffectTests",
     "to_type": "Collections",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "Combat",
     "relation_type": "uses",
     "strength": 1
   },
@@ -18538,6 +19490,13 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
     "from_class": "CombatPresentationEffectTests",
+    "to_type": "CombatEffectAudio",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
     "to_type": "CombatEffectBinding",
     "relation_type": "uses",
     "strength": 1
@@ -18552,7 +19511,112 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
     "from_class": "CombatPresentationEffectTests",
+    "to_type": "CombatEventAudio",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "CombatEventAudioPlayer_TracksCombatAndRewardEventCues",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "CombatEventAudioPlayer_TracksDefeatEventCue",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "CombatManager",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "CombatPhase",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "CombatSetup",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "CombatUiView",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "CombatWorldSpriteView",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "CombatWorldSpriteView_EnemyDefenseIntent_PlaysDefendEffectFromEnemySo",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "CombatWorldSpriteView_PlayerSkill_PlaysActivationEffectFromSkillSo",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "CombatWorldSpriteView_StartCombat_PlaysEnemyIntroBeforeAppearEffectFromEnemySo",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "CompleteBattleSceneLoad",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "Core",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
     "to_type": "Count",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "Create",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "CreateEnemyData",
     "relation_type": "uses",
     "strength": 1
   },
@@ -18573,6 +19637,34 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
     "from_class": "CombatPresentationEffectTests",
+    "to_type": "CreatePlayerData",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "CreateReward",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "CreateRewardTable",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "CreateSkill",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
     "to_type": "CueType",
     "relation_type": "uses",
     "strength": 1
@@ -18580,7 +19672,35 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
     "from_class": "CombatPresentationEffectTests",
-    "to_type": "DefaultMergeVfx",
+    "to_type": "CurrentPhase",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "Data",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "Defeat",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "Defend",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "Defense",
     "relation_type": "uses",
     "strength": 1
   },
@@ -18588,6 +19708,13 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
     "from_class": "CombatPresentationEffectTests",
     "to_type": "DestroyImmediate",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "EditorSceneManager",
     "relation_type": "uses",
     "strength": 1
   },
@@ -18615,7 +19742,56 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
     "from_class": "CombatPresentationEffectTests",
+    "to_type": "Enemies",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
     "to_type": "Enemy",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "EnemyAppear",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "EnemyAppearIntroDurationSeconds",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "EnemyController",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "EnemyDefend",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "EnemyIntent",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "EnemyIntentType",
     "relation_type": "uses",
     "strength": 1
   },
@@ -18636,6 +19812,13 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
     "from_class": "CombatPresentationEffectTests",
+    "to_type": "EnemySprite",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
     "to_type": "EqualTo",
     "relation_type": "uses",
     "strength": 1
@@ -18643,7 +19826,63 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
     "from_class": "CombatPresentationEffectTests",
+    "to_type": "False",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "Find",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
     "to_type": "FindActionEffect",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "FindAnyObjectByType",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "FindAssets",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "FindObjectsInactive",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "FindProperty",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "Flow",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "FlowController",
     "relation_type": "uses",
     "strength": 1
   },
@@ -18664,6 +19903,13 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
     "from_class": "CombatPresentationEffectTests",
+    "to_type": "GameContext",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
     "to_type": "Generic",
     "relation_type": "uses",
     "strength": 1
@@ -18678,7 +19924,77 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
     "from_class": "CombatPresentationEffectTests",
+    "to_type": "GetComponent",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "GetField",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "GetType",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "GreaterThan",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "GreaterThanOrEqualTo",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "GUIDToAssetPath",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "Include",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "Initialize",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "Initialized",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
     "to_type": "InRange",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "Instance",
     "relation_type": "uses",
     "strength": 1
   },
@@ -18699,7 +20015,49 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
     "from_class": "CombatPresentationEffectTests",
+    "to_type": "LastPlayedCue",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "Length",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "LessThan",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
     "to_type": "Linq",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "LoadAssetAtPath",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "LoadingRoot",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "LoadingUI",
     "relation_type": "uses",
     "strength": 1
   },
@@ -18734,6 +20092,27 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
     "from_class": "CombatPresentationEffectTests",
+    "to_type": "None",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "NonPublic",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "Not",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
     "to_type": "Null",
     "relation_type": "uses",
     "strength": 1
@@ -18749,6 +20128,41 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
     "from_class": "CombatPresentationEffectTests",
     "to_type": "Object",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "OnGameStarted",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "OpenScene",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "Player",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "PlayerCombatController",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "PlayerSO",
     "relation_type": "uses",
     "strength": 1
   },
@@ -18783,7 +20197,133 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
     "from_class": "CombatPresentationEffectTests",
+    "to_type": "PrototypeBoardTileEffects",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "PrototypeBoardTileEffects_DefinesEverySupportedMergeTile",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "PrototypeBoardTileEffects_UsesMergeClipAndGranderTuningForLargerTiles",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
     "to_type": "PrototypeCombatAudioRouter",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "PrototypeCombatBootstrap",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "PrototypeCombatBootstrap_AutoStart_WaitsForFlowGameStarted",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "PrototypeCombatEventAudioPlayer",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "PrototypeCombatEventAudioProfile",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "PrototypeCombatEventAudioProfile_ContainsResultAndRewardClips",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "PrototypeCombatEventAudioProfileSO",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "PrototypeCombatEventSoundCue",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "PrototypeEnemyAssets_HaveAppearActionEffectClips",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "PrototypeEnemyAssets_HaveDefendActionEffectClips",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "PrototypeSkillAssets_HaveActivationEffectClips",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "Reflection",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "RequestEndPlayerTurn",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "RequestUseSkill",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "Resolve",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "ResolveBoardPhase",
     "relation_type": "uses",
     "strength": 1
   },
@@ -18811,7 +20351,147 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
     "from_class": "CombatPresentationEffectTests",
+    "to_type": "RewardEnhance",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "RewardManager",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "RewardRest",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "Rewards",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "RewardTableSO",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "RunProgress",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
     "to_type": "SameAs",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "SceneManagement",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "Scenes",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "SerializedObject",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "SetActive",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "SetBoardState",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "SetCombatants",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "SetPrivateField",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "SetValue",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "SkillActivation",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "Skills",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "SkillSO",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "SkillType",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "SpriteRenderer",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "StartCombat",
     "relation_type": "uses",
     "strength": 1
   },
@@ -18846,6 +20526,13 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
     "from_class": "CombatPresentationEffectTests",
+    "to_type": "TestTools",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
     "to_type": "That",
     "relation_type": "uses",
     "strength": 1
@@ -18867,7 +20554,42 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
     "from_class": "CombatPresentationEffectTests",
+    "to_type": "ToString",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "True",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "UI",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "UnityEditor",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
     "to_type": "UnityEngine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "UnityTest",
     "relation_type": "uses",
     "strength": 1
   },
@@ -18895,7 +20617,28 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
     "from_class": "CombatPresentationEffectTests",
+    "to_type": "Victory",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "WaitForSecondsRealtime",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
     "to_type": "Within",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "WorldSpriteView",
     "relation_type": "uses",
     "strength": 1
   },
@@ -19798,13 +21541,6 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
-    "to_type": "BoardTransition",
-    "relation_type": "creates",
-    "strength": 2
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
-    "from_class": "CombatUiViewTests",
     "to_type": "Color",
     "relation_type": "creates",
     "strength": 2
@@ -19820,13 +21556,6 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
     "to_type": "PointerEventData",
-    "relation_type": "creates",
-    "strength": 2
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
-    "from_class": "CombatUiViewTests",
-    "to_type": "PrototypeCombatAudioRouter",
     "relation_type": "creates",
     "strength": 2
   },
@@ -19855,13 +21584,6 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
     "to_type": "ActionDescriptionText",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
-    "from_class": "CombatUiViewTests",
-    "to_type": "ActionPhase",
     "relation_type": "uses",
     "strength": 1
   },
@@ -19931,27 +21653,6 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
-    "to_type": "AudioRouter_EmitsBoardMoveCueForNonMergeBoardMovement",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
-    "from_class": "CombatUiViewTests",
-    "to_type": "AudioRouter_EmitsHitAndMergeCuesFromCombatChanges",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
-    "from_class": "CombatUiViewTests",
-    "to_type": "AudioRouter_EmitsHitCuesWhenBlockAbsorbsDamage",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
-    "from_class": "CombatUiViewTests",
     "to_type": "AudioSource",
     "relation_type": "uses",
     "strength": 1
@@ -19966,7 +21667,7 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
-    "to_type": "BattleScene_CombatUiView_HasInspectorAudioReferences",
+    "to_type": "BattleScene_CombatUiView_HasBoardEffectProfileOnly",
     "relation_type": "uses",
     "strength": 1
   },
@@ -19981,13 +21682,6 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
     "to_type": "BindingFlags",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
-    "from_class": "CombatUiViewTests",
-    "to_type": "Block",
     "relation_type": "uses",
     "strength": 1
   },
@@ -20022,20 +21716,6 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
-    "to_type": "BoardMerge",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
-    "from_class": "CombatUiViewTests",
-    "to_type": "BoardMove",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
-    "from_class": "CombatUiViewTests",
     "to_type": "BoardSwipeHandler",
     "relation_type": "uses",
     "strength": 1
@@ -20050,13 +21730,6 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
-    "to_type": "BoardTileMovement",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
-    "from_class": "CombatUiViewTests",
     "to_type": "BoardToActionDelay_WaitsAfterMovesAreSpentBeforeShowingSkillChoices",
     "relation_type": "uses",
     "strength": 1
@@ -20065,13 +21738,6 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
     "to_type": "BoardToActionPanelDelaySeconds",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
-    "from_class": "CombatUiViewTests",
-    "to_type": "BoardTransition",
     "relation_type": "uses",
     "strength": 1
   },
@@ -20134,21 +21800,7 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
-    "to_type": "CombatPhase",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
-    "from_class": "CombatUiViewTests",
     "to_type": "CombatSetup",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
-    "from_class": "CombatUiViewTests",
-    "to_type": "CombatSnapshot",
     "relation_type": "uses",
     "strength": 1
   },
@@ -20239,13 +21891,6 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
-    "to_type": "CurrentHp",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
-    "from_class": "CombatUiViewTests",
     "to_type": "Darkness",
     "relation_type": "uses",
     "strength": 1
@@ -20316,21 +21961,7 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
-    "to_type": "Enemies",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
-    "from_class": "CombatUiViewTests",
     "to_type": "Enemy",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
-    "from_class": "CombatUiViewTests",
-    "to_type": "EnemyCombatSnapshot",
     "relation_type": "uses",
     "strength": 1
   },
@@ -20351,21 +21982,7 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
-    "to_type": "EnemyHit",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
-    "from_class": "CombatUiViewTests",
     "to_type": "EnemyHp",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
-    "from_class": "CombatUiViewTests",
-    "to_type": "EnemyIndex",
     "relation_type": "uses",
     "strength": 1
   },
@@ -20400,13 +22017,6 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
-    "to_type": "EnemyTurn",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
-    "from_class": "CombatUiViewTests",
     "to_type": "EnemyTurnDelaySeconds",
     "relation_type": "uses",
     "strength": 1
@@ -20415,13 +22025,6 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
     "to_type": "EqualTo",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
-    "from_class": "CombatUiViewTests",
-    "to_type": "EquivalentTo",
     "relation_type": "uses",
     "strength": 1
   },
@@ -20450,6 +22053,20 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
     "to_type": "Fill",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
+    "from_class": "CombatUiViewTests",
+    "to_type": "Filled",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
+    "from_class": "CombatUiViewTests",
+    "to_type": "FillMethod",
     "relation_type": "uses",
     "strength": 1
   },
@@ -20498,21 +22115,7 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
-    "to_type": "From",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
-    "from_class": "CombatUiViewTests",
     "to_type": "Generic",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
-    "from_class": "CombatUiViewTests",
-    "to_type": "GetBoardTransitionCues",
     "relation_type": "uses",
     "strength": 1
   },
@@ -20547,14 +22150,14 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
-    "to_type": "GetSnapshotCues",
+    "to_type": "GetType",
     "relation_type": "uses",
     "strength": 1
   },
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
-    "to_type": "GetType",
+    "to_type": "GetValue",
     "relation_type": "uses",
     "strength": 1
   },
@@ -20569,6 +22172,13 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
     "to_type": "Handler",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
+    "from_class": "CombatUiViewTests",
+    "to_type": "Horizontal",
     "relation_type": "uses",
     "strength": 1
   },
@@ -20631,14 +22241,7 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
-    "to_type": "Initialize_ConfiguresAudioSourceForAudibleUiSfx",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
-    "from_class": "CombatUiViewTests",
-    "to_type": "Initialize_PreservesPositiveInspectorSoundVolumeScale",
+    "to_type": "Initialize_ConfiguresAudioSourceForAudibleBoardEffects",
     "relation_type": "uses",
     "strength": 1
   },
@@ -20729,14 +22332,7 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
-    "to_type": "IsMergeParticipant",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
-    "from_class": "CombatUiViewTests",
-    "to_type": "MaxHp",
+    "to_type": "Left",
     "relation_type": "uses",
     "strength": 1
   },
@@ -20750,7 +22346,7 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
-    "to_type": "Movements",
+    "to_type": "NonPublic",
     "relation_type": "uses",
     "strength": 1
   },
@@ -20827,14 +22423,14 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
-    "to_type": "Outline",
+    "to_type": "OriginHorizontal",
     "relation_type": "uses",
     "strength": 1
   },
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
-    "to_type": "Phase",
+    "to_type": "Outline",
     "relation_type": "uses",
     "strength": 1
   },
@@ -20876,20 +22472,6 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
-    "to_type": "PlayerCombatSnapshot",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
-    "from_class": "CombatUiViewTests",
-    "to_type": "PlayerHit",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
-    "from_class": "CombatUiViewTests",
     "to_type": "PlayerSO",
     "relation_type": "uses",
     "strength": 1
@@ -20918,21 +22500,7 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
-    "to_type": "PrototypeCombatAudioRouter",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
-    "from_class": "CombatUiViewTests",
     "to_type": "PrototypeCombatBootstrap",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
-    "from_class": "CombatUiViewTests",
-    "to_type": "PrototypeCombatSoundCue",
     "relation_type": "uses",
     "strength": 1
   },
@@ -20961,13 +22529,6 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
     "to_type": "RequestUseSkillById",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
-    "from_class": "CombatUiViewTests",
-    "to_type": "Reset",
     "relation_type": "uses",
     "strength": 1
   },
@@ -21038,6 +22599,13 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
     "to_type": "SetPrivateField",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
+    "from_class": "CombatUiViewTests",
+    "to_type": "SetValue",
     "relation_type": "uses",
     "strength": 1
   },
@@ -21191,14 +22759,14 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
-    "to_type": "To",
+    "to_type": "True",
     "relation_type": "uses",
     "strength": 1
   },
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
-    "to_type": "True",
+    "to_type": "Type",
     "relation_type": "uses",
     "strength": 1
   },
@@ -21226,21 +22794,7 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
-    "to_type": "Value",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
-    "from_class": "CombatUiViewTests",
     "to_type": "Vector2",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
-    "from_class": "CombatUiViewTests",
-    "to_type": "Vector2Int",
     "relation_type": "uses",
     "strength": 1
   },

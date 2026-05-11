@@ -29,7 +29,6 @@ namespace Project2048.Prototype
         public const float BoardToActionPanelDelaySeconds = 0.45f;
         public const float CombatVfxDurationSeconds = 0.65f;
         public const float EnemyDeathFadeDurationSeconds = 0.6f;
-        private const float DefaultSoundVolumeScale = 3f;
         private const float UiSfxDistance = 10000f;
 
         [Header("Top bar")]
@@ -100,16 +99,9 @@ namespace Project2048.Prototype
         [SerializeField] private Button rewardRestButton;
         [SerializeField] private Button rewardEnhanceButton;
 
-        [Header("Audio")]
-        // Temporary prototype SFX hookup. Final audio ownership should replace
-        // these inspector clips or remove this layer without touching combat core.
+        [Header("Board effects")]
         [SerializeField] private AudioSource audioSource;
         [SerializeField] private BoardTileEffectProfileSO boardTileEffectProfile;
-        [SerializeField] private AudioClip playerHitClip;
-        [SerializeField] private AudioClip enemyHitClip;
-        [SerializeField] private AudioClip boardMoveClip;
-        [SerializeField] private AudioClip boardMergeClip;
-        [SerializeField] private float soundVolumeScale = DefaultSoundVolumeScale;
 
         [Header("Theme")]
         [SerializeField] private Color emptyCellColor = new(0.10f, 0.10f, 0.10f, 1f);
@@ -184,7 +176,6 @@ namespace Project2048.Prototype
             snapshot = combatManager.GetSnapshot();
             lastEnemyWasDead = snapshot?.Enemies?.FirstOrDefault()?.IsDead ?? false;
             SetEnemyPortraitAlpha(lastEnemyWasDead ? 0f : 1f);
-            audioRouter.Reset(snapshot);
             uiState.Sync(snapshot);
             Render();
         }
@@ -319,13 +310,11 @@ namespace Project2048.Prototype
 
         private void HandleCombatStateChanged(CombatSnapshot nextSnapshot)
         {
-            var soundCues = audioRouter.GetSnapshotCues(nextSnapshot);
             var nextEnemyDead = nextSnapshot?.Enemies?.FirstOrDefault()?.IsDead ?? false;
             var enemyJustDied = !lastEnemyWasDead && nextEnemyDead;
             snapshot = nextSnapshot;
             uiState.Sync(snapshot);
             Render();
-            PlaySoundCues(soundCues);
             PlayCombatVfxIfNeeded(snapshot.LastVfxCue);
             PlayEnemyDeathFadeIfNeeded(enemyJustDied, nextEnemyDead);
             lastEnemyWasDead = nextEnemyDead;
@@ -341,9 +330,7 @@ namespace Project2048.Prototype
 
         private void HandleBoardTransitioned(BoardTransition transition)
         {
-            var playedProfileAudio = PlayBoardTileEffectCues(audioRouter.GetBoardTileEffectCues(transition));
-            PlayFallbackBoardSoundCues(audioRouter.GetBoardTransitionCues(transition), playedProfileAudio);
-
+            PlayBoardTileEffectCues(audioRouter.GetBoardTileEffectCues(transition));
             pendingBoardTransition = transition;
         }
 
@@ -1320,17 +1307,6 @@ namespace Project2048.Prototype
             audioSource.maxDistance = UiSfxDistance;
             audioSource.minDistance = UiSfxDistance;
             audioSource.rolloffMode = AudioRolloffMode.Linear;
-            if (soundVolumeScale <= 0f)
-            {
-                soundVolumeScale = DefaultSoundVolumeScale;
-            }
-
-            // Inspector clips in the sample scene are the source of truth; Resources
-            // paths only keep a generated/test scene from failing silently.
-            playerHitClip ??= Resources.Load<AudioClip>("Audio/Prototype/PlayerHit");
-            enemyHitClip ??= Resources.Load<AudioClip>("Audio/Prototype/EnemyHit");
-            boardMoveClip ??= Resources.Load<AudioClip>("Audio/Prototype/BoardMove");
-            boardMergeClip ??= Resources.Load<AudioClip>("Audio/Prototype/BoardMerge");
         }
 
         private Transform FindChildByName(string childName)
@@ -1382,45 +1358,13 @@ namespace Project2048.Prototype
             return child != null ? child.GetComponent<T>() : null;
         }
 
-        private void PlaySoundCues(IReadOnlyList<PrototypeCombatSoundCue> cues)
+        private void PlayBoardTileEffectCues(IReadOnlyList<BoardTileEffectCue> cues)
         {
-            if (cues == null || cues.Count == 0 || audioSource == null)
+            if (cues == null || cues.Count == 0 || boardTileEffectProfile == null)
             {
                 return;
             }
 
-            foreach (var cue in cues)
-            {
-                PlaySoundCue(cue);
-            }
-        }
-
-        private void PlaySoundCue(PrototypeCombatSoundCue cue)
-        {
-            var clip = cue switch
-            {
-                PrototypeCombatSoundCue.PlayerHit => playerHitClip,
-                PrototypeCombatSoundCue.EnemyHit => enemyHitClip,
-                PrototypeCombatSoundCue.BoardMove => boardMoveClip,
-                PrototypeCombatSoundCue.BoardMerge => boardMergeClip,
-                _ => null,
-            };
-
-            if (clip != null)
-            {
-                audioSource.PlayOneShot(clip, soundVolumeScale);
-            }
-        }
-
-        private (bool Move, bool Merge) PlayBoardTileEffectCues(IReadOnlyList<BoardTileEffectCue> cues)
-        {
-            if (cues == null || cues.Count == 0 || boardTileEffectProfile == null)
-            {
-                return (false, false);
-            }
-
-            var playedMoveAudio = false;
-            var playedMergeAudio = false;
             foreach (var cue in cues)
             {
                 var effect = ResolveBoardTileEffect(cue);
@@ -1429,40 +1373,8 @@ namespace Project2048.Prototype
                     continue;
                 }
 
-                var playedAudio = PlayEffectAudio(effect);
-                if (playedAudio && cue.CueType == BoardTileEffectCueType.Move)
-                {
-                    playedMoveAudio = true;
-                }
-                else if (playedAudio && cue.CueType == BoardTileEffectCueType.Merge)
-                {
-                    playedMergeAudio = true;
-                }
-
+                PlayEffectAudio(effect);
                 SpawnBoardEffectPrefab(effect, cue.Position);
-            }
-
-            return (playedMoveAudio, playedMergeAudio);
-        }
-
-        private void PlayFallbackBoardSoundCues(
-            IReadOnlyList<PrototypeCombatSoundCue> cues,
-            (bool Move, bool Merge) playedProfileAudio)
-        {
-            if (cues == null || cues.Count == 0)
-            {
-                return;
-            }
-
-            foreach (var cue in cues)
-            {
-                if ((cue == PrototypeCombatSoundCue.BoardMove && playedProfileAudio.Move) ||
-                    (cue == PrototypeCombatSoundCue.BoardMerge && playedProfileAudio.Merge))
-                {
-                    continue;
-                }
-
-                PlaySoundCue(cue);
             }
         }
 
@@ -1483,7 +1395,7 @@ namespace Project2048.Prototype
                 return false;
             }
 
-            return CombatEffectAudioPlayer.PlayOneShot(audioSource, effect, soundVolumeScale, transform);
+            return CombatEffectAudioPlayer.PlayOneShot(audioSource, effect, 1f, transform);
         }
 
         private void SpawnBoardEffectPrefab(CombatEffectBinding effect, Vector2Int boardPosition)

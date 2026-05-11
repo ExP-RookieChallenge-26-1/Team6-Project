@@ -18,6 +18,8 @@ namespace Project2048.UI
         private float displayedProgress;
         private Coroutine hideRoutine;
 
+        public bool IsVisible => GetRoot().activeInHierarchy;
+
         private void Awake()
         {
             root ??= gameObject;
@@ -127,8 +129,8 @@ namespace Project2048.UI
 
             displayedProgress = 1f;
             ApplyProgress(displayedProgress);
-            GetRoot().SetActive(false);
             hideRoutine = null;
+            GetRoot().SetActive(false);
         }
     }
 }

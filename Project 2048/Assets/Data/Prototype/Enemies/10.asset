@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f6115ca39d511d049965aae02efc3f23, type: 3}
-  m_Name: "나선뿔 목동"
+  m_Name: 10
   m_EditorClassIdentifier: Game.Core::Project2048.Enemy.EnemySO
   enemyName: "\uB098\uC120\uBFD4 \uBAA9\uB3D9"
   maxHp: 46
@@ -19,6 +19,27 @@ MonoBehaviour:
   debuffPower: 2
   difficultyScore: 2
   portrait: {fileID: 21300000, guid: d5eca2f55471f0c43b968697dd288ff4, type: 3}
+  actionEffects:
+  - actionId: appear
+    effect:
+      sfxClip: {fileID: 8300000, guid: 1d994d948240c984d8da3bb962630c5b, type: 3}
+      vfxPrefab: {fileID: 0}
+      animationClip: {fileID: 0}
+      volumeScale: 1
+      minPitch: 1
+      maxPitch: 1
+      localOffset: {x: 0, y: 0, z: 0}
+      autoDestroySeconds: 1.25
+  - actionId: defend
+    effect:
+      sfxClip: {fileID: 8300000, guid: 540d095afadc57c4a9c08e0d54cd9b60, type: 3}
+      vfxPrefab: {fileID: 0}
+      animationClip: {fileID: 0}
+      volumeScale: 1
+      minPitch: 0.94
+      maxPitch: 1.02
+      localOffset: {x: 0, y: 0, z: 0}
+      autoDestroySeconds: 1.25
   intentPattern: []
   aiActionBias: 2
   aiDebuffPattern: 0

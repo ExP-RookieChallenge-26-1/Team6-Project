@@ -383,7 +383,7 @@ namespace Project2048.Tests
         }
 
         [Test]
-        public void Initialize_ConfiguresAudioSourceForAudibleUiSfx()
+        public void Initialize_ConfiguresAudioSourceForAudibleBoardEffects()
         {
             var viewObject = CreateOwnedGameObject("CombatView");
             var source = viewObject.AddComponent<AudioSource>();
@@ -403,112 +403,10 @@ namespace Project2048.Tests
             Assert.That(source.mute, Is.False);
             Assert.That(source.minDistance, Is.GreaterThanOrEqualTo(1000f));
             Assert.That(source.maxDistance, Is.GreaterThanOrEqualTo(1000f));
-            Assert.That((float)GetPrivateField(view, "soundVolumeScale"), Is.EqualTo(3f).Within(0.001f));
         }
 
         [Test]
-        public void Initialize_PreservesPositiveInspectorSoundVolumeScale()
-        {
-            var viewObject = CreateOwnedGameObject("CombatView");
-            viewObject.AddComponent<AudioSource>();
-            var view = viewObject.AddComponent<CombatUiView>();
-            SetPrivateField(view, "soundVolumeScale", 1.5f);
-
-            view.Initialize(null);
-
-            Assert.That((float)GetPrivateField(view, "soundVolumeScale"), Is.EqualTo(1.5f).Within(0.001f));
-        }
-
-        [Test]
-        public void AudioRouter_EmitsHitAndMergeCuesFromCombatChanges()
-        {
-            var router = new PrototypeCombatAudioRouter();
-            router.Reset(new CombatSnapshot
-            {
-                Player = new PlayerCombatSnapshot { CurrentHp = 20, MaxHp = 20 },
-                Enemies = new System.Collections.Generic.List<EnemyCombatSnapshot>
-                {
-                    new() { EnemyIndex = 0, CurrentHp = 10, MaxHp = 10 },
-                },
-            });
-
-            var cues = router.GetSnapshotCues(new CombatSnapshot
-            {
-                Player = new PlayerCombatSnapshot { CurrentHp = 16, MaxHp = 20 },
-                Enemies = new System.Collections.Generic.List<EnemyCombatSnapshot>
-                {
-                    new() { EnemyIndex = 0, CurrentHp = 4, MaxHp = 10 },
-                },
-            });
-
-            Assert.That(cues, Does.Contain(PrototypeCombatSoundCue.PlayerHit));
-            Assert.That(cues, Does.Contain(PrototypeCombatSoundCue.EnemyHit));
-
-            var transition = new BoardTransition();
-            transition.Movements.Add(new BoardTileMovement
-            {
-                From = Vector2Int.zero,
-                To = Vector2Int.right,
-                Value = 2,
-                IsMergeParticipant = true,
-            });
-            var mergeCues = router.GetBoardTransitionCues(transition);
-
-            Assert.That(mergeCues, Is.EquivalentTo(new[]
-            {
-                PrototypeCombatSoundCue.BoardMove,
-                PrototypeCombatSoundCue.BoardMerge,
-            }));
-        }
-
-        [Test]
-        public void AudioRouter_EmitsBoardMoveCueForNonMergeBoardMovement()
-        {
-            var router = new PrototypeCombatAudioRouter();
-            var transition = new BoardTransition();
-            transition.Movements.Add(new BoardTileMovement
-            {
-                From = Vector2Int.zero,
-                To = Vector2Int.right,
-                Value = 2,
-                IsMergeParticipant = false,
-            });
-
-            var cues = router.GetBoardTransitionCues(transition);
-
-            Assert.That(cues, Is.EquivalentTo(new[] { PrototypeCombatSoundCue.BoardMove }));
-        }
-
-        [Test]
-        public void AudioRouter_EmitsHitCuesWhenBlockAbsorbsDamage()
-        {
-            var router = new PrototypeCombatAudioRouter();
-            router.Reset(new CombatSnapshot
-            {
-                Phase = CombatPhase.ActionPhase,
-                Player = new PlayerCombatSnapshot { CurrentHp = 20, MaxHp = 20, Block = 4 },
-                Enemies = new System.Collections.Generic.List<EnemyCombatSnapshot>
-                {
-                    new() { EnemyIndex = 0, CurrentHp = 10, MaxHp = 10, Block = 3 },
-                },
-            });
-
-            var cues = router.GetSnapshotCues(new CombatSnapshot
-            {
-                Phase = CombatPhase.EnemyTurn,
-                Player = new PlayerCombatSnapshot { CurrentHp = 20, MaxHp = 20, Block = 1 },
-                Enemies = new System.Collections.Generic.List<EnemyCombatSnapshot>
-                {
-                    new() { EnemyIndex = 0, CurrentHp = 10, MaxHp = 10, Block = 1 },
-                },
-            });
-
-            Assert.That(cues, Does.Contain(PrototypeCombatSoundCue.PlayerHit));
-            Assert.That(cues, Does.Contain(PrototypeCombatSoundCue.EnemyHit));
-        }
-
-        [Test]
-        public void BattleScene_CombatUiView_HasInspectorAudioReferences()
+        public void BattleScene_CombatUiView_HasBoardEffectProfileOnly()
         {
             EditorSceneManager.OpenScene("Assets/Scenes/BattleScene.unity");
             var view = Object.FindAnyObjectByType<CombatUiView>(FindObjectsInactive.Include);
@@ -518,11 +416,11 @@ namespace Project2048.Tests
             var serializedView = new SerializedObject(view);
             Assert.That(serializedView.FindProperty("audioSource").objectReferenceValue, Is.Not.Null);
             Assert.That(serializedView.FindProperty("boardTileEffectProfile").objectReferenceValue, Is.Not.Null);
-            Assert.That(serializedView.FindProperty("playerHitClip"), Is.Not.Null);
-            Assert.That(serializedView.FindProperty("enemyHitClip"), Is.Not.Null);
-            Assert.That(serializedView.FindProperty("boardMoveClip"), Is.Not.Null);
-            Assert.That(serializedView.FindProperty("boardMergeClip"), Is.Not.Null);
-            Assert.That(serializedView.FindProperty("soundVolumeScale").floatValue, Is.EqualTo(3f).Within(0.001f));
+            Assert.That(serializedView.FindProperty("playerHitClip"), Is.Null);
+            Assert.That(serializedView.FindProperty("enemyHitClip"), Is.Null);
+            Assert.That(serializedView.FindProperty("boardMoveClip"), Is.Null);
+            Assert.That(serializedView.FindProperty("boardMergeClip"), Is.Null);
+            Assert.That(serializedView.FindProperty("soundVolumeScale"), Is.Null);
         }
 
         [Test]

@@ -1,11 +1,21 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Project2048.Board2048;
+using Project2048.Combat;
+using Project2048.Core;
 using Project2048.Enemy;
+using Project2048.Flow;
 using Project2048.Presentation;
 using Project2048.Prototype;
+using Project2048.Rewards;
+using Project2048.Skills;
+using Project2048.UI;
+using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.TestTools;
 
 namespace Project2048.Tests
 {
@@ -74,20 +84,14 @@ namespace Project2048.Tests
         }
 
         [Test]
-        public void BoardTileEffectProfile_UsesSpecificMergeEffectBeforeFallback()
+        public void BoardTileEffectProfile_UsesExplicitMergeEffectOnly()
         {
             var profile = ScriptableObject.CreateInstance<BoardTileEffectProfileSO>();
-            var fallbackPrefab = CreateOwnedGameObject("DefaultMergeVfx");
             var merge2048Prefab = CreateOwnedGameObject("Merge2048Vfx");
-            var fallback = new CombatEffectBinding
-            {
-                vfxPrefab = fallbackPrefab,
-            };
             var merge2048 = new CombatEffectBinding
             {
                 vfxPrefab = merge2048Prefab,
             };
-            profile.defaultMergeEffect = fallback;
             profile.mergeEffects = new List<BoardTileMergeEffectBinding>
             {
                 new()
@@ -99,11 +103,11 @@ namespace Project2048.Tests
             ownedObjects.Add(profile);
 
             Assert.That(profile.ResolveMergeEffect(2048), Is.SameAs(merge2048));
-            Assert.That(profile.ResolveMergeEffect(128), Is.SameAs(fallback));
+            Assert.That(profile.ResolveMergeEffect(128), Is.Null);
         }
 
         [Test]
-        public void AudioRouter_BuildsTileEffectCuesForEachMoveAndEachMergedResult()
+        public void AudioRouter_BuildsOneMoveCuePerBoardMoveAndEachMergedResult()
         {
             var router = new PrototypeCombatAudioRouter();
             var transition = new BoardTransition();
@@ -126,12 +130,470 @@ namespace Project2048.Tests
 
             var cues = router.GetBoardTileEffectCues(transition);
 
-            Assert.That(cues.Count(cue => cue.CueType == BoardTileEffectCueType.Move), Is.EqualTo(2));
+            Assert.That(cues.Count(cue => cue.CueType == BoardTileEffectCueType.Move), Is.EqualTo(1));
             Assert.That(cues.Count(cue => cue.CueType == BoardTileEffectCueType.Merge), Is.EqualTo(1));
 
             var mergeCue = cues.Single(cue => cue.CueType == BoardTileEffectCueType.Merge);
             Assert.That(mergeCue.TileValue, Is.EqualTo(4));
             Assert.That(mergeCue.Position, Is.EqualTo(new Vector2Int(0, 0)));
+        }
+
+        [Test]
+        public void CombatEventAudioPlayer_TracksCombatAndRewardEventCues()
+        {
+            var manager = CreateOwnedGameObject("CombatManager").AddComponent<CombatManager>();
+            var rewardManager = CreateOwnedGameObject("RewardManager").AddComponent<RewardManager>();
+            var player = CreateOwnedGameObject("Player").AddComponent<PlayerCombatController>();
+            var enemy = CreateOwnedGameObject("Enemy").AddComponent<EnemyController>();
+            var bootstrap = CreateOwnedGameObject("Bootstrap").AddComponent<PrototypeCombatBootstrap>();
+            var audioPlayer = CreateOwnedGameObject("CombatEventAudio").AddComponent<PrototypeCombatEventAudioPlayer>();
+            var attack = CreateSkill("attack", SkillType.Attack, cost: 0, power: 99);
+            var playerData = CreatePlayerData(maxHp: 20, attackPower: 2);
+            var enemyData = CreateEnemyData(maxHp: 10, attackValue: 0);
+            var reward = CreateReward(healPercentOfMaxHp: 0.3f, extraBoardMoveCount: 2);
+            var runProgress = new RunProgress();
+
+            rewardManager.Initialize(runProgress, CreateRewardTable(reward));
+            rewardManager.BindCombat(manager);
+            SetPrivateField(bootstrap, "combatManager", manager);
+            SetPrivateField(bootstrap, "rewardManager", rewardManager);
+
+            audioPlayer.Initialize(bootstrap);
+            manager.SetCombatants(player, new[] { enemy });
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new List<EnemySO> { enemyData },
+                boardMoveCount = 1,
+                runProgress = runProgress,
+            });
+            manager.ResolveBoardPhase();
+
+            Assert.That(manager.RequestUseSkill(attack, enemy), Is.True);
+            Assert.That(audioPlayer.LastPlayedCue, Is.EqualTo(PrototypeCombatEventSoundCue.Victory));
+
+            rewardManager.ChooseEnhance(player);
+
+            Assert.That(audioPlayer.LastPlayedCue, Is.EqualTo(PrototypeCombatEventSoundCue.RewardEnhance));
+        }
+
+        [Test]
+        public void CombatEventAudioPlayer_TracksDefeatEventCue()
+        {
+            var manager = CreateOwnedGameObject("CombatManager").AddComponent<CombatManager>();
+            var rewardManager = CreateOwnedGameObject("RewardManager").AddComponent<RewardManager>();
+            var player = CreateOwnedGameObject("Player").AddComponent<PlayerCombatController>();
+            var enemy = CreateOwnedGameObject("Enemy").AddComponent<EnemyController>();
+            var bootstrap = CreateOwnedGameObject("Bootstrap").AddComponent<PrototypeCombatBootstrap>();
+            var audioPlayer = CreateOwnedGameObject("CombatEventAudio").AddComponent<PrototypeCombatEventAudioPlayer>();
+            var playerData = CreatePlayerData(maxHp: 10, attackPower: 2);
+            var enemyData = CreateEnemyData(maxHp: 10, attackValue: 20);
+
+            rewardManager.BindCombat(manager);
+            SetPrivateField(bootstrap, "combatManager", manager);
+            SetPrivateField(bootstrap, "rewardManager", rewardManager);
+
+            audioPlayer.Initialize(bootstrap);
+            manager.SetCombatants(player, new[] { enemy });
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new List<EnemySO> { enemyData },
+                boardMoveCount = 1,
+            });
+            manager.BoardManager.SetBoardState(new[,]
+            {
+                { 0, 0, 0, 0 },
+                { 0, 0, 0, 0 },
+                { 0, 0, 0, 0 },
+                { 0, 0, 0, 0 },
+            }, 0);
+            manager.ResolveBoardPhase();
+            manager.RequestEndPlayerTurn();
+
+            Assert.That(audioPlayer.LastPlayedCue, Is.EqualTo(PrototypeCombatEventSoundCue.Defeat));
+        }
+
+        [UnityTest]
+        public IEnumerator CombatWorldSpriteView_StartCombat_PlaysEnemyIntroBeforeAppearEffectFromEnemySo()
+        {
+            var viewObject = CreateOwnedGameObject("WorldSpriteView");
+            var view = viewObject.AddComponent<CombatWorldSpriteView>();
+            var enemyRenderer = CreateOwnedGameObject("EnemySprite").AddComponent<SpriteRenderer>();
+            var manager = CreateOwnedGameObject("CombatManager").AddComponent<CombatManager>();
+            var player = CreateOwnedGameObject("Player").AddComponent<PlayerCombatController>();
+            var enemy = CreateOwnedGameObject("Enemy").AddComponent<EnemyController>();
+            var bootstrap = CreateOwnedGameObject("Bootstrap").AddComponent<PrototypeCombatBootstrap>();
+            var playerData = CreatePlayerData(maxHp: 20, attackPower: 2);
+            var enemyData = CreateEnemyData(maxHp: 10, attackValue: 0);
+            var appearClip = AudioClip.Create("EnemyAppear", 512, 1, 44100, false);
+            ownedObjects.Add(appearClip);
+            enemyData.actionEffects = new List<CombatantActionEffectBinding>
+            {
+                new()
+                {
+                    actionId = CombatActionIds.Appear,
+                    effect = new CombatEffectBinding
+                    {
+                        sfxClip = appearClip,
+                        minPitch = 0.8f,
+                        maxPitch = 0.8f,
+                    },
+                },
+            };
+
+            SetPrivateField(view, "enemyRenderer", enemyRenderer);
+            SetPrivateField(bootstrap, "combatManager", manager);
+
+            manager.SetCombatants(player, new[] { enemy });
+            view.Initialize(bootstrap);
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new List<EnemySO> { enemyData },
+                boardMoveCount = 1,
+            });
+
+            Assert.That(viewObject.transform.Find("CombatEffectAudio"), Is.Null);
+            Assert.That(enemyRenderer.transform.localPosition.x, Is.GreaterThan(0f));
+
+            yield return new WaitForSecondsRealtime(CombatWorldSpriteView.EnemyAppearIntroDurationSeconds + 0.1f);
+
+            Assert.That(viewObject.transform.Find("CombatEffectAudio"), Is.Not.Null);
+            Assert.That(enemyRenderer.transform.localPosition, Is.EqualTo(Vector3.zero));
+        }
+
+        [UnityTest]
+        public IEnumerator PrototypeCombatBootstrap_AutoStart_WaitsForFlowGameStarted()
+        {
+            var flow = CreateOwnedGameObject("Flow").AddComponent<FlowController>();
+            var bootstrap = CreateOwnedGameObject("Bootstrap").AddComponent<PrototypeCombatBootstrap>();
+            var playerData = CreatePlayerData(maxHp: 20, attackPower: 2);
+            var enemyData = CreateEnemyData(maxHp: 10, attackValue: 0);
+
+            flow.Initialized(new GameContext());
+            SetPrivateField(bootstrap, "playerData", playerData);
+            SetPrivateField(bootstrap, "enemyData", enemyData);
+            SetPrivateField(bootstrap, "randomizeEnemyOnStart", false);
+
+            yield return null;
+
+            Assert.That(bootstrap.CombatManager.CurrentPhase, Is.EqualTo(CombatPhase.None));
+
+            flow.CompleteBattleSceneLoad();
+            yield return null;
+
+            Assert.That(bootstrap.CombatManager.CurrentPhase, Is.EqualTo(CombatPhase.BoardPhase));
+        }
+
+        [UnityTest]
+        public IEnumerator BattleSceneBinder_CompletesBattleLoadAfterLoadingUiHides()
+        {
+            var flow = CreateOwnedGameObject("Flow").AddComponent<FlowController>();
+            var loadingComponentObject = CreateOwnedGameObject("LoadingUI");
+            var loadingUI = loadingComponentObject.AddComponent<LoadingUI>();
+            var loadingRoot = CreateOwnedGameObject("LoadingRoot");
+            var binder = CreateOwnedGameObject("BattleSceneBinder").AddComponent<BattleSceneBinder>();
+            var gameStarted = false;
+
+            flow.Initialized(new GameContext());
+            flow.OnGameStarted += () => gameStarted = true;
+            loadingRoot.SetActive(true);
+            SetPrivateField(loadingUI, "root", loadingRoot);
+            SetPrivateField(binder, "flowController", flow);
+
+            yield return null;
+            yield return null;
+
+            Assert.That(gameStarted, Is.False);
+
+            loadingRoot.SetActive(false);
+            yield return null;
+
+            Assert.That(gameStarted, Is.True);
+        }
+
+        [Test]
+        public void CombatWorldSpriteView_PlayerSkill_PlaysActivationEffectFromSkillSo()
+        {
+            var viewObject = CreateOwnedGameObject("WorldSpriteView");
+            var view = viewObject.AddComponent<CombatWorldSpriteView>();
+            var enemyRenderer = CreateOwnedGameObject("EnemySprite").AddComponent<SpriteRenderer>();
+            var manager = CreateOwnedGameObject("CombatManager").AddComponent<CombatManager>();
+            var player = CreateOwnedGameObject("Player").AddComponent<PlayerCombatController>();
+            var enemy = CreateOwnedGameObject("Enemy").AddComponent<EnemyController>();
+            var bootstrap = CreateOwnedGameObject("Bootstrap").AddComponent<PrototypeCombatBootstrap>();
+            var playerData = CreatePlayerData(maxHp: 20, attackPower: 2);
+            var enemyData = CreateEnemyData(maxHp: 10, attackValue: 0);
+            var attack = CreateSkill("attack", SkillType.Attack, cost: 0, power: 1);
+            var activationClip = AudioClip.Create("SkillActivation", 512, 1, 44100, false);
+            ownedObjects.Add(activationClip);
+            attack.activationEffect = new CombatEffectBinding
+            {
+                sfxClip = activationClip,
+                minPitch = 0.8f,
+                maxPitch = 0.8f,
+            };
+
+            SetPrivateField(view, "enemyRenderer", enemyRenderer);
+            SetPrivateField(bootstrap, "combatManager", manager);
+
+            manager.SetCombatants(player, new[] { enemy });
+            view.Initialize(bootstrap);
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new List<EnemySO> { enemyData },
+                boardMoveCount = 1,
+            });
+            manager.ResolveBoardPhase();
+
+            Assert.That(manager.RequestUseSkill(attack, enemy), Is.True);
+            Assert.That(viewObject.transform.Find("CombatEffectAudio"), Is.Not.Null);
+        }
+
+        [Test]
+        public void CombatWorldSpriteView_EnemyDefenseIntent_PlaysDefendEffectFromEnemySo()
+        {
+            var viewObject = CreateOwnedGameObject("WorldSpriteView");
+            var view = viewObject.AddComponent<CombatWorldSpriteView>();
+            var enemyRenderer = CreateOwnedGameObject("EnemySprite").AddComponent<SpriteRenderer>();
+            var manager = CreateOwnedGameObject("CombatManager").AddComponent<CombatManager>();
+            var player = CreateOwnedGameObject("Player").AddComponent<PlayerCombatController>();
+            var enemy = CreateOwnedGameObject("Enemy").AddComponent<EnemyController>();
+            var bootstrap = CreateOwnedGameObject("Bootstrap").AddComponent<PrototypeCombatBootstrap>();
+            var playerData = CreatePlayerData(maxHp: 20, attackPower: 2);
+            var enemyData = CreateEnemyData(maxHp: 10, attackValue: 0);
+            var defendClip = AudioClip.Create("EnemyDefend", 512, 1, 44100, false);
+            ownedObjects.Add(defendClip);
+            enemyData.intentPattern = new List<EnemyIntent>
+            {
+                new()
+                {
+                    intentType = EnemyIntentType.Defense,
+                    value = 5,
+                },
+            };
+            enemyData.actionEffects = new List<CombatantActionEffectBinding>
+            {
+                new()
+                {
+                    actionId = CombatActionIds.Defend,
+                    effect = new CombatEffectBinding
+                    {
+                        sfxClip = defendClip,
+                    },
+                },
+            };
+
+            SetPrivateField(view, "enemyRenderer", enemyRenderer);
+            SetPrivateField(bootstrap, "combatManager", manager);
+
+            manager.SetCombatants(player, new[] { enemy });
+            view.Initialize(bootstrap);
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new List<EnemySO> { enemyData },
+                boardMoveCount = 1,
+            });
+            manager.ResolveBoardPhase();
+
+            manager.RequestEndPlayerTurn();
+
+            Assert.That(enemy.Block, Is.EqualTo(5));
+            Assert.That(viewObject.transform.Find("CombatEffectAudio"), Is.Not.Null);
+        }
+
+        [Test]
+        public void BattleScene_CombatEventAudioPlayer_UsesEventAudioProfileAsset()
+        {
+            EditorSceneManager.OpenScene("Assets/Scenes/BattleScene.unity");
+
+            var audioPlayer = Object.FindAnyObjectByType<PrototypeCombatEventAudioPlayer>(FindObjectsInactive.Include);
+
+            Assert.That(audioPlayer, Is.Not.Null);
+            Assert.That(audioPlayer.GetComponent<CombatUiView>(), Is.Null);
+
+            var serializedPlayer = new SerializedObject(audioPlayer);
+            Assert.That(serializedPlayer.FindProperty("audioSource").objectReferenceValue, Is.Not.Null);
+            Assert.That(serializedPlayer.FindProperty("eventAudioProfile").objectReferenceValue, Is.Not.Null);
+            Assert.That(serializedPlayer.FindProperty("victoryClip"), Is.Null);
+            Assert.That(serializedPlayer.FindProperty("defeatClip"), Is.Null);
+            Assert.That(serializedPlayer.FindProperty("restRewardClip"), Is.Null);
+            Assert.That(serializedPlayer.FindProperty("enhanceRewardClip"), Is.Null);
+            Assert.That(serializedPlayer.FindProperty("volumeScale"), Is.Null);
+        }
+
+        [Test]
+        public void BattleScene_HasBattleSceneBinderForLoadingCompletion()
+        {
+            EditorSceneManager.OpenScene("Assets/Scenes/BattleScene.unity");
+
+            var binder = Object.FindAnyObjectByType<BattleSceneBinder>(FindObjectsInactive.Include);
+            var bootstrap = Object.FindAnyObjectByType<PrototypeCombatBootstrap>(FindObjectsInactive.Include);
+
+            Assert.That(binder, Is.Not.Null);
+            Assert.That(bootstrap, Is.Not.Null);
+        }
+
+        [Test]
+        public void PrototypeCombatEventAudioProfile_ContainsResultAndRewardClips()
+        {
+            var profile = AssetDatabase.LoadAssetAtPath<PrototypeCombatEventAudioProfileSO>(
+                "Assets/Data/Prototype/Presentation/PrototypeCombatEventAudioProfile.asset");
+
+            Assert.That(profile, Is.Not.Null);
+            Assert.That(profile.Resolve(PrototypeCombatEventSoundCue.Victory).sfxClip, Is.Not.Null);
+            Assert.That(profile.Resolve(PrototypeCombatEventSoundCue.Defeat).sfxClip, Is.Not.Null);
+            Assert.That(profile.Resolve(PrototypeCombatEventSoundCue.RewardRest).sfxClip, Is.Not.Null);
+            Assert.That(profile.Resolve(PrototypeCombatEventSoundCue.RewardEnhance).sfxClip, Is.Not.Null);
+        }
+
+        [Test]
+        public void PrototypeEnemyAssets_HaveAppearActionEffectClips()
+        {
+            var enemyGuids = AssetDatabase.FindAssets("t:EnemySO", new[] { "Assets/Data/Prototype/Enemies" });
+
+            Assert.That(enemyGuids.Length, Is.GreaterThanOrEqualTo(12));
+            foreach (var guid in enemyGuids)
+            {
+                var path = AssetDatabase.GUIDToAssetPath(guid);
+                var enemy = AssetDatabase.LoadAssetAtPath<EnemySO>(path);
+                var effect = enemy != null ? enemy.FindActionEffect(CombatActionIds.Appear) : null;
+
+                Assert.That(effect, Is.Not.Null, path);
+                Assert.That(effect.sfxClip, Is.Not.Null, path);
+            }
+        }
+
+        [Test]
+        public void PrototypeEnemyAssets_HaveDefendActionEffectClips()
+        {
+            var enemyGuids = AssetDatabase.FindAssets("t:EnemySO", new[] { "Assets/Data/Prototype/Enemies" });
+
+            Assert.That(enemyGuids.Length, Is.GreaterThanOrEqualTo(12));
+            foreach (var guid in enemyGuids)
+            {
+                var path = AssetDatabase.GUIDToAssetPath(guid);
+                var enemy = AssetDatabase.LoadAssetAtPath<EnemySO>(path);
+                var effect = enemy != null ? enemy.FindActionEffect(CombatActionIds.Defend) : null;
+
+                Assert.That(effect, Is.Not.Null, path);
+                Assert.That(effect.sfxClip, Is.Not.Null, path);
+            }
+        }
+
+        [Test]
+        public void PrototypeBoardTileEffects_UsesMergeClipAndGranderTuningForLargerTiles()
+        {
+            var profile = AssetDatabase.LoadAssetAtPath<BoardTileEffectProfileSO>(
+                "Assets/Data/Prototype/Presentation/PrototypeBoardTileEffects.asset");
+
+            Assert.That(profile, Is.Not.Null);
+
+            var smallMerge = profile.ResolveMergeEffect(2);
+            var largeMerge = profile.ResolveMergeEffect(2048);
+
+            Assert.That(smallMerge, Is.Not.Null);
+            Assert.That(largeMerge, Is.Not.Null);
+            Assert.That(smallMerge.sfxClip, Is.Not.Null);
+            Assert.That(largeMerge.sfxClip, Is.EqualTo(smallMerge.sfxClip));
+            Assert.That(largeMerge.EffectiveVolumeScale, Is.GreaterThan(smallMerge.EffectiveVolumeScale));
+            Assert.That(largeMerge.EffectiveMaxPitch, Is.LessThan(smallMerge.EffectiveMaxPitch));
+        }
+
+        [Test]
+        public void PrototypeBoardTileEffects_DefinesEverySupportedMergeTile()
+        {
+            var profile = AssetDatabase.LoadAssetAtPath<BoardTileEffectProfileSO>(
+                "Assets/Data/Prototype/Presentation/PrototypeBoardTileEffects.asset");
+
+            Assert.That(profile, Is.Not.Null);
+            foreach (var tileValue in new[] { 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048 })
+            {
+                var effect = profile.ResolveMergeEffect(tileValue);
+
+                Assert.That(effect, Is.Not.Null, tileValue.ToString());
+                Assert.That(effect.sfxClip, Is.Not.Null, tileValue.ToString());
+            }
+        }
+
+        [Test]
+        public void PrototypeSkillAssets_HaveActivationEffectClips()
+        {
+            var skillGuids = AssetDatabase.FindAssets("t:SkillSO", new[] { "Assets/Data/Prototype/Skills" });
+
+            Assert.That(skillGuids.Length, Is.EqualTo(6));
+            foreach (var guid in skillGuids)
+            {
+                var path = AssetDatabase.GUIDToAssetPath(guid);
+                var skill = AssetDatabase.LoadAssetAtPath<SkillSO>(path);
+
+                Assert.That(skill?.activationEffect, Is.Not.Null, path);
+                Assert.That(skill.activationEffect.sfxClip, Is.Not.Null, path);
+            }
+        }
+
+        private PlayerSO CreatePlayerData(int maxHp, int attackPower)
+        {
+            var data = ScriptableObject.CreateInstance<PlayerSO>();
+            data.maxHp = maxHp;
+            data.attackPower = attackPower;
+            ownedObjects.Add(data);
+            return data;
+        }
+
+        private EnemySO CreateEnemyData(int maxHp, int attackValue)
+        {
+            var data = ScriptableObject.CreateInstance<EnemySO>();
+            data.maxHp = maxHp;
+            data.attackPower = attackValue;
+            data.intentPattern = new List<EnemyIntent>
+            {
+                new()
+                {
+                    intentType = EnemyIntentType.Attack,
+                    value = attackValue,
+                },
+            };
+            ownedObjects.Add(data);
+            return data;
+        }
+
+        private SkillSO CreateSkill(string skillId, SkillType skillType, int cost, int power)
+        {
+            var skill = ScriptableObject.CreateInstance<SkillSO>();
+            skill.skillId = skillId;
+            skill.skillType = skillType;
+            skill.cost = cost;
+            skill.power = power;
+            ownedObjects.Add(skill);
+            return skill;
+        }
+
+        private BattleRewardSO CreateReward(float healPercentOfMaxHp, int extraBoardMoveCount)
+        {
+            var reward = ScriptableObject.CreateInstance<BattleRewardSO>();
+            reward.healPercentOfMaxHp = healPercentOfMaxHp;
+            reward.extraBoardMoveCount = extraBoardMoveCount;
+            ownedObjects.Add(reward);
+            return reward;
+        }
+
+        private RewardTableSO CreateRewardTable(BattleRewardSO reward)
+        {
+            var table = ScriptableObject.CreateInstance<RewardTableSO>();
+            table.rewards = new List<BattleRewardSO> { reward };
+            ownedObjects.Add(table);
+            return table;
+        }
+
+        private static void SetPrivateField(object target, string fieldName, object value)
+        {
+            target.GetType()
+                .GetField(fieldName, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
+                ?.SetValue(target, value);
         }
     }
 }

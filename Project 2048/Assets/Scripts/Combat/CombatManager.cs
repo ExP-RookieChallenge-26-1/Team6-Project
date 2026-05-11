@@ -51,6 +51,7 @@ namespace Project2048.Combat
         public event Action<CombatResult> OnCombatVictory;
         public event Action OnCombatDefeat;
         public event Action<int> OnCostChanged;
+        public event Action<SkillSO, EnemyController> OnPlayerSkillUsed;
         public event Action<CombatSnapshot> OnCombatStateChanged;
 
         private void Awake()
@@ -180,6 +181,7 @@ namespace Project2048.Combat
 
             lastActionDescription = $"플레이어: {GetSkillDisplayName(skill)}";
             CostWallet.Spend(skill.cost);
+            OnPlayerSkillUsed?.Invoke(skill, target);
             skillExecutor.Execute(skill, player, target, damageCalculator);
             CheckVictory();
             return true;

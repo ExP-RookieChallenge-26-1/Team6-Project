@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72eabf8ddd794bd88d118b67ebda7b24, type: 3}
+  m_Name: PrototypeCombatEventAudioProfile
+  m_EditorClassIdentifier: Game.Core::Project2048.Prototype.PrototypeCombatEventAudioProfileSO
+  victoryEffect:
+    sfxClip: {fileID: 8300000, guid: b7b483fe358922b47989071ad8eaad16, type: 3}
+    vfxPrefab: {fileID: 0}
+    animationClip: {fileID: 0}
+    volumeScale: 1
+    minPitch: 1
+    maxPitch: 1
+    localOffset: {x: 0, y: 0, z: 0}
+    autoDestroySeconds: 1.25
+  defeatEffect:
+    sfxClip: {fileID: 8300000, guid: 9b98647612cc581478fe68d0aa5faddc, type: 3}
+    vfxPrefab: {fileID: 0}
+    animationClip: {fileID: 0}
+    volumeScale: 1
+    minPitch: 1
+    maxPitch: 1
+    localOffset: {x: 0, y: 0, z: 0}
+    autoDestroySeconds: 1.25
+  restRewardEffect:
+    sfxClip: {fileID: 8300000, guid: ecdede056482a6b4f9c470ee388135e9, type: 3}
+    vfxPrefab: {fileID: 0}
+    animationClip: {fileID: 0}
+    volumeScale: 1
+    minPitch: 1
+    maxPitch: 1
+    localOffset: {x: 0, y: 0, z: 0}
+    autoDestroySeconds: 1.25
+  enhanceRewardEffect:
+    sfxClip: {fileID: 8300000, guid: be79a58dcdf14904e8f249d07f463f0a, type: 3}
+    vfxPrefab: {fileID: 0}
+    animationClip: {fileID: 0}
+    volumeScale: 1
+    minPitch: 1
+    maxPitch: 1
+    localOffset: {x: 0, y: 0, z: 0}
+    autoDestroySeconds: 1.25

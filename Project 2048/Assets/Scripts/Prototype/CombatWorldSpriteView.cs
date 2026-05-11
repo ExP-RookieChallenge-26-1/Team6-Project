@@ -3,6 +3,7 @@ using System.Linq;
 using Project2048.Combat;
 using Project2048.Enemy;
 using Project2048.Presentation;
+using Project2048.Skills;
 using UnityEngine;
 
 namespace Project2048.Prototype
@@ -10,6 +11,11 @@ namespace Project2048.Prototype
     public class CombatWorldSpriteView : MonoBehaviour
     {
         public const float EnemyDeathFadeDurationSeconds = 0.6f;
+        public const float EnemyAppearIntroDurationSeconds = 0.45f;
+
+        private const float EnemyAppearIntroRightOffset = 2.25f;
+        private const float EnemyAppearIntroJumpHeight = 0.7f;
+        private const float EnemyAppearIntroScalePop = 0.08f;
 
         [SerializeField] private PrototypeCombatBootstrap bootstrap;
         [SerializeField] private SpriteRenderer backgroundRenderer;
@@ -23,6 +29,10 @@ namespace Project2048.Prototype
         private CombatManager combatManager;
         private CombatSnapshot snapshot;
         private Coroutine enemyDeathFadeCoroutine;
+        private Coroutine enemyAppearIntroCoroutine;
+        private Vector3 enemyRendererRestLocalPosition;
+        private Vector3 enemyRendererRestLocalScale = Vector3.one;
+        private bool hasEnemyRendererRestTransform;
         private bool lastEnemyWasDead;
 
         public void Initialize(PrototypeCombatBootstrap owner)
@@ -32,6 +42,7 @@ namespace Project2048.Prototype
             combatManager = owner != null ? owner.CombatManager : null;
 
             ResolveMissingReferences();
+            CacheEnemyRendererRestTransform();
             RenderBackground();
 
             if (combatManager == null)
@@ -41,6 +52,8 @@ namespace Project2048.Prototype
 
             combatManager.OnCombatStateChanged -= HandleCombatStateChanged;
             combatManager.OnCombatStateChanged += HandleCombatStateChanged;
+            combatManager.OnPlayerSkillUsed -= HandlePlayerSkillUsed;
+            combatManager.OnPlayerSkillUsed += HandlePlayerSkillUsed;
 
             snapshot = combatManager.GetSnapshot();
             lastEnemyWasDead = snapshot?.Enemies?.FirstOrDefault()?.IsDead ?? false;
@@ -52,6 +65,7 @@ namespace Project2048.Prototype
         {
             UnbindCombatEvents();
             ClearEnemyDeathFade();
+            ClearEnemyAppearIntro();
         }
 
         private void UnbindCombatEvents()
@@ -62,21 +76,43 @@ namespace Project2048.Prototype
             }
 
             combatManager.OnCombatStateChanged -= HandleCombatStateChanged;
+            combatManager.OnPlayerSkillUsed -= HandlePlayerSkillUsed;
         }
 
         private void HandleCombatStateChanged(CombatSnapshot nextSnapshot)
         {
             var playerWasHit = PlayerWasHit(snapshot, nextSnapshot);
             var enemyWasHit = EnemyWasHit(snapshot, nextSnapshot);
+            var enemyUsedDefense = EnemyUsedDefense(snapshot, nextSnapshot);
+            var enemyAppeared = EnemyAppeared(snapshot, nextSnapshot);
             var nextEnemyDead = nextSnapshot?.Enemies?.FirstOrDefault()?.IsDead ?? false;
             var enemyJustDied = !lastEnemyWasDead && nextEnemyDead;
 
             snapshot = nextSnapshot;
             Render(snapshot);
+            PlayEnemyAppearEffectIfNeeded(enemyAppeared);
             PlayPlayerActionEffectIfNeeded(playerWasHit);
             PlayEnemyActionEffectIfNeeded(enemyWasHit, enemyJustDied);
+            PlayEnemyDefenseEffectIfNeeded(enemyUsedDefense);
             PlayEnemyDeathFadeIfNeeded(enemyJustDied, nextEnemyDead);
             lastEnemyWasDead = nextEnemyDead;
+        }
+
+        private void HandlePlayerSkillUsed(SkillSO skill, EnemyController target)
+        {
+            if (skill?.activationEffect == null || !skill.activationEffect.HasAnyAsset)
+            {
+                return;
+            }
+
+            var isAttack = skill.skillType == SkillType.Attack;
+            var anchor = isAttack && target != null && enemyRenderer != null
+                ? enemyRenderer.transform
+                : playerRenderer != null
+                    ? playerRenderer.transform
+                    : transform;
+            var animator = isAttack ? enemyAnimator : playerAnimator;
+            PlayCombatantActionEffect(skill.activationEffect, anchor, animator);
         }
 
         private void Render(CombatSnapshot currentSnapshot)
@@ -95,7 +131,7 @@ namespace Project2048.Prototype
 
             enemyRenderer.sprite = ResolveEnemySprite(currentSnapshot);
             var enemyIsAlive = !(currentSnapshot?.Enemies?.FirstOrDefault()?.IsDead ?? false);
-            if (enemyIsAlive && enemyDeathFadeCoroutine == null)
+            if (enemyIsAlive && enemyDeathFadeCoroutine == null && enemyAppearIntroCoroutine == null)
             {
                 SetEnemyRendererAlpha(1f);
             }
@@ -112,6 +148,16 @@ namespace Project2048.Prototype
                 combatManager?.Player?.Data?.FindActionEffect(CombatActionIds.Hit),
                 playerRenderer != null ? playerRenderer.transform : transform,
                 playerAnimator);
+        }
+
+        private void PlayEnemyAppearEffectIfNeeded(bool enemyAppeared)
+        {
+            if (!enemyAppeared)
+            {
+                return;
+            }
+
+            PlayEnemyAppearIntro(ResolveCurrentEnemyData()?.FindActionEffect(CombatActionIds.Appear));
         }
 
         private void PlayEnemyActionEffectIfNeeded(bool enemyWasHit, bool enemyJustDied)
@@ -133,6 +179,19 @@ namespace Project2048.Prototype
 
             PlayCombatantActionEffect(
                 enemyData?.FindActionEffect(CombatActionIds.Hit),
+                enemyRenderer != null ? enemyRenderer.transform : transform,
+                enemyAnimator);
+        }
+
+        private void PlayEnemyDefenseEffectIfNeeded(bool enemyUsedDefense)
+        {
+            if (!enemyUsedDefense)
+            {
+                return;
+            }
+
+            PlayCombatantActionEffect(
+                ResolveCurrentEnemyData()?.FindActionEffect(CombatActionIds.Defend),
                 enemyRenderer != null ? enemyRenderer.transform : transform,
                 enemyAnimator);
         }
@@ -183,6 +242,63 @@ namespace Project2048.Prototype
             }
         }
 
+        private void PlayEnemyAppearIntro(CombatEffectBinding effect)
+        {
+            if (enemyRenderer == null)
+            {
+                PlayCombatantActionEffect(effect, transform, enemyAnimator);
+                return;
+            }
+
+            CacheEnemyRendererRestTransform();
+            ClearEnemyAppearIntro(restoreTransform: false);
+
+            if (!Application.isPlaying || !isActiveAndEnabled)
+            {
+                RestoreEnemyRendererTransform();
+                PlayCombatantActionEffect(effect, enemyRenderer.transform, enemyAnimator);
+                return;
+            }
+
+            enemyAppearIntroCoroutine = StartCoroutine(EnemyAppearIntroRoutine(effect));
+        }
+
+        private IEnumerator EnemyAppearIntroRoutine(CombatEffectBinding effect)
+        {
+            var targetPosition = enemyRendererRestLocalPosition;
+            var baseScale = enemyRendererRestLocalScale;
+            var startPosition = targetPosition + (Vector3.right * EnemyAppearIntroRightOffset);
+            var startTime = Time.realtimeSinceStartup;
+
+            enemyRenderer.transform.localPosition = startPosition;
+            enemyRenderer.transform.localScale = baseScale * (1f - EnemyAppearIntroScalePop);
+            SetEnemyRendererAlpha(1f);
+
+            while (true)
+            {
+                var elapsed = Time.realtimeSinceStartup - startTime;
+                var t = Mathf.Clamp01(elapsed / EnemyAppearIntroDurationSeconds);
+                var eased = 1f - Mathf.Pow(1f - t, 3f);
+                var position = Vector3.Lerp(startPosition, targetPosition, eased);
+                position.y += Mathf.Sin(t * Mathf.PI) * EnemyAppearIntroJumpHeight;
+                enemyRenderer.transform.localPosition = position;
+
+                var scalePop = 1f + Mathf.Sin(t * Mathf.PI) * EnemyAppearIntroScalePop;
+                enemyRenderer.transform.localScale = baseScale * scalePop;
+
+                if (t >= 1f)
+                {
+                    break;
+                }
+
+                yield return null;
+            }
+
+            RestoreEnemyRendererTransform();
+            enemyAppearIntroCoroutine = null;
+            PlayCombatantActionEffect(effect, enemyRenderer.transform, enemyAnimator);
+        }
+
         private void RenderBackground()
         {
             if (backgroundRenderer != null && defaultBackgroundSprite != null)
@@ -228,6 +344,7 @@ namespace Project2048.Prototype
                 return;
             }
 
+            ClearEnemyAppearIntro(restoreTransform: true);
             ClearEnemyDeathFade();
             if (!Application.isPlaying || !isActiveAndEnabled)
             {
@@ -268,6 +385,43 @@ namespace Project2048.Prototype
                 StopCoroutine(enemyDeathFadeCoroutine);
                 enemyDeathFadeCoroutine = null;
             }
+        }
+
+        private void ClearEnemyAppearIntro(bool restoreTransform = false)
+        {
+            if (enemyAppearIntroCoroutine != null)
+            {
+                StopCoroutine(enemyAppearIntroCoroutine);
+                enemyAppearIntroCoroutine = null;
+            }
+
+            if (restoreTransform)
+            {
+                RestoreEnemyRendererTransform();
+            }
+        }
+
+        private void CacheEnemyRendererRestTransform()
+        {
+            if (enemyRenderer == null || hasEnemyRendererRestTransform)
+            {
+                return;
+            }
+
+            enemyRendererRestLocalPosition = enemyRenderer.transform.localPosition;
+            enemyRendererRestLocalScale = enemyRenderer.transform.localScale;
+            hasEnemyRendererRestTransform = true;
+        }
+
+        private void RestoreEnemyRendererTransform()
+        {
+            if (enemyRenderer == null || !hasEnemyRendererRestTransform)
+            {
+                return;
+            }
+
+            enemyRenderer.transform.localPosition = enemyRendererRestLocalPosition;
+            enemyRenderer.transform.localScale = enemyRendererRestLocalScale;
         }
 
         private void SetEnemyRendererAlpha(float alpha)
@@ -354,6 +508,36 @@ namespace Project2048.Prototype
 
             return nextEnemy.CurrentHp < previousEnemy.CurrentHp ||
                 nextEnemy.Block < previousEnemy.Block;
+        }
+
+        private static bool EnemyUsedDefense(CombatSnapshot previous, CombatSnapshot next)
+        {
+            var previousEnemy = previous?.Enemies?.FirstOrDefault();
+            var nextEnemy = next?.Enemies?.FirstOrDefault();
+            if (previousEnemy == null || nextEnemy == null || nextEnemy.IsDead)
+            {
+                return false;
+            }
+
+            return next.Phase == CombatPhase.EnemyTurn &&
+                nextEnemy.Intent?.intentType == EnemyIntentType.Defense &&
+                nextEnemy.Block > previousEnemy.Block;
+        }
+
+        private static bool EnemyAppeared(CombatSnapshot previous, CombatSnapshot next)
+        {
+            var nextEnemy = next?.Enemies?.FirstOrDefault();
+            if (nextEnemy == null || nextEnemy.IsDead)
+            {
+                return false;
+            }
+
+            var previousEnemy = previous?.Enemies?.FirstOrDefault();
+            return previousEnemy == null ||
+                previousEnemy.IsDead ||
+                previous.Phase == CombatPhase.Victory ||
+                previous.Phase == CombatPhase.Defeat ||
+                previousEnemy.EnemyIndex != nextEnemy.EnemyIndex;
         }
     }
 }

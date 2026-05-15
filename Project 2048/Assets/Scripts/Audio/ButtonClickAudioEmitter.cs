@@ -24,7 +24,7 @@ namespace Project2048.Audio
         {
             if (button != null)
             {
-                button.onClick.RemoveListener(PlayIfInteractable);
+                button.onClick.RemoveListener(PlayIfButtonExists);
             }
         }
 
@@ -36,14 +36,14 @@ namespace Project2048.Audio
                 return;
             }
 
-            button.onClick.RemoveListener(PlayIfInteractable);
-            button.onClick.AddListener(PlayIfInteractable);
+            button.onClick.RemoveListener(PlayIfButtonExists);
+            button.onClick.AddListener(PlayIfButtonExists);
         }
 
-        private void PlayIfInteractable()
+        private void PlayIfButtonExists()
         {
             button ??= GetComponent<Button>();
-            if (button != null && button.IsActive() && button.IsInteractable())
+            if (button != null)
             {
                 ButtonClickAudioRouter.PlayGlobal();
             }

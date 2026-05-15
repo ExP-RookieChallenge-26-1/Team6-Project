@@ -8,8 +8,8 @@ namespace Project2048.Audio
     public class ButtonClickAudioRouter : MonoBehaviour
     {
         private const float ButtonRefreshIntervalSeconds = 0.5f;
-        public const float DefaultMinPitch = 0.96f;
-        public const float DefaultMaxPitch = 1.04f;
+        public const float DefaultMinPitch = 0.995f;
+        public const float DefaultMaxPitch = 1.005f;
 
         [SerializeField] private Project2048AudioSettings audioSettings;
         [SerializeField] private AudioSource audioSource;
@@ -62,6 +62,11 @@ namespace Project2048.Audio
 
         public static void PlayGlobal()
         {
+            if (Active == null)
+            {
+                Project2048AudioBootstrap.EnsureAudioRoot();
+            }
+
             Active?.PlayButtonClick();
         }
 

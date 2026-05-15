@@ -122,12 +122,12 @@ namespace Project2048.Tests
         [Test]
         public void ButtonClickAudioRouter_DefaultPitchVariationStaysSubtle()
         {
-            Assert.That(ButtonClickAudioRouter.DefaultMinPitch, Is.EqualTo(0.96f).Within(0.001f));
-            Assert.That(ButtonClickAudioRouter.DefaultMaxPitch, Is.EqualTo(1.04f).Within(0.001f));
-            Assert.That(ButtonClickAudioRouter.EvaluatePitch(0f), Is.EqualTo(0.96f).Within(0.001f));
+            Assert.That(ButtonClickAudioRouter.DefaultMinPitch, Is.EqualTo(0.995f).Within(0.001f));
+            Assert.That(ButtonClickAudioRouter.DefaultMaxPitch, Is.EqualTo(1.005f).Within(0.001f));
+            Assert.That(ButtonClickAudioRouter.EvaluatePitch(0f), Is.EqualTo(0.995f).Within(0.001f));
             Assert.That(ButtonClickAudioRouter.EvaluatePitch(0.5f), Is.EqualTo(1f).Within(0.001f));
-            Assert.That(ButtonClickAudioRouter.EvaluatePitch(1f), Is.EqualTo(1.04f).Within(0.001f));
-            Assert.That(ButtonClickAudioRouter.EvaluatePitch(0.5f, 1.04f, 0.96f), Is.EqualTo(1f).Within(0.001f));
+            Assert.That(ButtonClickAudioRouter.EvaluatePitch(1f), Is.EqualTo(1.005f).Within(0.001f));
+            Assert.That(ButtonClickAudioRouter.EvaluatePitch(0.5f, 1.005f, 0.995f), Is.EqualTo(1f).Within(0.001f));
         }
 
         [Test]
@@ -159,6 +159,43 @@ namespace Project2048.Tests
             }
 
             Assert.That(playCount, Is.EqualTo(2));
+
+            void CountPlay()
+            {
+                playCount++;
+            }
+        }
+
+        [Test]
+        public void ButtonClickAudioEmitter_PlaysWhenEarlierHandlerDisablesButton()
+        {
+            var settings = AssetDatabase.LoadAssetAtPath<Project2048AudioSettings>(
+                "Assets/Resources/Audio/Project2048AudioSettings.asset");
+            var root = CreateOwnedGameObject("ButtonAudioRoot");
+            root.AddComponent<AudioSource>();
+            var router = root.AddComponent<ButtonClickAudioRouter>();
+            var buttonObject = CreateOwnedGameObject("SelfDisablingButton");
+            buttonObject.AddComponent<UnityEngine.UI.Image>();
+            var button = buttonObject.AddComponent<UnityEngine.UI.Button>();
+            var playCount = 0;
+
+            Assert.That(settings, Is.Not.Null);
+            Assert.That(settings.ButtonClickClip, Is.Not.Null);
+
+            button.onClick.AddListener(() => buttonObject.SetActive(false));
+            router.Initialize(settings);
+
+            ButtonClickAudioRouter.ButtonClickPlayed += CountPlay;
+            try
+            {
+                button.onClick.Invoke();
+            }
+            finally
+            {
+                ButtonClickAudioRouter.ButtonClickPlayed -= CountPlay;
+            }
+
+            Assert.That(playCount, Is.EqualTo(1));
 
             void CountPlay()
             {

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Project2048.Audio;
 using Project2048.Board2048;
 using Project2048.Combat;
 using Project2048.Enemy;
@@ -10,6 +11,7 @@ using Project2048.Score;
 using Project2048.Skills;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -101,6 +103,8 @@ namespace Project2048.Prototype
 
         [Header("Board effects")]
         [SerializeField] private AudioSource audioSource;
+        [SerializeField] private AudioMixerGroup sfxMixerGroup;
+        [SerializeField] private SimpleBgmDucker bgmDucker;
         [SerializeField] private BoardTileEffectProfileSO boardTileEffectProfile;
 
         [Header("Theme")]
@@ -285,6 +289,13 @@ namespace Project2048.Prototype
             }
 
             button.onClick.RemoveAllListeners();
+            var clickEmitter = button.GetComponent<ButtonClickAudioEmitter>();
+            if (clickEmitter == null)
+            {
+                clickEmitter = button.gameObject.AddComponent<ButtonClickAudioEmitter>();
+            }
+
+            clickEmitter.EnsureBound();
             button.onClick.AddListener(() =>
             {
                 handler?.Invoke();
@@ -437,16 +448,17 @@ namespace Project2048.Prototype
 
             if (intentBubble != null)
             {
-                var hasIntent = enemy?.Intent != null && !enemy.IsDead;
+                var visibleIntents = GetVisibleIntents(enemy);
+                var hasIntent = visibleIntents.Count > 0 && !enemy.IsDead;
                 intentBubble.SetActive(hasIntent);
                 if (hasIntent && intentBubbleText != null)
                 {
-                    intentBubbleText.text = PrototypeCombatText.FormatIntent(enemy.Intent);
+                    intentBubbleText.text = PrototypeCombatText.FormatIntents(visibleIntents);
                 }
 
                 if (hasIntent && intentBubble.TryGetComponent<Image>(out var intentBubbleImage))
                 {
-                    intentBubbleImage.color = GetIntentBubbleColor(enemy.Intent);
+                    intentBubbleImage.color = GetIntentBubbleColor(visibleIntents[0]);
                 }
             }
 
@@ -924,6 +936,34 @@ namespace Project2048.Prototype
             };
         }
 
+        private static List<EnemyIntent> GetVisibleIntents(EnemyCombatSnapshot enemy)
+        {
+            var intents = new List<EnemyIntent>();
+            if (enemy?.Intents != null)
+            {
+                foreach (var intent in enemy.Intents)
+                {
+                    if (intent == null)
+                    {
+                        continue;
+                    }
+
+                    intents.Add(intent);
+                    if (intents.Count >= EnemySO.MaximumActionsPerTurn)
+                    {
+                        break;
+                    }
+                }
+            }
+
+            if (intents.Count == 0 && enemy?.Intent != null)
+            {
+                intents.Add(enemy.Intent);
+            }
+
+            return intents;
+        }
+
         private void ResolveMissingReferences()
         {
             turnCounterText ??= FindComponentInChildrenByName<TMP_Text>("TurnCounterText");
@@ -1298,15 +1338,42 @@ namespace Project2048.Prototype
                 audioSource = gameObject.AddComponent<AudioSource>();
             }
 
+            ResolveAudioRouting();
             audioSource.playOnAwake = false;
             audioSource.spatialBlend = 0f;
             audioSource.volume = 1f;
             audioSource.mute = false;
             audioSource.loop = false;
+            if (sfxMixerGroup != null)
+            {
+                audioSource.outputAudioMixerGroup = sfxMixerGroup;
+            }
             // Keep prototype UI sounds audible regardless of camera distance.
             audioSource.maxDistance = UiSfxDistance;
             audioSource.minDistance = UiSfxDistance;
             audioSource.rolloffMode = AudioRolloffMode.Linear;
+        }
+
+        private void ResolveAudioRouting()
+        {
+            var settings = Project2048AudioSettings.LoadDefault();
+            if (sfxMixerGroup == null)
+            {
+                sfxMixerGroup = settings != null ? settings.SfxGroup : null;
+            }
+
+            if (bgmDucker == null)
+            {
+                bgmDucker = SimpleBgmDucker.Active != null
+                    ? SimpleBgmDucker.Active
+                    : FindAnyObjectByType<SimpleBgmDucker>(FindObjectsInactive.Include);
+            }
+        }
+
+        private void DuckBgmForImportantSfx()
+        {
+            ResolveAudioRouting();
+            bgmDucker?.DuckBgm();
         }
 
         private Transform FindChildByName(string childName)
@@ -1373,7 +1440,7 @@ namespace Project2048.Prototype
                     continue;
                 }
 
-                PlayEffectAudio(effect);
+                PlayEffectAudio(effect, cue.CueType == BoardTileEffectCueType.Merge);
                 SpawnBoardEffectPrefab(effect, cue.Position);
             }
         }
@@ -1388,11 +1455,16 @@ namespace Project2048.Prototype
             };
         }
 
-        private bool PlayEffectAudio(CombatEffectBinding effect)
+        private bool PlayEffectAudio(CombatEffectBinding effect, bool duckBgm)
         {
             if (effect?.sfxClip == null || audioSource == null)
             {
                 return false;
+            }
+
+            if (duckBgm)
+            {
+                DuckBgmForImportantSfx();
             }
 
             return CombatEffectAudioPlayer.PlayOneShot(audioSource, effect, 1f, transform);

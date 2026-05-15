@@ -25,6 +25,11 @@ namespace Project2048.Enemy
 
         public void SetNextIntent(EnemyController enemy)
         {
+            SetNextIntents(enemy, 1);
+        }
+
+        public void SetNextIntents(EnemyController enemy, int count)
+        {
             if (enemy == null || enemy.Data == null)
             {
                 return;
@@ -36,21 +41,20 @@ namespace Project2048.Enemy
                 intentIndexMap[enemy] = 0;
             }
 
-            var pattern = enemy.Data.intentPattern;
-            EnemyIntent nextIntent;
-
-            if (pattern == null || pattern.Count == 0)
+            var intentCount = System.Math.Max(1, System.Math.Min(count, EnemySO.MaximumActionsPerTurn));
+            var nextIntents = new List<EnemyIntent>(intentCount);
+            for (var index = 0; index < intentCount; index++)
             {
-                nextIntent = aiBrain.ChooseIntent(enemy.Data, intentIndexMap[enemy]);
-            }
-            else
-            {
-                var index = intentIndexMap[enemy] % pattern.Count;
-                nextIntent = pattern[index].Clone();
+                var nextIntent = ResolveNextIntent(enemy);
+                if (nextIntent != null)
+                {
+                    nextIntents.Add(nextIntent);
+                }
+
+                intentIndexMap[enemy]++;
             }
 
-            enemy.SetIntent(nextIntent);
-            intentIndexMap[enemy]++;
+            enemy.SetIntents(nextIntents);
         }
 
         public void ExecuteIntent(
@@ -59,26 +63,48 @@ namespace Project2048.Enemy
             DamageCalculator damageCalculator = null,
             Board2048Manager boardManager = null)
         {
-            if (enemy == null || player == null || enemy.CurrentIntent == null)
+            ExecuteIntent(enemy, enemy?.CurrentIntent, player, damageCalculator, boardManager);
+        }
+
+        public void ExecuteIntent(
+            EnemyController enemy,
+            EnemyIntent intent,
+            PlayerCombatController player,
+            DamageCalculator damageCalculator = null,
+            Board2048Manager boardManager = null)
+        {
+            if (enemy == null || player == null || intent == null)
             {
                 return;
             }
 
             damageCalculator ??= new DamageCalculator();
 
-            switch (enemy.CurrentIntent.intentType)
+            switch (intent.intentType)
             {
                 case EnemyIntentType.Attack:
-                    var damage = damageCalculator.CalculateEnemyDamage(enemy.CurrentIntent);
+                    var damage = damageCalculator.CalculateEnemyDamage(intent);
                     player.TakeDamage(damage);
                     break;
                 case EnemyIntentType.Defense:
-                    enemy.AddBlock(enemy.CurrentIntent.value);
+                    enemy.AddBlock(intent.value);
                     break;
                 case EnemyIntentType.Debuff:
-                    ApplyDebuff(enemy.CurrentIntent, player, boardManager);
+                    ApplyDebuff(intent, player, boardManager);
                     break;
             }
+        }
+
+        private EnemyIntent ResolveNextIntent(EnemyController enemy)
+        {
+            var pattern = enemy.Data.intentPattern;
+            if (pattern == null || pattern.Count == 0)
+            {
+                return aiBrain.ChooseIntent(enemy.Data, intentIndexMap[enemy]);
+            }
+
+            var index = intentIndexMap[enemy] % pattern.Count;
+            return pattern[index]?.Clone();
         }
 
         private static void ApplyDebuff(EnemyIntent intent, PlayerCombatController player, Board2048Manager boardManager)

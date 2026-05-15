@@ -2226,6 +2226,1637 @@
     "strength": 1
   },
   {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioEmitter.cs",
+    "from_class": "ButtonClickAudioEmitter",
+    "to_type": "Button",
+    "relation_type": "component-access",
+    "strength": 3
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioEmitter.cs",
+    "from_class": "ButtonClickAudioEmitter",
+    "to_type": "MonoBehaviour",
+    "relation_type": "inherits",
+    "strength": 4
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioEmitter.cs",
+    "from_class": "ButtonClickAudioEmitter",
+    "to_type": "AddListener",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioEmitter.cs",
+    "from_class": "ButtonClickAudioEmitter",
+    "to_type": "Audio",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioEmitter.cs",
+    "from_class": "ButtonClickAudioEmitter",
+    "to_type": "Awake",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioEmitter.cs",
+    "from_class": "ButtonClickAudioEmitter",
+    "to_type": "Button",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioEmitter.cs",
+    "from_class": "ButtonClickAudioEmitter",
+    "to_type": "ButtonClickAudioRouter",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioEmitter.cs",
+    "from_class": "ButtonClickAudioEmitter",
+    "to_type": "DisallowMultipleComponent",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioEmitter.cs",
+    "from_class": "ButtonClickAudioEmitter",
+    "to_type": "EnsureBound",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioEmitter.cs",
+    "from_class": "ButtonClickAudioEmitter",
+    "to_type": "GetComponent",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioEmitter.cs",
+    "from_class": "ButtonClickAudioEmitter",
+    "to_type": "OnDisable",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioEmitter.cs",
+    "from_class": "ButtonClickAudioEmitter",
+    "to_type": "OnEnable",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioEmitter.cs",
+    "from_class": "ButtonClickAudioEmitter",
+    "to_type": "PlayGlobal",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioEmitter.cs",
+    "from_class": "ButtonClickAudioEmitter",
+    "to_type": "PlayIfButtonExists",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioEmitter.cs",
+    "from_class": "ButtonClickAudioEmitter",
+    "to_type": "Project2048",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioEmitter.cs",
+    "from_class": "ButtonClickAudioEmitter",
+    "to_type": "RemoveListener",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioEmitter.cs",
+    "from_class": "ButtonClickAudioEmitter",
+    "to_type": "RequireComponent",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioEmitter.cs",
+    "from_class": "ButtonClickAudioEmitter",
+    "to_type": "UI",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioEmitter.cs",
+    "from_class": "ButtonClickAudioEmitter",
+    "to_type": "UnityEngine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioRouter.cs",
+    "from_class": "ButtonClickAudioRouter",
+    "to_type": "AudioSource",
+    "relation_type": "component-access",
+    "strength": 3
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioRouter.cs",
+    "from_class": "ButtonClickAudioRouter",
+    "to_type": "ButtonClickAudioEmitter",
+    "relation_type": "component-access",
+    "strength": 3
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioRouter.cs",
+    "from_class": "ButtonClickAudioRouter",
+    "to_type": "PersistentBgmPlayer",
+    "relation_type": "component-access",
+    "strength": 3
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioRouter.cs",
+    "from_class": "ButtonClickAudioRouter",
+    "to_type": "MonoBehaviour",
+    "relation_type": "inherits",
+    "strength": 4
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioRouter.cs",
+    "from_class": "ButtonClickAudioRouter",
+    "to_type": "Active",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioRouter.cs",
+    "from_class": "ButtonClickAudioRouter",
+    "to_type": "AddComponent",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioRouter.cs",
+    "from_class": "ButtonClickAudioRouter",
+    "to_type": "ApplyOutputGroup",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioRouter.cs",
+    "from_class": "ButtonClickAudioRouter",
+    "to_type": "Audio",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioRouter.cs",
+    "from_class": "ButtonClickAudioRouter",
+    "to_type": "AudioClip",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioRouter.cs",
+    "from_class": "ButtonClickAudioRouter",
+    "to_type": "AudioSource",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioRouter.cs",
+    "from_class": "ButtonClickAudioRouter",
+    "to_type": "Awake",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioRouter.cs",
+    "from_class": "ButtonClickAudioRouter",
+    "to_type": "Button",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioRouter.cs",
+    "from_class": "ButtonClickAudioRouter",
+    "to_type": "ButtonClickAudioEmitter",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioRouter.cs",
+    "from_class": "ButtonClickAudioRouter",
+    "to_type": "ButtonClickClip",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioRouter.cs",
+    "from_class": "ButtonClickAudioRouter",
+    "to_type": "ButtonClickPlayed",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioRouter.cs",
+    "from_class": "ButtonClickAudioRouter",
+    "to_type": "ButtonRefreshIntervalSeconds",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioRouter.cs",
+    "from_class": "ButtonClickAudioRouter",
+    "to_type": "Clamp01",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioRouter.cs",
+    "from_class": "ButtonClickAudioRouter",
+    "to_type": "DefaultMaxPitch",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioRouter.cs",
+    "from_class": "ButtonClickAudioRouter",
+    "to_type": "DefaultMinPitch",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioRouter.cs",
+    "from_class": "ButtonClickAudioRouter",
+    "to_type": "DisallowMultipleComponent",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioRouter.cs",
+    "from_class": "ButtonClickAudioRouter",
+    "to_type": "EnsureAudioRoot",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioRouter.cs",
+    "from_class": "ButtonClickAudioRouter",
+    "to_type": "EnsureAudioSource",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioRouter.cs",
+    "from_class": "ButtonClickAudioRouter",
+    "to_type": "EnsureBound",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioRouter.cs",
+    "from_class": "ButtonClickAudioRouter",
+    "to_type": "EvaluatePitch",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioRouter.cs",
+    "from_class": "ButtonClickAudioRouter",
+    "to_type": "FindObjectsByType",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioRouter.cs",
+    "from_class": "ButtonClickAudioRouter",
+    "to_type": "FindObjectsInactive",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioRouter.cs",
+    "from_class": "ButtonClickAudioRouter",
+    "to_type": "float",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioRouter.cs",
+    "from_class": "ButtonClickAudioRouter",
+    "to_type": "GetComponent",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioRouter.cs",
+    "from_class": "ButtonClickAudioRouter",
+    "to_type": "GetComponents",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioRouter.cs",
+    "from_class": "ButtonClickAudioRouter",
+    "to_type": "HandleSceneLoaded",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioRouter.cs",
+    "from_class": "ButtonClickAudioRouter",
+    "to_type": "Include",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioRouter.cs",
+    "from_class": "ButtonClickAudioRouter",
+    "to_type": "Initialize",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioRouter.cs",
+    "from_class": "ButtonClickAudioRouter",
+    "to_type": "Invoke",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioRouter.cs",
+    "from_class": "ButtonClickAudioRouter",
+    "to_type": "LateUpdate",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioRouter.cs",
+    "from_class": "ButtonClickAudioRouter",
+    "to_type": "Lerp",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioRouter.cs",
+    "from_class": "ButtonClickAudioRouter",
+    "to_type": "LoadDefault",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioRouter.cs",
+    "from_class": "ButtonClickAudioRouter",
+    "to_type": "LoadSceneMode",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioRouter.cs",
+    "from_class": "ButtonClickAudioRouter",
+    "to_type": "Max",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioRouter.cs",
+    "from_class": "ButtonClickAudioRouter",
+    "to_type": "MaxPitch",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioRouter.cs",
+    "from_class": "ButtonClickAudioRouter",
+    "to_type": "Min",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioRouter.cs",
+    "from_class": "ButtonClickAudioRouter",
+    "to_type": "MinPitch",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioRouter.cs",
+    "from_class": "ButtonClickAudioRouter",
+    "to_type": "Object",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioRouter.cs",
+    "from_class": "ButtonClickAudioRouter",
+    "to_type": "OnDisable",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioRouter.cs",
+    "from_class": "ButtonClickAudioRouter",
+    "to_type": "OnEnable",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioRouter.cs",
+    "from_class": "ButtonClickAudioRouter",
+    "to_type": "PersistentBgmPlayer",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioRouter.cs",
+    "from_class": "ButtonClickAudioRouter",
+    "to_type": "PlayButtonClick",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioRouter.cs",
+    "from_class": "ButtonClickAudioRouter",
+    "to_type": "PlayGlobal",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioRouter.cs",
+    "from_class": "ButtonClickAudioRouter",
+    "to_type": "PlayOneShot",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioRouter.cs",
+    "from_class": "ButtonClickAudioRouter",
+    "to_type": "Project2048",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioRouter.cs",
+    "from_class": "ButtonClickAudioRouter",
+    "to_type": "Project2048AudioBootstrap",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioRouter.cs",
+    "from_class": "ButtonClickAudioRouter",
+    "to_type": "Project2048AudioChannel",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioRouter.cs",
+    "from_class": "ButtonClickAudioRouter",
+    "to_type": "Project2048AudioSettings",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioRouter.cs",
+    "from_class": "ButtonClickAudioRouter",
+    "to_type": "RefreshButtons",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioRouter.cs",
+    "from_class": "ButtonClickAudioRouter",
+    "to_type": "ResolveButtonClickClip",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioRouter.cs",
+    "from_class": "ButtonClickAudioRouter",
+    "to_type": "ResolveSettings",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioRouter.cs",
+    "from_class": "ButtonClickAudioRouter",
+    "to_type": "Scene",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioRouter.cs",
+    "from_class": "ButtonClickAudioRouter",
+    "to_type": "SceneManagement",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioRouter.cs",
+    "from_class": "ButtonClickAudioRouter",
+    "to_type": "SceneManager",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioRouter.cs",
+    "from_class": "ButtonClickAudioRouter",
+    "to_type": "Source",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioRouter.cs",
+    "from_class": "ButtonClickAudioRouter",
+    "to_type": "System",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioRouter.cs",
+    "from_class": "ButtonClickAudioRouter",
+    "to_type": "UI",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioRouter.cs",
+    "from_class": "ButtonClickAudioRouter",
+    "to_type": "UnityEngine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/PersistentBgmPlayer.cs",
+    "from_class": "PersistentBgmPlayer",
+    "to_type": "AudioSource",
+    "relation_type": "component-access",
+    "strength": 3
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/PersistentBgmPlayer.cs",
+    "from_class": "PersistentBgmPlayer",
+    "to_type": "MonoBehaviour",
+    "relation_type": "inherits",
+    "strength": 4
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/PersistentBgmPlayer.cs",
+    "from_class": "PersistentBgmPlayer",
+    "to_type": "AddComponent",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/PersistentBgmPlayer.cs",
+    "from_class": "PersistentBgmPlayer",
+    "to_type": "Application",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/PersistentBgmPlayer.cs",
+    "from_class": "PersistentBgmPlayer",
+    "to_type": "Audio",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/PersistentBgmPlayer.cs",
+    "from_class": "PersistentBgmPlayer",
+    "to_type": "AudioClip",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/PersistentBgmPlayer.cs",
+    "from_class": "PersistentBgmPlayer",
+    "to_type": "AudioMixerGroup",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/PersistentBgmPlayer.cs",
+    "from_class": "PersistentBgmPlayer",
+    "to_type": "AudioSource",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/PersistentBgmPlayer.cs",
+    "from_class": "PersistentBgmPlayer",
+    "to_type": "Awake",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/PersistentBgmPlayer.cs",
+    "from_class": "PersistentBgmPlayer",
+    "to_type": "BgmGroup",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/PersistentBgmPlayer.cs",
+    "from_class": "PersistentBgmPlayer",
+    "to_type": "BgmMixerGroup",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/PersistentBgmPlayer.cs",
+    "from_class": "PersistentBgmPlayer",
+    "to_type": "Destroy",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/PersistentBgmPlayer.cs",
+    "from_class": "PersistentBgmPlayer",
+    "to_type": "DontDestroyOnLoad",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/PersistentBgmPlayer.cs",
+    "from_class": "PersistentBgmPlayer",
+    "to_type": "EnsureAudioSource",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/PersistentBgmPlayer.cs",
+    "from_class": "PersistentBgmPlayer",
+    "to_type": "GetComponent",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/PersistentBgmPlayer.cs",
+    "from_class": "PersistentBgmPlayer",
+    "to_type": "Initialize",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/PersistentBgmPlayer.cs",
+    "from_class": "PersistentBgmPlayer",
+    "to_type": "LoadDefault",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/PersistentBgmPlayer.cs",
+    "from_class": "PersistentBgmPlayer",
+    "to_type": "MainThemeClip",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/PersistentBgmPlayer.cs",
+    "from_class": "PersistentBgmPlayer",
+    "to_type": "OnDestroy",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/PersistentBgmPlayer.cs",
+    "from_class": "PersistentBgmPlayer",
+    "to_type": "Play",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/PersistentBgmPlayer.cs",
+    "from_class": "PersistentBgmPlayer",
+    "to_type": "Project2048",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/PersistentBgmPlayer.cs",
+    "from_class": "PersistentBgmPlayer",
+    "to_type": "Project2048AudioSettings",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/PersistentBgmPlayer.cs",
+    "from_class": "PersistentBgmPlayer",
+    "to_type": "RequireComponent",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/PersistentBgmPlayer.cs",
+    "from_class": "PersistentBgmPlayer",
+    "to_type": "ResolveSettings",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/PersistentBgmPlayer.cs",
+    "from_class": "PersistentBgmPlayer",
+    "to_type": "Source",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/PersistentBgmPlayer.cs",
+    "from_class": "PersistentBgmPlayer",
+    "to_type": "Start",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/PersistentBgmPlayer.cs",
+    "from_class": "PersistentBgmPlayer",
+    "to_type": "UnityEngine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioBootstrap.cs",
+    "from_class": "Project2048AudioBootstrap",
+    "to_type": "ButtonClickAudioRouter",
+    "relation_type": "component-access",
+    "strength": 3
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioBootstrap.cs",
+    "from_class": "Project2048AudioBootstrap",
+    "to_type": "GameObject",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioBootstrap.cs",
+    "from_class": "Project2048AudioBootstrap",
+    "to_type": "AddComponent",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioBootstrap.cs",
+    "from_class": "Project2048AudioBootstrap",
+    "to_type": "Audio",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioBootstrap.cs",
+    "from_class": "Project2048AudioBootstrap",
+    "to_type": "AudioRootName",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioBootstrap.cs",
+    "from_class": "Project2048AudioBootstrap",
+    "to_type": "BeforeSceneLoad",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioBootstrap.cs",
+    "from_class": "Project2048AudioBootstrap",
+    "to_type": "BootstrapAudio",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioBootstrap.cs",
+    "from_class": "Project2048AudioBootstrap",
+    "to_type": "ButtonClickAudioRouter",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioBootstrap.cs",
+    "from_class": "Project2048AudioBootstrap",
+    "to_type": "DontDestroyOnLoad",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioBootstrap.cs",
+    "from_class": "Project2048AudioBootstrap",
+    "to_type": "EnsureAudioRoot",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioBootstrap.cs",
+    "from_class": "Project2048AudioBootstrap",
+    "to_type": "EnsureButtonClickRouter",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioBootstrap.cs",
+    "from_class": "Project2048AudioBootstrap",
+    "to_type": "FindAnyObjectByType",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioBootstrap.cs",
+    "from_class": "Project2048AudioBootstrap",
+    "to_type": "FindObjectsInactive",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioBootstrap.cs",
+    "from_class": "Project2048AudioBootstrap",
+    "to_type": "GetComponent",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioBootstrap.cs",
+    "from_class": "Project2048AudioBootstrap",
+    "to_type": "Include",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioBootstrap.cs",
+    "from_class": "Project2048AudioBootstrap",
+    "to_type": "Initialize",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioBootstrap.cs",
+    "from_class": "Project2048AudioBootstrap",
+    "to_type": "LoadDefault",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioBootstrap.cs",
+    "from_class": "Project2048AudioBootstrap",
+    "to_type": "Object",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioBootstrap.cs",
+    "from_class": "Project2048AudioBootstrap",
+    "to_type": "PersistentBgmPlayer",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioBootstrap.cs",
+    "from_class": "Project2048AudioBootstrap",
+    "to_type": "Project2048",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioBootstrap.cs",
+    "from_class": "Project2048AudioBootstrap",
+    "to_type": "Project2048Audio",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioBootstrap.cs",
+    "from_class": "Project2048AudioBootstrap",
+    "to_type": "Project2048AudioSettings",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioBootstrap.cs",
+    "from_class": "Project2048AudioBootstrap",
+    "to_type": "RuntimeInitializeLoadType",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioBootstrap.cs",
+    "from_class": "Project2048AudioBootstrap",
+    "to_type": "RuntimeInitializeOnLoadMethod",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioBootstrap.cs",
+    "from_class": "Project2048AudioBootstrap",
+    "to_type": "SimpleBgmDucker",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioBootstrap.cs",
+    "from_class": "Project2048AudioBootstrap",
+    "to_type": "string",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioBootstrap.cs",
+    "from_class": "Project2048AudioBootstrap",
+    "to_type": "UnityEngine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioChannel.cs",
+    "from_class": "Project2048AudioChannel",
+    "to_type": "Ambience",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioChannel.cs",
+    "from_class": "Project2048AudioChannel",
+    "to_type": "Audio",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioChannel.cs",
+    "from_class": "Project2048AudioChannel",
+    "to_type": "BGM",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioChannel.cs",
+    "from_class": "Project2048AudioChannel",
+    "to_type": "Project2048",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioChannel.cs",
+    "from_class": "Project2048AudioChannel",
+    "to_type": "Project2048AudioChannel",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioChannel.cs",
+    "from_class": "Project2048AudioChannel",
+    "to_type": "SFX",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioChannel.cs",
+    "from_class": "Project2048AudioChannel",
+    "to_type": "UI",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
+    "from_class": "Project2048AudioSettings",
+    "to_type": "ScriptableObject",
+    "relation_type": "inherits",
+    "strength": 4
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
+    "from_class": "Project2048AudioSettings",
+    "to_type": "Ambience",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
+    "from_class": "Project2048AudioSettings",
+    "to_type": "AmbienceGroup",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
+    "from_class": "Project2048AudioSettings",
+    "to_type": "AmbienceVolume",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
+    "from_class": "Project2048AudioSettings",
+    "to_type": "AmbienceVolumeParameter",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
+    "from_class": "Project2048AudioSettings",
+    "to_type": "AmbienceVolumeParameterName",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
+    "from_class": "Project2048AudioSettings",
+    "to_type": "ApplyOutputGroup",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
+    "from_class": "Project2048AudioSettings",
+    "to_type": "Audio",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
+    "from_class": "Project2048AudioSettings",
+    "to_type": "AudioClip",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
+    "from_class": "Project2048AudioSettings",
+    "to_type": "AudioMixer",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
+    "from_class": "Project2048AudioSettings",
+    "to_type": "AudioMixerGroup",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
+    "from_class": "Project2048AudioSettings",
+    "to_type": "AudioSource",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
+    "from_class": "Project2048AudioSettings",
+    "to_type": "BGM",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
+    "from_class": "Project2048AudioSettings",
+    "to_type": "BgmGroup",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
+    "from_class": "Project2048AudioSettings",
+    "to_type": "BGMVolume",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
+    "from_class": "Project2048AudioSettings",
+    "to_type": "BgmVolumeParameter",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
+    "from_class": "Project2048AudioSettings",
+    "to_type": "BgmVolumeParameterName",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
+    "from_class": "Project2048AudioSettings",
+    "to_type": "ButtonClickClip",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
+    "from_class": "Project2048AudioSettings",
+    "to_type": "CreateAssetMenu",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
+    "from_class": "Project2048AudioSettings",
+    "to_type": "Empty",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
+    "from_class": "Project2048AudioSettings",
+    "to_type": "GetGroup",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
+    "from_class": "Project2048AudioSettings",
+    "to_type": "GetVolumeParameter",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
+    "from_class": "Project2048AudioSettings",
+    "to_type": "IsNullOrWhiteSpace",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
+    "from_class": "Project2048AudioSettings",
+    "to_type": "Load",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
+    "from_class": "Project2048AudioSettings",
+    "to_type": "LoadDefault",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
+    "from_class": "Project2048AudioSettings",
+    "to_type": "MainThemeClip",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
+    "from_class": "Project2048AudioSettings",
+    "to_type": "MasterMixer",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
+    "from_class": "Project2048AudioSettings",
+    "to_type": "Project",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
+    "from_class": "Project2048AudioSettings",
+    "to_type": "Project2048",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
+    "from_class": "Project2048AudioSettings",
+    "to_type": "Project2048AudioChannel",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
+    "from_class": "Project2048AudioSettings",
+    "to_type": "ResolveParameterName",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
+    "from_class": "Project2048AudioSettings",
+    "to_type": "ResourcePath",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
+    "from_class": "Project2048AudioSettings",
+    "to_type": "Resources",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
+    "from_class": "Project2048AudioSettings",
+    "to_type": "SetFloat",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
+    "from_class": "Project2048AudioSettings",
+    "to_type": "Settings",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
+    "from_class": "Project2048AudioSettings",
+    "to_type": "SFX",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
+    "from_class": "Project2048AudioSettings",
+    "to_type": "SfxGroup",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
+    "from_class": "Project2048AudioSettings",
+    "to_type": "SFXVolume",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
+    "from_class": "Project2048AudioSettings",
+    "to_type": "SfxVolumeParameter",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
+    "from_class": "Project2048AudioSettings",
+    "to_type": "SfxVolumeParameterName",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
+    "from_class": "Project2048AudioSettings",
+    "to_type": "string",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
+    "from_class": "Project2048AudioSettings",
+    "to_type": "TrySetVolume",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
+    "from_class": "Project2048AudioSettings",
+    "to_type": "UI",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
+    "from_class": "Project2048AudioSettings",
+    "to_type": "UiGroup",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
+    "from_class": "Project2048AudioSettings",
+    "to_type": "UIVolume",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
+    "from_class": "Project2048AudioSettings",
+    "to_type": "UiVolumeParameter",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
+    "from_class": "Project2048AudioSettings",
+    "to_type": "UiVolumeParameterName",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
+    "from_class": "Project2048AudioSettings",
+    "to_type": "UnityEngine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/SimpleBgmDucker.cs",
+    "from_class": "SimpleBgmDucker",
+    "to_type": "MonoBehaviour",
+    "relation_type": "inherits",
+    "strength": 4
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/SimpleBgmDucker.cs",
+    "from_class": "SimpleBgmDucker",
+    "to_type": "Active",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/SimpleBgmDucker.cs",
+    "from_class": "SimpleBgmDucker",
+    "to_type": "ApplyBaseVolume",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/SimpleBgmDucker.cs",
+    "from_class": "SimpleBgmDucker",
+    "to_type": "ApplyBgmVolume",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/SimpleBgmDucker.cs",
+    "from_class": "SimpleBgmDucker",
+    "to_type": "AttackSeconds",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/SimpleBgmDucker.cs",
+    "from_class": "SimpleBgmDucker",
+    "to_type": "Audio",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/SimpleBgmDucker.cs",
+    "from_class": "SimpleBgmDucker",
+    "to_type": "AudioMixer",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/SimpleBgmDucker.cs",
+    "from_class": "SimpleBgmDucker",
+    "to_type": "Awake",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/SimpleBgmDucker.cs",
+    "from_class": "SimpleBgmDucker",
+    "to_type": "BaseVolumeDb",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/SimpleBgmDucker.cs",
+    "from_class": "SimpleBgmDucker",
+    "to_type": "BgmVolumeParameter",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/SimpleBgmDucker.cs",
+    "from_class": "SimpleBgmDucker",
+    "to_type": "BgmVolumeParameterName",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/SimpleBgmDucker.cs",
+    "from_class": "SimpleBgmDucker",
+    "to_type": "Clamp01",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/SimpleBgmDucker.cs",
+    "from_class": "SimpleBgmDucker",
+    "to_type": "Collections",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/SimpleBgmDucker.cs",
+    "from_class": "SimpleBgmDucker",
+    "to_type": "Coroutine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/SimpleBgmDucker.cs",
+    "from_class": "SimpleBgmDucker",
+    "to_type": "CurrentBgmVolumeDb",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/SimpleBgmDucker.cs",
+    "from_class": "SimpleBgmDucker",
+    "to_type": "DefaultAttackSeconds",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/SimpleBgmDucker.cs",
+    "from_class": "SimpleBgmDucker",
+    "to_type": "DefaultBaseVolumeDb",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/SimpleBgmDucker.cs",
+    "from_class": "SimpleBgmDucker",
+    "to_type": "DefaultDuckedVolumeDb",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/SimpleBgmDucker.cs",
+    "from_class": "SimpleBgmDucker",
+    "to_type": "DefaultHoldSeconds",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/SimpleBgmDucker.cs",
+    "from_class": "SimpleBgmDucker",
+    "to_type": "DefaultReleaseSeconds",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/SimpleBgmDucker.cs",
+    "from_class": "SimpleBgmDucker",
+    "to_type": "DuckBgm",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/SimpleBgmDucker.cs",
+    "from_class": "SimpleBgmDucker",
+    "to_type": "DuckedVolumeDb",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/SimpleBgmDucker.cs",
+    "from_class": "SimpleBgmDucker",
+    "to_type": "DuckRoutine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/SimpleBgmDucker.cs",
+    "from_class": "SimpleBgmDucker",
+    "to_type": "EvaluateVolumeDb",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/SimpleBgmDucker.cs",
+    "from_class": "SimpleBgmDucker",
+    "to_type": "float",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/SimpleBgmDucker.cs",
+    "from_class": "SimpleBgmDucker",
+    "to_type": "HoldSeconds",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/SimpleBgmDucker.cs",
+    "from_class": "SimpleBgmDucker",
+    "to_type": "Initialize",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/SimpleBgmDucker.cs",
+    "from_class": "SimpleBgmDucker",
+    "to_type": "IsNullOrWhiteSpace",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/SimpleBgmDucker.cs",
+    "from_class": "SimpleBgmDucker",
+    "to_type": "Lerp",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/SimpleBgmDucker.cs",
+    "from_class": "SimpleBgmDucker",
+    "to_type": "LoadDefault",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/SimpleBgmDucker.cs",
+    "from_class": "SimpleBgmDucker",
+    "to_type": "MasterMixer",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/SimpleBgmDucker.cs",
+    "from_class": "SimpleBgmDucker",
+    "to_type": "Max",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/SimpleBgmDucker.cs",
+    "from_class": "SimpleBgmDucker",
+    "to_type": "OnDisable",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/SimpleBgmDucker.cs",
+    "from_class": "SimpleBgmDucker",
+    "to_type": "OnEnable",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/SimpleBgmDucker.cs",
+    "from_class": "SimpleBgmDucker",
+    "to_type": "Project2048",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/SimpleBgmDucker.cs",
+    "from_class": "SimpleBgmDucker",
+    "to_type": "Project2048AudioSettings",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/SimpleBgmDucker.cs",
+    "from_class": "SimpleBgmDucker",
+    "to_type": "ReleaseSeconds",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/SimpleBgmDucker.cs",
+    "from_class": "SimpleBgmDucker",
+    "to_type": "ResolveMixer",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/SimpleBgmDucker.cs",
+    "from_class": "SimpleBgmDucker",
+    "to_type": "SetFloat",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/SimpleBgmDucker.cs",
+    "from_class": "SimpleBgmDucker",
+    "to_type": "StartCoroutine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/SimpleBgmDucker.cs",
+    "from_class": "SimpleBgmDucker",
+    "to_type": "StopCoroutine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/SimpleBgmDucker.cs",
+    "from_class": "SimpleBgmDucker",
+    "to_type": "System",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/SimpleBgmDucker.cs",
+    "from_class": "SimpleBgmDucker",
+    "to_type": "UnityEngine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
     "from_file": "Project 2048/Assets/Scripts/Board2048/Board2048Manager.cs",
     "from_class": "Board2048Manager",
     "to_type": "ArgumentException",
@@ -3138,13 +4769,6 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "from_class": "CombatManager",
-    "to_type": "Abs",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
-    "from_class": "CombatManager",
     "to_type": "ActionCostWallet",
     "relation_type": "uses",
     "strength": 1
@@ -3153,6 +4777,13 @@
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "from_class": "CombatManager",
     "to_type": "ActionPhase",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
+    "from_class": "CombatManager",
+    "to_type": "ActionsPerTurn",
     "relation_type": "uses",
     "strength": 1
   },
@@ -3195,13 +4826,6 @@
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "from_class": "CombatManager",
     "to_type": "Attack",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
-    "from_class": "CombatManager",
-    "to_type": "AttackModifier",
     "relation_type": "uses",
     "strength": 1
   },
@@ -3404,6 +5028,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "from_class": "CombatManager",
+    "to_type": "CloneEnemyIntents",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
+    "from_class": "CombatManager",
     "to_type": "Collections",
     "relation_type": "uses",
     "strength": 1
@@ -3516,13 +5147,6 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "from_class": "CombatManager",
-    "to_type": "CountDarknessStacks",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
-    "from_class": "CombatManager",
     "to_type": "CurrentCost",
     "relation_type": "uses",
     "strength": 1
@@ -3538,6 +5162,13 @@
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "from_class": "CombatManager",
     "to_type": "CurrentIntent",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
+    "from_class": "CombatManager",
+    "to_type": "CurrentIntents",
     "relation_type": "uses",
     "strength": 1
   },
@@ -3594,13 +5225,6 @@
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "from_class": "CombatManager",
     "to_type": "DelayedResolveEnemyTurn",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
-    "from_class": "CombatManager",
-    "to_type": "Description",
     "relation_type": "uses",
     "strength": 1
   },
@@ -3691,6 +5315,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "from_class": "CombatManager",
+    "to_type": "EnemySO",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
+    "from_class": "CombatManager",
     "to_type": "EnemyTurn",
     "relation_type": "uses",
     "strength": 1
@@ -3768,7 +5399,7 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "from_class": "CombatManager",
-    "to_type": "FormatEnemyIntent",
+    "to_type": "FormatEnemyIntents",
     "relation_type": "uses",
     "strength": 1
   },
@@ -3803,7 +5434,21 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "from_class": "CombatManager",
+    "to_type": "GetEnemyActionsPerTurn",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
+    "from_class": "CombatManager",
     "to_type": "GetEnemyDisplayName",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
+    "from_class": "CombatManager",
+    "to_type": "GetExecutableIntents",
     "relation_type": "uses",
     "strength": 1
   },
@@ -3915,20 +5560,6 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "from_class": "CombatManager",
-    "to_type": "IconText",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
-    "from_class": "CombatManager",
-    "to_type": "Id",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
-    "from_class": "CombatManager",
     "to_type": "Init",
     "relation_type": "uses",
     "strength": 1
@@ -3957,6 +5588,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "from_class": "CombatManager",
+    "to_type": "Intents",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
+    "from_class": "CombatManager",
     "to_type": "InvalidOperationException",
     "relation_type": "uses",
     "strength": 1
@@ -3972,13 +5610,6 @@
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "from_class": "CombatManager",
     "to_type": "IReadOnlyList",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
-    "from_class": "CombatManager",
-    "to_type": "IsBuff",
     "relation_type": "uses",
     "strength": 1
   },
@@ -4028,6 +5659,13 @@
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "from_class": "CombatManager",
     "to_type": "MaxHp",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
+    "from_class": "CombatManager",
+    "to_type": "MaximumActionsPerTurn",
     "relation_type": "uses",
     "strength": 1
   },
@@ -4161,13 +5799,6 @@
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "from_class": "CombatManager",
     "to_type": "OnStatusEffectsChanged",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
-    "from_class": "CombatManager",
-    "to_type": "PendingObstacleCount",
     "relation_type": "uses",
     "strength": 1
   },
@@ -4356,7 +5987,7 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "from_class": "CombatManager",
-    "to_type": "SetNextIntent",
+    "to_type": "SetNextIntents",
     "relation_type": "uses",
     "strength": 1
   },
@@ -4931,6 +6562,13 @@
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatSnapshot.cs",
     "from_class": "CombatSnapshot",
     "to_type": "Intent",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/CombatSnapshot.cs",
+    "from_class": "CombatSnapshot",
+    "to_type": "Intents",
     "relation_type": "uses",
     "strength": 1
   },
@@ -6680,9 +8318,23 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyController.cs",
     "from_class": "EnemyController",
+    "to_type": "List",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyController.cs",
+    "from_class": "EnemyController",
     "to_type": "MonoBehaviour",
     "relation_type": "inherits",
     "strength": 4
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyController.cs",
+    "from_class": "EnemyController",
+    "to_type": "Add",
+    "relation_type": "uses",
+    "strength": 1
   },
   {
     "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyController.cs",
@@ -6702,6 +8354,13 @@
     "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyController.cs",
     "from_class": "EnemyController",
     "to_type": "ArgumentNullException",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyController.cs",
+    "from_class": "EnemyController",
+    "to_type": "Array",
     "relation_type": "uses",
     "strength": 1
   },
@@ -6743,6 +8402,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyController.cs",
     "from_class": "EnemyController",
+    "to_type": "Clear",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyController.cs",
+    "from_class": "EnemyController",
     "to_type": "ClearBlock",
     "relation_type": "uses",
     "strength": 1
@@ -6751,6 +8417,20 @@
     "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyController.cs",
     "from_class": "EnemyController",
     "to_type": "Clone",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyController.cs",
+    "from_class": "EnemyController",
+    "to_type": "Collections",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyController.cs",
+    "from_class": "EnemyController",
+    "to_type": "Count",
     "relation_type": "uses",
     "strength": 1
   },
@@ -6771,7 +8451,21 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyController.cs",
     "from_class": "EnemyController",
+    "to_type": "CurrentIntents",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyController.cs",
+    "from_class": "EnemyController",
     "to_type": "Data",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyController.cs",
+    "from_class": "EnemyController",
+    "to_type": "Empty",
     "relation_type": "uses",
     "strength": 1
   },
@@ -6806,6 +8500,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyController.cs",
     "from_class": "EnemyController",
+    "to_type": "Generic",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyController.cs",
+    "from_class": "EnemyController",
     "to_type": "HandleDataValidated",
     "relation_type": "uses",
     "strength": 1
@@ -6828,6 +8529,13 @@
     "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyController.cs",
     "from_class": "EnemyController",
     "to_type": "Invoke",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyController.cs",
+    "from_class": "EnemyController",
+    "to_type": "IReadOnlyList",
     "relation_type": "uses",
     "strength": 1
   },
@@ -6919,6 +8627,13 @@
     "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyController.cs",
     "from_class": "EnemyController",
     "to_type": "SetIntent",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyController.cs",
+    "from_class": "EnemyController",
+    "to_type": "SetIntents",
     "relation_type": "uses",
     "strength": 1
   },
@@ -7061,6 +8776,20 @@
     "to_type": "EnemyAiBrain",
     "relation_type": "creates",
     "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyIntentSystem.cs",
+    "from_class": "EnemyIntentSystem",
+    "to_type": "List",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyIntentSystem.cs",
+    "from_class": "EnemyIntentSystem",
+    "to_type": "Add",
+    "relation_type": "uses",
+    "strength": 1
   },
   {
     "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyIntentSystem.cs",
@@ -7268,6 +8997,34 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyIntentSystem.cs",
     "from_class": "EnemyIntentSystem",
+    "to_type": "Math",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyIntentSystem.cs",
+    "from_class": "EnemyIntentSystem",
+    "to_type": "Max",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyIntentSystem.cs",
+    "from_class": "EnemyIntentSystem",
+    "to_type": "MaximumActionsPerTurn",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyIntentSystem.cs",
+    "from_class": "EnemyIntentSystem",
+    "to_type": "Min",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyIntentSystem.cs",
+    "from_class": "EnemyIntentSystem",
     "to_type": "PlayerCombatController",
     "relation_type": "uses",
     "strength": 1
@@ -7289,7 +9046,14 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyIntentSystem.cs",
     "from_class": "EnemyIntentSystem",
-    "to_type": "SetIntent",
+    "to_type": "ResolveNextIntent",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyIntentSystem.cs",
+    "from_class": "EnemyIntentSystem",
+    "to_type": "SetIntents",
     "relation_type": "uses",
     "strength": 1
   },
@@ -7297,6 +9061,13 @@
     "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyIntentSystem.cs",
     "from_class": "EnemyIntentSystem",
     "to_type": "SetNextIntent",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyIntentSystem.cs",
+    "from_class": "EnemyIntentSystem",
+    "to_type": "SetNextIntents",
     "relation_type": "uses",
     "strength": 1
   },
@@ -7373,6 +9144,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Enemy/EnemySO.cs",
     "from_class": "EnemySO",
+    "to_type": "ActionsPerTurn",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Enemy/EnemySO.cs",
+    "from_class": "EnemySO",
     "to_type": "AI",
     "relation_type": "uses",
     "strength": 1
@@ -7388,6 +9166,13 @@
     "from_file": "Project 2048/Assets/Scripts/Enemy/EnemySO.cs",
     "from_class": "EnemySO",
     "to_type": "Balanced",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Enemy/EnemySO.cs",
+    "from_class": "EnemySO",
+    "to_type": "Clamp",
     "relation_type": "uses",
     "strength": 1
   },
@@ -7528,6 +9313,13 @@
     "from_file": "Project 2048/Assets/Scripts/Enemy/EnemySO.cs",
     "from_class": "EnemySO",
     "to_type": "Max",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Enemy/EnemySO.cs",
+    "from_class": "EnemySO",
+    "to_type": "MaximumActionsPerTurn",
     "relation_type": "uses",
     "strength": 1
   },
@@ -9760,6 +11552,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
+    "to_type": "ButtonClickAudioEmitter",
+    "relation_type": "component-access",
+    "strength": 3
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
+    "from_class": "CombatUiView",
     "to_type": "CanvasGroup",
     "relation_type": "component-access",
     "strength": 3
@@ -9893,6 +11692,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
+    "to_type": "AddComponent",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
+    "from_class": "CombatUiView",
     "to_type": "AddListener",
     "relation_type": "uses",
     "strength": 1
@@ -9900,21 +11706,7 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
-    "to_type": "After",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
-    "from_class": "CombatUiView",
     "to_type": "AiProfileLabel",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
-    "from_class": "CombatUiView",
-    "to_type": "AnimatedTile",
     "relation_type": "uses",
     "strength": 1
   },
@@ -9929,6 +11721,20 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
     "to_type": "Attack",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
+    "from_class": "CombatUiView",
+    "to_type": "Audio",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
+    "from_class": "CombatUiView",
+    "to_type": "AudioMixerGroup",
     "relation_type": "uses",
     "strength": 1
   },
@@ -10075,6 +11881,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
+    "to_type": "ButtonClickAudioEmitter",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
+    "from_class": "CombatUiView",
     "to_type": "Canvas",
     "relation_type": "uses",
     "strength": 1
@@ -10215,13 +12028,6 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
-    "to_type": "DestroyAnimationObject",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
-    "from_class": "CombatUiView",
     "to_type": "Direction",
     "relation_type": "uses",
     "strength": 1
@@ -10285,6 +12091,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
+    "to_type": "EnsureBound",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
+    "from_class": "CombatUiView",
     "to_type": "EnsureHpBarDefaults",
     "relation_type": "uses",
     "strength": 1
@@ -10341,7 +12154,7 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
-    "to_type": "FormatIntent",
+    "to_type": "FormatIntents",
     "relation_type": "uses",
     "strength": 1
   },
@@ -10412,6 +12225,13 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
     "to_type": "GetSnapshot",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
+    "from_class": "CombatUiView",
+    "to_type": "GetVisibleIntents",
     "relation_type": "uses",
     "strength": 1
   },
@@ -10495,13 +12315,6 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
-    "to_type": "Intent",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
-    "from_class": "CombatUiView",
     "to_type": "Invoke",
     "relation_type": "uses",
     "strength": 1
@@ -10545,13 +12358,6 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
     "to_type": "Left",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
-    "from_class": "CombatUiView",
-    "to_type": "LerpUnclamped",
     "relation_type": "uses",
     "strength": 1
   },
@@ -10999,14 +12805,14 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
-    "to_type": "SetParent",
+    "to_type": "SetValue",
     "relation_type": "uses",
     "strength": 1
   },
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
-    "to_type": "SetValue",
+    "to_type": "SimpleBgmDucker",
     "relation_type": "uses",
     "strength": 1
   },
@@ -11258,13 +13064,6 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
-    "to_type": "WaitForSecondsRealtime",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
-    "from_class": "CombatUiView",
     "to_type": "WireButtons",
     "relation_type": "uses",
     "strength": 1
@@ -11300,6 +13099,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
+    "to_type": "Active",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
     "to_type": "AddComponent",
     "relation_type": "uses",
     "strength": 1
@@ -11308,6 +13114,13 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
     "to_type": "Animator",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "Any",
     "relation_type": "uses",
     "strength": 1
   },
@@ -11329,6 +13142,20 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
     "to_type": "Attack",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "Audio",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "AudioMixerGroup",
     "relation_type": "uses",
     "strength": 1
   },
@@ -11510,6 +13337,20 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
+    "to_type": "DuckBgm",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "DuckBgmForImportantSfx",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
     "to_type": "EffectiveAutoDestroySeconds",
     "relation_type": "uses",
     "strength": 1
@@ -11573,6 +13414,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
+    "to_type": "EnemyCombatSnapshot",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
     "to_type": "EnemyController",
     "relation_type": "uses",
     "strength": 1
@@ -11588,6 +13436,13 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
     "to_type": "EnemyDeathFadeRoutine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "EnemyHasDefenseIntent",
     "relation_type": "uses",
     "strength": 1
   },
@@ -11664,6 +13519,20 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
+    "to_type": "FindAnyObjectByType",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "FindObjectsInactive",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
     "to_type": "FindRendererByName",
     "relation_type": "uses",
     "strength": 1
@@ -11727,6 +13596,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
+    "to_type": "Include",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
     "to_type": "Initialize",
     "relation_type": "uses",
     "strength": 1
@@ -11748,6 +13624,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
+    "to_type": "Intents",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
     "to_type": "IsDead",
     "relation_type": "uses",
     "strength": 1
@@ -11763,6 +13646,13 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
     "to_type": "Linq",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "LoadDefault",
     "relation_type": "uses",
     "strength": 1
   },
@@ -11916,6 +13806,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
+    "to_type": "Project2048AudioSettings",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
     "to_type": "Prototype",
     "relation_type": "uses",
     "strength": 1
@@ -11951,6 +13848,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
+    "to_type": "ResolveAudioRouting",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
     "to_type": "ResolveCurrentEnemyData",
     "relation_type": "uses",
     "strength": 1
@@ -11980,6 +13884,20 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
     "to_type": "SetEnemyRendererAlpha",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "SfxGroup",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "SimpleBgmDucker",
     "relation_type": "uses",
     "strength": 1
   },
@@ -12973,7 +14891,28 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioPlayer.cs",
     "from_class": "PrototypeCombatEventAudioPlayer",
+    "to_type": "Active",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioPlayer.cs",
+    "from_class": "PrototypeCombatEventAudioPlayer",
     "to_type": "AddComponent",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioPlayer.cs",
+    "from_class": "PrototypeCombatEventAudioPlayer",
+    "to_type": "Audio",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioPlayer.cs",
+    "from_class": "PrototypeCombatEventAudioPlayer",
+    "to_type": "AudioMixerGroup",
     "relation_type": "uses",
     "strength": 1
   },
@@ -13050,6 +14989,20 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioPlayer.cs",
     "from_class": "PrototypeCombatEventAudioPlayer",
+    "to_type": "DuckBgm",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioPlayer.cs",
+    "from_class": "PrototypeCombatEventAudioPlayer",
+    "to_type": "DuckBgmForImportantSfx",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioPlayer.cs",
+    "from_class": "PrototypeCombatEventAudioPlayer",
     "to_type": "Enhance",
     "relation_type": "uses",
     "strength": 1
@@ -13065,6 +15018,20 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioPlayer.cs",
     "from_class": "PrototypeCombatEventAudioPlayer",
     "to_type": "EventSfxDistance",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioPlayer.cs",
+    "from_class": "PrototypeCombatEventAudioPlayer",
+    "to_type": "FindAnyObjectByType",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioPlayer.cs",
+    "from_class": "PrototypeCombatEventAudioPlayer",
+    "to_type": "FindObjectsInactive",
     "relation_type": "uses",
     "strength": 1
   },
@@ -13106,6 +15073,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioPlayer.cs",
     "from_class": "PrototypeCombatEventAudioPlayer",
+    "to_type": "Include",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioPlayer.cs",
+    "from_class": "PrototypeCombatEventAudioPlayer",
     "to_type": "Initialize",
     "relation_type": "uses",
     "strength": 1
@@ -13128,6 +15102,13 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioPlayer.cs",
     "from_class": "PrototypeCombatEventAudioPlayer",
     "to_type": "Linear",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioPlayer.cs",
+    "from_class": "PrototypeCombatEventAudioPlayer",
+    "to_type": "LoadDefault",
     "relation_type": "uses",
     "strength": 1
   },
@@ -13197,6 +15178,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioPlayer.cs",
     "from_class": "PrototypeCombatEventAudioPlayer",
+    "to_type": "Project2048AudioSettings",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioPlayer.cs",
+    "from_class": "PrototypeCombatEventAudioPlayer",
     "to_type": "Prototype",
     "relation_type": "uses",
     "strength": 1
@@ -13226,6 +15214,13 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioPlayer.cs",
     "from_class": "PrototypeCombatEventAudioPlayer",
     "to_type": "Resolve",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioPlayer.cs",
+    "from_class": "PrototypeCombatEventAudioPlayer",
+    "to_type": "ResolveAudioRouting",
     "relation_type": "uses",
     "strength": 1
   },
@@ -13275,6 +15270,20 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioPlayer.cs",
     "from_class": "PrototypeCombatEventAudioPlayer",
     "to_type": "Rewards",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioPlayer.cs",
+    "from_class": "PrototypeCombatEventAudioPlayer",
+    "to_type": "SfxGroup",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatEventAudioPlayer.cs",
+    "from_class": "PrototypeCombatEventAudioPlayer",
+    "to_type": "SimpleBgmDucker",
     "relation_type": "uses",
     "strength": 1
   },
@@ -13960,6 +15969,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatText.cs",
     "from_class": "PrototypeCombatText",
+    "to_type": "Collections",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatText.cs",
+    "from_class": "PrototypeCombatText",
     "to_type": "Combat",
     "relation_type": "uses",
     "strength": 1
@@ -14079,6 +16095,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatText.cs",
     "from_class": "PrototypeCombatText",
+    "to_type": "EnemySO",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatText.cs",
+    "from_class": "PrototypeCombatText",
     "to_type": "Fear",
     "relation_type": "uses",
     "strength": 1
@@ -14149,6 +16172,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatText.cs",
     "from_class": "PrototypeCombatText",
+    "to_type": "FormatIntents",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatText.cs",
+    "from_class": "PrototypeCombatText",
     "to_type": "FormatPlayerHp",
     "relation_type": "uses",
     "strength": 1
@@ -14212,6 +16242,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatText.cs",
     "from_class": "PrototypeCombatText",
+    "to_type": "Generic",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatText.cs",
+    "from_class": "PrototypeCombatText",
     "to_type": "IsNullOrWhiteSpace",
     "relation_type": "uses",
     "strength": 1
@@ -14219,7 +16256,28 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatText.cs",
     "from_class": "PrototypeCombatText",
+    "to_type": "Join",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatText.cs",
+    "from_class": "PrototypeCombatText",
+    "to_type": "Linq",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatText.cs",
+    "from_class": "PrototypeCombatText",
     "to_type": "Max",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatText.cs",
+    "from_class": "PrototypeCombatText",
+    "to_type": "MaximumActionsPerTurn",
     "relation_type": "uses",
     "strength": 1
   },
@@ -14268,6 +16326,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatText.cs",
     "from_class": "PrototypeCombatText",
+    "to_type": "Select",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatText.cs",
+    "from_class": "PrototypeCombatText",
     "to_type": "Skills",
     "relation_type": "uses",
     "strength": 1
@@ -14283,6 +16348,20 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatText.cs",
     "from_class": "PrototypeCombatText",
     "to_type": "SkillType",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatText.cs",
+    "from_class": "PrototypeCombatText",
+    "to_type": "System",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatText.cs",
+    "from_class": "PrototypeCombatText",
+    "to_type": "Take",
     "relation_type": "uses",
     "strength": 1
   },
@@ -14311,6 +16390,13 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatText.cs",
     "from_class": "PrototypeCombatText",
     "to_type": "Victory",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatText.cs",
+    "from_class": "PrototypeCombatText",
+    "to_type": "Where",
     "relation_type": "uses",
     "strength": 1
   },
@@ -17353,6 +19439,790 @@
     "strength": 1
   },
   {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "PersistentBgmPlayer",
+    "relation_type": "component-access",
+    "strength": 3
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "SimpleBgmDucker",
+    "relation_type": "component-access",
+    "strength": 3
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "GameObject",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "SerializedObject",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "BindingFlags",
+    "relation_type": "singleton-access",
+    "strength": 4
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "Add",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "AddComponent",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "AddListener",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "Ambience",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "AmbienceGroup",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "Assert",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "AssetDatabase",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "Assets",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "AttackSeconds",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "Audio",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "AudioSource",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "BaseVolumeDb",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "BGM",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "BgmGroup",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "BgmVolumeParameter",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "BgmVolumeParameterName",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "BindingFlags",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "Button",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "ButtonAudioRoot",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "ButtonClickAudioEmitter",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "ButtonClickAudioEmitter_PlaysWhenEarlierHandlerDisablesButton",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "ButtonClickAudioRouter",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "ButtonClickAudioRouter_AttachesEmitterToSceneButtonsAndRoutesToUiGroup",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "ButtonClickAudioRouter_DefaultPitchVariationStaysSubtle",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "ButtonClickAudioRouter_RebindsAfterRuntimeButtonListenersAreReplaced",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "ButtonClickClip",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "ButtonClickPlayed",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "Clear",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "Collections",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "CombatEventAudio",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "CombatUi",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "CombatUiView",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "CombatWorldSpriteView",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "Core",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "CountPlay",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "CreateOwnedGameObject",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "DefaultMaxPitch",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "DefaultMinPitch",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "DestroyImmediate",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "DuckedVolumeDb",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "Ducker",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "EnsureAudioDefaults",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "EnsureAudioRoot",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "EnsureAudioSource",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "EqualTo",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "EvaluatePitch",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "EvaluateVolumeDb",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "FindProperty",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "Framework",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "Game",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "Generic",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "GetComponent",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "GetMethod",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "GetType",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "HoldSeconds",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "Image",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "Initialize",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "Instance",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "Invoke",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "InvokePrivate",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "Is",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "LoadAssetAtPath",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "MainThemeClip",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "MasterMixer",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "NonPublic",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "Not",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "Null",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "NUnit",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "Object",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "PersistentBgmPlayer",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "Project2048",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "Project2048AudioBootstrap",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "Project2048AudioBootstrap_CreatesPersistentBgmPlayerAndDucker",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "Project2048AudioSettings",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "Project2048AudioSettings_DefaultAssetDefinesMixerGroupsAndMainTheme",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "Prototype",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "PrototypeCombatEventAudioPlayer",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "Reflection",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "RefreshButtons",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "ReleaseSeconds",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "RemoveAllListeners",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "Resources",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "RuntimeAudioRouting_AssignsKnownCombatSourcesToSfxMixerGroup",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "RuntimeButton",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "SameAs",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "SelfDisablingButton",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "SerializedObject",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "SerializedObjectFor",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "SetActive",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "SFX",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "SfxGroup",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "SimpleBgmDucker",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "SimpleBgmDucker_DefaultsMatchSfxClarityTuning",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "SimpleBgmDucker_EvaluateVolumeCurve_DucksQuicklyThenReturnsNaturally",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "Source",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "System",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "TearDown",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "Test",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "Tests",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "That",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "Type",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "UI",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "UiGroup",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "UnityEditor",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "UnityEngine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "Within",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "WorldSprites",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
     "from_file": "Project 2048/Assets/Tests/EditMode/Board2048ManagerTests.cs",
     "from_class": "Board2048ManagerTests",
     "to_type": "Board2048Manager",
@@ -18125,6 +20995,13 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
     "from_class": "CombatManagerTests",
+    "to_type": "GetField",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
+    "from_class": "CombatManagerTests",
     "to_type": "Is",
     "relation_type": "uses",
     "strength": 1
@@ -18244,6 +21121,13 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
     "from_class": "CombatManagerTests",
+    "to_type": "RequestEndPlayerTurn_EnemyWithTwoActions_ExecutesBothPreviewedActions",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
+    "from_class": "CombatManagerTests",
     "to_type": "RequestEndPlayerTurn_ExecutesEnemyAttack_AndStartsNextPlayerTurn",
     "relation_type": "uses",
     "strength": 1
@@ -18280,6 +21164,20 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
     "from_class": "CombatManagerTests",
     "to_type": "SetCombatants",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
+    "from_class": "CombatManagerTests",
+    "to_type": "SetEnemyActionsPerTurn",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
+    "from_class": "CombatManagerTests",
+    "to_type": "SetValue",
     "relation_type": "uses",
     "strength": 1
   },
@@ -20855,6 +23753,13 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
+    "to_type": "AssetDatabase",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
+    "from_class": "CombatUiViewTests",
     "to_type": "Assets",
     "relation_type": "uses",
     "strength": 1
@@ -20863,6 +23768,13 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
     "to_type": "Attack",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
+    "from_class": "CombatUiViewTests",
+    "to_type": "Audio",
     "relation_type": "uses",
     "strength": 1
   },
@@ -20891,6 +23803,20 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
     "to_type": "BattleScene_CombatUiView_HasSceneAuthoredStatusAndBlockObjectsOnBottomHpBars",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
+    "from_class": "CombatUiViewTests",
+    "to_type": "BindButton",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
+    "from_class": "CombatUiViewTests",
+    "to_type": "BindButton_ReattachesButtonClickAudioAfterReplacingRuntimeListeners",
     "relation_type": "uses",
     "strength": 1
   },
@@ -20981,6 +23907,41 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
+    "to_type": "Button",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
+    "from_class": "CombatUiViewTests",
+    "to_type": "ButtonAudioRoot",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
+    "from_class": "CombatUiViewTests",
+    "to_type": "ButtonClickAudioRouter",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
+    "from_class": "CombatUiViewTests",
+    "to_type": "ButtonClickClip",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
+    "from_class": "CombatUiViewTests",
+    "to_type": "ButtonClickPlayed",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
+    "from_class": "CombatUiViewTests",
     "to_type": "Clear",
     "relation_type": "uses",
     "strength": 1
@@ -21052,6 +24013,13 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
     "to_type": "Contain",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
+    "from_class": "CombatUiViewTests",
+    "to_type": "CountPlay",
     "relation_type": "uses",
     "strength": 1
   },
@@ -21324,6 +24292,13 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
+    "to_type": "FormatIntent",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
+    "from_class": "CombatUiViewTests",
     "to_type": "Framework",
     "relation_type": "uses",
     "strength": 1
@@ -21353,6 +24328,13 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
     "to_type": "GetField",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
+    "from_class": "CombatUiViewTests",
+    "to_type": "GetMethod",
     "relation_type": "uses",
     "strength": 1
   },
@@ -21471,6 +24453,13 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
+    "to_type": "Initialize_RendersTwoEnemyIntentsWhenEnemyCanActTwice",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
+    "from_class": "CombatUiViewTests",
     "to_type": "Initialize_WithMissingSerializedBattleReferences_WiresEnemyHpAndIntentByName",
     "relation_type": "uses",
     "strength": 1
@@ -21507,6 +24496,20 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
     "to_type": "IntentBubbleText",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
+    "from_class": "CombatUiViewTests",
+    "to_type": "Invoke",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
+    "from_class": "CombatUiViewTests",
+    "to_type": "InvokePrivate",
     "relation_type": "uses",
     "strength": 1
   },
@@ -21555,7 +24558,21 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
+    "to_type": "LoadAssetAtPath",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
+    "from_class": "CombatUiViewTests",
     "to_type": "MiddleLeft",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
+    "from_class": "CombatUiViewTests",
+    "to_type": "Multi",
     "relation_type": "uses",
     "strength": 1
   },
@@ -21709,6 +24726,13 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
+    "to_type": "Project2048AudioSettings",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
+    "from_class": "CombatUiViewTests",
     "to_type": "Prototype",
     "relation_type": "uses",
     "strength": 1
@@ -21717,6 +24741,13 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
     "to_type": "PrototypeCombatBootstrap",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
+    "from_class": "CombatUiViewTests",
+    "to_type": "PrototypeCombatText",
     "relation_type": "uses",
     "strength": 1
   },
@@ -21758,7 +24789,21 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
+    "to_type": "Resources",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
+    "from_class": "CombatUiViewTests",
     "to_type": "Right",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
+    "from_class": "CombatUiViewTests",
+    "to_type": "RuntimeCombatButton",
     "relation_type": "uses",
     "strength": 1
   },
@@ -21794,6 +24839,13 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
     "to_type": "SetCombatants",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
+    "from_class": "CombatUiViewTests",
+    "to_type": "SetEnemyActionsPerTurn",
     "relation_type": "uses",
     "strength": 1
   },
@@ -22262,6 +25314,13 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/EnemyAiBrainTests.cs",
     "from_class": "EnemyAiBrainTests",
+    "to_type": "Count",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/EnemyAiBrainTests.cs",
+    "from_class": "EnemyAiBrainTests",
     "to_type": "CountActions",
     "relation_type": "uses",
     "strength": 1
@@ -22291,6 +25350,13 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/EnemyAiBrainTests.cs",
     "from_class": "EnemyAiBrainTests",
     "to_type": "CurrentIntent",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/EnemyAiBrainTests.cs",
+    "from_class": "EnemyAiBrainTests",
+    "to_type": "CurrentIntents",
     "relation_type": "uses",
     "strength": 1
   },
@@ -22465,6 +25531,41 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/EnemyAiBrainTests.cs",
     "from_class": "EnemyAiBrainTests",
+    "to_type": "GetCurrentIntents",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/EnemyAiBrainTests.cs",
+    "from_class": "EnemyAiBrainTests",
+    "to_type": "GetField",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/EnemyAiBrainTests.cs",
+    "from_class": "EnemyAiBrainTests",
+    "to_type": "GetMethod",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/EnemyAiBrainTests.cs",
+    "from_class": "EnemyAiBrainTests",
+    "to_type": "GetProperty",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/EnemyAiBrainTests.cs",
+    "from_class": "EnemyAiBrainTests",
+    "to_type": "GetValue",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/EnemyAiBrainTests.cs",
+    "from_class": "EnemyAiBrainTests",
     "to_type": "GreaterThan",
     "relation_type": "uses",
     "strength": 1
@@ -22479,7 +25580,28 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/EnemyAiBrainTests.cs",
     "from_class": "EnemyAiBrainTests",
+    "to_type": "Invoke",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/EnemyAiBrainTests.cs",
+    "from_class": "EnemyAiBrainTests",
+    "to_type": "IReadOnlyList",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/EnemyAiBrainTests.cs",
+    "from_class": "EnemyAiBrainTests",
     "to_type": "Is",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/EnemyAiBrainTests.cs",
+    "from_class": "EnemyAiBrainTests",
+    "to_type": "MultiActionEnemy",
     "relation_type": "uses",
     "strength": 1
   },
@@ -22501,6 +25623,13 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/EnemyAiBrainTests.cs",
     "from_class": "EnemyAiBrainTests",
     "to_type": "Not",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/EnemyAiBrainTests.cs",
+    "from_class": "EnemyAiBrainTests",
+    "to_type": "Null",
     "relation_type": "uses",
     "strength": 1
   },
@@ -22529,6 +25658,13 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/EnemyAiBrainTests.cs",
     "from_class": "EnemyAiBrainTests",
     "to_type": "Project2048",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/EnemyAiBrainTests.cs",
+    "from_class": "EnemyAiBrainTests",
+    "to_type": "SetEnemyActionsPerTurn",
     "relation_type": "uses",
     "strength": 1
   },
@@ -22564,6 +25700,27 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/EnemyAiBrainTests.cs",
     "from_class": "EnemyAiBrainTests",
     "to_type": "SetNextIntent_WhenPatternIsEmpty_InsertsDebuffsByConfiguredPattern",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/EnemyAiBrainTests.cs",
+    "from_class": "EnemyAiBrainTests",
+    "to_type": "SetNextIntents",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/EnemyAiBrainTests.cs",
+    "from_class": "EnemyAiBrainTests",
+    "to_type": "SetNextIntents_UsesConsecutivePatternEntriesForPreview",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/EnemyAiBrainTests.cs",
+    "from_class": "EnemyAiBrainTests",
+    "to_type": "SetValue",
     "relation_type": "uses",
     "strength": 1
   },
@@ -23411,6 +26568,27 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
     "from_class": "MainMenuControllerTests",
     "to_type": "Static",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
+    "to_type": "StoryBackground",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
+    "to_type": "StoryScene",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
+    "to_type": "StoryScene_UsesSceneAuthoredBackground",
     "relation_type": "uses",
     "strength": 1
   },

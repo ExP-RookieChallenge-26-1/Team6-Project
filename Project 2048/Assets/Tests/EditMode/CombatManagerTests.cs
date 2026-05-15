@@ -244,6 +244,54 @@ namespace Project2048.Tests
         }
 
         [Test]
+        public void RequestEndPlayerTurn_EnemyWithTwoActions_ExecutesBothPreviewedActions()
+        {
+            var manager = CreateGameObject<CombatManager>("CombatManager");
+            var player = CreateGameObject<PlayerCombatController>("Player");
+            var enemy = CreateGameObject<EnemyController>("Enemy");
+            var playerData = CreatePlayerData(maxHp: 20, attackPower: 2);
+            var enemyData = CreateEnemyData(maxHp: 10, attackValue: 4);
+            enemyData.intentPattern = new List<EnemyIntent>
+            {
+                new()
+                {
+                    intentType = EnemyIntentType.Attack,
+                    value = 4,
+                },
+                new()
+                {
+                    intentType = EnemyIntentType.Defense,
+                    value = 5,
+                },
+            };
+            SetEnemyActionsPerTurn(enemyData, 2);
+
+            manager.SetCombatants(player, new[] { enemy });
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new List<EnemySO> { enemyData },
+                boardMoveCount = 1,
+            });
+
+            manager.BoardManager.SetBoardState(
+                new[,]
+                {
+                    { 64, 0, 0, 0 },
+                    { 0, 0, 0, 0 },
+                    { 0, 0, 0, 0 },
+                    { 0, 0, 0, 0 },
+                },
+                0);
+            manager.ResolveBoardPhase();
+            manager.RequestEndPlayerTurn();
+
+            Assert.That(player.CurrentHp, Is.EqualTo(16));
+            Assert.That(enemy.Block, Is.EqualTo(5));
+            Assert.That(manager.CurrentPhase, Is.EqualTo(CombatPhase.BoardPhase));
+        }
+
+        [Test]
         public void RefreshCombatantDataFromScriptableObjects_ReappliesChangedSoStatsDuringCombat()
         {
             var manager = CreateGameObject<CombatManager>("CombatManager");
@@ -326,6 +374,13 @@ namespace Project2048.Tests
             skill.power = power;
             ownedObjects.Add(skill);
             return skill;
+        }
+
+        private static void SetEnemyActionsPerTurn(EnemySO data, int count)
+        {
+            var field = typeof(EnemySO).GetField("actionsPerTurn");
+            Assert.That(field, Is.Not.Null, "EnemySO should expose actionsPerTurn for per-enemy multi-action tuning.");
+            field.SetValue(data, count);
         }
     }
 }

@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac444b865b6b4e109c9f49f4e147b61f, type: 3}
+  m_Name: Project2048AudioSettings
+  m_EditorClassIdentifier:
+  mainThemeClip: {fileID: 8300000, guid: 06fe7ea07bc4b7c48adefafd99b2d8a4, type: 3}
+  buttonClickClip: {fileID: 8300000, guid: 00951f63d646ce24d89d12413e0141aa, type: 3}
+  masterMixer: {fileID: 24100000, guid: 58cd19cfac3d48d999c2ab295b98b222, type: 2}
+  bgmGroup: {fileID: 1001000001, guid: 58cd19cfac3d48d999c2ab295b98b222, type: 2}
+  sfxGroup: {fileID: 1001000002, guid: 58cd19cfac3d48d999c2ab295b98b222, type: 2}
+  uiGroup: {fileID: 1001000003, guid: 58cd19cfac3d48d999c2ab295b98b222, type: 2}
+  ambienceGroup: {fileID: 1001000004, guid: 58cd19cfac3d48d999c2ab295b98b222, type: 2}
+  bgmVolumeParameter: BGMVolume
+  sfxVolumeParameter: SFXVolume
+  uiVolumeParameter: UIVolume
+  ambienceVolumeParameter: AmbienceVolume

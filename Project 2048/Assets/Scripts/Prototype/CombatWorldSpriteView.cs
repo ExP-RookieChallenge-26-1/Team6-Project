@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Linq;
+using Project2048.Audio;
 using Project2048.Combat;
 using Project2048.Enemy;
 using Project2048.Presentation;
 using Project2048.Skills;
 using UnityEngine;
+using UnityEngine.Audio;
 
 namespace Project2048.Prototype
 {
@@ -23,6 +25,8 @@ namespace Project2048.Prototype
         [SerializeField] private SpriteRenderer enemyRenderer;
         [SerializeField] private Sprite defaultBackgroundSprite;
         [SerializeField] private AudioSource audioSource;
+        [SerializeField] private AudioMixerGroup sfxMixerGroup;
+        [SerializeField] private SimpleBgmDucker bgmDucker;
         [SerializeField] private Animator playerAnimator;
         [SerializeField] private Animator enemyAnimator;
 
@@ -220,6 +224,7 @@ namespace Project2048.Prototype
                 EnsureAudioSource();
                 if (audioSource != null)
                 {
+                    DuckBgmForImportantSfx();
                     CombatEffectAudioPlayer.PlayOneShot(audioSource, effect, 1f, transform);
                 }
             }
@@ -476,8 +481,35 @@ namespace Project2048.Prototype
                 audioSource = gameObject.AddComponent<AudioSource>();
             }
 
+            ResolveAudioRouting();
             audioSource.playOnAwake = false;
             audioSource.spatialBlend = 0f;
+            if (sfxMixerGroup != null)
+            {
+                audioSource.outputAudioMixerGroup = sfxMixerGroup;
+            }
+        }
+
+        private void ResolveAudioRouting()
+        {
+            var settings = Project2048AudioSettings.LoadDefault();
+            if (sfxMixerGroup == null)
+            {
+                sfxMixerGroup = settings != null ? settings.SfxGroup : null;
+            }
+
+            if (bgmDucker == null)
+            {
+                bgmDucker = SimpleBgmDucker.Active != null
+                    ? SimpleBgmDucker.Active
+                    : FindAnyObjectByType<SimpleBgmDucker>(FindObjectsInactive.Include);
+            }
+        }
+
+        private void DuckBgmForImportantSfx()
+        {
+            ResolveAudioRouting();
+            bgmDucker?.DuckBgm();
         }
 
         private static SpriteRenderer FindRendererByName(string objectName)
@@ -520,8 +552,18 @@ namespace Project2048.Prototype
             }
 
             return next.Phase == CombatPhase.EnemyTurn &&
-                nextEnemy.Intent?.intentType == EnemyIntentType.Defense &&
+                EnemyHasDefenseIntent(nextEnemy) &&
                 nextEnemy.Block > previousEnemy.Block;
+        }
+
+        private static bool EnemyHasDefenseIntent(EnemyCombatSnapshot enemy)
+        {
+            if (enemy?.Intents != null && enemy.Intents.Any(intent => intent?.intentType == EnemyIntentType.Defense))
+            {
+                return true;
+            }
+
+            return enemy?.Intent?.intentType == EnemyIntentType.Defense;
         }
 
         private static bool EnemyAppeared(CombatSnapshot previous, CombatSnapshot next)

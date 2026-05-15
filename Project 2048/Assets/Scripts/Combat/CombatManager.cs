@@ -316,7 +316,7 @@ namespace Project2048.Combat
         {
             var wasSuppressing = suppressStateNotifications;
             suppressStateNotifications = true;
-            enemyIntentSystem.ExecuteIntent(enemy, player, damageCalculator, BoardManager);
+            enemyIntentSystem.ExecuteIntent(enemy, intent, player, damageCalculator, BoardManager);
             suppressStateNotifications = wasSuppressing;
 
             if (intent != null &&
@@ -365,17 +365,42 @@ namespace Project2048.Combat
         private bool ResolveEnemyAction(EnemyController enemy)
         {
             enemy.ClearBlock();
-            var intent = enemy.CurrentIntent?.Clone();
-            lastActionDescription = $"{GetEnemyDisplayName(enemy)}: {FormatEnemyIntent(intent)}";
-            ExecuteEnemyIntent(enemy, intent);
-            return CheckDefeat();
+            var intents = GetExecutableIntents(enemy);
+            lastActionDescription = $"{GetEnemyDisplayName(enemy)}: {FormatEnemyIntents(intents)}";
+
+            foreach (var intent in intents)
+            {
+                ExecuteEnemyIntent(enemy, intent);
+                if (CheckDefeat())
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static List<EnemyIntent> GetExecutableIntents(EnemyController enemy)
+        {
+            var intents = CloneEnemyIntents(enemy?.CurrentIntents);
+            if (intents.Count == 0 && enemy?.CurrentIntent != null)
+            {
+                intents.Add(enemy.CurrentIntent.Clone());
+            }
+
+            return intents;
+        }
+
+        private static int GetEnemyActionsPerTurn(EnemyController enemy)
+        {
+            return enemy?.Data != null ? enemy.Data.ActionsPerTurn : 1;
         }
 
         private void PrepareEnemyIntents()
         {
             foreach (var enemy in enemies.Where(enemy => enemy != null && !enemy.IsDead))
             {
-                enemyIntentSystem.SetNextIntent(enemy);
+                enemyIntentSystem.SetNextIntents(enemy, GetEnemyActionsPerTurn(enemy));
             }
         }
 
@@ -617,6 +642,7 @@ namespace Project2048.Combat
                     continue;
                 }
 
+                var intents = CloneEnemyIntents(enemy.CurrentIntents);
                 snapshots.Add(new EnemyCombatSnapshot
                 {
                     EnemyIndex = index,
@@ -628,12 +654,38 @@ namespace Project2048.Combat
                     Block = enemy.Block,
                     IsDead = enemy.IsDead,
                     AiProfileLabel = enemy.Data != null ? enemy.Data.GetAiProfileLabel() : string.Empty,
-                    Intent = enemy.CurrentIntent?.Clone(),
+                    Intent = intents.Count > 0 ? intents[0].Clone() : enemy.CurrentIntent?.Clone(),
+                    Intents = intents,
                     StatusEffects = BuildEnemyStatusEffects(enemy),
                 });
             }
 
             return snapshots;
+        }
+
+        private static List<EnemyIntent> CloneEnemyIntents(IEnumerable<EnemyIntent> source)
+        {
+            var intents = new List<EnemyIntent>();
+            if (source == null)
+            {
+                return intents;
+            }
+
+            foreach (var intent in source)
+            {
+                if (intent == null)
+                {
+                    continue;
+                }
+
+                intents.Add(intent.Clone());
+                if (intents.Count >= EnemySO.MaximumActionsPerTurn)
+                {
+                    break;
+                }
+            }
+
+            return intents;
         }
 
         private List<CombatStatusEffectSnapshot> BuildPlayerStatusEffects()
@@ -803,6 +855,16 @@ namespace Project2048.Combat
                 },
                 _ => intent.intentType.ToString(),
             };
+        }
+
+        private static string FormatEnemyIntents(IReadOnlyList<EnemyIntent> intents)
+        {
+            if (intents == null || intents.Count == 0)
+            {
+                return FormatEnemyIntent(null);
+            }
+
+            return string.Join(" / ", intents.Select(FormatEnemyIntent));
         }
     }
 }

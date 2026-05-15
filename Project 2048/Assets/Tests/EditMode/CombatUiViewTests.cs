@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using Project2048.Audio;
 using Project2048.Board2048;
 using Project2048.Combat;
 using Project2048.Enemy;
@@ -172,6 +173,51 @@ namespace Project2048.Tests
             Assert.That(boardHpFill.rectTransform.anchorMax.x, Is.EqualTo(0.8f).Within(0.001f));
             Assert.That(playerBattleHpText.text, Is.EqualTo("체력 16/20"));
             Assert.That(boardHpText.text, Is.EqualTo("체력 16/20"));
+        }
+
+        [Test]
+        public void Initialize_RendersTwoEnemyIntentsWhenEnemyCanActTwice()
+        {
+            var viewObject = CreateOwnedGameObject("CombatView");
+            var view = viewObject.AddComponent<CombatUiView>();
+            CreateImageChild(viewObject.transform, "IntentBubble");
+            var intentText = CreateTextChild(viewObject.transform.Find("IntentBubble"), "IntentBubbleText");
+
+            var manager = CreateOwnedGameObject("CombatManager").AddComponent<CombatManager>();
+            var player = CreateOwnedGameObject("Player").AddComponent<PlayerCombatController>();
+            var enemy = CreateOwnedGameObject("Enemy").AddComponent<EnemyController>();
+            var bootstrap = CreateOwnedGameObject("Bootstrap").AddComponent<PrototypeCombatBootstrap>();
+            SetPrivateField(bootstrap, "combatManager", manager);
+
+            var playerData = CreatePlayerData(20, 0);
+            var enemyData = CreateEnemyData("Multi", 10, 4);
+            enemyData.intentPattern = new System.Collections.Generic.List<EnemyIntent>
+            {
+                new()
+                {
+                    intentType = EnemyIntentType.Attack,
+                    value = 4,
+                },
+                new()
+                {
+                    intentType = EnemyIntentType.Defense,
+                    value = 3,
+                },
+            };
+            SetEnemyActionsPerTurn(enemyData, 2);
+
+            manager.SetCombatants(player, new[] { enemy });
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new System.Collections.Generic.List<EnemySO> { enemyData },
+                boardMoveCount = 1,
+            });
+
+            view.Initialize(bootstrap);
+
+            Assert.That(intentText.text, Is.EqualTo(
+                $"{PrototypeCombatText.FormatIntent(enemyData.intentPattern[0])}\n{PrototypeCombatText.FormatIntent(enemyData.intentPattern[1])}"));
         }
 
         [Test]
@@ -406,6 +452,44 @@ namespace Project2048.Tests
         }
 
         [Test]
+        public void BindButton_ReattachesButtonClickAudioAfterReplacingRuntimeListeners()
+        {
+            var settings = AssetDatabase.LoadAssetAtPath<Project2048AudioSettings>(
+                "Assets/Resources/Audio/Project2048AudioSettings.asset");
+            var audioRoot = CreateOwnedGameObject("ButtonAudioRoot");
+            var router = audioRoot.AddComponent<ButtonClickAudioRouter>();
+            var view = CreateOwnedGameObject("CombatView").AddComponent<CombatUiView>();
+            var buttonObject = CreateOwnedGameObject("RuntimeCombatButton");
+            buttonObject.AddComponent<Image>();
+            var button = buttonObject.AddComponent<Button>();
+            var handlerCount = 0;
+            var playCount = 0;
+
+            Assert.That(settings, Is.Not.Null);
+            Assert.That(settings.ButtonClickClip, Is.Not.Null);
+
+            ButtonClickAudioRouter.ButtonClickPlayed += CountPlay;
+            try
+            {
+                router.Initialize(settings);
+                InvokePrivate(view, "BindButton", button, (System.Action)(() => handlerCount++));
+                button.onClick.Invoke();
+            }
+            finally
+            {
+                ButtonClickAudioRouter.ButtonClickPlayed -= CountPlay;
+            }
+
+            Assert.That(playCount, Is.EqualTo(1));
+            Assert.That(handlerCount, Is.EqualTo(1));
+
+            void CountPlay()
+            {
+                playCount++;
+            }
+        }
+
+        [Test]
         public void BattleScene_CombatUiView_HasBoardEffectProfileOnly()
         {
             EditorSceneManager.OpenScene("Assets/Scenes/BattleScene.unity");
@@ -550,6 +634,13 @@ namespace Project2048.Tests
             return skill;
         }
 
+        private static void SetEnemyActionsPerTurn(EnemySO data, int count)
+        {
+            var field = typeof(EnemySO).GetField("actionsPerTurn");
+            Assert.That(field, Is.Not.Null, "EnemySO should expose actionsPerTurn for per-enemy multi-action tuning.");
+            field.SetValue(data, count);
+        }
+
         private static void SetPrivateField(object target, string fieldName, object value)
         {
             target.GetType()
@@ -562,6 +653,14 @@ namespace Project2048.Tests
             return target.GetType()
                 .GetField(fieldName, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
                 ?.GetValue(target);
+        }
+
+        private static void InvokePrivate(object target, string methodName, params object[] args)
+        {
+            var method = target.GetType()
+                .GetMethod(methodName, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+            Assert.That(method, Is.Not.Null);
+            method.Invoke(target, args);
         }
 
         private static void AssertHpFillIsRenderable(Image fill)

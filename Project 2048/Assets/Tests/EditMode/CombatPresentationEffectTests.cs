@@ -296,6 +296,10 @@ namespace Project2048.Tests
                 yield break;
             }
 
+            Assert.That(shakeTarget.transform.localPosition, Is.EqualTo(Vector3.zero));
+
+            yield return new WaitForSecondsRealtime(CombatWorldSpriteView.EnemyAppearIntroDurationSeconds + 0.1f);
+
             Assert.That(shakeTarget.transform.localPosition, Is.Not.EqualTo(Vector3.zero));
 
             yield return new WaitForSecondsRealtime(CombatWorldSpriteView.EnemyAppearWorldShakeDurationSeconds + 0.1f);
@@ -344,8 +348,13 @@ namespace Project2048.Tests
             Assert.That(foregroundRoot, Is.Not.Null);
             Assert.That(foregroundRoot.name, Is.EqualTo("ForegroundShakeRoot"));
             Assert.That(enemyRenderer.transform.parent, Is.EqualTo(foregroundRoot));
-            Assert.That(foregroundRoot.localPosition, Is.Not.EqualTo(Vector3.zero));
+            Assert.That(foregroundRoot.localPosition, Is.EqualTo(Vector3.zero));
             Assert.That(backgroundRenderer.transform.parent, Is.EqualTo(viewObject.transform));
+            Assert.That(backgroundRenderer.transform.localPosition, Is.EqualTo(Vector3.zero));
+
+            yield return new WaitForSecondsRealtime(CombatWorldSpriteView.EnemyAppearIntroDurationSeconds + 0.1f);
+
+            Assert.That(foregroundRoot.localPosition, Is.Not.EqualTo(Vector3.zero));
             Assert.That(backgroundRenderer.transform.localPosition, Is.EqualTo(Vector3.zero));
 
             yield return new WaitForSecondsRealtime(CombatWorldSpriteView.EnemyAppearWorldShakeDurationSeconds + 0.1f);
@@ -394,6 +403,12 @@ namespace Project2048.Tests
             Assert.That(foregroundRoot, Is.Not.Null);
             Assert.That(foregroundRoot.name, Is.EqualTo("ForegroundShakeRoot"));
             Assert.That(playerRenderer.transform.parent, Is.EqualTo(viewObject.transform));
+            Assert.That(foregroundRoot.localPosition, Is.EqualTo(Vector3.zero));
+            Assert.That(playerRenderer.transform.localPosition, Is.EqualTo(Vector3.zero));
+
+            yield return new WaitForSecondsRealtime(CombatWorldSpriteView.EnemyAppearIntroDurationSeconds + 0.1f);
+
+            Assert.That(foregroundRoot.localPosition, Is.Not.EqualTo(Vector3.zero));
             Assert.That(playerRenderer.transform.localPosition, Is.EqualTo(Vector3.zero));
 
             yield return new WaitForSecondsRealtime(CombatWorldSpriteView.EnemyAppearWorldShakeDurationSeconds + 0.1f);

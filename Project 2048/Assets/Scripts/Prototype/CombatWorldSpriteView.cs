@@ -16,7 +16,7 @@ namespace Project2048.Prototype
         public const float EnemyDeathFadeDurationSeconds = 0.6f;
         public const float EnemyAppearIntroDurationSeconds = 0.45f;
         public const float EnemyAttackLungeDurationSeconds = 0.32f;
-        public const float EnemyAppearWorldShakeDurationSeconds = 0.34f;
+        public const float EnemyAppearWorldShakeDurationSeconds = 1f;
         public const float ShieldImpactParticleLifetimeSeconds = 0.8f;
         public const float DebuffCastParticleLifetimeSeconds = 0.9f;
 
@@ -26,7 +26,7 @@ namespace Project2048.Prototype
         private const float EnemyAttackLungeDistance = 0.72f;
         private const float EnemyAttackLungeImpactTime = 0.45f;
         private const float EnemyAttackLungeScalePop = 0.05f;
-        private const float EnemyAppearWorldShakeMagnitude = 0.22f;
+        private const float EnemyAppearWorldShakeMagnitude = 0.06f;
         private const int ShieldImpactParticleCount = 22;
         private const int DebuffCastParticleCount = 28;
 
@@ -334,8 +334,8 @@ namespace Project2048.Prototype
         {
             if (enemyRenderer == null)
             {
-                PlayEnemyAppearWorldShake();
                 PlayCombatantActionEffect(effect, transform, enemyAnimator);
+                PlayEnemyAppearWorldShake();
                 return;
             }
 
@@ -350,7 +350,6 @@ namespace Project2048.Prototype
                 return;
             }
 
-            PlayEnemyAppearWorldShake();
             enemyAppearIntroCoroutine = StartCoroutine(EnemyAppearIntroRoutine(effect));
         }
 
@@ -410,6 +409,7 @@ namespace Project2048.Prototype
             RestoreEnemyRendererTransform();
             enemyAppearIntroCoroutine = null;
             PlayCombatantActionEffect(effect, enemyRenderer.transform, enemyAnimator);
+            PlayEnemyAppearWorldShake();
         }
 
         private IEnumerator EnemyAttackLungeRoutine(CombatEffectBinding effect)

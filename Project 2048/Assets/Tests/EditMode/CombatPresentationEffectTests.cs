@@ -65,8 +65,23 @@ namespace Project2048.Tests
                 out var centerPoint);
 
             var distanceFromCenter = Vector2.Distance(popup.anchoredPosition, centerPoint);
-            Assert.That(distanceFromCenter, Is.GreaterThan(12f));
-            Assert.That(distanceFromCenter, Is.LessThan(150f));
+            var offset = popup.anchoredPosition - centerPoint;
+            Assert.That(Mathf.Abs(offset.x), Is.GreaterThan(8f));
+            Assert.That(Mathf.Abs(offset.y), Is.GreaterThan(8f));
+            Assert.That(distanceFromCenter, Is.GreaterThan(40f));
+            Assert.That(distanceFromCenter, Is.LessThan(170f));
+        }
+
+        private static void AssertDamageNumberPopupIsReadable(TMPro.TMP_Text text)
+        {
+            Assert.That(text.color.r, Is.GreaterThan(0.95f));
+            Assert.That(text.color.g, Is.GreaterThan(0.72f));
+            Assert.That(text.color.b, Is.LessThan(0.2f));
+            Assert.That(text.outlineColor, Is.EqualTo((Color32)Color.white));
+            Assert.That(text.outlineWidth, Is.GreaterThanOrEqualTo(0.18f));
+            Assert.That(text.fontMaterial.IsKeywordEnabled(TMPro.ShaderUtilities.Keyword_Glow), Is.True);
+            Assert.That(text.fontMaterial.GetColor(TMPro.ShaderUtilities.ID_GlowColor).a, Is.GreaterThan(0.45f));
+            Assert.That(text.fontMaterial.GetFloat(TMPro.ShaderUtilities.ID_GlowOuter), Is.GreaterThanOrEqualTo(0.28f));
         }
 
         [Test]
@@ -590,6 +605,7 @@ namespace Project2048.Tests
             Assert.That(text, Is.Not.Null);
             Assert.That(text.text, Is.EqualTo("3"));
             Assert.That(text.text, Does.Not.StartWith("-"));
+            AssertDamageNumberPopupIsReadable(text);
             AssertPopupIsNearButNotCentered((RectTransform)popup, (RectTransform)popupLayer, camera, playerRenderer.transform.position);
         }
 
@@ -638,6 +654,7 @@ namespace Project2048.Tests
             Assert.That(text, Is.Not.Null);
             Assert.That(text.text, Is.EqualTo("4"));
             Assert.That(text.text, Does.Not.StartWith("-"));
+            AssertDamageNumberPopupIsReadable(text);
             AssertPopupIsNearButNotCentered((RectTransform)popup, (RectTransform)popupLayer, camera, enemyRenderer.transform.position);
         }
 

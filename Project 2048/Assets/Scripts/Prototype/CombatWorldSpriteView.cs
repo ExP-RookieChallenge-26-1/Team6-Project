@@ -32,16 +32,23 @@ namespace Project2048.Prototype
         private const float EnemyAttackLungeScalePop = 0.05f;
         private const float EnemyAppearWorldShakeMagnitude = 0.13f;
         private const float DamageNumberPopupRiseDistance = 0.62f;
-        private const float DamageNumberPopupMinimumWorldOffset = 0.18f;
-        private const float DamageNumberPopupFallbackWorldRadius = 0.48f;
+        private const float DamageNumberPopupMinimumWorldOffset = 0.22f;
+        private const float DamageNumberPopupFallbackWorldRadius = 0.55f;
         private const float DamageNumberPopupBoundsRadiusMultiplier = 0.65f;
-        private const float DamageNumberPopupVerticalRadiusScale = 0.75f;
-        private const float DamageNumberPopupWorldFontSize = 2.6f;
-        private const float DamageNumberPopupUiFontSize = 34f;
+        private const float DamageNumberPopupWorldFontSize = 2.9f;
+        private const float DamageNumberPopupUiFontSize = 40f;
+        private const float DamageNumberPopupOutlineWidth = 0.22f;
+        private const float DamageNumberPopupGlowInner = 0.04f;
+        private const float DamageNumberPopupGlowOuter = 0.36f;
+        private const float DamageNumberPopupGlowPower = 0.72f;
+        private const float DamageNumberPopupGlowOffset = 0f;
         private const int DamageNumberPopupSortingOrderOffset = 32;
         private const int ShieldImpactParticleCount = 22;
         private const int DebuffCastParticleCount = 28;
         private const string DefaultWorldVfxProfileResourceName = "PrototypeCombatWorldVfxProfile";
+        private static readonly Color DamageNumberPopupTextColor = new(1f, 0.82f, 0.02f, 1f);
+        private static readonly Color DamageNumberPopupOutlineColor = Color.white;
+        private static readonly Color DamageNumberPopupGlowColor = new(1f, 0.72f, 0f, 0.82f);
 
         [SerializeField] private PrototypeCombatBootstrap bootstrap;
         [SerializeField] private SpriteRenderer backgroundRenderer;
@@ -405,7 +412,7 @@ namespace Project2048.Prototype
             rectTransform.anchorMin = new Vector2(0.5f, 0.5f);
             rectTransform.anchorMax = new Vector2(0.5f, 0.5f);
             rectTransform.pivot = new Vector2(0.5f, 0.5f);
-            rectTransform.sizeDelta = new Vector2(160f, 64f);
+            rectTransform.sizeDelta = new Vector2(196f, 84f);
             rectTransform.anchoredPosition = ResolveDamageNumberCanvasPosition(targetRenderer, popupLayer);
 
             var label = popupObject.GetComponent<TextMeshProUGUI>();
@@ -450,8 +457,56 @@ namespace Project2048.Prototype
             label.alignment = TextAlignmentOptions.Center;
             label.fontSize = fontSize;
             label.fontStyle = FontStyles.Bold;
-            label.color = new Color(1f, 0.92f, 0.55f, 1f);
+            label.color = DamageNumberPopupTextColor;
             label.textWrappingMode = TextWrappingModes.NoWrap;
+            label.overflowMode = TextOverflowModes.Overflow;
+            label.faceColor = DamageNumberPopupTextColor;
+            label.outlineColor = DamageNumberPopupOutlineColor;
+            label.outlineWidth = DamageNumberPopupOutlineWidth;
+            ConfigureDamageNumberGlow(label);
+        }
+
+        private static void ConfigureDamageNumberGlow(TMP_Text label)
+        {
+            var sourceMaterial = label.fontMaterial;
+            if (sourceMaterial == null)
+            {
+                return;
+            }
+
+            var material = new Material(sourceMaterial)
+            {
+                name = "DamageNumberPopupMaterial",
+            };
+
+            material.EnableKeyword(ShaderUtilities.Keyword_Outline);
+            if (material.HasProperty(ShaderUtilities.ID_FaceColor))
+            {
+                material.SetColor(ShaderUtilities.ID_FaceColor, DamageNumberPopupTextColor);
+            }
+
+            if (material.HasProperty(ShaderUtilities.ID_OutlineColor))
+            {
+                material.SetColor(ShaderUtilities.ID_OutlineColor, DamageNumberPopupOutlineColor);
+            }
+
+            if (material.HasProperty(ShaderUtilities.ID_OutlineWidth))
+            {
+                material.SetFloat(ShaderUtilities.ID_OutlineWidth, DamageNumberPopupOutlineWidth);
+            }
+
+            if (material.HasProperty(ShaderUtilities.ID_GlowColor))
+            {
+                material.EnableKeyword(ShaderUtilities.Keyword_Glow);
+                material.SetColor(ShaderUtilities.ID_GlowColor, DamageNumberPopupGlowColor);
+                material.SetFloat(ShaderUtilities.ID_GlowInner, DamageNumberPopupGlowInner);
+                material.SetFloat(ShaderUtilities.ID_GlowOuter, DamageNumberPopupGlowOuter);
+                material.SetFloat(ShaderUtilities.ID_GlowPower, DamageNumberPopupGlowPower);
+                material.SetFloat(ShaderUtilities.ID_GlowOffset, DamageNumberPopupGlowOffset);
+            }
+
+            label.fontMaterial = material;
+            label.UpdateMeshPadding();
         }
 
         private static Vector3 ResolveDamageNumberWorldPosition(SpriteRenderer targetRenderer)
@@ -463,7 +518,7 @@ namespace Project2048.Prototype
             var distance = Random.Range(minRadius, maxRadius);
             var offset = new Vector3(
                 Mathf.Cos(angle) * distance,
-                Mathf.Sin(angle) * distance * DamageNumberPopupVerticalRadiusScale,
+                Mathf.Sin(angle) * distance,
                 0f);
 
             return center + offset;
@@ -589,7 +644,7 @@ namespace Project2048.Prototype
 
             var popupObject = popupTransform.gameObject;
             damageNumberPopups.Remove(popupObject);
-            Destroy(popupObject);
+            DestroyDamageNumberPopup(popupObject);
         }
 
         private void ClearDamageNumberPopups()
@@ -601,17 +656,36 @@ namespace Project2048.Prototype
                     continue;
                 }
 
-                if (Application.isPlaying)
-                {
-                    Destroy(popup);
-                }
-                else
-                {
-                    DestroyImmediate(popup);
-                }
+                DestroyDamageNumberPopup(popup);
             }
 
             damageNumberPopups.Clear();
+        }
+
+        private static void DestroyDamageNumberPopup(GameObject popup)
+        {
+            var label = popup.GetComponent<TMP_Text>();
+            var material = label != null ? label.fontMaterial : null;
+            if (material != null && material.name.StartsWith("DamageNumberPopupMaterial"))
+            {
+                if (Application.isPlaying)
+                {
+                    Destroy(material);
+                }
+                else
+                {
+                    DestroyImmediate(material);
+                }
+            }
+
+            if (Application.isPlaying)
+            {
+                Destroy(popup);
+            }
+            else
+            {
+                DestroyImmediate(popup);
+            }
         }
 
         private void PlayEnemyAppearIntro(CombatEffectBinding effect)

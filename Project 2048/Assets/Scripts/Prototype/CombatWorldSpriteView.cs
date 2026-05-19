@@ -264,16 +264,12 @@ namespace Project2048.Prototype
 
             lastPlayedEnemyDebuffVfxSequence = cue.Sequence;
             var effect = ResolveCurrentEnemyData()?.FindActionEffect(ResolveDebuffActionId(cue.DebuffType));
-            var hasAuthoredParticles = effect?.particleEffect?.HasParticleVisual ?? false;
             PlayCombatantActionEffect(
                 effect,
                 enemyRenderer != null ? enemyRenderer.transform : transform,
                 enemyAnimator);
 
-            if (!hasAuthoredParticles)
-            {
-                SpawnDebuffCastParticles(cue.DebuffType);
-            }
+            SpawnDebuffCastParticles(cue.DebuffType);
         }
 
         private void PlayShieldImpactEffectIfNeeded(bool shieldWasHit, Transform anchor)
@@ -795,19 +791,21 @@ namespace Project2048.Prototype
 
         private void SpawnDebuffCastParticles(DebuffType debuffType)
         {
-            var color = ResolveDebuffParticleColor(debuffType);
             var effect = ResolveDebuffParticleEffect(debuffType);
+            var material = effect?.particleMaterial != null
+                ? effect.particleMaterial
+                : ResolveDebuffParticleMaterial(debuffType);
+            var color = material != null ? Color.white : ResolveDebuffParticleColor(debuffType);
             SpawnParticleBurst(
-                effect,
+                effect?.particlePrefab != null ? effect.particlePrefab : debuffCastParticlePrefab,
                 enemyRenderer != null ? enemyRenderer.transform : transform,
                 $"{debuffType}DebuffCastParticles",
-                debuffCastParticlePrefab,
                 color,
-                effect?.particleMaterial != null ? null : ResolveDebuffParticleMaterial(debuffType),
-                DebuffCastParticleLifetimeSeconds,
-                DebuffCastParticleCount,
-                0.62f,
-                0.16f,
+                material,
+                effect != null ? effect.EffectiveLifetimeSeconds : DebuffCastParticleLifetimeSeconds,
+                effect != null ? effect.EffectiveBurstCount : DebuffCastParticleCount,
+                effect != null ? effect.EffectiveStartSpeed : 0.62f,
+                effect != null ? effect.EffectiveStartSize : 0.16f,
                 swirl: true);
         }
 
@@ -877,6 +875,11 @@ namespace Project2048.Prototype
             particles.transform.localPosition = Vector3.zero;
             ConfigureParticleBurst(particles, color, material, lifetimeSeconds, burstCount, startSpeed, startSize, parent, swirl);
             particles.Play(true);
+            if (swirl && Application.isPlaying && isActiveAndEnabled)
+            {
+                StartCoroutine(SwirlParticleTransformRoutine(particles.transform, lifetimeSeconds));
+            }
+
             if (lifetimeSeconds > 0f && Application.isPlaying)
             {
                 Destroy(particles.gameObject, lifetimeSeconds + 0.2f);
@@ -964,16 +967,7 @@ namespace Project2048.Prototype
             shape.arc = 360f;
 
             var velocity = particles.velocityOverLifetime;
-            velocity.enabled = true;
-            velocity.space = ParticleSystemSimulationSpace.Local;
-            velocity.orbitalX = new ParticleSystem.MinMaxCurve(0f);
-            velocity.orbitalY = new ParticleSystem.MinMaxCurve(0f);
-            velocity.orbitalZ = new ParticleSystem.MinMaxCurve(3.8f);
-            velocity.orbitalOffsetX = new ParticleSystem.MinMaxCurve(0f);
-            velocity.orbitalOffsetY = new ParticleSystem.MinMaxCurve(0f);
-            velocity.orbitalOffsetZ = new ParticleSystem.MinMaxCurve(0f);
-            velocity.radial = new ParticleSystem.MinMaxCurve(-0.16f);
-            velocity.speedModifier = new ParticleSystem.MinMaxCurve(1f);
+            velocity.enabled = false;
 
             var rotation = particles.rotationOverLifetime;
             rotation.enabled = true;
@@ -986,6 +980,24 @@ namespace Project2048.Prototype
                 new Keyframe(0f, 0.45f),
                 new Keyframe(Mathf.Clamp01(0.32f / Mathf.Max(0.05f, lifetimeSeconds)), 1.18f),
                 new Keyframe(1f, 0f)));
+        }
+
+        private static IEnumerator SwirlParticleTransformRoutine(Transform particleTransform, float lifetimeSeconds)
+        {
+            var elapsed = 0f;
+            var duration = Mathf.Max(0.05f, lifetimeSeconds);
+            while (elapsed < duration)
+            {
+                if (particleTransform == null)
+                {
+                    yield break;
+                }
+
+                elapsed += Time.deltaTime;
+                var progress = Mathf.Clamp01(elapsed / duration);
+                particleTransform.localRotation = Quaternion.Euler(0f, 0f, progress * 540f);
+                yield return null;
+            }
         }
 
         private static void DisableSwirlBurst(ParticleSystem particles)

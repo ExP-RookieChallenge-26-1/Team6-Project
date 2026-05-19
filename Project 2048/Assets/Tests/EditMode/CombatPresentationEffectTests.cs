@@ -558,10 +558,8 @@ namespace Project2048.Tests
             var particles = enemyRenderer.transform.Find("FearDebuffCastParticles")?.GetComponent<ParticleSystem>();
             Assert.That(particles, Is.Not.Null);
             Assert.That(particles.shape.shapeType, Is.EqualTo(ParticleSystemShapeType.Circle));
-            Assert.That(particles.velocityOverLifetime.enabled, Is.True);
-            Assert.That(particles.velocityOverLifetime.orbitalX.mode, Is.EqualTo(ParticleSystemCurveMode.Constant));
-            Assert.That(particles.velocityOverLifetime.orbitalY.mode, Is.EqualTo(ParticleSystemCurveMode.Constant));
-            Assert.That(particles.velocityOverLifetime.orbitalZ.mode, Is.EqualTo(ParticleSystemCurveMode.Constant));
+            Assert.That(particles.velocityOverLifetime.enabled, Is.False);
+            Assert.That(particles.rotationOverLifetime.enabled, Is.True);
             AssertColorApproximately(particles.main.startColor.color, Color.white);
 
             var profile = Resources.Load<CombatWorldVfxProfileSO>("PrototypeCombatWorldVfxProfile");

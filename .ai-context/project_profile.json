@@ -9,16 +9,16 @@
   "files_with_fixed_update": 0,
   "files_with_late_update": 2,
   "singleton_candidates": 3,
-  "manager_like_classes": 32,
+  "manager_like_classes": 31,
   "ui_related_classes": 36,
   "save_load_related_classes": 36,
   "role_counts": {
     "ui": 36,
     "combat": 65,
-    "data": 36,
+    "data": 37,
     "save-load": 36,
     "player": 52,
-    "manager": 31,
+    "manager": 30,
     "scene": 9,
     "runtime": 37,
     "inventory": 2,
@@ -34,12 +34,18 @@
     {
       "class_name": "CombatUiView",
       "file_id": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
-      "relation_count": 218,
+      "relation_count": 217,
       "referenced_type_count": 200
     },
     {
       "class_name": "CombatPresentationEffectTests",
       "file_id": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+      "relation_count": 211,
+      "referenced_type_count": 200
+    },
+    {
+      "class_name": "CombatUiViewTests",
+      "file_id": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
       "relation_count": 211,
       "referenced_type_count": 200
     },
@@ -50,22 +56,16 @@
       "referenced_type_count": 200
     },
     {
-      "class_name": "CombatUiViewTests",
-      "file_id": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
-      "relation_count": 208,
-      "referenced_type_count": 197
+      "class_name": "CombatWorldSpriteView",
+      "file_id": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+      "relation_count": 200,
+      "referenced_type_count": 192
     },
     {
       "class_name": "RewardGrowthTests",
       "file_id": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
       "relation_count": 193,
       "referenced_type_count": 180
-    },
-    {
-      "class_name": "CombatWorldSpriteView",
-      "file_id": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
-      "relation_count": 132,
-      "referenced_type_count": 128
     },
     {
       "class_name": "CombatUiContractTests",
@@ -142,6 +142,31 @@
       "risk_score": 95
     },
     {
+      "file_id": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+      "class_name": "CombatWorldSpriteView",
+      "risk_flags": [
+        "high-coupling",
+        "public-field-heavy",
+        "getcomponent-heavy",
+        "find-heavy",
+        "magic-number-heavy",
+        "large-class",
+        "save-load-sensitive",
+        "state-owner"
+      ],
+      "risk_reasons": [
+        "참조 타입 또는 관계 수가 많음",
+        "public 필드 노출 수가 많음",
+        "GetComponent/TryGetComponent 호출이 많음",
+        "Find 계열 탐색 사용",
+        "숫자 리터럴이 많아 의미 파악이 어려울 수 있음",
+        "파일/메서드/필드 수가 많아 책임이 커질 가능성",
+        "저장/불러오기 관련 로직 포함",
+        "상태 중심 또는 관리 중심 클래스일 가능성"
+      ],
+      "risk_score": 95
+    },
+    {
       "file_id": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
       "class_name": "CombatUiViewTests",
       "risk_flags": [
@@ -190,29 +215,6 @@
         "상태 중심 또는 관리 중심 클래스일 가능성"
       ],
       "risk_score": 88
-    },
-    {
-      "file_id": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
-      "class_name": "CombatWorldSpriteView",
-      "risk_flags": [
-        "high-coupling",
-        "getcomponent-heavy",
-        "find-heavy",
-        "magic-number-heavy",
-        "large-class",
-        "save-load-sensitive",
-        "state-owner"
-      ],
-      "risk_reasons": [
-        "참조 타입 또는 관계 수가 많음",
-        "GetComponent/TryGetComponent 호출이 많음",
-        "Find 계열 탐색 사용",
-        "숫자 리터럴이 많아 의미 파악이 어려울 수 있음",
-        "파일/메서드/필드 수가 많아 책임이 커질 가능성",
-        "저장/불러오기 관련 로직 포함",
-        "상태 중심 또는 관리 중심 클래스일 가능성"
-      ],
-      "risk_score": 85
     },
     {
       "file_id": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",

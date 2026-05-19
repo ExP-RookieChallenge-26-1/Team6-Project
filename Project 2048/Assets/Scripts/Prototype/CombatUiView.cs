@@ -49,6 +49,7 @@ namespace Project2048.Prototype
         [SerializeField] private TMP_Text playerBattleHpText;
         [SerializeField] private Image enemyHpBarFill;
         [SerializeField] private TMP_Text enemyHpText;
+        [SerializeField] private GameObject enemyHpRoot;
         [SerializeField] private RectTransform playerBattleStatusEffectsRoot;
         [SerializeField] private RectTransform enemyStatusEffectsRoot;
         [SerializeField] private GameObject statusTooltip;
@@ -138,6 +139,7 @@ namespace Project2048.Prototype
         private Coroutine boardAnimationCoroutine;
         private Coroutine combatVfxCoroutine;
         private Coroutine enemyDeathFadeCoroutine;
+        private Coroutine enemyHpHideCoroutine;
         private bool boardTransitionAnimating;
         private bool lastEnemyWasDead;
         private int lastPlayedCombatVfxSequence;
@@ -202,6 +204,7 @@ namespace Project2048.Prototype
             ClearBoardAnimationOverlay();
             ClearCombatVfx();
             ClearEnemyDeathFade();
+            ClearEnemyHpHide();
             ClearHpDamageTrailAnimations();
         }
 
@@ -438,6 +441,7 @@ namespace Project2048.Prototype
         {
             var enemy = snapshot?.Enemies?.FirstOrDefault();
             var player = snapshot?.Player;
+            var enemyIsAlive = enemy != null && !enemy.IsDead;
             if (enemyNameText != null)
             {
                 var enemyStatusFallback = enemyHpText == null && enemy != null
@@ -456,7 +460,7 @@ namespace Project2048.Prototype
             if (intentBubble != null)
             {
                 var visibleIntents = GetVisibleIntents(enemy);
-                var hasIntent = visibleIntents.Count > 0 && !enemy.IsDead;
+                var hasIntent = visibleIntents.Count > 0 && enemyIsAlive;
                 intentBubble.SetActive(hasIntent);
                 if (hasIntent && intentBubbleText != null)
                 {
@@ -508,6 +512,19 @@ namespace Project2048.Prototype
             SetBlockIndicator(playerBattleHpBarFill, player?.Block ?? 0);
             RenderStatusEffects(playerBattleStatusEffectsRoot, player?.StatusEffects);
 
+            if (enemyIsAlive)
+            {
+                ShowEnemyHp();
+            }
+            else if (enemy != null)
+            {
+                HideEnemyHpAfterDamageTrail();
+            }
+            else
+            {
+                HideEnemyHpImmediately();
+            }
+
             if (enemyHpBarFill != null && enemy != null && enemy.MaxHp > 0)
             {
                 SetHpBarValue(enemyHpBarFill, enemy.CurrentHp, enemy.MaxHp);
@@ -518,8 +535,8 @@ namespace Project2048.Prototype
                 enemyHpText.text = PrototypeCombatText.FormatEnemyHp(enemy.CurrentHp, enemy.MaxHp, enemy.Block);
             }
 
-            SetBlockIndicator(enemyHpBarFill, enemy?.Block ?? 0);
-            RenderStatusEffects(enemyStatusEffectsRoot, enemy?.StatusEffects);
+            SetBlockIndicator(enemyHpBarFill, enemyIsAlive ? enemy.Block : 0);
+            RenderStatusEffects(enemyStatusEffectsRoot, enemyIsAlive ? enemy.StatusEffects : null);
 
             if (actionDescriptionText != null)
             {
@@ -1029,6 +1046,7 @@ namespace Project2048.Prototype
             playerBattleHpText ??= FindNestedComponentByName<TMP_Text>("PlayerBattleHp", "Text");
             enemyHpBarFill ??= FindNestedComponentByName<Image>("EnemyHp", "Fill");
             enemyHpText ??= FindNestedComponentByName<TMP_Text>("EnemyHp", "Text");
+            ResolveEnemyHpRoot();
             playerBattleStatusEffectsRoot ??= FindComponentInChildrenByName<RectTransform>("PlayerBattleStatusEffects");
             enemyStatusEffectsRoot ??= FindComponentInChildrenByName<RectTransform>("EnemyStatusEffects");
             statusTooltip ??= FindChildByName("StatusTooltip")?.gameObject;
@@ -1038,6 +1056,77 @@ namespace Project2048.Prototype
             playerBoardStatusEffectsRoot ??= FindComponentInChildrenByName<RectTransform>("PlayerBoardStatusEffects");
             actionDescriptionText ??= FindComponentInChildrenByName<TMP_Text>("ActionDescriptionText");
             enemyTurnText ??= FindComponentInChildrenByName<TMP_Text>("EnemyTurnText");
+        }
+
+        private void ResolveEnemyHpRoot()
+        {
+            if (enemyHpRoot != null)
+            {
+                return;
+            }
+
+            enemyHpRoot = FindChildByName("EnemyHp")?.gameObject
+                ?? enemyHpBarFill?.transform.parent?.gameObject
+                ?? enemyHpText?.transform.parent?.gameObject;
+        }
+
+        private void SetEnemyHpVisible(bool visible)
+        {
+            ResolveEnemyHpRoot();
+            if (enemyHpRoot != null && enemyHpRoot.activeSelf != visible)
+            {
+                enemyHpRoot.SetActive(visible);
+            }
+        }
+
+        private void ShowEnemyHp()
+        {
+            ClearEnemyHpHide();
+            SetEnemyHpVisible(true);
+        }
+
+        private void HideEnemyHpImmediately()
+        {
+            ClearEnemyHpHide();
+            SetEnemyHpVisible(false);
+        }
+
+        private void HideEnemyHpAfterDamageTrail()
+        {
+            ResolveEnemyHpRoot();
+            if (enemyHpRoot == null || enemyHpHideCoroutine != null || !enemyHpRoot.activeSelf)
+            {
+                return;
+            }
+
+            if (!Application.isPlaying || !isActiveAndEnabled)
+            {
+                SetEnemyHpVisible(false);
+                return;
+            }
+
+            enemyHpHideCoroutine = StartCoroutine(EnemyHpHideAfterDamageTrailRoutine());
+        }
+
+        private IEnumerator EnemyHpHideAfterDamageTrailRoutine()
+        {
+            var delaySeconds = HpDamageTrailDelaySeconds + HpDamageTrailDurationSeconds + 0.05f;
+            if (delaySeconds > 0f)
+            {
+                yield return new WaitForSecondsRealtime(delaySeconds);
+            }
+
+            SetEnemyHpVisible(false);
+            enemyHpHideCoroutine = null;
+        }
+
+        private void ClearEnemyHpHide()
+        {
+            if (enemyHpHideCoroutine != null)
+            {
+                StopCoroutine(enemyHpHideCoroutine);
+                enemyHpHideCoroutine = null;
+            }
         }
 
         private void EnsureHpBarDefaults()

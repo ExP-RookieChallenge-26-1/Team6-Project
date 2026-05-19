@@ -178,6 +178,41 @@ namespace Project2048.Tests
         }
 
         [Test]
+        public void EnemyDeath_HidesEnemyHpRoot()
+        {
+            var viewObject = CreateOwnedGameObject("CombatView");
+            var view = viewObject.AddComponent<CombatUiView>();
+            var enemyHp = CreateImageChild(viewObject.transform, "EnemyHp");
+            CreateImageChild(enemyHp.transform, "Fill");
+            CreateTextChild(enemyHp.transform, "Text");
+            var manager = CreateOwnedGameObject("CombatManager").AddComponent<CombatManager>();
+            var player = CreateOwnedGameObject("Player").AddComponent<PlayerCombatController>();
+            var enemy = CreateOwnedGameObject("Enemy").AddComponent<EnemyController>();
+            var bootstrap = CreateOwnedGameObject("Bootstrap").AddComponent<PrototypeCombatBootstrap>();
+            var attack = CreateSkill("attack", "검격", SkillType.Attack, cost: 0, power: 99);
+            var playerData = CreatePlayerData(20, 0, attack);
+            var enemyData = CreateEnemyData("슬라임", 10, 0);
+
+            SetPrivateField(bootstrap, "combatManager", manager);
+            manager.SetCombatants(player, new[] { enemy });
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new System.Collections.Generic.List<EnemySO> { enemyData },
+                boardMoveCount = 1,
+            });
+            manager.ResolveBoardPhase();
+            view.Initialize(bootstrap);
+
+            Assert.That(enemyHp.gameObject.activeSelf, Is.True);
+
+            Assert.That(manager.RequestUseSkill(attack, enemy), Is.True);
+
+            Assert.That(enemy.IsDead, Is.True);
+            Assert.That(enemyHp.gameObject.activeSelf, Is.False);
+        }
+
+        [Test]
         public void HpBarDamageTrail_HoldsPreviousHpRatioWhenDamageLands()
         {
             var viewObject = CreateOwnedGameObject("CombatView");

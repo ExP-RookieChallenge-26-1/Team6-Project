@@ -496,7 +496,14 @@ namespace Project2048.Tests
 
             Assert.That(manager.RequestUseSkill(attack, enemy), Is.True);
 
-            Assert.That(enemyRenderer.transform.Find("ShieldImpactParticles"), Is.Not.Null);
+            var particles = enemyRenderer.transform.Find("ShieldImpactParticles")?.GetComponent<ParticleSystem>();
+            Assert.That(particles, Is.Not.Null);
+            Assert.That(particles.shape.shapeType, Is.EqualTo(ParticleSystemShapeType.Sphere));
+
+            var profile = Resources.Load<CombatWorldVfxProfileSO>("PrototypeCombatWorldVfxProfile");
+            Assert.That(profile, Is.Not.Null);
+            var renderer = particles.GetComponent<ParticleSystemRenderer>();
+            Assert.That(renderer.sharedMaterial, Is.EqualTo(profile.shieldImpactEffect.particleMaterial));
         }
 
         [Test]
@@ -536,7 +543,39 @@ namespace Project2048.Tests
 
             manager.RequestEndPlayerTurn();
 
-            Assert.That(enemyRenderer.transform.Find("FearDebuffCastParticles"), Is.Not.Null);
+            var particles = enemyRenderer.transform.Find("FearDebuffCastParticles")?.GetComponent<ParticleSystem>();
+            Assert.That(particles, Is.Not.Null);
+            Assert.That(particles.shape.shapeType, Is.EqualTo(ParticleSystemShapeType.Circle));
+            Assert.That(particles.velocityOverLifetime.enabled, Is.True);
+
+            var profile = Resources.Load<CombatWorldVfxProfileSO>("PrototypeCombatWorldVfxProfile");
+            Assert.That(profile, Is.Not.Null);
+            var renderer = particles.GetComponent<ParticleSystemRenderer>();
+            Assert.That(renderer.sharedMaterial, Is.EqualTo(profile.fearDebuffCastEffect.particleMaterial));
+        }
+
+        [Test]
+        public void PrototypeCombatWorldVfxProfile_AssignsShieldAndCcParticleMaterials()
+        {
+            var profile = Resources.Load<CombatWorldVfxProfileSO>("PrototypeCombatWorldVfxProfile");
+
+            Assert.That(profile, Is.Not.Null);
+            Assert.That(profile.shieldImpactEffect.particleMaterial, Is.Not.Null);
+            Assert.That(profile.fearDebuffCastEffect.particleMaterial, Is.Not.Null);
+            Assert.That(profile.darknessDebuffCastEffect.particleMaterial, Is.Not.Null);
+            Assert.That(profile.shieldImpactEffect.swirl, Is.False);
+            Assert.That(profile.fearDebuffCastEffect.swirl, Is.True);
+            Assert.That(profile.darknessDebuffCastEffect.swirl, Is.True);
+
+            AssertColorApproximately(
+                ResolveMaterialColor(profile.shieldImpactEffect.particleMaterial),
+                new Color(0.62f, 0.92f, 1f, 0.96f));
+            AssertColorApproximately(
+                ResolveMaterialColor(profile.fearDebuffCastEffect.particleMaterial),
+                new Color(0.75f, 0.05f, 0.16f, 0.95f));
+            AssertColorApproximately(
+                ResolveMaterialColor(profile.darknessDebuffCastEffect.particleMaterial),
+                new Color(0.40f, 0.12f, 0.78f, 0.95f));
         }
 
         [UnityTest]
@@ -870,6 +909,25 @@ namespace Project2048.Tests
             target.GetType()
                 .GetField(fieldName, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
                 ?.SetValue(target, value);
+        }
+
+        private static Color ResolveMaterialColor(Material material)
+        {
+            Assert.That(material, Is.Not.Null);
+            if (material.HasProperty("_BaseColor"))
+            {
+                return material.GetColor("_BaseColor");
+            }
+
+            return material.HasProperty("_Color") ? material.GetColor("_Color") : material.color;
+        }
+
+        private static void AssertColorApproximately(Color actual, Color expected)
+        {
+            Assert.That(actual.r, Is.EqualTo(expected.r).Within(0.001f));
+            Assert.That(actual.g, Is.EqualTo(expected.g).Within(0.001f));
+            Assert.That(actual.b, Is.EqualTo(expected.b).Within(0.001f));
+            Assert.That(actual.a, Is.EqualTo(expected.a).Within(0.001f));
         }
     }
 }

@@ -8,6 +8,7 @@ using Project2048.Skills;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.EventSystems;
+using UnityEngine.Rendering;
 
 namespace Project2048.Prototype
 {
@@ -29,6 +30,7 @@ namespace Project2048.Prototype
         private const float EnemyAppearWorldShakeMagnitude = 0.06f;
         private const int ShieldImpactParticleCount = 22;
         private const int DebuffCastParticleCount = 28;
+        private const string DefaultWorldVfxProfileResourceName = "PrototypeCombatWorldVfxProfile";
 
         [SerializeField] private PrototypeCombatBootstrap bootstrap;
         [SerializeField] private SpriteRenderer backgroundRenderer;
@@ -42,11 +44,15 @@ namespace Project2048.Prototype
         [SerializeField] private Animator enemyAnimator;
         [SerializeField] private ParticleSystem shieldImpactParticlePrefab;
         [SerializeField] private ParticleSystem debuffCastParticlePrefab;
+        [SerializeField] private CombatWorldVfxProfileSO worldVfxProfile;
         [SerializeField] private WorldShake worldShake;
         [SerializeField] private Transform foregroundShakeRoot;
         [SerializeField] private Color shieldImpactParticleColor = new(0.62f, 0.92f, 1f, 0.96f);
         [SerializeField] private Color fearDebuffParticleColor = new(0.75f, 0.05f, 0.16f, 0.95f);
         [SerializeField] private Color darknessDebuffParticleColor = new(0.40f, 0.12f, 0.78f, 0.95f);
+        [SerializeField] private Material shieldImpactParticleMaterial;
+        [SerializeField] private Material fearDebuffParticleMaterial;
+        [SerializeField] private Material darknessDebuffParticleMaterial;
 
         private CombatManager combatManager;
         private CombatSnapshot snapshot;
@@ -58,6 +64,9 @@ namespace Project2048.Prototype
         private bool hasEnemyRendererRestTransform;
         private bool lastEnemyWasDead;
         private int lastPlayedEnemyDebuffVfxSequence;
+        private Material runtimeShieldImpactParticleMaterial;
+        private Material runtimeFearDebuffParticleMaterial;
+        private Material runtimeDarknessDebuffParticleMaterial;
 
         public void Initialize(PrototypeCombatBootstrap owner)
         {
@@ -66,6 +75,7 @@ namespace Project2048.Prototype
             combatManager = owner != null ? owner.CombatManager : null;
 
             ResolveMissingReferences();
+            ResolveWorldVfxProfile();
             ResolveWorldShake();
             CacheEnemyRendererRestTransform();
             RenderBackground();
@@ -94,6 +104,7 @@ namespace Project2048.Prototype
             ClearEnemyAppearIntro();
             ClearEnemyAttackLunge();
             ClearWorldShake();
+            DestroyRuntimeParticleMaterials();
         }
 
         private void UnbindCombatEvents()
@@ -253,7 +264,7 @@ namespace Project2048.Prototype
 
             lastPlayedEnemyDebuffVfxSequence = cue.Sequence;
             var effect = ResolveCurrentEnemyData()?.FindActionEffect(ResolveDebuffActionId(cue.DebuffType));
-            var hasAuthoredVisual = effect?.vfxPrefab != null || effect?.animationClip != null;
+            var hasAuthoredVisual = effect?.HasAuthoredVisual ?? false;
             PlayCombatantActionEffect(
                 effect,
                 enemyRenderer != null ? enemyRenderer.transform : transform,
@@ -272,15 +283,19 @@ namespace Project2048.Prototype
                 return;
             }
 
+            var effect = ResolveShieldImpactParticleEffect();
             SpawnParticleBurst(
-                shieldImpactParticlePrefab,
+                effect,
                 anchor,
                 "ShieldImpactParticles",
+                shieldImpactParticlePrefab,
                 shieldImpactParticleColor,
+                effect?.particleMaterial != null ? null : ResolveShieldImpactParticleMaterial(),
                 ShieldImpactParticleLifetimeSeconds,
                 ShieldImpactParticleCount,
                 0.78f,
-                0.13f);
+                0.13f,
+                swirl: false);
         }
 
         private EnemySO ResolveCurrentEnemyData()
@@ -322,6 +337,22 @@ namespace Project2048.Prototype
                 {
                     Destroy(instance, lifetime);
                 }
+            }
+
+            if (effect.particleEffect?.HasParticleVisual == true)
+            {
+                SpawnParticleBurst(
+                    effect.particleEffect,
+                    anchor,
+                    "CombatActionParticles",
+                    fallbackPrefab: null,
+                    fallbackColor: Color.white,
+                    fallbackMaterial: null,
+                    fallbackLifetimeSeconds: effect.EffectiveAutoDestroySeconds,
+                    fallbackBurstCount: 16,
+                    fallbackStartSpeed: 0.6f,
+                    fallbackStartSize: 0.12f,
+                    swirl: false);
             }
 
             if (effect.animationClip != null && animator != null && animator.runtimeAnimatorController != null)
@@ -765,15 +796,55 @@ namespace Project2048.Prototype
         private void SpawnDebuffCastParticles(DebuffType debuffType)
         {
             var color = ResolveDebuffParticleColor(debuffType);
+            var effect = ResolveDebuffParticleEffect(debuffType);
             SpawnParticleBurst(
-                debuffCastParticlePrefab,
+                effect,
                 enemyRenderer != null ? enemyRenderer.transform : transform,
                 $"{debuffType}DebuffCastParticles",
+                debuffCastParticlePrefab,
                 color,
+                effect?.particleMaterial != null ? null : ResolveDebuffParticleMaterial(debuffType),
                 DebuffCastParticleLifetimeSeconds,
                 DebuffCastParticleCount,
                 0.62f,
-                0.16f);
+                0.16f,
+                swirl: true);
+        }
+
+        private void SpawnParticleBurst(
+            CombatParticleEffectBinding effect,
+            Transform anchor,
+            string fallbackObjectName,
+            ParticleSystem fallbackPrefab,
+            Color fallbackColor,
+            Material fallbackMaterial,
+            float fallbackLifetimeSeconds,
+            int fallbackBurstCount,
+            float fallbackStartSpeed,
+            float fallbackStartSize,
+            bool swirl)
+        {
+            var prefab = effect?.particlePrefab != null ? effect.particlePrefab : fallbackPrefab;
+            var color = effect != null ? effect.ResolveColor(fallbackColor) : fallbackColor;
+            var material = effect?.particleMaterial != null ? effect.particleMaterial : fallbackMaterial;
+            var objectName = effect?.ResolveObjectName(fallbackObjectName) ?? fallbackObjectName;
+            var lifetimeSeconds = effect != null ? effect.EffectiveLifetimeSeconds : fallbackLifetimeSeconds;
+            var burstCount = effect != null ? effect.EffectiveBurstCount : fallbackBurstCount;
+            var startSpeed = effect != null ? effect.EffectiveStartSpeed : fallbackStartSpeed;
+            var startSize = effect != null ? effect.EffectiveStartSize : fallbackStartSize;
+            var shouldSwirl = effect != null ? effect.swirl : swirl;
+
+            SpawnParticleBurst(
+                prefab,
+                anchor,
+                objectName,
+                color,
+                material,
+                lifetimeSeconds,
+                burstCount,
+                startSpeed,
+                startSize,
+                shouldSwirl);
         }
 
         private void SpawnParticleBurst(
@@ -781,10 +852,12 @@ namespace Project2048.Prototype
             Transform anchor,
             string objectName,
             Color color,
+            Material material,
             float lifetimeSeconds,
             int burstCount,
             float startSpeed,
-            float startSize)
+            float startSize,
+            bool swirl)
         {
             var parent = anchor != null ? anchor : transform;
             var particles = prefab != null
@@ -797,7 +870,7 @@ namespace Project2048.Prototype
 
             particles.gameObject.name = objectName;
             particles.transform.localPosition = Vector3.zero;
-            ConfigureParticleBurst(particles, color, lifetimeSeconds, burstCount, startSpeed, startSize, parent);
+            ConfigureParticleBurst(particles, color, material, lifetimeSeconds, burstCount, startSpeed, startSize, parent, swirl);
             particles.Play(true);
             if (lifetimeSeconds > 0f && Application.isPlaying)
             {
@@ -815,11 +888,13 @@ namespace Project2048.Prototype
         private static void ConfigureParticleBurst(
             ParticleSystem particles,
             Color color,
+            Material material,
             float lifetimeSeconds,
             int burstCount,
             float startSpeed,
             float startSize,
-            Transform anchor)
+            Transform anchor,
+            bool swirl)
         {
             particles.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
             particles.Clear(true);
@@ -845,7 +920,21 @@ namespace Project2048.Prototype
             shape.shapeType = ParticleSystemShapeType.Sphere;
             shape.radius = 0.22f;
 
+            if (swirl)
+            {
+                ConfigureSwirlBurst(particles, lifetimeSeconds);
+            }
+            else
+            {
+                DisableSwirlBurst(particles);
+            }
+
             var renderer = particles.GetComponent<ParticleSystemRenderer>();
+            if (renderer != null && material != null)
+            {
+                renderer.sharedMaterial = material;
+            }
+
             if (renderer == null || anchor == null)
             {
                 return;
@@ -861,6 +950,45 @@ namespace Project2048.Prototype
             renderer.sortingOrder = anchorRenderer.sortingOrder + 2;
         }
 
+        private static void ConfigureSwirlBurst(ParticleSystem particles, float lifetimeSeconds)
+        {
+            var shape = particles.shape;
+            shape.shapeType = ParticleSystemShapeType.Circle;
+            shape.radius = 0.34f;
+            shape.radiusThickness = 0.32f;
+            shape.arc = 360f;
+
+            var velocity = particles.velocityOverLifetime;
+            velocity.enabled = true;
+            velocity.space = ParticleSystemSimulationSpace.Local;
+            velocity.orbitalZ = new ParticleSystem.MinMaxCurve(2.8f, 4.6f);
+            velocity.radial = new ParticleSystem.MinMaxCurve(-0.22f, 0.04f);
+
+            var rotation = particles.rotationOverLifetime;
+            rotation.enabled = true;
+            rotation.separateAxes = true;
+            rotation.z = new ParticleSystem.MinMaxCurve(-Mathf.PI * 1.5f, Mathf.PI * 1.5f);
+
+            var size = particles.sizeOverLifetime;
+            size.enabled = true;
+            size.size = new ParticleSystem.MinMaxCurve(1f, new AnimationCurve(
+                new Keyframe(0f, 0.45f),
+                new Keyframe(Mathf.Clamp01(0.32f / Mathf.Max(0.05f, lifetimeSeconds)), 1.18f),
+                new Keyframe(1f, 0f)));
+        }
+
+        private static void DisableSwirlBurst(ParticleSystem particles)
+        {
+            var velocity = particles.velocityOverLifetime;
+            velocity.enabled = false;
+
+            var rotation = particles.rotationOverLifetime;
+            rotation.enabled = false;
+
+            var size = particles.sizeOverLifetime;
+            size.enabled = false;
+        }
+
         private Color ResolveDebuffParticleColor(DebuffType debuffType)
         {
             return debuffType switch
@@ -869,6 +997,137 @@ namespace Project2048.Prototype
                 DebuffType.Darkness => darknessDebuffParticleColor,
                 _ => shieldImpactParticleColor,
             };
+        }
+
+        private CombatParticleEffectBinding ResolveShieldImpactParticleEffect()
+        {
+            ResolveWorldVfxProfile();
+            return worldVfxProfile != null ? worldVfxProfile.shieldImpactEffect : null;
+        }
+
+        private CombatParticleEffectBinding ResolveDebuffParticleEffect(DebuffType debuffType)
+        {
+            ResolveWorldVfxProfile();
+            return worldVfxProfile != null ? worldVfxProfile.ResolveDebuffCastEffect(debuffType) : null;
+        }
+
+        private Material ResolveShieldImpactParticleMaterial()
+        {
+            return shieldImpactParticleMaterial != null
+                ? shieldImpactParticleMaterial
+                : runtimeShieldImpactParticleMaterial ??= CreateParticleMaterial(
+                    "ShieldImpactParticleMaterial",
+                    shieldImpactParticleColor);
+        }
+
+        private Material ResolveDebuffParticleMaterial(DebuffType debuffType)
+        {
+            return debuffType switch
+            {
+                DebuffType.Fear => fearDebuffParticleMaterial != null
+                    ? fearDebuffParticleMaterial
+                    : runtimeFearDebuffParticleMaterial ??= CreateParticleMaterial(
+                        "FearDebuffParticleMaterial",
+                        fearDebuffParticleColor),
+                DebuffType.Darkness => darknessDebuffParticleMaterial != null
+                    ? darknessDebuffParticleMaterial
+                    : runtimeDarknessDebuffParticleMaterial ??= CreateParticleMaterial(
+                        "DarknessDebuffParticleMaterial",
+                        darknessDebuffParticleColor),
+                _ => ResolveShieldImpactParticleMaterial(),
+            };
+        }
+
+        private static Material CreateParticleMaterial(string materialName, Color color)
+        {
+            var shader = Shader.Find("Universal Render Pipeline/Particles/Unlit")
+                ?? Shader.Find("Particles/Standard Unlit")
+                ?? Shader.Find("Sprites/Default")
+                ?? Shader.Find("Universal Render Pipeline/Unlit");
+            if (shader == null)
+            {
+                return null;
+            }
+
+            var material = new Material(shader)
+            {
+                name = materialName,
+                renderQueue = (int)RenderQueue.Transparent,
+            };
+            ApplyParticleMaterialColor(material, color);
+            return material;
+        }
+
+        private static void ApplyParticleMaterialColor(Material material, Color color)
+        {
+            if (material == null)
+            {
+                return;
+            }
+
+            if (material.HasProperty("_BaseColor"))
+            {
+                material.SetColor("_BaseColor", color);
+            }
+
+            if (material.HasProperty("_Color"))
+            {
+                material.SetColor("_Color", color);
+            }
+
+            if (material.HasProperty("_TintColor"))
+            {
+                material.SetColor("_TintColor", color);
+            }
+
+            if (material.HasProperty("_Surface"))
+            {
+                material.SetFloat("_Surface", 1f);
+            }
+
+            if (material.HasProperty("_SrcBlend"))
+            {
+                material.SetFloat("_SrcBlend", (float)BlendMode.SrcAlpha);
+            }
+
+            if (material.HasProperty("_DstBlend"))
+            {
+                material.SetFloat("_DstBlend", (float)BlendMode.OneMinusSrcAlpha);
+            }
+
+            if (material.HasProperty("_ZWrite"))
+            {
+                material.SetFloat("_ZWrite", 0f);
+            }
+
+            material.EnableKeyword("_ALPHABLEND_ON");
+            material.EnableKeyword("_SURFACE_TYPE_TRANSPARENT");
+        }
+
+        private void DestroyRuntimeParticleMaterials()
+        {
+            DestroyRuntimeMaterial(ref runtimeShieldImpactParticleMaterial);
+            DestroyRuntimeMaterial(ref runtimeFearDebuffParticleMaterial);
+            DestroyRuntimeMaterial(ref runtimeDarknessDebuffParticleMaterial);
+        }
+
+        private static void DestroyRuntimeMaterial(ref Material material)
+        {
+            if (material == null)
+            {
+                return;
+            }
+
+            if (Application.isPlaying)
+            {
+                Destroy(material);
+            }
+            else
+            {
+                DestroyImmediate(material);
+            }
+
+            material = null;
         }
 
         private static string ResolveDebuffActionId(DebuffType debuffType)
@@ -941,6 +1200,14 @@ namespace Project2048.Prototype
             if (enemyAnimator == null && enemyRenderer != null)
             {
                 enemyAnimator = enemyRenderer.GetComponent<Animator>();
+            }
+        }
+
+        private void ResolveWorldVfxProfile()
+        {
+            if (worldVfxProfile == null)
+            {
+                worldVfxProfile = Resources.Load<CombatWorldVfxProfileSO>(DefaultWorldVfxProfileResourceName);
             }
         }
 

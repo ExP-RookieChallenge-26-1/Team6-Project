@@ -1,0 +1,47 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac6d36361b9c44f38b64b0318e34a9a2, type: 3}
+  m_Name: PrototypeCombatWorldVfxProfile
+  m_EditorClassIdentifier: Game.Core::Project2048.Prototype.CombatWorldVfxProfileSO
+  shieldImpactEffect:
+    objectName: ShieldImpactParticles
+    particlePrefab: {fileID: 0}
+    particleMaterial: {fileID: 2100000, guid: a5a4f5b9bc0f42af8d3c52df445df941, type: 2}
+    useParticleColor: 1
+    particleColor: {r: 0.62, g: 0.92, b: 1, a: 0.96}
+    lifetimeSeconds: 0.8
+    burstCount: 22
+    startSpeed: 0.78
+    startSize: 0.13
+    swirl: 0
+  fearDebuffCastEffect:
+    objectName: FearDebuffCastParticles
+    particlePrefab: {fileID: 0}
+    particleMaterial: {fileID: 2100000, guid: e3c729c7f6bb4aa78ff3c8a385a4762f, type: 2}
+    useParticleColor: 1
+    particleColor: {r: 0.75, g: 0.05, b: 0.16, a: 0.95}
+    lifetimeSeconds: 0.9
+    burstCount: 28
+    startSpeed: 0.62
+    startSize: 0.16
+    swirl: 1
+  darknessDebuffCastEffect:
+    objectName: DarknessDebuffCastParticles
+    particlePrefab: {fileID: 0}
+    particleMaterial: {fileID: 2100000, guid: 9dc2d6350ec44e5ba1f2dfbc1762b0d2, type: 2}
+    useParticleColor: 1
+    particleColor: {r: 0.4, g: 0.12, b: 0.78, a: 0.95}
+    lifetimeSeconds: 0.9
+    burstCount: 28
+    startSpeed: 0.62
+    startSize: 0.16
+    swirl: 1

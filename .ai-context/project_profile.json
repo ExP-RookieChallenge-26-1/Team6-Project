@@ -2,25 +2,25 @@
   "project_name": "unknown",
   "language": "C#",
   "engine_guess": "Unity",
-  "total_cs_files": 91,
-  "mono_behaviour_files": 28,
-  "scriptable_object_files": 8,
-  "files_with_update": 2,
+  "total_cs_files": 101,
+  "mono_behaviour_files": 31,
+  "scriptable_object_files": 11,
+  "files_with_update": 3,
   "files_with_fixed_update": 0,
-  "files_with_late_update": 1,
-  "singleton_candidates": 1,
-  "manager_like_classes": 28,
-  "ui_related_classes": 30,
-  "save_load_related_classes": 29,
+  "files_with_late_update": 2,
+  "singleton_candidates": 3,
+  "manager_like_classes": 32,
+  "ui_related_classes": 36,
+  "save_load_related_classes": 36,
   "role_counts": {
-    "ui": 30,
-    "save-load": 29,
-    "runtime": 35,
-    "player": 50,
-    "data": 36,
-    "combat": 60,
-    "manager": 27,
-    "scene": 6,
+    "ui": 36,
+    "combat": 67,
+    "data": 38,
+    "save-load": 36,
+    "player": 52,
+    "manager": 31,
+    "scene": 9,
+    "runtime": 40,
     "inventory": 2,
     "network": 2
   },
@@ -38,9 +38,21 @@
       "referenced_type_count": 200
     },
     {
+      "class_name": "CombatPresentationEffectTests",
+      "file_id": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+      "relation_count": 214,
+      "referenced_type_count": 200
+    },
+    {
+      "class_name": "CombatWorldSpriteView",
+      "file_id": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+      "relation_count": 211,
+      "referenced_type_count": 200
+    },
+    {
       "class_name": "CombatUiViewTests",
       "file_id": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
-      "relation_count": 213,
+      "relation_count": 211,
       "referenced_type_count": 200
     },
     {
@@ -62,28 +74,16 @@
       "referenced_type_count": 120
     },
     {
+      "class_name": "AudioMixerStructureTests",
+      "file_id": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+      "relation_count": 112,
+      "referenced_type_count": 107
+    },
+    {
       "class_name": "SelectedMonsterRosterBuilder",
       "file_id": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
       "relation_count": 98,
       "referenced_type_count": 95
-    },
-    {
-      "class_name": "Board2048Manager",
-      "file_id": "Project 2048/Assets/Scripts/Board2048/Board2048Manager.cs",
-      "relation_count": 83,
-      "referenced_type_count": 79
-    },
-    {
-      "class_name": "MainMenuControllerTests",
-      "file_id": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
-      "relation_count": 83,
-      "referenced_type_count": 78
-    },
-    {
-      "class_name": "CombatWorldSpriteView",
-      "file_id": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
-      "relation_count": 81,
-      "referenced_type_count": 77
     }
   ],
   "high_risk_classes": [
@@ -150,6 +150,7 @@
         "find-heavy",
         "magic-number-heavy",
         "large-class",
+        "save-load-sensitive",
         "ui-runtime-mixed",
         "state-owner"
       ],
@@ -159,7 +160,79 @@
         "Find 계열 탐색 사용",
         "숫자 리터럴이 많아 의미 파악이 어려울 수 있음",
         "파일/메서드/필드 수가 많아 책임이 커질 가능성",
+        "저장/불러오기 관련 로직 포함",
         "UI와 런타임 책임이 한 파일에 섞였을 가능성",
+        "상태 중심 또는 관리 중심 클래스일 가능성"
+      ],
+      "risk_score": 95
+    },
+    {
+      "file_id": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioRouter.cs",
+      "class_name": "ButtonClickAudioRouter",
+      "risk_flags": [
+        "update-heavy",
+        "high-coupling",
+        "getcomponent-heavy",
+        "magic-number-heavy",
+        "init-order-sensitive",
+        "save-load-sensitive",
+        "ui-runtime-mixed",
+        "state-owner"
+      ],
+      "risk_reasons": [
+        "Unity 업데이트 루프 사용",
+        "참조 타입 또는 관계 수가 많음",
+        "GetComponent/TryGetComponent 호출이 많음",
+        "숫자 리터럴이 많아 의미 파악이 어려울 수 있음",
+        "초기화 순서에 민감할 가능성",
+        "저장/불러오기 관련 로직 포함",
+        "UI와 런타임 책임이 한 파일에 섞였을 가능성",
+        "상태 중심 또는 관리 중심 클래스일 가능성"
+      ],
+      "risk_score": 88
+    },
+    {
+      "file_id": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+      "class_name": "CombatPresentationEffectTests",
+      "risk_flags": [
+        "high-coupling",
+        "getcomponent-heavy",
+        "find-heavy",
+        "magic-number-heavy",
+        "large-class",
+        "save-load-sensitive",
+        "state-owner"
+      ],
+      "risk_reasons": [
+        "참조 타입 또는 관계 수가 많음",
+        "GetComponent/TryGetComponent 호출이 많음",
+        "Find 계열 탐색 사용",
+        "숫자 리터럴이 많아 의미 파악이 어려울 수 있음",
+        "파일/메서드/필드 수가 많아 책임이 커질 가능성",
+        "저장/불러오기 관련 로직 포함",
+        "상태 중심 또는 관리 중심 클래스일 가능성"
+      ],
+      "risk_score": 85
+    },
+    {
+      "file_id": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+      "class_name": "CombatWorldSpriteView",
+      "risk_flags": [
+        "high-coupling",
+        "public-field-heavy",
+        "getcomponent-heavy",
+        "find-heavy",
+        "magic-number-heavy",
+        "large-class",
+        "state-owner"
+      ],
+      "risk_reasons": [
+        "참조 타입 또는 관계 수가 많음",
+        "public 필드 노출 수가 많음",
+        "GetComponent/TryGetComponent 호출이 많음",
+        "Find 계열 탐색 사용",
+        "숫자 리터럴이 많아 의미 파악이 어려울 수 있음",
+        "파일/메서드/필드 수가 많아 책임이 커질 가능성",
         "상태 중심 또는 관리 중심 클래스일 가능성"
       ],
       "risk_score": 83
@@ -188,7 +261,7 @@
       "risk_score": 83
     },
     {
-      "file_id": "Project 2048/Assets/Scripts/Core/LoadingUI.cs",
+      "file_id": "Project 2048/Assets/Scripts/UI/Loading/LoadingUI.cs",
       "class_name": "LoadingUI",
       "risk_flags": [
         "update-heavy",
@@ -211,31 +284,31 @@
       "risk_score": 76
     },
     {
-      "file_id": "MineFind/CellMaker.cs",
-      "class_name": "CellMaker",
+      "file_id": "Project 2048/Assets/Scripts/Audio/Project2048AudioBootstrap.cs",
+      "class_name": "Project2048AudioBootstrap",
       "risk_flags": [
+        "singleton-candidate",
         "high-coupling",
-        "public-field-heavy",
-        "getcomponent-heavy",
-        "magic-number-heavy",
+        "find-heavy",
         "save-load-sensitive",
+        "ui-runtime-mixed",
         "state-owner"
       ],
       "risk_reasons": [
+        "Instance 또는 DontDestroyOnLoad 패턴 감지",
         "참조 타입 또는 관계 수가 많음",
-        "public 필드 노출 수가 많음",
-        "GetComponent/TryGetComponent 호출이 많음",
-        "숫자 리터럴이 많아 의미 파악이 어려울 수 있음",
+        "Find 계열 탐색 사용",
         "저장/불러오기 관련 로직 포함",
+        "UI와 런타임 책임이 한 파일에 섞였을 가능성",
         "상태 중심 또는 관리 중심 클래스일 가능성"
       ],
-      "risk_score": 68
+      "risk_score": 75
     },
     {
-      "file_id": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
-      "class_name": "MainMenuController",
+      "file_id": "Project 2048/Assets/Scripts/Audio/PersistentBgmPlayer.cs",
+      "class_name": "PersistentBgmPlayer",
       "risk_flags": [
-        "update-heavy",
+        "singleton-candidate",
         "high-coupling",
         "init-order-sensitive",
         "save-load-sensitive",
@@ -243,75 +316,19 @@
         "state-owner"
       ],
       "risk_reasons": [
-        "Unity 업데이트 루프 사용",
+        "Instance 또는 DontDestroyOnLoad 패턴 감지",
         "참조 타입 또는 관계 수가 많음",
         "초기화 순서에 민감할 가능성",
         "저장/불러오기 관련 로직 포함",
         "UI와 런타임 책임이 한 파일에 섞였을 가능성",
         "상태 중심 또는 관리 중심 클래스일 가능성"
       ],
-      "risk_score": 68
-    },
-    {
-      "file_id": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
-      "class_name": "CombatWorldSpriteView",
-      "risk_flags": [
-        "high-coupling",
-        "getcomponent-heavy",
-        "find-heavy",
-        "large-class",
-        "state-owner"
-      ],
-      "risk_reasons": [
-        "참조 타입 또는 관계 수가 많음",
-        "GetComponent/TryGetComponent 호출이 많음",
-        "Find 계열 탐색 사용",
-        "파일/메서드/필드 수가 많아 책임이 커질 가능성",
-        "상태 중심 또는 관리 중심 클래스일 가능성"
-      ],
-      "risk_score": 65
-    },
-    {
-      "file_id": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
-      "class_name": "MainMenuControllerTests",
-      "risk_flags": [
-        "high-coupling",
-        "getcomponent-heavy",
-        "find-heavy",
-        "save-load-sensitive",
-        "state-owner"
-      ],
-      "risk_reasons": [
-        "참조 타입 또는 관계 수가 많음",
-        "GetComponent/TryGetComponent 호출이 많음",
-        "Find 계열 탐색 사용",
-        "저장/불러오기 관련 로직 포함",
-        "상태 중심 또는 관리 중심 클래스일 가능성"
-      ],
-      "risk_score": 62
-    },
-    {
-      "file_id": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
-      "class_name": "CombatManager",
-      "risk_flags": [
-        "high-coupling",
-        "large-class",
-        "init-order-sensitive",
-        "ui-runtime-mixed",
-        "state-owner"
-      ],
-      "risk_reasons": [
-        "참조 타입 또는 관계 수가 많음",
-        "파일/메서드/필드 수가 많아 책임이 커질 가능성",
-        "초기화 순서에 민감할 가능성",
-        "UI와 런타임 책임이 한 파일에 섞였을 가능성",
-        "상태 중심 또는 관리 중심 클래스일 가능성"
-      ],
-      "risk_score": 61
+      "risk_score": 73
     }
   ],
   "common_patterns": [
     "Manager 성격 클래스 다수",
+    "싱글톤 후보 클래스 다수",
     "고결합 클래스 존재"
   ]
 }

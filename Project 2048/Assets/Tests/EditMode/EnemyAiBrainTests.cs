@@ -132,6 +132,58 @@ namespace Project2048.Tests
             Assert.That(enhancedEnemy.CurrentIntent.value, Is.GreaterThan(normalEnemy.CurrentIntent.value));
         }
 
+        [Test]
+        public void SetNextIntents_UsesConsecutivePatternEntriesForPreview()
+        {
+            var enemy = CreateEnemy("MultiActionEnemy");
+            var data = CreateEnemyData();
+            data.intentPattern = new List<EnemyIntent>
+            {
+                new()
+                {
+                    intentType = EnemyIntentType.Attack,
+                    value = 9,
+                },
+                new()
+                {
+                    intentType = EnemyIntentType.Defense,
+                    value = 5,
+                },
+                new()
+                {
+                    intentType = EnemyIntentType.Debuff,
+                    debuffType = DebuffType.Fear,
+                    value = 2,
+                },
+            };
+            SetEnemyActionsPerTurn(data, 2);
+            enemy.Init(data);
+
+            var system = new EnemyIntentSystem(new System.Random(1));
+            var setNextIntents = typeof(EnemyIntentSystem).GetMethod(
+                "SetNextIntents",
+                new[] { typeof(EnemyController), typeof(int) });
+            Assert.That(setNextIntents, Is.Not.Null, "EnemyIntentSystem should expose SetNextIntents for multi-action previews.");
+
+            setNextIntents.Invoke(system, new object[] { enemy, 2 });
+            var firstPreview = GetCurrentIntents(enemy);
+
+            Assert.That(firstPreview.Count, Is.EqualTo(2));
+            Assert.That(firstPreview[0].intentType, Is.EqualTo(EnemyIntentType.Attack));
+            Assert.That(firstPreview[0].value, Is.EqualTo(9));
+            Assert.That(firstPreview[1].intentType, Is.EqualTo(EnemyIntentType.Defense));
+            Assert.That(firstPreview[1].value, Is.EqualTo(5));
+            Assert.That(enemy.CurrentIntent.intentType, Is.EqualTo(EnemyIntentType.Attack));
+
+            setNextIntents.Invoke(system, new object[] { enemy, 2 });
+            var secondPreview = GetCurrentIntents(enemy);
+
+            Assert.That(secondPreview.Count, Is.EqualTo(2));
+            Assert.That(secondPreview[0].intentType, Is.EqualTo(EnemyIntentType.Debuff));
+            Assert.That(secondPreview[0].debuffType, Is.EqualTo(DebuffType.Fear));
+            Assert.That(secondPreview[1].intentType, Is.EqualTo(EnemyIntentType.Attack));
+        }
+
         private EnemyController CreateEnemy(string name)
         {
             var gameObject = new GameObject(name);
@@ -172,6 +224,20 @@ namespace Project2048.Tests
             }
 
             return (attacks, defenses);
+        }
+
+        private static void SetEnemyActionsPerTurn(EnemySO data, int count)
+        {
+            var field = typeof(EnemySO).GetField("actionsPerTurn");
+            Assert.That(field, Is.Not.Null, "EnemySO should expose actionsPerTurn for per-enemy multi-action tuning.");
+            field.SetValue(data, count);
+        }
+
+        private static IReadOnlyList<EnemyIntent> GetCurrentIntents(EnemyController enemy)
+        {
+            var property = typeof(EnemyController).GetProperty("CurrentIntents");
+            Assert.That(property, Is.Not.Null, "EnemyController should expose all previewed intents.");
+            return (IReadOnlyList<EnemyIntent>)property.GetValue(enemy);
         }
     }
 }

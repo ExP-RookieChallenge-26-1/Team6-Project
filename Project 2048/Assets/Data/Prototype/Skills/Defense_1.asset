@@ -20,4 +20,13 @@ MonoBehaviour:
   targetAttackModifier: 0
   selfDefenseBonus: 0
   icon: {fileID: 0}
+  activationEffect:
+    sfxClip: {fileID: 8300000, guid: 4806a612105a8b74ab54ad19a7060ec3, type: 3}
+    vfxPrefab: {fileID: 0}
+    animationClip: {fileID: 0}
+    volumeScale: 1
+    minPitch: 1
+    maxPitch: 1
+    localOffset: {x: 0, y: 0, z: 0}
+    autoDestroySeconds: 1.25
   description: "\uBC29\uC5B4\uB3C4 3\uC744 \uC5BB\uB294\uB2E4."

@@ -1,11 +1,12 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Project2048.Enemy
 {
     public class EnemyController : MonoBehaviour
     {
-        private EnemyIntent baseIntent;
+        private readonly List<EnemyIntent> baseIntents = new();
 
         public EnemySO Data { get; private set; }
         public int MaxHp { get; private set; }
@@ -14,6 +15,7 @@ namespace Project2048.Enemy
         public int AttackModifier { get; private set; }
         public bool IsDead => CurrentHp <= 0;
         public EnemyIntent CurrentIntent { get; private set; }
+        public IReadOnlyList<EnemyIntent> CurrentIntents { get; private set; } = Array.Empty<EnemyIntent>();
 
         public event Action<int, int> OnHpChanged;
         public event Action<int> OnBlockChanged;
@@ -34,8 +36,9 @@ namespace Project2048.Enemy
             CurrentHp = MaxHp;
             Block = 0;
             AttackModifier = 0;
-            baseIntent = null;
+            baseIntents.Clear();
             CurrentIntent = null;
+            CurrentIntents = Array.Empty<EnemyIntent>();
 
             OnHpChanged?.Invoke(CurrentHp, MaxHp);
             OnBlockChanged?.Invoke(Block);
@@ -97,7 +100,23 @@ namespace Project2048.Enemy
 
         public void SetIntent(EnemyIntent intent)
         {
-            baseIntent = intent?.Clone();
+            SetIntents(intent != null ? new[] { intent } : null);
+        }
+
+        public void SetIntents(IEnumerable<EnemyIntent> intents)
+        {
+            baseIntents.Clear();
+            if (intents != null)
+            {
+                foreach (var intent in intents)
+                {
+                    if (intent != null)
+                    {
+                        baseIntents.Add(intent.Clone());
+                    }
+                }
+            }
+
             RefreshIntentPreview();
         }
 
@@ -114,12 +133,25 @@ namespace Project2048.Enemy
 
         private void RefreshIntentPreview()
         {
-            CurrentIntent = baseIntent?.Clone();
-            if (CurrentIntent != null && CurrentIntent.intentType == EnemyIntentType.Attack)
+            var currentIntents = new List<EnemyIntent>(baseIntents.Count);
+            foreach (var baseIntent in baseIntents)
             {
-                CurrentIntent.value = Mathf.Max(0, CurrentIntent.value + AttackModifier);
+                var currentIntent = baseIntent?.Clone();
+                if (currentIntent == null)
+                {
+                    continue;
+                }
+
+                if (currentIntent.intentType == EnemyIntentType.Attack)
+                {
+                    currentIntent.value = Mathf.Max(0, currentIntent.value + AttackModifier);
+                }
+
+                currentIntents.Add(currentIntent);
             }
 
+            CurrentIntents = currentIntents;
+            CurrentIntent = currentIntents.Count > 0 ? currentIntents[0] : null;
             OnIntentChanged?.Invoke(CurrentIntent);
         }
 

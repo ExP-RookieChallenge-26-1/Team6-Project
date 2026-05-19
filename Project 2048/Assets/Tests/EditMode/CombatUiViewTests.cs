@@ -1,4 +1,6 @@
+using System.Collections;
 using NUnit.Framework;
+using Project2048.Audio;
 using Project2048.Board2048;
 using Project2048.Combat;
 using Project2048.Enemy;
@@ -8,6 +10,7 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.TestTools;
 using UnityEngine.UI;
 
 namespace Project2048.Tests
@@ -175,6 +178,174 @@ namespace Project2048.Tests
         }
 
         [Test]
+        public void EnemyDeath_HidesEnemyHpRoot()
+        {
+            var viewObject = CreateOwnedGameObject("CombatView");
+            var view = viewObject.AddComponent<CombatUiView>();
+            var enemyHp = CreateImageChild(viewObject.transform, "EnemyHp");
+            CreateImageChild(enemyHp.transform, "Fill");
+            CreateTextChild(enemyHp.transform, "Text");
+            var manager = CreateOwnedGameObject("CombatManager").AddComponent<CombatManager>();
+            var player = CreateOwnedGameObject("Player").AddComponent<PlayerCombatController>();
+            var enemy = CreateOwnedGameObject("Enemy").AddComponent<EnemyController>();
+            var bootstrap = CreateOwnedGameObject("Bootstrap").AddComponent<PrototypeCombatBootstrap>();
+            var attack = CreateSkill("attack", "검격", SkillType.Attack, cost: 0, power: 99);
+            var playerData = CreatePlayerData(20, 0, attack);
+            var enemyData = CreateEnemyData("슬라임", 10, 0);
+
+            SetPrivateField(bootstrap, "combatManager", manager);
+            manager.SetCombatants(player, new[] { enemy });
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new System.Collections.Generic.List<EnemySO> { enemyData },
+                boardMoveCount = 1,
+            });
+            manager.ResolveBoardPhase();
+            view.Initialize(bootstrap);
+
+            Assert.That(enemyHp.gameObject.activeSelf, Is.True);
+
+            Assert.That(manager.RequestUseSkill(attack, enemy), Is.True);
+
+            Assert.That(enemy.IsDead, Is.True);
+            Assert.That(enemyHp.gameObject.activeSelf, Is.False);
+        }
+
+        [Test]
+        public void HpBarDamageTrail_HoldsPreviousHpRatioWhenDamageLands()
+        {
+            var viewObject = CreateOwnedGameObject("CombatView");
+            var view = viewObject.AddComponent<CombatUiView>();
+            var playerBattleHp = CreateImageChild(viewObject.transform, "PlayerBattleHp");
+            var playerBattleHpFill = CreateImageChild(playerBattleHp.transform, "Fill");
+            CreateTextChild(playerBattleHp.transform, "Text");
+            var enemyHp = CreateImageChild(viewObject.transform, "EnemyHp");
+            CreateImageChild(enemyHp.transform, "Fill");
+            CreateTextChild(enemyHp.transform, "Text");
+            var boardHpFill = CreateImageChild(viewObject.transform, "HpBarFill");
+            CreateTextChild(viewObject.transform, "HpText");
+
+            var manager = CreateOwnedGameObject("CombatManager").AddComponent<CombatManager>();
+            var player = CreateOwnedGameObject("Player").AddComponent<PlayerCombatController>();
+            var enemy = CreateOwnedGameObject("Enemy").AddComponent<EnemyController>();
+            var bootstrap = CreateOwnedGameObject("Bootstrap").AddComponent<PrototypeCombatBootstrap>();
+            SetPrivateField(bootstrap, "combatManager", manager);
+
+            var playerData = CreatePlayerData(20, 0);
+            var enemyData = CreateEnemyData("슬라임", 10, 0);
+            manager.SetCombatants(player, new[] { enemy });
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new System.Collections.Generic.List<EnemySO> { enemyData },
+                boardMoveCount = 1,
+            });
+
+            view.Initialize(bootstrap);
+            player.TakeDamage(4);
+
+            var battleTrail = playerBattleHp.transform.Find("DamageTrailFill")?.GetComponent<Image>();
+            var boardTrail = boardHpFill.transform.Find("DamageTrailFill")?.GetComponent<Image>();
+            Assert.That(battleTrail, Is.Not.Null);
+            Assert.That(boardTrail, Is.Not.Null);
+            Assert.That(playerBattleHpFill.rectTransform.anchorMax.x, Is.EqualTo(0.8f).Within(0.001f));
+            Assert.That(battleTrail.rectTransform.anchorMax.x, Is.EqualTo(1f).Within(0.001f));
+            Assert.That(boardHpFill.rectTransform.anchorMax.x, Is.EqualTo(0.8f).Within(0.001f));
+            Assert.That(boardTrail.rectTransform.anchorMax.x, Is.EqualTo(1f).Within(0.001f));
+            Assert.That(battleTrail.transform.GetSiblingIndex(), Is.LessThan(playerBattleHpFill.transform.GetSiblingIndex()));
+        }
+
+        [UnityTest]
+        public IEnumerator EnemyAppear_KeepsUiRootStill()
+        {
+            var viewObject = CreateOwnedRectTransformObject("CombatView");
+            var view = viewObject.AddComponent<CombatUiView>();
+            var manager = CreateOwnedGameObject("CombatManager").AddComponent<CombatManager>();
+            var player = CreateOwnedGameObject("Player").AddComponent<PlayerCombatController>();
+            var enemy = CreateOwnedGameObject("Enemy").AddComponent<EnemyController>();
+            var bootstrap = CreateOwnedGameObject("Bootstrap").AddComponent<PrototypeCombatBootstrap>();
+            SetPrivateField(bootstrap, "combatManager", manager);
+
+            var playerData = CreatePlayerData(20, 0);
+            var enemyData = CreateEnemyData("슬라임", 10, 0);
+            manager.SetCombatants(player, new[] { enemy });
+
+            view.Initialize(bootstrap);
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new System.Collections.Generic.List<EnemySO> { enemyData },
+                boardMoveCount = 1,
+            });
+
+            if (!Application.isPlaying)
+            {
+                yield break;
+            }
+
+            yield return null;
+
+            Assert.That(viewObject.transform.localPosition, Is.EqualTo(Vector3.zero));
+        }
+
+        [Test]
+        public void ObstacleCellColor_UsesDarknessDebuffColor()
+        {
+            var viewObject = CreateOwnedGameObject("CombatView");
+            var view = viewObject.AddComponent<CombatUiView>();
+
+            var obstacleColor = (Color)InvokePrivate(view, "GetCellColor", Board2048Manager.ObstacleValue);
+
+            Assert.That(obstacleColor, Is.EqualTo(new Color(0.20f, 0.07f, 0.34f, 1f)));
+        }
+
+        [Test]
+        public void Initialize_RendersTwoEnemyIntentsWhenEnemyCanActTwice()
+        {
+            var viewObject = CreateOwnedGameObject("CombatView");
+            var view = viewObject.AddComponent<CombatUiView>();
+            CreateImageChild(viewObject.transform, "IntentBubble");
+            var intentText = CreateTextChild(viewObject.transform.Find("IntentBubble"), "IntentBubbleText");
+
+            var manager = CreateOwnedGameObject("CombatManager").AddComponent<CombatManager>();
+            var player = CreateOwnedGameObject("Player").AddComponent<PlayerCombatController>();
+            var enemy = CreateOwnedGameObject("Enemy").AddComponent<EnemyController>();
+            var bootstrap = CreateOwnedGameObject("Bootstrap").AddComponent<PrototypeCombatBootstrap>();
+            SetPrivateField(bootstrap, "combatManager", manager);
+
+            var playerData = CreatePlayerData(20, 0);
+            var enemyData = CreateEnemyData("Multi", 10, 4);
+            enemyData.intentPattern = new System.Collections.Generic.List<EnemyIntent>
+            {
+                new()
+                {
+                    intentType = EnemyIntentType.Attack,
+                    value = 4,
+                },
+                new()
+                {
+                    intentType = EnemyIntentType.Defense,
+                    value = 3,
+                },
+            };
+            SetEnemyActionsPerTurn(enemyData, 2);
+
+            manager.SetCombatants(player, new[] { enemy });
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new System.Collections.Generic.List<EnemySO> { enemyData },
+                boardMoveCount = 1,
+            });
+
+            view.Initialize(bootstrap);
+
+            Assert.That(intentText.text, Is.EqualTo(
+                $"{PrototypeCombatText.FormatIntent(enemyData.intentPattern[0])}\n{PrototypeCombatText.FormatIntent(enemyData.intentPattern[1])}"));
+        }
+
+        [Test]
         public void Initialize_BuildsBlockAndStatusEffectUiAroundHpBars()
         {
             var viewObject = CreateOwnedGameObject("CombatView");
@@ -243,6 +414,9 @@ namespace Project2048.Tests
             Assert.That(fearChip, Is.Not.Null);
             Assert.That(boardFearChip, Is.Not.Null);
             Assert.That(attackChip, Is.Not.Null);
+            Assert.That(fearChip.GetComponent<Image>().color, Is.EqualTo(new Color(0.45f, 0.03f, 0.06f, 0.95f)));
+            Assert.That(boardFearChip.GetComponent<Image>().color, Is.EqualTo(new Color(0.45f, 0.03f, 0.06f, 0.95f)));
+            Assert.That(attackChip.GetComponent<Image>().color, Is.EqualTo(new Color(0.85f, 0.12f, 0.12f, 0.95f)));
             Assert.That(fearChip.GetComponentInChildren<TMPro.TMP_Text>(true), Is.Null);
             Assert.That(boardFearChip.GetComponentInChildren<TMPro.TMP_Text>(true), Is.Null);
             Assert.That(attackChip.GetComponentInChildren<TMPro.TMP_Text>(true), Is.Null);
@@ -383,7 +557,7 @@ namespace Project2048.Tests
         }
 
         [Test]
-        public void Initialize_ConfiguresAudioSourceForAudibleUiSfx()
+        public void Initialize_ConfiguresAudioSourceForAudibleBoardEffects()
         {
             var viewObject = CreateOwnedGameObject("CombatView");
             var source = viewObject.AddComponent<AudioSource>();
@@ -403,112 +577,48 @@ namespace Project2048.Tests
             Assert.That(source.mute, Is.False);
             Assert.That(source.minDistance, Is.GreaterThanOrEqualTo(1000f));
             Assert.That(source.maxDistance, Is.GreaterThanOrEqualTo(1000f));
-            Assert.That((float)GetPrivateField(view, "soundVolumeScale"), Is.EqualTo(3f).Within(0.001f));
         }
 
         [Test]
-        public void Initialize_PreservesPositiveInspectorSoundVolumeScale()
+        public void BindButton_ReattachesButtonClickAudioAfterReplacingRuntimeListeners()
         {
-            var viewObject = CreateOwnedGameObject("CombatView");
-            viewObject.AddComponent<AudioSource>();
-            var view = viewObject.AddComponent<CombatUiView>();
-            SetPrivateField(view, "soundVolumeScale", 1.5f);
+            var settings = AssetDatabase.LoadAssetAtPath<Project2048AudioSettings>(
+                "Assets/Resources/Audio/Project2048AudioSettings.asset");
+            var audioRoot = CreateOwnedGameObject("ButtonAudioRoot");
+            var router = audioRoot.AddComponent<ButtonClickAudioRouter>();
+            var view = CreateOwnedGameObject("CombatView").AddComponent<CombatUiView>();
+            var buttonObject = CreateOwnedGameObject("RuntimeCombatButton");
+            buttonObject.AddComponent<Image>();
+            var button = buttonObject.AddComponent<Button>();
+            var handlerCount = 0;
+            var playCount = 0;
 
-            view.Initialize(null);
+            Assert.That(settings, Is.Not.Null);
+            Assert.That(settings.ButtonClickClip, Is.Not.Null);
 
-            Assert.That((float)GetPrivateField(view, "soundVolumeScale"), Is.EqualTo(1.5f).Within(0.001f));
+            ButtonClickAudioRouter.ButtonClickPlayed += CountPlay;
+            try
+            {
+                router.Initialize(settings);
+                InvokePrivate(view, "BindButton", button, (System.Action)(() => handlerCount++));
+                button.onClick.Invoke();
+            }
+            finally
+            {
+                ButtonClickAudioRouter.ButtonClickPlayed -= CountPlay;
+            }
+
+            Assert.That(playCount, Is.EqualTo(1));
+            Assert.That(handlerCount, Is.EqualTo(1));
+
+            void CountPlay()
+            {
+                playCount++;
+            }
         }
 
         [Test]
-        public void AudioRouter_EmitsHitAndMergeCuesFromCombatChanges()
-        {
-            var router = new PrototypeCombatAudioRouter();
-            router.Reset(new CombatSnapshot
-            {
-                Player = new PlayerCombatSnapshot { CurrentHp = 20, MaxHp = 20 },
-                Enemies = new System.Collections.Generic.List<EnemyCombatSnapshot>
-                {
-                    new() { EnemyIndex = 0, CurrentHp = 10, MaxHp = 10 },
-                },
-            });
-
-            var cues = router.GetSnapshotCues(new CombatSnapshot
-            {
-                Player = new PlayerCombatSnapshot { CurrentHp = 16, MaxHp = 20 },
-                Enemies = new System.Collections.Generic.List<EnemyCombatSnapshot>
-                {
-                    new() { EnemyIndex = 0, CurrentHp = 4, MaxHp = 10 },
-                },
-            });
-
-            Assert.That(cues, Does.Contain(PrototypeCombatSoundCue.PlayerHit));
-            Assert.That(cues, Does.Contain(PrototypeCombatSoundCue.EnemyHit));
-
-            var transition = new BoardTransition();
-            transition.Movements.Add(new BoardTileMovement
-            {
-                From = Vector2Int.zero,
-                To = Vector2Int.right,
-                Value = 2,
-                IsMergeParticipant = true,
-            });
-            var mergeCues = router.GetBoardTransitionCues(transition);
-
-            Assert.That(mergeCues, Is.EquivalentTo(new[]
-            {
-                PrototypeCombatSoundCue.BoardMove,
-                PrototypeCombatSoundCue.BoardMerge,
-            }));
-        }
-
-        [Test]
-        public void AudioRouter_EmitsBoardMoveCueForNonMergeBoardMovement()
-        {
-            var router = new PrototypeCombatAudioRouter();
-            var transition = new BoardTransition();
-            transition.Movements.Add(new BoardTileMovement
-            {
-                From = Vector2Int.zero,
-                To = Vector2Int.right,
-                Value = 2,
-                IsMergeParticipant = false,
-            });
-
-            var cues = router.GetBoardTransitionCues(transition);
-
-            Assert.That(cues, Is.EquivalentTo(new[] { PrototypeCombatSoundCue.BoardMove }));
-        }
-
-        [Test]
-        public void AudioRouter_EmitsHitCuesWhenBlockAbsorbsDamage()
-        {
-            var router = new PrototypeCombatAudioRouter();
-            router.Reset(new CombatSnapshot
-            {
-                Phase = CombatPhase.ActionPhase,
-                Player = new PlayerCombatSnapshot { CurrentHp = 20, MaxHp = 20, Block = 4 },
-                Enemies = new System.Collections.Generic.List<EnemyCombatSnapshot>
-                {
-                    new() { EnemyIndex = 0, CurrentHp = 10, MaxHp = 10, Block = 3 },
-                },
-            });
-
-            var cues = router.GetSnapshotCues(new CombatSnapshot
-            {
-                Phase = CombatPhase.EnemyTurn,
-                Player = new PlayerCombatSnapshot { CurrentHp = 20, MaxHp = 20, Block = 1 },
-                Enemies = new System.Collections.Generic.List<EnemyCombatSnapshot>
-                {
-                    new() { EnemyIndex = 0, CurrentHp = 10, MaxHp = 10, Block = 1 },
-                },
-            });
-
-            Assert.That(cues, Does.Contain(PrototypeCombatSoundCue.PlayerHit));
-            Assert.That(cues, Does.Contain(PrototypeCombatSoundCue.EnemyHit));
-        }
-
-        [Test]
-        public void BattleScene_CombatUiView_HasInspectorAudioReferences()
+        public void BattleScene_CombatUiView_HasBoardEffectProfileOnly()
         {
             EditorSceneManager.OpenScene("Assets/Scenes/BattleScene.unity");
             var view = Object.FindAnyObjectByType<CombatUiView>(FindObjectsInactive.Include);
@@ -518,11 +628,11 @@ namespace Project2048.Tests
             var serializedView = new SerializedObject(view);
             Assert.That(serializedView.FindProperty("audioSource").objectReferenceValue, Is.Not.Null);
             Assert.That(serializedView.FindProperty("boardTileEffectProfile").objectReferenceValue, Is.Not.Null);
-            Assert.That(serializedView.FindProperty("playerHitClip"), Is.Not.Null);
-            Assert.That(serializedView.FindProperty("enemyHitClip"), Is.Not.Null);
-            Assert.That(serializedView.FindProperty("boardMoveClip"), Is.Not.Null);
-            Assert.That(serializedView.FindProperty("boardMergeClip"), Is.Not.Null);
-            Assert.That(serializedView.FindProperty("soundVolumeScale").floatValue, Is.EqualTo(3f).Within(0.001f));
+            Assert.That(serializedView.FindProperty("playerHitClip"), Is.Null);
+            Assert.That(serializedView.FindProperty("enemyHitClip"), Is.Null);
+            Assert.That(serializedView.FindProperty("boardMoveClip"), Is.Null);
+            Assert.That(serializedView.FindProperty("boardMergeClip"), Is.Null);
+            Assert.That(serializedView.FindProperty("soundVolumeScale"), Is.Null);
         }
 
         [Test]
@@ -596,6 +706,13 @@ namespace Project2048.Tests
             return gameObject;
         }
 
+        private GameObject CreateOwnedRectTransformObject(string name)
+        {
+            var gameObject = new GameObject(name, typeof(RectTransform));
+            ownedObjects.Add(gameObject);
+            return gameObject;
+        }
+
         private Image CreateImageChild(Transform parent, string name)
         {
             var child = new GameObject(name, typeof(RectTransform), typeof(Image));
@@ -652,6 +769,13 @@ namespace Project2048.Tests
             return skill;
         }
 
+        private static void SetEnemyActionsPerTurn(EnemySO data, int count)
+        {
+            var field = typeof(EnemySO).GetField("actionsPerTurn");
+            Assert.That(field, Is.Not.Null, "EnemySO should expose actionsPerTurn for per-enemy multi-action tuning.");
+            field.SetValue(data, count);
+        }
+
         private static void SetPrivateField(object target, string fieldName, object value)
         {
             target.GetType()
@@ -664,6 +788,14 @@ namespace Project2048.Tests
             return target.GetType()
                 .GetField(fieldName, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
                 ?.GetValue(target);
+        }
+
+        private static object InvokePrivate(object target, string methodName, params object[] args)
+        {
+            var method = target.GetType()
+                .GetMethod(methodName, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+            Assert.That(method, Is.Not.Null);
+            return method.Invoke(target, args);
         }
 
         private static void AssertHpFillIsRenderable(Image fill)

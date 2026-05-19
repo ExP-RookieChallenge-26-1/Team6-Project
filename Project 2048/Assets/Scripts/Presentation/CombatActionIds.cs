@@ -3,6 +3,7 @@ namespace Project2048.Presentation
     public static class CombatActionIds
     {
         public const string Idle = "idle";
+        public const string Appear = "appear";
         public const string Attack = "attack";
         public const string Defend = "defend";
         public const string Hit = "hit";

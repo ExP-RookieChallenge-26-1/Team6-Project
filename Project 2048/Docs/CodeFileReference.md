@@ -2,7 +2,7 @@
 
 이 문서는 `Assets` 아래 C# 코드 파일을 하나씩 설명한다. 처음 보는 사람이 "이 파일이 왜 있는지", "어디와 연결되는지", "고칠 때 뭘 조심해야 하는지"를 빠르게 잡는 용도다.
 
-UI와 사운드는 이 작업의 담당 범위가 아니다. `Prototype`과 `Editor/CombatUiBuilder.cs`는 전투 루프를 눈과 귀로 확인하기 위해 임시로 이런 식으로 구현한 예시다. 정식 UI/사운드가 들어오면 전투 코어는 유지하고 이 임시 UI/사운드 쪽만 교체할 수 있다.
+UI 클릭음은 이 작업의 담당 범위가 아니다. 전투 피드백 사운드는 버튼 자체가 아니라 전투 이벤트와 ScriptableObject 효과 데이터에서 재생되도록 분리되어 있다.
 
 코스트 변환표도 테스트와 전투 루프 검증을 위한 임시 수치다. 정식 밸런스가 정해지면 `CostConverter.cs`의 표와 관련 테스트 기대값을 같이 바꾸면 된다.
 
@@ -12,12 +12,116 @@ UI와 사운드는 이 작업의 담당 범위가 아니다. `Prototype`과 `Edi
 |---|---:|---|
 | `Assets/Scripts/Board2048` | 4 | 2048 보드, 이동, 병합, 코스트 변환 |
 | `Assets/Scripts/Combat` | 9 | 전투 흐름, 플레이어 상태, snapshot, 전투 시작/종료 |
+| `Assets/Scripts/Core` | 2 | 게임 상태 컨텍스트, 전역 게임/플로우 진입점 |
 | `Assets/Scripts/Cost` | 1 | 행동 코스트 보관과 소비 |
 | `Assets/Scripts/Enemy` | 11 | 적 상태, 인텐트, AI 브레인, AI 타입 표시, 디버프 |
+| `Assets/Scripts/Flow` | 6 | 씬 로딩 요청, 로딩 UI 종료 후 전투 시작 이벤트 연결 |
 | `Assets/Scripts/Skills` | 3 | 스킬 데이터와 실행 |
-| `Assets/Scripts/Prototype` | 9 | 전투 확인용 임시 UI, 임시 사운드 cue, 임시 데이터 |
+| `Assets/Scripts/Presentation` | 5 | 전투/보드 효과 바인딩, actionId, 사운드/VFX 공용 데이터 |
+| `Assets/Scripts/Prototype` | 13 | 전투 확인용 임시 UI, 전투 presentation 사운드 재생, 임시 데이터 |
+| `Assets/Scripts/Rewards` | 6 | 전투 보상, 진행 성장, 보상 선택 결과 이벤트 |
+| `Assets/Scripts/Score` | 2 | 점수 계산과 점수 규칙 데이터 |
+| `Assets/Scripts/Story` | 3 | 스토리 진행 데이터와 컨트롤러 |
+| `Assets/Scripts/UI` | 6 | 메인 메뉴, 로딩, 팝업, 스토리 텍스트 UI |
 | `Assets/Editor` | 1 | 임시 UI 생성 메뉴 |
-| `Assets/Tests/EditMode` | 13 | 전투 규칙과 외부 연결 계약 검증 |
+| `Assets/Tests/EditMode` | 17 | 전투 규칙과 외부 연결 계약 검증 |
+
+## Core / Flow / UI 코드
+
+### `Assets/Scripts/Core/GameManager.cs`
+
+전역 게임 진입점이다.
+
+- `GameContext`를 만들고 `FlowController`를 초기화한다.
+- 새 게임 시작 요청을 `FlowController.SetNewGame()`으로 넘긴다.
+- 씬 전환 후에도 유지되도록 `DontDestroyOnLoad`를 쓴다.
+
+연결:
+
+- `BattleSceneBinder`와 `PrototypeCombatBootstrap`이 `GameManager.Instance.FlowController`를 우선 참조한다.
+
+조심할 점:
+
+- 전투 사운드나 화면 연출을 직접 넣지 않는다. 씬/상태 흐름만 담당한다.
+
+### `Assets/Scripts/Flow/FlowController.cs`
+
+게임 흐름 이벤트를 발행하는 컨트롤러다.
+
+- 로딩 시작, 메인 메뉴/스토리/전투 씬 로드 요청 이벤트를 낸다.
+- 전투 씬 준비가 끝나면 `CompleteBattleSceneLoad()`에서 `OnGameStarted`를 낸다.
+- `GameContext.GameState`를 Loading, Story, Playing 등으로 바꾼다.
+
+연결:
+
+- `SceneFlowManager`가 씬 로드 요청 이벤트를 듣는다.
+- `LoadingFlowBinder`가 로딩 시작 이벤트를 듣는다.
+- `PrototypeCombatBootstrap`이 `OnGameStarted`를 듣고 전투를 시작한다.
+
+조심할 점:
+
+- `OnGameStarted`는 전투 시작 허가 신호다. 로딩 UI가 아직 보일 때 호출하면 등장 사운드가 로딩 중에 날 수 있다.
+
+### `Assets/Scripts/Flow/SceneFlowManager.cs`
+
+실제 Unity 씬 로드를 수행한다.
+
+- `FlowController`의 씬 로드 요청을 받아 `LoadSceneAsync`를 실행한다.
+- 로딩 진행률 이벤트를 낸다.
+- 최소 로딩 시간을 보장한 뒤 `OnSceneLoadCompleted`를 낸다.
+
+연결:
+
+- `LoadingFlowBinder`가 진행률과 완료 이벤트를 받아 `LoadingUI`에 전달한다.
+
+조심할 점:
+
+- 이 파일은 씬 활성화와 로딩 진행률까지만 담당한다. 전투 시작은 `BattleSceneBinder`가 로딩 UI 숨김 이후에 처리한다.
+
+### `Assets/Scripts/Flow/Binder/BattleSceneBinder.cs`
+
+전투 씬이 실제로 플레이를 시작해도 되는 시점을 연결한다.
+
+- `FlowController`를 찾는다.
+- 시작 직후 한 프레임을 기다려 다른 씬 컴포넌트가 이벤트를 구독할 시간을 준다.
+- `LoadingUI.IsVisible`이 꺼질 때까지 기다린다.
+- 그 다음 `FlowController.CompleteBattleSceneLoad()`를 호출한다.
+
+연결:
+
+- `PrototypeCombatBootstrap`의 자동 전투 시작은 이 파일이 발생시키는 `OnGameStarted` 뒤에 실행된다.
+- 몬스터 등장 사운드가 로딩 중에 재생되지 않도록 막는 흐름의 마지막 문이다.
+- `BattleScene.unity`의 `PrototypeCombatEntry` 오브젝트에 붙어 있어야 한다.
+
+조심할 점:
+
+- 전투 씬에 들어왔다고 바로 전투를 시작하면 안 된다. 로딩 UI hide 루틴이 끝났는지 확인해야 한다.
+- 이 컴포넌트가 씬에서 빠지면 `PrototypeCombatBootstrap`이 `OnGameStarted`를 기다리다가 전투를 시작하지 못한다.
+
+### `Assets/Scripts/Flow/Binder/LoadingFlowBinder.cs`
+
+플로우 이벤트와 로딩 UI를 묶는 바인더다.
+
+- 로딩 시작 이벤트에서 `LoadingUI.Show()`를 호출한다.
+- 씬 로드 진행률을 `LoadingUI.SetProgress()`로 넘긴다.
+- 씬 로드 완료 이벤트에서 `LoadingUI.Hide()`를 호출한다.
+
+조심할 점:
+
+- 로딩 UI를 숨기는 호출과 실제 비활성화 완료 시점은 다를 수 있다. 완료 대기는 `LoadingUI.IsVisible`을 봐야 한다.
+
+### `Assets/Scripts/UI/Loading/LoadingUI.cs`
+
+로딩 화면 표시와 진행률 표시를 담당한다.
+
+- `Show`, `Hide`, `SetProgress`로 로딩 UI 상태를 갱신한다.
+- `Hide()`는 진행률이 100%까지 찬 뒤 root를 끈다.
+- `IsVisible`로 root 활성 상태와 hide 코루틴 진행 여부를 외부에 알려준다.
+
+연결:
+
+- `LoadingFlowBinder`가 표시와 진행률을 갱신한다.
+- `BattleSceneBinder`가 `IsVisible`을 보고 전투 시작 타이밍을 늦춘다.
 
 ## Board2048 코드
 
@@ -103,12 +207,16 @@ UI와 사운드는 이 작업의 담당 범위가 아니다. `Prototype`과 `Edi
 - UI가 쓸 수 있는 command 메서드와 `CombatSnapshot` 이벤트를 제공한다.
 - 보드가 끝나면 코스트를 만들고, 스킬을 쓰면 코스트를 소비하고, 턴 종료 시 적 인텐트를 실행한다.
 - 디버프 인텐트가 실행되면 `CombatVfxCue`를 만들어 UI에 임시 VFX 신호를 보낸다.
+- 승리/패배 이벤트와 스킬 사용 이벤트를 내서 presentation 사운드가 UI 버튼과 분리되어 반응할 수 있게 한다.
 
 주요 외부 연결점:
 
 ```csharp
 GetSnapshot()
 OnCombatStateChanged
+OnCombatVictory
+OnCombatDefeat
+OnPlayerSkillUsed
 RequestBoardMove(Direction direction)
 RequestUseSkillById(string skillId, int targetIndex)
 RequestEndPlayerTurn()
@@ -118,11 +226,14 @@ RequestEndPlayerTurn()
 
 - `Board2048Manager`, `ActionCostWallet`, `SkillExecutor`, `EnemyIntentSystem`, `DamageCalculator`를 묶는다.
 - 임시 UI는 `CombatUiView`에서 이 파일의 command와 snapshot만 쓴다.
+- 전투 결과음은 `PrototypeCombatEventAudioPlayer`가 `OnCombatVictory`와 `OnCombatDefeat`을 구독해서 처리한다.
+- 스킬 사용음은 `CombatWorldSpriteView`가 `OnPlayerSkillUsed`를 구독하고 `SkillSO.activationEffect`를 재생한다.
 - 테스트는 `CombatManagerTests.cs`와 `CombatUiContractTests.cs`에서 전투 계약을 검증한다.
 
 조심할 점:
 
 - UI 배치, 버튼 색, 사운드, 저장 로직을 넣지 않는다.
+- `AudioClip`과 `AudioSource`를 직접 들고 있지 않는다. 사운드 데이터는 SO와 presentation 계층이 가진다.
 - 외부 UI가 내부 컨트롤러를 직접 만지지 않아도 되도록 snapshot/command 경계를 유지한다.
 - `StartCombat` 초기화 중에는 중간 snapshot이 여러 번 나가지 않게 `suppressStateNotifications`를 쓴다.
 
@@ -252,15 +363,18 @@ RequestEndPlayerTurn()
 - 보드 이동 횟수 보너스
 - 초상화
 - 시작 스킬 목록
+- 플레이어 action effect 목록
 
 연결:
 
 - `PlayerCombatController.Init`이 이 데이터를 읽는다.
 - `CombatUiView`가 임시 UI 초상화 표시용으로 참조한다.
+- `CombatWorldSpriteView`가 `FindActionEffect`로 플레이어 hit 같은 action effect를 찾는다.
 
 조심할 점:
 
 - `OnValidate`가 음수 HP/공격력/보너스를 막는다.
+- 스킬별 효과음은 `PlayerSO.actionEffects`가 아니라 `SkillSO.activationEffect`에 둔다.
 
 ### `Assets/Scripts/Combat/TurnController.cs`
 
@@ -503,6 +617,7 @@ AI가 디버프 턴에 공포와 암흑을 어떤 순서로 낼지 나타낸다.
 - AI 디버프 순서
 - AI 일반형/강화형 구분
 - AI 디버프 주기
+- 몬스터 action effect 목록
 
 연결:
 
@@ -510,10 +625,12 @@ AI가 디버프 턴에 공포와 암흑을 어떤 순서로 낼지 나타낸다.
 - `EnemyIntentSystem`이 인텐트 패턴을 읽는다.
 - `EnemyAiBrain`이 AI 설정값을 읽는다.
 - `CombatUiView`가 임시 UI 초상화를 표시할 때 쓴다.
+- `CombatWorldSpriteView`가 `FindActionEffect`로 등장, 피격, 사망 같은 action effect를 찾는다.
 
 조심할 점:
 
 - `intentPattern`에 값이 있으면 AI 브레인보다 고정 패턴을 우선한다.
+- 몬스터 등장 사운드는 `actionEffects`에 `actionId = "appear"`로 넣는다.
 - `OnValidate`가 음수 HP/공격력/방어력/디버프 수치/난이도 점수를 막는다.
 
 ## Skills 코드
@@ -547,6 +664,7 @@ AI가 디버프 턴에 공포와 암흑을 어떤 순서로 낼지 나타낸다.
 - 위력
 - 대상 공격력 보정
 - 자기 방어 보너스
+- 사용 시 재생할 activation effect
 - 아이콘
 - 설명
 
@@ -555,10 +673,12 @@ AI가 디버프 턴에 공포와 암흑을 어떤 순서로 낼지 나타낸다.
 - `PlayerSO.startingSkills`에 들어간다.
 - `CombatSnapshot.SkillSnapshot`으로 UI에 노출된다.
 - `SkillExecutor`가 실제 효과를 실행한다.
+- `CombatWorldSpriteView`가 `CombatManager.OnPlayerSkillUsed`를 받아 `activationEffect`를 재생한다.
 
 조심할 점:
 
 - `skillId`는 UI command에서 찾는 키다. 중복되면 버튼 입력이 꼬일 수 있다.
+- 스킬 사용 사운드는 UI 버튼 클릭음이 아니라 이 SO의 `activationEffect`에 둔다.
 - 현재 수치는 프로토타입 검증용이다.
 
 ### `Assets/Scripts/Skills/SkillType.cs`
@@ -578,6 +698,102 @@ AI가 디버프 턴에 공포와 암흑을 어떤 순서로 낼지 나타낸다.
 조심할 점:
 
 - `Debuff`, `Heal`은 enum에는 있지만 현재 실행/임시 UI 흐름이 완성되어 있지 않다.
+
+## Presentation 코드
+
+### `Assets/Scripts/Presentation/CombatEffectBinding.cs`
+
+전투 presentation 효과 하나를 담는 공용 데이터다.
+
+- `sfxClip`
+- `vfxPrefab`
+- `animationClip`
+- `volumeScale`
+- `minPitch`, `maxPitch`
+- `localOffset`
+- `autoDestroySeconds`
+
+연결:
+
+- `SkillSO.activationEffect`, `EnemySO.actionEffects`, `PlayerSO.actionEffects`, `BoardTileEffectProfileSO`, `PrototypeCombatEventAudioProfileSO`에서 공통으로 쓴다.
+- `CombatEffectAudioPlayer.PlayOneShot`이 pitch와 volume을 반영해 사운드를 재생한다.
+
+조심할 점:
+
+- 이 파일은 효과 데이터와 공용 재생 helper다. 어떤 상황에서 재생할지는 각 presentation 스크립트가 결정한다.
+
+### `Assets/Scripts/Presentation/CombatantActionEffectBinding.cs`
+
+전투 대상의 actionId와 effect를 연결한다.
+
+- `actionId`
+- `CombatEffectBinding effect`
+- `Find` helper
+
+연결:
+
+- `PlayerSO.actionEffects`와 `EnemySO.actionEffects`에서 사용한다.
+- `CombatWorldSpriteView`가 `hit`, `death`, `appear` 같은 actionId로 effect를 찾는다.
+
+조심할 점:
+
+- actionId 비교는 공백 제거와 대소문자 무시를 한다.
+- 새 actionId는 가능하면 `CombatActionIds.cs`에 상수로 추가한다.
+
+### `Assets/Scripts/Presentation/CombatActionIds.cs`
+
+SO action effect에서 쓰는 문자열 키 모음이다.
+
+- `appear`
+- `attack`
+- `defend`
+- `hit`
+- `death`
+- `debuff_fear`
+- `debuff_darkness`
+
+연결:
+
+- `EnemySO.actionEffects`의 몬스터 등장 사운드는 `appear`를 사용한다.
+- `CombatWorldSpriteView`가 이 상수로 SO effect를 찾는다.
+
+조심할 점:
+
+- SO에 직접 문자열을 쓰는 구조라 오타가 나면 effect가 재생되지 않는다. 코드에서는 상수를 사용한다.
+
+### `Assets/Scripts/Presentation/BoardTileEffectCue.cs`
+
+보드 이동/병합 presentation effect를 재생하기 위한 cue 데이터다.
+
+- cue 타입: `Move`, `Merge`
+- 타일 값
+- 보드 위치
+
+연결:
+
+- `PrototypeCombatAudioRouter`가 `BoardTransition`에서 만든다.
+- `CombatUiView`가 cue를 `BoardTileEffectProfileSO`로 해석한다.
+
+조심할 점:
+
+- 보드 규칙이 아니라 presentation 요청 데이터다.
+
+### `Assets/Scripts/Presentation/BoardTileEffectProfileSO.cs`
+
+보드 타일 이동/병합 effect를 담는 ScriptableObject다.
+
+- 이동 effect: `moveEffect`
+- 병합 effect 목록: `mergeEffects`
+
+연결:
+
+- `CombatUiView`가 `ResolveMoveEffect`와 `ResolveMergeEffect(tileValue)`로 effect를 찾는다.
+- `PrototypeBoardTileEffects.asset`이 실제 프로토타입 보드 사운드 데이터를 가진다.
+
+조심할 점:
+
+- 병합에는 default fallback이 없다. 지원하는 병합 타일 값은 `mergeEffects`에 모두 명시해야 한다.
+- 큰 타일일수록 웅장하게 들리도록 각 타일별 `volumeScale`과 pitch를 SO에서 조정한다.
 
 ## Prototype 코드
 
@@ -620,7 +836,7 @@ AI가 디버프 턴에 공포와 암흑을 어떤 순서로 낼지 나타낸다.
 - `CombatManager.OnCombatStateChanged`를 구독한다.
 - 받은 snapshot을 화면에 그린다.
 - `CombatVfxCue`를 받으면 공포/암흑별 임시 VFX를 한 번 재생한다.
-- `PrototypeCombatAudioRouter`가 만든 임시 사운드 cue를 `AudioSource.PlayOneShot`으로 재생한다.
+- `PrototypeCombatAudioRouter`가 만든 보드 effect cue를 `BoardTileEffectProfileSO`로 해석해 재생한다.
 - 적 이름과 AI 타입 라벨을 적 머리 위에 표시한다.
 - 적 HP 텍스트에는 방어도가 있으면 `방어 N`을 함께 표시한다.
 - 전용 적 HP 텍스트가 없는 오래된 임시 씬에서는 적 머리 위 라벨에 체력과 방어도를 함께 표시한다.
@@ -631,36 +847,91 @@ AI가 디버프 턴에 공포와 암흑을 어떤 순서로 낼지 나타낸다.
 연결:
 
 - `PrototypeCombatBootstrap`이 초기화한다.
-- `CombatManager`, `BoardSwipeHandler`, `BoardCellView`, `PrototypeCombatText`, `PrototypeCombatUiState`, `PrototypeCombatAudioRouter`와 연결된다.
+- `CombatManager`, `BoardSwipeHandler`, `BoardCellView`, `PrototypeCombatText`, `PrototypeCombatUiState`, `PrototypeCombatAudioRouter`, `BoardTileEffectProfileSO`와 연결된다.
 
 조심할 점:
 
 - 이 파일은 담당 범위의 정식 UI가 아니다. 전투 루프 확인용 임시 구현이다.
 - 공포/암흑 VFX도 정식 연출이 아니라 디버프 발동 확인용 임시 구현이다.
-- 사운드도 정식 사운드 시스템이 아니라 플레이 확인용 임시 구현이다. 클립은 인스펙터에서 교체하고, 전투 코어에는 오디오 코드를 넣지 않는다.
+- UI 버튼 클릭음은 여기서 다루지 않는다. 보드 이동/병합 사운드는 `BoardTileEffectProfileSO`의 SO 데이터만 읽는다.
 - 정식 UI를 만들 때도 `CombatManager`와 연결하는 방식은 snapshot/command 구조를 유지하면 된다.
 
-### `Assets/Scripts/Prototype/PrototypeCombatAudioRouter.cs`
+### `Assets/Scripts/Prototype/CombatWorldSpriteView.cs`
 
-전투 변화와 보드 이동 데이터를 임시 사운드 cue로 바꾼다.
+전투 월드 스프라이트와 combatant action effect를 재생하는 presentation 스크립트다.
 
-- 이전 `CombatSnapshot`과 새 `CombatSnapshot`을 비교한다.
-- 플레이어 HP가 줄거나 적 턴 중 플레이어 방어도가 줄면 `PlayerHit` cue를 만든다.
-- 적 HP가 줄거나 적 방어도가 줄면 `EnemyHit` cue를 만든다.
-- 보드 이동이 있으면 `BoardMove` cue를 만든다.
-- 보드 이동 중 병합 참여 타일이 있으면 `BoardMerge` cue를 추가한다.
+- 플레이어/적 초상화 스프라이트를 표시한다.
+- 플레이어 피격, 적 피격, 적 사망 action effect를 재생한다.
+- 몬스터가 등장하면 화면 오른쪽에서 점프하듯 들어오는 인트로를 보여준 뒤 `EnemySO.actionEffects`의 `appear` effect를 재생한다.
+- 플레이어가 스킬을 쓰면 `SkillSO.activationEffect`를 재생한다.
 
 연결:
 
-- `CombatUiView`가 snapshot 갱신과 `BoardTransition` 수신 시 호출한다.
-- `CombatUiView`가 cue에 맞는 인스펙터 `AudioClip`을 골라 `AudioSource.PlayOneShot(clip, soundVolumeScale)`로 재생한다.
-- `CombatUiViewTests.cs`가 HP/방어도 감소, 보드 이동, 병합 cue를 검증한다.
+- `CombatManager.OnCombatStateChanged`를 구독한다.
+- `CombatManager.OnPlayerSkillUsed`를 구독한다.
+- `PlayerSO`, `EnemySO`, `SkillSO`의 `CombatEffectBinding`을 읽는다.
 
 조심할 점:
 
-- 이 파일은 정식 사운드 시스템이 아니다. 전투 코어에 사운드를 넣지 않으려고 둔 임시 라우터다.
-- cue는 "무슨 일이 있었는지"만 말한다. 어떤 클립을 쓸지, 볼륨을 얼마로 할지는 `CombatUiView` 인스펙터 쪽 임시 연결이 담당한다.
-- 정식 사운드가 들어오면 이 조건만 참고해서 교체하면 된다.
+- UI 버튼 사운드를 재생하는 곳이 아니다.
+- 전투 코어가 아니라 presentation 계층이므로 SO effect를 읽어서 재생하는 역할만 맡는다.
+- 몬스터 등장 사운드는 인트로가 끝난 뒤 나야 한다. 로딩 완료 대기는 `BattleSceneBinder`, 전투 시작 지연은 `PrototypeCombatBootstrap`이 맡는다.
+
+### `Assets/Scripts/Prototype/PrototypeCombatAudioRouter.cs`
+
+보드 이동 데이터를 보드 effect cue로 바꾼다.
+
+- 보드 이동이 있으면 `BoardTileEffectCueType.Move` cue를 만든다.
+- 보드 이동 중 병합 결과가 있으면 병합 결과 타일 값으로 `BoardTileEffectCueType.Merge` cue를 만든다.
+- 같은 위치/결과값 병합은 한 번만 cue를 만든다.
+
+연결:
+
+- `CombatUiView`가 `BoardTransition` 수신 시 호출한다.
+- `CombatUiView`가 cue를 `BoardTileEffectProfileSO`로 해석해 effect를 재생한다.
+- `CombatPresentationEffectTests.cs`가 보드 이동/병합 cue를 검증한다.
+
+조심할 점:
+
+- 이 파일은 클립을 고르지 않는다. 어떤 클립/피치/볼륨을 쓸지는 `BoardTileEffectProfileSO`가 담당한다.
+- 플레이어/적 피격음 같은 combatant 사운드는 여기서 만들지 않는다. 해당 effect는 `PlayerSO`, `EnemySO`, `SkillSO` 또는 전투 이벤트 쪽에서 처리한다.
+
+### `Assets/Scripts/Prototype/PrototypeCombatEventAudioPlayer.cs`
+
+전투 결과와 보상 선택 결과 사운드를 재생하는 presentation 스크립트다.
+
+- `CombatManager.OnCombatVictory`에서 승리 사운드를 재생한다.
+- `CombatManager.OnCombatDefeat`에서 패배 사운드를 재생한다.
+- `RewardManager.OnRewardClaimed`에서 휴식/강화 보상 선택 사운드를 재생한다.
+- 실제 클립은 `PrototypeCombatEventAudioProfileSO`에서 가져온다.
+
+연결:
+
+- `PrototypeCombatBootstrap`이 초기화한다.
+- `PrototypeCombatEventAudioProfile.asset`이 승리/패배/보상 effect를 가진다.
+
+조심할 점:
+
+- 버튼 클릭음이 아니라 보상 선택 결과 이벤트에 반응한다.
+- 전투 코어에 `AudioClip`을 넣지 않기 위한 presentation 계층이다.
+
+### `Assets/Scripts/Prototype/PrototypeCombatEventAudioProfileSO.cs`
+
+전투 이벤트 사운드 effect를 담는 ScriptableObject다.
+
+- 승리 effect
+- 패배 effect
+- 휴식 보상 선택 effect
+- 강화 보상 선택 effect
+
+연결:
+
+- `PrototypeCombatEventAudioPlayer`가 cue에 맞는 `CombatEffectBinding`을 가져온다.
+- `PrototypeCombatEventAudioProfile.asset`이 `Assets/Sounds`의 스테이지 성공/실패, 힐, 강화 클립을 참조한다.
+
+조심할 점:
+
+- 새 전투 이벤트 사운드를 추가하면 enum, profile SO, player resolve 로직, 테스트를 같이 갱신한다.
 
 ### `Assets/Scripts/Prototype/PrototypeCombatBootstrap.cs`
 
@@ -669,17 +940,19 @@ AI가 디버프 턴에 공포와 암흑을 어떤 순서로 낼지 나타낸다.
 - 필요한 `CombatManager`, `PlayerCombatController`, `EnemyController`가 없으면 런타임에 만든다.
 - 지정된 Player/Enemy 데이터가 없으면 `PrototypeCombatFactory`로 임시 데이터를 만든다.
 - `randomizeEnemyOnStart`가 켜져 있으면 전투 시작마다 임시 적 AI 풀에서 랜덤 적을 뽑는다.
-- `StartCombat`을 호출해서 전투를 시작한다.
+- `FlowController`가 있으면 `OnGameStarted`를 받은 뒤 `StartCombat`을 호출한다.
+- `FlowController`가 없는 단독 테스트/임시 실행에서는 기존처럼 `Start()`에서 바로 시작한다.
 - 재시작도 처리한다.
+- `CombatUiView`, `CombatWorldSpriteView`, `PrototypeCombatEventAudioPlayer`를 초기화한다.
 
 연결:
 
 - 씬의 임시 UI와 전투 코어를 이어준다.
-- `CombatUiView.Initialize`를 호출한다.
+- `CombatUiView.Initialize`, `CombatWorldSpriteView.Initialize`, `PrototypeCombatEventAudioPlayer.Initialize`을 호출한다.
 
 조심할 점:
 
-- 정식 게임 시작 흐름이 생기면 이 파일은 교체될 수 있다.
+- 자동 시작 흐름을 바꿀 때는 로딩 UI가 사라지기 전에 전투가 시작되지 않는지 확인해야 한다.
 
 ### `Assets/Scripts/Prototype/PrototypeCombatFactory.cs`
 
@@ -765,7 +1038,7 @@ AI가 디버프 턴에 공포와 암흑을 어떤 순서로 낼지 나타낸다.
 - 메뉴: `Project2048/Generate Combat UI`
 - Canvas, 보드, 버튼, 패널, 결과 오버레이를 만든다.
 - `CombatUiView`에 필요한 serialized reference를 연결한다.
-- 정식 사운드나 클립 배정은 만들지 않는다. 샘플 씬의 임시 사운드는 `CombatUiView` 인스펙터에서 직접 연결한다.
+- UI 클릭음이나 버튼 사운드는 만들지 않는다. 전투 피드백 사운드는 별도 SO와 presentation 컴포넌트에서 연결한다.
 - 임시 PlayerSO, EnemySO, SkillSO 에셋도 준비한다.
 - EventSystem과 InputSystem UI 모듈을 보장한다.
 
@@ -777,7 +1050,7 @@ AI가 디버프 턴에 공포와 암흑을 어떤 순서로 낼지 나타낸다.
 
 - 이 파일도 정식 UI 담당 범위가 아니다. 전투를 눈으로 확인하기 위한 임시 생성 도구다.
 - 정식 UI가 들어오면 이 생성 방식은 버려도 된다.
-- 사운드까지 자동 생성하는 도구가 아니므로, 필요한 경우 샘플 씬에서 `AudioSource`와 임시 클립을 따로 꽂는다.
+- 사운드까지 자동 생성하는 도구가 아니므로, 필요한 경우 SO 에셋과 presentation 컴포넌트 연결을 별도로 확인한다.
 
 ## EditMode 테스트 코드
 
@@ -835,9 +1108,23 @@ UI가 전투 내부 객체를 직접 잡지 않고 snapshot/command만으로 전
 - 공포는 플레이어 상태효과에만 표시되고 적 상태효과에는 표시되지 않는다.
 - 암흑 디버프 후 다음 보드에 방해 블록이 배치된다.
 
+### `Assets/Tests/EditMode/CombatPresentationEffectTests.cs`
+
+전투 presentation effect와 SO 기반 사운드 연결을 검증한다.
+
+보호하는 규칙:
+
+- `EnemySO`와 `PlayerSO` action effect는 actionId로 찾을 수 있다.
+- `CombatEffectBinding`은 pitch 범위와 volume을 안전하게 정규화한다.
+- 보드 이동/병합 cue는 `BoardTransition`에서 만들어진다.
+- 전투 승리/패배와 보상 선택 사운드는 전투/보상 이벤트에서 나온다.
+- 몬스터 등장 사운드는 `EnemySO.actionEffects`의 `appear`에서 나온다.
+- 스킬 사용 사운드는 `SkillSO.activationEffect`에서 나온다.
+- 보드 병합 사운드는 타일 값별 `BoardTileEffectProfileSO.mergeEffects`에 모두 명시되어야 한다.
+
 ### `Assets/Tests/EditMode/CombatUiViewTests.cs`
 
-임시 UI의 입력, 타이밍 상수, 임시 사운드 연결을 검증한다.
+임시 UI의 입력, 타이밍 상수, 보드 effect 프로필 연결을 검증한다.
 
 보호하는 규칙:
 
@@ -846,7 +1133,8 @@ UI가 전투 내부 객체를 직접 잡지 않고 snapshot/command만으로 전
 - 디버프 임시 VFX가 짧은 피드백 시간 안에 끝난다.
 - 임시 `AudioSource`가 2D UI 피드백용 설정으로 맞춰진다.
 - 인스펙터의 양수 `soundVolumeScale`은 런타임에서 덮어쓰지 않는다.
-- HP/방어도 감소와 보드 이동/병합이 임시 사운드 cue로 변환된다.
+- `CombatUiView`에는 예전 `playerHitClip`, `enemyHitClip`, `boardMoveClip`, `boardMergeClip` 필드가 남아 있지 않다.
+- 보드 effect는 `BoardTileEffectProfileSO`만 사용한다.
 - 모바일/마우스 스와이프가 방향 입력을 낸다.
 
 ### `Assets/Tests/EditMode/CostConverterTests.cs`
@@ -936,4 +1224,5 @@ UI가 전투 내부 객체를 직접 잡지 않고 snapshot/command만으로 전
 4. `CostConverter.cs` 섹션
 5. `SkillExecutor.cs` 섹션
 6. `EnemyIntentSystem.cs` 섹션
-7. 필요한 테스트 파일 섹션
+7. `Presentation` 코드 섹션
+8. 필요한 테스트 파일 섹션

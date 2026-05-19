@@ -8,7 +8,6 @@ namespace Project2048.Presentation
     public class BoardTileEffectProfileSO : ScriptableObject
     {
         public CombatEffectBinding moveEffect = new();
-        public CombatEffectBinding defaultMergeEffect = new();
         public List<BoardTileMergeEffectBinding> mergeEffects = new();
 
         public CombatEffectBinding ResolveMoveEffect()
@@ -26,7 +25,7 @@ namespace Project2048.Presentation
                 }
             }
 
-            return defaultMergeEffect;
+            return null;
         }
 
         private void OnValidate()

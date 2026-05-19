@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Project2048.Audio;
 using Project2048.Board2048;
 using Project2048.Combat;
 using Project2048.Enemy;
@@ -10,6 +11,7 @@ using Project2048.Score;
 using Project2048.Skills;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -29,7 +31,8 @@ namespace Project2048.Prototype
         public const float BoardToActionPanelDelaySeconds = 0.45f;
         public const float CombatVfxDurationSeconds = 0.65f;
         public const float EnemyDeathFadeDurationSeconds = 0.6f;
-        private const float DefaultSoundVolumeScale = 3f;
+        public const float HpDamageTrailDelaySeconds = 0.25f;
+        public const float HpDamageTrailDurationSeconds = 0.35f;
         private const float UiSfxDistance = 10000f;
 
         [Header("Top bar")]
@@ -46,6 +49,7 @@ namespace Project2048.Prototype
         [SerializeField] private TMP_Text playerBattleHpText;
         [SerializeField] private Image enemyHpBarFill;
         [SerializeField] private TMP_Text enemyHpText;
+        [SerializeField] private GameObject enemyHpRoot;
         [SerializeField] private RectTransform playerBattleStatusEffectsRoot;
         [SerializeField] private RectTransform enemyStatusEffectsRoot;
         [SerializeField] private GameObject statusTooltip;
@@ -100,16 +104,11 @@ namespace Project2048.Prototype
         [SerializeField] private Button rewardRestButton;
         [SerializeField] private Button rewardEnhanceButton;
 
-        [Header("Audio")]
-        // Temporary prototype SFX hookup. Final audio ownership should replace
-        // these inspector clips or remove this layer without touching combat core.
+        [Header("Board effects")]
         [SerializeField] private AudioSource audioSource;
+        [SerializeField] private AudioMixerGroup sfxMixerGroup;
+        [SerializeField] private SimpleBgmDucker bgmDucker;
         [SerializeField] private BoardTileEffectProfileSO boardTileEffectProfile;
-        [SerializeField] private AudioClip playerHitClip;
-        [SerializeField] private AudioClip enemyHitClip;
-        [SerializeField] private AudioClip boardMoveClip;
-        [SerializeField] private AudioClip boardMergeClip;
-        [SerializeField] private float soundVolumeScale = DefaultSoundVolumeScale;
 
         [Header("Theme")]
         [SerializeField] private Color emptyCellColor = new(0.10f, 0.10f, 0.10f, 1f);
@@ -123,6 +122,7 @@ namespace Project2048.Prototype
         [SerializeField] private Color playerHpFillColor = new(0.18f, 0.86f, 0.34f, 1f);
         [SerializeField] private Color enemyHpFillColor = new(0.88f, 0.14f, 0.14f, 1f);
         [SerializeField] private Color hpBarBackgroundColor = new(0.08f, 0.09f, 0.10f, 1f);
+        [SerializeField] private Color hpDamageTrailColor = new(0.32f, 0.06f, 0.08f, 0.90f);
         [SerializeField] private Color blockFrameColor = new(0.66f, 0.70f, 0.74f, 1f);
         [SerializeField] private Color blockIconColor = new(0.42f, 0.46f, 0.50f, 0.95f);
         [SerializeField] private Color buffStatusColor = new(0.20f, 0.46f, 0.30f, 0.95f);
@@ -139,11 +139,15 @@ namespace Project2048.Prototype
         private Coroutine boardAnimationCoroutine;
         private Coroutine combatVfxCoroutine;
         private Coroutine enemyDeathFadeCoroutine;
+        private Coroutine enemyHpHideCoroutine;
         private bool boardTransitionAnimating;
         private bool lastEnemyWasDead;
         private int lastPlayedCombatVfxSequence;
         private RectTransform combatVfxPulseRect;
         private Vector3 combatVfxOriginalScale = Vector3.one;
+        private readonly Dictionary<Image, float> hpMainFillRatios = new();
+        private readonly Dictionary<Image, float> hpDamageTrailRatios = new();
+        private readonly Dictionary<Image, Coroutine> hpDamageTrailCoroutines = new();
 
         private void Awake()
         {
@@ -184,7 +188,6 @@ namespace Project2048.Prototype
             snapshot = combatManager.GetSnapshot();
             lastEnemyWasDead = snapshot?.Enemies?.FirstOrDefault()?.IsDead ?? false;
             SetEnemyPortraitAlpha(lastEnemyWasDead ? 0f : 1f);
-            audioRouter.Reset(snapshot);
             uiState.Sync(snapshot);
             Render();
         }
@@ -201,6 +204,8 @@ namespace Project2048.Prototype
             ClearBoardAnimationOverlay();
             ClearCombatVfx();
             ClearEnemyDeathFade();
+            ClearEnemyHpHide();
+            ClearHpDamageTrailAnimations();
         }
 
         private void UnbindCombatEvents()
@@ -294,6 +299,13 @@ namespace Project2048.Prototype
             }
 
             button.onClick.RemoveAllListeners();
+            var clickEmitter = button.GetComponent<ButtonClickAudioEmitter>();
+            if (clickEmitter == null)
+            {
+                clickEmitter = button.gameObject.AddComponent<ButtonClickAudioEmitter>();
+            }
+
+            clickEmitter.EnsureBound();
             button.onClick.AddListener(() =>
             {
                 handler?.Invoke();
@@ -319,13 +331,11 @@ namespace Project2048.Prototype
 
         private void HandleCombatStateChanged(CombatSnapshot nextSnapshot)
         {
-            var soundCues = audioRouter.GetSnapshotCues(nextSnapshot);
             var nextEnemyDead = nextSnapshot?.Enemies?.FirstOrDefault()?.IsDead ?? false;
             var enemyJustDied = !lastEnemyWasDead && nextEnemyDead;
             snapshot = nextSnapshot;
             uiState.Sync(snapshot);
             Render();
-            PlaySoundCues(soundCues);
             PlayCombatVfxIfNeeded(snapshot.LastVfxCue);
             PlayEnemyDeathFadeIfNeeded(enemyJustDied, nextEnemyDead);
             lastEnemyWasDead = nextEnemyDead;
@@ -341,9 +351,7 @@ namespace Project2048.Prototype
 
         private void HandleBoardTransitioned(BoardTransition transition)
         {
-            var playedProfileAudio = PlayBoardTileEffectCues(audioRouter.GetBoardTileEffectCues(transition));
-            PlayFallbackBoardSoundCues(audioRouter.GetBoardTransitionCues(transition), playedProfileAudio);
-
+            PlayBoardTileEffectCues(audioRouter.GetBoardTileEffectCues(transition));
             pendingBoardTransition = transition;
         }
 
@@ -433,6 +441,7 @@ namespace Project2048.Prototype
         {
             var enemy = snapshot?.Enemies?.FirstOrDefault();
             var player = snapshot?.Player;
+            var enemyIsAlive = enemy != null && !enemy.IsDead;
             if (enemyNameText != null)
             {
                 var enemyStatusFallback = enemyHpText == null && enemy != null
@@ -450,16 +459,17 @@ namespace Project2048.Prototype
 
             if (intentBubble != null)
             {
-                var hasIntent = enemy?.Intent != null && !enemy.IsDead;
+                var visibleIntents = GetVisibleIntents(enemy);
+                var hasIntent = visibleIntents.Count > 0 && enemyIsAlive;
                 intentBubble.SetActive(hasIntent);
                 if (hasIntent && intentBubbleText != null)
                 {
-                    intentBubbleText.text = PrototypeCombatText.FormatIntent(enemy.Intent);
+                    intentBubbleText.text = PrototypeCombatText.FormatIntents(visibleIntents);
                 }
 
                 if (hasIntent && intentBubble.TryGetComponent<Image>(out var intentBubbleImage))
                 {
-                    intentBubbleImage.color = GetIntentBubbleColor(enemy.Intent);
+                    intentBubbleImage.color = GetIntentBubbleColor(visibleIntents[0]);
                 }
             }
 
@@ -502,6 +512,19 @@ namespace Project2048.Prototype
             SetBlockIndicator(playerBattleHpBarFill, player?.Block ?? 0);
             RenderStatusEffects(playerBattleStatusEffectsRoot, player?.StatusEffects);
 
+            if (enemyIsAlive)
+            {
+                ShowEnemyHp();
+            }
+            else if (enemy != null)
+            {
+                HideEnemyHpAfterDamageTrail();
+            }
+            else
+            {
+                HideEnemyHpImmediately();
+            }
+
             if (enemyHpBarFill != null && enemy != null && enemy.MaxHp > 0)
             {
                 SetHpBarValue(enemyHpBarFill, enemy.CurrentHp, enemy.MaxHp);
@@ -512,8 +535,8 @@ namespace Project2048.Prototype
                 enemyHpText.text = PrototypeCombatText.FormatEnemyHp(enemy.CurrentHp, enemy.MaxHp, enemy.Block);
             }
 
-            SetBlockIndicator(enemyHpBarFill, enemy?.Block ?? 0);
-            RenderStatusEffects(enemyStatusEffectsRoot, enemy?.StatusEffects);
+            SetBlockIndicator(enemyHpBarFill, enemyIsAlive ? enemy.Block : 0);
+            RenderStatusEffects(enemyStatusEffectsRoot, enemyIsAlive ? enemy.StatusEffects : null);
 
             if (actionDescriptionText != null)
             {
@@ -618,7 +641,7 @@ namespace Project2048.Prototype
                 }
 
                 var value = snapshot.Board[row, col];
-                cell.SetValue(value, emptyCellColor, filledCellColor, highlightCellColor, obstacleCellColor);
+                cell.SetValue(value, emptyCellColor, filledCellColor, highlightCellColor, GetObstacleCellColor());
             }
         }
 
@@ -816,7 +839,7 @@ namespace Project2048.Prototype
         {
             if (value < 0)
             {
-                return obstacleCellColor;
+                return GetObstacleCellColor();
             }
 
             if (value == 0)
@@ -931,10 +954,83 @@ namespace Project2048.Prototype
             return intent.intentType switch
             {
                 EnemyIntentType.Defense => defenseIntentColor,
-                EnemyIntentType.Debuff when intent.debuffType == DebuffType.Darkness => darknessIntentColor,
-                EnemyIntentType.Debuff when intent.debuffType == DebuffType.Fear => fearIntentColor,
+                EnemyIntentType.Debuff => GetDebuffColor(intent.debuffType),
                 _ => attackIntentColor,
             };
+        }
+
+        private Color GetStatusEffectColor(CombatStatusEffectSnapshot effect)
+        {
+            if (effect == null || string.IsNullOrWhiteSpace(effect.Id))
+            {
+                return debuffStatusColor;
+            }
+
+            if (effect.Id == "attack-up" || effect.Id == "attack-down")
+            {
+                return WithAlpha(attackIntentColor, 0.95f);
+            }
+
+            if (effect.Id == "fear")
+            {
+                return WithAlpha(GetDebuffColor(DebuffType.Fear), 0.95f);
+            }
+
+            if (effect.Id == "darkness")
+            {
+                return WithAlpha(GetDebuffColor(DebuffType.Darkness), 0.95f);
+            }
+
+            return effect.IsBuff ? buffStatusColor : debuffStatusColor;
+        }
+
+        private Color GetDebuffColor(DebuffType debuffType)
+        {
+            return debuffType switch
+            {
+                DebuffType.Darkness => darknessIntentColor,
+                DebuffType.Fear => fearIntentColor,
+                _ => debuffStatusColor,
+            };
+        }
+
+        private Color GetObstacleCellColor()
+        {
+            return GetDebuffColor(DebuffType.Darkness);
+        }
+
+        private static Color WithAlpha(Color color, float alpha)
+        {
+            color.a = alpha;
+            return color;
+        }
+
+        private static List<EnemyIntent> GetVisibleIntents(EnemyCombatSnapshot enemy)
+        {
+            var intents = new List<EnemyIntent>();
+            if (enemy?.Intents != null)
+            {
+                foreach (var intent in enemy.Intents)
+                {
+                    if (intent == null)
+                    {
+                        continue;
+                    }
+
+                    intents.Add(intent);
+                    if (intents.Count >= EnemySO.MaximumActionsPerTurn)
+                    {
+                        break;
+                    }
+                }
+            }
+
+            if (intents.Count == 0 && enemy?.Intent != null)
+            {
+                intents.Add(enemy.Intent);
+            }
+
+            return intents;
         }
 
         private void ResolveMissingReferences()
@@ -950,6 +1046,7 @@ namespace Project2048.Prototype
             playerBattleHpText ??= FindNestedComponentByName<TMP_Text>("PlayerBattleHp", "Text");
             enemyHpBarFill ??= FindNestedComponentByName<Image>("EnemyHp", "Fill");
             enemyHpText ??= FindNestedComponentByName<TMP_Text>("EnemyHp", "Text");
+            ResolveEnemyHpRoot();
             playerBattleStatusEffectsRoot ??= FindComponentInChildrenByName<RectTransform>("PlayerBattleStatusEffects");
             enemyStatusEffectsRoot ??= FindComponentInChildrenByName<RectTransform>("EnemyStatusEffects");
             statusTooltip ??= FindChildByName("StatusTooltip")?.gameObject;
@@ -961,11 +1058,85 @@ namespace Project2048.Prototype
             enemyTurnText ??= FindComponentInChildrenByName<TMP_Text>("EnemyTurnText");
         }
 
+        private void ResolveEnemyHpRoot()
+        {
+            if (enemyHpRoot != null)
+            {
+                return;
+            }
+
+            enemyHpRoot = FindChildByName("EnemyHp")?.gameObject
+                ?? enemyHpBarFill?.transform.parent?.gameObject
+                ?? enemyHpText?.transform.parent?.gameObject;
+        }
+
+        private void SetEnemyHpVisible(bool visible)
+        {
+            ResolveEnemyHpRoot();
+            if (enemyHpRoot != null && enemyHpRoot.activeSelf != visible)
+            {
+                enemyHpRoot.SetActive(visible);
+            }
+        }
+
+        private void ShowEnemyHp()
+        {
+            ClearEnemyHpHide();
+            SetEnemyHpVisible(true);
+        }
+
+        private void HideEnemyHpImmediately()
+        {
+            ClearEnemyHpHide();
+            SetEnemyHpVisible(false);
+        }
+
+        private void HideEnemyHpAfterDamageTrail()
+        {
+            ResolveEnemyHpRoot();
+            if (enemyHpRoot == null || enemyHpHideCoroutine != null || !enemyHpRoot.activeSelf)
+            {
+                return;
+            }
+
+            if (!Application.isPlaying || !isActiveAndEnabled)
+            {
+                SetEnemyHpVisible(false);
+                return;
+            }
+
+            enemyHpHideCoroutine = StartCoroutine(EnemyHpHideAfterDamageTrailRoutine());
+        }
+
+        private IEnumerator EnemyHpHideAfterDamageTrailRoutine()
+        {
+            var delaySeconds = HpDamageTrailDelaySeconds + HpDamageTrailDurationSeconds + 0.05f;
+            if (delaySeconds > 0f)
+            {
+                yield return new WaitForSecondsRealtime(delaySeconds);
+            }
+
+            SetEnemyHpVisible(false);
+            enemyHpHideCoroutine = null;
+        }
+
+        private void ClearEnemyHpHide()
+        {
+            if (enemyHpHideCoroutine != null)
+            {
+                StopCoroutine(enemyHpHideCoroutine);
+                enemyHpHideCoroutine = null;
+            }
+        }
+
         private void EnsureHpBarDefaults()
         {
             ConfigureHpBarFill(playerBattleHpBarFill, playerHpFillColor, hpBarBackgroundColor);
             ConfigureHpBarFill(enemyHpBarFill, enemyHpFillColor, hpBarBackgroundColor);
             ConfigureHpBarFill(hpBarFill, playerHpFillColor, hpBarBackgroundColor);
+            EnsureDamageTrailFill(playerBattleHpBarFill);
+            EnsureDamageTrailFill(enemyHpBarFill);
+            EnsureDamageTrailFill(hpBarFill);
             playerBoardStatusEffectsRoot = EnsureStatusEffectsRoot(hpBarFill, "PlayerBoardStatusEffects") ?? playerBoardStatusEffectsRoot;
             playerBattleStatusEffectsRoot = EnsureStatusEffectsRoot(playerBattleHpBarFill, "PlayerBattleStatusEffects") ?? playerBattleStatusEffectsRoot;
             enemyStatusEffectsRoot = EnsureStatusEffectsRoot(enemyHpBarFill, "EnemyStatusEffects") ?? enemyStatusEffectsRoot;
@@ -1002,9 +1173,48 @@ namespace Project2048.Prototype
             }
         }
 
-        private static void SetHpBarValue(Image fillImage, int currentHp, int maxHp)
+        private void SetHpBarValue(Image fillImage, int currentHp, int maxHp)
         {
             var ratio = maxHp > 0 ? Mathf.Clamp01(currentHp / (float)maxHp) : 0f;
+            var damageTrailFill = EnsureDamageTrailFill(fillImage);
+            var hasPreviousMainRatio = hpMainFillRatios.TryGetValue(fillImage, out var previousMainRatio);
+            if (!hasPreviousMainRatio)
+            {
+                previousMainRatio = ratio;
+            }
+
+            SetHpFillRatio(fillImage, ratio);
+
+            if (damageTrailFill != null)
+            {
+                if (!hasPreviousMainRatio)
+                {
+                    SetHpDamageTrailRatio(fillImage, damageTrailFill, ratio);
+                }
+                else if (ratio < previousMainRatio - 0.001f)
+                {
+                    var startRatio = Mathf.Max(ResolveHpDamageTrailRatio(fillImage), previousMainRatio);
+                    SetHpDamageTrailRatio(fillImage, damageTrailFill, startRatio);
+                    PlayHpDamageTrail(fillImage, damageTrailFill, startRatio, ratio);
+                }
+                else if (ratio > previousMainRatio + 0.001f)
+                {
+                    StopHpDamageTrail(fillImage);
+                    SetHpDamageTrailRatio(fillImage, damageTrailFill, ratio);
+                }
+            }
+
+            hpMainFillRatios[fillImage] = ratio;
+        }
+
+        private static void SetHpFillRatio(Image fillImage, float ratio)
+        {
+            if (fillImage == null)
+            {
+                return;
+            }
+
+            ratio = Mathf.Clamp01(ratio);
             fillImage.fillAmount = ratio;
 
             var rectTransform = fillImage.rectTransform;
@@ -1012,6 +1222,143 @@ namespace Project2048.Prototype
             rectTransform.anchorMax = new Vector2(ratio, 1f);
             rectTransform.offsetMin = Vector2.zero;
             rectTransform.offsetMax = Vector2.zero;
+        }
+
+        private Image EnsureDamageTrailFill(Image fillImage)
+        {
+            var hpRoot = ResolveHpRoot(fillImage);
+            if (fillImage == null || hpRoot == null)
+            {
+                return null;
+            }
+
+            var existing = hpRoot.Find("DamageTrailFill");
+            Image trailImage;
+            RectTransform trailRect;
+            if (existing != null)
+            {
+                trailImage = existing.GetComponent<Image>();
+                if (trailImage == null)
+                {
+                    trailImage = existing.gameObject.AddComponent<Image>();
+                }
+
+                trailRect = existing as RectTransform ?? existing.gameObject.AddComponent<RectTransform>();
+            }
+            else
+            {
+                var trailObject = new GameObject("DamageTrailFill", typeof(RectTransform), typeof(Image));
+                trailObject.transform.SetParent(hpRoot, false);
+                trailImage = trailObject.GetComponent<Image>();
+                trailRect = trailObject.GetComponent<RectTransform>();
+            }
+
+            trailImage.sprite = fillImage.sprite;
+            trailImage.type = Image.Type.Filled;
+            trailImage.fillMethod = Image.FillMethod.Horizontal;
+            trailImage.fillOrigin = (int)Image.OriginHorizontal.Left;
+            trailImage.fillClockwise = true;
+            trailImage.color = hpDamageTrailColor;
+            trailImage.raycastTarget = false;
+
+            trailRect.anchorMin = Vector2.zero;
+            trailRect.anchorMax = Vector2.one;
+            trailRect.offsetMin = Vector2.zero;
+            trailRect.offsetMax = Vector2.zero;
+            trailRect.pivot = new Vector2(0f, 0.5f);
+            trailImage.transform.SetAsFirstSibling();
+            SetHpFillRatio(trailImage, ResolveHpDamageTrailRatio(fillImage));
+            return trailImage;
+        }
+
+        private float ResolveHpDamageTrailRatio(Image fillImage)
+        {
+            if (fillImage != null && hpDamageTrailRatios.TryGetValue(fillImage, out var ratio))
+            {
+                return ratio;
+            }
+
+            return fillImage != null && hpMainFillRatios.TryGetValue(fillImage, out var mainRatio)
+                ? mainRatio
+                : fillImage != null ? Mathf.Clamp01(fillImage.fillAmount) : 0f;
+        }
+
+        private void SetHpDamageTrailRatio(Image fillImage, Image trailImage, float ratio)
+        {
+            if (fillImage == null || trailImage == null)
+            {
+                return;
+            }
+
+            ratio = Mathf.Clamp01(ratio);
+            SetHpFillRatio(trailImage, ratio);
+            hpDamageTrailRatios[fillImage] = ratio;
+        }
+
+        private void PlayHpDamageTrail(Image fillImage, Image trailImage, float fromRatio, float toRatio)
+        {
+            StopHpDamageTrail(fillImage);
+            if (!Application.isPlaying || !isActiveAndEnabled || fillImage == null || trailImage == null)
+            {
+                return;
+            }
+
+            hpDamageTrailCoroutines[fillImage] = StartCoroutine(HpDamageTrailRoutine(fillImage, trailImage, fromRatio, toRatio));
+        }
+
+        private IEnumerator HpDamageTrailRoutine(Image fillImage, Image trailImage, float fromRatio, float toRatio)
+        {
+            if (HpDamageTrailDelaySeconds > 0f)
+            {
+                yield return new WaitForSecondsRealtime(HpDamageTrailDelaySeconds);
+            }
+
+            var elapsed = 0f;
+            while (elapsed < HpDamageTrailDurationSeconds)
+            {
+                if (fillImage == null || trailImage == null)
+                {
+                    yield break;
+                }
+
+                elapsed += Time.unscaledDeltaTime;
+                var t = Mathf.SmoothStep(0f, 1f, Mathf.Clamp01(elapsed / HpDamageTrailDurationSeconds));
+                SetHpDamageTrailRatio(fillImage, trailImage, Mathf.Lerp(fromRatio, toRatio, t));
+                yield return null;
+            }
+
+            SetHpDamageTrailRatio(fillImage, trailImage, toRatio);
+            hpDamageTrailCoroutines.Remove(fillImage);
+        }
+
+        private void StopHpDamageTrail(Image fillImage)
+        {
+            if (fillImage == null || !hpDamageTrailCoroutines.TryGetValue(fillImage, out var routine))
+            {
+                return;
+            }
+
+            if (routine != null)
+            {
+                StopCoroutine(routine);
+            }
+
+            hpDamageTrailCoroutines.Remove(fillImage);
+        }
+
+        private void ClearHpDamageTrailAnimations()
+        {
+            foreach (var routine in hpDamageTrailCoroutines.Values)
+            {
+                if (routine != null)
+                {
+                    StopCoroutine(routine);
+                }
+            }
+
+            hpDamageTrailCoroutines.Clear();
+            hpMainFillRatios.Clear();
+            hpDamageTrailRatios.Clear();
         }
 
         private void SetBlockIndicator(Image fillImage, int block)
@@ -1219,7 +1566,7 @@ namespace Project2048.Prototype
             chipRect.sizeDelta = new Vector2(32f, 32f);
 
             var image = chipObject.GetComponent<Image>();
-            image.color = effect.IsBuff ? buffStatusColor : debuffStatusColor;
+            image.color = GetStatusEffectColor(effect);
             image.raycastTarget = true;
 
             chipObject.GetComponent<StatusEffectTooltipTarget>()
@@ -1311,26 +1658,42 @@ namespace Project2048.Prototype
                 audioSource = gameObject.AddComponent<AudioSource>();
             }
 
+            ResolveAudioRouting();
             audioSource.playOnAwake = false;
             audioSource.spatialBlend = 0f;
             audioSource.volume = 1f;
             audioSource.mute = false;
             audioSource.loop = false;
+            if (sfxMixerGroup != null)
+            {
+                audioSource.outputAudioMixerGroup = sfxMixerGroup;
+            }
             // Keep prototype UI sounds audible regardless of camera distance.
             audioSource.maxDistance = UiSfxDistance;
             audioSource.minDistance = UiSfxDistance;
             audioSource.rolloffMode = AudioRolloffMode.Linear;
-            if (soundVolumeScale <= 0f)
+        }
+
+        private void ResolveAudioRouting()
+        {
+            var settings = Project2048AudioSettings.LoadDefault();
+            if (sfxMixerGroup == null)
             {
-                soundVolumeScale = DefaultSoundVolumeScale;
+                sfxMixerGroup = settings != null ? settings.SfxGroup : null;
             }
 
-            // Inspector clips in the sample scene are the source of truth; Resources
-            // paths only keep a generated/test scene from failing silently.
-            playerHitClip ??= Resources.Load<AudioClip>("Audio/Prototype/PlayerHit");
-            enemyHitClip ??= Resources.Load<AudioClip>("Audio/Prototype/EnemyHit");
-            boardMoveClip ??= Resources.Load<AudioClip>("Audio/Prototype/BoardMove");
-            boardMergeClip ??= Resources.Load<AudioClip>("Audio/Prototype/BoardMerge");
+            if (bgmDucker == null)
+            {
+                bgmDucker = SimpleBgmDucker.Active != null
+                    ? SimpleBgmDucker.Active
+                    : FindAnyObjectByType<SimpleBgmDucker>(FindObjectsInactive.Include);
+            }
+        }
+
+        private void DuckBgmForImportantSfx()
+        {
+            ResolveAudioRouting();
+            bgmDucker?.DuckBgm();
         }
 
         private Transform FindChildByName(string childName)
@@ -1382,45 +1745,13 @@ namespace Project2048.Prototype
             return child != null ? child.GetComponent<T>() : null;
         }
 
-        private void PlaySoundCues(IReadOnlyList<PrototypeCombatSoundCue> cues)
+        private void PlayBoardTileEffectCues(IReadOnlyList<BoardTileEffectCue> cues)
         {
-            if (cues == null || cues.Count == 0 || audioSource == null)
+            if (cues == null || cues.Count == 0 || boardTileEffectProfile == null)
             {
                 return;
             }
 
-            foreach (var cue in cues)
-            {
-                PlaySoundCue(cue);
-            }
-        }
-
-        private void PlaySoundCue(PrototypeCombatSoundCue cue)
-        {
-            var clip = cue switch
-            {
-                PrototypeCombatSoundCue.PlayerHit => playerHitClip,
-                PrototypeCombatSoundCue.EnemyHit => enemyHitClip,
-                PrototypeCombatSoundCue.BoardMove => boardMoveClip,
-                PrototypeCombatSoundCue.BoardMerge => boardMergeClip,
-                _ => null,
-            };
-
-            if (clip != null)
-            {
-                audioSource.PlayOneShot(clip, soundVolumeScale);
-            }
-        }
-
-        private (bool Move, bool Merge) PlayBoardTileEffectCues(IReadOnlyList<BoardTileEffectCue> cues)
-        {
-            if (cues == null || cues.Count == 0 || boardTileEffectProfile == null)
-            {
-                return (false, false);
-            }
-
-            var playedMoveAudio = false;
-            var playedMergeAudio = false;
             foreach (var cue in cues)
             {
                 var effect = ResolveBoardTileEffect(cue);
@@ -1429,40 +1760,8 @@ namespace Project2048.Prototype
                     continue;
                 }
 
-                var playedAudio = PlayEffectAudio(effect);
-                if (playedAudio && cue.CueType == BoardTileEffectCueType.Move)
-                {
-                    playedMoveAudio = true;
-                }
-                else if (playedAudio && cue.CueType == BoardTileEffectCueType.Merge)
-                {
-                    playedMergeAudio = true;
-                }
-
+                PlayEffectAudio(effect, cue.CueType == BoardTileEffectCueType.Merge);
                 SpawnBoardEffectPrefab(effect, cue.Position);
-            }
-
-            return (playedMoveAudio, playedMergeAudio);
-        }
-
-        private void PlayFallbackBoardSoundCues(
-            IReadOnlyList<PrototypeCombatSoundCue> cues,
-            (bool Move, bool Merge) playedProfileAudio)
-        {
-            if (cues == null || cues.Count == 0)
-            {
-                return;
-            }
-
-            foreach (var cue in cues)
-            {
-                if ((cue == PrototypeCombatSoundCue.BoardMove && playedProfileAudio.Move) ||
-                    (cue == PrototypeCombatSoundCue.BoardMerge && playedProfileAudio.Merge))
-                {
-                    continue;
-                }
-
-                PlaySoundCue(cue);
             }
         }
 
@@ -1476,14 +1775,19 @@ namespace Project2048.Prototype
             };
         }
 
-        private bool PlayEffectAudio(CombatEffectBinding effect)
+        private bool PlayEffectAudio(CombatEffectBinding effect, bool duckBgm)
         {
             if (effect?.sfxClip == null || audioSource == null)
             {
                 return false;
             }
 
-            return CombatEffectAudioPlayer.PlayOneShot(audioSource, effect, soundVolumeScale, transform);
+            if (duckBgm)
+            {
+                DuckBgmForImportantSfx();
+            }
+
+            return CombatEffectAudioPlayer.PlayOneShot(audioSource, effect, 1f, transform);
         }
 
         private void SpawnBoardEffectPrefab(CombatEffectBinding effect, Vector2Int boardPosition)
@@ -1731,14 +2035,16 @@ namespace Project2048.Prototype
             }
         }
 
-        private static Color GetDebuffVfxColor(DebuffType debuffType)
+        private Color GetDebuffVfxColor(DebuffType debuffType)
         {
-            return debuffType switch
+            var color = GetDebuffColor(debuffType);
+            color.a = debuffType switch
             {
-                DebuffType.Fear => new Color(0.45f, 0.02f, 0.10f, 0.42f),
-                DebuffType.Darkness => new Color(0.14f, 0.02f, 0.24f, 0.48f),
-                _ => new Color(0f, 0f, 0f, 0.35f),
+                DebuffType.Fear => 0.42f,
+                DebuffType.Darkness => 0.48f,
+                _ => 0.35f,
             };
+            return color;
         }
 
         private void ClearCombatVfx()
@@ -1880,5 +2186,6 @@ namespace Project2048.Prototype
 
             return sb.ToString();
         }
+
     }
 }

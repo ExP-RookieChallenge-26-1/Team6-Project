@@ -14,7 +14,7 @@ namespace Project2048.Prototype
             lifetimeSeconds = 0.8f,
             burstCount = 22,
             startSpeed = 0.78f,
-            startSize = 0.17f,
+            startSize = 0.22f,
         };
 
         public CombatParticleEffectBinding fearDebuffCastEffect = new()
@@ -24,7 +24,7 @@ namespace Project2048.Prototype
             lifetimeSeconds = 0.9f,
             burstCount = 28,
             startSpeed = 0.62f,
-            startSize = 0.22f,
+            startSize = 0.28f,
             swirl = true,
         };
 
@@ -35,7 +35,7 @@ namespace Project2048.Prototype
             lifetimeSeconds = 0.9f,
             burstCount = 28,
             startSpeed = 0.62f,
-            startSize = 0.22f,
+            startSize = 0.28f,
             swirl = true,
         };
 

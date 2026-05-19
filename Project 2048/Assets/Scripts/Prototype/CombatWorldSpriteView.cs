@@ -20,7 +20,7 @@ namespace Project2048.Prototype
         public const float EnemyAppearWorldShakeDurationSeconds = 1.5f;
         public const float ShieldImpactParticleLifetimeSeconds = 0.8f;
         public const float DebuffCastParticleLifetimeSeconds = 0.9f;
-        public const float DebuffTargetParticleDelaySeconds = 0.18f;
+        public const float DebuffTargetParticleDelaySeconds = DebuffCastParticleLifetimeSeconds;
 
         private const float EnemyAppearIntroRightOffset = 2.25f;
         private const float EnemyAppearIntroJumpHeight = 0.7f;
@@ -28,7 +28,7 @@ namespace Project2048.Prototype
         private const float EnemyAttackLungeDistance = 0.72f;
         private const float EnemyAttackLungeImpactTime = 0.45f;
         private const float EnemyAttackLungeScalePop = 0.05f;
-        private const float EnemyAppearWorldShakeMagnitude = 0.11f;
+        private const float EnemyAppearWorldShakeMagnitude = 0.13f;
         private const int ShieldImpactParticleCount = 22;
         private const int DebuffCastParticleCount = 28;
         private const string DefaultWorldVfxProfileResourceName = "PrototypeCombatWorldVfxProfile";
@@ -273,7 +273,7 @@ namespace Project2048.Prototype
             SpawnDebuffCastParticles(
                 cue.DebuffType,
                 enemyRenderer != null ? enemyRenderer.transform : transform);
-            PlayDebuffTargetEffectAfterCast(cue.DebuffType);
+            PlayDebuffTargetEffectAfterCast(cue.DebuffType, ResolveDebuffParticleLifetimeSeconds(cue.DebuffType));
         }
 
         private void PlayShieldImpactEffectIfNeeded(bool shieldWasHit, Transform anchor)
@@ -294,7 +294,7 @@ namespace Project2048.Prototype
                 ShieldImpactParticleLifetimeSeconds,
                 ShieldImpactParticleCount,
                 0.78f,
-                0.17f,
+                0.22f,
                 swirl: false);
         }
 
@@ -793,7 +793,7 @@ namespace Project2048.Prototype
                 : lungeWorldPosition;
         }
 
-        private void PlayDebuffTargetEffectAfterCast(DebuffType debuffType)
+        private void PlayDebuffTargetEffectAfterCast(DebuffType debuffType, float delaySeconds)
         {
             var target = playerRenderer != null ? playerRenderer.transform : transform;
             if (!isActiveAndEnabled)
@@ -802,12 +802,12 @@ namespace Project2048.Prototype
                 return;
             }
 
-            StartCoroutine(SpawnDebuffTargetParticlesAfterDelay(debuffType, target));
+            StartCoroutine(SpawnDebuffTargetParticlesAfterDelay(debuffType, target, delaySeconds));
         }
 
-        private IEnumerator SpawnDebuffTargetParticlesAfterDelay(DebuffType debuffType, Transform target)
+        private IEnumerator SpawnDebuffTargetParticlesAfterDelay(DebuffType debuffType, Transform target, float delaySeconds)
         {
-            yield return new WaitForSecondsRealtime(DebuffTargetParticleDelaySeconds);
+            yield return new WaitForSecondsRealtime(Mathf.Max(0.05f, delaySeconds));
             SpawnDebuffCastParticles(debuffType, target != null ? target : transform);
         }
 
@@ -827,7 +827,7 @@ namespace Project2048.Prototype
                 effect != null ? effect.EffectiveLifetimeSeconds : DebuffCastParticleLifetimeSeconds,
                 effect != null ? effect.EffectiveBurstCount : DebuffCastParticleCount,
                 effect != null ? effect.EffectiveStartSpeed : 0.62f,
-                effect != null ? effect.EffectiveStartSize : 0.22f,
+                effect != null ? effect.EffectiveStartSize : 0.28f,
                 swirl: true);
         }
 
@@ -948,7 +948,7 @@ namespace Project2048.Prototype
             var shape = particles.shape;
             shape.enabled = true;
             shape.shapeType = ParticleSystemShapeType.Sphere;
-            shape.radius = 0.28f;
+            shape.radius = 0.36f;
 
             if (swirl)
             {
@@ -984,7 +984,7 @@ namespace Project2048.Prototype
         {
             var shape = particles.shape;
             shape.shapeType = ParticleSystemShapeType.Circle;
-            shape.radius = 0.42f;
+            shape.radius = 0.54f;
             shape.radiusThickness = 0.32f;
             shape.arc = 360f;
 
@@ -1054,6 +1054,11 @@ namespace Project2048.Prototype
         {
             ResolveWorldVfxProfile();
             return worldVfxProfile != null ? worldVfxProfile.ResolveDebuffCastEffect(debuffType) : null;
+        }
+
+        private float ResolveDebuffParticleLifetimeSeconds(DebuffType debuffType)
+        {
+            return ResolveDebuffParticleEffect(debuffType)?.EffectiveLifetimeSeconds ?? DebuffTargetParticleDelaySeconds;
         }
 
         private Material ResolveShieldImpactParticleMaterial()

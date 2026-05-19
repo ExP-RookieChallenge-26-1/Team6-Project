@@ -9,25 +9,31 @@
   "files_with_fixed_update": 0,
   "files_with_late_update": 2,
   "singleton_candidates": 3,
-  "manager_like_classes": 32,
-  "ui_related_classes": 36,
-  "save_load_related_classes": 36,
+  "manager_like_classes": 30,
+  "ui_related_classes": 38,
+  "save_load_related_classes": 37,
   "role_counts": {
-    "ui": 36,
+    "ui": 38,
     "combat": 67,
     "data": 38,
-    "save-load": 36,
-    "player": 52,
-    "manager": 31,
+    "save-load": 37,
+    "player": 51,
+    "manager": 29,
     "scene": 9,
     "runtime": 40,
-    "inventory": 2,
+    "inventory": 1,
     "network": 2
   },
   "high_coupling_classes": [
     {
       "class_name": "CombatUiBuilder",
       "file_id": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
+      "relation_count": 220,
+      "referenced_type_count": 200
+    },
+    {
+      "class_name": "CombatWorldSpriteView",
+      "file_id": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
       "relation_count": 220,
       "referenced_type_count": 200
     },
@@ -40,13 +46,7 @@
     {
       "class_name": "CombatPresentationEffectTests",
       "file_id": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
-      "relation_count": 214,
-      "referenced_type_count": 200
-    },
-    {
-      "class_name": "CombatWorldSpriteView",
-      "file_id": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
-      "relation_count": 211,
+      "relation_count": 215,
       "referenced_type_count": 200
     },
     {
@@ -64,8 +64,8 @@
     {
       "class_name": "RewardGrowthTests",
       "file_id": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
-      "relation_count": 193,
-      "referenced_type_count": 180
+      "relation_count": 195,
+      "referenced_type_count": 182
     },
     {
       "class_name": "CombatUiContractTests",
@@ -142,6 +142,31 @@
       "risk_score": 95
     },
     {
+      "file_id": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+      "class_name": "CombatPresentationEffectTests",
+      "risk_flags": [
+        "high-coupling",
+        "getcomponent-heavy",
+        "find-heavy",
+        "magic-number-heavy",
+        "large-class",
+        "save-load-sensitive",
+        "ui-runtime-mixed",
+        "state-owner"
+      ],
+      "risk_reasons": [
+        "참조 타입 또는 관계 수가 많음",
+        "GetComponent/TryGetComponent 호출이 많음",
+        "Find 계열 탐색 사용",
+        "숫자 리터럴이 많아 의미 파악이 어려울 수 있음",
+        "파일/메서드/필드 수가 많아 책임이 커질 가능성",
+        "저장/불러오기 관련 로직 포함",
+        "UI와 런타임 책임이 한 파일에 섞였을 가능성",
+        "상태 중심 또는 관리 중심 클래스일 가능성"
+      ],
+      "risk_score": 95
+    },
+    {
       "file_id": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
       "class_name": "CombatUiViewTests",
       "risk_flags": [
@@ -167,6 +192,31 @@
       "risk_score": 95
     },
     {
+      "file_id": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+      "class_name": "CombatWorldSpriteView",
+      "risk_flags": [
+        "high-coupling",
+        "public-field-heavy",
+        "getcomponent-heavy",
+        "find-heavy",
+        "magic-number-heavy",
+        "large-class",
+        "ui-runtime-mixed",
+        "state-owner"
+      ],
+      "risk_reasons": [
+        "참조 타입 또는 관계 수가 많음",
+        "public 필드 노출 수가 많음",
+        "GetComponent/TryGetComponent 호출이 많음",
+        "Find 계열 탐색 사용",
+        "숫자 리터럴이 많아 의미 파악이 어려울 수 있음",
+        "파일/메서드/필드 수가 많아 책임이 커질 가능성",
+        "UI와 런타임 책임이 한 파일에 섞였을 가능성",
+        "상태 중심 또는 관리 중심 클래스일 가능성"
+      ],
+      "risk_score": 93
+    },
+    {
       "file_id": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioRouter.cs",
       "class_name": "ButtonClickAudioRouter",
       "risk_flags": [
@@ -190,52 +240,6 @@
         "상태 중심 또는 관리 중심 클래스일 가능성"
       ],
       "risk_score": 88
-    },
-    {
-      "file_id": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
-      "class_name": "CombatPresentationEffectTests",
-      "risk_flags": [
-        "high-coupling",
-        "getcomponent-heavy",
-        "find-heavy",
-        "magic-number-heavy",
-        "large-class",
-        "save-load-sensitive",
-        "state-owner"
-      ],
-      "risk_reasons": [
-        "참조 타입 또는 관계 수가 많음",
-        "GetComponent/TryGetComponent 호출이 많음",
-        "Find 계열 탐색 사용",
-        "숫자 리터럴이 많아 의미 파악이 어려울 수 있음",
-        "파일/메서드/필드 수가 많아 책임이 커질 가능성",
-        "저장/불러오기 관련 로직 포함",
-        "상태 중심 또는 관리 중심 클래스일 가능성"
-      ],
-      "risk_score": 85
-    },
-    {
-      "file_id": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
-      "class_name": "CombatWorldSpriteView",
-      "risk_flags": [
-        "high-coupling",
-        "public-field-heavy",
-        "getcomponent-heavy",
-        "find-heavy",
-        "magic-number-heavy",
-        "large-class",
-        "state-owner"
-      ],
-      "risk_reasons": [
-        "참조 타입 또는 관계 수가 많음",
-        "public 필드 노출 수가 많음",
-        "GetComponent/TryGetComponent 호출이 많음",
-        "Find 계열 탐색 사용",
-        "숫자 리터럴이 많아 의미 파악이 어려울 수 있음",
-        "파일/메서드/필드 수가 많아 책임이 커질 가능성",
-        "상태 중심 또는 관리 중심 클래스일 가능성"
-      ],
-      "risk_score": 83
     },
     {
       "file_id": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
@@ -305,25 +309,25 @@
       "risk_score": 75
     },
     {
-      "file_id": "Project 2048/Assets/Scripts/Audio/PersistentBgmPlayer.cs",
-      "class_name": "PersistentBgmPlayer",
+      "file_id": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatBootstrap.cs",
+      "class_name": "PrototypeCombatBootstrap",
       "risk_flags": [
-        "singleton-candidate",
         "high-coupling",
+        "find-heavy",
+        "large-class",
         "init-order-sensitive",
         "save-load-sensitive",
-        "ui-runtime-mixed",
         "state-owner"
       ],
       "risk_reasons": [
-        "Instance 또는 DontDestroyOnLoad 패턴 감지",
         "참조 타입 또는 관계 수가 많음",
+        "Find 계열 탐색 사용",
+        "파일/메서드/필드 수가 많아 책임이 커질 가능성",
         "초기화 순서에 민감할 가능성",
         "저장/불러오기 관련 로직 포함",
-        "UI와 런타임 책임이 한 파일에 섞였을 가능성",
         "상태 중심 또는 관리 중심 클래스일 가능성"
       ],
-      "risk_score": 73
+      "risk_score": 75
     }
   ],
   "common_patterns": [

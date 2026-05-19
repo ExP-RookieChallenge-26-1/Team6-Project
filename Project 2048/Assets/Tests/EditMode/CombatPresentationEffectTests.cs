@@ -990,7 +990,7 @@ namespace Project2048.Tests
         public void PrototypeCombatEventAudioProfile_ContainsResultAndRewardClips()
         {
             var profile = AssetDatabase.LoadAssetAtPath<PrototypeCombatEventAudioProfileSO>(
-                "Assets/Data/Prototype/Presentation/PrototypeCombatEventAudioProfile.asset");
+                "Assets/Data/Presentation/PrototypeCombatEventAudioProfile.asset");
 
             Assert.That(profile, Is.Not.Null);
             Assert.That(profile.Resolve(PrototypeCombatEventSoundCue.Victory).sfxClip, Is.Not.Null);
@@ -1002,7 +1002,7 @@ namespace Project2048.Tests
         [Test]
         public void PrototypeEnemyAssets_HaveAppearActionEffectClips()
         {
-            var enemyGuids = AssetDatabase.FindAssets("t:EnemySO", new[] { "Assets/Data/Prototype/Enemies" });
+            var enemyGuids = AssetDatabase.FindAssets("t:EnemySO", new[] { "Assets/Data/Enemies" });
 
             Assert.That(enemyGuids.Length, Is.GreaterThanOrEqualTo(12));
             foreach (var guid in enemyGuids)
@@ -1019,7 +1019,7 @@ namespace Project2048.Tests
         [Test]
         public void PrototypeEnemyAssets_HaveDefendActionEffectClips()
         {
-            var enemyGuids = AssetDatabase.FindAssets("t:EnemySO", new[] { "Assets/Data/Prototype/Enemies" });
+            var enemyGuids = AssetDatabase.FindAssets("t:EnemySO", new[] { "Assets/Data/Enemies" });
 
             Assert.That(enemyGuids.Length, Is.GreaterThanOrEqualTo(12));
             foreach (var guid in enemyGuids)
@@ -1036,7 +1036,7 @@ namespace Project2048.Tests
         [Test]
         public void PrototypeEnemyAssets_HaveAttackAndHitActionEffectClips()
         {
-            var enemyGuids = AssetDatabase.FindAssets("t:EnemySO", new[] { "Assets/Data/Prototype/Enemies" });
+            var enemyGuids = AssetDatabase.FindAssets("t:EnemySO", new[] { "Assets/Data/Enemies" });
 
             Assert.That(enemyGuids.Length, Is.GreaterThanOrEqualTo(12));
             foreach (var guid in enemyGuids)
@@ -1069,7 +1069,7 @@ namespace Project2048.Tests
 
             foreach (var pair in expectedVolumes)
             {
-                var path = $"Assets/Data/Prototype/Enemies/{pair.Key}";
+                var path = $"Assets/Data/Enemies/{pair.Key}";
                 var enemy = AssetDatabase.LoadAssetAtPath<EnemySO>(path);
 
                 Assert.That(enemy, Is.Not.Null, path);
@@ -1083,7 +1083,7 @@ namespace Project2048.Tests
         public void PrototypeBoardTileEffects_UsesMergeClipAndGranderTuningForLargerTiles()
         {
             var profile = AssetDatabase.LoadAssetAtPath<BoardTileEffectProfileSO>(
-                "Assets/Data/Prototype/Presentation/PrototypeBoardTileEffects.asset");
+                "Assets/Data/Presentation/PrototypeBoardTileEffects.asset");
 
             Assert.That(profile, Is.Not.Null);
 
@@ -1102,7 +1102,7 @@ namespace Project2048.Tests
         public void PrototypeBoardTileEffects_DefinesEverySupportedMergeTile()
         {
             var profile = AssetDatabase.LoadAssetAtPath<BoardTileEffectProfileSO>(
-                "Assets/Data/Prototype/Presentation/PrototypeBoardTileEffects.asset");
+                "Assets/Data/Presentation/PrototypeBoardTileEffects.asset");
 
             Assert.That(profile, Is.Not.Null);
             foreach (var tileValue in new[] { 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048 })
@@ -1117,7 +1117,7 @@ namespace Project2048.Tests
         [Test]
         public void PrototypeSkillAssets_HaveActivationEffectClips()
         {
-            var skillGuids = AssetDatabase.FindAssets("t:SkillSO", new[] { "Assets/Data/Prototype/Skills" });
+            var skillGuids = AssetDatabase.FindAssets("t:SkillSO", new[] { "Assets/Data/Skills" });
 
             Assert.That(skillGuids.Length, Is.EqualTo(6));
             foreach (var guid in skillGuids)

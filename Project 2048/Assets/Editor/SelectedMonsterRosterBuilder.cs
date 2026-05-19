@@ -10,7 +10,7 @@ namespace Project2048.PrototypeEditor
 {
     public static class SelectedMonsterRosterBuilder
     {
-        private const string EnemyFolder = "Assets/Data/Prototype/Enemies";
+        private const string EnemyFolder = "Assets/Data/Enemies";
         private const string ExistingWolfPath = EnemyFolder + "/01.asset";
 
         private readonly struct EnemySeed
@@ -64,8 +64,7 @@ namespace Project2048.PrototypeEditor
         public static void BuildSelectedMonsterEnemyAssets()
         {
             EnsureFolder("Assets", "Data");
-            EnsureFolder("Assets/Data", "Prototype");
-            EnsureFolder("Assets/Data/Prototype", "Enemies");
+            EnsureFolder("Assets/Data", "Enemies");
 
             var enemies = new List<EnemySO>();
             var wolf = AssetDatabase.LoadAssetAtPath<EnemySO>(ExistingWolfPath);

@@ -5,6 +5,7 @@ using Project2048.Combat;
 using Project2048.Enemy;
 using Project2048.Presentation;
 using Project2048.Skills;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.EventSystems;
@@ -20,6 +21,8 @@ namespace Project2048.Prototype
         public const float EnemyAppearWorldShakeDurationSeconds = 1.5f;
         public const float ShieldImpactParticleLifetimeSeconds = 0.8f;
         public const float DebuffCastParticleLifetimeSeconds = 0.9f;
+        public const float DebuffTargetParticleDelaySeconds = DebuffCastParticleLifetimeSeconds;
+        public const float DamageNumberPopupDurationSeconds = 0.55f;
 
         private const float EnemyAppearIntroRightOffset = 2.25f;
         private const float EnemyAppearIntroJumpHeight = 0.7f;
@@ -27,10 +30,25 @@ namespace Project2048.Prototype
         private const float EnemyAttackLungeDistance = 0.72f;
         private const float EnemyAttackLungeImpactTime = 0.45f;
         private const float EnemyAttackLungeScalePop = 0.05f;
-        private const float EnemyAppearWorldShakeMagnitude = 0.09f;
+        private const float EnemyAppearWorldShakeMagnitude = 0.13f;
+        private const float DamageNumberPopupRiseDistance = 0.62f;
+        private const float DamageNumberPopupMinimumWorldOffset = 0.22f;
+        private const float DamageNumberPopupFallbackWorldRadius = 0.55f;
+        private const float DamageNumberPopupBoundsRadiusMultiplier = 0.65f;
+        private const float DamageNumberPopupWorldFontSize = 2.9f;
+        private const float DamageNumberPopupUiFontSize = 40f;
+        private const float DamageNumberPopupOutlineWidth = 0.22f;
+        private const float DamageNumberPopupGlowInner = 0.04f;
+        private const float DamageNumberPopupGlowOuter = 0.36f;
+        private const float DamageNumberPopupGlowPower = 0.72f;
+        private const float DamageNumberPopupGlowOffset = 0f;
+        private const int DamageNumberPopupSortingOrderOffset = 32;
         private const int ShieldImpactParticleCount = 22;
         private const int DebuffCastParticleCount = 28;
         private const string DefaultWorldVfxProfileResourceName = "PrototypeCombatWorldVfxProfile";
+        private static readonly Color DamageNumberPopupTextColor = new(1f, 0.82f, 0.02f, 1f);
+        private static readonly Color DamageNumberPopupOutlineColor = Color.white;
+        private static readonly Color DamageNumberPopupGlowColor = new(1f, 0.72f, 0f, 0.82f);
 
         [SerializeField] private PrototypeCombatBootstrap bootstrap;
         [SerializeField] private SpriteRenderer backgroundRenderer;
@@ -67,6 +85,8 @@ namespace Project2048.Prototype
         private Material runtimeShieldImpactParticleMaterial;
         private Material runtimeFearDebuffParticleMaterial;
         private Material runtimeDarknessDebuffParticleMaterial;
+        private RectTransform damageNumberPopupLayer;
+        private readonly System.Collections.Generic.List<GameObject> damageNumberPopups = new();
 
         public void Initialize(PrototypeCombatBootstrap owner)
         {
@@ -104,6 +124,7 @@ namespace Project2048.Prototype
             ClearEnemyAppearIntro();
             ClearEnemyAttackLunge();
             ClearWorldShake();
+            ClearDamageNumberPopups();
             DestroyRuntimeParticleMaterials();
         }
 
@@ -120,6 +141,8 @@ namespace Project2048.Prototype
 
         private void HandleCombatStateChanged(CombatSnapshot nextSnapshot)
         {
+            var playerHpDamage = ResolvePlayerHpDamage(snapshot, nextSnapshot);
+            var enemyHpDamage = ResolveEnemyHpDamage(snapshot, nextSnapshot);
             var playerWasHit = PlayerWasHit(snapshot, nextSnapshot);
             var enemyWasHit = EnemyWasHit(snapshot, nextSnapshot);
             var playerShieldWasHit = PlayerShieldWasHit(snapshot, nextSnapshot);
@@ -138,6 +161,8 @@ namespace Project2048.Prototype
             PlayShieldImpactEffectIfNeeded(enemyShieldWasHit, enemyRenderer != null ? enemyRenderer.transform : transform);
             PlayPlayerActionEffectIfNeeded(playerWasHit);
             PlayEnemyActionEffectIfNeeded(enemyWasHit, enemyJustDied);
+            PlayDamageNumberPopupIfNeeded(playerHpDamage, playerRenderer);
+            PlayDamageNumberPopupIfNeeded(enemyHpDamage, enemyRenderer);
             PlayEnemyDebuffCastEffectIfNeeded(snapshot?.LastVfxCue);
             PlayEnemyDefenseEffectIfNeeded(enemyUsedDefense);
             PlayEnemyDeathFadeIfNeeded(enemyJustDied, nextEnemyDead);
@@ -263,13 +288,21 @@ namespace Project2048.Prototype
             }
 
             lastPlayedEnemyDebuffVfxSequence = cue.Sequence;
-            var effect = ResolveCurrentEnemyData()?.FindActionEffect(ResolveDebuffActionId(cue.DebuffType));
+            var enemyData = ResolveCurrentEnemyData();
+            var effect = enemyData?.FindActionEffect(ResolveDebuffActionId(cue.DebuffType));
             PlayCombatantActionEffect(
                 effect,
                 enemyRenderer != null ? enemyRenderer.transform : transform,
                 enemyAnimator);
+            if (effect?.sfxClip == null)
+            {
+                PlayCombatantActionAudioEffect(enemyData?.FindActionEffect(CombatActionIds.Attack));
+            }
 
-            SpawnDebuffCastParticles(cue.DebuffType);
+            SpawnDebuffCastParticles(
+                cue.DebuffType,
+                enemyRenderer != null ? enemyRenderer.transform : transform);
+            PlayDebuffTargetEffectAfterCast(cue.DebuffType, ResolveDebuffParticleLifetimeSeconds(cue.DebuffType));
         }
 
         private void PlayShieldImpactEffectIfNeeded(bool shieldWasHit, Transform anchor)
@@ -290,7 +323,7 @@ namespace Project2048.Prototype
                 ShieldImpactParticleLifetimeSeconds,
                 ShieldImpactParticleCount,
                 0.78f,
-                0.13f,
+                0.22f,
                 swirl: false);
         }
 
@@ -313,15 +346,7 @@ namespace Project2048.Prototype
                 return;
             }
 
-            if (effect.sfxClip != null)
-            {
-                EnsureAudioSource();
-                if (audioSource != null)
-                {
-                    DuckBgmForImportantSfx();
-                    CombatEffectAudioPlayer.PlayOneShot(audioSource, effect, 1f, transform);
-                }
-            }
+            PlayCombatantActionAudioEffect(effect);
 
             if (effect.vfxPrefab != null)
             {
@@ -354,6 +379,326 @@ namespace Project2048.Prototype
             if (effect.animationClip != null && animator != null && animator.runtimeAnimatorController != null)
             {
                 animator.Play(effect.animationClip.name, 0, 0f);
+            }
+        }
+
+        private void PlayCombatantActionAudioEffect(CombatEffectBinding effect)
+        {
+            if (effect?.sfxClip == null)
+            {
+                return;
+            }
+
+            EnsureAudioSource();
+            if (audioSource == null)
+            {
+                return;
+            }
+
+            DuckBgmForImportantSfx();
+            CombatEffectAudioPlayer.PlayOneShot(audioSource, effect, 1f, transform);
+        }
+
+        private void PlayDamageNumberPopupIfNeeded(int damageAmount, SpriteRenderer targetRenderer)
+        {
+            if (damageAmount <= 0 || targetRenderer == null)
+            {
+                return;
+            }
+
+            var popupLayer = ResolveDamageNumberPopupLayer();
+            if (popupLayer != null)
+            {
+                PlayDamageNumberUiPopup(damageAmount, targetRenderer, popupLayer);
+                return;
+            }
+
+            PlayDamageNumberWorldPopup(damageAmount, targetRenderer);
+        }
+
+        private void PlayDamageNumberUiPopup(int damageAmount, SpriteRenderer targetRenderer, RectTransform popupLayer)
+        {
+            var popupObject = new GameObject("DamageNumberPopup", typeof(RectTransform), typeof(TextMeshProUGUI));
+            popupObject.transform.SetParent(popupLayer, false);
+            damageNumberPopups.Add(popupObject);
+
+            var rectTransform = popupObject.GetComponent<RectTransform>();
+            rectTransform.anchorMin = new Vector2(0.5f, 0.5f);
+            rectTransform.anchorMax = new Vector2(0.5f, 0.5f);
+            rectTransform.pivot = new Vector2(0.5f, 0.5f);
+            rectTransform.sizeDelta = new Vector2(196f, 84f);
+            rectTransform.anchoredPosition = ResolveDamageNumberCanvasPosition(targetRenderer, popupLayer);
+
+            var label = popupObject.GetComponent<TextMeshProUGUI>();
+            ConfigureDamageNumberLabel(label, damageAmount, DamageNumberPopupUiFontSize);
+            label.raycastTarget = false;
+
+            if (!Application.isPlaying || !isActiveAndEnabled)
+            {
+                return;
+            }
+
+            StartCoroutine(DamageNumberPopupRoutine(rectTransform, label));
+        }
+
+        private void PlayDamageNumberWorldPopup(int damageAmount, SpriteRenderer targetRenderer)
+        {
+            var popupObject = new GameObject("DamageNumberPopup", typeof(TextMeshPro));
+            popupObject.transform.SetParent(targetRenderer.transform, false);
+            popupObject.transform.localPosition = targetRenderer.transform.InverseTransformPoint(ResolveDamageNumberWorldPosition(targetRenderer));
+            popupObject.transform.localRotation = Quaternion.identity;
+            popupObject.transform.localScale = Vector3.one;
+            damageNumberPopups.Add(popupObject);
+
+            var label = popupObject.GetComponent<TextMeshPro>();
+            ConfigureDamageNumberLabel(label, damageAmount, DamageNumberPopupWorldFontSize);
+
+            var meshRenderer = popupObject.GetComponent<MeshRenderer>();
+            meshRenderer.sortingLayerID = targetRenderer.sortingLayerID;
+            meshRenderer.sortingOrder = targetRenderer.sortingOrder + DamageNumberPopupSortingOrderOffset;
+
+            if (!Application.isPlaying || !isActiveAndEnabled)
+            {
+                return;
+            }
+
+            StartCoroutine(DamageNumberPopupRoutine(popupObject.transform, label));
+        }
+
+        private static void ConfigureDamageNumberLabel(TMP_Text label, int damageAmount, float fontSize)
+        {
+            label.text = damageAmount.ToString();
+            label.alignment = TextAlignmentOptions.Center;
+            label.fontSize = fontSize;
+            label.fontStyle = FontStyles.Bold;
+            label.color = DamageNumberPopupTextColor;
+            label.textWrappingMode = TextWrappingModes.NoWrap;
+            label.overflowMode = TextOverflowModes.Overflow;
+            label.faceColor = DamageNumberPopupTextColor;
+            label.outlineColor = DamageNumberPopupOutlineColor;
+            label.outlineWidth = DamageNumberPopupOutlineWidth;
+            ConfigureDamageNumberGlow(label);
+        }
+
+        private static void ConfigureDamageNumberGlow(TMP_Text label)
+        {
+            var sourceMaterial = label.fontMaterial;
+            if (sourceMaterial == null)
+            {
+                return;
+            }
+
+            var material = new Material(sourceMaterial)
+            {
+                name = "DamageNumberPopupMaterial",
+            };
+
+            material.EnableKeyword(ShaderUtilities.Keyword_Outline);
+            if (material.HasProperty(ShaderUtilities.ID_FaceColor))
+            {
+                material.SetColor(ShaderUtilities.ID_FaceColor, DamageNumberPopupTextColor);
+            }
+
+            if (material.HasProperty(ShaderUtilities.ID_OutlineColor))
+            {
+                material.SetColor(ShaderUtilities.ID_OutlineColor, DamageNumberPopupOutlineColor);
+            }
+
+            if (material.HasProperty(ShaderUtilities.ID_OutlineWidth))
+            {
+                material.SetFloat(ShaderUtilities.ID_OutlineWidth, DamageNumberPopupOutlineWidth);
+            }
+
+            if (material.HasProperty(ShaderUtilities.ID_GlowColor))
+            {
+                material.EnableKeyword(ShaderUtilities.Keyword_Glow);
+                material.SetColor(ShaderUtilities.ID_GlowColor, DamageNumberPopupGlowColor);
+                material.SetFloat(ShaderUtilities.ID_GlowInner, DamageNumberPopupGlowInner);
+                material.SetFloat(ShaderUtilities.ID_GlowOuter, DamageNumberPopupGlowOuter);
+                material.SetFloat(ShaderUtilities.ID_GlowPower, DamageNumberPopupGlowPower);
+                material.SetFloat(ShaderUtilities.ID_GlowOffset, DamageNumberPopupGlowOffset);
+            }
+
+            label.fontMaterial = material;
+            label.UpdateMeshPadding();
+        }
+
+        private static Vector3 ResolveDamageNumberWorldPosition(SpriteRenderer targetRenderer)
+        {
+            var center = ResolveDamageNumberWorldCenter(targetRenderer);
+            var maxRadius = ResolveDamageNumberWorldOffsetRadius(targetRenderer);
+            var minRadius = Mathf.Min(DamageNumberPopupMinimumWorldOffset, maxRadius * 0.75f);
+            var angle = Random.Range(0f, Mathf.PI * 2f);
+            var distance = Random.Range(minRadius, maxRadius);
+            var offset = new Vector3(
+                Mathf.Cos(angle) * distance,
+                Mathf.Sin(angle) * distance,
+                0f);
+
+            return center + offset;
+        }
+
+        private static Vector3 ResolveDamageNumberWorldCenter(SpriteRenderer targetRenderer)
+        {
+            if (targetRenderer == null)
+            {
+                return Vector3.zero;
+            }
+
+            if (targetRenderer.sprite == null)
+            {
+                return targetRenderer.transform.position;
+            }
+
+            return targetRenderer.bounds.center;
+        }
+
+        private static float ResolveDamageNumberWorldOffsetRadius(SpriteRenderer targetRenderer)
+        {
+            if (targetRenderer == null || targetRenderer.sprite == null)
+            {
+                return DamageNumberPopupFallbackWorldRadius;
+            }
+
+            var bounds = targetRenderer.bounds;
+            var boundsRadius = Mathf.Max(bounds.extents.x, bounds.extents.y) * DamageNumberPopupBoundsRadiusMultiplier;
+            return Mathf.Clamp(boundsRadius, DamageNumberPopupMinimumWorldOffset, DamageNumberPopupFallbackWorldRadius);
+        }
+
+        private static Vector2 ResolveDamageNumberCanvasPosition(SpriteRenderer targetRenderer, RectTransform popupLayer)
+        {
+            var worldPosition = ResolveDamageNumberWorldPosition(targetRenderer);
+            var canvas = popupLayer != null ? popupLayer.GetComponentInParent<Canvas>() : null;
+            var worldCamera = Camera.main;
+            if (worldCamera == null)
+            {
+                return new Vector2(worldPosition.x * 100f, worldPosition.y * 100f);
+            }
+
+            var screenPoint = RectTransformUtility.WorldToScreenPoint(worldCamera, worldPosition);
+            var eventCamera = canvas != null && canvas.renderMode != RenderMode.ScreenSpaceOverlay
+                ? canvas.worldCamera != null ? canvas.worldCamera : worldCamera
+                : null;
+
+            return RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                popupLayer,
+                screenPoint,
+                eventCamera,
+                out var localPoint)
+                ? localPoint
+                : Vector2.zero;
+        }
+
+        private RectTransform ResolveDamageNumberPopupLayer()
+        {
+            if (damageNumberPopupLayer != null)
+            {
+                damageNumberPopupLayer.SetAsLastSibling();
+                return damageNumberPopupLayer;
+            }
+
+            var canvas = GameObject.Find("CombatCanvas")?.GetComponent<Canvas>()
+                ?? FindAnyObjectByType<Canvas>(FindObjectsInactive.Include);
+            if (canvas == null)
+            {
+                return null;
+            }
+
+            var existing = canvas.transform.Find("DamageNumberPopupLayer") as RectTransform;
+            if (existing != null)
+            {
+                damageNumberPopupLayer = existing;
+                damageNumberPopupLayer.SetAsLastSibling();
+                return damageNumberPopupLayer;
+            }
+
+            var layerObject = new GameObject("DamageNumberPopupLayer", typeof(RectTransform));
+            layerObject.transform.SetParent(canvas.transform, false);
+            damageNumberPopupLayer = layerObject.GetComponent<RectTransform>();
+            damageNumberPopupLayer.anchorMin = Vector2.zero;
+            damageNumberPopupLayer.anchorMax = Vector2.one;
+            damageNumberPopupLayer.offsetMin = Vector2.zero;
+            damageNumberPopupLayer.offsetMax = Vector2.zero;
+            damageNumberPopupLayer.SetAsLastSibling();
+            return damageNumberPopupLayer;
+        }
+
+        private IEnumerator DamageNumberPopupRoutine(Transform popupTransform, TMP_Text label)
+        {
+            var startPosition = popupTransform.localPosition;
+            var startTime = Time.realtimeSinceStartup;
+
+            while (true)
+            {
+                if (popupTransform == null || label == null)
+                {
+                    yield break;
+                }
+
+                var elapsed = Time.realtimeSinceStartup - startTime;
+                var t = Mathf.Clamp01(elapsed / DamageNumberPopupDurationSeconds);
+                popupTransform.localPosition = startPosition + Vector3.up * Mathf.SmoothStep(0f, DamageNumberPopupRiseDistance, t);
+
+                var pop = t < 0.24f
+                    ? Mathf.Lerp(0.92f, 1.16f, Mathf.Clamp01(t / 0.24f))
+                    : Mathf.Lerp(1.16f, 1f, Mathf.Clamp01((t - 0.24f) / 0.26f));
+                popupTransform.localScale = Vector3.one * pop;
+
+                var color = label.color;
+                color.a = t < 0.62f ? 1f : Mathf.Lerp(1f, 0f, Mathf.Clamp01((t - 0.62f) / 0.38f));
+                label.color = color;
+
+                if (t >= 1f)
+                {
+                    break;
+                }
+
+                yield return null;
+            }
+
+            var popupObject = popupTransform.gameObject;
+            damageNumberPopups.Remove(popupObject);
+            DestroyDamageNumberPopup(popupObject);
+        }
+
+        private void ClearDamageNumberPopups()
+        {
+            foreach (var popup in damageNumberPopups)
+            {
+                if (popup == null)
+                {
+                    continue;
+                }
+
+                DestroyDamageNumberPopup(popup);
+            }
+
+            damageNumberPopups.Clear();
+        }
+
+        private static void DestroyDamageNumberPopup(GameObject popup)
+        {
+            var label = popup.GetComponent<TMP_Text>();
+            var material = label != null ? label.fontMaterial : null;
+            if (material != null && material.name.StartsWith("DamageNumberPopupMaterial"))
+            {
+                if (Application.isPlaying)
+                {
+                    Destroy(material);
+                }
+                else
+                {
+                    DestroyImmediate(material);
+                }
+            }
+
+            if (Application.isPlaying)
+            {
+                Destroy(popup);
+            }
+            else
+            {
+                DestroyImmediate(popup);
             }
         }
 
@@ -789,7 +1134,25 @@ namespace Project2048.Prototype
                 : lungeWorldPosition;
         }
 
-        private void SpawnDebuffCastParticles(DebuffType debuffType)
+        private void PlayDebuffTargetEffectAfterCast(DebuffType debuffType, float delaySeconds)
+        {
+            var target = playerRenderer != null ? playerRenderer.transform : transform;
+            if (!isActiveAndEnabled)
+            {
+                SpawnDebuffCastParticles(debuffType, target);
+                return;
+            }
+
+            StartCoroutine(SpawnDebuffTargetParticlesAfterDelay(debuffType, target, delaySeconds));
+        }
+
+        private IEnumerator SpawnDebuffTargetParticlesAfterDelay(DebuffType debuffType, Transform target, float delaySeconds)
+        {
+            yield return new WaitForSecondsRealtime(Mathf.Max(0.05f, delaySeconds));
+            SpawnDebuffCastParticles(debuffType, target != null ? target : transform);
+        }
+
+        private void SpawnDebuffCastParticles(DebuffType debuffType, Transform anchor)
         {
             var effect = ResolveDebuffParticleEffect(debuffType);
             var material = effect?.particleMaterial != null
@@ -798,14 +1161,14 @@ namespace Project2048.Prototype
             var color = material != null ? Color.white : ResolveDebuffParticleColor(debuffType);
             SpawnParticleBurst(
                 effect?.particlePrefab != null ? effect.particlePrefab : debuffCastParticlePrefab,
-                enemyRenderer != null ? enemyRenderer.transform : transform,
+                anchor,
                 $"{debuffType}DebuffCastParticles",
                 color,
                 material,
                 effect != null ? effect.EffectiveLifetimeSeconds : DebuffCastParticleLifetimeSeconds,
                 effect != null ? effect.EffectiveBurstCount : DebuffCastParticleCount,
                 effect != null ? effect.EffectiveStartSpeed : 0.62f,
-                effect != null ? effect.EffectiveStartSize : 0.16f,
+                effect != null ? effect.EffectiveStartSize : 0.28f,
                 swirl: true);
         }
 
@@ -926,7 +1289,7 @@ namespace Project2048.Prototype
             var shape = particles.shape;
             shape.enabled = true;
             shape.shapeType = ParticleSystemShapeType.Sphere;
-            shape.radius = 0.22f;
+            shape.radius = 0.36f;
 
             if (swirl)
             {
@@ -962,7 +1325,7 @@ namespace Project2048.Prototype
         {
             var shape = particles.shape;
             shape.shapeType = ParticleSystemShapeType.Circle;
-            shape.radius = 0.34f;
+            shape.radius = 0.54f;
             shape.radiusThickness = 0.32f;
             shape.arc = 360f;
 
@@ -1032,6 +1395,11 @@ namespace Project2048.Prototype
         {
             ResolveWorldVfxProfile();
             return worldVfxProfile != null ? worldVfxProfile.ResolveDebuffCastEffect(debuffType) : null;
+        }
+
+        private float ResolveDebuffParticleLifetimeSeconds(DebuffType debuffType)
+        {
+            return ResolveDebuffParticleEffect(debuffType)?.EffectiveLifetimeSeconds ?? DebuffTargetParticleDelaySeconds;
         }
 
         private Material ResolveShieldImpactParticleMaterial()
@@ -1295,6 +1663,16 @@ namespace Project2048.Prototype
                 next.Player.Block < previous.Player.Block);
         }
 
+        private static int ResolvePlayerHpDamage(CombatSnapshot previous, CombatSnapshot next)
+        {
+            if (previous?.Player == null || next?.Player == null)
+            {
+                return 0;
+            }
+
+            return Mathf.Max(0, previous.Player.CurrentHp - next.Player.CurrentHp);
+        }
+
         private static bool PlayerShieldWasHit(CombatSnapshot previous, CombatSnapshot next)
         {
             if (previous?.Player == null || next?.Player == null || next.Phase != CombatPhase.EnemyTurn)
@@ -1316,6 +1694,18 @@ namespace Project2048.Prototype
 
             return nextEnemy.CurrentHp < previousEnemy.CurrentHp ||
                 (next.Phase == CombatPhase.ActionPhase && nextEnemy.Block < previousEnemy.Block);
+        }
+
+        private static int ResolveEnemyHpDamage(CombatSnapshot previous, CombatSnapshot next)
+        {
+            var previousEnemy = previous?.Enemies?.FirstOrDefault();
+            var nextEnemy = next?.Enemies?.FirstOrDefault();
+            if (previousEnemy == null || nextEnemy == null)
+            {
+                return 0;
+            }
+
+            return Mathf.Max(0, previousEnemy.CurrentHp - nextEnemy.CurrentHp);
         }
 
         private static bool EnemyShieldWasHit(CombatSnapshot previous, CombatSnapshot next)

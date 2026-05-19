@@ -22,7 +22,7 @@ namespace Project2048.PrototypeEditor
     public static class CombatUiBuilder
     {
         private const string KoreanFontAssetPath = "Assets/Fonts/MaruBuri-Regular SDF.asset";
-        private const string DataFolder = "Assets/Data/Prototype";
+        private const string DataFolder = "Assets/Data";
         private const string EnemyFolder = DataFolder + "/Enemies";
         private const string SkillFolder = DataFolder + "/Skills";
         private const string BattleScenePath = "Assets/Scenes/BattleScene.unity";
@@ -175,7 +175,6 @@ namespace Project2048.PrototypeEditor
         private static PrototypeCombatLoadout EnsurePrototypeDataAssets()
         {
             EnsureFolder("Assets", "Data");
-            EnsureFolder("Assets/Data", "Prototype");
             EnsureFolder(DataFolder, "Enemies");
             EnsureFolder(DataFolder, "Skills");
 
@@ -197,6 +196,7 @@ namespace Project2048.PrototypeEditor
             var player = CreateOrLoadAsset<PlayerSO>(DataFolder + "/PrototypePlayer.asset");
             player.maxHp = 30;
             player.attackPower = 2;
+            player.initialBoardMoveCount = 12;
             player.boardMoveCountBonus = 0;
             player.startingSkills = new List<SkillSO>(skills);
             player.portrait = LoadSprite(PlayerSpritePath) ?? player.portrait;
@@ -527,7 +527,6 @@ namespace Project2048.PrototypeEditor
                 randomizeEnemy.boolValue = true;
             }
 
-            so.FindProperty("boardMoveCount").intValue = 12;
             so.FindProperty("autoStartOnPlay").boolValue = true;
             so.FindProperty("enemyTurnDelaySeconds").floatValue = 1.2f;
             so.ApplyModifiedPropertiesWithoutUndo();

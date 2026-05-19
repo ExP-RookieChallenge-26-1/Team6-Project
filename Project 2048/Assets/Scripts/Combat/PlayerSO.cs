@@ -11,6 +11,7 @@ namespace Project2048.Combat
     {
         public int maxHp = 30;
         public int attackPower = 3;
+        [Min(0)] public int initialBoardMoveCount = 4;
         public int boardMoveCountBonus;
         public Sprite portrait;
         public List<SkillSO> startingSkills = new();
@@ -23,10 +24,16 @@ namespace Project2048.Combat
             return CombatantActionEffectBinding.Find(actionEffects, actionId);
         }
 
+        public int ResolveInitialBoardMoveCount()
+        {
+            return Mathf.Max(0, initialBoardMoveCount);
+        }
+
         private void OnValidate()
         {
             maxHp = Mathf.Max(1, maxHp);
             attackPower = Mathf.Max(0, attackPower);
+            initialBoardMoveCount = Mathf.Max(0, initialBoardMoveCount);
             boardMoveCountBonus = Mathf.Max(0, boardMoveCountBonus);
             if (Application.isPlaying)
             {

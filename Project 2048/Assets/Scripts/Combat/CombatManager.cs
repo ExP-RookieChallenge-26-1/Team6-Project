@@ -279,8 +279,21 @@ namespace Project2048.Combat
             var runMoveBonus = currentSetup.runProgress != null
                 ? currentSetup.runProgress.ExtraBoardMoveCount
                 : 0;
-            var moveCount = Mathf.Max(0, currentSetup.boardMoveCount + player.BoardMoveCountBonus + runMoveBonus);
+            var baseMoveCount = ResolveInitialBoardMoveCount();
+            var moveCount = Mathf.Max(0, baseMoveCount + player.BoardMoveCountBonus + runMoveBonus);
             BoardManager.InitBoard(moveCount);
+        }
+
+        private int ResolveInitialBoardMoveCount()
+        {
+            if (currentSetup.boardMoveCount >= 0)
+            {
+                return currentSetup.boardMoveCount;
+            }
+
+            return currentSetup.playerData != null
+                ? currentSetup.playerData.ResolveInitialBoardMoveCount()
+                : 0;
         }
 
         private void StartEnemyTurn()

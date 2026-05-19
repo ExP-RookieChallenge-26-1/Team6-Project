@@ -248,6 +248,29 @@ namespace Project2048.Tests
         }
 
         [Test]
+        public void Bootstrap_StartPrototypeCombat_UsesPlayerInitialBoardMoveCount()
+        {
+            var bootstrap = CreateGameObject<PrototypeCombatBootstrap>("Bootstrap");
+            var manager = CreateGameObject<CombatManager>("CombatManager");
+            var player = CreateGameObject<PlayerCombatController>("Player");
+            var enemy = CreateGameObject<EnemyController>("Enemy");
+            var playerData = CreatePlayerData(maxHp: 20, attackPower: 2);
+            var enemyData = CreateEnemyData(maxHp: 10, attackValue: 0);
+
+            playerData.initialBoardMoveCount = 9;
+            SetPrivateField(bootstrap, "combatManager", manager);
+            SetPrivateField(bootstrap, "playerController", player);
+            SetPrivateField(bootstrap, "enemyController", enemy);
+            SetPrivateField(bootstrap, "playerData", playerData);
+            SetPrivateField(bootstrap, "enemyData", enemyData);
+            SetPrivateField(bootstrap, "randomizeEnemyOnStart", false);
+
+            bootstrap.StartPrototypeCombat();
+
+            Assert.That(manager.BoardManager.MoveCount, Is.EqualTo(9));
+        }
+
+        [Test]
         public void BattleScene_RewardOverlayAndManagers_AreSceneAuthored()
         {
             EditorSceneManager.OpenScene("Assets/Scenes/BattleScene.unity");

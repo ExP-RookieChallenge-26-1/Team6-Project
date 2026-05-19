@@ -32,7 +32,8 @@ namespace Project2048.Prototype
         private const float EnemyAttackLungeScalePop = 0.05f;
         private const float EnemyAppearWorldShakeMagnitude = 0.13f;
         private const float DamageNumberPopupRiseDistance = 0.62f;
-        private const float DamageNumberPopupFontSize = 2.6f;
+        private const float DamageNumberPopupWorldFontSize = 2.6f;
+        private const float DamageNumberPopupUiFontSize = 34f;
         private const int DamageNumberPopupSortingOrderOffset = 32;
         private const int ShieldImpactParticleCount = 22;
         private const int DebuffCastParticleCount = 28;
@@ -73,6 +74,7 @@ namespace Project2048.Prototype
         private Material runtimeShieldImpactParticleMaterial;
         private Material runtimeFearDebuffParticleMaterial;
         private Material runtimeDarknessDebuffParticleMaterial;
+        private RectTransform damageNumberPopupLayer;
         private readonly System.Collections.Generic.List<GameObject> damageNumberPopups = new();
 
         public void Initialize(PrototypeCombatBootstrap owner)
@@ -379,20 +381,52 @@ namespace Project2048.Prototype
                 return;
             }
 
+            var popupLayer = ResolveDamageNumberPopupLayer();
+            if (popupLayer != null)
+            {
+                PlayDamageNumberUiPopup(damageAmount, targetRenderer, popupLayer);
+                return;
+            }
+
+            PlayDamageNumberWorldPopup(damageAmount, targetRenderer);
+        }
+
+        private void PlayDamageNumberUiPopup(int damageAmount, SpriteRenderer targetRenderer, RectTransform popupLayer)
+        {
+            var popupObject = new GameObject("DamageNumberPopup", typeof(RectTransform), typeof(TextMeshProUGUI));
+            popupObject.transform.SetParent(popupLayer, false);
+            damageNumberPopups.Add(popupObject);
+
+            var rectTransform = popupObject.GetComponent<RectTransform>();
+            rectTransform.anchorMin = new Vector2(0.5f, 0.5f);
+            rectTransform.anchorMax = new Vector2(0.5f, 0.5f);
+            rectTransform.pivot = new Vector2(0.5f, 0.5f);
+            rectTransform.sizeDelta = new Vector2(160f, 64f);
+            rectTransform.anchoredPosition = ResolveDamageNumberCanvasPosition(targetRenderer, popupLayer);
+
+            var label = popupObject.GetComponent<TextMeshProUGUI>();
+            ConfigureDamageNumberLabel(label, damageAmount, DamageNumberPopupUiFontSize);
+            label.raycastTarget = false;
+
+            if (!Application.isPlaying || !isActiveAndEnabled)
+            {
+                return;
+            }
+
+            StartCoroutine(DamageNumberPopupRoutine(rectTransform, label));
+        }
+
+        private void PlayDamageNumberWorldPopup(int damageAmount, SpriteRenderer targetRenderer)
+        {
             var popupObject = new GameObject("DamageNumberPopup", typeof(TextMeshPro));
             popupObject.transform.SetParent(targetRenderer.transform, false);
-            popupObject.transform.localPosition = ResolveDamageNumberLocalPosition(targetRenderer);
+            popupObject.transform.localPosition = targetRenderer.transform.InverseTransformPoint(ResolveDamageNumberWorldPosition(targetRenderer));
             popupObject.transform.localRotation = Quaternion.identity;
             popupObject.transform.localScale = Vector3.one;
             damageNumberPopups.Add(popupObject);
 
             var label = popupObject.GetComponent<TextMeshPro>();
-            label.text = damageAmount.ToString();
-            label.alignment = TextAlignmentOptions.Center;
-            label.fontSize = DamageNumberPopupFontSize;
-            label.fontStyle = FontStyles.Bold;
-            label.color = new Color(1f, 0.92f, 0.55f, 1f);
-            label.textWrappingMode = TextWrappingModes.NoWrap;
+            ConfigureDamageNumberLabel(label, damageAmount, DamageNumberPopupWorldFontSize);
 
             var meshRenderer = popupObject.GetComponent<MeshRenderer>();
             meshRenderer.sortingLayerID = targetRenderer.sortingLayerID;
@@ -406,20 +440,87 @@ namespace Project2048.Prototype
             StartCoroutine(DamageNumberPopupRoutine(popupObject.transform, label));
         }
 
-        private static Vector3 ResolveDamageNumberLocalPosition(SpriteRenderer targetRenderer)
+        private static void ConfigureDamageNumberLabel(TMP_Text label, int damageAmount, float fontSize)
+        {
+            label.text = damageAmount.ToString();
+            label.alignment = TextAlignmentOptions.Center;
+            label.fontSize = fontSize;
+            label.fontStyle = FontStyles.Bold;
+            label.color = new Color(1f, 0.92f, 0.55f, 1f);
+            label.textWrappingMode = TextWrappingModes.NoWrap;
+        }
+
+        private static Vector3 ResolveDamageNumberWorldPosition(SpriteRenderer targetRenderer)
         {
             if (targetRenderer == null)
             {
-                return new Vector3(0f, 1.2f, 0f);
+                return Vector3.up * 1.2f;
             }
 
             if (targetRenderer.sprite == null)
             {
-                return new Vector3(0f, 1.2f, 0f);
+                return targetRenderer.transform.position + (Vector3.up * 1.2f);
             }
 
-            var worldPosition = targetRenderer.bounds.center + Vector3.up * (targetRenderer.bounds.extents.y + 0.35f);
-            return targetRenderer.transform.InverseTransformPoint(worldPosition);
+            return targetRenderer.bounds.center + Vector3.up * (targetRenderer.bounds.extents.y + 0.35f);
+        }
+
+        private static Vector2 ResolveDamageNumberCanvasPosition(SpriteRenderer targetRenderer, RectTransform popupLayer)
+        {
+            var worldPosition = ResolveDamageNumberWorldPosition(targetRenderer);
+            var canvas = popupLayer != null ? popupLayer.GetComponentInParent<Canvas>() : null;
+            var worldCamera = Camera.main;
+            if (worldCamera == null)
+            {
+                return new Vector2(worldPosition.x * 100f, worldPosition.y * 100f);
+            }
+
+            var screenPoint = RectTransformUtility.WorldToScreenPoint(worldCamera, worldPosition);
+            var eventCamera = canvas != null && canvas.renderMode != RenderMode.ScreenSpaceOverlay
+                ? canvas.worldCamera != null ? canvas.worldCamera : worldCamera
+                : null;
+
+            return RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                popupLayer,
+                screenPoint,
+                eventCamera,
+                out var localPoint)
+                ? localPoint
+                : Vector2.zero;
+        }
+
+        private RectTransform ResolveDamageNumberPopupLayer()
+        {
+            if (damageNumberPopupLayer != null)
+            {
+                damageNumberPopupLayer.SetAsLastSibling();
+                return damageNumberPopupLayer;
+            }
+
+            var canvas = GameObject.Find("CombatCanvas")?.GetComponent<Canvas>()
+                ?? FindAnyObjectByType<Canvas>(FindObjectsInactive.Include);
+            if (canvas == null)
+            {
+                return null;
+            }
+
+            var existing = canvas.transform.Find("DamageNumberPopupLayer") as RectTransform;
+            if (existing != null)
+            {
+                damageNumberPopupLayer = existing;
+                damageNumberPopupLayer.SetAsLastSibling();
+                return damageNumberPopupLayer;
+            }
+
+            var layerObject = new GameObject("DamageNumberPopupLayer", typeof(RectTransform));
+            layerObject.transform.SetParent(canvas.transform, false);
+            damageNumberPopupLayer = layerObject.GetComponent<RectTransform>();
+            damageNumberPopupLayer.anchorMin = Vector2.zero;
+            damageNumberPopupLayer.anchorMax = Vector2.one;
+            damageNumberPopupLayer.offsetMin = Vector2.zero;
+            damageNumberPopupLayer.offsetMax = Vector2.zero;
+            damageNumberPopupLayer.SetAsLastSibling();
+            return damageNumberPopupLayer;
         }
 
         private IEnumerator DamageNumberPopupRoutine(Transform popupTransform, TMP_Text label)

@@ -44,6 +44,13 @@ namespace Project2048.Tests
             return gameObject;
         }
 
+        private GameObject CreateOwnedRectTransformObject(string name)
+        {
+            var gameObject = new GameObject(name, typeof(RectTransform));
+            ownedObjects.Add(gameObject);
+            return gameObject;
+        }
+
         [Test]
         public void EnemySo_ResolvesActionEffectByActionId()
         {
@@ -521,6 +528,12 @@ namespace Project2048.Tests
         [Test]
         public void CombatWorldSpriteView_PlayerHpDamage_ShowsUnsignedDamageNumberAtPlayerBody()
         {
+            var canvasObject = CreateOwnedRectTransformObject("CombatCanvas");
+            canvasObject.AddComponent<Canvas>().renderMode = RenderMode.ScreenSpaceOverlay;
+            var camera = CreateOwnedGameObject("MainCamera").AddComponent<Camera>();
+            camera.tag = "MainCamera";
+            camera.orthographic = true;
+            camera.transform.position = new Vector3(0f, 0f, -10f);
             var viewObject = CreateOwnedGameObject("WorldSpriteView");
             var view = viewObject.AddComponent<CombatWorldSpriteView>();
             var playerRenderer = CreateOwnedGameObject("PlayerSprite").AddComponent<SpriteRenderer>();
@@ -550,17 +563,26 @@ namespace Project2048.Tests
 
             manager.RequestEndPlayerTurn();
 
-            var popup = playerRenderer.transform.Find("DamageNumberPopup");
-            var text = popup != null ? popup.GetComponent<TMPro.TextMeshPro>() : null;
+            var popupLayer = canvasObject.transform.Find("DamageNumberPopupLayer");
+            var popup = popupLayer?.Find("DamageNumberPopup");
+            var text = popup != null ? popup.GetComponent<TMPro.TextMeshProUGUI>() : null;
+            Assert.That(playerRenderer.transform.Find("DamageNumberPopup"), Is.Null);
+            Assert.That(popupLayer, Is.Not.Null);
             Assert.That(text, Is.Not.Null);
             Assert.That(text.text, Is.EqualTo("3"));
             Assert.That(text.text, Does.Not.StartWith("-"));
-            Assert.That(popup.position.y, Is.GreaterThan(playerRenderer.transform.position.y));
+            Assert.That(((RectTransform)popup).anchoredPosition.y, Is.GreaterThan(0f));
         }
 
         [Test]
         public void CombatWorldSpriteView_PlayerSkillHpDamage_ShowsUnsignedDamageNumberAtEnemyBody()
         {
+            var canvasObject = CreateOwnedRectTransformObject("CombatCanvas");
+            canvasObject.AddComponent<Canvas>().renderMode = RenderMode.ScreenSpaceOverlay;
+            var camera = CreateOwnedGameObject("MainCamera").AddComponent<Camera>();
+            camera.tag = "MainCamera";
+            camera.orthographic = true;
+            camera.transform.position = new Vector3(0f, 0f, -10f);
             var viewObject = CreateOwnedGameObject("WorldSpriteView");
             var view = viewObject.AddComponent<CombatWorldSpriteView>();
             var enemyRenderer = CreateOwnedGameObject("EnemySprite").AddComponent<SpriteRenderer>();
@@ -588,12 +610,15 @@ namespace Project2048.Tests
 
             Assert.That(manager.RequestUseSkill(attack, enemy), Is.True);
 
-            var popup = enemyRenderer.transform.Find("DamageNumberPopup");
-            var text = popup != null ? popup.GetComponent<TMPro.TextMeshPro>() : null;
+            var popupLayer = canvasObject.transform.Find("DamageNumberPopupLayer");
+            var popup = popupLayer?.Find("DamageNumberPopup");
+            var text = popup != null ? popup.GetComponent<TMPro.TextMeshProUGUI>() : null;
+            Assert.That(enemyRenderer.transform.Find("DamageNumberPopup"), Is.Null);
+            Assert.That(popupLayer, Is.Not.Null);
             Assert.That(text, Is.Not.Null);
             Assert.That(text.text, Is.EqualTo("4"));
             Assert.That(text.text, Does.Not.StartWith("-"));
-            Assert.That(popup.position.y, Is.GreaterThan(enemyRenderer.transform.position.y));
+            Assert.That(((RectTransform)popup).anchoredPosition.y, Is.GreaterThan(0f));
         }
 
         [UnityTest]

@@ -272,7 +272,7 @@ namespace Project2048.Tests
 
             Assert.That(CombatWorldSpriteView.EnemyAppearWorldShakeDurationSeconds, Is.EqualTo(1.5f).Within(0.001f));
             Assert.That(magnitudeField, Is.Not.Null);
-            Assert.That((float)magnitudeField.GetValue(null), Is.EqualTo(0.09f).Within(0.001f));
+            Assert.That((float)magnitudeField.GetValue(null), Is.EqualTo(0.11f).Within(0.001f));
         }
 
         [UnityTest]
@@ -518,11 +518,12 @@ namespace Project2048.Tests
             Assert.That(renderer.sharedMaterial, Is.EqualTo(profile.shieldImpactEffect.particleMaterial));
         }
 
-        [Test]
-        public void CombatWorldSpriteView_EnemyDebuffIntent_SpawnsDebuffCastParticles()
+        [UnityTest]
+        public IEnumerator CombatWorldSpriteView_EnemyDebuffIntent_SpawnsDebuffCastParticlesFromEnemyThenPlayer()
         {
             var viewObject = CreateOwnedGameObject("WorldSpriteView");
             var view = viewObject.AddComponent<CombatWorldSpriteView>();
+            var playerRenderer = CreateOwnedGameObject("PlayerSprite").AddComponent<SpriteRenderer>();
             var enemyRenderer = CreateOwnedGameObject("EnemySprite").AddComponent<SpriteRenderer>();
             var manager = CreateOwnedGameObject("CombatManager").AddComponent<CombatManager>();
             var player = CreateOwnedGameObject("Player").AddComponent<PlayerCombatController>();
@@ -540,6 +541,7 @@ namespace Project2048.Tests
                 },
             };
 
+            SetPrivateField(view, "playerRenderer", playerRenderer);
             SetPrivateField(view, "enemyRenderer", enemyRenderer);
             SetPrivateField(bootstrap, "combatManager", manager);
 
@@ -555,17 +557,24 @@ namespace Project2048.Tests
 
             manager.RequestEndPlayerTurn();
 
-            var particles = enemyRenderer.transform.Find("FearDebuffCastParticles")?.GetComponent<ParticleSystem>();
-            Assert.That(particles, Is.Not.Null);
-            Assert.That(particles.shape.shapeType, Is.EqualTo(ParticleSystemShapeType.Circle));
-            Assert.That(particles.velocityOverLifetime.enabled, Is.False);
-            Assert.That(particles.rotationOverLifetime.enabled, Is.True);
-            AssertColorApproximately(particles.main.startColor.color, Color.white);
+            var enemyParticles = enemyRenderer.transform.Find("FearDebuffCastParticles")?.GetComponent<ParticleSystem>();
+            Assert.That(enemyParticles, Is.Not.Null);
+            Assert.That(playerRenderer.transform.Find("FearDebuffCastParticles"), Is.Null);
+            Assert.That(enemyParticles.shape.shapeType, Is.EqualTo(ParticleSystemShapeType.Circle));
+            Assert.That(enemyParticles.velocityOverLifetime.enabled, Is.False);
+            Assert.That(enemyParticles.rotationOverLifetime.enabled, Is.True);
+            AssertColorApproximately(enemyParticles.main.startColor.color, Color.white);
 
             var profile = Resources.Load<CombatWorldVfxProfileSO>("PrototypeCombatWorldVfxProfile");
             Assert.That(profile, Is.Not.Null);
-            var renderer = particles.GetComponent<ParticleSystemRenderer>();
+            var renderer = enemyParticles.GetComponent<ParticleSystemRenderer>();
             Assert.That(renderer.sharedMaterial, Is.EqualTo(profile.fearDebuffCastEffect.particleMaterial));
+
+            yield return new WaitForSecondsRealtime(CombatWorldSpriteView.DebuffTargetParticleDelaySeconds + 0.05f);
+
+            var playerParticles = playerRenderer.transform.Find("FearDebuffCastParticles")?.GetComponent<ParticleSystem>();
+            Assert.That(playerParticles, Is.Not.Null);
+            Assert.That(playerParticles.shape.shapeType, Is.EqualTo(ParticleSystemShapeType.Circle));
         }
 
         [Test]
@@ -636,6 +645,9 @@ namespace Project2048.Tests
             Assert.That(profile.shieldImpactEffect.useParticleColor, Is.False);
             Assert.That(profile.fearDebuffCastEffect.useParticleColor, Is.False);
             Assert.That(profile.darknessDebuffCastEffect.useParticleColor, Is.False);
+            Assert.That(profile.shieldImpactEffect.EffectiveStartSize, Is.EqualTo(0.17f).Within(0.001f));
+            Assert.That(profile.fearDebuffCastEffect.EffectiveStartSize, Is.EqualTo(0.22f).Within(0.001f));
+            Assert.That(profile.darknessDebuffCastEffect.EffectiveStartSize, Is.EqualTo(0.22f).Within(0.001f));
 
             AssertColorApproximately(
                 ResolveMaterialColor(profile.shieldImpactEffect.particleMaterial),

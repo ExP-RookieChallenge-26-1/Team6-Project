@@ -21,7 +21,7 @@ MonoBehaviour:
     lifetimeSeconds: 0.8
     burstCount: 22
     startSpeed: 0.78
-    startSize: 0.13
+    startSize: 0.17
     swirl: 0
   fearDebuffCastEffect:
     objectName: FearDebuffCastParticles
@@ -32,7 +32,7 @@ MonoBehaviour:
     lifetimeSeconds: 0.9
     burstCount: 28
     startSpeed: 0.62
-    startSize: 0.16
+    startSize: 0.22
     swirl: 1
   darknessDebuffCastEffect:
     objectName: DarknessDebuffCastParticles
@@ -43,5 +43,5 @@ MonoBehaviour:
     lifetimeSeconds: 0.9
     burstCount: 28
     startSpeed: 0.62
-    startSize: 0.16
+    startSize: 0.22
     swirl: 1

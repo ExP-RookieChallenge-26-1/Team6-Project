@@ -20,6 +20,7 @@ namespace Project2048.Prototype
         public const float EnemyAppearWorldShakeDurationSeconds = 1.5f;
         public const float ShieldImpactParticleLifetimeSeconds = 0.8f;
         public const float DebuffCastParticleLifetimeSeconds = 0.9f;
+        public const float DebuffTargetParticleDelaySeconds = 0.18f;
 
         private const float EnemyAppearIntroRightOffset = 2.25f;
         private const float EnemyAppearIntroJumpHeight = 0.7f;
@@ -27,7 +28,7 @@ namespace Project2048.Prototype
         private const float EnemyAttackLungeDistance = 0.72f;
         private const float EnemyAttackLungeImpactTime = 0.45f;
         private const float EnemyAttackLungeScalePop = 0.05f;
-        private const float EnemyAppearWorldShakeMagnitude = 0.09f;
+        private const float EnemyAppearWorldShakeMagnitude = 0.11f;
         private const int ShieldImpactParticleCount = 22;
         private const int DebuffCastParticleCount = 28;
         private const string DefaultWorldVfxProfileResourceName = "PrototypeCombatWorldVfxProfile";
@@ -269,7 +270,10 @@ namespace Project2048.Prototype
                 enemyRenderer != null ? enemyRenderer.transform : transform,
                 enemyAnimator);
 
-            SpawnDebuffCastParticles(cue.DebuffType);
+            SpawnDebuffCastParticles(
+                cue.DebuffType,
+                enemyRenderer != null ? enemyRenderer.transform : transform);
+            PlayDebuffTargetEffectAfterCast(cue.DebuffType);
         }
 
         private void PlayShieldImpactEffectIfNeeded(bool shieldWasHit, Transform anchor)
@@ -290,7 +294,7 @@ namespace Project2048.Prototype
                 ShieldImpactParticleLifetimeSeconds,
                 ShieldImpactParticleCount,
                 0.78f,
-                0.13f,
+                0.17f,
                 swirl: false);
         }
 
@@ -789,7 +793,25 @@ namespace Project2048.Prototype
                 : lungeWorldPosition;
         }
 
-        private void SpawnDebuffCastParticles(DebuffType debuffType)
+        private void PlayDebuffTargetEffectAfterCast(DebuffType debuffType)
+        {
+            var target = playerRenderer != null ? playerRenderer.transform : transform;
+            if (!isActiveAndEnabled)
+            {
+                SpawnDebuffCastParticles(debuffType, target);
+                return;
+            }
+
+            StartCoroutine(SpawnDebuffTargetParticlesAfterDelay(debuffType, target));
+        }
+
+        private IEnumerator SpawnDebuffTargetParticlesAfterDelay(DebuffType debuffType, Transform target)
+        {
+            yield return new WaitForSecondsRealtime(DebuffTargetParticleDelaySeconds);
+            SpawnDebuffCastParticles(debuffType, target != null ? target : transform);
+        }
+
+        private void SpawnDebuffCastParticles(DebuffType debuffType, Transform anchor)
         {
             var effect = ResolveDebuffParticleEffect(debuffType);
             var material = effect?.particleMaterial != null
@@ -798,14 +820,14 @@ namespace Project2048.Prototype
             var color = material != null ? Color.white : ResolveDebuffParticleColor(debuffType);
             SpawnParticleBurst(
                 effect?.particlePrefab != null ? effect.particlePrefab : debuffCastParticlePrefab,
-                enemyRenderer != null ? enemyRenderer.transform : transform,
+                anchor,
                 $"{debuffType}DebuffCastParticles",
                 color,
                 material,
                 effect != null ? effect.EffectiveLifetimeSeconds : DebuffCastParticleLifetimeSeconds,
                 effect != null ? effect.EffectiveBurstCount : DebuffCastParticleCount,
                 effect != null ? effect.EffectiveStartSpeed : 0.62f,
-                effect != null ? effect.EffectiveStartSize : 0.16f,
+                effect != null ? effect.EffectiveStartSize : 0.22f,
                 swirl: true);
         }
 
@@ -926,7 +948,7 @@ namespace Project2048.Prototype
             var shape = particles.shape;
             shape.enabled = true;
             shape.shapeType = ParticleSystemShapeType.Sphere;
-            shape.radius = 0.22f;
+            shape.radius = 0.28f;
 
             if (swirl)
             {
@@ -962,7 +984,7 @@ namespace Project2048.Prototype
         {
             var shape = particles.shape;
             shape.shapeType = ParticleSystemShapeType.Circle;
-            shape.radius = 0.34f;
+            shape.radius = 0.42f;
             shape.radiusThickness = 0.32f;
             shape.arc = 360f;
 

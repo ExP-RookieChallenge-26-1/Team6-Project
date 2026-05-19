@@ -264,12 +264,13 @@ namespace Project2048.Tests
         }
 
         [UnityTest]
-        public IEnumerator CombatWorldSpriteView_EnemyAppear_ShakesScreenTargetBriefly()
+        public IEnumerator CombatWorldSpriteView_EnemyAppear_UsesAssignedWorldShakeBriefly()
         {
             var viewObject = CreateOwnedGameObject("WorldSpriteView");
             var view = viewObject.AddComponent<CombatWorldSpriteView>();
             var enemyRenderer = CreateOwnedGameObject("EnemySprite").AddComponent<SpriteRenderer>();
-            var shakeTarget = CreateOwnedGameObject("ScreenShakeTarget");
+            var shakeTarget = CreateOwnedGameObject("AssignedWorldShakeRoot");
+            var worldShake = shakeTarget.AddComponent<WorldShake>();
             var manager = CreateOwnedGameObject("CombatManager").AddComponent<CombatManager>();
             var player = CreateOwnedGameObject("Player").AddComponent<PlayerCombatController>();
             var enemy = CreateOwnedGameObject("Enemy").AddComponent<EnemyController>();
@@ -278,7 +279,7 @@ namespace Project2048.Tests
             var enemyData = CreateEnemyData(maxHp: 10, attackValue: 0);
 
             SetPrivateField(view, "enemyRenderer", enemyRenderer);
-            SetPrivateField(view, "screenShakeTarget", shakeTarget.transform);
+            SetPrivateField(view, "worldShake", worldShake);
             SetPrivateField(bootstrap, "combatManager", manager);
 
             manager.SetCombatants(player, new[] { enemy });
@@ -297,7 +298,7 @@ namespace Project2048.Tests
 
             Assert.That(shakeTarget.transform.localPosition, Is.Not.EqualTo(Vector3.zero));
 
-            yield return new WaitForSecondsRealtime(CombatWorldSpriteView.EnemyAppearScreenShakeDurationSeconds + 0.1f);
+            yield return new WaitForSecondsRealtime(CombatWorldSpriteView.EnemyAppearWorldShakeDurationSeconds + 0.1f);
 
             Assert.That(shakeTarget.transform.localPosition, Is.EqualTo(Vector3.zero));
         }
@@ -341,16 +342,64 @@ namespace Project2048.Tests
 
             var foregroundRoot = playerRenderer.transform.parent;
             Assert.That(foregroundRoot, Is.Not.Null);
-            Assert.That(foregroundRoot.name, Is.EqualTo("ForegroundScreenShakeRoot"));
+            Assert.That(foregroundRoot.name, Is.EqualTo("ForegroundShakeRoot"));
             Assert.That(enemyRenderer.transform.parent, Is.EqualTo(foregroundRoot));
             Assert.That(foregroundRoot.localPosition, Is.Not.EqualTo(Vector3.zero));
             Assert.That(backgroundRenderer.transform.parent, Is.EqualTo(viewObject.transform));
             Assert.That(backgroundRenderer.transform.localPosition, Is.EqualTo(Vector3.zero));
 
-            yield return new WaitForSecondsRealtime(CombatWorldSpriteView.EnemyAppearScreenShakeDurationSeconds + 0.1f);
+            yield return new WaitForSecondsRealtime(CombatWorldSpriteView.EnemyAppearWorldShakeDurationSeconds + 0.1f);
 
             Assert.That(foregroundRoot.localPosition, Is.EqualTo(Vector3.zero));
             Assert.That(backgroundRenderer.transform.localPosition, Is.EqualTo(Vector3.zero));
+        }
+
+        [UnityTest]
+        public IEnumerator CombatWorldSpriteView_EnemyAppear_DoesNotMovePhysicsRendererIntoWorldShakeRoot()
+        {
+            var viewObject = CreateOwnedGameObject("WorldSpriteView");
+            var view = viewObject.AddComponent<CombatWorldSpriteView>();
+            var playerRenderer = CreateOwnedGameObject("PlayerSprite").AddComponent<SpriteRenderer>();
+            var enemyRenderer = CreateOwnedGameObject("EnemySprite").AddComponent<SpriteRenderer>();
+            playerRenderer.gameObject.AddComponent<Rigidbody2D>();
+            playerRenderer.gameObject.AddComponent<BoxCollider2D>();
+            var manager = CreateOwnedGameObject("CombatManager").AddComponent<CombatManager>();
+            var player = CreateOwnedGameObject("Player").AddComponent<PlayerCombatController>();
+            var enemy = CreateOwnedGameObject("Enemy").AddComponent<EnemyController>();
+            var bootstrap = CreateOwnedGameObject("Bootstrap").AddComponent<PrototypeCombatBootstrap>();
+            var playerData = CreatePlayerData(maxHp: 20, attackPower: 2);
+            var enemyData = CreateEnemyData(maxHp: 10, attackValue: 0);
+
+            playerRenderer.transform.SetParent(viewObject.transform, false);
+            enemyRenderer.transform.SetParent(viewObject.transform, false);
+            SetPrivateField(view, "playerRenderer", playerRenderer);
+            SetPrivateField(view, "enemyRenderer", enemyRenderer);
+            SetPrivateField(bootstrap, "combatManager", manager);
+
+            manager.SetCombatants(player, new[] { enemy });
+            view.Initialize(bootstrap);
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new List<EnemySO> { enemyData },
+                boardMoveCount = 1,
+            });
+
+            if (!Application.isPlaying)
+            {
+                yield break;
+            }
+
+            var foregroundRoot = enemyRenderer.transform.parent;
+            Assert.That(foregroundRoot, Is.Not.Null);
+            Assert.That(foregroundRoot.name, Is.EqualTo("ForegroundShakeRoot"));
+            Assert.That(playerRenderer.transform.parent, Is.EqualTo(viewObject.transform));
+            Assert.That(playerRenderer.transform.localPosition, Is.EqualTo(Vector3.zero));
+
+            yield return new WaitForSecondsRealtime(CombatWorldSpriteView.EnemyAppearWorldShakeDurationSeconds + 0.1f);
+
+            Assert.That(foregroundRoot.localPosition, Is.EqualTo(Vector3.zero));
+            Assert.That(playerRenderer.transform.localPosition, Is.EqualTo(Vector3.zero));
         }
 
         [UnityTest]

@@ -222,7 +222,7 @@ namespace Project2048.Tests
         }
 
         [UnityTest]
-        public IEnumerator EnemyAppear_ShakesUiRootBriefly()
+        public IEnumerator EnemyAppear_KeepsUiRootStill()
         {
             var viewObject = CreateOwnedRectTransformObject("CombatView");
             var view = viewObject.AddComponent<CombatUiView>();
@@ -249,9 +249,7 @@ namespace Project2048.Tests
                 yield break;
             }
 
-            Assert.That(viewObject.transform.localPosition, Is.Not.EqualTo(Vector3.zero));
-
-            yield return new WaitForSecondsRealtime(CombatUiView.EnemyAppearUiShakeDurationSeconds + 0.1f);
+            yield return null;
 
             Assert.That(viewObject.transform.localPosition, Is.EqualTo(Vector3.zero));
         }

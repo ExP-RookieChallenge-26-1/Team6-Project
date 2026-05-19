@@ -7,6 +7,7 @@ using Project2048.Presentation;
 using Project2048.Skills;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.EventSystems;
 
 namespace Project2048.Prototype
 {
@@ -15,7 +16,7 @@ namespace Project2048.Prototype
         public const float EnemyDeathFadeDurationSeconds = 0.6f;
         public const float EnemyAppearIntroDurationSeconds = 0.45f;
         public const float EnemyAttackLungeDurationSeconds = 0.32f;
-        public const float EnemyAppearScreenShakeDurationSeconds = 0.34f;
+        public const float EnemyAppearWorldShakeDurationSeconds = 0.34f;
         public const float ShieldImpactParticleLifetimeSeconds = 0.8f;
         public const float DebuffCastParticleLifetimeSeconds = 0.9f;
 
@@ -25,7 +26,7 @@ namespace Project2048.Prototype
         private const float EnemyAttackLungeDistance = 0.72f;
         private const float EnemyAttackLungeImpactTime = 0.45f;
         private const float EnemyAttackLungeScalePop = 0.05f;
-        private const float EnemyAppearScreenShakeMagnitude = 0.22f;
+        private const float EnemyAppearWorldShakeMagnitude = 0.22f;
         private const int ShieldImpactParticleCount = 22;
         private const int DebuffCastParticleCount = 28;
 
@@ -41,7 +42,8 @@ namespace Project2048.Prototype
         [SerializeField] private Animator enemyAnimator;
         [SerializeField] private ParticleSystem shieldImpactParticlePrefab;
         [SerializeField] private ParticleSystem debuffCastParticlePrefab;
-        [SerializeField] private Transform screenShakeTarget;
+        [SerializeField] private WorldShake worldShake;
+        [SerializeField] private Transform foregroundShakeRoot;
         [SerializeField] private Color shieldImpactParticleColor = new(0.62f, 0.92f, 1f, 0.96f);
         [SerializeField] private Color fearDebuffParticleColor = new(0.75f, 0.05f, 0.16f, 0.95f);
         [SerializeField] private Color darknessDebuffParticleColor = new(0.40f, 0.12f, 0.78f, 0.95f);
@@ -51,10 +53,6 @@ namespace Project2048.Prototype
         private Coroutine enemyDeathFadeCoroutine;
         private Coroutine enemyAppearIntroCoroutine;
         private Coroutine enemyAttackLungeCoroutine;
-        private Coroutine screenShakeCoroutine;
-        private Transform activeScreenShakeTarget;
-        private Transform foregroundScreenShakeRoot;
-        private Vector3 screenShakeRestLocalPosition;
         private Vector3 enemyRendererRestLocalPosition;
         private Vector3 enemyRendererRestLocalScale = Vector3.one;
         private bool hasEnemyRendererRestTransform;
@@ -68,7 +66,7 @@ namespace Project2048.Prototype
             combatManager = owner != null ? owner.CombatManager : null;
 
             ResolveMissingReferences();
-            ResolveScreenShakeTarget();
+            ResolveWorldShake();
             CacheEnemyRendererRestTransform();
             RenderBackground();
 
@@ -95,7 +93,7 @@ namespace Project2048.Prototype
             ClearEnemyDeathFade();
             ClearEnemyAppearIntro();
             ClearEnemyAttackLunge();
-            ClearScreenShake(restoreTransform: true);
+            ClearWorldShake();
         }
 
         private void UnbindCombatEvents()
@@ -336,7 +334,7 @@ namespace Project2048.Prototype
         {
             if (enemyRenderer == null)
             {
-                PlayEnemyAppearScreenShake();
+                PlayEnemyAppearWorldShake();
                 PlayCombatantActionEffect(effect, transform, enemyAnimator);
                 return;
             }
@@ -352,7 +350,7 @@ namespace Project2048.Prototype
                 return;
             }
 
-            PlayEnemyAppearScreenShake();
+            PlayEnemyAppearWorldShake();
             enemyAppearIntroCoroutine = StartCoroutine(EnemyAppearIntroRoutine(effect));
         }
 
@@ -584,79 +582,51 @@ namespace Project2048.Prototype
             }
         }
 
-        private void PlayEnemyAppearScreenShake()
+        private void PlayEnemyAppearWorldShake()
         {
             if (!Application.isPlaying || !isActiveAndEnabled)
             {
                 return;
             }
 
-            var target = ResolveScreenShakeTarget();
-            if (target == null)
+            var shake = ResolveWorldShake();
+            if (shake == null)
             {
                 return;
             }
 
-            ClearScreenShake(restoreTransform: true);
-            activeScreenShakeTarget = target;
-            screenShakeRestLocalPosition = target.localPosition;
-            screenShakeCoroutine = StartCoroutine(ScreenShakeRoutine(target, screenShakeRestLocalPosition));
+            shake.Shake(EnemyAppearWorldShakeDurationSeconds, EnemyAppearWorldShakeMagnitude);
         }
 
-        private IEnumerator ScreenShakeRoutine(Transform target, Vector3 restLocalPosition)
+        private WorldShake ResolveWorldShake()
         {
-            var startTime = Time.realtimeSinceStartup;
-            while (true)
+            if (worldShake != null && IsUsableShakeTarget(worldShake.transform))
             {
-                if (target == null)
-                {
-                    yield break;
-                }
-
-                var elapsed = Time.realtimeSinceStartup - startTime;
-                var t = Mathf.Clamp01(elapsed / EnemyAppearScreenShakeDurationSeconds);
-                var decay = 1f - t;
-                var offset = new Vector3(
-                    Mathf.Sin((t * Mathf.PI * 13f) + 0.35f) * EnemyAppearScreenShakeMagnitude * decay,
-                    Mathf.Sin((t * Mathf.PI * 17f) + 1.1f) * EnemyAppearScreenShakeMagnitude * 0.55f * decay,
-                    0f);
-                target.localPosition = restLocalPosition + offset;
-
-                if (t >= 1f)
-                {
-                    break;
-                }
-
-                yield return null;
+                worldShake.ResetRestPosition();
+                return worldShake;
             }
 
-            target.localPosition = restLocalPosition;
-            screenShakeCoroutine = null;
-            activeScreenShakeTarget = null;
+            var root = ResolveForegroundShakeRoot();
+            if (root == null || !IsUsableShakeTarget(root))
+            {
+                return null;
+            }
+
+            worldShake = root.GetComponent<WorldShake>();
+            if (worldShake == null)
+            {
+                worldShake = root.gameObject.AddComponent<WorldShake>();
+            }
+
+            worldShake.ResetRestPosition();
+            return worldShake;
         }
 
-        private Transform ResolveScreenShakeTarget()
+        private Transform ResolveForegroundShakeRoot()
         {
-            if (screenShakeTarget != null)
+            if (foregroundShakeRoot != null)
             {
-                return screenShakeTarget;
-            }
-
-            var foregroundRoot = ResolveForegroundScreenShakeRoot();
-            if (foregroundRoot != null)
-            {
-                screenShakeTarget = foregroundRoot;
-                return screenShakeTarget;
-            }
-
-            return transform;
-        }
-
-        private Transform ResolveForegroundScreenShakeRoot()
-        {
-            if (foregroundScreenShakeRoot != null)
-            {
-                return foregroundScreenShakeRoot;
+                return IsUsableShakeTarget(foregroundShakeRoot) ? foregroundShakeRoot : null;
             }
 
             if (playerRenderer == null && enemyRenderer == null)
@@ -664,54 +634,107 @@ namespace Project2048.Prototype
                 return null;
             }
 
-            var rootObject = new GameObject("ForegroundScreenShakeRoot");
-            foregroundScreenShakeRoot = rootObject.transform;
-            foregroundScreenShakeRoot.SetParent(transform, false);
-            foregroundScreenShakeRoot.localPosition = Vector3.zero;
-            foregroundScreenShakeRoot.localRotation = Quaternion.identity;
-            foregroundScreenShakeRoot.localScale = Vector3.one;
+            var rootObject = new GameObject("ForegroundShakeRoot");
+            foregroundShakeRoot = rootObject.transform;
+            foregroundShakeRoot.SetParent(transform, false);
+            foregroundShakeRoot.localPosition = Vector3.zero;
+            foregroundShakeRoot.localRotation = Quaternion.identity;
+            foregroundShakeRoot.localScale = Vector3.one;
 
-            ReparentRendererForScreenShake(playerRenderer);
-            ReparentRendererForScreenShake(enemyRenderer);
+            var reparentedCount = 0;
+            reparentedCount += ReparentRendererForWorldShake(playerRenderer) ? 1 : 0;
+            reparentedCount += ReparentRendererForWorldShake(enemyRenderer) ? 1 : 0;
+            if (reparentedCount <= 0)
+            {
+                DestroyGeneratedShakeRoot(rootObject);
+                foregroundShakeRoot = null;
+                return null;
+            }
+
             hasEnemyRendererRestTransform = false;
-            return foregroundScreenShakeRoot;
+            return foregroundShakeRoot;
         }
 
-        private void ReparentRendererForScreenShake(SpriteRenderer renderer)
+        private bool ReparentRendererForWorldShake(SpriteRenderer renderer)
         {
-            if (renderer == null || foregroundScreenShakeRoot == null)
+            if (renderer == null || foregroundShakeRoot == null)
             {
-                return;
+                return false;
             }
 
             var rendererTransform = renderer.transform;
-            if (rendererTransform == foregroundScreenShakeRoot || rendererTransform.IsChildOf(foregroundScreenShakeRoot))
+            if (rendererTransform == foregroundShakeRoot || rendererTransform.IsChildOf(foregroundShakeRoot))
             {
-                return;
+                return false;
             }
 
-            if (rendererTransform.parent != null && rendererTransform.parent != transform)
+            if (!CanAutoReparentForWorldShake(rendererTransform))
             {
-                return;
+                return false;
             }
 
-            rendererTransform.SetParent(foregroundScreenShakeRoot, true);
+            rendererTransform.SetParent(foregroundShakeRoot, true);
+            return true;
         }
 
-        private void ClearScreenShake(bool restoreTransform = false)
+        private void ClearWorldShake()
         {
-            if (screenShakeCoroutine != null)
+            if (worldShake != null)
             {
-                StopCoroutine(screenShakeCoroutine);
-                screenShakeCoroutine = null;
+                worldShake.StopShake(restorePosition: true);
+            }
+        }
+
+        private bool CanAutoReparentForWorldShake(Transform target)
+        {
+            if (target == null || target == transform)
+            {
+                return false;
             }
 
-            if (restoreTransform && activeScreenShakeTarget != null)
+            if (target.parent != null && target.parent != transform)
             {
-                activeScreenShakeTarget.localPosition = screenShakeRestLocalPosition;
+                return false;
             }
 
-            activeScreenShakeTarget = null;
+            return IsUsableShakeTarget(target);
+        }
+
+        private bool IsUsableShakeTarget(Transform target)
+        {
+            if (target == null)
+            {
+                return false;
+            }
+
+            if (backgroundRenderer != null && backgroundRenderer.transform.IsChildOf(target))
+            {
+                return false;
+            }
+
+            return target.GetComponentInChildren<Rigidbody2D>(includeInactive: true) == null &&
+                target.GetComponentInChildren<Collider2D>(includeInactive: true) == null &&
+                target.GetComponentInChildren<Camera>(includeInactive: true) == null &&
+                target.GetComponentInChildren<AudioListener>(includeInactive: true) == null &&
+                target.GetComponentInChildren<Canvas>(includeInactive: true) == null &&
+                target.GetComponentInChildren<EventSystem>(includeInactive: true) == null;
+        }
+
+        private static void DestroyGeneratedShakeRoot(GameObject rootObject)
+        {
+            if (rootObject == null)
+            {
+                return;
+            }
+
+            if (Application.isPlaying)
+            {
+                Destroy(rootObject);
+            }
+            else
+            {
+                DestroyImmediate(rootObject);
+            }
         }
 
         private Vector3 ResolveEnemyAttackLungeTarget(Vector3 restLocalPosition)

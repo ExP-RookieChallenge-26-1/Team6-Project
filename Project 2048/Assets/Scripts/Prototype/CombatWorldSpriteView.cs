@@ -288,11 +288,16 @@ namespace Project2048.Prototype
             }
 
             lastPlayedEnemyDebuffVfxSequence = cue.Sequence;
-            var effect = ResolveCurrentEnemyData()?.FindActionEffect(ResolveDebuffActionId(cue.DebuffType));
+            var enemyData = ResolveCurrentEnemyData();
+            var effect = enemyData?.FindActionEffect(ResolveDebuffActionId(cue.DebuffType));
             PlayCombatantActionEffect(
                 effect,
                 enemyRenderer != null ? enemyRenderer.transform : transform,
                 enemyAnimator);
+            if (effect?.sfxClip == null)
+            {
+                PlayCombatantActionAudioEffect(enemyData?.FindActionEffect(CombatActionIds.Attack));
+            }
 
             SpawnDebuffCastParticles(
                 cue.DebuffType,
@@ -341,15 +346,7 @@ namespace Project2048.Prototype
                 return;
             }
 
-            if (effect.sfxClip != null)
-            {
-                EnsureAudioSource();
-                if (audioSource != null)
-                {
-                    DuckBgmForImportantSfx();
-                    CombatEffectAudioPlayer.PlayOneShot(audioSource, effect, 1f, transform);
-                }
-            }
+            PlayCombatantActionAudioEffect(effect);
 
             if (effect.vfxPrefab != null)
             {
@@ -383,6 +380,23 @@ namespace Project2048.Prototype
             {
                 animator.Play(effect.animationClip.name, 0, 0f);
             }
+        }
+
+        private void PlayCombatantActionAudioEffect(CombatEffectBinding effect)
+        {
+            if (effect?.sfxClip == null)
+            {
+                return;
+            }
+
+            EnsureAudioSource();
+            if (audioSource == null)
+            {
+                return;
+            }
+
+            DuckBgmForImportantSfx();
+            CombatEffectAudioPlayer.PlayOneShot(audioSource, effect, 1f, transform);
         }
 
         private void PlayDamageNumberPopupIfNeeded(int damageAmount, SpriteRenderer targetRenderer)

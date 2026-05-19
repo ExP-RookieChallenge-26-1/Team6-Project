@@ -947,6 +947,63 @@ namespace Project2048.Tests
         }
 
         [Test]
+        public void CombatWorldSpriteView_EnemyDebuffIntent_PlaysAttackEffectSfxFromEnemySo()
+        {
+            var viewObject = CreateOwnedGameObject("WorldSpriteView");
+            var view = viewObject.AddComponent<CombatWorldSpriteView>();
+            var enemyRenderer = CreateOwnedGameObject("EnemySprite").AddComponent<SpriteRenderer>();
+            var manager = CreateOwnedGameObject("CombatManager").AddComponent<CombatManager>();
+            var player = CreateOwnedGameObject("Player").AddComponent<PlayerCombatController>();
+            var enemy = CreateOwnedGameObject("Enemy").AddComponent<EnemyController>();
+            var bootstrap = CreateOwnedGameObject("Bootstrap").AddComponent<PrototypeCombatBootstrap>();
+            var playerData = CreatePlayerData(maxHp: 20, attackPower: 2);
+            var enemyData = CreateEnemyData(maxHp: 10, attackValue: 0);
+            var attackClip = AudioClip.Create("EnemyAttackVoice", 512, 1, 44100, false);
+            ownedObjects.Add(attackClip);
+            enemyData.intentPattern = new List<EnemyIntent>
+            {
+                new()
+                {
+                    intentType = EnemyIntentType.Debuff,
+                    debuffType = DebuffType.Fear,
+                    value = 1,
+                },
+            };
+            enemyData.actionEffects = new List<CombatantActionEffectBinding>
+            {
+                new()
+                {
+                    actionId = CombatActionIds.Attack,
+                    effect = new CombatEffectBinding
+                    {
+                        sfxClip = attackClip,
+                        minPitch = 0.8f,
+                        maxPitch = 0.8f,
+                    },
+                },
+            };
+
+            SetPrivateField(view, "enemyRenderer", enemyRenderer);
+            SetPrivateField(bootstrap, "combatManager", manager);
+
+            manager.SetCombatants(player, new[] { enemy });
+            view.Initialize(bootstrap);
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new List<EnemySO> { enemyData },
+                boardMoveCount = 1,
+            });
+            manager.ResolveBoardPhase();
+
+            manager.RequestEndPlayerTurn();
+
+            var audio = viewObject.transform.Find("CombatEffectAudio")?.GetComponent<AudioSource>();
+            Assert.That(audio, Is.Not.Null);
+            Assert.That(audio.pitch, Is.EqualTo(0.8f).Within(0.001f));
+        }
+
+        [Test]
         public void BattleScene_CombatEventAudioPlayer_UsesEventAudioProfileAsset()
         {
             EditorSceneManager.OpenScene("Assets/Scenes/BattleScene.unity");
@@ -1043,13 +1100,22 @@ namespace Project2048.Tests
             {
                 var path = AssetDatabase.GUIDToAssetPath(guid);
                 var enemy = AssetDatabase.LoadAssetAtPath<EnemySO>(path);
+                var appearEffect = enemy != null ? enemy.FindActionEffect(CombatActionIds.Appear) : null;
                 var attackEffect = enemy != null ? enemy.FindActionEffect(CombatActionIds.Attack) : null;
                 var hitEffect = enemy != null ? enemy.FindActionEffect(CombatActionIds.Hit) : null;
 
+                Assert.That(appearEffect, Is.Not.Null, path);
                 Assert.That(attackEffect, Is.Not.Null, path);
                 Assert.That(attackEffect.sfxClip, Is.Not.Null, path);
                 Assert.That(hitEffect, Is.Not.Null, path);
                 Assert.That(hitEffect.sfxClip, Is.Not.Null, path);
+                Assert.That(
+                    AssetDatabase.GetAssetPath(attackEffect.sfxClip),
+                    Does.StartWith("Assets/Sounds/MonsterAttackSfx/"),
+                    path);
+                Assert.That(attackEffect.sfxClip.length, Is.LessThan(hitEffect.sfxClip.length), path);
+                Assert.That(attackEffect.EffectiveMinPitch, Is.EqualTo(appearEffect.EffectiveMinPitch).Within(0.0001f), path);
+                Assert.That(attackEffect.EffectiveMaxPitch, Is.EqualTo(appearEffect.EffectiveMaxPitch).Within(0.0001f), path);
                 Assert.That(
                     AssetDatabase.GetAssetPath(hitEffect.sfxClip),
                     Does.StartWith("Assets/Sounds/MonsterHitSfx/"),

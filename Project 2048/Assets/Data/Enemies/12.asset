@@ -65,7 +65,7 @@ MonoBehaviour:
       autoDestroySeconds: 1.25
   - actionId: attack
     effect:
-      sfxClip: {fileID: 8300000, guid: c7f983bb489b67c4c8015edcff0d5d7e, type: 3}
+      sfxClip: {fileID: 8300000, guid: ca348040dafd4dd0a2d935811616f8c2, type: 3}
       vfxPrefab: {fileID: 0}
       animationClip: {fileID: 0}
       particleEffect:

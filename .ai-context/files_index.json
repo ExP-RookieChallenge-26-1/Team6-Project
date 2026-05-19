@@ -6623,9 +6623,9 @@
     "file_id": "Project 2048/Assets/Scripts/Presentation/CombatEffectBinding.cs",
     "path": "Project 2048/Assets/Scripts/Presentation/CombatEffectBinding.cs",
     "file_name": "CombatEffectBinding.cs",
-    "content_hash": "93c612c30a312e912585db6c9185b744dcb8b74b",
-    "size": 3090,
-    "line_count": 82,
+    "content_hash": "b0aff9d78cb7f8bd104014c8d44fa4e131f914f8",
+    "size": 3257,
+    "line_count": 84,
     "namespace": "Project2048.Presentation",
     "using_list": [
       "System",
@@ -6684,6 +6684,13 @@
         "is_static": false
       },
       {
+        "name": "particleEffect",
+        "type": "CombatParticleEffectBinding",
+        "access": "public",
+        "serialized": false,
+        "is_static": false
+      },
+      {
         "name": "localOffset",
         "type": "Vector3",
         "access": "public",
@@ -6716,7 +6723,7 @@
     "has_on_enable": false,
     "has_on_disable": false,
     "serialize_field_count": 0,
-    "public_field_count": 4,
+    "public_field_count": 5,
     "get_component_count": 0,
     "find_call_count": 0,
     "new_keyword_count": 1,
@@ -6726,6 +6733,7 @@
     "referenced_types": [
       "AudioClip",
       "AnimationClip",
+      "CombatParticleEffectBinding",
       "Vector3",
       "System",
       "UnityEngine",
@@ -6734,6 +6742,8 @@
       "Serializable",
       "Min",
       "HasAnyAsset",
+      "HasAuthoredVisual",
+      "HasParticleVisual",
       "EffectiveVolumeScale",
       "Max",
       "EffectiveMinPitch",
@@ -6773,6 +6783,285 @@
     ],
     "summary_signals": [
       "전투 계열 로직 포함"
+    ]
+  },
+  {
+    "file_id": "Project 2048/Assets/Scripts/Presentation/CombatParticleEffectBinding.cs",
+    "path": "Project 2048/Assets/Scripts/Presentation/CombatParticleEffectBinding.cs",
+    "file_name": "CombatParticleEffectBinding.cs",
+    "content_hash": "457b9f074872722bcd66d70a2b9caf2540f20473",
+    "size": 1303,
+    "line_count": 37,
+    "namespace": "Project2048.Presentation",
+    "using_list": [
+      "System",
+      "UnityEngine"
+    ],
+    "classes": [
+      {
+        "name": "CombatParticleEffectBinding",
+        "kind": "class",
+        "access": "public",
+        "base_types": [],
+        "interfaces": [],
+        "attributes": [],
+        "is_partial": false,
+        "is_generic": false
+      }
+    ],
+    "main_class_name": "CombatParticleEffectBinding",
+    "unity_type": "None",
+    "methods": [
+      "ResolveObjectName",
+      "ResolveColor"
+    ],
+    "fields": [
+      {
+        "name": "objectName",
+        "type": "string",
+        "access": "public",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "particlePrefab",
+        "type": "ParticleSystem",
+        "access": "public",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "particleMaterial",
+        "type": "Material",
+        "access": "public",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "useParticleColor",
+        "type": "bool",
+        "access": "public",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "particleColor",
+        "type": "Color",
+        "access": "public",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "swirl",
+        "type": "bool",
+        "access": "public",
+        "serialized": false,
+        "is_static": false
+      }
+    ],
+    "properties": [],
+    "events": [],
+    "unity_messages": [],
+    "has_update": false,
+    "has_fixed_update": false,
+    "has_late_update": false,
+    "has_awake": false,
+    "has_start": false,
+    "has_on_enable": false,
+    "has_on_disable": false,
+    "serialize_field_count": 0,
+    "public_field_count": 6,
+    "get_component_count": 0,
+    "find_call_count": 0,
+    "new_keyword_count": 0,
+    "coroutine_count": 0,
+    "singleton_candidate": false,
+    "dont_destroy_on_load": false,
+    "referenced_types": [
+      "string",
+      "ParticleSystem",
+      "Material",
+      "bool",
+      "Color",
+      "System",
+      "UnityEngine",
+      "Project2048",
+      "Presentation",
+      "Serializable",
+      "Min",
+      "HasParticleVisual",
+      "EffectiveLifetimeSeconds",
+      "Max",
+      "EffectiveBurstCount",
+      "EffectiveStartSpeed",
+      "EffectiveStartSize",
+      "ResolveObjectName",
+      "IsNullOrWhiteSpace",
+      "Trim",
+      "ResolveColor"
+    ],
+    "component_access_types": [],
+    "created_types": [],
+    "singleton_access_types": [],
+    "string_literals": [],
+    "numeric_literals": [
+      0.05,
+      0.8,
+      16,
+      0,
+      0.6,
+      0.01,
+      0.12
+    ],
+    "guessed_roles": [
+      "combat",
+      "runtime"
+    ],
+    "summary_signals": [
+      "전투 계열 로직 포함"
+    ]
+  },
+  {
+    "file_id": "Project 2048/Assets/Scripts/Presentation/WorldShake.cs",
+    "path": "Project 2048/Assets/Scripts/Presentation/WorldShake.cs",
+    "file_name": "WorldShake.cs",
+    "content_hash": "9fa66e83999e56cdfcd0552c855c2cbecb02d3fd",
+    "size": 2898,
+    "line_count": 106,
+    "namespace": "Project2048.Presentation",
+    "using_list": [
+      "System.Collections",
+      "UnityEngine"
+    ],
+    "classes": [
+      {
+        "name": "WorldShake",
+        "kind": "class",
+        "access": "public",
+        "base_types": [
+          "MonoBehaviour"
+        ],
+        "interfaces": [],
+        "attributes": [],
+        "is_partial": false,
+        "is_generic": false
+      }
+    ],
+    "main_class_name": "WorldShake",
+    "unity_type": "MonoBehaviour",
+    "methods": [
+      "Awake",
+      "OnDisable",
+      "ResetRestPosition",
+      "Shake",
+      "StopShake",
+      "ShakeRoutine",
+      "RestorePosition",
+      "CreateShakeOffset",
+      "Vector3"
+    ],
+    "fields": [
+      {
+        "name": "originalLocalPosition",
+        "type": "Vector3",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "shakeCoroutine",
+        "type": "Coroutine",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "elapsed",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "damping",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "sample",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      }
+    ],
+    "properties": [],
+    "events": [],
+    "unity_messages": [
+      "Awake",
+      "OnDisable"
+    ],
+    "has_update": false,
+    "has_fixed_update": false,
+    "has_late_update": false,
+    "has_awake": true,
+    "has_start": false,
+    "has_on_enable": false,
+    "has_on_disable": true,
+    "serialize_field_count": 0,
+    "public_field_count": 0,
+    "get_component_count": 0,
+    "find_call_count": 0,
+    "new_keyword_count": 1,
+    "coroutine_count": 2,
+    "singleton_candidate": false,
+    "dont_destroy_on_load": false,
+    "referenced_types": [
+      "Vector3",
+      "Coroutine",
+      "System",
+      "Collections",
+      "UnityEngine",
+      "Project2048",
+      "Presentation",
+      "IsShaking",
+      "Awake",
+      "ResetRestPosition",
+      "OnDisable",
+      "StopShake",
+      "Shake",
+      "Application",
+      "RestorePosition",
+      "StartCoroutine",
+      "ShakeRoutine",
+      "StopCoroutine",
+      "Clamp01",
+      "CreateShakeOffset",
+      "Vector2"
+    ],
+    "component_access_types": [],
+    "created_types": [
+      "Vector3"
+    ],
+    "singleton_access_types": [],
+    "string_literals": [],
+    "numeric_literals": [
+      0.15,
+      0.08,
+      0,
+      1,
+      0.0001,
+      0.5
+    ],
+    "guessed_roles": [
+      "runtime",
+      "save-load"
+    ],
+    "summary_signals": [
+      "런타임 컴포넌트",
+      "저장/불러오기 관련 로직 포함"
     ]
   },
   {
@@ -7080,9 +7369,9 @@
     "file_id": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "path": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "file_name": "CombatUiView.cs",
-    "content_hash": "15248b7040ed4f9287a9201d5aa327091c82cae9",
-    "size": 76410,
-    "line_count": 2102,
+    "content_hash": "747aa934183cdae01b6a35baaf29443240acfae9",
+    "size": 78962,
+    "line_count": 2192,
     "namespace": "Project2048.Prototype",
     "using_list": [
       "System.Collections",
@@ -7166,6 +7455,13 @@
       "WithAlpha",
       "GetVisibleIntents",
       "ResolveMissingReferences",
+      "ResolveEnemyHpRoot",
+      "SetEnemyHpVisible",
+      "ShowEnemyHp",
+      "HideEnemyHpImmediately",
+      "HideEnemyHpAfterDamageTrail",
+      "EnemyHpHideAfterDamageTrailRoutine",
+      "ClearEnemyHpHide",
       "EnsureHpBarDefaults",
       "ConfigureHpBarFill",
       "SetHpBarValue",
@@ -7316,6 +7612,13 @@
         "is_static": false
       },
       {
+        "name": "enemyHpHideCoroutine",
+        "type": "Coroutine",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
         "name": "boardTransitionAnimating",
         "type": "bool",
         "access": "private",
@@ -7394,6 +7697,13 @@
       },
       {
         "name": "player",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "enemyIsAlive",
         "type": "var",
         "access": "internal",
         "serialized": false,
@@ -7492,6 +7802,13 @@
       },
       {
         "name": "skill",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "delaySeconds",
         "type": "var",
         "access": "internal",
         "serialized": false,
@@ -7649,8 +7966,8 @@
     "public_field_count": 6,
     "get_component_count": 33,
     "find_call_count": 2,
-    "new_keyword_count": 55,
-    "coroutine_count": 8,
+    "new_keyword_count": 56,
+    "coroutine_count": 10,
     "singleton_candidate": false,
     "dont_destroy_on_load": false,
     "referenced_types": [
@@ -7743,6 +8060,7 @@
       "ClearBoardAnimationOverlay",
       "ClearCombatVfx",
       "ClearEnemyDeathFade",
+      "ClearEnemyHpHide",
       "ClearHpDamageTrailAnimations",
       "UnbindRewardEvents",
       "Direction",
@@ -7830,6 +8148,9 @@
       "SetBlockIndicator",
       "RenderStatusEffects",
       "StatusEffects",
+      "ShowEnemyHp",
+      "HideEnemyHpAfterDamageTrail",
+      "HideEnemyHpImmediately",
       "FormatActionDescription",
       "LastActionDescription",
       "Sprite",
@@ -7849,11 +8170,7 @@
       "GridLayoutGroup",
       "Rect",
       "Vector2",
-      "From",
-      "To",
-      "Value",
-      "TryGetCellCenter",
-      "GetCell"
+      "From"
     ],
     "component_access_types": [
       "ButtonClickAudioEmitter",
@@ -7940,9 +8257,9 @@
     "file_id": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "path": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "file_name": "CombatWorldSpriteView.cs",
-    "content_hash": "1b1404b6804c40b835cce3c16fabec57e8bcda8b",
-    "size": 37113,
-    "line_count": 1034,
+    "content_hash": "38a7200059fd6ea659485d45337ae97f1f7e9564",
+    "size": 50292,
+    "line_count": 1395,
     "namespace": "Project2048.Prototype",
     "using_list": [
       "System.Collections",
@@ -7953,7 +8270,9 @@
       "Project2048.Presentation",
       "Project2048.Skills",
       "UnityEngine",
-      "UnityEngine.Audio"
+      "UnityEngine.Audio",
+      "UnityEngine.EventSystems",
+      "UnityEngine.Rendering"
     ],
     "classes": [
       {
@@ -7999,23 +8318,41 @@
       "ClearEnemyDeathFade",
       "ClearEnemyAppearIntro",
       "ClearEnemyAttackLunge",
-      "PlayEnemyAppearScreenShake",
-      "ScreenShakeRoutine",
-      "Vector3",
-      "ResolveScreenShakeTarget",
-      "ClearScreenShake",
+      "PlayEnemyAppearWorldShake",
+      "ResolveWorldShake",
+      "ResolveForegroundShakeRoot",
+      "GameObject",
+      "ReparentRendererForWorldShake",
+      "ClearWorldShake",
+      "CanAutoReparentForWorldShake",
+      "IsUsableShakeTarget",
+      "DestroyGeneratedShakeRoot",
       "ResolveEnemyAttackLungeTarget",
       "SpawnDebuffCastParticles",
       "SpawnParticleBurst",
       "CreateFallbackParticleSystem",
-      "GameObject",
       "ConfigureParticleBurst",
+      "ConfigureSwirlBurst",
+      "AnimationCurve",
+      "Keyframe",
+      "SwirlParticleTransformRoutine",
+      "DisableSwirlBurst",
       "ResolveDebuffParticleColor",
+      "ResolveShieldImpactParticleEffect",
+      "ResolveDebuffParticleEffect",
+      "ResolveShieldImpactParticleMaterial",
+      "ResolveDebuffParticleMaterial",
+      "CreateParticleMaterial",
+      "Material",
+      "ApplyParticleMaterialColor",
+      "DestroyRuntimeParticleMaterials",
+      "DestroyRuntimeMaterial",
       "ResolveDebuffActionId",
       "CacheEnemyRendererRestTransform",
       "RestoreEnemyRendererTransform",
       "SetEnemyRendererAlpha",
       "ResolveMissingReferences",
+      "ResolveWorldVfxProfile",
       "EnsureAudioSource",
       "ResolveAudioRouting",
       "DuckBgmForImportantSfx",
@@ -8053,7 +8390,7 @@
         "is_static": false
       },
       {
-        "name": "EnemyAppearScreenShakeDurationSeconds",
+        "name": "EnemyAppearWorldShakeDurationSeconds",
         "type": "float",
         "access": "public",
         "serialized": false,
@@ -8116,7 +8453,7 @@
         "is_static": false
       },
       {
-        "name": "EnemyAppearScreenShakeMagnitude",
+        "name": "EnemyAppearWorldShakeMagnitude",
         "type": "float",
         "access": "private",
         "serialized": false,
@@ -8132,6 +8469,13 @@
       {
         "name": "DebuffCastParticleCount",
         "type": "int",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "DefaultWorldVfxProfileResourceName",
+        "type": "string",
         "access": "private",
         "serialized": false,
         "is_static": false
@@ -8172,27 +8516,6 @@
         "is_static": false
       },
       {
-        "name": "screenShakeCoroutine",
-        "type": "Coroutine",
-        "access": "private",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "activeScreenShakeTarget",
-        "type": "Transform",
-        "access": "private",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "screenShakeRestLocalPosition",
-        "type": "Vector3",
-        "access": "private",
-        "serialized": false,
-        "is_static": false
-      },
-      {
         "name": "enemyRendererRestLocalPosition",
         "type": "Vector3",
         "access": "private",
@@ -8228,6 +8551,27 @@
         "is_static": false
       },
       {
+        "name": "runtimeShieldImpactParticleMaterial",
+        "type": "Material",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "runtimeFearDebuffParticleMaterial",
+        "type": "Material",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "runtimeDarknessDebuffParticleMaterial",
+        "type": "Material",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
         "name": "enemyJustDied",
         "type": "var",
         "access": "internal",
@@ -8243,13 +8587,6 @@
       },
       {
         "name": "animator",
-        "type": "var",
-        "access": "internal",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "hasAuthoredVisual",
         "type": "var",
         "access": "internal",
         "serialized": false,
@@ -8368,35 +8705,14 @@
         "is_static": false
       },
       {
-        "name": "startTime",
+        "name": "reparentedCount",
         "type": "var",
         "access": "internal",
         "serialized": false,
         "is_static": false
       },
       {
-        "name": "break",
-        "type": "yield",
-        "access": "internal",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "elapsed",
-        "type": "var",
-        "access": "internal",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "decay",
-        "type": "var",
-        "access": "internal",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "mainCamera",
+        "name": "rendererTransform",
         "type": "var",
         "access": "internal",
         "serialized": false,
@@ -8431,6 +8747,55 @@
         "is_static": false
       },
       {
+        "name": "prefab",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "material",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "lifetimeSeconds",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "burstCount",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "startSpeed",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "startSize",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "shouldSwirl",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
         "name": "parent",
         "type": "var",
         "access": "internal",
@@ -8459,6 +8824,69 @@
         "is_static": false
       },
       {
+        "name": "shape",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "velocity",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "rotation",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "size",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "elapsed",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "break",
+        "type": "yield",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "velocity",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "rotation",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "size",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
         "name": "color",
         "type": "var",
         "access": "internal",
@@ -8480,20 +8908,22 @@
     "has_on_disable": false,
     "serialize_field_count": 0,
     "public_field_count": 6,
-    "get_component_count": 7,
+    "get_component_count": 8,
     "find_call_count": 2,
-    "new_keyword_count": 3,
+    "new_keyword_count": 10,
     "coroutine_count": 8,
     "singleton_candidate": false,
     "dont_destroy_on_load": false,
     "referenced_types": [
       "float",
       "int",
+      "string",
       "CombatManager",
       "CombatSnapshot",
       "Coroutine",
       "Vector3",
       "bool",
+      "Material",
       "System",
       "Collections",
       "Linq",
@@ -8504,11 +8934,13 @@
       "Presentation",
       "Skills",
       "UnityEngine",
+      "EventSystems",
+      "Rendering",
       "Prototype",
       "EnemyDeathFadeDurationSeconds",
       "EnemyAppearIntroDurationSeconds",
       "EnemyAttackLungeDurationSeconds",
-      "EnemyAppearScreenShakeDurationSeconds",
+      "EnemyAppearWorldShakeDurationSeconds",
       "ShieldImpactParticleLifetimeSeconds",
       "DebuffCastParticleLifetimeSeconds",
       "EnemyAppearIntroRightOffset",
@@ -8517,9 +8949,11 @@
       "EnemyAttackLungeDistance",
       "EnemyAttackLungeImpactTime",
       "EnemyAttackLungeScalePop",
-      "EnemyAppearScreenShakeMagnitude",
+      "EnemyAppearWorldShakeMagnitude",
       "ShieldImpactParticleCount",
       "DebuffCastParticleCount",
+      "DefaultWorldVfxProfileResourceName",
+      "PrototypeCombatWorldVfxProfile",
       "PrototypeCombatBootstrap",
       "SpriteRenderer",
       "Sprite",
@@ -8528,10 +8962,14 @@
       "SimpleBgmDucker",
       "Animator",
       "ParticleSystem",
+      "CombatWorldVfxProfileSO",
+      "WorldShake",
       "Color",
       "Initialize",
       "UnbindCombatEvents",
       "ResolveMissingReferences",
+      "ResolveWorldVfxProfile",
+      "ResolveWorldShake",
       "CacheEnemyRendererRestTransform",
       "RenderBackground",
       "OnCombatStateChanged",
@@ -8548,7 +8986,8 @@
       "ClearEnemyDeathFade",
       "ClearEnemyAppearIntro",
       "ClearEnemyAttackLunge",
-      "ClearScreenShake",
+      "ClearWorldShake",
+      "DestroyRuntimeParticleMaterials",
       "PlayerWasHit",
       "EnemyWasHit",
       "PlayerShieldWasHit",
@@ -8589,8 +9028,10 @@
       "None",
       "ResolveDebuffActionId",
       "SpawnDebuffCastParticles",
+      "ResolveShieldImpactParticleEffect",
       "SpawnParticleBurst",
       "ShieldImpactParticles",
+      "ResolveShieldImpactParticleMaterial",
       "EnemySO",
       "EnemyIndex",
       "Count",
@@ -8603,8 +9044,10 @@
       "Quaternion",
       "EffectiveAutoDestroySeconds",
       "Destroy",
+      "HasParticleVisual",
+      "CombatActionParticles",
       "Play",
-      "PlayEnemyAppearScreenShake",
+      "PlayEnemyAppearWorldShake",
       "Application",
       "RestoreEnemyRendererTransform",
       "StartCoroutine",
@@ -8620,16 +9063,42 @@
       "PlayEnemyDeathFade",
       "EnemyDeathFadeRoutine",
       "StopCoroutine",
-      "ResolveScreenShakeTarget",
-      "ScreenShakeRoutine",
+      "Shake",
+      "IsUsableShakeTarget",
+      "ResetRestPosition",
+      "ResolveForegroundShakeRoot",
+      "GetComponent",
+      "AddComponent",
+      "ForegroundShakeRoot",
+      "SetParent",
+      "ReparentRendererForWorldShake",
+      "DestroyGeneratedShakeRoot",
+      "IsChildOf",
+      "CanAutoReparentForWorldShake",
+      "StopShake",
+      "GetComponentInChildren",
+      "Rigidbody2D",
+      "Collider2D",
       "Camera",
+      "AudioListener",
+      "Canvas",
+      "EventSystem",
+      "DestroyImmediate",
       "InverseTransformPoint",
+      "ResolveDebuffParticleEffect",
+      "ResolveDebuffParticleMaterial",
       "ResolveDebuffParticleColor",
       "DebuffCastParticles",
+      "EffectiveLifetimeSeconds",
+      "EffectiveBurstCount",
+      "EffectiveStartSpeed",
+      "EffectiveStartSize",
+      "CombatParticleEffectBinding",
+      "ResolveColor",
+      "ResolveObjectName",
       "CreateFallbackParticleSystem",
       "ConfigureParticleBurst",
-      "SetParent",
-      "GetComponent",
+      "SwirlParticleTransformRoutine",
       "Stop",
       "ParticleSystemStopBehavior",
       "StopEmittingAndClear",
@@ -8643,44 +9112,12 @@
       "MaxValue",
       "ParticleSystemShapeType",
       "Sphere",
-      "ParticleSystemRenderer",
-      "Fear",
-      "Darkness",
-      "DebuffFear",
-      "DebuffDarkness",
-      "FindRendererByName",
-      "BackgroundSprite",
-      "PlayerSprite",
-      "EnemySprite",
-      "AddComponent",
-      "ResolveAudioRouting",
-      "Project2048AudioSettings",
-      "LoadDefault",
-      "SfxGroup",
-      "Active",
-      "FindAnyObjectByType",
-      "FindObjectsInactive",
-      "Include",
-      "DuckBgm",
-      "Find",
-      "Phase",
-      "CombatPhase",
-      "EnemyTurn",
-      "CurrentHp",
-      "Block",
-      "ActionPhase",
-      "EnemyHasAttackIntent",
-      "EnemyHasDefenseIntent",
-      "EnemyCombatSnapshot",
-      "Intents",
-      "Any",
-      "EnemyIntentType",
-      "Intent",
-      "Defense",
-      "Victory",
-      "Defeat"
+      "ConfigureSwirlBurst",
+      "DisableSwirlBurst",
+      "ParticleSystemRenderer"
     ],
     "component_access_types": [
+      "WorldShake",
       "ParticleSystem",
       "ParticleSystemRenderer",
       "SpriteRenderer",
@@ -8688,22 +9125,39 @@
       "AudioSource"
     ],
     "created_types": [
-      "Vector3",
-      "GameObject"
+      "GameObject",
+      "AnimationCurve",
+      "Keyframe",
+      "Material"
     ],
     "singleton_access_types": [],
     "string_literals": [
+      "PrototypeCombatWorldVfxProfile",
       "ShieldImpactParticles",
+      "CombatActionParticles",
+      "ForegroundShakeRoot",
       "{debuffType}DebuffCastParticles",
-      "BackgroundSprite",
-      "PlayerSprite",
-      "EnemySprite"
+      "ShieldImpactParticleMaterial",
+      "FearDebuffParticleMaterial",
+      "DarknessDebuffParticleMaterial",
+      "Universal Render Pipeline/Particles/Unlit",
+      "Particles/Standard Unlit",
+      "Sprites/Default",
+      "Universal Render Pipeline/Unlit",
+      "_BaseColor",
+      "_Color",
+      "_TintColor",
+      "_Surface",
+      "_SrcBlend",
+      "_DstBlend",
+      "_ZWrite",
+      "_ALPHABLEND_ON"
     ],
     "numeric_literals": [
       0.6,
       0.45,
       0.32,
-      0.22,
+      1.5,
       0.8,
       0.9,
       2.25,
@@ -8711,6 +9165,7 @@
       0.08,
       0.72,
       0.05,
+      0.09,
       22,
       28,
       0.62,
@@ -8718,22 +9173,134 @@
       1,
       0.96,
       0.75,
-      0.16,
-      0.95
+      0.16
     ],
     "guessed_roles": [
       "combat",
       "runtime",
       "player",
       "data",
-      "save-load"
+      "manager"
     ],
     "summary_signals": [
       "런타임 컴포넌트",
       "전투 계열 로직 포함",
-      "저장/불러오기 관련 로직 포함",
       "컴포넌트 조회 사용",
       "Find 계열 탐색 사용"
+    ]
+  },
+  {
+    "file_id": "Project 2048/Assets/Scripts/Prototype/CombatWorldVfxProfileSO.cs",
+    "path": "Project 2048/Assets/Scripts/Prototype/CombatWorldVfxProfileSO.cs",
+    "file_name": "CombatWorldVfxProfileSO.cs",
+    "content_hash": "a64598d07afa858921bc097987c21e52dd92dabb",
+    "size": 1652,
+    "line_count": 53,
+    "namespace": "Project2048.Prototype",
+    "using_list": [
+      "Project2048.Enemy",
+      "Project2048.Presentation",
+      "UnityEngine"
+    ],
+    "classes": [
+      {
+        "name": "CombatWorldVfxProfileSO",
+        "kind": "class",
+        "access": "public",
+        "base_types": [
+          "ScriptableObject"
+        ],
+        "interfaces": [],
+        "attributes": [],
+        "is_partial": false,
+        "is_generic": false
+      }
+    ],
+    "main_class_name": "CombatWorldVfxProfileSO",
+    "unity_type": "ScriptableObject",
+    "methods": [
+      "Color",
+      "ResolveDebuffCastEffect"
+    ],
+    "fields": [],
+    "properties": [],
+    "events": [],
+    "unity_messages": [],
+    "has_update": false,
+    "has_fixed_update": false,
+    "has_late_update": false,
+    "has_awake": false,
+    "has_start": false,
+    "has_on_enable": false,
+    "has_on_disable": false,
+    "serialize_field_count": 0,
+    "public_field_count": 0,
+    "get_component_count": 0,
+    "find_call_count": 0,
+    "new_keyword_count": 3,
+    "coroutine_count": 0,
+    "singleton_candidate": false,
+    "dont_destroy_on_load": false,
+    "referenced_types": [
+      "Project2048",
+      "Enemy",
+      "Presentation",
+      "UnityEngine",
+      "Prototype",
+      "CreateAssetMenu",
+      "Game",
+      "Combat",
+      "World",
+      "VFX",
+      "Profile",
+      "CombatParticleEffectBinding",
+      "ShieldImpactParticles",
+      "Color",
+      "FearDebuffCastParticles",
+      "DarknessDebuffCastParticles",
+      "ResolveDebuffCastEffect",
+      "DebuffType",
+      "Fear",
+      "Darkness"
+    ],
+    "component_access_types": [],
+    "created_types": [
+      "Color"
+    ],
+    "singleton_access_types": [],
+    "string_literals": [
+      "Game/Combat World VFX Profile",
+      "ShieldImpactParticles",
+      "FearDebuffCastParticles",
+      "DarknessDebuffCastParticles"
+    ],
+    "numeric_literals": [
+      0.62,
+      0.92,
+      1,
+      0.96,
+      0.8,
+      22,
+      0.78,
+      0.13,
+      0.75,
+      0.05,
+      0.16,
+      0.95,
+      0.9,
+      28,
+      0.24,
+      0.1,
+      0.48
+    ],
+    "guessed_roles": [
+      "combat",
+      "data",
+      "runtime"
+    ],
+    "summary_signals": [
+      "데이터 자산 중심 구조",
+      "전투 계열 로직 포함"
     ]
   },
   {
@@ -12932,9 +13499,9 @@
     "file_id": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
     "path": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
     "file_name": "CombatPresentationEffectTests.cs",
-    "content_hash": "e9b939d8c0848ddd43de41bc247f8283dbe963e0",
-    "size": 33558,
-    "line_count": 761,
+    "content_hash": "9fc03abe4a28043bf6e175d2841383ffd2cc766f",
+    "size": 46535,
+    "line_count": 1004,
     "namespace": "Project2048.Tests",
     "using_list": [
       "System.Collections",
@@ -12988,10 +13555,16 @@
       "CombatEventAudioPlayer_TracksDefeatEventCue",
       "CombatWorldSpriteView_StartCombat_PlaysEnemyIntroBeforeAppearEffectFromEnemySo",
       "WaitForSecondsRealtime",
-      "CombatWorldSpriteView_EnemyAppear_ShakesScreenTargetBriefly",
+      "CombatWorldSpriteView_EnemyAppearShake_UsesLongerStrongerTuning",
+      "CombatWorldSpriteView_EnemyAppear_UsesAssignedWorldShakeBriefly",
+      "CombatWorldSpriteView_EnemyAppear_ShakesForegroundButKeepsBackgroundStill",
+      "CombatWorldSpriteView_EnemyAppear_DoesNotMovePhysicsRendererIntoWorldShakeRoot",
       "CombatWorldSpriteView_EnemyAttack_LungesTowardPlayerAndSpawnsPlayerShieldParticles",
       "CombatWorldSpriteView_PlayerAttackAgainstEnemyBlock_SpawnsEnemyShieldParticles",
       "CombatWorldSpriteView_EnemyDebuffIntent_SpawnsDebuffCastParticles",
+      "CombatWorldSpriteView_EnemyDebuffIntent_WithAuthoredVfxStillSpawnsFearParticles",
+      "PrototypeCombatWorldVfxProfile_AssignsShieldAndCcParticleMaterials",
+      "Color",
       "PrototypeCombatBootstrap_AutoStart_WaitsForFlowGameStarted",
       "GameContext",
       "BattleSceneBinder_CompletesBattleLoadAfterLoadingUiHides",
@@ -13010,12 +13583,42 @@
       "CreateEnemyData",
       "CreateSkill",
       "CreateReward",
-      "SetPrivateField"
+      "SetPrivateField",
+      "ResolveMaterialColor",
+      "AssertColorApproximately"
     ],
     "fields": [
       {
         "name": "break",
         "type": "yield",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "break",
+        "type": "yield",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "foregroundRoot",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "break",
+        "type": "yield",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "foregroundRoot",
+        "type": "var",
         "access": "internal",
         "serialized": false,
         "is_static": false
@@ -13054,10 +13657,10 @@
     "has_on_disable": false,
     "serialize_field_count": 0,
     "public_field_count": 0,
-    "get_component_count": 1,
+    "get_component_count": 5,
     "find_call_count": 3,
-    "new_keyword_count": 53,
-    "coroutine_count": 5,
+    "new_keyword_count": 70,
+    "coroutine_count": 7,
     "singleton_candidate": false,
     "dont_destroy_on_load": false,
     "referenced_types": [
@@ -13190,17 +13793,42 @@
       "WaitForSecondsRealtime",
       "EnemyAppearIntroDurationSeconds",
       "Not",
-      "CombatWorldSpriteView_EnemyAppear_ShakesScreenTargetBriefly",
-      "ScreenShakeTarget",
+      "CombatWorldSpriteView_EnemyAppearShake_UsesLongerStrongerTuning",
+      "GetField",
+      "EnemyAppearWorldShakeMagnitude",
+      "Reflection",
+      "BindingFlags",
+      "Static",
+      "NonPublic",
+      "EnemyAppearWorldShakeDurationSeconds",
+      "GetValue",
+      "CombatWorldSpriteView_EnemyAppear_UsesAssignedWorldShakeBriefly",
+      "AssignedWorldShakeRoot",
+      "WorldShake",
       "Application",
-      "EnemyAppearScreenShakeDurationSeconds",
-      "CombatWorldSpriteView_EnemyAttack_LungesTowardPlayerAndSpawnsPlayerShieldParticles",
+      "CombatWorldSpriteView_EnemyAppear_ShakesForegroundButKeepsBackgroundStill",
+      "BackgroundSprite",
       "PlayerSprite",
+      "SetParent",
+      "ForegroundShakeRoot",
+      "CombatWorldSpriteView_EnemyAppear_DoesNotMovePhysicsRendererIntoWorldShakeRoot",
+      "Rigidbody2D",
+      "BoxCollider2D",
+      "CombatWorldSpriteView_EnemyAttack_LungesTowardPlayerAndSpawnsPlayerShieldParticles",
       "AddBlock",
       "ShieldImpactParticles",
       "LessThan",
       "EnemyAttackLungeDurationSeconds",
       "CombatWorldSpriteView_PlayerAttackAgainstEnemyBlock_SpawnsEnemyShieldParticles",
+      "GetComponent",
+      "ParticleSystem",
+      "ParticleSystemShapeType",
+      "Sphere",
+      "Resources",
+      "Load",
+      "CombatWorldVfxProfileSO",
+      "PrototypeCombatWorldVfxProfile",
+      "ParticleSystemRenderer",
       "CombatWorldSpriteView_EnemyDebuffIntent_SpawnsDebuffCastParticles",
       "EnemyIntent",
       "EnemyIntentType",
@@ -13208,6 +13836,15 @@
       "DebuffType",
       "Fear",
       "FearDebuffCastParticles",
+      "Circle",
+      "False",
+      "AssertColorApproximately",
+      "Color",
+      "CombatWorldSpriteView_EnemyDebuffIntent_WithAuthoredVfxStillSpawnsFearParticles",
+      "AuthoredFearVfxPrefab",
+      "DebuffFear",
+      "PrototypeCombatWorldVfxProfile_AssignsShieldAndCcParticleMaterials",
+      "ResolveMaterialColor",
       "PrototypeCombatBootstrap_AutoStart_WaitsForFlowGameStarted",
       "FlowController",
       "Initialized",
@@ -13223,46 +13860,14 @@
       "BattleSceneBinder",
       "OnGameStarted",
       "SetActive",
-      "False",
       "CombatWorldSpriteView_PlayerSkill_PlaysActivationEffectFromSkillSo",
       "SkillActivation",
       "CombatWorldSpriteView_EnemyDefenseIntent_PlaysDefendEffectFromEnemySo",
-      "EnemyDefend",
-      "Defense",
-      "Defend",
-      "Block",
-      "BattleScene_CombatEventAudioPlayer_UsesEventAudioProfileAsset",
-      "EditorSceneManager",
-      "OpenScene",
-      "Assets",
-      "Scenes",
-      "BattleScene",
-      "FindAnyObjectByType",
-      "FindObjectsInactive",
-      "Include",
-      "GetComponent",
-      "CombatUiView",
-      "SerializedObject",
-      "FindProperty",
-      "BattleScene_HasBattleSceneBinderForLoadingCompletion",
-      "PrototypeCombatEventAudioProfile_ContainsResultAndRewardClips",
-      "AssetDatabase",
-      "LoadAssetAtPath",
-      "PrototypeCombatEventAudioProfileSO",
-      "Data",
-      "PrototypeCombatEventAudioProfile",
-      "Resolve",
-      "RewardRest",
-      "PrototypeEnemyAssets_HaveAppearActionEffectClips",
-      "FindAssets",
-      "Enemies",
-      "Length",
-      "GreaterThanOrEqualTo",
-      "GUIDToAssetPath",
-      "PrototypeEnemyAssets_HaveDefendActionEffectClips",
-      "PrototypeBoardTileEffects_UsesMergeClipAndGranderTuningForLargerTiles"
+      "EnemyDefend"
     ],
     "component_access_types": [
+      "ParticleSystem",
+      "ParticleSystemRenderer",
       "CombatUiView"
     ],
     "created_types": [
@@ -13273,6 +13878,7 @@
       "Vector2Int",
       "RunProgress",
       "WaitForSecondsRealtime",
+      "Color",
       "GameContext",
       "SerializedObject"
     ],
@@ -13296,10 +13902,10 @@
       "EnemyAppear",
       "enemyRenderer",
       "CombatEffectAudio",
-      "ScreenShakeTarget",
-      "screenShakeTarget",
-      "PlayerSprite",
-      "playerRenderer"
+      "EnemyAppearWorldShakeMagnitude",
+      "AssignedWorldShakeRoot",
+      "worldShake",
+      "BackgroundSprite"
     ],
     "numeric_literals": [
       2,
@@ -13320,8 +13926,8 @@
       512,
       44100,
       0.1,
-      1,
-      5
+      1.5,
+      0.09
     ],
     "guessed_roles": [
       "combat",
@@ -13634,11 +14240,12 @@
     "file_id": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "path": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "file_name": "CombatUiViewTests.cs",
-    "content_hash": "848484f64dec31afe55d3a0efd92268ff32bb780",
-    "size": 35440,
-    "line_count": 735,
+    "content_hash": "4462d56b5d1557185de9e7c25e4049b1be488c82",
+    "size": 38836,
+    "line_count": 812,
     "namespace": "Project2048.Tests",
     "using_list": [
+      "System.Collections",
       "NUnit.Framework",
       "Project2048.Audio",
       "Project2048.Board2048",
@@ -13650,6 +14257,7 @@
       "UnityEditor.SceneManagement",
       "UnityEngine",
       "UnityEngine.EventSystems",
+      "UnityEngine.TestTools",
       "UnityEngine.UI"
     ],
     "classes": [
@@ -13677,7 +14285,9 @@
       "Vector2",
       "Initialize_WithMissingSerializedBattleReferences_WiresEnemyHpAndIntentByName",
       "Color",
+      "EnemyDeath_HidesEnemyHpRoot",
       "HpBarDamageTrail_HoldsPreviousHpRatioWhenDamageLands",
+      "EnemyAppear_KeepsUiRootStill",
       "ObstacleCellColor_UsesDarknessDebuffColor",
       "Initialize_RendersTwoEnemyIntentsWhenEnemyCanActTwice",
       "Initialize_BuildsBlockAndStatusEffectUiAroundHpBars",
@@ -13690,6 +14300,7 @@
       "SerializedObject",
       "BattleScene_CombatUiView_HasSceneAuthoredStatusAndBlockObjectsOnBottomHpBars",
       "CreateOwnedGameObject",
+      "CreateOwnedRectTransformObject",
       "CreateImageChild",
       "CreateTextChild",
       "CreatePlayerData",
@@ -13705,6 +14316,13 @@
       {
         "name": "observed",
         "type": "Direction?",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "break",
+        "type": "yield",
         "access": "internal",
         "serialized": false,
         "is_static": false
@@ -13745,12 +14363,14 @@
     "public_field_count": 0,
     "get_component_count": 23,
     "find_call_count": 2,
-    "new_keyword_count": 46,
-    "coroutine_count": 0,
+    "new_keyword_count": 51,
+    "coroutine_count": 1,
     "singleton_candidate": false,
     "dont_destroy_on_load": false,
     "referenced_types": [
       "Direction?",
+      "System",
+      "Collections",
       "NUnit",
       "Framework",
       "Project2048",
@@ -13764,10 +14384,9 @@
       "SceneManagement",
       "UnityEngine",
       "EventSystems",
+      "TestTools",
       "UI",
       "Tests",
-      "System",
-      "Collections",
       "Generic",
       "Object",
       "TearDown",
@@ -13848,6 +14467,11 @@
       "Fear",
       "RequestUseSkillById",
       "RequestEndPlayerTurn",
+      "EnemyDeath_HidesEnemyHpRoot",
+      "True",
+      "RequestUseSkill",
+      "IsDead",
+      "False",
       "HpBarDamageTrail_HoldsPreviousHpRatioWhenDamageLands",
       "TakeDamage",
       "DamageTrailFill",
@@ -13857,6 +14481,11 @@
       "Null",
       "GetSiblingIndex",
       "LessThan",
+      "UnityTest",
+      "EnemyAppear_KeepsUiRootStill",
+      "CreateOwnedRectTransformObject",
+      "Application",
+      "Vector3",
       "ObstacleCellColor_UsesDarknessDebuffColor",
       "InvokePrivate",
       "GetCellColor",
@@ -13874,7 +14503,6 @@
       "ApplyFear",
       "ApplyAttackModifier",
       "Outline",
-      "True",
       "BlockIcon",
       "TMPro",
       "TMP_Text",
@@ -13894,7 +14522,6 @@
       "Contain",
       "IPointerExitHandler",
       "OnPointerExit",
-      "False",
       "Initialize_PreservesSceneAuthoredPlayerBattleStatusEffectsRootPosition",
       "HorizontalLayoutGroup",
       "SetParent",
@@ -13940,16 +14567,7 @@
       "PlayerSO",
       "SkillSO",
       "CreateInstance",
-      "GetField",
-      "SetValue",
-      "GetType",
-      "Reflection",
-      "BindingFlags",
-      "Instance",
-      "NonPublic",
-      "GetPrivateField",
-      "GetValue",
-      "GetMethod"
+      "GetField"
     ],
     "component_access_types": [
       "Image",

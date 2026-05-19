@@ -263,13 +263,26 @@ namespace Project2048.Tests
             Assert.That(enemyRenderer.transform.localPosition, Is.EqualTo(Vector3.zero));
         }
 
+        [Test]
+        public void CombatWorldSpriteView_EnemyAppearShake_UsesLongerStrongerTuning()
+        {
+            var magnitudeField = typeof(CombatWorldSpriteView).GetField(
+                "EnemyAppearWorldShakeMagnitude",
+                System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic);
+
+            Assert.That(CombatWorldSpriteView.EnemyAppearWorldShakeDurationSeconds, Is.EqualTo(1.5f).Within(0.001f));
+            Assert.That(magnitudeField, Is.Not.Null);
+            Assert.That((float)magnitudeField.GetValue(null), Is.EqualTo(0.09f).Within(0.001f));
+        }
+
         [UnityTest]
-        public IEnumerator CombatWorldSpriteView_EnemyAppear_ShakesScreenTargetBriefly()
+        public IEnumerator CombatWorldSpriteView_EnemyAppear_UsesAssignedWorldShakeBriefly()
         {
             var viewObject = CreateOwnedGameObject("WorldSpriteView");
             var view = viewObject.AddComponent<CombatWorldSpriteView>();
             var enemyRenderer = CreateOwnedGameObject("EnemySprite").AddComponent<SpriteRenderer>();
-            var shakeTarget = CreateOwnedGameObject("ScreenShakeTarget");
+            var shakeTarget = CreateOwnedGameObject("AssignedWorldShakeRoot");
+            var worldShake = shakeTarget.AddComponent<WorldShake>();
             var manager = CreateOwnedGameObject("CombatManager").AddComponent<CombatManager>();
             var player = CreateOwnedGameObject("Player").AddComponent<PlayerCombatController>();
             var enemy = CreateOwnedGameObject("Enemy").AddComponent<EnemyController>();
@@ -278,7 +291,7 @@ namespace Project2048.Tests
             var enemyData = CreateEnemyData(maxHp: 10, attackValue: 0);
 
             SetPrivateField(view, "enemyRenderer", enemyRenderer);
-            SetPrivateField(view, "screenShakeTarget", shakeTarget.transform);
+            SetPrivateField(view, "worldShake", worldShake);
             SetPrivateField(bootstrap, "combatManager", manager);
 
             manager.SetCombatants(player, new[] { enemy });
@@ -295,11 +308,125 @@ namespace Project2048.Tests
                 yield break;
             }
 
+            Assert.That(shakeTarget.transform.localPosition, Is.EqualTo(Vector3.zero));
+
+            yield return new WaitForSecondsRealtime(CombatWorldSpriteView.EnemyAppearIntroDurationSeconds + 0.1f);
+
             Assert.That(shakeTarget.transform.localPosition, Is.Not.EqualTo(Vector3.zero));
 
-            yield return new WaitForSecondsRealtime(CombatWorldSpriteView.EnemyAppearScreenShakeDurationSeconds + 0.1f);
+            yield return new WaitForSecondsRealtime(CombatWorldSpriteView.EnemyAppearWorldShakeDurationSeconds + 0.1f);
 
             Assert.That(shakeTarget.transform.localPosition, Is.EqualTo(Vector3.zero));
+        }
+
+        [UnityTest]
+        public IEnumerator CombatWorldSpriteView_EnemyAppear_ShakesForegroundButKeepsBackgroundStill()
+        {
+            var viewObject = CreateOwnedGameObject("WorldSpriteView");
+            var view = viewObject.AddComponent<CombatWorldSpriteView>();
+            var backgroundRenderer = CreateOwnedGameObject("BackgroundSprite").AddComponent<SpriteRenderer>();
+            var playerRenderer = CreateOwnedGameObject("PlayerSprite").AddComponent<SpriteRenderer>();
+            var enemyRenderer = CreateOwnedGameObject("EnemySprite").AddComponent<SpriteRenderer>();
+            var manager = CreateOwnedGameObject("CombatManager").AddComponent<CombatManager>();
+            var player = CreateOwnedGameObject("Player").AddComponent<PlayerCombatController>();
+            var enemy = CreateOwnedGameObject("Enemy").AddComponent<EnemyController>();
+            var bootstrap = CreateOwnedGameObject("Bootstrap").AddComponent<PrototypeCombatBootstrap>();
+            var playerData = CreatePlayerData(maxHp: 20, attackPower: 2);
+            var enemyData = CreateEnemyData(maxHp: 10, attackValue: 0);
+
+            backgroundRenderer.transform.SetParent(viewObject.transform, false);
+            playerRenderer.transform.SetParent(viewObject.transform, false);
+            enemyRenderer.transform.SetParent(viewObject.transform, false);
+            SetPrivateField(view, "backgroundRenderer", backgroundRenderer);
+            SetPrivateField(view, "playerRenderer", playerRenderer);
+            SetPrivateField(view, "enemyRenderer", enemyRenderer);
+            SetPrivateField(bootstrap, "combatManager", manager);
+
+            manager.SetCombatants(player, new[] { enemy });
+            view.Initialize(bootstrap);
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new List<EnemySO> { enemyData },
+                boardMoveCount = 1,
+            });
+
+            if (!Application.isPlaying)
+            {
+                yield break;
+            }
+
+            var foregroundRoot = playerRenderer.transform.parent;
+            Assert.That(foregroundRoot, Is.Not.Null);
+            Assert.That(foregroundRoot.name, Is.EqualTo("ForegroundShakeRoot"));
+            Assert.That(enemyRenderer.transform.parent, Is.EqualTo(foregroundRoot));
+            Assert.That(foregroundRoot.localPosition, Is.EqualTo(Vector3.zero));
+            Assert.That(backgroundRenderer.transform.parent, Is.EqualTo(viewObject.transform));
+            Assert.That(backgroundRenderer.transform.localPosition, Is.EqualTo(Vector3.zero));
+
+            yield return new WaitForSecondsRealtime(CombatWorldSpriteView.EnemyAppearIntroDurationSeconds + 0.1f);
+
+            Assert.That(foregroundRoot.localPosition, Is.Not.EqualTo(Vector3.zero));
+            Assert.That(backgroundRenderer.transform.localPosition, Is.EqualTo(Vector3.zero));
+
+            yield return new WaitForSecondsRealtime(CombatWorldSpriteView.EnemyAppearWorldShakeDurationSeconds + 0.1f);
+
+            Assert.That(foregroundRoot.localPosition, Is.EqualTo(Vector3.zero));
+            Assert.That(backgroundRenderer.transform.localPosition, Is.EqualTo(Vector3.zero));
+        }
+
+        [UnityTest]
+        public IEnumerator CombatWorldSpriteView_EnemyAppear_DoesNotMovePhysicsRendererIntoWorldShakeRoot()
+        {
+            var viewObject = CreateOwnedGameObject("WorldSpriteView");
+            var view = viewObject.AddComponent<CombatWorldSpriteView>();
+            var playerRenderer = CreateOwnedGameObject("PlayerSprite").AddComponent<SpriteRenderer>();
+            var enemyRenderer = CreateOwnedGameObject("EnemySprite").AddComponent<SpriteRenderer>();
+            playerRenderer.gameObject.AddComponent<Rigidbody2D>();
+            playerRenderer.gameObject.AddComponent<BoxCollider2D>();
+            var manager = CreateOwnedGameObject("CombatManager").AddComponent<CombatManager>();
+            var player = CreateOwnedGameObject("Player").AddComponent<PlayerCombatController>();
+            var enemy = CreateOwnedGameObject("Enemy").AddComponent<EnemyController>();
+            var bootstrap = CreateOwnedGameObject("Bootstrap").AddComponent<PrototypeCombatBootstrap>();
+            var playerData = CreatePlayerData(maxHp: 20, attackPower: 2);
+            var enemyData = CreateEnemyData(maxHp: 10, attackValue: 0);
+
+            playerRenderer.transform.SetParent(viewObject.transform, false);
+            enemyRenderer.transform.SetParent(viewObject.transform, false);
+            SetPrivateField(view, "playerRenderer", playerRenderer);
+            SetPrivateField(view, "enemyRenderer", enemyRenderer);
+            SetPrivateField(bootstrap, "combatManager", manager);
+
+            manager.SetCombatants(player, new[] { enemy });
+            view.Initialize(bootstrap);
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new List<EnemySO> { enemyData },
+                boardMoveCount = 1,
+            });
+
+            if (!Application.isPlaying)
+            {
+                yield break;
+            }
+
+            var foregroundRoot = enemyRenderer.transform.parent;
+            Assert.That(foregroundRoot, Is.Not.Null);
+            Assert.That(foregroundRoot.name, Is.EqualTo("ForegroundShakeRoot"));
+            Assert.That(playerRenderer.transform.parent, Is.EqualTo(viewObject.transform));
+            Assert.That(foregroundRoot.localPosition, Is.EqualTo(Vector3.zero));
+            Assert.That(playerRenderer.transform.localPosition, Is.EqualTo(Vector3.zero));
+
+            yield return new WaitForSecondsRealtime(CombatWorldSpriteView.EnemyAppearIntroDurationSeconds + 0.1f);
+
+            Assert.That(foregroundRoot.localPosition, Is.Not.EqualTo(Vector3.zero));
+            Assert.That(playerRenderer.transform.localPosition, Is.EqualTo(Vector3.zero));
+
+            yield return new WaitForSecondsRealtime(CombatWorldSpriteView.EnemyAppearWorldShakeDurationSeconds + 0.1f);
+
+            Assert.That(foregroundRoot.localPosition, Is.EqualTo(Vector3.zero));
+            Assert.That(playerRenderer.transform.localPosition, Is.EqualTo(Vector3.zero));
         }
 
         [UnityTest]
@@ -381,7 +508,14 @@ namespace Project2048.Tests
 
             Assert.That(manager.RequestUseSkill(attack, enemy), Is.True);
 
-            Assert.That(enemyRenderer.transform.Find("ShieldImpactParticles"), Is.Not.Null);
+            var particles = enemyRenderer.transform.Find("ShieldImpactParticles")?.GetComponent<ParticleSystem>();
+            Assert.That(particles, Is.Not.Null);
+            Assert.That(particles.shape.shapeType, Is.EqualTo(ParticleSystemShapeType.Sphere));
+
+            var profile = Resources.Load<CombatWorldVfxProfileSO>("PrototypeCombatWorldVfxProfile");
+            Assert.That(profile, Is.Not.Null);
+            var renderer = particles.GetComponent<ParticleSystemRenderer>();
+            Assert.That(renderer.sharedMaterial, Is.EqualTo(profile.shieldImpactEffect.particleMaterial));
         }
 
         [Test]
@@ -421,7 +555,97 @@ namespace Project2048.Tests
 
             manager.RequestEndPlayerTurn();
 
+            var particles = enemyRenderer.transform.Find("FearDebuffCastParticles")?.GetComponent<ParticleSystem>();
+            Assert.That(particles, Is.Not.Null);
+            Assert.That(particles.shape.shapeType, Is.EqualTo(ParticleSystemShapeType.Circle));
+            Assert.That(particles.velocityOverLifetime.enabled, Is.False);
+            Assert.That(particles.rotationOverLifetime.enabled, Is.True);
+            AssertColorApproximately(particles.main.startColor.color, Color.white);
+
+            var profile = Resources.Load<CombatWorldVfxProfileSO>("PrototypeCombatWorldVfxProfile");
+            Assert.That(profile, Is.Not.Null);
+            var renderer = particles.GetComponent<ParticleSystemRenderer>();
+            Assert.That(renderer.sharedMaterial, Is.EqualTo(profile.fearDebuffCastEffect.particleMaterial));
+        }
+
+        [Test]
+        public void CombatWorldSpriteView_EnemyDebuffIntent_WithAuthoredVfxStillSpawnsFearParticles()
+        {
+            var viewObject = CreateOwnedGameObject("WorldSpriteView");
+            var view = viewObject.AddComponent<CombatWorldSpriteView>();
+            var enemyRenderer = CreateOwnedGameObject("EnemySprite").AddComponent<SpriteRenderer>();
+            var authoredVfxPrefab = CreateOwnedGameObject("AuthoredFearVfxPrefab");
+            var manager = CreateOwnedGameObject("CombatManager").AddComponent<CombatManager>();
+            var player = CreateOwnedGameObject("Player").AddComponent<PlayerCombatController>();
+            var enemy = CreateOwnedGameObject("Enemy").AddComponent<EnemyController>();
+            var bootstrap = CreateOwnedGameObject("Bootstrap").AddComponent<PrototypeCombatBootstrap>();
+            var playerData = CreatePlayerData(maxHp: 20, attackPower: 2);
+            var enemyData = CreateEnemyData(maxHp: 10, attackValue: 0);
+            enemyData.actionEffects = new List<CombatantActionEffectBinding>
+            {
+                new()
+                {
+                    actionId = CombatActionIds.DebuffFear,
+                    effect = new CombatEffectBinding
+                    {
+                        vfxPrefab = authoredVfxPrefab,
+                        autoDestroySeconds = 0f,
+                    },
+                },
+            };
+            enemyData.intentPattern = new List<EnemyIntent>
+            {
+                new()
+                {
+                    intentType = EnemyIntentType.Debuff,
+                    debuffType = DebuffType.Fear,
+                    value = 1,
+                },
+            };
+
+            SetPrivateField(view, "enemyRenderer", enemyRenderer);
+            SetPrivateField(bootstrap, "combatManager", manager);
+
+            manager.SetCombatants(player, new[] { enemy });
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new List<EnemySO> { enemyData },
+                boardMoveCount = 1,
+            });
+            manager.ResolveBoardPhase();
+            view.Initialize(bootstrap);
+
+            manager.RequestEndPlayerTurn();
+
             Assert.That(enemyRenderer.transform.Find("FearDebuffCastParticles"), Is.Not.Null);
+        }
+
+        [Test]
+        public void PrototypeCombatWorldVfxProfile_AssignsShieldAndCcParticleMaterials()
+        {
+            var profile = Resources.Load<CombatWorldVfxProfileSO>("PrototypeCombatWorldVfxProfile");
+
+            Assert.That(profile, Is.Not.Null);
+            Assert.That(profile.shieldImpactEffect.particleMaterial, Is.Not.Null);
+            Assert.That(profile.fearDebuffCastEffect.particleMaterial, Is.Not.Null);
+            Assert.That(profile.darknessDebuffCastEffect.particleMaterial, Is.Not.Null);
+            Assert.That(profile.shieldImpactEffect.swirl, Is.False);
+            Assert.That(profile.fearDebuffCastEffect.swirl, Is.True);
+            Assert.That(profile.darknessDebuffCastEffect.swirl, Is.True);
+            Assert.That(profile.shieldImpactEffect.useParticleColor, Is.False);
+            Assert.That(profile.fearDebuffCastEffect.useParticleColor, Is.False);
+            Assert.That(profile.darknessDebuffCastEffect.useParticleColor, Is.False);
+
+            AssertColorApproximately(
+                ResolveMaterialColor(profile.shieldImpactEffect.particleMaterial),
+                new Color(0.62f, 0.92f, 1f, 0.96f));
+            AssertColorApproximately(
+                ResolveMaterialColor(profile.fearDebuffCastEffect.particleMaterial),
+                new Color(0.75f, 0.05f, 0.16f, 0.95f));
+            AssertColorApproximately(
+                ResolveMaterialColor(profile.darknessDebuffCastEffect.particleMaterial),
+                new Color(0.24f, 0.10f, 0.48f, 0.95f));
         }
 
         [UnityTest]
@@ -755,6 +979,25 @@ namespace Project2048.Tests
             target.GetType()
                 .GetField(fieldName, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
                 ?.SetValue(target, value);
+        }
+
+        private static Color ResolveMaterialColor(Material material)
+        {
+            Assert.That(material, Is.Not.Null);
+            if (material.HasProperty("_BaseColor"))
+            {
+                return material.GetColor("_BaseColor");
+            }
+
+            return material.HasProperty("_Color") ? material.GetColor("_Color") : material.color;
+        }
+
+        private static void AssertColorApproximately(Color actual, Color expected)
+        {
+            Assert.That(actual.r, Is.EqualTo(expected.r).Within(0.001f));
+            Assert.That(actual.g, Is.EqualTo(expected.g).Within(0.001f));
+            Assert.That(actual.b, Is.EqualTo(expected.b).Within(0.001f));
+            Assert.That(actual.a, Is.EqualTo(expected.a).Within(0.001f));
         }
     }
 }

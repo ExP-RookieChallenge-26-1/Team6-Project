@@ -1,3 +1,4 @@
+using System.Collections;
 using NUnit.Framework;
 using Project2048.Audio;
 using Project2048.Board2048;
@@ -9,6 +10,7 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.TestTools;
 using UnityEngine.UI;
 
 namespace Project2048.Tests
@@ -176,6 +178,41 @@ namespace Project2048.Tests
         }
 
         [Test]
+        public void EnemyDeath_HidesEnemyHpRoot()
+        {
+            var viewObject = CreateOwnedGameObject("CombatView");
+            var view = viewObject.AddComponent<CombatUiView>();
+            var enemyHp = CreateImageChild(viewObject.transform, "EnemyHp");
+            CreateImageChild(enemyHp.transform, "Fill");
+            CreateTextChild(enemyHp.transform, "Text");
+            var manager = CreateOwnedGameObject("CombatManager").AddComponent<CombatManager>();
+            var player = CreateOwnedGameObject("Player").AddComponent<PlayerCombatController>();
+            var enemy = CreateOwnedGameObject("Enemy").AddComponent<EnemyController>();
+            var bootstrap = CreateOwnedGameObject("Bootstrap").AddComponent<PrototypeCombatBootstrap>();
+            var attack = CreateSkill("attack", "검격", SkillType.Attack, cost: 0, power: 99);
+            var playerData = CreatePlayerData(20, 0, attack);
+            var enemyData = CreateEnemyData("슬라임", 10, 0);
+
+            SetPrivateField(bootstrap, "combatManager", manager);
+            manager.SetCombatants(player, new[] { enemy });
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new System.Collections.Generic.List<EnemySO> { enemyData },
+                boardMoveCount = 1,
+            });
+            manager.ResolveBoardPhase();
+            view.Initialize(bootstrap);
+
+            Assert.That(enemyHp.gameObject.activeSelf, Is.True);
+
+            Assert.That(manager.RequestUseSkill(attack, enemy), Is.True);
+
+            Assert.That(enemy.IsDead, Is.True);
+            Assert.That(enemyHp.gameObject.activeSelf, Is.False);
+        }
+
+        [Test]
         public void HpBarDamageTrail_HoldsPreviousHpRatioWhenDamageLands()
         {
             var viewObject = CreateOwnedGameObject("CombatView");
@@ -217,6 +254,39 @@ namespace Project2048.Tests
             Assert.That(boardHpFill.rectTransform.anchorMax.x, Is.EqualTo(0.8f).Within(0.001f));
             Assert.That(boardTrail.rectTransform.anchorMax.x, Is.EqualTo(1f).Within(0.001f));
             Assert.That(battleTrail.transform.GetSiblingIndex(), Is.LessThan(playerBattleHpFill.transform.GetSiblingIndex()));
+        }
+
+        [UnityTest]
+        public IEnumerator EnemyAppear_KeepsUiRootStill()
+        {
+            var viewObject = CreateOwnedRectTransformObject("CombatView");
+            var view = viewObject.AddComponent<CombatUiView>();
+            var manager = CreateOwnedGameObject("CombatManager").AddComponent<CombatManager>();
+            var player = CreateOwnedGameObject("Player").AddComponent<PlayerCombatController>();
+            var enemy = CreateOwnedGameObject("Enemy").AddComponent<EnemyController>();
+            var bootstrap = CreateOwnedGameObject("Bootstrap").AddComponent<PrototypeCombatBootstrap>();
+            SetPrivateField(bootstrap, "combatManager", manager);
+
+            var playerData = CreatePlayerData(20, 0);
+            var enemyData = CreateEnemyData("슬라임", 10, 0);
+            manager.SetCombatants(player, new[] { enemy });
+
+            view.Initialize(bootstrap);
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new System.Collections.Generic.List<EnemySO> { enemyData },
+                boardMoveCount = 1,
+            });
+
+            if (!Application.isPlaying)
+            {
+                yield break;
+            }
+
+            yield return null;
+
+            Assert.That(viewObject.transform.localPosition, Is.EqualTo(Vector3.zero));
         }
 
         [Test]
@@ -632,6 +702,13 @@ namespace Project2048.Tests
         private GameObject CreateOwnedGameObject(string name)
         {
             var gameObject = new GameObject(name);
+            ownedObjects.Add(gameObject);
+            return gameObject;
+        }
+
+        private GameObject CreateOwnedRectTransformObject(string name)
+        {
+            var gameObject = new GameObject(name, typeof(RectTransform));
             ownedObjects.Add(gameObject);
             return gameObject;
         }

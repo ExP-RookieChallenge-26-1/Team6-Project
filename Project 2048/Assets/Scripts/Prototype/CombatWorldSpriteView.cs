@@ -7,6 +7,8 @@ using Project2048.Presentation;
 using Project2048.Skills;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.EventSystems;
+using UnityEngine.Rendering;
 
 namespace Project2048.Prototype
 {
@@ -15,7 +17,7 @@ namespace Project2048.Prototype
         public const float EnemyDeathFadeDurationSeconds = 0.6f;
         public const float EnemyAppearIntroDurationSeconds = 0.45f;
         public const float EnemyAttackLungeDurationSeconds = 0.32f;
-        public const float EnemyAppearScreenShakeDurationSeconds = 0.22f;
+        public const float EnemyAppearWorldShakeDurationSeconds = 1.5f;
         public const float ShieldImpactParticleLifetimeSeconds = 0.8f;
         public const float DebuffCastParticleLifetimeSeconds = 0.9f;
 
@@ -25,9 +27,10 @@ namespace Project2048.Prototype
         private const float EnemyAttackLungeDistance = 0.72f;
         private const float EnemyAttackLungeImpactTime = 0.45f;
         private const float EnemyAttackLungeScalePop = 0.05f;
-        private const float EnemyAppearScreenShakeMagnitude = 0.08f;
+        private const float EnemyAppearWorldShakeMagnitude = 0.09f;
         private const int ShieldImpactParticleCount = 22;
         private const int DebuffCastParticleCount = 28;
+        private const string DefaultWorldVfxProfileResourceName = "PrototypeCombatWorldVfxProfile";
 
         [SerializeField] private PrototypeCombatBootstrap bootstrap;
         [SerializeField] private SpriteRenderer backgroundRenderer;
@@ -41,24 +44,29 @@ namespace Project2048.Prototype
         [SerializeField] private Animator enemyAnimator;
         [SerializeField] private ParticleSystem shieldImpactParticlePrefab;
         [SerializeField] private ParticleSystem debuffCastParticlePrefab;
-        [SerializeField] private Transform screenShakeTarget;
+        [SerializeField] private CombatWorldVfxProfileSO worldVfxProfile;
+        [SerializeField] private WorldShake worldShake;
+        [SerializeField] private Transform foregroundShakeRoot;
         [SerializeField] private Color shieldImpactParticleColor = new(0.62f, 0.92f, 1f, 0.96f);
         [SerializeField] private Color fearDebuffParticleColor = new(0.75f, 0.05f, 0.16f, 0.95f);
-        [SerializeField] private Color darknessDebuffParticleColor = new(0.40f, 0.12f, 0.78f, 0.95f);
+        [SerializeField] private Color darknessDebuffParticleColor = new(0.24f, 0.10f, 0.48f, 0.95f);
+        [SerializeField] private Material shieldImpactParticleMaterial;
+        [SerializeField] private Material fearDebuffParticleMaterial;
+        [SerializeField] private Material darknessDebuffParticleMaterial;
 
         private CombatManager combatManager;
         private CombatSnapshot snapshot;
         private Coroutine enemyDeathFadeCoroutine;
         private Coroutine enemyAppearIntroCoroutine;
         private Coroutine enemyAttackLungeCoroutine;
-        private Coroutine screenShakeCoroutine;
-        private Transform activeScreenShakeTarget;
-        private Vector3 screenShakeRestLocalPosition;
         private Vector3 enemyRendererRestLocalPosition;
         private Vector3 enemyRendererRestLocalScale = Vector3.one;
         private bool hasEnemyRendererRestTransform;
         private bool lastEnemyWasDead;
         private int lastPlayedEnemyDebuffVfxSequence;
+        private Material runtimeShieldImpactParticleMaterial;
+        private Material runtimeFearDebuffParticleMaterial;
+        private Material runtimeDarknessDebuffParticleMaterial;
 
         public void Initialize(PrototypeCombatBootstrap owner)
         {
@@ -67,6 +75,8 @@ namespace Project2048.Prototype
             combatManager = owner != null ? owner.CombatManager : null;
 
             ResolveMissingReferences();
+            ResolveWorldVfxProfile();
+            ResolveWorldShake();
             CacheEnemyRendererRestTransform();
             RenderBackground();
 
@@ -93,7 +103,8 @@ namespace Project2048.Prototype
             ClearEnemyDeathFade();
             ClearEnemyAppearIntro();
             ClearEnemyAttackLunge();
-            ClearScreenShake(restoreTransform: true);
+            ClearWorldShake();
+            DestroyRuntimeParticleMaterials();
         }
 
         private void UnbindCombatEvents()
@@ -253,16 +264,12 @@ namespace Project2048.Prototype
 
             lastPlayedEnemyDebuffVfxSequence = cue.Sequence;
             var effect = ResolveCurrentEnemyData()?.FindActionEffect(ResolveDebuffActionId(cue.DebuffType));
-            var hasAuthoredVisual = effect?.vfxPrefab != null || effect?.animationClip != null;
             PlayCombatantActionEffect(
                 effect,
                 enemyRenderer != null ? enemyRenderer.transform : transform,
                 enemyAnimator);
 
-            if (!hasAuthoredVisual)
-            {
-                SpawnDebuffCastParticles(cue.DebuffType);
-            }
+            SpawnDebuffCastParticles(cue.DebuffType);
         }
 
         private void PlayShieldImpactEffectIfNeeded(bool shieldWasHit, Transform anchor)
@@ -272,15 +279,19 @@ namespace Project2048.Prototype
                 return;
             }
 
+            var effect = ResolveShieldImpactParticleEffect();
             SpawnParticleBurst(
-                shieldImpactParticlePrefab,
+                effect,
                 anchor,
                 "ShieldImpactParticles",
+                shieldImpactParticlePrefab,
                 shieldImpactParticleColor,
+                effect?.particleMaterial != null ? null : ResolveShieldImpactParticleMaterial(),
                 ShieldImpactParticleLifetimeSeconds,
                 ShieldImpactParticleCount,
                 0.78f,
-                0.13f);
+                0.13f,
+                swirl: false);
         }
 
         private EnemySO ResolveCurrentEnemyData()
@@ -324,6 +335,22 @@ namespace Project2048.Prototype
                 }
             }
 
+            if (effect.particleEffect?.HasParticleVisual == true)
+            {
+                SpawnParticleBurst(
+                    effect.particleEffect,
+                    anchor,
+                    "CombatActionParticles",
+                    fallbackPrefab: null,
+                    fallbackColor: Color.white,
+                    fallbackMaterial: null,
+                    fallbackLifetimeSeconds: effect.EffectiveAutoDestroySeconds,
+                    fallbackBurstCount: 16,
+                    fallbackStartSpeed: 0.6f,
+                    fallbackStartSize: 0.12f,
+                    swirl: false);
+            }
+
             if (effect.animationClip != null && animator != null && animator.runtimeAnimatorController != null)
             {
                 animator.Play(effect.animationClip.name, 0, 0f);
@@ -334,8 +361,8 @@ namespace Project2048.Prototype
         {
             if (enemyRenderer == null)
             {
-                PlayEnemyAppearScreenShake();
                 PlayCombatantActionEffect(effect, transform, enemyAnimator);
+                PlayEnemyAppearWorldShake();
                 return;
             }
 
@@ -350,7 +377,6 @@ namespace Project2048.Prototype
                 return;
             }
 
-            PlayEnemyAppearScreenShake();
             enemyAppearIntroCoroutine = StartCoroutine(EnemyAppearIntroRoutine(effect));
         }
 
@@ -410,6 +436,7 @@ namespace Project2048.Prototype
             RestoreEnemyRendererTransform();
             enemyAppearIntroCoroutine = null;
             PlayCombatantActionEffect(effect, enemyRenderer.transform, enemyAnimator);
+            PlayEnemyAppearWorldShake();
         }
 
         private IEnumerator EnemyAttackLungeRoutine(CombatEffectBinding effect)
@@ -582,88 +609,159 @@ namespace Project2048.Prototype
             }
         }
 
-        private void PlayEnemyAppearScreenShake()
+        private void PlayEnemyAppearWorldShake()
         {
             if (!Application.isPlaying || !isActiveAndEnabled)
             {
                 return;
             }
 
-            var target = ResolveScreenShakeTarget();
-            if (target == null)
+            var shake = ResolveWorldShake();
+            if (shake == null)
             {
                 return;
             }
 
-            ClearScreenShake(restoreTransform: true);
-            activeScreenShakeTarget = target;
-            screenShakeRestLocalPosition = target.localPosition;
-            screenShakeCoroutine = StartCoroutine(ScreenShakeRoutine(target, screenShakeRestLocalPosition));
+            shake.Shake(EnemyAppearWorldShakeDurationSeconds, EnemyAppearWorldShakeMagnitude);
         }
 
-        private IEnumerator ScreenShakeRoutine(Transform target, Vector3 restLocalPosition)
+        private WorldShake ResolveWorldShake()
         {
-            var startTime = Time.realtimeSinceStartup;
-            while (true)
+            if (worldShake != null && IsUsableShakeTarget(worldShake.transform))
             {
-                if (target == null)
-                {
-                    yield break;
-                }
-
-                var elapsed = Time.realtimeSinceStartup - startTime;
-                var t = Mathf.Clamp01(elapsed / EnemyAppearScreenShakeDurationSeconds);
-                var decay = 1f - t;
-                var offset = new Vector3(
-                    Mathf.Sin(t * Mathf.PI * 8f) * EnemyAppearScreenShakeMagnitude * decay,
-                    Mathf.Sin((t * Mathf.PI * 11f) + 0.8f) * EnemyAppearScreenShakeMagnitude * 0.45f * decay,
-                    0f);
-                target.localPosition = restLocalPosition + offset;
-
-                if (t >= 1f)
-                {
-                    break;
-                }
-
-                yield return null;
+                worldShake.ResetRestPosition();
+                return worldShake;
             }
 
-            target.localPosition = restLocalPosition;
-            screenShakeCoroutine = null;
-            activeScreenShakeTarget = null;
+            var root = ResolveForegroundShakeRoot();
+            if (root == null || !IsUsableShakeTarget(root))
+            {
+                return null;
+            }
+
+            worldShake = root.GetComponent<WorldShake>();
+            if (worldShake == null)
+            {
+                worldShake = root.gameObject.AddComponent<WorldShake>();
+            }
+
+            worldShake.ResetRestPosition();
+            return worldShake;
         }
 
-        private Transform ResolveScreenShakeTarget()
+        private Transform ResolveForegroundShakeRoot()
         {
-            if (screenShakeTarget != null)
+            if (foregroundShakeRoot != null)
             {
-                return screenShakeTarget;
+                return IsUsableShakeTarget(foregroundShakeRoot) ? foregroundShakeRoot : null;
             }
 
-            var mainCamera = Camera.main;
-            if (mainCamera != null)
+            if (playerRenderer == null && enemyRenderer == null)
             {
-                screenShakeTarget = mainCamera.transform;
-                return screenShakeTarget;
+                return null;
             }
 
-            return transform;
+            var rootObject = new GameObject("ForegroundShakeRoot");
+            foregroundShakeRoot = rootObject.transform;
+            foregroundShakeRoot.SetParent(transform, false);
+            foregroundShakeRoot.localPosition = Vector3.zero;
+            foregroundShakeRoot.localRotation = Quaternion.identity;
+            foregroundShakeRoot.localScale = Vector3.one;
+
+            var reparentedCount = 0;
+            reparentedCount += ReparentRendererForWorldShake(playerRenderer) ? 1 : 0;
+            reparentedCount += ReparentRendererForWorldShake(enemyRenderer) ? 1 : 0;
+            if (reparentedCount <= 0)
+            {
+                DestroyGeneratedShakeRoot(rootObject);
+                foregroundShakeRoot = null;
+                return null;
+            }
+
+            hasEnemyRendererRestTransform = false;
+            return foregroundShakeRoot;
         }
 
-        private void ClearScreenShake(bool restoreTransform = false)
+        private bool ReparentRendererForWorldShake(SpriteRenderer renderer)
         {
-            if (screenShakeCoroutine != null)
+            if (renderer == null || foregroundShakeRoot == null)
             {
-                StopCoroutine(screenShakeCoroutine);
-                screenShakeCoroutine = null;
+                return false;
             }
 
-            if (restoreTransform && activeScreenShakeTarget != null)
+            var rendererTransform = renderer.transform;
+            if (rendererTransform == foregroundShakeRoot || rendererTransform.IsChildOf(foregroundShakeRoot))
             {
-                activeScreenShakeTarget.localPosition = screenShakeRestLocalPosition;
+                return false;
             }
 
-            activeScreenShakeTarget = null;
+            if (!CanAutoReparentForWorldShake(rendererTransform))
+            {
+                return false;
+            }
+
+            rendererTransform.SetParent(foregroundShakeRoot, true);
+            return true;
+        }
+
+        private void ClearWorldShake()
+        {
+            if (worldShake != null)
+            {
+                worldShake.StopShake(restorePosition: true);
+            }
+        }
+
+        private bool CanAutoReparentForWorldShake(Transform target)
+        {
+            if (target == null || target == transform)
+            {
+                return false;
+            }
+
+            if (target.parent != null && target.parent != transform)
+            {
+                return false;
+            }
+
+            return IsUsableShakeTarget(target);
+        }
+
+        private bool IsUsableShakeTarget(Transform target)
+        {
+            if (target == null)
+            {
+                return false;
+            }
+
+            if (backgroundRenderer != null && backgroundRenderer.transform.IsChildOf(target))
+            {
+                return false;
+            }
+
+            return target.GetComponentInChildren<Rigidbody2D>(includeInactive: true) == null &&
+                target.GetComponentInChildren<Collider2D>(includeInactive: true) == null &&
+                target.GetComponentInChildren<Camera>(includeInactive: true) == null &&
+                target.GetComponentInChildren<AudioListener>(includeInactive: true) == null &&
+                target.GetComponentInChildren<Canvas>(includeInactive: true) == null &&
+                target.GetComponentInChildren<EventSystem>(includeInactive: true) == null;
+        }
+
+        private static void DestroyGeneratedShakeRoot(GameObject rootObject)
+        {
+            if (rootObject == null)
+            {
+                return;
+            }
+
+            if (Application.isPlaying)
+            {
+                Destroy(rootObject);
+            }
+            else
+            {
+                DestroyImmediate(rootObject);
+            }
         }
 
         private Vector3 ResolveEnemyAttackLungeTarget(Vector3 restLocalPosition)
@@ -693,16 +791,63 @@ namespace Project2048.Prototype
 
         private void SpawnDebuffCastParticles(DebuffType debuffType)
         {
-            var color = ResolveDebuffParticleColor(debuffType);
+            var effect = ResolveDebuffParticleEffect(debuffType);
+            var material = effect?.particleMaterial != null
+                ? effect.particleMaterial
+                : ResolveDebuffParticleMaterial(debuffType);
+            var color = material != null ? Color.white : ResolveDebuffParticleColor(debuffType);
             SpawnParticleBurst(
-                debuffCastParticlePrefab,
+                effect?.particlePrefab != null ? effect.particlePrefab : debuffCastParticlePrefab,
                 enemyRenderer != null ? enemyRenderer.transform : transform,
                 $"{debuffType}DebuffCastParticles",
                 color,
-                DebuffCastParticleLifetimeSeconds,
-                DebuffCastParticleCount,
-                0.62f,
-                0.16f);
+                material,
+                effect != null ? effect.EffectiveLifetimeSeconds : DebuffCastParticleLifetimeSeconds,
+                effect != null ? effect.EffectiveBurstCount : DebuffCastParticleCount,
+                effect != null ? effect.EffectiveStartSpeed : 0.62f,
+                effect != null ? effect.EffectiveStartSize : 0.16f,
+                swirl: true);
+        }
+
+        private void SpawnParticleBurst(
+            CombatParticleEffectBinding effect,
+            Transform anchor,
+            string fallbackObjectName,
+            ParticleSystem fallbackPrefab,
+            Color fallbackColor,
+            Material fallbackMaterial,
+            float fallbackLifetimeSeconds,
+            int fallbackBurstCount,
+            float fallbackStartSpeed,
+            float fallbackStartSize,
+            bool swirl)
+        {
+            var prefab = effect?.particlePrefab != null ? effect.particlePrefab : fallbackPrefab;
+            var material = effect?.particleMaterial != null ? effect.particleMaterial : fallbackMaterial;
+            var color = effect != null ? effect.ResolveColor(fallbackColor) : fallbackColor;
+            if (material != null)
+            {
+                color = Color.white;
+            }
+
+            var objectName = effect?.ResolveObjectName(fallbackObjectName) ?? fallbackObjectName;
+            var lifetimeSeconds = effect != null ? effect.EffectiveLifetimeSeconds : fallbackLifetimeSeconds;
+            var burstCount = effect != null ? effect.EffectiveBurstCount : fallbackBurstCount;
+            var startSpeed = effect != null ? effect.EffectiveStartSpeed : fallbackStartSpeed;
+            var startSize = effect != null ? effect.EffectiveStartSize : fallbackStartSize;
+            var shouldSwirl = effect != null ? effect.swirl : swirl;
+
+            SpawnParticleBurst(
+                prefab,
+                anchor,
+                objectName,
+                color,
+                material,
+                lifetimeSeconds,
+                burstCount,
+                startSpeed,
+                startSize,
+                shouldSwirl);
         }
 
         private void SpawnParticleBurst(
@@ -710,10 +855,12 @@ namespace Project2048.Prototype
             Transform anchor,
             string objectName,
             Color color,
+            Material material,
             float lifetimeSeconds,
             int burstCount,
             float startSpeed,
-            float startSize)
+            float startSize,
+            bool swirl)
         {
             var parent = anchor != null ? anchor : transform;
             var particles = prefab != null
@@ -726,8 +873,13 @@ namespace Project2048.Prototype
 
             particles.gameObject.name = objectName;
             particles.transform.localPosition = Vector3.zero;
-            ConfigureParticleBurst(particles, color, lifetimeSeconds, burstCount, startSpeed, startSize, parent);
+            ConfigureParticleBurst(particles, color, material, lifetimeSeconds, burstCount, startSpeed, startSize, parent, swirl);
             particles.Play(true);
+            if (swirl && Application.isPlaying && isActiveAndEnabled)
+            {
+                StartCoroutine(SwirlParticleTransformRoutine(particles.transform, lifetimeSeconds));
+            }
+
             if (lifetimeSeconds > 0f && Application.isPlaying)
             {
                 Destroy(particles.gameObject, lifetimeSeconds + 0.2f);
@@ -744,11 +896,13 @@ namespace Project2048.Prototype
         private static void ConfigureParticleBurst(
             ParticleSystem particles,
             Color color,
+            Material material,
             float lifetimeSeconds,
             int burstCount,
             float startSpeed,
             float startSize,
-            Transform anchor)
+            Transform anchor,
+            bool swirl)
         {
             particles.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
             particles.Clear(true);
@@ -774,7 +928,21 @@ namespace Project2048.Prototype
             shape.shapeType = ParticleSystemShapeType.Sphere;
             shape.radius = 0.22f;
 
+            if (swirl)
+            {
+                ConfigureSwirlBurst(particles, lifetimeSeconds);
+            }
+            else
+            {
+                DisableSwirlBurst(particles);
+            }
+
             var renderer = particles.GetComponent<ParticleSystemRenderer>();
+            if (renderer != null && material != null)
+            {
+                renderer.sharedMaterial = material;
+            }
+
             if (renderer == null || anchor == null)
             {
                 return;
@@ -790,6 +958,60 @@ namespace Project2048.Prototype
             renderer.sortingOrder = anchorRenderer.sortingOrder + 2;
         }
 
+        private static void ConfigureSwirlBurst(ParticleSystem particles, float lifetimeSeconds)
+        {
+            var shape = particles.shape;
+            shape.shapeType = ParticleSystemShapeType.Circle;
+            shape.radius = 0.34f;
+            shape.radiusThickness = 0.32f;
+            shape.arc = 360f;
+
+            var velocity = particles.velocityOverLifetime;
+            velocity.enabled = false;
+
+            var rotation = particles.rotationOverLifetime;
+            rotation.enabled = true;
+            rotation.separateAxes = true;
+            rotation.z = new ParticleSystem.MinMaxCurve(-Mathf.PI * 1.5f, Mathf.PI * 1.5f);
+
+            var size = particles.sizeOverLifetime;
+            size.enabled = true;
+            size.size = new ParticleSystem.MinMaxCurve(1f, new AnimationCurve(
+                new Keyframe(0f, 0.45f),
+                new Keyframe(Mathf.Clamp01(0.32f / Mathf.Max(0.05f, lifetimeSeconds)), 1.18f),
+                new Keyframe(1f, 0f)));
+        }
+
+        private static IEnumerator SwirlParticleTransformRoutine(Transform particleTransform, float lifetimeSeconds)
+        {
+            var elapsed = 0f;
+            var duration = Mathf.Max(0.05f, lifetimeSeconds);
+            while (elapsed < duration)
+            {
+                if (particleTransform == null)
+                {
+                    yield break;
+                }
+
+                elapsed += Time.deltaTime;
+                var progress = Mathf.Clamp01(elapsed / duration);
+                particleTransform.localRotation = Quaternion.Euler(0f, 0f, progress * 540f);
+                yield return null;
+            }
+        }
+
+        private static void DisableSwirlBurst(ParticleSystem particles)
+        {
+            var velocity = particles.velocityOverLifetime;
+            velocity.enabled = false;
+
+            var rotation = particles.rotationOverLifetime;
+            rotation.enabled = false;
+
+            var size = particles.sizeOverLifetime;
+            size.enabled = false;
+        }
+
         private Color ResolveDebuffParticleColor(DebuffType debuffType)
         {
             return debuffType switch
@@ -798,6 +1020,137 @@ namespace Project2048.Prototype
                 DebuffType.Darkness => darknessDebuffParticleColor,
                 _ => shieldImpactParticleColor,
             };
+        }
+
+        private CombatParticleEffectBinding ResolveShieldImpactParticleEffect()
+        {
+            ResolveWorldVfxProfile();
+            return worldVfxProfile != null ? worldVfxProfile.shieldImpactEffect : null;
+        }
+
+        private CombatParticleEffectBinding ResolveDebuffParticleEffect(DebuffType debuffType)
+        {
+            ResolveWorldVfxProfile();
+            return worldVfxProfile != null ? worldVfxProfile.ResolveDebuffCastEffect(debuffType) : null;
+        }
+
+        private Material ResolveShieldImpactParticleMaterial()
+        {
+            return shieldImpactParticleMaterial != null
+                ? shieldImpactParticleMaterial
+                : runtimeShieldImpactParticleMaterial ??= CreateParticleMaterial(
+                    "ShieldImpactParticleMaterial",
+                    shieldImpactParticleColor);
+        }
+
+        private Material ResolveDebuffParticleMaterial(DebuffType debuffType)
+        {
+            return debuffType switch
+            {
+                DebuffType.Fear => fearDebuffParticleMaterial != null
+                    ? fearDebuffParticleMaterial
+                    : runtimeFearDebuffParticleMaterial ??= CreateParticleMaterial(
+                        "FearDebuffParticleMaterial",
+                        fearDebuffParticleColor),
+                DebuffType.Darkness => darknessDebuffParticleMaterial != null
+                    ? darknessDebuffParticleMaterial
+                    : runtimeDarknessDebuffParticleMaterial ??= CreateParticleMaterial(
+                        "DarknessDebuffParticleMaterial",
+                        darknessDebuffParticleColor),
+                _ => ResolveShieldImpactParticleMaterial(),
+            };
+        }
+
+        private static Material CreateParticleMaterial(string materialName, Color color)
+        {
+            var shader = Shader.Find("Universal Render Pipeline/Particles/Unlit")
+                ?? Shader.Find("Particles/Standard Unlit")
+                ?? Shader.Find("Sprites/Default")
+                ?? Shader.Find("Universal Render Pipeline/Unlit");
+            if (shader == null)
+            {
+                return null;
+            }
+
+            var material = new Material(shader)
+            {
+                name = materialName,
+                renderQueue = (int)RenderQueue.Transparent,
+            };
+            ApplyParticleMaterialColor(material, color);
+            return material;
+        }
+
+        private static void ApplyParticleMaterialColor(Material material, Color color)
+        {
+            if (material == null)
+            {
+                return;
+            }
+
+            if (material.HasProperty("_BaseColor"))
+            {
+                material.SetColor("_BaseColor", color);
+            }
+
+            if (material.HasProperty("_Color"))
+            {
+                material.SetColor("_Color", color);
+            }
+
+            if (material.HasProperty("_TintColor"))
+            {
+                material.SetColor("_TintColor", color);
+            }
+
+            if (material.HasProperty("_Surface"))
+            {
+                material.SetFloat("_Surface", 1f);
+            }
+
+            if (material.HasProperty("_SrcBlend"))
+            {
+                material.SetFloat("_SrcBlend", (float)BlendMode.SrcAlpha);
+            }
+
+            if (material.HasProperty("_DstBlend"))
+            {
+                material.SetFloat("_DstBlend", (float)BlendMode.OneMinusSrcAlpha);
+            }
+
+            if (material.HasProperty("_ZWrite"))
+            {
+                material.SetFloat("_ZWrite", 0f);
+            }
+
+            material.EnableKeyword("_ALPHABLEND_ON");
+            material.EnableKeyword("_SURFACE_TYPE_TRANSPARENT");
+        }
+
+        private void DestroyRuntimeParticleMaterials()
+        {
+            DestroyRuntimeMaterial(ref runtimeShieldImpactParticleMaterial);
+            DestroyRuntimeMaterial(ref runtimeFearDebuffParticleMaterial);
+            DestroyRuntimeMaterial(ref runtimeDarknessDebuffParticleMaterial);
+        }
+
+        private static void DestroyRuntimeMaterial(ref Material material)
+        {
+            if (material == null)
+            {
+                return;
+            }
+
+            if (Application.isPlaying)
+            {
+                Destroy(material);
+            }
+            else
+            {
+                DestroyImmediate(material);
+            }
+
+            material = null;
         }
 
         private static string ResolveDebuffActionId(DebuffType debuffType)
@@ -870,6 +1223,14 @@ namespace Project2048.Prototype
             if (enemyAnimator == null && enemyRenderer != null)
             {
                 enemyAnimator = enemyRenderer.GetComponent<Animator>();
+            }
+        }
+
+        private void ResolveWorldVfxProfile()
+        {
+            if (worldVfxProfile == null)
+            {
+                worldVfxProfile = Resources.Load<CombatWorldVfxProfileSO>(DefaultWorldVfxProfileResourceName);
             }
         }
 

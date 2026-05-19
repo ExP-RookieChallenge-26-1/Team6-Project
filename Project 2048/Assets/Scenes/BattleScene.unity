@@ -10326,6 +10326,9 @@ MonoBehaviour:
   audioSource: {fileID: 0}
   playerAnimator: {fileID: 0}
   enemyAnimator: {fileID: 0}
+  shieldImpactParticlePrefab: {fileID: 0}
+  debuffCastParticlePrefab: {fileID: 0}
+  worldVfxProfile: {fileID: 11400000, guid: df6e72d26db5470e8d3e245efd4c04aa, type: 2}
 --- !u!4 &1520538826
 Transform:
   m_ObjectHideFlags: 0

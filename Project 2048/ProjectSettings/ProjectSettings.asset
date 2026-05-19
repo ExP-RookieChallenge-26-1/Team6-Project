@@ -13,7 +13,7 @@ PlayerSettings:
   useOnDemandResources: 0
   accelerometerFrequency: 60
   companyName: DefaultCompany
-  productName: Project 2048
+  productName: Abyslume
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.13725491, g: 0.12156863, b: 0.1254902, a: 1}
@@ -699,14 +699,14 @@ PlayerSettings:
   editorAssembliesCompatibilityLevel: 1
   m_RenderingPath: 1
   m_MobileRenderingPath: 1
-  metroPackageName: Project 2048
+  metroPackageName: Abyslume
   metroPackageVersion: 
   metroCertificatePath: 
   metroCertificatePassword: 
   metroCertificateSubject: 
   metroCertificateIssuer: 
   metroCertificateNotAfter: 0000000000000000
-  metroApplicationDescription: Project 2048
+  metroApplicationDescription: Abyslume
   wsaImages: {}
   metroTileShortName: 
   metroTileShowName: 0
@@ -781,7 +781,7 @@ PlayerSettings:
   cloudProjectId: 87d5d6bb-5556-4d55-b70b-8b4a67967785
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: Project 2048
+  projectName: Abyslume
   organizationId: rrhogm0930
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0

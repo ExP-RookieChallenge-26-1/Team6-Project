@@ -51,6 +51,24 @@ namespace Project2048.Tests
             return gameObject;
         }
 
+        private static void AssertPopupIsNearButNotCentered(
+            RectTransform popup,
+            RectTransform popupLayer,
+            Camera camera,
+            Vector3 targetWorldCenter)
+        {
+            var screenPoint = RectTransformUtility.WorldToScreenPoint(camera, targetWorldCenter);
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                popupLayer,
+                screenPoint,
+                null,
+                out var centerPoint);
+
+            var distanceFromCenter = Vector2.Distance(popup.anchoredPosition, centerPoint);
+            Assert.That(distanceFromCenter, Is.GreaterThan(12f));
+            Assert.That(distanceFromCenter, Is.LessThan(150f));
+        }
+
         [Test]
         public void EnemySo_ResolvesActionEffectByActionId()
         {
@@ -528,6 +546,7 @@ namespace Project2048.Tests
         [Test]
         public void CombatWorldSpriteView_PlayerHpDamage_ShowsUnsignedDamageNumberAtPlayerBody()
         {
+            Random.InitState(2048);
             var canvasObject = CreateOwnedRectTransformObject("CombatCanvas");
             canvasObject.AddComponent<Canvas>().renderMode = RenderMode.ScreenSpaceOverlay;
             var camera = CreateOwnedGameObject("MainCamera").AddComponent<Camera>();
@@ -571,12 +590,13 @@ namespace Project2048.Tests
             Assert.That(text, Is.Not.Null);
             Assert.That(text.text, Is.EqualTo("3"));
             Assert.That(text.text, Does.Not.StartWith("-"));
-            Assert.That(((RectTransform)popup).anchoredPosition.y, Is.GreaterThan(0f));
+            AssertPopupIsNearButNotCentered((RectTransform)popup, (RectTransform)popupLayer, camera, playerRenderer.transform.position);
         }
 
         [Test]
         public void CombatWorldSpriteView_PlayerSkillHpDamage_ShowsUnsignedDamageNumberAtEnemyBody()
         {
+            Random.InitState(2048);
             var canvasObject = CreateOwnedRectTransformObject("CombatCanvas");
             canvasObject.AddComponent<Canvas>().renderMode = RenderMode.ScreenSpaceOverlay;
             var camera = CreateOwnedGameObject("MainCamera").AddComponent<Camera>();
@@ -618,7 +638,7 @@ namespace Project2048.Tests
             Assert.That(text, Is.Not.Null);
             Assert.That(text.text, Is.EqualTo("4"));
             Assert.That(text.text, Does.Not.StartWith("-"));
-            Assert.That(((RectTransform)popup).anchoredPosition.y, Is.GreaterThan(0f));
+            AssertPopupIsNearButNotCentered((RectTransform)popup, (RectTransform)popupLayer, camera, enemyRenderer.transform.position);
         }
 
         [UnityTest]
@@ -1017,6 +1037,28 @@ namespace Project2048.Tests
                     AssetDatabase.GetAssetPath(hitEffect.sfxClip),
                     Does.StartWith("Assets/Sounds/MonsterHitSfx/"),
                     path);
+            }
+        }
+
+        [Test]
+        public void PrototypeEnemyAssets_MonsterOneUsersHaveBoostedVoiceActionVolumes()
+        {
+            var expectedVolumes = new Dictionary<string, (float appear, float attack, float hit)>
+            {
+                ["05.asset"] = (1.5f, 1.38f, 1.17f),
+                ["08.asset"] = (1.23f, 1.1316f, 0.9594f),
+                ["12.asset"] = (1.23f, 1.1316f, 0.9594f),
+            };
+
+            foreach (var pair in expectedVolumes)
+            {
+                var path = $"Assets/Data/Prototype/Enemies/{pair.Key}";
+                var enemy = AssetDatabase.LoadAssetAtPath<EnemySO>(path);
+
+                Assert.That(enemy, Is.Not.Null, path);
+                Assert.That(enemy.FindActionEffect(CombatActionIds.Appear).EffectiveVolumeScale, Is.EqualTo(pair.Value.appear).Within(0.0001f), path);
+                Assert.That(enemy.FindActionEffect(CombatActionIds.Attack).EffectiveVolumeScale, Is.EqualTo(pair.Value.attack).Within(0.0001f), path);
+                Assert.That(enemy.FindActionEffect(CombatActionIds.Hit).EffectiveVolumeScale, Is.EqualTo(pair.Value.hit).Within(0.0001f), path);
             }
         }
 

@@ -37,7 +37,7 @@ MonoBehaviour:
         startSpeed: 0.6
         startSize: 0.12
         swirl: 0
-      volumeScale: 1
+      volumeScale: 1.5
       minPitch: 1
       maxPitch: 1
       localOffset: {x: 0, y: 0, z: 0}
@@ -79,7 +79,7 @@ MonoBehaviour:
         startSpeed: 0.6
         startSize: 0.12
         swirl: 0
-      volumeScale: 0.92
+      volumeScale: 1.38
       minPitch: 1
       maxPitch: 1
       localOffset: {x: 0, y: 0, z: 0}
@@ -100,7 +100,7 @@ MonoBehaviour:
         startSpeed: 0.6
         startSize: 0.12
         swirl: 0
-      volumeScale: 0.78
+      volumeScale: 1.17
       minPitch: 1
       maxPitch: 1
       localOffset: {x: 0, y: 0, z: 0}

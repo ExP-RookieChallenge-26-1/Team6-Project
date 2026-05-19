@@ -32,6 +32,10 @@ namespace Project2048.Prototype
         private const float EnemyAttackLungeScalePop = 0.05f;
         private const float EnemyAppearWorldShakeMagnitude = 0.13f;
         private const float DamageNumberPopupRiseDistance = 0.62f;
+        private const float DamageNumberPopupMinimumWorldOffset = 0.18f;
+        private const float DamageNumberPopupFallbackWorldRadius = 0.48f;
+        private const float DamageNumberPopupBoundsRadiusMultiplier = 0.65f;
+        private const float DamageNumberPopupVerticalRadiusScale = 0.75f;
         private const float DamageNumberPopupWorldFontSize = 2.6f;
         private const float DamageNumberPopupUiFontSize = 34f;
         private const int DamageNumberPopupSortingOrderOffset = 32;
@@ -452,17 +456,44 @@ namespace Project2048.Prototype
 
         private static Vector3 ResolveDamageNumberWorldPosition(SpriteRenderer targetRenderer)
         {
+            var center = ResolveDamageNumberWorldCenter(targetRenderer);
+            var maxRadius = ResolveDamageNumberWorldOffsetRadius(targetRenderer);
+            var minRadius = Mathf.Min(DamageNumberPopupMinimumWorldOffset, maxRadius * 0.75f);
+            var angle = Random.Range(0f, Mathf.PI * 2f);
+            var distance = Random.Range(minRadius, maxRadius);
+            var offset = new Vector3(
+                Mathf.Cos(angle) * distance,
+                Mathf.Sin(angle) * distance * DamageNumberPopupVerticalRadiusScale,
+                0f);
+
+            return center + offset;
+        }
+
+        private static Vector3 ResolveDamageNumberWorldCenter(SpriteRenderer targetRenderer)
+        {
             if (targetRenderer == null)
             {
-                return Vector3.up * 1.2f;
+                return Vector3.zero;
             }
 
             if (targetRenderer.sprite == null)
             {
-                return targetRenderer.transform.position + (Vector3.up * 1.2f);
+                return targetRenderer.transform.position;
             }
 
-            return targetRenderer.bounds.center + Vector3.up * (targetRenderer.bounds.extents.y + 0.35f);
+            return targetRenderer.bounds.center;
+        }
+
+        private static float ResolveDamageNumberWorldOffsetRadius(SpriteRenderer targetRenderer)
+        {
+            if (targetRenderer == null || targetRenderer.sprite == null)
+            {
+                return DamageNumberPopupFallbackWorldRadius;
+            }
+
+            var bounds = targetRenderer.bounds;
+            var boundsRadius = Mathf.Max(bounds.extents.x, bounds.extents.y) * DamageNumberPopupBoundsRadiusMultiplier;
+            return Mathf.Clamp(boundsRadius, DamageNumberPopupMinimumWorldOffset, DamageNumberPopupFallbackWorldRadius);
         }
 
         private static Vector2 ResolveDamageNumberCanvasPosition(SpriteRenderer targetRenderer, RectTransform popupLayer)

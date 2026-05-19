@@ -83,7 +83,7 @@ namespace Project2048.Tests
             Assert.That(backgroundRect.offsetMin, Is.EqualTo(Vector2.zero));
             Assert.That(backgroundRect.offsetMax, Is.EqualTo(Vector2.zero));
 
-            var controller = Object.FindFirstObjectByType<global::MainMenuController>(FindObjectsInactive.Include);
+            var controller = Object.FindAnyObjectByType<global::MainMenuController>(FindObjectsInactive.Include);
             Assert.That(controller, Is.Not.Null);
 
             var serializedController = new SerializedObject(controller);

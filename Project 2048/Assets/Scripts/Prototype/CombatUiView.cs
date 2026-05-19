@@ -33,9 +33,9 @@ namespace Project2048.Prototype
         public const float EnemyDeathFadeDurationSeconds = 0.6f;
         public const float HpDamageTrailDelaySeconds = 0.25f;
         public const float HpDamageTrailDurationSeconds = 0.35f;
-        public const float HpHitShakeDurationSeconds = 0.10f;
+        public const float HpHitShakeDurationSeconds = 0.12f;
         private const float HpDamageFlashDurationSeconds = 0.12f;
-        private const float HpHitShakeMagnitude = 7f;
+        private const float HpHitShakeMagnitude = 12f;
         private const float UiSfxDistance = 10000f;
 
         [Header("Top bar")]
@@ -126,7 +126,7 @@ namespace Project2048.Prototype
         [SerializeField] private Color enemyHpFillColor = new(0.88f, 0.14f, 0.14f, 1f);
         [SerializeField] private Color hpBarBackgroundColor = new(0.08f, 0.09f, 0.10f, 1f);
         [SerializeField] private Color hpDamageTrailColor = new(0.32f, 0.06f, 0.08f, 0.90f);
-        [SerializeField] private Color hpDamageFlashColor = new(1f, 0.86f, 0.26f, 0.95f);
+        [SerializeField] private Color hpDamageFlashColor = new(1f, 1f, 1f, 0.95f);
         [SerializeField] private Color blockFrameColor = new(0.66f, 0.70f, 0.74f, 1f);
         [SerializeField] private Color blockIconColor = new(0.42f, 0.46f, 0.50f, 0.95f);
         [SerializeField] private Color buffStatusColor = new(0.20f, 0.46f, 0.30f, 0.95f);

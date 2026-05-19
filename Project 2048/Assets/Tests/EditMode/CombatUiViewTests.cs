@@ -259,7 +259,12 @@ namespace Project2048.Tests
         [Test]
         public void HpBarDamageFeedback_FlashesDamagedSegmentAndUsesShortShake()
         {
-            Assert.That(CombatUiView.HpHitShakeDurationSeconds, Is.InRange(0.08f, 0.12f));
+            Assert.That(CombatUiView.HpHitShakeDurationSeconds, Is.InRange(0.10f, 0.13f));
+            var shakeMagnitudeField = typeof(CombatUiView).GetField(
+                "HpHitShakeMagnitude",
+                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static);
+            Assert.That(shakeMagnitudeField, Is.Not.Null);
+            Assert.That((float)shakeMagnitudeField.GetRawConstantValue(), Is.GreaterThanOrEqualTo(10f));
 
             var viewObject = CreateOwnedGameObject("CombatView");
             var view = viewObject.AddComponent<CombatUiView>();
@@ -299,6 +304,12 @@ namespace Project2048.Tests
             Assert.That(battleFlash.rectTransform.anchorMax.x, Is.EqualTo(1f).Within(0.001f));
             Assert.That(boardFlash.rectTransform.anchorMin.x, Is.EqualTo(0.8f).Within(0.001f));
             Assert.That(boardFlash.rectTransform.anchorMax.x, Is.EqualTo(1f).Within(0.001f));
+            Assert.That(battleFlash.color.r, Is.EqualTo(1f).Within(0.001f));
+            Assert.That(battleFlash.color.g, Is.EqualTo(1f).Within(0.001f));
+            Assert.That(battleFlash.color.b, Is.EqualTo(1f).Within(0.001f));
+            Assert.That(boardFlash.color.r, Is.EqualTo(1f).Within(0.001f));
+            Assert.That(boardFlash.color.g, Is.EqualTo(1f).Within(0.001f));
+            Assert.That(boardFlash.color.b, Is.EqualTo(1f).Within(0.001f));
             Assert.That(battleFlash.color.a, Is.GreaterThan(0.5f));
             Assert.That(boardFlash.color.a, Is.GreaterThan(0.5f));
         }

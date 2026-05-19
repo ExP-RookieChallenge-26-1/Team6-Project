@@ -16,7 +16,7 @@ MonoBehaviour:
     objectName: ShieldImpactParticles
     particlePrefab: {fileID: 0}
     particleMaterial: {fileID: 2100000, guid: a5a4f5b9bc0f42af8d3c52df445df941, type: 2}
-    useParticleColor: 1
+    useParticleColor: 0
     particleColor: {r: 0.62, g: 0.92, b: 1, a: 0.96}
     lifetimeSeconds: 0.8
     burstCount: 22
@@ -27,7 +27,7 @@ MonoBehaviour:
     objectName: FearDebuffCastParticles
     particlePrefab: {fileID: 0}
     particleMaterial: {fileID: 2100000, guid: e3c729c7f6bb4aa78ff3c8a385a4762f, type: 2}
-    useParticleColor: 1
+    useParticleColor: 0
     particleColor: {r: 0.75, g: 0.05, b: 0.16, a: 0.95}
     lifetimeSeconds: 0.9
     burstCount: 28
@@ -38,8 +38,8 @@ MonoBehaviour:
     objectName: DarknessDebuffCastParticles
     particlePrefab: {fileID: 0}
     particleMaterial: {fileID: 2100000, guid: 9dc2d6350ec44e5ba1f2dfbc1762b0d2, type: 2}
-    useParticleColor: 1
-    particleColor: {r: 0.4, g: 0.12, b: 0.78, a: 0.95}
+    useParticleColor: 0
+    particleColor: {r: 0.24, g: 0.1, b: 0.48, a: 0.95}
     lifetimeSeconds: 0.9
     burstCount: 28
     startSpeed: 0.62

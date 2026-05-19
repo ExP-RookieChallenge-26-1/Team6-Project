@@ -263,6 +263,18 @@ namespace Project2048.Tests
             Assert.That(enemyRenderer.transform.localPosition, Is.EqualTo(Vector3.zero));
         }
 
+        [Test]
+        public void CombatWorldSpriteView_EnemyAppearShake_UsesLongerStrongerTuning()
+        {
+            var magnitudeField = typeof(CombatWorldSpriteView).GetField(
+                "EnemyAppearWorldShakeMagnitude",
+                System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic);
+
+            Assert.That(CombatWorldSpriteView.EnemyAppearWorldShakeDurationSeconds, Is.EqualTo(1.5f).Within(0.001f));
+            Assert.That(magnitudeField, Is.Not.Null);
+            Assert.That((float)magnitudeField.GetValue(null), Is.EqualTo(0.09f).Within(0.001f));
+        }
+
         [UnityTest]
         public IEnumerator CombatWorldSpriteView_EnemyAppear_UsesAssignedWorldShakeBriefly()
         {
@@ -547,11 +559,68 @@ namespace Project2048.Tests
             Assert.That(particles, Is.Not.Null);
             Assert.That(particles.shape.shapeType, Is.EqualTo(ParticleSystemShapeType.Circle));
             Assert.That(particles.velocityOverLifetime.enabled, Is.True);
+            Assert.That(particles.velocityOverLifetime.orbitalX.mode, Is.EqualTo(ParticleSystemCurveMode.Constant));
+            Assert.That(particles.velocityOverLifetime.orbitalY.mode, Is.EqualTo(ParticleSystemCurveMode.Constant));
+            Assert.That(particles.velocityOverLifetime.orbitalZ.mode, Is.EqualTo(ParticleSystemCurveMode.Constant));
+            AssertColorApproximately(particles.main.startColor.color, Color.white);
 
             var profile = Resources.Load<CombatWorldVfxProfileSO>("PrototypeCombatWorldVfxProfile");
             Assert.That(profile, Is.Not.Null);
             var renderer = particles.GetComponent<ParticleSystemRenderer>();
             Assert.That(renderer.sharedMaterial, Is.EqualTo(profile.fearDebuffCastEffect.particleMaterial));
+        }
+
+        [Test]
+        public void CombatWorldSpriteView_EnemyDebuffIntent_WithAuthoredVfxStillSpawnsFearParticles()
+        {
+            var viewObject = CreateOwnedGameObject("WorldSpriteView");
+            var view = viewObject.AddComponent<CombatWorldSpriteView>();
+            var enemyRenderer = CreateOwnedGameObject("EnemySprite").AddComponent<SpriteRenderer>();
+            var authoredVfxPrefab = CreateOwnedGameObject("AuthoredFearVfxPrefab");
+            var manager = CreateOwnedGameObject("CombatManager").AddComponent<CombatManager>();
+            var player = CreateOwnedGameObject("Player").AddComponent<PlayerCombatController>();
+            var enemy = CreateOwnedGameObject("Enemy").AddComponent<EnemyController>();
+            var bootstrap = CreateOwnedGameObject("Bootstrap").AddComponent<PrototypeCombatBootstrap>();
+            var playerData = CreatePlayerData(maxHp: 20, attackPower: 2);
+            var enemyData = CreateEnemyData(maxHp: 10, attackValue: 0);
+            enemyData.actionEffects = new List<CombatantActionEffectBinding>
+            {
+                new()
+                {
+                    actionId = CombatActionIds.DebuffFear,
+                    effect = new CombatEffectBinding
+                    {
+                        vfxPrefab = authoredVfxPrefab,
+                        autoDestroySeconds = 0f,
+                    },
+                },
+            };
+            enemyData.intentPattern = new List<EnemyIntent>
+            {
+                new()
+                {
+                    intentType = EnemyIntentType.Debuff,
+                    debuffType = DebuffType.Fear,
+                    value = 1,
+                },
+            };
+
+            SetPrivateField(view, "enemyRenderer", enemyRenderer);
+            SetPrivateField(bootstrap, "combatManager", manager);
+
+            manager.SetCombatants(player, new[] { enemy });
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new List<EnemySO> { enemyData },
+                boardMoveCount = 1,
+            });
+            manager.ResolveBoardPhase();
+            view.Initialize(bootstrap);
+
+            manager.RequestEndPlayerTurn();
+
+            Assert.That(enemyRenderer.transform.Find("FearDebuffCastParticles"), Is.Not.Null);
         }
 
         [Test]
@@ -566,6 +635,9 @@ namespace Project2048.Tests
             Assert.That(profile.shieldImpactEffect.swirl, Is.False);
             Assert.That(profile.fearDebuffCastEffect.swirl, Is.True);
             Assert.That(profile.darknessDebuffCastEffect.swirl, Is.True);
+            Assert.That(profile.shieldImpactEffect.useParticleColor, Is.False);
+            Assert.That(profile.fearDebuffCastEffect.useParticleColor, Is.False);
+            Assert.That(profile.darknessDebuffCastEffect.useParticleColor, Is.False);
 
             AssertColorApproximately(
                 ResolveMaterialColor(profile.shieldImpactEffect.particleMaterial),
@@ -575,7 +647,7 @@ namespace Project2048.Tests
                 new Color(0.75f, 0.05f, 0.16f, 0.95f));
             AssertColorApproximately(
                 ResolveMaterialColor(profile.darknessDebuffCastEffect.particleMaterial),
-                new Color(0.40f, 0.12f, 0.78f, 0.95f));
+                new Color(0.24f, 0.10f, 0.48f, 0.95f));
         }
 
         [UnityTest]

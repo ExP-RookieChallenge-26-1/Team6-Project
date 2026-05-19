@@ -17,7 +17,7 @@ namespace Project2048.Prototype
         public const float EnemyDeathFadeDurationSeconds = 0.6f;
         public const float EnemyAppearIntroDurationSeconds = 0.45f;
         public const float EnemyAttackLungeDurationSeconds = 0.32f;
-        public const float EnemyAppearWorldShakeDurationSeconds = 1f;
+        public const float EnemyAppearWorldShakeDurationSeconds = 1.5f;
         public const float ShieldImpactParticleLifetimeSeconds = 0.8f;
         public const float DebuffCastParticleLifetimeSeconds = 0.9f;
 
@@ -27,7 +27,7 @@ namespace Project2048.Prototype
         private const float EnemyAttackLungeDistance = 0.72f;
         private const float EnemyAttackLungeImpactTime = 0.45f;
         private const float EnemyAttackLungeScalePop = 0.05f;
-        private const float EnemyAppearWorldShakeMagnitude = 0.06f;
+        private const float EnemyAppearWorldShakeMagnitude = 0.09f;
         private const int ShieldImpactParticleCount = 22;
         private const int DebuffCastParticleCount = 28;
         private const string DefaultWorldVfxProfileResourceName = "PrototypeCombatWorldVfxProfile";
@@ -49,7 +49,7 @@ namespace Project2048.Prototype
         [SerializeField] private Transform foregroundShakeRoot;
         [SerializeField] private Color shieldImpactParticleColor = new(0.62f, 0.92f, 1f, 0.96f);
         [SerializeField] private Color fearDebuffParticleColor = new(0.75f, 0.05f, 0.16f, 0.95f);
-        [SerializeField] private Color darknessDebuffParticleColor = new(0.40f, 0.12f, 0.78f, 0.95f);
+        [SerializeField] private Color darknessDebuffParticleColor = new(0.24f, 0.10f, 0.48f, 0.95f);
         [SerializeField] private Material shieldImpactParticleMaterial;
         [SerializeField] private Material fearDebuffParticleMaterial;
         [SerializeField] private Material darknessDebuffParticleMaterial;
@@ -264,13 +264,13 @@ namespace Project2048.Prototype
 
             lastPlayedEnemyDebuffVfxSequence = cue.Sequence;
             var effect = ResolveCurrentEnemyData()?.FindActionEffect(ResolveDebuffActionId(cue.DebuffType));
-            var hasAuthoredVisual = effect?.HasAuthoredVisual ?? false;
+            var hasAuthoredParticles = effect?.particleEffect?.HasParticleVisual ?? false;
             PlayCombatantActionEffect(
                 effect,
                 enemyRenderer != null ? enemyRenderer.transform : transform,
                 enemyAnimator);
 
-            if (!hasAuthoredVisual)
+            if (!hasAuthoredParticles)
             {
                 SpawnDebuffCastParticles(cue.DebuffType);
             }
@@ -825,8 +825,13 @@ namespace Project2048.Prototype
             bool swirl)
         {
             var prefab = effect?.particlePrefab != null ? effect.particlePrefab : fallbackPrefab;
-            var color = effect != null ? effect.ResolveColor(fallbackColor) : fallbackColor;
             var material = effect?.particleMaterial != null ? effect.particleMaterial : fallbackMaterial;
+            var color = effect != null ? effect.ResolveColor(fallbackColor) : fallbackColor;
+            if (material != null)
+            {
+                color = Color.white;
+            }
+
             var objectName = effect?.ResolveObjectName(fallbackObjectName) ?? fallbackObjectName;
             var lifetimeSeconds = effect != null ? effect.EffectiveLifetimeSeconds : fallbackLifetimeSeconds;
             var burstCount = effect != null ? effect.EffectiveBurstCount : fallbackBurstCount;
@@ -961,8 +966,14 @@ namespace Project2048.Prototype
             var velocity = particles.velocityOverLifetime;
             velocity.enabled = true;
             velocity.space = ParticleSystemSimulationSpace.Local;
-            velocity.orbitalZ = new ParticleSystem.MinMaxCurve(2.8f, 4.6f);
-            velocity.radial = new ParticleSystem.MinMaxCurve(-0.22f, 0.04f);
+            velocity.orbitalX = new ParticleSystem.MinMaxCurve(0f);
+            velocity.orbitalY = new ParticleSystem.MinMaxCurve(0f);
+            velocity.orbitalZ = new ParticleSystem.MinMaxCurve(3.8f);
+            velocity.orbitalOffsetX = new ParticleSystem.MinMaxCurve(0f);
+            velocity.orbitalOffsetY = new ParticleSystem.MinMaxCurve(0f);
+            velocity.orbitalOffsetZ = new ParticleSystem.MinMaxCurve(0f);
+            velocity.radial = new ParticleSystem.MinMaxCurve(-0.16f);
+            velocity.speedModifier = new ParticleSystem.MinMaxCurve(1f);
 
             var rotation = particles.rotationOverLifetime;
             rotation.enabled = true;

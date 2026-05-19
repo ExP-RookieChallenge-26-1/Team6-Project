@@ -331,6 +331,28 @@ namespace Project2048.Tests
             Assert.That(refreshedSnapshot.Enemies[0].MaxHp, Is.EqualTo(3));
         }
 
+        [Test]
+        public void StartCombat_WithoutBoardMoveOverride_UsesPlayerInitialBoardMoveCount()
+        {
+            var manager = CreateGameObject<CombatManager>("CombatManager");
+            var player = CreateGameObject<PlayerCombatController>("Player");
+            var enemy = CreateGameObject<EnemyController>("Enemy");
+            var playerData = CreatePlayerData(maxHp: 20, attackPower: 2);
+            var enemyData = CreateEnemyData(maxHp: 10, attackValue: 0);
+
+            playerData.initialBoardMoveCount = 7;
+
+            manager.SetCombatants(player, new[] { enemy });
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new List<EnemySO> { enemyData },
+            });
+
+            Assert.That(manager.BoardManager.MoveCount, Is.EqualTo(7));
+            Assert.That(manager.GetSnapshot().RemainingBoardMoves, Is.EqualTo(7));
+        }
+
         private T CreateGameObject<T>(string name)
             where T : Component
         {

@@ -3429,7 +3429,6 @@ MonoBehaviour:
   enemyData: {fileID: 11400000, guid: 06eaa3c71a8251b49b93faea191f399e, type: 2}
   enemyPool: []
   randomizeEnemyOnStart: 1
-  boardMoveCount: 12
   autoStartOnPlay: 1
   enemyTurnDelaySeconds: 1.2
 --- !u!4 &681573541

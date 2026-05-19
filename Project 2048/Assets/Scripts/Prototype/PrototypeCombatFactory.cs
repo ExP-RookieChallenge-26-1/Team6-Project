@@ -99,6 +99,7 @@ namespace Project2048.Prototype
             player.name = "PrototypePlayer";
             player.maxHp = 30;
             player.attackPower = 2;
+            player.initialBoardMoveCount = 4;
             player.boardMoveCountBonus = 0;
             player.startingSkills = new List<SkillSO>(skills);
 

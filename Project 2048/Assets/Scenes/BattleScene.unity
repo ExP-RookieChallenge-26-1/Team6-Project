@@ -9833,7 +9833,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 89bd2abaeb2b1a74bbbcb196d5936544, type: 2}
   - {fileID: 11400000, guid: e41a6edb3293a5c48908ac0e3de93328, type: 2}
   randomizeEnemyOnStart: 1
-  boardMoveCount: 12
   autoStartOnPlay: 1
   enemyTurnDelaySeconds: 1.2
   runProgress:

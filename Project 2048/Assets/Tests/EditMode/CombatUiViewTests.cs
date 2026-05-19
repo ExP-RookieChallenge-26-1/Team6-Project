@@ -1,3 +1,4 @@
+using System.Collections;
 using NUnit.Framework;
 using Project2048.Audio;
 using Project2048.Board2048;
@@ -9,6 +10,7 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.TestTools;
 using UnityEngine.UI;
 
 namespace Project2048.Tests
@@ -217,6 +219,41 @@ namespace Project2048.Tests
             Assert.That(boardHpFill.rectTransform.anchorMax.x, Is.EqualTo(0.8f).Within(0.001f));
             Assert.That(boardTrail.rectTransform.anchorMax.x, Is.EqualTo(1f).Within(0.001f));
             Assert.That(battleTrail.transform.GetSiblingIndex(), Is.LessThan(playerBattleHpFill.transform.GetSiblingIndex()));
+        }
+
+        [UnityTest]
+        public IEnumerator EnemyAppear_ShakesUiRootBriefly()
+        {
+            var viewObject = CreateOwnedRectTransformObject("CombatView");
+            var view = viewObject.AddComponent<CombatUiView>();
+            var manager = CreateOwnedGameObject("CombatManager").AddComponent<CombatManager>();
+            var player = CreateOwnedGameObject("Player").AddComponent<PlayerCombatController>();
+            var enemy = CreateOwnedGameObject("Enemy").AddComponent<EnemyController>();
+            var bootstrap = CreateOwnedGameObject("Bootstrap").AddComponent<PrototypeCombatBootstrap>();
+            SetPrivateField(bootstrap, "combatManager", manager);
+
+            var playerData = CreatePlayerData(20, 0);
+            var enemyData = CreateEnemyData("슬라임", 10, 0);
+            manager.SetCombatants(player, new[] { enemy });
+
+            view.Initialize(bootstrap);
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new System.Collections.Generic.List<EnemySO> { enemyData },
+                boardMoveCount = 1,
+            });
+
+            if (!Application.isPlaying)
+            {
+                yield break;
+            }
+
+            Assert.That(viewObject.transform.localPosition, Is.Not.EqualTo(Vector3.zero));
+
+            yield return new WaitForSecondsRealtime(CombatUiView.EnemyAppearUiShakeDurationSeconds + 0.1f);
+
+            Assert.That(viewObject.transform.localPosition, Is.EqualTo(Vector3.zero));
         }
 
         [Test]
@@ -632,6 +669,13 @@ namespace Project2048.Tests
         private GameObject CreateOwnedGameObject(string name)
         {
             var gameObject = new GameObject(name);
+            ownedObjects.Add(gameObject);
+            return gameObject;
+        }
+
+        private GameObject CreateOwnedRectTransformObject(string name)
+        {
+            var gameObject = new GameObject(name, typeof(RectTransform));
             ownedObjects.Add(gameObject);
             return gameObject;
         }

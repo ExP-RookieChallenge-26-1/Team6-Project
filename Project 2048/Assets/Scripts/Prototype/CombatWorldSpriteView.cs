@@ -15,7 +15,7 @@ namespace Project2048.Prototype
         public const float EnemyDeathFadeDurationSeconds = 0.6f;
         public const float EnemyAppearIntroDurationSeconds = 0.45f;
         public const float EnemyAttackLungeDurationSeconds = 0.32f;
-        public const float EnemyAppearScreenShakeDurationSeconds = 0.22f;
+        public const float EnemyAppearScreenShakeDurationSeconds = 0.34f;
         public const float ShieldImpactParticleLifetimeSeconds = 0.8f;
         public const float DebuffCastParticleLifetimeSeconds = 0.9f;
 
@@ -25,7 +25,7 @@ namespace Project2048.Prototype
         private const float EnemyAttackLungeDistance = 0.72f;
         private const float EnemyAttackLungeImpactTime = 0.45f;
         private const float EnemyAttackLungeScalePop = 0.05f;
-        private const float EnemyAppearScreenShakeMagnitude = 0.08f;
+        private const float EnemyAppearScreenShakeMagnitude = 0.22f;
         private const int ShieldImpactParticleCount = 22;
         private const int DebuffCastParticleCount = 28;
 
@@ -53,6 +53,7 @@ namespace Project2048.Prototype
         private Coroutine enemyAttackLungeCoroutine;
         private Coroutine screenShakeCoroutine;
         private Transform activeScreenShakeTarget;
+        private Transform foregroundScreenShakeRoot;
         private Vector3 screenShakeRestLocalPosition;
         private Vector3 enemyRendererRestLocalPosition;
         private Vector3 enemyRendererRestLocalScale = Vector3.one;
@@ -67,6 +68,7 @@ namespace Project2048.Prototype
             combatManager = owner != null ? owner.CombatManager : null;
 
             ResolveMissingReferences();
+            ResolveScreenShakeTarget();
             CacheEnemyRendererRestTransform();
             RenderBackground();
 
@@ -615,8 +617,8 @@ namespace Project2048.Prototype
                 var t = Mathf.Clamp01(elapsed / EnemyAppearScreenShakeDurationSeconds);
                 var decay = 1f - t;
                 var offset = new Vector3(
-                    Mathf.Sin(t * Mathf.PI * 8f) * EnemyAppearScreenShakeMagnitude * decay,
-                    Mathf.Sin((t * Mathf.PI * 11f) + 0.8f) * EnemyAppearScreenShakeMagnitude * 0.45f * decay,
+                    Mathf.Sin((t * Mathf.PI * 13f) + 0.35f) * EnemyAppearScreenShakeMagnitude * decay,
+                    Mathf.Sin((t * Mathf.PI * 17f) + 1.1f) * EnemyAppearScreenShakeMagnitude * 0.55f * decay,
                     0f);
                 target.localPosition = restLocalPosition + offset;
 
@@ -640,14 +642,60 @@ namespace Project2048.Prototype
                 return screenShakeTarget;
             }
 
-            var mainCamera = Camera.main;
-            if (mainCamera != null)
+            var foregroundRoot = ResolveForegroundScreenShakeRoot();
+            if (foregroundRoot != null)
             {
-                screenShakeTarget = mainCamera.transform;
+                screenShakeTarget = foregroundRoot;
                 return screenShakeTarget;
             }
 
             return transform;
+        }
+
+        private Transform ResolveForegroundScreenShakeRoot()
+        {
+            if (foregroundScreenShakeRoot != null)
+            {
+                return foregroundScreenShakeRoot;
+            }
+
+            if (playerRenderer == null && enemyRenderer == null)
+            {
+                return null;
+            }
+
+            var rootObject = new GameObject("ForegroundScreenShakeRoot");
+            foregroundScreenShakeRoot = rootObject.transform;
+            foregroundScreenShakeRoot.SetParent(transform, false);
+            foregroundScreenShakeRoot.localPosition = Vector3.zero;
+            foregroundScreenShakeRoot.localRotation = Quaternion.identity;
+            foregroundScreenShakeRoot.localScale = Vector3.one;
+
+            ReparentRendererForScreenShake(playerRenderer);
+            ReparentRendererForScreenShake(enemyRenderer);
+            hasEnemyRendererRestTransform = false;
+            return foregroundScreenShakeRoot;
+        }
+
+        private void ReparentRendererForScreenShake(SpriteRenderer renderer)
+        {
+            if (renderer == null || foregroundScreenShakeRoot == null)
+            {
+                return;
+            }
+
+            var rendererTransform = renderer.transform;
+            if (rendererTransform == foregroundScreenShakeRoot || rendererTransform.IsChildOf(foregroundScreenShakeRoot))
+            {
+                return;
+            }
+
+            if (rendererTransform.parent != null && rendererTransform.parent != transform)
+            {
+                return;
+            }
+
+            rendererTransform.SetParent(foregroundScreenShakeRoot, true);
         }
 
         private void ClearScreenShake(bool restoreTransform = false)

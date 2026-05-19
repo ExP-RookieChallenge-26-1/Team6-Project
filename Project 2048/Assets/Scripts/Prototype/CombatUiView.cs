@@ -30,10 +30,12 @@ namespace Project2048.Prototype
         public const float BoardTransitionDurationSeconds = 0.14f;
         public const float BoardToActionPanelDelaySeconds = 0.45f;
         public const float CombatVfxDurationSeconds = 0.65f;
+        public const float EnemyAppearUiShakeDurationSeconds = 0.34f;
         public const float EnemyDeathFadeDurationSeconds = 0.6f;
         public const float HpDamageTrailDelaySeconds = 0.25f;
         public const float HpDamageTrailDurationSeconds = 0.35f;
         private const float UiSfxDistance = 10000f;
+        private const float EnemyAppearUiShakeMagnitude = 22f;
 
         [Header("Top bar")]
         [SerializeField] private TMP_Text turnCounterText;
@@ -137,12 +139,15 @@ namespace Project2048.Prototype
         private BoardTransition pendingBoardTransition;
         private Coroutine boardAnimationCoroutine;
         private Coroutine combatVfxCoroutine;
+        private Coroutine enemyAppearUiShakeCoroutine;
         private Coroutine enemyDeathFadeCoroutine;
         private bool boardTransitionAnimating;
         private bool lastEnemyWasDead;
         private int lastPlayedCombatVfxSequence;
         private RectTransform combatVfxPulseRect;
         private Vector3 combatVfxOriginalScale = Vector3.one;
+        private Transform activeEnemyAppearUiShakeTarget;
+        private Vector3 enemyAppearUiShakeRestLocalPosition;
         private readonly Dictionary<Image, float> hpMainFillRatios = new();
         private readonly Dictionary<Image, float> hpDamageTrailRatios = new();
         private readonly Dictionary<Image, Coroutine> hpDamageTrailCoroutines = new();
@@ -201,6 +206,7 @@ namespace Project2048.Prototype
 
             ClearBoardAnimationOverlay();
             ClearCombatVfx();
+            ClearEnemyAppearUiShake(restoreTransform: true);
             ClearEnemyDeathFade();
             ClearHpDamageTrailAnimations();
         }
@@ -328,11 +334,13 @@ namespace Project2048.Prototype
 
         private void HandleCombatStateChanged(CombatSnapshot nextSnapshot)
         {
+            var enemyAppeared = EnemyAppeared(snapshot, nextSnapshot);
             var nextEnemyDead = nextSnapshot?.Enemies?.FirstOrDefault()?.IsDead ?? false;
             var enemyJustDied = !lastEnemyWasDead && nextEnemyDead;
             snapshot = nextSnapshot;
             uiState.Sync(snapshot);
             Render();
+            PlayEnemyAppearUiShakeIfNeeded(enemyAppeared);
             PlayCombatVfxIfNeeded(snapshot.LastVfxCue);
             PlayEnemyDeathFadeIfNeeded(enemyJustDied, nextEnemyDead);
             lastEnemyWasDead = nextEnemyDead;
@@ -1979,6 +1987,93 @@ namespace Project2048.Prototype
             }
         }
 
+        private void PlayEnemyAppearUiShakeIfNeeded(bool enemyAppeared)
+        {
+            if (!enemyAppeared)
+            {
+                return;
+            }
+
+            PlayEnemyAppearUiShake();
+        }
+
+        private void PlayEnemyAppearUiShake()
+        {
+            if (!Application.isPlaying || !isActiveAndEnabled)
+            {
+                return;
+            }
+
+            var target = ResolveEnemyAppearUiShakeTarget();
+            if (target == null)
+            {
+                return;
+            }
+
+            ClearEnemyAppearUiShake(restoreTransform: true);
+            activeEnemyAppearUiShakeTarget = target;
+            enemyAppearUiShakeRestLocalPosition = target.localPosition;
+            enemyAppearUiShakeCoroutine = StartCoroutine(
+                EnemyAppearUiShakeRoutine(target, enemyAppearUiShakeRestLocalPosition));
+        }
+
+        private IEnumerator EnemyAppearUiShakeRoutine(Transform target, Vector3 restLocalPosition)
+        {
+            var startTime = Time.realtimeSinceStartup;
+            while (true)
+            {
+                if (target == null)
+                {
+                    break;
+                }
+
+                var elapsed = Time.realtimeSinceStartup - startTime;
+                var t = Mathf.Clamp01(elapsed / EnemyAppearUiShakeDurationSeconds);
+                var decay = 1f - t;
+                var offset = new Vector3(
+                    Mathf.Sin((t * Mathf.PI * 13f) + 0.35f) * EnemyAppearUiShakeMagnitude * decay,
+                    Mathf.Sin((t * Mathf.PI * 17f) + 1.1f) * EnemyAppearUiShakeMagnitude * 0.55f * decay,
+                    0f);
+                target.localPosition = restLocalPosition + offset;
+
+                if (t >= 1f)
+                {
+                    break;
+                }
+
+                yield return null;
+            }
+
+            if (target != null)
+            {
+                target.localPosition = restLocalPosition;
+            }
+
+            enemyAppearUiShakeCoroutine = null;
+            activeEnemyAppearUiShakeTarget = null;
+        }
+
+        private Transform ResolveEnemyAppearUiShakeTarget()
+        {
+            return transform;
+        }
+
+        private void ClearEnemyAppearUiShake(bool restoreTransform = false)
+        {
+            if (enemyAppearUiShakeCoroutine != null)
+            {
+                StopCoroutine(enemyAppearUiShakeCoroutine);
+                enemyAppearUiShakeCoroutine = null;
+            }
+
+            if (restoreTransform && activeEnemyAppearUiShakeTarget != null)
+            {
+                activeEnemyAppearUiShakeTarget.localPosition = enemyAppearUiShakeRestLocalPosition;
+            }
+
+            activeEnemyAppearUiShakeTarget = null;
+        }
+
         private void PlayEnemyDeathFadeIfNeeded(bool enemyJustDied, bool nextEnemyDead)
         {
             if ((enemyJustDied || nextEnemyDead) &&
@@ -2096,6 +2191,22 @@ namespace Project2048.Prototype
             }
 
             return sb.ToString();
+        }
+
+        private static bool EnemyAppeared(CombatSnapshot previous, CombatSnapshot next)
+        {
+            var nextEnemy = next?.Enemies?.FirstOrDefault();
+            if (nextEnemy == null || nextEnemy.IsDead)
+            {
+                return false;
+            }
+
+            var previousEnemy = previous?.Enemies?.FirstOrDefault();
+            return previousEnemy == null ||
+                previousEnemy.IsDead ||
+                previous.Phase == CombatPhase.Victory ||
+                previous.Phase == CombatPhase.Defeat ||
+                previousEnemy.EnemyIndex != nextEnemy.EnemyIndex;
         }
     }
 }

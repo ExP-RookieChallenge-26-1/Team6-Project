@@ -886,6 +886,30 @@ namespace Project2048.Tests
         }
 
         [Test]
+        public void PrototypeEnemyAssets_HaveAttackAndHitActionEffectClips()
+        {
+            var enemyGuids = AssetDatabase.FindAssets("t:EnemySO", new[] { "Assets/Data/Prototype/Enemies" });
+
+            Assert.That(enemyGuids.Length, Is.GreaterThanOrEqualTo(12));
+            foreach (var guid in enemyGuids)
+            {
+                var path = AssetDatabase.GUIDToAssetPath(guid);
+                var enemy = AssetDatabase.LoadAssetAtPath<EnemySO>(path);
+                var attackEffect = enemy != null ? enemy.FindActionEffect(CombatActionIds.Attack) : null;
+                var hitEffect = enemy != null ? enemy.FindActionEffect(CombatActionIds.Hit) : null;
+
+                Assert.That(attackEffect, Is.Not.Null, path);
+                Assert.That(attackEffect.sfxClip, Is.Not.Null, path);
+                Assert.That(hitEffect, Is.Not.Null, path);
+                Assert.That(hitEffect.sfxClip, Is.Not.Null, path);
+                Assert.That(
+                    AssetDatabase.GetAssetPath(hitEffect.sfxClip),
+                    Does.StartWith("Assets/Sounds/MonsterHitSfx/"),
+                    path);
+            }
+        }
+
+        [Test]
         public void PrototypeBoardTileEffects_UsesMergeClipAndGranderTuningForLargerTiles()
         {
             var profile = AssetDatabase.LoadAssetAtPath<BoardTileEffectProfileSO>(

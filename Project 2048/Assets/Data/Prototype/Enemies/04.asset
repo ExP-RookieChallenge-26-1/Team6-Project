@@ -18,6 +18,7 @@ MonoBehaviour:
   defensePower: 4
   debuffPower: 2
   difficultyScore: 2
+  actionsPerTurn: 1
   portrait: {fileID: 21300000, guid: 4568f48d7b08b7a449294129ab9312b0, type: 3}
   actionEffects:
   - actionId: appear
@@ -25,6 +26,17 @@ MonoBehaviour:
       sfxClip: {fileID: 8300000, guid: 1d994d948240c984d8da3bb962630c5b, type: 3}
       vfxPrefab: {fileID: 0}
       animationClip: {fileID: 0}
+      particleEffect:
+        objectName:
+        particlePrefab: {fileID: 0}
+        particleMaterial: {fileID: 0}
+        useParticleColor: 0
+        particleColor: {r: 1, g: 1, b: 1, a: 1}
+        lifetimeSeconds: 0.8
+        burstCount: 16
+        startSpeed: 0.6
+        startSize: 0.12
+        swirl: 0
       volumeScale: 0.78
       minPitch: 1.06
       maxPitch: 1.18
@@ -35,9 +47,62 @@ MonoBehaviour:
       sfxClip: {fileID: 8300000, guid: f311d0e68a8f5364a86190032f2c8efd, type: 3}
       vfxPrefab: {fileID: 0}
       animationClip: {fileID: 0}
+      particleEffect:
+        objectName:
+        particlePrefab: {fileID: 0}
+        particleMaterial: {fileID: 0}
+        useParticleColor: 0
+        particleColor: {r: 1, g: 1, b: 1, a: 1}
+        lifetimeSeconds: 0.8
+        burstCount: 16
+        startSpeed: 0.6
+        startSize: 0.12
+        swirl: 0
       volumeScale: 1
       minPitch: 0.96
       maxPitch: 1.04
+      localOffset: {x: 0, y: 0, z: 0}
+      autoDestroySeconds: 1.25
+  - actionId: attack
+    effect:
+      sfxClip: {fileID: 8300000, guid: 1d994d948240c984d8da3bb962630c5b, type: 3}
+      vfxPrefab: {fileID: 0}
+      animationClip: {fileID: 0}
+      particleEffect:
+        objectName:
+        particlePrefab: {fileID: 0}
+        particleMaterial: {fileID: 0}
+        useParticleColor: 0
+        particleColor: {r: 1, g: 1, b: 1, a: 1}
+        lifetimeSeconds: 0.8
+        burstCount: 16
+        startSpeed: 0.6
+        startSize: 0.12
+        swirl: 0
+      volumeScale: 0.7176
+      minPitch: 1.06
+      maxPitch: 1.18
+      localOffset: {x: 0, y: 0, z: 0}
+      autoDestroySeconds: 1.25
+  - actionId: hit
+    effect:
+      sfxClip: {fileID: 8300000, guid: 50e3ad226a4650a4da633f4307775076, type: 3}
+      vfxPrefab: {fileID: 0}
+      animationClip: {fileID: 0}
+      particleEffect:
+        objectName:
+        particlePrefab: {fileID: 0}
+        particleMaterial: {fileID: 0}
+        useParticleColor: 0
+        particleColor: {r: 1, g: 1, b: 1, a: 1}
+        lifetimeSeconds: 0.8
+        burstCount: 16
+        startSpeed: 0.6
+        startSize: 0.12
+        swirl: 0
+      volumeScale: 0.6083999
+      minPitch: 1.06
+      maxPitch: 1.18
       localOffset: {x: 0, y: 0, z: 0}
       autoDestroySeconds: 1.25
   intentPattern: []

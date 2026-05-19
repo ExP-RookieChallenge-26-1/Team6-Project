@@ -176,6 +176,61 @@ namespace Project2048.Tests
         }
 
         [Test]
+        public void HpBarDamageTrail_HoldsPreviousHpRatioWhenDamageLands()
+        {
+            var viewObject = CreateOwnedGameObject("CombatView");
+            var view = viewObject.AddComponent<CombatUiView>();
+            var playerBattleHp = CreateImageChild(viewObject.transform, "PlayerBattleHp");
+            var playerBattleHpFill = CreateImageChild(playerBattleHp.transform, "Fill");
+            CreateTextChild(playerBattleHp.transform, "Text");
+            var enemyHp = CreateImageChild(viewObject.transform, "EnemyHp");
+            CreateImageChild(enemyHp.transform, "Fill");
+            CreateTextChild(enemyHp.transform, "Text");
+            var boardHpFill = CreateImageChild(viewObject.transform, "HpBarFill");
+            CreateTextChild(viewObject.transform, "HpText");
+
+            var manager = CreateOwnedGameObject("CombatManager").AddComponent<CombatManager>();
+            var player = CreateOwnedGameObject("Player").AddComponent<PlayerCombatController>();
+            var enemy = CreateOwnedGameObject("Enemy").AddComponent<EnemyController>();
+            var bootstrap = CreateOwnedGameObject("Bootstrap").AddComponent<PrototypeCombatBootstrap>();
+            SetPrivateField(bootstrap, "combatManager", manager);
+
+            var playerData = CreatePlayerData(20, 0);
+            var enemyData = CreateEnemyData("슬라임", 10, 0);
+            manager.SetCombatants(player, new[] { enemy });
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new System.Collections.Generic.List<EnemySO> { enemyData },
+                boardMoveCount = 1,
+            });
+
+            view.Initialize(bootstrap);
+            player.TakeDamage(4);
+
+            var battleTrail = playerBattleHp.transform.Find("DamageTrailFill")?.GetComponent<Image>();
+            var boardTrail = boardHpFill.transform.Find("DamageTrailFill")?.GetComponent<Image>();
+            Assert.That(battleTrail, Is.Not.Null);
+            Assert.That(boardTrail, Is.Not.Null);
+            Assert.That(playerBattleHpFill.rectTransform.anchorMax.x, Is.EqualTo(0.8f).Within(0.001f));
+            Assert.That(battleTrail.rectTransform.anchorMax.x, Is.EqualTo(1f).Within(0.001f));
+            Assert.That(boardHpFill.rectTransform.anchorMax.x, Is.EqualTo(0.8f).Within(0.001f));
+            Assert.That(boardTrail.rectTransform.anchorMax.x, Is.EqualTo(1f).Within(0.001f));
+            Assert.That(battleTrail.transform.GetSiblingIndex(), Is.LessThan(playerBattleHpFill.transform.GetSiblingIndex()));
+        }
+
+        [Test]
+        public void ObstacleCellColor_UsesDarknessDebuffColor()
+        {
+            var viewObject = CreateOwnedGameObject("CombatView");
+            var view = viewObject.AddComponent<CombatUiView>();
+
+            var obstacleColor = (Color)InvokePrivate(view, "GetCellColor", Board2048Manager.ObstacleValue);
+
+            Assert.That(obstacleColor, Is.EqualTo(new Color(0.20f, 0.07f, 0.34f, 1f)));
+        }
+
+        [Test]
         public void Initialize_RendersTwoEnemyIntentsWhenEnemyCanActTwice()
         {
             var viewObject = CreateOwnedGameObject("CombatView");
@@ -289,6 +344,9 @@ namespace Project2048.Tests
             Assert.That(fearChip, Is.Not.Null);
             Assert.That(boardFearChip, Is.Not.Null);
             Assert.That(attackChip, Is.Not.Null);
+            Assert.That(fearChip.GetComponent<Image>().color, Is.EqualTo(new Color(0.45f, 0.03f, 0.06f, 0.95f)));
+            Assert.That(boardFearChip.GetComponent<Image>().color, Is.EqualTo(new Color(0.45f, 0.03f, 0.06f, 0.95f)));
+            Assert.That(attackChip.GetComponent<Image>().color, Is.EqualTo(new Color(0.85f, 0.12f, 0.12f, 0.95f)));
             Assert.That(fearChip.GetComponentInChildren<TMPro.TMP_Text>(true), Is.Null);
             Assert.That(boardFearChip.GetComponentInChildren<TMPro.TMP_Text>(true), Is.Null);
             Assert.That(attackChip.GetComponentInChildren<TMPro.TMP_Text>(true), Is.Null);
@@ -655,12 +713,12 @@ namespace Project2048.Tests
                 ?.GetValue(target);
         }
 
-        private static void InvokePrivate(object target, string methodName, params object[] args)
+        private static object InvokePrivate(object target, string methodName, params object[] args)
         {
             var method = target.GetType()
                 .GetMethod(methodName, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
             Assert.That(method, Is.Not.Null);
-            method.Invoke(target, args);
+            return method.Invoke(target, args);
         }
 
         private static void AssertHpFillIsRenderable(Image fill)

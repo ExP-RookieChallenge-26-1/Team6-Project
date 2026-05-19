@@ -33,6 +33,9 @@ namespace Project2048.Prototype
         public const float EnemyDeathFadeDurationSeconds = 0.6f;
         public const float HpDamageTrailDelaySeconds = 0.25f;
         public const float HpDamageTrailDurationSeconds = 0.35f;
+        public const float HpHitShakeDurationSeconds = 0.10f;
+        private const float HpDamageFlashDurationSeconds = 0.12f;
+        private const float HpHitShakeMagnitude = 7f;
         private const float UiSfxDistance = 10000f;
 
         [Header("Top bar")]
@@ -123,6 +126,7 @@ namespace Project2048.Prototype
         [SerializeField] private Color enemyHpFillColor = new(0.88f, 0.14f, 0.14f, 1f);
         [SerializeField] private Color hpBarBackgroundColor = new(0.08f, 0.09f, 0.10f, 1f);
         [SerializeField] private Color hpDamageTrailColor = new(0.32f, 0.06f, 0.08f, 0.90f);
+        [SerializeField] private Color hpDamageFlashColor = new(1f, 0.86f, 0.26f, 0.95f);
         [SerializeField] private Color blockFrameColor = new(0.66f, 0.70f, 0.74f, 1f);
         [SerializeField] private Color blockIconColor = new(0.42f, 0.46f, 0.50f, 0.95f);
         [SerializeField] private Color buffStatusColor = new(0.20f, 0.46f, 0.30f, 0.95f);
@@ -148,6 +152,9 @@ namespace Project2048.Prototype
         private readonly Dictionary<Image, float> hpMainFillRatios = new();
         private readonly Dictionary<Image, float> hpDamageTrailRatios = new();
         private readonly Dictionary<Image, Coroutine> hpDamageTrailCoroutines = new();
+        private readonly Dictionary<Image, Coroutine> hpDamageFlashCoroutines = new();
+        private readonly Dictionary<Image, Coroutine> hpHitShakeCoroutines = new();
+        private readonly Dictionary<RectTransform, Vector2> hpHitShakeRestPositions = new();
 
         private void Awake()
         {
@@ -1195,11 +1202,14 @@ namespace Project2048.Prototype
                 {
                     var startRatio = Mathf.Max(ResolveHpDamageTrailRatio(fillImage), previousMainRatio);
                     SetHpDamageTrailRatio(fillImage, damageTrailFill, startRatio);
+                    PlayHpDamageFlash(fillImage, startRatio, ratio);
+                    PlayHpHitShake(fillImage);
                     PlayHpDamageTrail(fillImage, damageTrailFill, startRatio, ratio);
                 }
                 else if (ratio > previousMainRatio + 0.001f)
                 {
                     StopHpDamageTrail(fillImage);
+                    StopHpDamageFlash(fillImage, hideFlash: true);
                     SetHpDamageTrailRatio(fillImage, damageTrailFill, ratio);
                 }
             }
@@ -1271,6 +1281,46 @@ namespace Project2048.Prototype
             return trailImage;
         }
 
+        private Image EnsureDamageFlashFill(Image fillImage)
+        {
+            var hpRoot = ResolveHpRoot(fillImage);
+            if (fillImage == null || hpRoot == null)
+            {
+                return null;
+            }
+
+            var existing = hpRoot.Find("DamageFlashFill");
+            Image flashImage;
+            RectTransform flashRect;
+            if (existing != null)
+            {
+                flashImage = existing.GetComponent<Image>();
+                if (flashImage == null)
+                {
+                    flashImage = existing.gameObject.AddComponent<Image>();
+                }
+
+                flashRect = existing as RectTransform ?? existing.gameObject.AddComponent<RectTransform>();
+            }
+            else
+            {
+                var flashObject = new GameObject("DamageFlashFill", typeof(RectTransform), typeof(Image));
+                flashObject.transform.SetParent(hpRoot, false);
+                flashImage = flashObject.GetComponent<Image>();
+                flashRect = flashObject.GetComponent<RectTransform>();
+            }
+
+            flashImage.sprite = fillImage.sprite;
+            flashImage.type = Image.Type.Simple;
+            flashImage.color = hpDamageFlashColor;
+            flashImage.raycastTarget = false;
+            flashRect.offsetMin = Vector2.zero;
+            flashRect.offsetMax = Vector2.zero;
+            flashRect.pivot = new Vector2(0f, 0.5f);
+            flashImage.transform.SetSiblingIndex(Mathf.Max(0, fillImage.transform.GetSiblingIndex()));
+            return flashImage;
+        }
+
         private float ResolveHpDamageTrailRatio(Image fillImage)
         {
             if (fillImage != null && hpDamageTrailRatios.TryGetValue(fillImage, out var ratio))
@@ -1304,6 +1354,67 @@ namespace Project2048.Prototype
             }
 
             hpDamageTrailCoroutines[fillImage] = StartCoroutine(HpDamageTrailRoutine(fillImage, trailImage, fromRatio, toRatio));
+        }
+
+        private void PlayHpDamageFlash(Image fillImage, float fromRatio, float toRatio)
+        {
+            var flashImage = EnsureDamageFlashFill(fillImage);
+            if (fillImage == null || flashImage == null)
+            {
+                return;
+            }
+
+            StopHpDamageFlash(fillImage, hideFlash: false);
+            SetHpDamageFlashSegment(flashImage, fromRatio, toRatio, hpDamageFlashColor.a);
+            if (!Application.isPlaying || !isActiveAndEnabled)
+            {
+                return;
+            }
+
+            hpDamageFlashCoroutines[fillImage] = StartCoroutine(HpDamageFlashRoutine(fillImage, flashImage, fromRatio, toRatio));
+        }
+
+        private IEnumerator HpDamageFlashRoutine(Image fillImage, Image flashImage, float fromRatio, float toRatio)
+        {
+            var elapsed = 0f;
+            while (elapsed < HpDamageFlashDurationSeconds)
+            {
+                if (fillImage == null || flashImage == null)
+                {
+                    yield break;
+                }
+
+                elapsed += Time.unscaledDeltaTime;
+                var alpha = Mathf.Lerp(hpDamageFlashColor.a, 0f, Mathf.Clamp01(elapsed / HpDamageFlashDurationSeconds));
+                SetHpDamageFlashSegment(flashImage, fromRatio, toRatio, alpha);
+                yield return null;
+            }
+
+            SetHpDamageFlashSegment(flashImage, fromRatio, toRatio, 0f);
+            hpDamageFlashCoroutines.Remove(fillImage);
+        }
+
+        private void SetHpDamageFlashSegment(Image flashImage, float fromRatio, float toRatio, float alpha)
+        {
+            if (flashImage == null)
+            {
+                return;
+            }
+
+            fromRatio = Mathf.Clamp01(fromRatio);
+            toRatio = Mathf.Clamp01(toRatio);
+            var left = Mathf.Min(fromRatio, toRatio);
+            var right = Mathf.Max(fromRatio, toRatio);
+            flashImage.gameObject.SetActive(right > left + 0.001f && alpha > 0.001f);
+            var rectTransform = flashImage.rectTransform;
+            rectTransform.anchorMin = new Vector2(left, 0f);
+            rectTransform.anchorMax = new Vector2(right, 1f);
+            rectTransform.offsetMin = Vector2.zero;
+            rectTransform.offsetMax = Vector2.zero;
+
+            var color = hpDamageFlashColor;
+            color.a = Mathf.Clamp01(alpha);
+            flashImage.color = color;
         }
 
         private IEnumerator HpDamageTrailRoutine(Image fillImage, Image trailImage, float fromRatio, float toRatio)
@@ -1346,6 +1457,99 @@ namespace Project2048.Prototype
             hpDamageTrailCoroutines.Remove(fillImage);
         }
 
+        private void StopHpDamageFlash(Image fillImage, bool hideFlash)
+        {
+            if (fillImage != null && hpDamageFlashCoroutines.TryGetValue(fillImage, out var routine) && routine != null)
+            {
+                StopCoroutine(routine);
+            }
+
+            if (fillImage != null)
+            {
+                hpDamageFlashCoroutines.Remove(fillImage);
+            }
+
+            if (hideFlash)
+            {
+                var flash = ResolveHpRoot(fillImage)?.Find("DamageFlashFill")?.GetComponent<Image>();
+                if (flash != null)
+                {
+                    SetHpDamageFlashSegment(flash, 0f, 0f, 0f);
+                }
+            }
+        }
+
+        private void PlayHpHitShake(Image fillImage)
+        {
+            var hpRoot = ResolveHpRoot(fillImage);
+            if (fillImage == null || hpRoot == null)
+            {
+                return;
+            }
+
+            StopHpHitShake(fillImage, restorePosition: true);
+            if (!hpHitShakeRestPositions.ContainsKey(hpRoot))
+            {
+                hpHitShakeRestPositions[hpRoot] = hpRoot.anchoredPosition;
+            }
+
+            if (!Application.isPlaying || !isActiveAndEnabled)
+            {
+                return;
+            }
+
+            hpHitShakeCoroutines[fillImage] = StartCoroutine(HpHitShakeRoutine(fillImage, hpRoot));
+        }
+
+        private IEnumerator HpHitShakeRoutine(Image fillImage, RectTransform hpRoot)
+        {
+            var restPosition = hpHitShakeRestPositions.TryGetValue(hpRoot, out var storedPosition)
+                ? storedPosition
+                : hpRoot.anchoredPosition;
+            var elapsed = 0f;
+            while (elapsed < HpHitShakeDurationSeconds)
+            {
+                if (fillImage == null || hpRoot == null)
+                {
+                    yield break;
+                }
+
+                elapsed += Time.unscaledDeltaTime;
+                var t = Mathf.Clamp01(elapsed / HpHitShakeDurationSeconds);
+                var offset = Mathf.Sin(t * Mathf.PI * 4f) * HpHitShakeMagnitude * (1f - t);
+                hpRoot.anchoredPosition = restPosition + new Vector2(offset, 0f);
+                yield return null;
+            }
+
+            hpRoot.anchoredPosition = restPosition;
+            hpHitShakeCoroutines.Remove(fillImage);
+        }
+
+        private void StopHpHitShake(Image fillImage, bool restorePosition)
+        {
+            if (fillImage == null)
+            {
+                return;
+            }
+
+            if (hpHitShakeCoroutines.TryGetValue(fillImage, out var routine) && routine != null)
+            {
+                StopCoroutine(routine);
+            }
+
+            hpHitShakeCoroutines.Remove(fillImage);
+            if (!restorePosition)
+            {
+                return;
+            }
+
+            var hpRoot = ResolveHpRoot(fillImage);
+            if (hpRoot != null && hpHitShakeRestPositions.TryGetValue(hpRoot, out var restPosition))
+            {
+                hpRoot.anchoredPosition = restPosition;
+            }
+        }
+
         private void ClearHpDamageTrailAnimations()
         {
             foreach (var routine in hpDamageTrailCoroutines.Values)
@@ -1357,6 +1561,33 @@ namespace Project2048.Prototype
             }
 
             hpDamageTrailCoroutines.Clear();
+            foreach (var routine in hpDamageFlashCoroutines.Values)
+            {
+                if (routine != null)
+                {
+                    StopCoroutine(routine);
+                }
+            }
+
+            hpDamageFlashCoroutines.Clear();
+            foreach (var routine in hpHitShakeCoroutines.Values)
+            {
+                if (routine != null)
+                {
+                    StopCoroutine(routine);
+                }
+            }
+
+            hpHitShakeCoroutines.Clear();
+            foreach (var entry in hpHitShakeRestPositions)
+            {
+                if (entry.Key != null)
+                {
+                    entry.Key.anchoredPosition = entry.Value;
+                }
+            }
+
+            hpHitShakeRestPositions.Clear();
             hpMainFillRatios.Clear();
             hpDamageTrailRatios.Clear();
         }

@@ -256,6 +256,53 @@ namespace Project2048.Tests
             Assert.That(battleTrail.transform.GetSiblingIndex(), Is.LessThan(playerBattleHpFill.transform.GetSiblingIndex()));
         }
 
+        [Test]
+        public void HpBarDamageFeedback_FlashesDamagedSegmentAndUsesShortShake()
+        {
+            Assert.That(CombatUiView.HpHitShakeDurationSeconds, Is.InRange(0.08f, 0.12f));
+
+            var viewObject = CreateOwnedGameObject("CombatView");
+            var view = viewObject.AddComponent<CombatUiView>();
+            var playerBattleHp = CreateImageChild(viewObject.transform, "PlayerBattleHp");
+            var playerBattleHpFill = CreateImageChild(playerBattleHp.transform, "Fill");
+            CreateTextChild(playerBattleHp.transform, "Text");
+            var enemyHp = CreateImageChild(viewObject.transform, "EnemyHp");
+            CreateImageChild(enemyHp.transform, "Fill");
+            CreateTextChild(enemyHp.transform, "Text");
+            var boardHpFill = CreateImageChild(viewObject.transform, "HpBarFill");
+            CreateTextChild(viewObject.transform, "HpText");
+
+            var manager = CreateOwnedGameObject("CombatManager").AddComponent<CombatManager>();
+            var player = CreateOwnedGameObject("Player").AddComponent<PlayerCombatController>();
+            var enemy = CreateOwnedGameObject("Enemy").AddComponent<EnemyController>();
+            var bootstrap = CreateOwnedGameObject("Bootstrap").AddComponent<PrototypeCombatBootstrap>();
+            SetPrivateField(bootstrap, "combatManager", manager);
+
+            var playerData = CreatePlayerData(20, 0);
+            var enemyData = CreateEnemyData("Slime", 10, 0);
+            manager.SetCombatants(player, new[] { enemy });
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new System.Collections.Generic.List<EnemySO> { enemyData },
+                boardMoveCount = 1,
+            });
+
+            view.Initialize(bootstrap);
+            player.TakeDamage(4);
+
+            var battleFlash = playerBattleHp.transform.Find("DamageFlashFill")?.GetComponent<Image>();
+            var boardFlash = boardHpFill.transform.Find("DamageFlashFill")?.GetComponent<Image>();
+            Assert.That(battleFlash, Is.Not.Null);
+            Assert.That(boardFlash, Is.Not.Null);
+            Assert.That(battleFlash.rectTransform.anchorMin.x, Is.EqualTo(0.8f).Within(0.001f));
+            Assert.That(battleFlash.rectTransform.anchorMax.x, Is.EqualTo(1f).Within(0.001f));
+            Assert.That(boardFlash.rectTransform.anchorMin.x, Is.EqualTo(0.8f).Within(0.001f));
+            Assert.That(boardFlash.rectTransform.anchorMax.x, Is.EqualTo(1f).Within(0.001f));
+            Assert.That(battleFlash.color.a, Is.GreaterThan(0.5f));
+            Assert.That(boardFlash.color.a, Is.GreaterThan(0.5f));
+        }
+
         [UnityTest]
         public IEnumerator EnemyAppear_KeepsUiRootStill()
         {

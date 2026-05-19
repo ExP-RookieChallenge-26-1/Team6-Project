@@ -5,6 +5,7 @@ using Project2048.Combat;
 using Project2048.Enemy;
 using Project2048.Presentation;
 using Project2048.Skills;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.EventSystems;
@@ -21,6 +22,7 @@ namespace Project2048.Prototype
         public const float ShieldImpactParticleLifetimeSeconds = 0.8f;
         public const float DebuffCastParticleLifetimeSeconds = 0.9f;
         public const float DebuffTargetParticleDelaySeconds = DebuffCastParticleLifetimeSeconds;
+        public const float DamageNumberPopupDurationSeconds = 0.55f;
 
         private const float EnemyAppearIntroRightOffset = 2.25f;
         private const float EnemyAppearIntroJumpHeight = 0.7f;
@@ -29,6 +31,9 @@ namespace Project2048.Prototype
         private const float EnemyAttackLungeImpactTime = 0.45f;
         private const float EnemyAttackLungeScalePop = 0.05f;
         private const float EnemyAppearWorldShakeMagnitude = 0.13f;
+        private const float DamageNumberPopupRiseDistance = 0.62f;
+        private const float DamageNumberPopupFontSize = 2.6f;
+        private const int DamageNumberPopupSortingOrderOffset = 32;
         private const int ShieldImpactParticleCount = 22;
         private const int DebuffCastParticleCount = 28;
         private const string DefaultWorldVfxProfileResourceName = "PrototypeCombatWorldVfxProfile";
@@ -68,6 +73,7 @@ namespace Project2048.Prototype
         private Material runtimeShieldImpactParticleMaterial;
         private Material runtimeFearDebuffParticleMaterial;
         private Material runtimeDarknessDebuffParticleMaterial;
+        private readonly System.Collections.Generic.List<GameObject> damageNumberPopups = new();
 
         public void Initialize(PrototypeCombatBootstrap owner)
         {
@@ -105,6 +111,7 @@ namespace Project2048.Prototype
             ClearEnemyAppearIntro();
             ClearEnemyAttackLunge();
             ClearWorldShake();
+            ClearDamageNumberPopups();
             DestroyRuntimeParticleMaterials();
         }
 
@@ -121,6 +128,8 @@ namespace Project2048.Prototype
 
         private void HandleCombatStateChanged(CombatSnapshot nextSnapshot)
         {
+            var playerHpDamage = ResolvePlayerHpDamage(snapshot, nextSnapshot);
+            var enemyHpDamage = ResolveEnemyHpDamage(snapshot, nextSnapshot);
             var playerWasHit = PlayerWasHit(snapshot, nextSnapshot);
             var enemyWasHit = EnemyWasHit(snapshot, nextSnapshot);
             var playerShieldWasHit = PlayerShieldWasHit(snapshot, nextSnapshot);
@@ -139,6 +148,8 @@ namespace Project2048.Prototype
             PlayShieldImpactEffectIfNeeded(enemyShieldWasHit, enemyRenderer != null ? enemyRenderer.transform : transform);
             PlayPlayerActionEffectIfNeeded(playerWasHit);
             PlayEnemyActionEffectIfNeeded(enemyWasHit, enemyJustDied);
+            PlayDamageNumberPopupIfNeeded(playerHpDamage, playerRenderer);
+            PlayDamageNumberPopupIfNeeded(enemyHpDamage, enemyRenderer);
             PlayEnemyDebuffCastEffectIfNeeded(snapshot?.LastVfxCue);
             PlayEnemyDefenseEffectIfNeeded(enemyUsedDefense);
             PlayEnemyDeathFadeIfNeeded(enemyJustDied, nextEnemyDead);
@@ -359,6 +370,116 @@ namespace Project2048.Prototype
             {
                 animator.Play(effect.animationClip.name, 0, 0f);
             }
+        }
+
+        private void PlayDamageNumberPopupIfNeeded(int damageAmount, SpriteRenderer targetRenderer)
+        {
+            if (damageAmount <= 0 || targetRenderer == null)
+            {
+                return;
+            }
+
+            var popupObject = new GameObject("DamageNumberPopup", typeof(TextMeshPro));
+            popupObject.transform.SetParent(targetRenderer.transform, false);
+            popupObject.transform.localPosition = ResolveDamageNumberLocalPosition(targetRenderer);
+            popupObject.transform.localRotation = Quaternion.identity;
+            popupObject.transform.localScale = Vector3.one;
+            damageNumberPopups.Add(popupObject);
+
+            var label = popupObject.GetComponent<TextMeshPro>();
+            label.text = damageAmount.ToString();
+            label.alignment = TextAlignmentOptions.Center;
+            label.fontSize = DamageNumberPopupFontSize;
+            label.fontStyle = FontStyles.Bold;
+            label.color = new Color(1f, 0.92f, 0.55f, 1f);
+            label.textWrappingMode = TextWrappingModes.NoWrap;
+
+            var meshRenderer = popupObject.GetComponent<MeshRenderer>();
+            meshRenderer.sortingLayerID = targetRenderer.sortingLayerID;
+            meshRenderer.sortingOrder = targetRenderer.sortingOrder + DamageNumberPopupSortingOrderOffset;
+
+            if (!Application.isPlaying || !isActiveAndEnabled)
+            {
+                return;
+            }
+
+            StartCoroutine(DamageNumberPopupRoutine(popupObject.transform, label));
+        }
+
+        private static Vector3 ResolveDamageNumberLocalPosition(SpriteRenderer targetRenderer)
+        {
+            if (targetRenderer == null)
+            {
+                return new Vector3(0f, 1.2f, 0f);
+            }
+
+            if (targetRenderer.sprite == null)
+            {
+                return new Vector3(0f, 1.2f, 0f);
+            }
+
+            var worldPosition = targetRenderer.bounds.center + Vector3.up * (targetRenderer.bounds.extents.y + 0.35f);
+            return targetRenderer.transform.InverseTransformPoint(worldPosition);
+        }
+
+        private IEnumerator DamageNumberPopupRoutine(Transform popupTransform, TMP_Text label)
+        {
+            var startPosition = popupTransform.localPosition;
+            var startTime = Time.realtimeSinceStartup;
+
+            while (true)
+            {
+                if (popupTransform == null || label == null)
+                {
+                    yield break;
+                }
+
+                var elapsed = Time.realtimeSinceStartup - startTime;
+                var t = Mathf.Clamp01(elapsed / DamageNumberPopupDurationSeconds);
+                popupTransform.localPosition = startPosition + Vector3.up * Mathf.SmoothStep(0f, DamageNumberPopupRiseDistance, t);
+
+                var pop = t < 0.24f
+                    ? Mathf.Lerp(0.92f, 1.16f, Mathf.Clamp01(t / 0.24f))
+                    : Mathf.Lerp(1.16f, 1f, Mathf.Clamp01((t - 0.24f) / 0.26f));
+                popupTransform.localScale = Vector3.one * pop;
+
+                var color = label.color;
+                color.a = t < 0.62f ? 1f : Mathf.Lerp(1f, 0f, Mathf.Clamp01((t - 0.62f) / 0.38f));
+                label.color = color;
+
+                if (t >= 1f)
+                {
+                    break;
+                }
+
+                yield return null;
+            }
+
+            var popupObject = popupTransform.gameObject;
+            damageNumberPopups.Remove(popupObject);
+            Destroy(popupObject);
+        }
+
+        private void ClearDamageNumberPopups()
+        {
+            foreach (var popup in damageNumberPopups)
+            {
+                if (popup == null)
+                {
+                    continue;
+                }
+
+                if (Application.isPlaying)
+                {
+                    Destroy(popup);
+                }
+                else
+                {
+                    DestroyImmediate(popup);
+                }
+            }
+
+            damageNumberPopups.Clear();
         }
 
         private void PlayEnemyAppearIntro(CombatEffectBinding effect)
@@ -1322,6 +1443,16 @@ namespace Project2048.Prototype
                 next.Player.Block < previous.Player.Block);
         }
 
+        private static int ResolvePlayerHpDamage(CombatSnapshot previous, CombatSnapshot next)
+        {
+            if (previous?.Player == null || next?.Player == null)
+            {
+                return 0;
+            }
+
+            return Mathf.Max(0, previous.Player.CurrentHp - next.Player.CurrentHp);
+        }
+
         private static bool PlayerShieldWasHit(CombatSnapshot previous, CombatSnapshot next)
         {
             if (previous?.Player == null || next?.Player == null || next.Phase != CombatPhase.EnemyTurn)
@@ -1343,6 +1474,18 @@ namespace Project2048.Prototype
 
             return nextEnemy.CurrentHp < previousEnemy.CurrentHp ||
                 (next.Phase == CombatPhase.ActionPhase && nextEnemy.Block < previousEnemy.Block);
+        }
+
+        private static int ResolveEnemyHpDamage(CombatSnapshot previous, CombatSnapshot next)
+        {
+            var previousEnemy = previous?.Enemies?.FirstOrDefault();
+            var nextEnemy = next?.Enemies?.FirstOrDefault();
+            if (previousEnemy == null || nextEnemy == null)
+            {
+                return 0;
+            }
+
+            return Mathf.Max(0, previousEnemy.CurrentHp - nextEnemy.CurrentHp);
         }
 
         private static bool EnemyShieldWasHit(CombatSnapshot previous, CombatSnapshot next)

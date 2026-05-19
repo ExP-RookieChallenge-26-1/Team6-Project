@@ -518,6 +518,84 @@ namespace Project2048.Tests
             Assert.That(renderer.sharedMaterial, Is.EqualTo(profile.shieldImpactEffect.particleMaterial));
         }
 
+        [Test]
+        public void CombatWorldSpriteView_PlayerHpDamage_ShowsUnsignedDamageNumberAtPlayerBody()
+        {
+            var viewObject = CreateOwnedGameObject("WorldSpriteView");
+            var view = viewObject.AddComponent<CombatWorldSpriteView>();
+            var playerRenderer = CreateOwnedGameObject("PlayerSprite").AddComponent<SpriteRenderer>();
+            var enemyRenderer = CreateOwnedGameObject("EnemySprite").AddComponent<SpriteRenderer>();
+            var manager = CreateOwnedGameObject("CombatManager").AddComponent<CombatManager>();
+            var player = CreateOwnedGameObject("Player").AddComponent<PlayerCombatController>();
+            var enemy = CreateOwnedGameObject("Enemy").AddComponent<EnemyController>();
+            var bootstrap = CreateOwnedGameObject("Bootstrap").AddComponent<PrototypeCombatBootstrap>();
+            var playerData = CreatePlayerData(maxHp: 20, attackPower: 2);
+            var enemyData = CreateEnemyData(maxHp: 10, attackValue: 3);
+
+            playerRenderer.transform.localPosition = new Vector3(-1f, 0f, 0f);
+            enemyRenderer.transform.localPosition = new Vector3(1f, 0f, 0f);
+            SetPrivateField(view, "playerRenderer", playerRenderer);
+            SetPrivateField(view, "enemyRenderer", enemyRenderer);
+            SetPrivateField(bootstrap, "combatManager", manager);
+
+            manager.SetCombatants(player, new[] { enemy });
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new List<EnemySO> { enemyData },
+                boardMoveCount = 1,
+            });
+            manager.ResolveBoardPhase();
+            view.Initialize(bootstrap);
+
+            manager.RequestEndPlayerTurn();
+
+            var popup = playerRenderer.transform.Find("DamageNumberPopup");
+            var text = popup != null ? popup.GetComponent<TMPro.TextMeshPro>() : null;
+            Assert.That(text, Is.Not.Null);
+            Assert.That(text.text, Is.EqualTo("3"));
+            Assert.That(text.text, Does.Not.StartWith("-"));
+            Assert.That(popup.position.y, Is.GreaterThan(playerRenderer.transform.position.y));
+        }
+
+        [Test]
+        public void CombatWorldSpriteView_PlayerSkillHpDamage_ShowsUnsignedDamageNumberAtEnemyBody()
+        {
+            var viewObject = CreateOwnedGameObject("WorldSpriteView");
+            var view = viewObject.AddComponent<CombatWorldSpriteView>();
+            var enemyRenderer = CreateOwnedGameObject("EnemySprite").AddComponent<SpriteRenderer>();
+            var manager = CreateOwnedGameObject("CombatManager").AddComponent<CombatManager>();
+            var player = CreateOwnedGameObject("Player").AddComponent<PlayerCombatController>();
+            var enemy = CreateOwnedGameObject("Enemy").AddComponent<EnemyController>();
+            var bootstrap = CreateOwnedGameObject("Bootstrap").AddComponent<PrototypeCombatBootstrap>();
+            var playerData = CreatePlayerData(maxHp: 20, attackPower: 2);
+            var enemyData = CreateEnemyData(maxHp: 10, attackValue: 0);
+            var attack = CreateSkill("attack", SkillType.Attack, cost: 0, power: 4);
+
+            enemyRenderer.transform.localPosition = new Vector3(1f, 0f, 0f);
+            SetPrivateField(view, "enemyRenderer", enemyRenderer);
+            SetPrivateField(bootstrap, "combatManager", manager);
+
+            manager.SetCombatants(player, new[] { enemy });
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new List<EnemySO> { enemyData },
+                boardMoveCount = 1,
+            });
+            manager.ResolveBoardPhase();
+            view.Initialize(bootstrap);
+
+            Assert.That(manager.RequestUseSkill(attack, enemy), Is.True);
+
+            var popup = enemyRenderer.transform.Find("DamageNumberPopup");
+            var text = popup != null ? popup.GetComponent<TMPro.TextMeshPro>() : null;
+            Assert.That(text, Is.Not.Null);
+            Assert.That(text.text, Is.EqualTo("4"));
+            Assert.That(text.text, Does.Not.StartWith("-"));
+            Assert.That(popup.position.y, Is.GreaterThan(enemyRenderer.transform.position.y));
+        }
+
         [UnityTest]
         public IEnumerator CombatWorldSpriteView_EnemyDebuffIntent_SpawnsDebuffCastParticlesFromEnemyThenPlayer()
         {
@@ -836,6 +914,14 @@ namespace Project2048.Tests
 
             Assert.That(binder, Is.Not.Null);
             Assert.That(bootstrap, Is.Not.Null);
+        }
+
+        [Test]
+        public void BattleScene_DoesNotContainPrototypeVfxTextPlaceholder()
+        {
+            EditorSceneManager.OpenScene("Assets/Scenes/BattleScene.unity");
+
+            Assert.That(GameObject.Find("PrototypeVfxText"), Is.Null);
         }
 
         [Test]

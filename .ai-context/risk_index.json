@@ -590,6 +590,40 @@
     "risk_score": 51
   },
   {
+    "file_id": "Project 2048/Assets/Scripts/Flow/StageFlowController.cs",
+    "class_name": "StageFlowController",
+    "risk_flags": [
+      "high-coupling",
+      "large-class",
+      "init-order-sensitive",
+      "state-owner"
+    ],
+    "risk_reasons": [
+      "참조 타입 또는 관계 수가 많음",
+      "파일/메서드/필드 수가 많아 책임이 커질 가능성",
+      "초기화 순서에 민감할 가능성",
+      "상태 중심 또는 관리 중심 클래스일 가능성"
+    ],
+    "risk_score": 51
+  },
+  {
+    "file_id": "Project 2048/Assets/Scripts/Flow/FlowController.cs",
+    "class_name": "FlowController",
+    "risk_flags": [
+      "high-coupling",
+      "find-heavy",
+      "save-load-sensitive",
+      "state-owner"
+    ],
+    "risk_reasons": [
+      "참조 타입 또는 관계 수가 많음",
+      "Find 계열 탐색 사용",
+      "저장/불러오기 관련 로직 포함",
+      "상태 중심 또는 관리 중심 클래스일 가능성"
+    ],
+    "risk_score": 50
+  },
+  {
     "file_id": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
     "class_name": "CombatManagerTests",
     "risk_flags": [
@@ -879,21 +913,6 @@
   {
     "file_id": "Project 2048/Assets/Scripts/Core/GameContext.cs",
     "class_name": "GameContext",
-    "risk_flags": [
-      "high-coupling",
-      "save-load-sensitive",
-      "state-owner"
-    ],
-    "risk_reasons": [
-      "참조 타입 또는 관계 수가 많음",
-      "저장/불러오기 관련 로직 포함",
-      "상태 중심 또는 관리 중심 클래스일 가능성"
-    ],
-    "risk_score": 38
-  },
-  {
-    "file_id": "Project 2048/Assets/Scripts/Flow/FlowController.cs",
-    "class_name": "FlowController",
     "risk_flags": [
       "high-coupling",
       "save-load-sensitive",
@@ -1340,13 +1359,13 @@
     "risk_score": 10
   },
   {
-    "file_id": "Project 2048/Assets/Scripts/Flow/StageFlowController.cs",
-    "class_name": "StageFlowController",
+    "file_id": "Project 2048/Assets/Scripts/Flow/StageResult.cs",
+    "class_name": "StageResult",
     "risk_flags": [
-      "update-heavy"
+      "public-field-heavy"
     ],
     "risk_reasons": [
-      "Unity 업데이트 루프 사용"
+      "public 필드 노출 수가 많음"
     ],
     "risk_score": 10
   },
@@ -1526,6 +1545,13 @@
   {
     "file_id": "Project 2048/Assets/Scripts/Enemy/EnemyIntentType.cs",
     "class_name": "EnemyIntentType",
+    "risk_flags": [],
+    "risk_reasons": [],
+    "risk_score": 0
+  },
+  {
+    "file_id": "Project 2048/Assets/Scripts/Flow/StageFlowState.cs",
+    "class_name": "StageFlowState",
     "risk_flags": [],
     "risk_reasons": [],
     "risk_score": 0

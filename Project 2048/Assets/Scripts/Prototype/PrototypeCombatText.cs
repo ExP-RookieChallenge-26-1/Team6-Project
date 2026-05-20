@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using Project2048.Combat;
 using Project2048.Enemy;
 using Project2048.Rewards;
@@ -99,6 +101,21 @@ namespace Project2048.Prototype
                 },
                 _ => intent.intentType.ToString(),
             };
+        }
+
+        public static string FormatIntents(IEnumerable<EnemyIntent> intents)
+        {
+            if (intents == null)
+            {
+                return string.Empty;
+            }
+
+            return string.Join(
+                "\n",
+                intents
+                    .Where(intent => intent != null)
+                    .Take(EnemySO.MaximumActionsPerTurn)
+                    .Select(FormatIntent));
         }
 
         public static string FormatDebuffVfxLabel(CombatVfxCue cue)

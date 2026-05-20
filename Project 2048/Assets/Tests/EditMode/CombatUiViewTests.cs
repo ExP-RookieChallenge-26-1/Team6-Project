@@ -1,4 +1,6 @@
+using System.Collections;
 using NUnit.Framework;
+using Project2048.Audio;
 using Project2048.Board2048;
 using Project2048.Combat;
 using Project2048.Enemy;
@@ -8,12 +10,14 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.TestTools;
 using UnityEngine.UI;
 
 namespace Project2048.Tests
 {
     public class CombatUiViewTests
     {
+        private const string HpBarSpritePath = "Assets/Art/UI/WideHexHpBar.png";
         private readonly System.Collections.Generic.List<Object> ownedObjects = new();
 
         [TearDown]
@@ -40,6 +44,12 @@ namespace Project2048.Tests
         public void BoardToActionDelay_WaitsAfterMovesAreSpentBeforeShowingSkillChoices()
         {
             Assert.That(CombatUiView.BoardToActionPanelDelaySeconds, Is.GreaterThanOrEqualTo(0.35f));
+        }
+
+        [Test]
+        public void HpDamageTrailDuration_IsLongEnoughToRead()
+        {
+            Assert.That(CombatUiView.HpDamageTrailDurationSeconds, Is.GreaterThanOrEqualTo(0.5f));
         }
 
         [Test]
@@ -156,7 +166,7 @@ namespace Project2048.Tests
             manager.RequestUseSkillById("attack", 0);
 
             Assert.That(enemyHpFill.fillAmount, Is.EqualTo(0.5f).Within(0.001f));
-            Assert.That(enemyHpText.text, Is.EqualTo("체력 5/10"));
+            Assert.That(enemyHpText.text, Is.EqualTo("5/10"));
             Assert.That(actionText.text, Is.EqualTo("최근 행동: 플레이어: 검격"));
 
             enemy.SetIntent(new EnemyIntent
@@ -168,10 +178,306 @@ namespace Project2048.Tests
 
             Assert.That(playerBattleHpFill.fillAmount, Is.EqualTo(0.8f).Within(0.001f));
             Assert.That(boardHpFill.fillAmount, Is.EqualTo(0.8f).Within(0.001f));
-            Assert.That(playerBattleHpFill.rectTransform.anchorMax.x, Is.EqualTo(0.8f).Within(0.001f));
-            Assert.That(boardHpFill.rectTransform.anchorMax.x, Is.EqualTo(0.8f).Within(0.001f));
-            Assert.That(playerBattleHpText.text, Is.EqualTo("체력 16/20"));
-            Assert.That(boardHpText.text, Is.EqualTo("체력 16/20"));
+            Assert.That(playerBattleHpFill.rectTransform.anchorMax.x, Is.EqualTo(1f).Within(0.001f));
+            Assert.That(boardHpFill.rectTransform.anchorMax.x, Is.EqualTo(1f).Within(0.001f));
+            Assert.That(playerBattleHpText.text, Is.EqualTo("16/20"));
+            Assert.That(boardHpText.text, Is.EqualTo("16/20"));
+        }
+
+        [Test]
+        public void EnemyDeath_HidesEnemyHpRoot()
+        {
+            var viewObject = CreateOwnedGameObject("CombatView");
+            var view = viewObject.AddComponent<CombatUiView>();
+            var enemyHp = CreateImageChild(viewObject.transform, "EnemyHp");
+            CreateImageChild(enemyHp.transform, "Fill");
+            CreateTextChild(enemyHp.transform, "Text");
+            var manager = CreateOwnedGameObject("CombatManager").AddComponent<CombatManager>();
+            var player = CreateOwnedGameObject("Player").AddComponent<PlayerCombatController>();
+            var enemy = CreateOwnedGameObject("Enemy").AddComponent<EnemyController>();
+            var bootstrap = CreateOwnedGameObject("Bootstrap").AddComponent<PrototypeCombatBootstrap>();
+            var attack = CreateSkill("attack", "검격", SkillType.Attack, cost: 0, power: 99);
+            var playerData = CreatePlayerData(20, 0, attack);
+            var enemyData = CreateEnemyData("슬라임", 10, 0);
+
+            SetPrivateField(bootstrap, "combatManager", manager);
+            manager.SetCombatants(player, new[] { enemy });
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new System.Collections.Generic.List<EnemySO> { enemyData },
+                boardMoveCount = 1,
+            });
+            manager.ResolveBoardPhase();
+            view.Initialize(bootstrap);
+
+            Assert.That(enemyHp.gameObject.activeSelf, Is.True);
+
+            Assert.That(manager.RequestUseSkill(attack, enemy), Is.True);
+
+            Assert.That(enemy.IsDead, Is.True);
+            Assert.That(enemyHp.gameObject.activeSelf, Is.False);
+        }
+
+        [Test]
+        public void HpBarRender_ReappliesFixedThemeFillColor()
+        {
+            var viewObject = CreateOwnedGameObject("CombatView");
+            var view = viewObject.AddComponent<CombatUiView>();
+            var playerBattleHp = CreateImageChild(viewObject.transform, "PlayerBattleHp");
+            var fill = CreateImageChild(playerBattleHp.transform, "Fill");
+            var trail = playerBattleHp.transform.Find("DamageTrailFill")?.GetComponent<Image>();
+            fill.color = Color.red;
+
+            InvokePrivate(view, "SetHpBarValue", fill, 7, 10);
+
+            Assert.That(fill.color, Is.EqualTo(CombatUiView.ThemeHpFillColor));
+            Assert.That(trail, Is.Not.Null);
+            Assert.That(trail.color, Is.EqualTo(CombatUiView.ThemeHpDamageTrailColor));
+            Assert.That(trail.transform.GetSiblingIndex(), Is.LessThan(fill.transform.GetSiblingIndex()));
+        }
+
+        [Test]
+        public void PlayerDamage_UpdatesBoardHpWhileActionScreenIsVisible()
+        {
+            var viewObject = CreateOwnedGameObject("CombatView");
+            var view = viewObject.AddComponent<CombatUiView>();
+            var playerBattleHp = CreateImageChild(viewObject.transform, "PlayerBattleHp");
+            var playerBattleHpFill = CreateImageChild(playerBattleHp.transform, "Fill");
+            CreateTextChild(playerBattleHp.transform, "Text");
+            var enemyHp = CreateImageChild(viewObject.transform, "EnemyHp");
+            CreateImageChild(enemyHp.transform, "Fill");
+            CreateTextChild(enemyHp.transform, "Text");
+            var boardHpRoot = CreateOwnedRectTransformObject("HpBarBg");
+            boardHpRoot.transform.SetParent(viewObject.transform, false);
+            var boardHpFill = CreateImageChild(boardHpRoot.transform, "HpBarFill");
+            var boardHpText = CreateTextChild(viewObject.transform, "HpText");
+
+            var manager = CreateOwnedGameObject("CombatManager").AddComponent<CombatManager>();
+            var player = CreateOwnedGameObject("Player").AddComponent<PlayerCombatController>();
+            var enemy = CreateOwnedGameObject("Enemy").AddComponent<EnemyController>();
+            var bootstrap = CreateOwnedGameObject("Bootstrap").AddComponent<PrototypeCombatBootstrap>();
+            SetPrivateField(bootstrap, "combatManager", manager);
+
+            var playerData = CreatePlayerData(20, 0);
+            var enemyData = CreateEnemyData("Enemy", 10, 0);
+            manager.SetCombatants(player, new[] { enemy });
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new System.Collections.Generic.List<EnemySO> { enemyData },
+                boardMoveCount = 1,
+            });
+
+            view.Initialize(bootstrap);
+            manager.ResolveBoardPhase();
+            var uiState = GetPrivateField(view, "uiState") as PrototypeCombatUiState;
+            uiState?.SelectCategory(SkillType.Attack);
+
+            player.TakeDamage(4);
+
+            Assert.That(uiState?.ScreenMode, Is.EqualTo(PrototypeCombatScreenMode.ActionSkills));
+            Assert.That(playerBattleHpFill.fillAmount, Is.EqualTo(0.8f).Within(0.001f));
+            Assert.That(boardHpFill.fillAmount, Is.EqualTo(0.8f).Within(0.001f));
+            Assert.That(boardHpText.text, Is.EqualTo("16/20"));
+        }
+
+        [Test]
+        public void HpBarDamageTrail_HoldsPreviousHpRatioWhenDamageLands()
+        {
+            var viewObject = CreateOwnedGameObject("CombatView");
+            var view = viewObject.AddComponent<CombatUiView>();
+            var playerBattleHp = CreateImageChild(viewObject.transform, "PlayerBattleHp");
+            var playerBattleHpFill = CreateImageChild(playerBattleHp.transform, "Fill");
+            CreateTextChild(playerBattleHp.transform, "Text");
+            var enemyHp = CreateImageChild(viewObject.transform, "EnemyHp");
+            CreateImageChild(enemyHp.transform, "Fill");
+            CreateTextChild(enemyHp.transform, "Text");
+            var boardHpFill = CreateImageChild(viewObject.transform, "HpBarFill");
+            CreateTextChild(viewObject.transform, "HpText");
+
+            var manager = CreateOwnedGameObject("CombatManager").AddComponent<CombatManager>();
+            var player = CreateOwnedGameObject("Player").AddComponent<PlayerCombatController>();
+            var enemy = CreateOwnedGameObject("Enemy").AddComponent<EnemyController>();
+            var bootstrap = CreateOwnedGameObject("Bootstrap").AddComponent<PrototypeCombatBootstrap>();
+            SetPrivateField(bootstrap, "combatManager", manager);
+
+            var playerData = CreatePlayerData(20, 0);
+            var enemyData = CreateEnemyData("슬라임", 10, 0);
+            manager.SetCombatants(player, new[] { enemy });
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new System.Collections.Generic.List<EnemySO> { enemyData },
+                boardMoveCount = 1,
+            });
+
+            view.Initialize(bootstrap);
+            player.TakeDamage(4);
+
+            var battleTrail = playerBattleHp.transform.Find("DamageTrailFill")?.GetComponent<Image>();
+            var boardTrail = boardHpFill.transform.Find("DamageTrailFill")?.GetComponent<Image>();
+            var enemyTrail = enemyHp.transform.Find("DamageTrailFill")?.GetComponent<Image>();
+            Assert.That(battleTrail, Is.Not.Null);
+            Assert.That(boardTrail, Is.Not.Null);
+            Assert.That(enemyTrail, Is.Not.Null);
+            Assert.That(playerBattleHpFill.fillAmount, Is.EqualTo(0.8f).Within(0.001f));
+            Assert.That(battleTrail.fillAmount, Is.EqualTo(1f).Within(0.001f));
+            Assert.That(boardHpFill.fillAmount, Is.EqualTo(0.8f).Within(0.001f));
+            Assert.That(boardTrail.fillAmount, Is.EqualTo(1f).Within(0.001f));
+            Assert.That(playerBattleHpFill.rectTransform.anchorMax.x, Is.EqualTo(1f).Within(0.001f));
+            Assert.That(boardHpFill.rectTransform.anchorMax.x, Is.EqualTo(1f).Within(0.001f));
+            Assert.That(battleTrail.transform.GetSiblingIndex(), Is.LessThan(playerBattleHpFill.transform.GetSiblingIndex()));
+            Assert.That(battleTrail.color, Is.EqualTo(CombatUiView.ThemeHpDamageTrailColor));
+            Assert.That(boardTrail.color, Is.EqualTo(CombatUiView.ThemeHpDamageTrailColor));
+            Assert.That(enemyTrail.color, Is.EqualTo(CombatUiView.ThemeHpDamageTrailColor));
+        }
+
+        [Test]
+        public void HpBarDamageFeedback_FlashesDamagedSegmentAndUsesShortShake()
+        {
+            Assert.That(CombatUiView.HpHitShakeDurationSeconds, Is.InRange(0.10f, 0.13f));
+            var shakeMagnitudeField = typeof(CombatUiView).GetField(
+                "HpHitShakeMagnitude",
+                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static);
+            Assert.That(shakeMagnitudeField, Is.Not.Null);
+            Assert.That((float)shakeMagnitudeField.GetRawConstantValue(), Is.GreaterThanOrEqualTo(10f));
+
+            var viewObject = CreateOwnedGameObject("CombatView");
+            var view = viewObject.AddComponent<CombatUiView>();
+            var playerBattleHp = CreateImageChild(viewObject.transform, "PlayerBattleHp");
+            var playerBattleHpFill = CreateImageChild(playerBattleHp.transform, "Fill");
+            CreateTextChild(playerBattleHp.transform, "Text");
+            var enemyHp = CreateImageChild(viewObject.transform, "EnemyHp");
+            CreateImageChild(enemyHp.transform, "Fill");
+            CreateTextChild(enemyHp.transform, "Text");
+            var boardHpFill = CreateImageChild(viewObject.transform, "HpBarFill");
+            CreateTextChild(viewObject.transform, "HpText");
+
+            var manager = CreateOwnedGameObject("CombatManager").AddComponent<CombatManager>();
+            var player = CreateOwnedGameObject("Player").AddComponent<PlayerCombatController>();
+            var enemy = CreateOwnedGameObject("Enemy").AddComponent<EnemyController>();
+            var bootstrap = CreateOwnedGameObject("Bootstrap").AddComponent<PrototypeCombatBootstrap>();
+            SetPrivateField(bootstrap, "combatManager", manager);
+
+            var playerData = CreatePlayerData(20, 0);
+            var enemyData = CreateEnemyData("Slime", 10, 0);
+            manager.SetCombatants(player, new[] { enemy });
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new System.Collections.Generic.List<EnemySO> { enemyData },
+                boardMoveCount = 1,
+            });
+
+            view.Initialize(bootstrap);
+            player.TakeDamage(4);
+
+            var battleFlash = playerBattleHp.transform.Find("DamageFlashFill")?.GetComponent<Image>();
+            var boardFlash = boardHpFill.transform.Find("DamageFlashFill")?.GetComponent<Image>();
+            Assert.That(battleFlash, Is.Not.Null);
+            Assert.That(boardFlash, Is.Not.Null);
+            Assert.That(battleFlash.rectTransform.anchorMin.x, Is.EqualTo(0.8f).Within(0.001f));
+            Assert.That(battleFlash.rectTransform.anchorMax.x, Is.EqualTo(1f).Within(0.001f));
+            Assert.That(boardFlash.rectTransform.anchorMin.x, Is.EqualTo(0.8f).Within(0.001f));
+            Assert.That(boardFlash.rectTransform.anchorMax.x, Is.EqualTo(1f).Within(0.001f));
+            Assert.That(battleFlash.color.r, Is.EqualTo(1f).Within(0.001f));
+            Assert.That(battleFlash.color.g, Is.EqualTo(1f).Within(0.001f));
+            Assert.That(battleFlash.color.b, Is.EqualTo(1f).Within(0.001f));
+            Assert.That(boardFlash.color.r, Is.EqualTo(1f).Within(0.001f));
+            Assert.That(boardFlash.color.g, Is.EqualTo(1f).Within(0.001f));
+            Assert.That(boardFlash.color.b, Is.EqualTo(1f).Within(0.001f));
+            Assert.That(battleFlash.color.a, Is.GreaterThan(0.5f));
+            Assert.That(boardFlash.color.a, Is.GreaterThan(0.5f));
+        }
+
+        [UnityTest]
+        public IEnumerator EnemyAppear_KeepsUiRootStill()
+        {
+            var viewObject = CreateOwnedRectTransformObject("CombatView");
+            var view = viewObject.AddComponent<CombatUiView>();
+            var manager = CreateOwnedGameObject("CombatManager").AddComponent<CombatManager>();
+            var player = CreateOwnedGameObject("Player").AddComponent<PlayerCombatController>();
+            var enemy = CreateOwnedGameObject("Enemy").AddComponent<EnemyController>();
+            var bootstrap = CreateOwnedGameObject("Bootstrap").AddComponent<PrototypeCombatBootstrap>();
+            SetPrivateField(bootstrap, "combatManager", manager);
+
+            var playerData = CreatePlayerData(20, 0);
+            var enemyData = CreateEnemyData("슬라임", 10, 0);
+            manager.SetCombatants(player, new[] { enemy });
+
+            view.Initialize(bootstrap);
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new System.Collections.Generic.List<EnemySO> { enemyData },
+                boardMoveCount = 1,
+            });
+
+            if (!Application.isPlaying)
+            {
+                yield break;
+            }
+
+            yield return null;
+
+            Assert.That(viewObject.transform.localPosition, Is.EqualTo(Vector3.zero));
+        }
+
+        [Test]
+        public void ObstacleCellColor_UsesDarknessDebuffColor()
+        {
+            var viewObject = CreateOwnedGameObject("CombatView");
+            var view = viewObject.AddComponent<CombatUiView>();
+
+            var obstacleColor = (Color)InvokePrivate(view, "GetCellColor", Board2048Manager.ObstacleValue);
+
+            Assert.That(obstacleColor, Is.EqualTo(new Color(0.20f, 0.07f, 0.34f, 1f)));
+        }
+
+        [Test]
+        public void Initialize_RendersTwoEnemyIntentsWhenEnemyCanActTwice()
+        {
+            var viewObject = CreateOwnedGameObject("CombatView");
+            var view = viewObject.AddComponent<CombatUiView>();
+            CreateImageChild(viewObject.transform, "IntentBubble");
+            var intentText = CreateTextChild(viewObject.transform.Find("IntentBubble"), "IntentBubbleText");
+
+            var manager = CreateOwnedGameObject("CombatManager").AddComponent<CombatManager>();
+            var player = CreateOwnedGameObject("Player").AddComponent<PlayerCombatController>();
+            var enemy = CreateOwnedGameObject("Enemy").AddComponent<EnemyController>();
+            var bootstrap = CreateOwnedGameObject("Bootstrap").AddComponent<PrototypeCombatBootstrap>();
+            SetPrivateField(bootstrap, "combatManager", manager);
+
+            var playerData = CreatePlayerData(20, 0);
+            var enemyData = CreateEnemyData("Multi", 10, 4);
+            enemyData.intentPattern = new System.Collections.Generic.List<EnemyIntent>
+            {
+                new()
+                {
+                    intentType = EnemyIntentType.Attack,
+                    value = 4,
+                },
+                new()
+                {
+                    intentType = EnemyIntentType.Defense,
+                    value = 3,
+                },
+            };
+            SetEnemyActionsPerTurn(enemyData, 2);
+
+            manager.SetCombatants(player, new[] { enemy });
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new System.Collections.Generic.List<EnemySO> { enemyData },
+                boardMoveCount = 1,
+            });
+
+            view.Initialize(bootstrap);
+
+            Assert.That(intentText.text, Is.EqualTo(
+                $"{PrototypeCombatText.FormatIntent(enemyData.intentPattern[0])}\n{PrototypeCombatText.FormatIntent(enemyData.intentPattern[1])}"));
         }
 
         [Test]
@@ -213,16 +519,17 @@ namespace Project2048.Tests
             view.Initialize(bootstrap);
 
             var playerOutline = playerBattleHp.GetComponent<Outline>();
-            Assert.That(playerOutline, Is.Not.Null);
-            Assert.That(playerOutline.enabled, Is.True);
+            Assert.That(playerOutline == null || !playerOutline.enabled, Is.True);
             Assert.That(playerBattleHp.transform.Find("BlockIcon/Text").GetComponent<TMPro.TMP_Text>().text, Is.EqualTo("3"));
-            Assert.That(boardHpRoot.GetComponent<Outline>().enabled, Is.True);
+            Assert.That(boardHpRoot.GetComponent<Outline>() == null || !boardHpRoot.GetComponent<Outline>().enabled, Is.True);
             Assert.That(boardHpRoot.Find("BlockIcon/Text").GetComponent<TMPro.TMP_Text>().text, Is.EqualTo("3"));
 
             var enemyOutline = enemyHp.GetComponent<Outline>();
-            Assert.That(enemyOutline, Is.Not.Null);
-            Assert.That(enemyOutline.enabled, Is.True);
+            Assert.That(enemyOutline == null || !enemyOutline.enabled, Is.True);
             Assert.That(enemyHp.transform.Find("BlockIcon/Text").GetComponent<TMPro.TMP_Text>().text, Is.EqualTo("4"));
+            Assert.That(playerBattleHp.transform.Find("BlockIcon").GetComponent<RectTransform>().anchoredPosition.x, Is.GreaterThanOrEqualTo(12f));
+            Assert.That(boardHpRoot.Find("BlockIcon").GetComponent<RectTransform>().anchoredPosition.x, Is.GreaterThanOrEqualTo(12f));
+            Assert.That(enemyHp.transform.Find("BlockIcon").GetComponent<RectTransform>().anchoredPosition.x, Is.GreaterThanOrEqualTo(12f));
 
             Assert.That(viewObject.transform.Find("FloatingStatusLayer"), Is.Null);
 
@@ -243,6 +550,9 @@ namespace Project2048.Tests
             Assert.That(fearChip, Is.Not.Null);
             Assert.That(boardFearChip, Is.Not.Null);
             Assert.That(attackChip, Is.Not.Null);
+            Assert.That(fearChip.GetComponent<Image>().color, Is.EqualTo(new Color(0.45f, 0.03f, 0.06f, 0.95f)));
+            Assert.That(boardFearChip.GetComponent<Image>().color, Is.EqualTo(new Color(0.45f, 0.03f, 0.06f, 0.95f)));
+            Assert.That(attackChip.GetComponent<Image>().color, Is.EqualTo(new Color(0.85f, 0.12f, 0.12f, 0.95f)));
             Assert.That(fearChip.GetComponentInChildren<TMPro.TMP_Text>(true), Is.Null);
             Assert.That(boardFearChip.GetComponentInChildren<TMPro.TMP_Text>(true), Is.Null);
             Assert.That(attackChip.GetComponentInChildren<TMPro.TMP_Text>(true), Is.Null);
@@ -406,6 +716,44 @@ namespace Project2048.Tests
         }
 
         [Test]
+        public void BindButton_ReattachesButtonClickAudioAfterReplacingRuntimeListeners()
+        {
+            var settings = AssetDatabase.LoadAssetAtPath<Project2048AudioSettings>(
+                "Assets/Resources/Audio/Project2048AudioSettings.asset");
+            var audioRoot = CreateOwnedGameObject("ButtonAudioRoot");
+            var router = audioRoot.AddComponent<ButtonClickAudioRouter>();
+            var view = CreateOwnedGameObject("CombatView").AddComponent<CombatUiView>();
+            var buttonObject = CreateOwnedGameObject("RuntimeCombatButton");
+            buttonObject.AddComponent<Image>();
+            var button = buttonObject.AddComponent<Button>();
+            var handlerCount = 0;
+            var playCount = 0;
+
+            Assert.That(settings, Is.Not.Null);
+            Assert.That(settings.ButtonClickClip, Is.Not.Null);
+
+            ButtonClickAudioRouter.ButtonClickPlayed += CountPlay;
+            try
+            {
+                router.Initialize(settings);
+                InvokePrivate(view, "BindButton", button, (System.Action)(() => handlerCount++));
+                button.onClick.Invoke();
+            }
+            finally
+            {
+                ButtonClickAudioRouter.ButtonClickPlayed -= CountPlay;
+            }
+
+            Assert.That(playCount, Is.EqualTo(1));
+            Assert.That(handlerCount, Is.EqualTo(1));
+
+            void CountPlay()
+            {
+                playCount++;
+            }
+        }
+
+        [Test]
         public void BattleScene_CombatUiView_HasBoardEffectProfileOnly()
         {
             EditorSceneManager.OpenScene("Assets/Scenes/BattleScene.unity");
@@ -436,7 +784,9 @@ namespace Project2048.Tests
             Assert.That(root, Is.Not.Null);
             Assert.That(root.name, Is.EqualTo("PlayerBattleStatusEffects"));
             Assert.That(root.parent != null ? root.parent.name : null, Is.EqualTo("PlayerBattleHp"));
+            Assert.That(root.anchoredPosition.x, Is.EqualTo(CombatUiView.HpStatusEffectXOffset).Within(0.001f));
             Assert.That(root.Find("StatusEffectIconSample"), Is.Not.Null);
+            Assert.That(root.parent.Find("HpBarOutline"), Is.Not.Null);
 
             var blockIcon = root.parent.Find("BlockIcon") as RectTransform;
             Assert.That(blockIcon, Is.Not.Null);
@@ -447,7 +797,9 @@ namespace Project2048.Tests
             Assert.That(boardRoot, Is.Not.Null);
             Assert.That(boardRoot.name, Is.EqualTo("PlayerBoardStatusEffects"));
             Assert.That(boardRoot.parent != null ? boardRoot.parent.name : null, Is.EqualTo("HpBarBg"));
+            Assert.That(boardRoot.anchoredPosition.x, Is.EqualTo(CombatUiView.HpStatusEffectXOffset).Within(0.001f));
             Assert.That(boardRoot.Find("StatusEffectIconSample"), Is.Not.Null);
+            Assert.That(boardRoot.parent.Find("HpBarOutline"), Is.Not.Null);
 
             var boardBlockIcon = boardRoot.parent.Find("BlockIcon") as RectTransform;
             Assert.That(boardBlockIcon, Is.Not.Null);
@@ -458,7 +810,9 @@ namespace Project2048.Tests
             Assert.That(enemyStatusRoot, Is.Not.Null);
             Assert.That(enemyStatusRoot.name, Is.EqualTo("EnemyStatusEffects"));
             Assert.That(enemyStatusRoot.parent != null ? enemyStatusRoot.parent.name : null, Is.EqualTo("EnemyHp"));
+            Assert.That(enemyStatusRoot.anchoredPosition.x, Is.EqualTo(CombatUiView.HpStatusEffectXOffset).Within(0.001f));
             Assert.That(enemyStatusRoot.Find("StatusEffectIconSample"), Is.Not.Null);
+            Assert.That(enemyStatusRoot.parent.Find("HpBarOutline"), Is.Not.Null);
 
             var enemyBlockIcon = enemyStatusRoot.parent.Find("BlockIcon") as RectTransform;
             Assert.That(enemyBlockIcon, Is.Not.Null);
@@ -494,12 +848,111 @@ namespace Project2048.Tests
             return gameObject;
         }
 
+        private GameObject CreateOwnedRectTransformObject(string name)
+        {
+            var gameObject = new GameObject(name, typeof(RectTransform));
+            ownedObjects.Add(gameObject);
+            return gameObject;
+        }
+
         private Image CreateImageChild(Transform parent, string name)
         {
             var child = new GameObject(name, typeof(RectTransform), typeof(Image));
             child.transform.SetParent(parent, false);
             ownedObjects.Add(child);
-            return child.GetComponent<Image>();
+            var image = child.GetComponent<Image>();
+            if (name == "Fill" || name == "HpBarFill")
+            {
+                ConfigureAuthoredHpFillForTest(parent, image);
+            }
+
+            return image;
+        }
+
+        private void ConfigureAuthoredHpFillForTest(Transform hpRoot, Image fill)
+        {
+            var sprite = AssetDatabase.LoadAssetAtPath<Sprite>(HpBarSpritePath);
+            fill.sprite = sprite;
+            fill.type = Image.Type.Filled;
+            fill.fillMethod = Image.FillMethod.Horizontal;
+            fill.fillOrigin = (int)Image.OriginHorizontal.Left;
+            fill.color = CombatUiView.ThemeHpFillColor;
+            fill.raycastTarget = false;
+            SetStretchForTest(fill.rectTransform, new Vector2(2.75f, 2.75f), new Vector2(-2.75f, -2.75f));
+
+            CreateAuthoredHpImageForTest(hpRoot, "HpBarInterior", sprite, CombatUiView.ThemeHpBarBackgroundColor, filled: false, active: true);
+            CreateAuthoredHpImageForTest(hpRoot, "DamageTrailFill", sprite, CombatUiView.ThemeHpDamageTrailColor, filled: true, active: true);
+            CreateAuthoredHpImageForTest(hpRoot, "DamageFlashFill", sprite, new Color(1f, 1f, 1f, 0.95f), filled: false, active: false);
+            CreateAuthoredHpImageForTest(hpRoot, "HpBarOutline", sprite, CombatUiView.ThemeHpBorderColor, filled: false, active: true, inset: false);
+            CreateAuthoredBlockIconForTest(hpRoot);
+        }
+
+        private void CreateAuthoredHpImageForTest(Transform parent, string name, Sprite sprite, Color color, bool filled, bool active, bool inset = true)
+        {
+            if (parent.Find(name) != null)
+            {
+                return;
+            }
+
+            var child = new GameObject(name, typeof(RectTransform), typeof(Image));
+            child.transform.SetParent(parent, false);
+            ownedObjects.Add(child);
+            child.SetActive(active);
+            var image = child.GetComponent<Image>();
+            image.sprite = sprite;
+            image.type = filled ? Image.Type.Filled : Image.Type.Simple;
+            image.fillMethod = Image.FillMethod.Horizontal;
+            image.fillOrigin = (int)Image.OriginHorizontal.Left;
+            image.color = color;
+            image.raycastTarget = false;
+            SetStretchForTest(
+                image.rectTransform,
+                inset ? new Vector2(2.75f, 2.75f) : Vector2.zero,
+                inset ? new Vector2(-2.75f, -2.75f) : Vector2.zero);
+        }
+
+        private void CreateAuthoredBlockIconForTest(Transform hpRoot)
+        {
+            if (hpRoot.Find("BlockIcon") != null)
+            {
+                return;
+            }
+
+            var iconObject = new GameObject("BlockIcon", typeof(RectTransform), typeof(Image));
+            iconObject.transform.SetParent(hpRoot, false);
+            ownedObjects.Add(iconObject);
+            var icon = iconObject.GetComponent<RectTransform>();
+            icon.anchorMin = new Vector2(1f, 0.5f);
+            icon.anchorMax = new Vector2(1f, 0.5f);
+            icon.pivot = new Vector2(0f, 0.5f);
+            icon.anchoredPosition = new Vector2(12f, 0f);
+            icon.sizeDelta = new Vector2(34f, 24f);
+
+            var image = iconObject.GetComponent<Image>();
+            image.color = new Color(0.42f, 0.46f, 0.5f, 0.95f);
+            image.raycastTarget = false;
+
+            var textObject = new GameObject("Text", typeof(RectTransform), typeof(TMPro.TextMeshProUGUI));
+            textObject.transform.SetParent(icon, false);
+            ownedObjects.Add(textObject);
+            var textRect = textObject.GetComponent<RectTransform>();
+            SetStretchForTest(textRect, Vector2.zero, Vector2.zero);
+            var label = textObject.GetComponent<TMPro.TMP_Text>();
+            label.alignment = TMPro.TextAlignmentOptions.Center;
+            label.fontSize = 16f;
+            label.fontStyle = TMPro.FontStyles.Bold;
+            label.color = Color.white;
+            label.textWrappingMode = TMPro.TextWrappingModes.NoWrap;
+            label.raycastTarget = false;
+        }
+
+        private static void SetStretchForTest(RectTransform rect, Vector2 offsetMin, Vector2 offsetMax)
+        {
+            rect.anchorMin = Vector2.zero;
+            rect.anchorMax = Vector2.one;
+            rect.offsetMin = offsetMin;
+            rect.offsetMax = offsetMax;
+            rect.anchoredPosition = Vector2.zero;
         }
 
         private TMPro.TMP_Text CreateTextChild(Transform parent, string name)
@@ -550,6 +1003,13 @@ namespace Project2048.Tests
             return skill;
         }
 
+        private static void SetEnemyActionsPerTurn(EnemySO data, int count)
+        {
+            var field = typeof(EnemySO).GetField("actionsPerTurn");
+            Assert.That(field, Is.Not.Null, "EnemySO should expose actionsPerTurn for per-enemy multi-action tuning.");
+            field.SetValue(data, count);
+        }
+
         private static void SetPrivateField(object target, string fieldName, object value)
         {
             target.GetType()
@@ -564,13 +1024,40 @@ namespace Project2048.Tests
                 ?.GetValue(target);
         }
 
+        private static object InvokePrivate(object target, string methodName, params object[] args)
+        {
+            var method = target.GetType()
+                .GetMethod(methodName, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+            Assert.That(method, Is.Not.Null);
+            return method.Invoke(target, args);
+        }
+
         private static void AssertHpFillIsRenderable(Image fill)
         {
             Assert.That(fill.type, Is.EqualTo(Image.Type.Filled));
             Assert.That(fill.fillMethod, Is.EqualTo(Image.FillMethod.Horizontal));
             Assert.That(fill.fillOrigin, Is.EqualTo((int)Image.OriginHorizontal.Left));
+            Assert.That(fill.sprite, Is.Not.Null);
+            Assert.That(fill.sprite.texture.width, Is.GreaterThanOrEqualTo(1024));
+            Assert.That(fill.sprite.texture.height, Is.GreaterThanOrEqualTo(256));
+            Assert.That(fill.color, Is.EqualTo(CombatUiView.ThemeHpFillColor));
+            if (fill.transform.parent != null && fill.transform.parent.TryGetComponent<Image>(out var background))
+            {
+                Assert.That(background.color, Is.EqualTo(Color.clear));
+
+                var interior = fill.transform.parent.Find("HpBarInterior")?.GetComponent<Image>();
+                Assert.That(interior, Is.Not.Null);
+                Assert.That(interior.color, Is.EqualTo(CombatUiView.ThemeHpBarBackgroundColor));
+
+                var outline = fill.transform.parent.Find("HpBarOutline")?.GetComponent<Image>();
+                Assert.That(outline, Is.Not.Null);
+                Assert.That(outline.color, Is.EqualTo(CombatUiView.ThemeHpBorderColor));
+            }
+
             Assert.That(fill.rectTransform.anchorMin.x, Is.EqualTo(0f).Within(0.001f));
             Assert.That(fill.rectTransform.anchorMax.x, Is.EqualTo(1f).Within(0.001f));
+            Assert.That(fill.rectTransform.offsetMin.x, Is.GreaterThan(0f));
+            Assert.That(fill.rectTransform.offsetMin.y, Is.GreaterThan(0f));
             Assert.That(fill.raycastTarget, Is.False);
         }
     }

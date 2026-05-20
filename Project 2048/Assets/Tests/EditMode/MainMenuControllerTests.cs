@@ -83,7 +83,7 @@ namespace Project2048.Tests
             Assert.That(backgroundRect.offsetMin, Is.EqualTo(Vector2.zero));
             Assert.That(backgroundRect.offsetMax, Is.EqualTo(Vector2.zero));
 
-            var controller = Object.FindFirstObjectByType<global::MainMenuController>(FindObjectsInactive.Include);
+            var controller = Object.FindAnyObjectByType<global::MainMenuController>(FindObjectsInactive.Include);
             Assert.That(controller, Is.Not.Null);
 
             var serializedController = new SerializedObject(controller);
@@ -97,6 +97,38 @@ namespace Project2048.Tests
             var settingPopup = canvas.transform.Find("SettingPopup");
             Assert.That(settingPopup, Is.Not.Null);
             Assert.That(settingPopup.GetComponent<global::SettingPopup>(), Is.Not.Null);
+        }
+
+        [Test]
+        public void StoryScene_UsesSceneAuthoredBackground()
+        {
+            EditorSceneManager.OpenScene("Assets/Scenes/StoryScene.unity", OpenSceneMode.Single);
+
+            var canvas = GameObject.Find("Canvas");
+            Assert.That(canvas, Is.Not.Null);
+            Assert.That(canvas.GetComponent<Canvas>(), Is.Not.Null);
+
+            var scaler = canvas.GetComponent<CanvasScaler>();
+            Assert.That(scaler, Is.Not.Null);
+            Assert.That(scaler.uiScaleMode, Is.EqualTo(CanvasScaler.ScaleMode.ScaleWithScreenSize));
+            Assert.That(scaler.referenceResolution, Is.EqualTo(new Vector2(1080f, 1920f)));
+            Assert.That(scaler.matchWidthOrHeight, Is.EqualTo(0.5f).Within(0.001f));
+
+            var background = canvas.transform.Find("StoryBackground");
+            Assert.That(background, Is.Not.Null);
+            Assert.That(background.gameObject.activeSelf, Is.True);
+            Assert.That(background.GetSiblingIndex(), Is.EqualTo(0));
+
+            var backgroundImage = background.GetComponent<RawImage>();
+            Assert.That(backgroundImage, Is.Not.Null);
+            Assert.That(AssetDatabase.GetAssetPath(backgroundImage.texture), Is.EqualTo("Assets/Art/MainMenu/MainMenuBackgroundPlaceholder.png"));
+            Assert.That(backgroundImage.raycastTarget, Is.False);
+
+            var backgroundRect = (RectTransform)background;
+            Assert.That(backgroundRect.anchorMin, Is.EqualTo(Vector2.zero));
+            Assert.That(backgroundRect.anchorMax, Is.EqualTo(Vector2.one));
+            Assert.That(backgroundRect.offsetMin, Is.EqualTo(Vector2.zero));
+            Assert.That(backgroundRect.offsetMax, Is.EqualTo(Vector2.zero));
         }
 
         private static void AssertSerializedReference(SerializedObject serializedObject, string propertyName)

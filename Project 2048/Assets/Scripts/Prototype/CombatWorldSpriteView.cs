@@ -1,10 +1,15 @@
 using System.Collections;
 using System.Linq;
+using Project2048.Audio;
 using Project2048.Combat;
 using Project2048.Enemy;
 using Project2048.Presentation;
 using Project2048.Skills;
+using TMPro;
 using UnityEngine;
+using UnityEngine.Audio;
+using UnityEngine.EventSystems;
+using UnityEngine.Rendering;
 
 namespace Project2048.Prototype
 {
@@ -12,10 +17,38 @@ namespace Project2048.Prototype
     {
         public const float EnemyDeathFadeDurationSeconds = 0.6f;
         public const float EnemyAppearIntroDurationSeconds = 0.45f;
+        public const float EnemyAttackLungeDurationSeconds = 0.32f;
+        public const float EnemyAppearWorldShakeDurationSeconds = 1.5f;
+        public const float ShieldImpactParticleLifetimeSeconds = 0.8f;
+        public const float DebuffCastParticleLifetimeSeconds = 0.9f;
+        public const float DebuffTargetParticleDelaySeconds = DebuffCastParticleLifetimeSeconds;
+        public const float DamageNumberPopupDurationSeconds = 0.55f;
 
         private const float EnemyAppearIntroRightOffset = 2.25f;
         private const float EnemyAppearIntroJumpHeight = 0.7f;
         private const float EnemyAppearIntroScalePop = 0.08f;
+        private const float EnemyAttackLungeDistance = 0.72f;
+        private const float EnemyAttackLungeImpactTime = 0.45f;
+        private const float EnemyAttackLungeScalePop = 0.05f;
+        private const float EnemyAppearWorldShakeMagnitude = 0.13f;
+        private const float DamageNumberPopupRiseDistance = 0.62f;
+        private const float DamageNumberPopupMinimumWorldOffset = 0.22f;
+        private const float DamageNumberPopupFallbackWorldRadius = 0.55f;
+        private const float DamageNumberPopupBoundsRadiusMultiplier = 0.65f;
+        private const float DamageNumberPopupWorldFontSize = 2.9f;
+        private const float DamageNumberPopupUiFontSize = 40f;
+        private const float DamageNumberPopupOutlineWidth = 0.22f;
+        private const float DamageNumberPopupGlowInner = 0.04f;
+        private const float DamageNumberPopupGlowOuter = 0.36f;
+        private const float DamageNumberPopupGlowPower = 0.72f;
+        private const float DamageNumberPopupGlowOffset = 0f;
+        private const int DamageNumberPopupSortingOrderOffset = 32;
+        private const int ShieldImpactParticleCount = 22;
+        private const int DebuffCastParticleCount = 28;
+        private const string DefaultWorldVfxProfileResourceName = "PrototypeCombatWorldVfxProfile";
+        private static readonly Color DamageNumberPopupTextColor = new(1f, 0.82f, 0.02f, 1f);
+        private static readonly Color DamageNumberPopupOutlineColor = Color.white;
+        private static readonly Color DamageNumberPopupGlowColor = new(1f, 0.72f, 0f, 0.82f);
 
         [SerializeField] private PrototypeCombatBootstrap bootstrap;
         [SerializeField] private SpriteRenderer backgroundRenderer;
@@ -23,17 +56,37 @@ namespace Project2048.Prototype
         [SerializeField] private SpriteRenderer enemyRenderer;
         [SerializeField] private Sprite defaultBackgroundSprite;
         [SerializeField] private AudioSource audioSource;
+        [SerializeField] private AudioMixerGroup sfxMixerGroup;
+        [SerializeField] private SimpleBgmDucker bgmDucker;
         [SerializeField] private Animator playerAnimator;
         [SerializeField] private Animator enemyAnimator;
+        [SerializeField] private ParticleSystem shieldImpactParticlePrefab;
+        [SerializeField] private ParticleSystem debuffCastParticlePrefab;
+        [SerializeField] private CombatWorldVfxProfileSO worldVfxProfile;
+        [SerializeField] private WorldShake worldShake;
+        [SerializeField] private Transform foregroundShakeRoot;
+        [SerializeField] private Color shieldImpactParticleColor = new(0.62f, 0.92f, 1f, 0.96f);
+        [SerializeField] private Color fearDebuffParticleColor = new(0.75f, 0.05f, 0.16f, 0.95f);
+        [SerializeField] private Color darknessDebuffParticleColor = new(0.24f, 0.10f, 0.48f, 0.95f);
+        [SerializeField] private Material shieldImpactParticleMaterial;
+        [SerializeField] private Material fearDebuffParticleMaterial;
+        [SerializeField] private Material darknessDebuffParticleMaterial;
 
         private CombatManager combatManager;
         private CombatSnapshot snapshot;
         private Coroutine enemyDeathFadeCoroutine;
         private Coroutine enemyAppearIntroCoroutine;
+        private Coroutine enemyAttackLungeCoroutine;
         private Vector3 enemyRendererRestLocalPosition;
         private Vector3 enemyRendererRestLocalScale = Vector3.one;
         private bool hasEnemyRendererRestTransform;
         private bool lastEnemyWasDead;
+        private int lastPlayedEnemyDebuffVfxSequence;
+        private Material runtimeShieldImpactParticleMaterial;
+        private Material runtimeFearDebuffParticleMaterial;
+        private Material runtimeDarknessDebuffParticleMaterial;
+        private RectTransform damageNumberPopupLayer;
+        private readonly System.Collections.Generic.List<GameObject> damageNumberPopups = new();
 
         public void Initialize(PrototypeCombatBootstrap owner)
         {
@@ -42,6 +95,8 @@ namespace Project2048.Prototype
             combatManager = owner != null ? owner.CombatManager : null;
 
             ResolveMissingReferences();
+            ResolveWorldVfxProfile();
+            ResolveWorldShake();
             CacheEnemyRendererRestTransform();
             RenderBackground();
 
@@ -57,6 +112,7 @@ namespace Project2048.Prototype
 
             snapshot = combatManager.GetSnapshot();
             lastEnemyWasDead = snapshot?.Enemies?.FirstOrDefault()?.IsDead ?? false;
+            lastPlayedEnemyDebuffVfxSequence = 0;
             Render(snapshot);
             SetEnemyRendererAlpha(lastEnemyWasDead ? 0f : 1f);
         }
@@ -66,6 +122,10 @@ namespace Project2048.Prototype
             UnbindCombatEvents();
             ClearEnemyDeathFade();
             ClearEnemyAppearIntro();
+            ClearEnemyAttackLunge();
+            ClearWorldShake();
+            ClearDamageNumberPopups();
+            DestroyRuntimeParticleMaterials();
         }
 
         private void UnbindCombatEvents()
@@ -81,8 +141,13 @@ namespace Project2048.Prototype
 
         private void HandleCombatStateChanged(CombatSnapshot nextSnapshot)
         {
+            var playerHpDamage = ResolvePlayerHpDamage(snapshot, nextSnapshot);
+            var enemyHpDamage = ResolveEnemyHpDamage(snapshot, nextSnapshot);
             var playerWasHit = PlayerWasHit(snapshot, nextSnapshot);
             var enemyWasHit = EnemyWasHit(snapshot, nextSnapshot);
+            var playerShieldWasHit = PlayerShieldWasHit(snapshot, nextSnapshot);
+            var enemyShieldWasHit = EnemyShieldWasHit(snapshot, nextSnapshot);
+            var enemyUsedAttack = EnemyUsedAttack(snapshot, nextSnapshot, playerWasHit);
             var enemyUsedDefense = EnemyUsedDefense(snapshot, nextSnapshot);
             var enemyAppeared = EnemyAppeared(snapshot, nextSnapshot);
             var nextEnemyDead = nextSnapshot?.Enemies?.FirstOrDefault()?.IsDead ?? false;
@@ -91,8 +156,14 @@ namespace Project2048.Prototype
             snapshot = nextSnapshot;
             Render(snapshot);
             PlayEnemyAppearEffectIfNeeded(enemyAppeared);
+            PlayEnemyAttackEffectIfNeeded(enemyUsedAttack);
+            PlayShieldImpactEffectIfNeeded(playerShieldWasHit, playerRenderer != null ? playerRenderer.transform : transform);
+            PlayShieldImpactEffectIfNeeded(enemyShieldWasHit, enemyRenderer != null ? enemyRenderer.transform : transform);
             PlayPlayerActionEffectIfNeeded(playerWasHit);
             PlayEnemyActionEffectIfNeeded(enemyWasHit, enemyJustDied);
+            PlayDamageNumberPopupIfNeeded(playerHpDamage, playerRenderer);
+            PlayDamageNumberPopupIfNeeded(enemyHpDamage, enemyRenderer);
+            PlayEnemyDebuffCastEffectIfNeeded(snapshot?.LastVfxCue);
             PlayEnemyDefenseEffectIfNeeded(enemyUsedDefense);
             PlayEnemyDeathFadeIfNeeded(enemyJustDied, nextEnemyDead);
             lastEnemyWasDead = nextEnemyDead;
@@ -106,6 +177,11 @@ namespace Project2048.Prototype
             }
 
             var isAttack = skill.skillType == SkillType.Attack;
+            if (isAttack && TryPlayProjectileSkillEffect(skill.activationEffect, target))
+            {
+                return;
+            }
+
             var anchor = isAttack && target != null && enemyRenderer != null
                 ? enemyRenderer.transform
                 : playerRenderer != null
@@ -113,6 +189,43 @@ namespace Project2048.Prototype
                     : transform;
             var animator = isAttack ? enemyAnimator : playerAnimator;
             PlayCombatantActionEffect(skill.activationEffect, anchor, animator);
+        }
+
+        private bool TryPlayProjectileSkillEffect(CombatEffectBinding effect, EnemyController target)
+        {
+            if (effect?.vfxPrefab == null || target == null)
+            {
+                return false;
+            }
+
+            var prefabProjectile = effect.vfxPrefab.GetComponentInChildren<CombatProjectileEffect>(true);
+            if (prefabProjectile == null)
+            {
+                return false;
+            }
+
+            var sourceTransform = playerRenderer != null ? playerRenderer.transform : transform;
+            var targetTransform = enemyRenderer != null ? enemyRenderer.transform : transform;
+            PlayCombatantActionAudioEffect(effect);
+
+            var instance = Instantiate(effect.vfxPrefab, sourceTransform.position, Quaternion.identity, transform);
+            var projectile = instance.GetComponentInChildren<CombatProjectileEffect>(true);
+            projectile?.Launch(sourceTransform, targetTransform, effect.localOffset);
+
+            if (effect.animationClip != null && enemyAnimator != null && enemyAnimator.runtimeAnimatorController != null)
+            {
+                enemyAnimator.Play(effect.animationClip.name, 0, 0f);
+            }
+
+            var lifetime = projectile != null
+                ? Mathf.Max(effect.EffectiveAutoDestroySeconds, projectile.EstimatedLifetimeSeconds + 0.2f)
+                : effect.EffectiveAutoDestroySeconds;
+            if (lifetime > 0f)
+            {
+                Destroy(instance, lifetime);
+            }
+
+            return true;
         }
 
         private void Render(CombatSnapshot currentSnapshot)
@@ -150,6 +263,16 @@ namespace Project2048.Prototype
                 playerAnimator);
         }
 
+        private void PlayEnemyAttackEffectIfNeeded(bool enemyUsedAttack)
+        {
+            if (!enemyUsedAttack)
+            {
+                return;
+            }
+
+            PlayEnemyAttackLunge(ResolveCurrentEnemyData()?.FindActionEffect(CombatActionIds.Attack));
+        }
+
         private void PlayEnemyAppearEffectIfNeeded(bool enemyAppeared)
         {
             if (!enemyAppeared)
@@ -180,7 +303,8 @@ namespace Project2048.Prototype
             PlayCombatantActionEffect(
                 enemyData?.FindActionEffect(CombatActionIds.Hit),
                 enemyRenderer != null ? enemyRenderer.transform : transform,
-                enemyAnimator);
+                enemyAnimator,
+                delayAudioUntilAuthoredVisualEnds: true);
         }
 
         private void PlayEnemyDefenseEffectIfNeeded(bool enemyUsedDefense)
@@ -196,6 +320,56 @@ namespace Project2048.Prototype
                 enemyAnimator);
         }
 
+        private void PlayEnemyDebuffCastEffectIfNeeded(CombatVfxCue cue)
+        {
+            if (cue == null ||
+                cue.Sequence <= 0 ||
+                cue.Sequence == lastPlayedEnemyDebuffVfxSequence ||
+                cue.DebuffType == DebuffType.None)
+            {
+                return;
+            }
+
+            lastPlayedEnemyDebuffVfxSequence = cue.Sequence;
+            var enemyData = ResolveCurrentEnemyData();
+            var effect = enemyData?.FindActionEffect(ResolveDebuffActionId(cue.DebuffType));
+            PlayCombatantActionEffect(
+                effect,
+                enemyRenderer != null ? enemyRenderer.transform : transform,
+                enemyAnimator);
+            if (effect?.sfxClip == null)
+            {
+                PlayCombatantActionAudioEffect(enemyData?.FindActionEffect(CombatActionIds.Attack));
+            }
+
+            SpawnDebuffCastParticles(
+                cue.DebuffType,
+                enemyRenderer != null ? enemyRenderer.transform : transform);
+            PlayDebuffTargetEffectAfterCast(cue.DebuffType, ResolveDebuffParticleLifetimeSeconds(cue.DebuffType));
+        }
+
+        private void PlayShieldImpactEffectIfNeeded(bool shieldWasHit, Transform anchor)
+        {
+            if (!shieldWasHit)
+            {
+                return;
+            }
+
+            var effect = ResolveShieldImpactParticleEffect();
+            SpawnParticleBurst(
+                effect,
+                anchor,
+                "ShieldImpactParticles",
+                shieldImpactParticlePrefab,
+                shieldImpactParticleColor,
+                effect?.particleMaterial != null ? null : ResolveShieldImpactParticleMaterial(),
+                ShieldImpactParticleLifetimeSeconds,
+                ShieldImpactParticleCount,
+                0.78f,
+                0.22f,
+                swirl: false);
+        }
+
         private EnemySO ResolveCurrentEnemyData()
         {
             var enemyIndex = snapshot?.Enemies?.FirstOrDefault()?.EnemyIndex ?? 0;
@@ -208,20 +382,23 @@ namespace Project2048.Prototype
             return enemies[enemyIndex]?.Data;
         }
 
-        private void PlayCombatantActionEffect(CombatEffectBinding effect, Transform anchor, Animator animator)
+        private void PlayCombatantActionEffect(
+            CombatEffectBinding effect,
+            Transform anchor,
+            Animator animator,
+            bool delayAudioUntilAuthoredVisualEnds = false)
         {
             if (effect == null || !effect.HasAnyAsset)
             {
                 return;
             }
 
-            if (effect.sfxClip != null)
+            var audioDelay = delayAudioUntilAuthoredVisualEnds
+                ? ResolveAuthoredVisualDurationSeconds(effect)
+                : 0f;
+            if (audioDelay <= 0f)
             {
-                EnsureAudioSource();
-                if (audioSource != null)
-                {
-                    CombatEffectAudioPlayer.PlayOneShot(audioSource, effect, 1f, transform);
-                }
+                PlayCombatantActionAudioEffect(effect);
             }
 
             if (effect.vfxPrefab != null)
@@ -236,9 +413,394 @@ namespace Project2048.Prototype
                 }
             }
 
+            if (effect.particleEffect?.HasParticleVisual == true)
+            {
+                SpawnParticleBurst(
+                    effect.particleEffect,
+                    anchor,
+                    "CombatActionParticles",
+                    fallbackPrefab: null,
+                    fallbackColor: Color.white,
+                    fallbackMaterial: null,
+                    fallbackLifetimeSeconds: effect.EffectiveAutoDestroySeconds,
+                    fallbackBurstCount: 16,
+                    fallbackStartSpeed: 0.6f,
+                    fallbackStartSize: 0.12f,
+                    swirl: false);
+            }
+
             if (effect.animationClip != null && animator != null && animator.runtimeAnimatorController != null)
             {
                 animator.Play(effect.animationClip.name, 0, 0f);
+            }
+
+            if (audioDelay > 0f)
+            {
+                PlayCombatantActionAudioEffect(effect, audioDelay);
+            }
+        }
+
+        private static float ResolveAuthoredVisualDurationSeconds(CombatEffectBinding effect)
+        {
+            if (effect == null || !effect.HasAuthoredVisual)
+            {
+                return 0f;
+            }
+
+            var duration = 0f;
+            if (effect.vfxPrefab != null)
+            {
+                duration = Mathf.Max(duration, effect.EffectiveAutoDestroySeconds);
+            }
+
+            if (effect.particleEffect?.HasParticleVisual == true)
+            {
+                duration = Mathf.Max(duration, effect.particleEffect.EffectiveLifetimeSeconds);
+            }
+
+            if (effect.animationClip != null)
+            {
+                duration = Mathf.Max(duration, effect.animationClip.length);
+            }
+
+            return duration;
+        }
+
+        private void PlayCombatantActionAudioEffect(CombatEffectBinding effect, float extraDelaySeconds = 0f)
+        {
+            if (effect?.sfxClip == null)
+            {
+                return;
+            }
+
+            var delay = effect.EffectiveSfxDelaySeconds + Mathf.Max(0f, extraDelaySeconds);
+            if (delay > 0f && isActiveAndEnabled)
+            {
+                StartCoroutine(PlayCombatantActionAudioEffectAfterDelay(effect, delay));
+                return;
+            }
+
+            PlayCombatantActionAudioEffectNow(effect);
+        }
+
+        private IEnumerator PlayCombatantActionAudioEffectAfterDelay(CombatEffectBinding effect, float delaySeconds)
+        {
+            yield return new WaitForSeconds(delaySeconds);
+            PlayCombatantActionAudioEffectNow(effect);
+        }
+
+        private void PlayCombatantActionAudioEffectNow(CombatEffectBinding effect)
+        {
+            EnsureAudioSource();
+            if (audioSource == null)
+            {
+                return;
+            }
+
+            DuckBgmForImportantSfx();
+            CombatEffectAudioPlayer.PlayOneShot(audioSource, effect, 1f, transform);
+        }
+
+        private void PlayDamageNumberPopupIfNeeded(int damageAmount, SpriteRenderer targetRenderer)
+        {
+            if (damageAmount <= 0 || targetRenderer == null)
+            {
+                return;
+            }
+
+            var popupLayer = ResolveDamageNumberPopupLayer();
+            if (popupLayer != null)
+            {
+                PlayDamageNumberUiPopup(damageAmount, targetRenderer, popupLayer);
+                return;
+            }
+
+            PlayDamageNumberWorldPopup(damageAmount, targetRenderer);
+        }
+
+        private void PlayDamageNumberUiPopup(int damageAmount, SpriteRenderer targetRenderer, RectTransform popupLayer)
+        {
+            var popupObject = new GameObject("DamageNumberPopup", typeof(RectTransform), typeof(TextMeshProUGUI));
+            popupObject.transform.SetParent(popupLayer, false);
+            damageNumberPopups.Add(popupObject);
+
+            var rectTransform = popupObject.GetComponent<RectTransform>();
+            rectTransform.anchorMin = new Vector2(0.5f, 0.5f);
+            rectTransform.anchorMax = new Vector2(0.5f, 0.5f);
+            rectTransform.pivot = new Vector2(0.5f, 0.5f);
+            rectTransform.sizeDelta = new Vector2(196f, 84f);
+            rectTransform.anchoredPosition = ResolveDamageNumberCanvasPosition(targetRenderer, popupLayer);
+
+            var label = popupObject.GetComponent<TextMeshProUGUI>();
+            ConfigureDamageNumberLabel(label, damageAmount, DamageNumberPopupUiFontSize);
+            label.raycastTarget = false;
+
+            if (!Application.isPlaying || !isActiveAndEnabled)
+            {
+                return;
+            }
+
+            StartCoroutine(DamageNumberPopupRoutine(rectTransform, label));
+        }
+
+        private void PlayDamageNumberWorldPopup(int damageAmount, SpriteRenderer targetRenderer)
+        {
+            var popupObject = new GameObject("DamageNumberPopup", typeof(TextMeshPro));
+            popupObject.transform.SetParent(targetRenderer.transform, false);
+            popupObject.transform.localPosition = targetRenderer.transform.InverseTransformPoint(ResolveDamageNumberWorldPosition(targetRenderer));
+            popupObject.transform.localRotation = Quaternion.identity;
+            popupObject.transform.localScale = Vector3.one;
+            damageNumberPopups.Add(popupObject);
+
+            var label = popupObject.GetComponent<TextMeshPro>();
+            ConfigureDamageNumberLabel(label, damageAmount, DamageNumberPopupWorldFontSize);
+
+            var meshRenderer = popupObject.GetComponent<MeshRenderer>();
+            meshRenderer.sortingLayerID = targetRenderer.sortingLayerID;
+            meshRenderer.sortingOrder = targetRenderer.sortingOrder + DamageNumberPopupSortingOrderOffset;
+
+            if (!Application.isPlaying || !isActiveAndEnabled)
+            {
+                return;
+            }
+
+            StartCoroutine(DamageNumberPopupRoutine(popupObject.transform, label));
+        }
+
+        private static void ConfigureDamageNumberLabel(TMP_Text label, int damageAmount, float fontSize)
+        {
+            label.text = damageAmount.ToString();
+            label.alignment = TextAlignmentOptions.Center;
+            label.fontSize = fontSize;
+            label.fontStyle = FontStyles.Bold;
+            label.color = DamageNumberPopupTextColor;
+            label.textWrappingMode = TextWrappingModes.NoWrap;
+            label.overflowMode = TextOverflowModes.Overflow;
+            label.faceColor = DamageNumberPopupTextColor;
+            label.outlineColor = DamageNumberPopupOutlineColor;
+            label.outlineWidth = DamageNumberPopupOutlineWidth;
+            ConfigureDamageNumberGlow(label);
+        }
+
+        private static void ConfigureDamageNumberGlow(TMP_Text label)
+        {
+            var sourceMaterial = label.fontMaterial;
+            if (sourceMaterial == null)
+            {
+                return;
+            }
+
+            var material = new Material(sourceMaterial)
+            {
+                name = "DamageNumberPopupMaterial",
+            };
+
+            material.EnableKeyword(ShaderUtilities.Keyword_Outline);
+            if (material.HasProperty(ShaderUtilities.ID_FaceColor))
+            {
+                material.SetColor(ShaderUtilities.ID_FaceColor, DamageNumberPopupTextColor);
+            }
+
+            if (material.HasProperty(ShaderUtilities.ID_OutlineColor))
+            {
+                material.SetColor(ShaderUtilities.ID_OutlineColor, DamageNumberPopupOutlineColor);
+            }
+
+            if (material.HasProperty(ShaderUtilities.ID_OutlineWidth))
+            {
+                material.SetFloat(ShaderUtilities.ID_OutlineWidth, DamageNumberPopupOutlineWidth);
+            }
+
+            if (material.HasProperty(ShaderUtilities.ID_GlowColor))
+            {
+                material.EnableKeyword(ShaderUtilities.Keyword_Glow);
+                material.SetColor(ShaderUtilities.ID_GlowColor, DamageNumberPopupGlowColor);
+                material.SetFloat(ShaderUtilities.ID_GlowInner, DamageNumberPopupGlowInner);
+                material.SetFloat(ShaderUtilities.ID_GlowOuter, DamageNumberPopupGlowOuter);
+                material.SetFloat(ShaderUtilities.ID_GlowPower, DamageNumberPopupGlowPower);
+                material.SetFloat(ShaderUtilities.ID_GlowOffset, DamageNumberPopupGlowOffset);
+            }
+
+            label.fontMaterial = material;
+            label.UpdateMeshPadding();
+        }
+
+        private static Vector3 ResolveDamageNumberWorldPosition(SpriteRenderer targetRenderer)
+        {
+            var center = ResolveDamageNumberWorldCenter(targetRenderer);
+            var maxRadius = ResolveDamageNumberWorldOffsetRadius(targetRenderer);
+            var minRadius = Mathf.Min(DamageNumberPopupMinimumWorldOffset, maxRadius * 0.75f);
+            var angle = Random.Range(0f, Mathf.PI * 2f);
+            var distance = Random.Range(minRadius, maxRadius);
+            var offset = new Vector3(
+                Mathf.Cos(angle) * distance,
+                Mathf.Sin(angle) * distance,
+                0f);
+
+            return center + offset;
+        }
+
+        private static Vector3 ResolveDamageNumberWorldCenter(SpriteRenderer targetRenderer)
+        {
+            if (targetRenderer == null)
+            {
+                return Vector3.zero;
+            }
+
+            if (targetRenderer.sprite == null)
+            {
+                return targetRenderer.transform.position;
+            }
+
+            return targetRenderer.bounds.center;
+        }
+
+        private static float ResolveDamageNumberWorldOffsetRadius(SpriteRenderer targetRenderer)
+        {
+            if (targetRenderer == null || targetRenderer.sprite == null)
+            {
+                return DamageNumberPopupFallbackWorldRadius;
+            }
+
+            var bounds = targetRenderer.bounds;
+            var boundsRadius = Mathf.Max(bounds.extents.x, bounds.extents.y) * DamageNumberPopupBoundsRadiusMultiplier;
+            return Mathf.Clamp(boundsRadius, DamageNumberPopupMinimumWorldOffset, DamageNumberPopupFallbackWorldRadius);
+        }
+
+        private static Vector2 ResolveDamageNumberCanvasPosition(SpriteRenderer targetRenderer, RectTransform popupLayer)
+        {
+            var worldPosition = ResolveDamageNumberWorldPosition(targetRenderer);
+            var canvas = popupLayer != null ? popupLayer.GetComponentInParent<Canvas>() : null;
+            var worldCamera = Camera.main;
+            if (worldCamera == null)
+            {
+                return new Vector2(worldPosition.x * 100f, worldPosition.y * 100f);
+            }
+
+            var screenPoint = RectTransformUtility.WorldToScreenPoint(worldCamera, worldPosition);
+            var eventCamera = canvas != null && canvas.renderMode != RenderMode.ScreenSpaceOverlay
+                ? canvas.worldCamera != null ? canvas.worldCamera : worldCamera
+                : null;
+
+            return RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                popupLayer,
+                screenPoint,
+                eventCamera,
+                out var localPoint)
+                ? localPoint
+                : Vector2.zero;
+        }
+
+        private RectTransform ResolveDamageNumberPopupLayer()
+        {
+            if (damageNumberPopupLayer != null)
+            {
+                damageNumberPopupLayer.SetAsLastSibling();
+                return damageNumberPopupLayer;
+            }
+
+            var canvas = GameObject.Find("CombatCanvas")?.GetComponent<Canvas>()
+                ?? FindAnyObjectByType<Canvas>(FindObjectsInactive.Include);
+            if (canvas == null)
+            {
+                return null;
+            }
+
+            var existing = canvas.transform.Find("DamageNumberPopupLayer") as RectTransform;
+            if (existing != null)
+            {
+                damageNumberPopupLayer = existing;
+                damageNumberPopupLayer.SetAsLastSibling();
+                return damageNumberPopupLayer;
+            }
+
+            var layerObject = new GameObject("DamageNumberPopupLayer", typeof(RectTransform));
+            layerObject.transform.SetParent(canvas.transform, false);
+            damageNumberPopupLayer = layerObject.GetComponent<RectTransform>();
+            damageNumberPopupLayer.anchorMin = Vector2.zero;
+            damageNumberPopupLayer.anchorMax = Vector2.one;
+            damageNumberPopupLayer.offsetMin = Vector2.zero;
+            damageNumberPopupLayer.offsetMax = Vector2.zero;
+            damageNumberPopupLayer.SetAsLastSibling();
+            return damageNumberPopupLayer;
+        }
+
+        private IEnumerator DamageNumberPopupRoutine(Transform popupTransform, TMP_Text label)
+        {
+            var startPosition = popupTransform.localPosition;
+            var startTime = Time.realtimeSinceStartup;
+
+            while (true)
+            {
+                if (popupTransform == null || label == null)
+                {
+                    yield break;
+                }
+
+                var elapsed = Time.realtimeSinceStartup - startTime;
+                var t = Mathf.Clamp01(elapsed / DamageNumberPopupDurationSeconds);
+                popupTransform.localPosition = startPosition + Vector3.up * Mathf.SmoothStep(0f, DamageNumberPopupRiseDistance, t);
+
+                var pop = t < 0.24f
+                    ? Mathf.Lerp(0.92f, 1.16f, Mathf.Clamp01(t / 0.24f))
+                    : Mathf.Lerp(1.16f, 1f, Mathf.Clamp01((t - 0.24f) / 0.26f));
+                popupTransform.localScale = Vector3.one * pop;
+
+                var color = label.color;
+                color.a = t < 0.62f ? 1f : Mathf.Lerp(1f, 0f, Mathf.Clamp01((t - 0.62f) / 0.38f));
+                label.color = color;
+
+                if (t >= 1f)
+                {
+                    break;
+                }
+
+                yield return null;
+            }
+
+            var popupObject = popupTransform.gameObject;
+            damageNumberPopups.Remove(popupObject);
+            DestroyDamageNumberPopup(popupObject);
+        }
+
+        private void ClearDamageNumberPopups()
+        {
+            foreach (var popup in damageNumberPopups)
+            {
+                if (popup == null)
+                {
+                    continue;
+                }
+
+                DestroyDamageNumberPopup(popup);
+            }
+
+            damageNumberPopups.Clear();
+        }
+
+        private static void DestroyDamageNumberPopup(GameObject popup)
+        {
+            var label = popup.GetComponent<TMP_Text>();
+            var material = label != null ? label.fontMaterial : null;
+            if (material != null && material.name.StartsWith("DamageNumberPopupMaterial"))
+            {
+                if (Application.isPlaying)
+                {
+                    Destroy(material);
+                }
+                else
+                {
+                    DestroyImmediate(material);
+                }
+            }
+
+            if (Application.isPlaying)
+            {
+                Destroy(popup);
+            }
+            else
+            {
+                DestroyImmediate(popup);
             }
         }
 
@@ -247,10 +809,12 @@ namespace Project2048.Prototype
             if (enemyRenderer == null)
             {
                 PlayCombatantActionEffect(effect, transform, enemyAnimator);
+                PlayEnemyAppearWorldShake();
                 return;
             }
 
             CacheEnemyRendererRestTransform();
+            ClearEnemyAttackLunge(restoreTransform: true);
             ClearEnemyAppearIntro(restoreTransform: false);
 
             if (!Application.isPlaying || !isActiveAndEnabled)
@@ -261,6 +825,28 @@ namespace Project2048.Prototype
             }
 
             enemyAppearIntroCoroutine = StartCoroutine(EnemyAppearIntroRoutine(effect));
+        }
+
+        private void PlayEnemyAttackLunge(CombatEffectBinding effect)
+        {
+            if (enemyRenderer == null)
+            {
+                PlayCombatantActionEffect(effect, transform, enemyAnimator);
+                return;
+            }
+
+            CacheEnemyRendererRestTransform();
+            ClearEnemyAppearIntro(restoreTransform: true);
+            ClearEnemyAttackLunge(restoreTransform: true);
+
+            if (!Application.isPlaying || !isActiveAndEnabled)
+            {
+                RestoreEnemyRendererTransform();
+                PlayCombatantActionEffect(effect, enemyRenderer.transform, enemyAnimator);
+                return;
+            }
+
+            enemyAttackLungeCoroutine = StartCoroutine(EnemyAttackLungeRoutine(effect));
         }
 
         private IEnumerator EnemyAppearIntroRoutine(CombatEffectBinding effect)
@@ -297,6 +883,60 @@ namespace Project2048.Prototype
             RestoreEnemyRendererTransform();
             enemyAppearIntroCoroutine = null;
             PlayCombatantActionEffect(effect, enemyRenderer.transform, enemyAnimator);
+            PlayEnemyAppearWorldShake();
+        }
+
+        private IEnumerator EnemyAttackLungeRoutine(CombatEffectBinding effect)
+        {
+            var startPosition = enemyRendererRestLocalPosition;
+            var targetPosition = ResolveEnemyAttackLungeTarget(startPosition);
+            var baseScale = enemyRendererRestLocalScale;
+            var startTime = Time.realtimeSinceStartup;
+            var playedImpactEffect = false;
+
+            while (true)
+            {
+                var elapsed = Time.realtimeSinceStartup - startTime;
+                var t = Mathf.Clamp01(elapsed / EnemyAttackLungeDurationSeconds);
+                if (!playedImpactEffect && t >= EnemyAttackLungeImpactTime)
+                {
+                    playedImpactEffect = true;
+                    PlayCombatantActionEffect(effect, enemyRenderer.transform, enemyAnimator);
+                }
+
+                Vector3 position;
+                if (t < EnemyAttackLungeImpactTime)
+                {
+                    var attackT = Mathf.Clamp01(t / EnemyAttackLungeImpactTime);
+                    var eased = 1f - Mathf.Pow(1f - attackT, 3f);
+                    position = Vector3.Lerp(startPosition, targetPosition, eased);
+                }
+                else
+                {
+                    var recoverT = Mathf.Clamp01((t - EnemyAttackLungeImpactTime) / (1f - EnemyAttackLungeImpactTime));
+                    var eased = Mathf.SmoothStep(0f, 1f, recoverT);
+                    position = Vector3.Lerp(targetPosition, startPosition, eased);
+                }
+
+                enemyRenderer.transform.localPosition = position;
+                var scalePop = 1f + Mathf.Sin(t * Mathf.PI) * EnemyAttackLungeScalePop;
+                enemyRenderer.transform.localScale = baseScale * scalePop;
+
+                if (t >= 1f)
+                {
+                    break;
+                }
+
+                yield return null;
+            }
+
+            RestoreEnemyRendererTransform();
+            if (!playedImpactEffect)
+            {
+                PlayCombatantActionEffect(effect, enemyRenderer.transform, enemyAnimator);
+            }
+
+            enemyAttackLungeCoroutine = null;
         }
 
         private void RenderBackground()
@@ -345,6 +985,7 @@ namespace Project2048.Prototype
             }
 
             ClearEnemyAppearIntro(restoreTransform: true);
+            ClearEnemyAttackLunge(restoreTransform: true);
             ClearEnemyDeathFade();
             if (!Application.isPlaying || !isActiveAndEnabled)
             {
@@ -399,6 +1040,597 @@ namespace Project2048.Prototype
             {
                 RestoreEnemyRendererTransform();
             }
+        }
+
+        private void ClearEnemyAttackLunge(bool restoreTransform = false)
+        {
+            if (enemyAttackLungeCoroutine != null)
+            {
+                StopCoroutine(enemyAttackLungeCoroutine);
+                enemyAttackLungeCoroutine = null;
+            }
+
+            if (restoreTransform)
+            {
+                RestoreEnemyRendererTransform();
+            }
+        }
+
+        private void PlayEnemyAppearWorldShake()
+        {
+            if (!Application.isPlaying || !isActiveAndEnabled)
+            {
+                return;
+            }
+
+            var shake = ResolveWorldShake();
+            if (shake == null)
+            {
+                return;
+            }
+
+            shake.Shake(EnemyAppearWorldShakeDurationSeconds, EnemyAppearWorldShakeMagnitude);
+        }
+
+        private WorldShake ResolveWorldShake()
+        {
+            if (worldShake != null && IsUsableShakeTarget(worldShake.transform))
+            {
+                worldShake.ResetRestPosition();
+                return worldShake;
+            }
+
+            var root = ResolveForegroundShakeRoot();
+            if (root == null || !IsUsableShakeTarget(root))
+            {
+                return null;
+            }
+
+            worldShake = root.GetComponent<WorldShake>();
+            if (worldShake == null)
+            {
+                worldShake = root.gameObject.AddComponent<WorldShake>();
+            }
+
+            worldShake.ResetRestPosition();
+            return worldShake;
+        }
+
+        private Transform ResolveForegroundShakeRoot()
+        {
+            if (foregroundShakeRoot != null)
+            {
+                return IsUsableShakeTarget(foregroundShakeRoot) ? foregroundShakeRoot : null;
+            }
+
+            if (playerRenderer == null && enemyRenderer == null)
+            {
+                return null;
+            }
+
+            var rootObject = new GameObject("ForegroundShakeRoot");
+            foregroundShakeRoot = rootObject.transform;
+            foregroundShakeRoot.SetParent(transform, false);
+            foregroundShakeRoot.localPosition = Vector3.zero;
+            foregroundShakeRoot.localRotation = Quaternion.identity;
+            foregroundShakeRoot.localScale = Vector3.one;
+
+            var reparentedCount = 0;
+            reparentedCount += ReparentRendererForWorldShake(playerRenderer) ? 1 : 0;
+            reparentedCount += ReparentRendererForWorldShake(enemyRenderer) ? 1 : 0;
+            if (reparentedCount <= 0)
+            {
+                DestroyGeneratedShakeRoot(rootObject);
+                foregroundShakeRoot = null;
+                return null;
+            }
+
+            hasEnemyRendererRestTransform = false;
+            return foregroundShakeRoot;
+        }
+
+        private bool ReparentRendererForWorldShake(SpriteRenderer renderer)
+        {
+            if (renderer == null || foregroundShakeRoot == null)
+            {
+                return false;
+            }
+
+            var rendererTransform = renderer.transform;
+            if (rendererTransform == foregroundShakeRoot || rendererTransform.IsChildOf(foregroundShakeRoot))
+            {
+                return false;
+            }
+
+            if (!CanAutoReparentForWorldShake(rendererTransform))
+            {
+                return false;
+            }
+
+            rendererTransform.SetParent(foregroundShakeRoot, true);
+            return true;
+        }
+
+        private void ClearWorldShake()
+        {
+            if (worldShake != null)
+            {
+                worldShake.StopShake(restorePosition: true);
+            }
+        }
+
+        private bool CanAutoReparentForWorldShake(Transform target)
+        {
+            if (target == null || target == transform)
+            {
+                return false;
+            }
+
+            if (target.parent != null && target.parent != transform)
+            {
+                return false;
+            }
+
+            return IsUsableShakeTarget(target);
+        }
+
+        private bool IsUsableShakeTarget(Transform target)
+        {
+            if (target == null)
+            {
+                return false;
+            }
+
+            if (backgroundRenderer != null && backgroundRenderer.transform.IsChildOf(target))
+            {
+                return false;
+            }
+
+            return target.GetComponentInChildren<Rigidbody2D>(includeInactive: true) == null &&
+                target.GetComponentInChildren<Collider2D>(includeInactive: true) == null &&
+                target.GetComponentInChildren<Camera>(includeInactive: true) == null &&
+                target.GetComponentInChildren<AudioListener>(includeInactive: true) == null &&
+                target.GetComponentInChildren<Canvas>(includeInactive: true) == null &&
+                target.GetComponentInChildren<EventSystem>(includeInactive: true) == null;
+        }
+
+        private static void DestroyGeneratedShakeRoot(GameObject rootObject)
+        {
+            if (rootObject == null)
+            {
+                return;
+            }
+
+            if (Application.isPlaying)
+            {
+                Destroy(rootObject);
+            }
+            else
+            {
+                DestroyImmediate(rootObject);
+            }
+        }
+
+        private Vector3 ResolveEnemyAttackLungeTarget(Vector3 restLocalPosition)
+        {
+            if (enemyRenderer == null)
+            {
+                return restLocalPosition;
+            }
+
+            var enemyTransform = enemyRenderer.transform;
+            var enemyWorldPosition = enemyTransform.position;
+            var targetWorldPosition = playerRenderer != null
+                ? playerRenderer.transform.position
+                : enemyWorldPosition + Vector3.left;
+            var direction = targetWorldPosition - enemyWorldPosition;
+            direction.z = 0f;
+            if (direction.sqrMagnitude <= 0.0001f)
+            {
+                direction = Vector3.left;
+            }
+
+            var lungeWorldPosition = enemyWorldPosition + direction.normalized * EnemyAttackLungeDistance;
+            return enemyTransform.parent != null
+                ? enemyTransform.parent.InverseTransformPoint(lungeWorldPosition)
+                : lungeWorldPosition;
+        }
+
+        private void PlayDebuffTargetEffectAfterCast(DebuffType debuffType, float delaySeconds)
+        {
+            var target = playerRenderer != null ? playerRenderer.transform : transform;
+            if (!isActiveAndEnabled)
+            {
+                SpawnDebuffCastParticles(debuffType, target);
+                return;
+            }
+
+            StartCoroutine(SpawnDebuffTargetParticlesAfterDelay(debuffType, target, delaySeconds));
+        }
+
+        private IEnumerator SpawnDebuffTargetParticlesAfterDelay(DebuffType debuffType, Transform target, float delaySeconds)
+        {
+            yield return new WaitForSecondsRealtime(Mathf.Max(0.05f, delaySeconds));
+            SpawnDebuffCastParticles(debuffType, target != null ? target : transform);
+        }
+
+        private void SpawnDebuffCastParticles(DebuffType debuffType, Transform anchor)
+        {
+            var effect = ResolveDebuffParticleEffect(debuffType);
+            var material = effect?.particleMaterial != null
+                ? effect.particleMaterial
+                : ResolveDebuffParticleMaterial(debuffType);
+            var color = material != null ? Color.white : ResolveDebuffParticleColor(debuffType);
+            SpawnParticleBurst(
+                effect?.particlePrefab != null ? effect.particlePrefab : debuffCastParticlePrefab,
+                anchor,
+                $"{debuffType}DebuffCastParticles",
+                color,
+                material,
+                effect != null ? effect.EffectiveLifetimeSeconds : DebuffCastParticleLifetimeSeconds,
+                effect != null ? effect.EffectiveBurstCount : DebuffCastParticleCount,
+                effect != null ? effect.EffectiveStartSpeed : 0.62f,
+                effect != null ? effect.EffectiveStartSize : 0.28f,
+                swirl: true);
+        }
+
+        private void SpawnParticleBurst(
+            CombatParticleEffectBinding effect,
+            Transform anchor,
+            string fallbackObjectName,
+            ParticleSystem fallbackPrefab,
+            Color fallbackColor,
+            Material fallbackMaterial,
+            float fallbackLifetimeSeconds,
+            int fallbackBurstCount,
+            float fallbackStartSpeed,
+            float fallbackStartSize,
+            bool swirl)
+        {
+            var prefab = effect?.particlePrefab != null ? effect.particlePrefab : fallbackPrefab;
+            var material = effect?.particleMaterial != null ? effect.particleMaterial : fallbackMaterial;
+            var color = effect != null ? effect.ResolveColor(fallbackColor) : fallbackColor;
+            if (material != null)
+            {
+                color = Color.white;
+            }
+
+            var objectName = effect?.ResolveObjectName(fallbackObjectName) ?? fallbackObjectName;
+            var lifetimeSeconds = effect != null ? effect.EffectiveLifetimeSeconds : fallbackLifetimeSeconds;
+            var burstCount = effect != null ? effect.EffectiveBurstCount : fallbackBurstCount;
+            var startSpeed = effect != null ? effect.EffectiveStartSpeed : fallbackStartSpeed;
+            var startSize = effect != null ? effect.EffectiveStartSize : fallbackStartSize;
+            var shouldSwirl = effect != null ? effect.swirl : swirl;
+
+            SpawnParticleBurst(
+                prefab,
+                anchor,
+                objectName,
+                color,
+                material,
+                lifetimeSeconds,
+                burstCount,
+                startSpeed,
+                startSize,
+                shouldSwirl);
+        }
+
+        private void SpawnParticleBurst(
+            ParticleSystem prefab,
+            Transform anchor,
+            string objectName,
+            Color color,
+            Material material,
+            float lifetimeSeconds,
+            int burstCount,
+            float startSpeed,
+            float startSize,
+            bool swirl)
+        {
+            var parent = anchor != null ? anchor : transform;
+            var particles = prefab != null
+                ? Instantiate(prefab, parent.position, Quaternion.identity, parent)
+                : CreateFallbackParticleSystem(parent, objectName);
+            if (particles == null)
+            {
+                return;
+            }
+
+            particles.gameObject.name = objectName;
+            particles.transform.localPosition = Vector3.zero;
+            ConfigureParticleBurst(particles, color, material, lifetimeSeconds, burstCount, startSpeed, startSize, parent, swirl);
+            particles.Play(true);
+            if (swirl && Application.isPlaying && isActiveAndEnabled)
+            {
+                StartCoroutine(SwirlParticleTransformRoutine(particles.transform, lifetimeSeconds));
+            }
+
+            if (lifetimeSeconds > 0f && Application.isPlaying)
+            {
+                Destroy(particles.gameObject, lifetimeSeconds + 0.2f);
+            }
+        }
+
+        private ParticleSystem CreateFallbackParticleSystem(Transform parent, string objectName)
+        {
+            var particleObject = new GameObject(objectName, typeof(ParticleSystem));
+            particleObject.transform.SetParent(parent, false);
+            return particleObject.GetComponent<ParticleSystem>();
+        }
+
+        private static void ConfigureParticleBurst(
+            ParticleSystem particles,
+            Color color,
+            Material material,
+            float lifetimeSeconds,
+            int burstCount,
+            float startSpeed,
+            float startSize,
+            Transform anchor,
+            bool swirl)
+        {
+            particles.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+            particles.Clear(true);
+
+            var main = particles.main;
+            main.duration = Mathf.Max(0.05f, lifetimeSeconds * 0.35f);
+            main.loop = false;
+            main.startLifetime = Mathf.Max(0.05f, lifetimeSeconds);
+            main.startSpeed = Mathf.Max(0f, startSpeed);
+            main.startSize = Mathf.Max(0.01f, startSize);
+            main.startColor = color;
+            main.simulationSpace = ParticleSystemSimulationSpace.Local;
+
+            var emission = particles.emission;
+            emission.rateOverTime = 0f;
+            emission.SetBursts(new[]
+            {
+                new ParticleSystem.Burst(0f, (short)Mathf.Clamp(burstCount, 1, short.MaxValue)),
+            });
+
+            var shape = particles.shape;
+            shape.enabled = true;
+            shape.shapeType = ParticleSystemShapeType.Sphere;
+            shape.radius = 0.36f;
+
+            if (swirl)
+            {
+                ConfigureSwirlBurst(particles, lifetimeSeconds);
+            }
+            else
+            {
+                DisableSwirlBurst(particles);
+            }
+
+            var renderer = particles.GetComponent<ParticleSystemRenderer>();
+            if (renderer != null && material != null)
+            {
+                renderer.sharedMaterial = material;
+            }
+
+            if (renderer == null || anchor == null)
+            {
+                return;
+            }
+
+            var anchorRenderer = anchor.GetComponent<SpriteRenderer>();
+            if (anchorRenderer == null)
+            {
+                return;
+            }
+
+            renderer.sortingLayerID = anchorRenderer.sortingLayerID;
+            renderer.sortingOrder = anchorRenderer.sortingOrder + 2;
+        }
+
+        private static void ConfigureSwirlBurst(ParticleSystem particles, float lifetimeSeconds)
+        {
+            var shape = particles.shape;
+            shape.shapeType = ParticleSystemShapeType.Circle;
+            shape.radius = 0.54f;
+            shape.radiusThickness = 0.32f;
+            shape.arc = 360f;
+
+            var velocity = particles.velocityOverLifetime;
+            velocity.enabled = false;
+
+            var rotation = particles.rotationOverLifetime;
+            rotation.enabled = true;
+            rotation.separateAxes = true;
+            rotation.z = new ParticleSystem.MinMaxCurve(-Mathf.PI * 1.5f, Mathf.PI * 1.5f);
+
+            var size = particles.sizeOverLifetime;
+            size.enabled = true;
+            size.size = new ParticleSystem.MinMaxCurve(1f, new AnimationCurve(
+                new Keyframe(0f, 0.45f),
+                new Keyframe(Mathf.Clamp01(0.32f / Mathf.Max(0.05f, lifetimeSeconds)), 1.18f),
+                new Keyframe(1f, 0f)));
+        }
+
+        private static IEnumerator SwirlParticleTransformRoutine(Transform particleTransform, float lifetimeSeconds)
+        {
+            var elapsed = 0f;
+            var duration = Mathf.Max(0.05f, lifetimeSeconds);
+            while (elapsed < duration)
+            {
+                if (particleTransform == null)
+                {
+                    yield break;
+                }
+
+                elapsed += Time.deltaTime;
+                var progress = Mathf.Clamp01(elapsed / duration);
+                particleTransform.localRotation = Quaternion.Euler(0f, 0f, progress * 540f);
+                yield return null;
+            }
+        }
+
+        private static void DisableSwirlBurst(ParticleSystem particles)
+        {
+            var velocity = particles.velocityOverLifetime;
+            velocity.enabled = false;
+
+            var rotation = particles.rotationOverLifetime;
+            rotation.enabled = false;
+
+            var size = particles.sizeOverLifetime;
+            size.enabled = false;
+        }
+
+        private Color ResolveDebuffParticleColor(DebuffType debuffType)
+        {
+            return debuffType switch
+            {
+                DebuffType.Fear => fearDebuffParticleColor,
+                DebuffType.Darkness => darknessDebuffParticleColor,
+                _ => shieldImpactParticleColor,
+            };
+        }
+
+        private CombatParticleEffectBinding ResolveShieldImpactParticleEffect()
+        {
+            ResolveWorldVfxProfile();
+            return worldVfxProfile != null ? worldVfxProfile.shieldImpactEffect : null;
+        }
+
+        private CombatParticleEffectBinding ResolveDebuffParticleEffect(DebuffType debuffType)
+        {
+            ResolveWorldVfxProfile();
+            return worldVfxProfile != null ? worldVfxProfile.ResolveDebuffCastEffect(debuffType) : null;
+        }
+
+        private float ResolveDebuffParticleLifetimeSeconds(DebuffType debuffType)
+        {
+            return ResolveDebuffParticleEffect(debuffType)?.EffectiveLifetimeSeconds ?? DebuffTargetParticleDelaySeconds;
+        }
+
+        private Material ResolveShieldImpactParticleMaterial()
+        {
+            return shieldImpactParticleMaterial != null
+                ? shieldImpactParticleMaterial
+                : runtimeShieldImpactParticleMaterial ??= CreateParticleMaterial(
+                    "ShieldImpactParticleMaterial",
+                    shieldImpactParticleColor);
+        }
+
+        private Material ResolveDebuffParticleMaterial(DebuffType debuffType)
+        {
+            return debuffType switch
+            {
+                DebuffType.Fear => fearDebuffParticleMaterial != null
+                    ? fearDebuffParticleMaterial
+                    : runtimeFearDebuffParticleMaterial ??= CreateParticleMaterial(
+                        "FearDebuffParticleMaterial",
+                        fearDebuffParticleColor),
+                DebuffType.Darkness => darknessDebuffParticleMaterial != null
+                    ? darknessDebuffParticleMaterial
+                    : runtimeDarknessDebuffParticleMaterial ??= CreateParticleMaterial(
+                        "DarknessDebuffParticleMaterial",
+                        darknessDebuffParticleColor),
+                _ => ResolveShieldImpactParticleMaterial(),
+            };
+        }
+
+        private static Material CreateParticleMaterial(string materialName, Color color)
+        {
+            var shader = Shader.Find("Universal Render Pipeline/Particles/Unlit")
+                ?? Shader.Find("Particles/Standard Unlit")
+                ?? Shader.Find("Sprites/Default")
+                ?? Shader.Find("Universal Render Pipeline/Unlit");
+            if (shader == null)
+            {
+                return null;
+            }
+
+            var material = new Material(shader)
+            {
+                name = materialName,
+                renderQueue = (int)RenderQueue.Transparent,
+            };
+            ApplyParticleMaterialColor(material, color);
+            return material;
+        }
+
+        private static void ApplyParticleMaterialColor(Material material, Color color)
+        {
+            if (material == null)
+            {
+                return;
+            }
+
+            if (material.HasProperty("_BaseColor"))
+            {
+                material.SetColor("_BaseColor", color);
+            }
+
+            if (material.HasProperty("_Color"))
+            {
+                material.SetColor("_Color", color);
+            }
+
+            if (material.HasProperty("_TintColor"))
+            {
+                material.SetColor("_TintColor", color);
+            }
+
+            if (material.HasProperty("_Surface"))
+            {
+                material.SetFloat("_Surface", 1f);
+            }
+
+            if (material.HasProperty("_SrcBlend"))
+            {
+                material.SetFloat("_SrcBlend", (float)BlendMode.SrcAlpha);
+            }
+
+            if (material.HasProperty("_DstBlend"))
+            {
+                material.SetFloat("_DstBlend", (float)BlendMode.OneMinusSrcAlpha);
+            }
+
+            if (material.HasProperty("_ZWrite"))
+            {
+                material.SetFloat("_ZWrite", 0f);
+            }
+
+            material.EnableKeyword("_ALPHABLEND_ON");
+            material.EnableKeyword("_SURFACE_TYPE_TRANSPARENT");
+        }
+
+        private void DestroyRuntimeParticleMaterials()
+        {
+            DestroyRuntimeMaterial(ref runtimeShieldImpactParticleMaterial);
+            DestroyRuntimeMaterial(ref runtimeFearDebuffParticleMaterial);
+            DestroyRuntimeMaterial(ref runtimeDarknessDebuffParticleMaterial);
+        }
+
+        private static void DestroyRuntimeMaterial(ref Material material)
+        {
+            if (material == null)
+            {
+                return;
+            }
+
+            if (Application.isPlaying)
+            {
+                Destroy(material);
+            }
+            else
+            {
+                DestroyImmediate(material);
+            }
+
+            material = null;
+        }
+
+        private static string ResolveDebuffActionId(DebuffType debuffType)
+        {
+            return debuffType switch
+            {
+                DebuffType.Fear => CombatActionIds.DebuffFear,
+                DebuffType.Darkness => CombatActionIds.DebuffDarkness,
+                _ => null,
+            };
         }
 
         private void CacheEnemyRendererRestTransform()
@@ -464,6 +1696,14 @@ namespace Project2048.Prototype
             }
         }
 
+        private void ResolveWorldVfxProfile()
+        {
+            if (worldVfxProfile == null)
+            {
+                worldVfxProfile = Resources.Load<CombatWorldVfxProfileSO>(DefaultWorldVfxProfileResourceName);
+            }
+        }
+
         private void EnsureAudioSource()
         {
             if (audioSource == null)
@@ -476,8 +1716,35 @@ namespace Project2048.Prototype
                 audioSource = gameObject.AddComponent<AudioSource>();
             }
 
+            ResolveAudioRouting();
             audioSource.playOnAwake = false;
             audioSource.spatialBlend = 0f;
+            if (sfxMixerGroup != null)
+            {
+                audioSource.outputAudioMixerGroup = sfxMixerGroup;
+            }
+        }
+
+        private void ResolveAudioRouting()
+        {
+            var settings = Project2048AudioSettings.LoadDefault();
+            if (sfxMixerGroup == null)
+            {
+                sfxMixerGroup = settings != null ? settings.SfxGroup : null;
+            }
+
+            if (bgmDucker == null)
+            {
+                bgmDucker = SimpleBgmDucker.Active != null
+                    ? SimpleBgmDucker.Active
+                    : FindAnyObjectByType<SimpleBgmDucker>(FindObjectsInactive.Include);
+            }
+        }
+
+        private void DuckBgmForImportantSfx()
+        {
+            ResolveAudioRouting();
+            bgmDucker?.DuckBgm();
         }
 
         private static SpriteRenderer FindRendererByName(string objectName)
@@ -493,8 +1760,29 @@ namespace Project2048.Prototype
                 return false;
             }
 
-            return next.Player.CurrentHp < previous.Player.CurrentHp ||
-                next.Player.Block < previous.Player.Block;
+            return next.Phase == CombatPhase.EnemyTurn &&
+                (next.Player.CurrentHp < previous.Player.CurrentHp ||
+                next.Player.Block < previous.Player.Block);
+        }
+
+        private static int ResolvePlayerHpDamage(CombatSnapshot previous, CombatSnapshot next)
+        {
+            if (previous?.Player == null || next?.Player == null)
+            {
+                return 0;
+            }
+
+            return Mathf.Max(0, previous.Player.CurrentHp - next.Player.CurrentHp);
+        }
+
+        private static bool PlayerShieldWasHit(CombatSnapshot previous, CombatSnapshot next)
+        {
+            if (previous?.Player == null || next?.Player == null || next.Phase != CombatPhase.EnemyTurn)
+            {
+                return false;
+            }
+
+            return previous.Player.Block > 0 && next.Player.Block < previous.Player.Block;
         }
 
         private static bool EnemyWasHit(CombatSnapshot previous, CombatSnapshot next)
@@ -507,7 +1795,42 @@ namespace Project2048.Prototype
             }
 
             return nextEnemy.CurrentHp < previousEnemy.CurrentHp ||
-                nextEnemy.Block < previousEnemy.Block;
+                (next.Phase == CombatPhase.ActionPhase && nextEnemy.Block < previousEnemy.Block);
+        }
+
+        private static int ResolveEnemyHpDamage(CombatSnapshot previous, CombatSnapshot next)
+        {
+            var previousEnemy = previous?.Enemies?.FirstOrDefault();
+            var nextEnemy = next?.Enemies?.FirstOrDefault();
+            if (previousEnemy == null || nextEnemy == null)
+            {
+                return 0;
+            }
+
+            return Mathf.Max(0, previousEnemy.CurrentHp - nextEnemy.CurrentHp);
+        }
+
+        private static bool EnemyShieldWasHit(CombatSnapshot previous, CombatSnapshot next)
+        {
+            var previousEnemy = previous?.Enemies?.FirstOrDefault();
+            var nextEnemy = next?.Enemies?.FirstOrDefault();
+            if (previousEnemy == null || nextEnemy == null || next.Phase != CombatPhase.ActionPhase)
+            {
+                return false;
+            }
+
+            return previousEnemy.Block > 0 && nextEnemy.Block < previousEnemy.Block;
+        }
+
+        private static bool EnemyUsedAttack(CombatSnapshot previous, CombatSnapshot next, bool playerWasHit)
+        {
+            if (!playerWasHit || next?.Phase != CombatPhase.EnemyTurn)
+            {
+                return false;
+            }
+
+            var nextEnemy = next.Enemies?.FirstOrDefault();
+            return EnemyHasAttackIntent(nextEnemy);
         }
 
         private static bool EnemyUsedDefense(CombatSnapshot previous, CombatSnapshot next)
@@ -520,8 +1843,28 @@ namespace Project2048.Prototype
             }
 
             return next.Phase == CombatPhase.EnemyTurn &&
-                nextEnemy.Intent?.intentType == EnemyIntentType.Defense &&
+                EnemyHasDefenseIntent(nextEnemy) &&
                 nextEnemy.Block > previousEnemy.Block;
+        }
+
+        private static bool EnemyHasAttackIntent(EnemyCombatSnapshot enemy)
+        {
+            if (enemy?.Intents != null && enemy.Intents.Any(intent => intent?.intentType == EnemyIntentType.Attack))
+            {
+                return true;
+            }
+
+            return enemy?.Intent?.intentType == EnemyIntentType.Attack;
+        }
+
+        private static bool EnemyHasDefenseIntent(EnemyCombatSnapshot enemy)
+        {
+            if (enemy?.Intents != null && enemy.Intents.Any(intent => intent?.intentType == EnemyIntentType.Defense))
+            {
+                return true;
+            }
+
+            return enemy?.Intent?.intentType == EnemyIntentType.Defense;
         }
 
         private static bool EnemyAppeared(CombatSnapshot previous, CombatSnapshot next)

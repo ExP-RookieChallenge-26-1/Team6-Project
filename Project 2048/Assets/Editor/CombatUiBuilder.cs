@@ -1,5 +1,6 @@
 #if UNITY_EDITOR
 using System.Collections.Generic;
+using System.IO;
 using Project2048.Combat;
 using Project2048.Enemy;
 using Project2048.Prototype;
@@ -22,12 +23,20 @@ namespace Project2048.PrototypeEditor
     public static class CombatUiBuilder
     {
         private const string KoreanFontAssetPath = "Assets/Fonts/MaruBuri-Regular SDF.asset";
-        private const string DataFolder = "Assets/Data/Prototype";
+        private const string DataFolder = "Assets/Data";
         private const string EnemyFolder = DataFolder + "/Enemies";
         private const string SkillFolder = DataFolder + "/Skills";
         private const string BattleScenePath = "Assets/Scenes/BattleScene.unity";
         private const string PlayerSpritePath = "Assets/Art/Prototype/PrototypePlayerCutout.png";
         private const string EnemySpritePath = "Assets/Art/Prototype/PrototypeEnemyCutout.png";
+        private const string HpBarSpritePath = "Assets/Art/UI/WideHexHpBar.png";
+        private const string HpBarOutlineSpritePath = "Assets/Art/UI/WideHexHpBarOutline.png";
+        private const int HpBarSpriteWidth = 1024;
+        private const int HpBarSpriteHeight = 256;
+        private const int HpBarSpriteSamplesPerAxis = 4;
+        private const float HpBarBorderThickness = 2.75f;
+        private const float HpBarPointLengthPixels = 72f;
+        private const float HpBarOutlineThicknessPixels = 24f;
 
         [MenuItem("Project2048/Generate Combat UI")]
         public static void GenerateCombatUi()
@@ -81,8 +90,12 @@ namespace Project2048.PrototypeEditor
             var playerStatusRoot = EnsureStatusEffectAuthoringRoot(
                 playerBattleHpRoot,
                 "PlayerBattleStatusEffects",
-                new Vector2(0f, -39f));
+                new Vector2(CombatUiView.HpStatusEffectXOffset, -39f));
+            EnsureHpBarAuthoring(playerBattleHpRoot, playerBattleHpFill, CombatUiView.ThemeHpFillColor, CombatUiView.ThemeHpBarBackgroundColor);
             EnsureBlockIconAuthoring(playerBattleHpRoot, font);
+            EnsureHpTextAuthoring(
+                FindHpText(playerBattleHpRoot) ?? so.FindProperty("playerBattleHpText")?.objectReferenceValue as TMP_Text,
+                "0/0");
             SetRef(so, "playerBattleStatusEffectsRoot", playerStatusRoot);
 
             var playerBoardHpFill = so.FindProperty("hpBarFill")?.objectReferenceValue as Image;
@@ -98,8 +111,10 @@ namespace Project2048.PrototypeEditor
                 var playerBoardStatusRoot = EnsureStatusEffectAuthoringRoot(
                     playerBoardHpRoot,
                     "PlayerBoardStatusEffects",
-                    new Vector2(0f, -6f));
+                    new Vector2(CombatUiView.HpStatusEffectXOffset, -6f));
+                EnsureHpBarAuthoring(playerBoardHpRoot, playerBoardHpFill, CombatUiView.ThemeHpFillColor, CombatUiView.ThemeHpBarBackgroundColor);
                 EnsureBlockIconAuthoring(playerBoardHpRoot, font);
+                EnsureHpTextAuthoring(so.FindProperty("hpText")?.objectReferenceValue as TMP_Text, "30/30");
                 SetRef(so, "playerBoardStatusEffectsRoot", playerBoardStatusRoot);
             }
 
@@ -116,13 +131,18 @@ namespace Project2048.PrototypeEditor
                 var enemyStatusRoot = EnsureStatusEffectAuthoringRoot(
                     enemyHpRoot,
                     "EnemyStatusEffects",
-                    new Vector2(0f, -6f));
+                    new Vector2(CombatUiView.HpStatusEffectXOffset, -6f));
+                EnsureHpBarAuthoring(enemyHpRoot, enemyHpFill, CombatUiView.ThemeHpFillColor, CombatUiView.ThemeHpBarBackgroundColor);
                 EnsureBlockIconAuthoring(enemyHpRoot, font);
+                EnsureHpTextAuthoring(
+                    FindHpText(enemyHpRoot) ?? so.FindProperty("enemyHpText")?.objectReferenceValue as TMP_Text,
+                    "0/0");
                 SetRef(so, "enemyStatusEffectsRoot", enemyStatusRoot);
             }
             so.ApplyModifiedPropertiesWithoutUndo();
 
             EditorUtility.SetDirty(view);
+            AssetDatabase.SaveAssets();
             EditorSceneManager.MarkSceneDirty(scene);
             EditorSceneManager.SaveScene(scene);
             Debug.Log("Combat status effect roots ensured.");
@@ -175,7 +195,6 @@ namespace Project2048.PrototypeEditor
         private static PrototypeCombatLoadout EnsurePrototypeDataAssets()
         {
             EnsureFolder("Assets", "Data");
-            EnsureFolder("Assets/Data", "Prototype");
             EnsureFolder(DataFolder, "Enemies");
             EnsureFolder(DataFolder, "Skills");
 
@@ -197,6 +216,7 @@ namespace Project2048.PrototypeEditor
             var player = CreateOrLoadAsset<PlayerSO>(DataFolder + "/PrototypePlayer.asset");
             player.maxHp = 30;
             player.attackPower = 2;
+            player.initialBoardMoveCount = 12;
             player.boardMoveCountBonus = 0;
             player.startingSkills = new List<SkillSO>(skills);
             player.portrait = LoadSprite(PlayerSpritePath) ?? player.portrait;
@@ -340,17 +360,17 @@ namespace Project2048.PrototypeEditor
             refs.IntentBubbleText = CreateLabel(refs.IntentBubble.transform, "IntentBubbleText", "공격 5", 28, TextAlignmentOptions.Center, font);
             SetStretch(refs.IntentBubbleText.rectTransform, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
 
-            CreateStatusBar(parent, "PlayerBattleHp", new Vector2(0.22f, 0.06f), new Vector2(230, 24), new Color(0.06f, 0.18f, 0.08f, 1f), new Color(0.12f, 0.86f, 0.28f, 1f), font, out refs.PlayerBattleHpFill, out refs.PlayerBattleHpText);
+            CreateStatusBar(parent, "PlayerBattleHp", new Vector2(0.22f, 0.06f), new Vector2(300, 20), CombatUiView.ThemeHpBarBackgroundColor, CombatUiView.ThemeHpFillColor, font, out refs.PlayerBattleHpFill, out refs.PlayerBattleHpText);
             refs.PlayerBattleStatusEffectsRoot = EnsureStatusEffectAuthoringRoot(
                 refs.PlayerBattleHpFill.transform.parent as RectTransform,
                 "PlayerBattleStatusEffects",
-                new Vector2(0f, -39f));
+                new Vector2(CombatUiView.HpStatusEffectXOffset, -39f));
             EnsureBlockIconAuthoring(refs.PlayerBattleHpFill.transform.parent as RectTransform, font);
-            CreateStatusBar(parent, "EnemyHp", new Vector2(0.74f, 0.06f), new Vector2(340, 26), new Color(0.20f, 0.04f, 0.04f, 1f), new Color(0.92f, 0.12f, 0.12f, 1f), font, out refs.EnemyHpFill, out refs.EnemyHpText);
+            CreateStatusBar(parent, "EnemyHp", new Vector2(0.74f, 0.06f), new Vector2(420, 20), CombatUiView.ThemeHpBarBackgroundColor, CombatUiView.ThemeHpFillColor, font, out refs.EnemyHpFill, out refs.EnemyHpText);
             refs.EnemyStatusEffectsRoot = EnsureStatusEffectAuthoringRoot(
                 refs.EnemyHpFill.transform.parent as RectTransform,
                 "EnemyStatusEffects",
-                new Vector2(0f, -6f));
+                new Vector2(CombatUiView.HpStatusEffectXOffset, -6f));
             EnsureBlockIconAuthoring(refs.EnemyHpFill.transform.parent as RectTransform, font);
 
             var strike = CreateLabel(parent, "PrototypeVfxText", "*", 76, TextAlignmentOptions.Center, font);
@@ -373,20 +393,26 @@ namespace Project2048.PrototypeEditor
             var boardRect = refs.BoardPanel.GetComponent<RectTransform>();
             SetStretch(boardRect, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
 
-            var hpBg = CreateImage(boardRect, "HpBarBg", new Color(0.20f, 0.06f, 0.06f, 1f));
-            SetAnchor(hpBg.rectTransform, new Vector2(0.27f, 0.92f), new Vector2(360, 28), Vector2.zero);
-            refs.HpBarFill = CreateImage(hpBg.transform, "HpBarFill", new Color(0.12f, 0.86f, 0.28f, 1f));
-            refs.HpBarFill.type = Image.Type.Filled;
-            refs.HpBarFill.fillMethod = Image.FillMethod.Horizontal;
-            refs.HpBarFill.fillOrigin = 0;
-            SetStretch(refs.HpBarFill.rectTransform, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
+            var hpBg = CreateImage(boardRect, "HpBarBg", CombatUiView.ThemeHpBorderColor);
+            SetAnchor(hpBg.rectTransform, new Vector2(0.27f, 0.92f), new Vector2(420, 22), Vector2.zero);
+            var hpSprite = EnsureHpBarSpriteAsset();
+            var hpOutlineSprite = EnsureHpBarOutlineSpriteAsset();
+            ConfigureHpBarRootImage(hpBg);
+            var hpInterior = CreateImage(hpBg.transform, "HpBarInterior", CombatUiView.ThemeHpBarBackgroundColor);
+            ConfigureHpBarSimpleImage(hpInterior, hpSprite, CombatUiView.ThemeHpBarBackgroundColor);
+            refs.HpBarFill = CreateImage(hpBg.transform, "HpBarFill", CombatUiView.ThemeHpFillColor);
+            ConfigureHpBarFilledImage(refs.HpBarFill, hpSprite, CombatUiView.ThemeHpFillColor);
+            EnsureHpBarFeedbackImage(hpBg.rectTransform, "DamageTrailFill", hpSprite, CombatUiView.ThemeHpDamageTrailColor, filled: true);
+            EnsureHpBarFeedbackImage(hpBg.rectTransform, "DamageFlashFill", hpSprite, new Color(1f, 1f, 1f, 0.95f), filled: false);
+            EnsureHpBarOutlineImage(hpBg.rectTransform, hpOutlineSprite);
             refs.PlayerBoardStatusEffectsRoot = EnsureStatusEffectAuthoringRoot(
                 hpBg.rectTransform,
                 "PlayerBoardStatusEffects",
-                new Vector2(0f, -6f));
+                new Vector2(CombatUiView.HpStatusEffectXOffset, -6f));
             EnsureBlockIconAuthoring(hpBg.rectTransform, font);
 
-            refs.HpText = CreateLabel(boardRect, "HpText", "체력 30/30", 24, TextAlignmentOptions.Left, font);
+            refs.HpText = CreateLabel(boardRect, "HpText", "30/30", 24, TextAlignmentOptions.Left, font);
+            ConfigureHpTextAuthoring(refs.HpText);
             SetAnchor(refs.HpText.rectTransform, new Vector2(0.25f, 0.96f), new Vector2(360, 42), Vector2.zero);
 
             refs.TurnLimitText = CreateLabel(boardRect, "TurnLimitText", "제한 턴 : 12회", 30, TextAlignmentOptions.Right, font);
@@ -527,7 +553,6 @@ namespace Project2048.PrototypeEditor
                 randomizeEnemy.boolValue = true;
             }
 
-            so.FindProperty("boardMoveCount").intValue = 12;
             so.FindProperty("autoStartOnPlay").boolValue = true;
             so.FindProperty("enemyTurnDelaySeconds").floatValue = 1.2f;
             so.ApplyModifiedPropertiesWithoutUndo();
@@ -635,19 +660,380 @@ namespace Project2048.PrototypeEditor
             out Image fill,
             out TMP_Text text)
         {
-            var bg = CreateImage(parent, name, bgColor);
+            var hpSprite = EnsureHpBarSpriteAsset();
+            var outlineSprite = EnsureHpBarOutlineSpriteAsset();
+            var bg = CreateImage(parent, name, CombatUiView.ThemeHpBorderColor);
             bg.raycastTarget = false;
             SetAnchor(bg.rectTransform, anchor, size, Vector2.zero);
-            fill = CreateImage(bg.transform, "Fill", fillColor);
-            fill.raycastTarget = false;
-            fill.type = Image.Type.Filled;
-            fill.fillMethod = Image.FillMethod.Horizontal;
-            fill.fillOrigin = 0;
-            SetStretch(fill.rectTransform, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
+            ConfigureHpBarRootImage(bg);
 
-            text = CreateLabel(bg.transform, "Text", "체력 0/0", 18, TextAlignmentOptions.Center, font);
+            var interior = CreateImage(bg.transform, "HpBarInterior", bgColor);
+            ConfigureHpBarSimpleImage(interior, hpSprite, bgColor);
+
+            fill = CreateImage(bg.transform, "Fill", fillColor);
+            ConfigureHpBarFilledImage(fill, hpSprite, fillColor);
+            EnsureHpBarFeedbackImage(bg.rectTransform, "DamageTrailFill", hpSprite, CombatUiView.ThemeHpDamageTrailColor, filled: true);
+            EnsureHpBarFeedbackImage(bg.rectTransform, "DamageFlashFill", hpSprite, new Color(1f, 1f, 1f, 0.95f), filled: false);
+            EnsureHpBarOutlineImage(bg.rectTransform, outlineSprite);
+
+            text = CreateLabel(bg.transform, "Text", "0/0", CombatUiView.HpTextMinFontSize, TextAlignmentOptions.Center, font);
             text.fontStyle = FontStyles.Bold;
+            ConfigureHpTextAuthoring(text);
             SetStretch(text.rectTransform, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
+        }
+
+        private static TMP_Text FindHpText(RectTransform hpRoot)
+        {
+            if (hpRoot == null)
+            {
+                return null;
+            }
+
+            return hpRoot.Find("Text")?.GetComponent<TMP_Text>();
+        }
+
+        private static void EnsureHpTextAuthoring(TMP_Text text, string fallbackText)
+        {
+            if (text == null)
+            {
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(text.text))
+            {
+                text.text = fallbackText;
+            }
+            else if (text.text.StartsWith("체력 "))
+            {
+                text.text = text.text.Substring("체력 ".Length);
+            }
+
+            ConfigureHpTextAuthoring(text);
+            EditorUtility.SetDirty(text);
+        }
+
+        private static void ConfigureHpTextAuthoring(TMP_Text text)
+        {
+            if (text == null)
+            {
+                return;
+            }
+
+            text.color = Color.white;
+            text.fontSize = Mathf.Max(text.fontSize, CombatUiView.HpTextMinFontSize);
+            text.outlineColor = CombatUiView.ThemeHpTextOutlineColor;
+            text.outlineWidth = CombatUiView.HpTextOutlineWidth;
+            text.raycastTarget = false;
+
+            var outline = text.GetComponent<Outline>() ?? text.gameObject.AddComponent<Outline>();
+            outline.effectColor = CombatUiView.ThemeHpTextOutlineColor;
+            outline.effectDistance = new Vector2(CombatUiView.HpTextOutlineDistance, -CombatUiView.HpTextOutlineDistance);
+            outline.useGraphicAlpha = true;
+            EditorUtility.SetDirty(outline);
+        }
+
+        private static void EnsureHpBarAuthoring(RectTransform hpRoot, Image fill, Color fillColor, Color backgroundColor)
+        {
+            if (hpRoot == null)
+            {
+                return;
+            }
+
+            var hpSprite = EnsureHpBarSpriteAsset();
+            var outlineSprite = EnsureHpBarOutlineSpriteAsset();
+            if (hpRoot.TryGetComponent<Image>(out var rootImage))
+            {
+                ConfigureHpBarRootImage(rootImage);
+            }
+
+            var interior = EnsureChildImage(hpRoot, "HpBarInterior");
+            ConfigureHpBarSimpleImage(interior, hpSprite, backgroundColor);
+            if (fill != null)
+            {
+                ConfigureHpBarFilledImage(fill, hpSprite, fillColor);
+            }
+
+            var trail = EnsureHpBarFeedbackImage(hpRoot, "DamageTrailFill", hpSprite, CombatUiView.ThemeHpDamageTrailColor, filled: true);
+            var flash = EnsureHpBarFeedbackImage(hpRoot, "DamageFlashFill", hpSprite, new Color(1f, 1f, 1f, 0.95f), filled: false);
+            var outline = EnsureHpBarOutlineImage(hpRoot, outlineSprite);
+            interior.transform.SetAsFirstSibling();
+            if (trail != null)
+            {
+                trail.transform.SetSiblingIndex(1);
+            }
+
+            if (fill != null)
+            {
+                fill.transform.SetSiblingIndex(2);
+            }
+
+            if (flash != null)
+            {
+                flash.transform.SetSiblingIndex(3);
+                flash.gameObject.SetActive(false);
+            }
+
+            if (outline != null)
+            {
+                outline.transform.SetSiblingIndex(4);
+            }
+
+            EditorUtility.SetDirty(hpRoot);
+        }
+
+        private static Image EnsureChildImage(RectTransform parent, string name)
+        {
+            var child = parent.Find(name) as RectTransform;
+            if (child == null)
+            {
+                var childObject = new GameObject(name, typeof(RectTransform), typeof(Image));
+                childObject.transform.SetParent(parent, false);
+                child = childObject.GetComponent<RectTransform>();
+            }
+
+            var image = child.GetComponent<Image>() ?? child.gameObject.AddComponent<Image>();
+            EditorUtility.SetDirty(child);
+            EditorUtility.SetDirty(image);
+            return image;
+        }
+
+        private static Image EnsureHpBarFeedbackImage(RectTransform parent, string name, Sprite sprite, Color color, bool filled)
+        {
+            var image = EnsureChildImage(parent, name);
+            if (filled)
+            {
+                ConfigureHpBarFilledImage(image, sprite, color);
+            }
+            else
+            {
+                ConfigureHpBarSimpleImage(image, sprite, color);
+            }
+
+            image.raycastTarget = false;
+            return image;
+        }
+
+        private static Image EnsureHpBarOutlineImage(RectTransform parent, Sprite sprite)
+        {
+            var image = EnsureChildImage(parent, "HpBarOutline");
+            image.sprite = sprite;
+            image.type = Image.Type.Simple;
+            image.color = CombatUiView.ThemeHpBorderColor;
+            image.raycastTarget = false;
+            SetStretch(image.rectTransform, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
+            return image;
+        }
+
+        private static void ConfigureHpBarRootImage(Image image)
+        {
+            image.sprite = null;
+            image.type = Image.Type.Simple;
+            image.color = Color.clear;
+            image.raycastTarget = false;
+        }
+
+        private static void ConfigureHpBarSimpleImage(Image image, Sprite sprite, Color color)
+        {
+            image.sprite = sprite;
+            image.type = Image.Type.Simple;
+            image.color = color;
+            image.raycastTarget = false;
+            SetStretch(image.rectTransform, Vector2.zero, Vector2.one, new Vector2(HpBarBorderThickness, HpBarBorderThickness), new Vector2(-HpBarBorderThickness, -HpBarBorderThickness));
+        }
+
+        private static void ConfigureHpBarFilledImage(Image image, Sprite sprite, Color color)
+        {
+            image.sprite = sprite;
+            image.type = Image.Type.Filled;
+            image.fillMethod = Image.FillMethod.Horizontal;
+            image.fillOrigin = (int)Image.OriginHorizontal.Left;
+            image.fillClockwise = true;
+            image.fillAmount = Mathf.Clamp01(image.fillAmount);
+            image.color = color;
+            image.raycastTarget = false;
+            SetStretch(image.rectTransform, Vector2.zero, Vector2.one, new Vector2(HpBarBorderThickness, HpBarBorderThickness), new Vector2(-HpBarBorderThickness, -HpBarBorderThickness));
+        }
+
+        private static Sprite EnsureHpBarSpriteAsset()
+        {
+            var directory = Path.GetDirectoryName(HpBarSpritePath);
+            if (!string.IsNullOrEmpty(directory))
+            {
+                Directory.CreateDirectory(directory);
+            }
+
+            var texture = new Texture2D(HpBarSpriteWidth, HpBarSpriteHeight, TextureFormat.RGBA32, false)
+            {
+                filterMode = FilterMode.Bilinear,
+                wrapMode = TextureWrapMode.Clamp,
+            };
+
+            var pixels = new Color32[HpBarSpriteWidth * HpBarSpriteHeight];
+            for (var y = 0; y < HpBarSpriteHeight; y++)
+            {
+                for (var x = 0; x < HpBarSpriteWidth; x++)
+                {
+                    pixels[y * HpBarSpriteWidth + x] = new Color32(255, 255, 255, CalculateWideHexAlpha(x, y));
+                }
+            }
+
+            texture.SetPixels32(pixels);
+            texture.Apply(updateMipmaps: false, makeNoLongerReadable: false);
+            File.WriteAllBytes(HpBarSpritePath, texture.EncodeToPNG());
+            Object.DestroyImmediate(texture);
+            AssetDatabase.ImportAsset(HpBarSpritePath, ImportAssetOptions.ForceSynchronousImport);
+
+            if (AssetImporter.GetAtPath(HpBarSpritePath) is TextureImporter importer)
+            {
+                importer.textureType = TextureImporterType.Sprite;
+                importer.spriteImportMode = SpriteImportMode.Single;
+                importer.mipmapEnabled = false;
+                importer.alphaIsTransparency = true;
+                importer.filterMode = FilterMode.Bilinear;
+                importer.textureCompression = TextureImporterCompression.Uncompressed;
+                importer.maxTextureSize = 2048;
+                importer.SaveAndReimport();
+            }
+
+            return AssetDatabase.LoadAssetAtPath<Sprite>(HpBarSpritePath);
+        }
+
+        private static Sprite EnsureHpBarOutlineSpriteAsset()
+        {
+            var directory = Path.GetDirectoryName(HpBarOutlineSpritePath);
+            if (!string.IsNullOrEmpty(directory))
+            {
+                Directory.CreateDirectory(directory);
+            }
+
+            var texture = new Texture2D(HpBarSpriteWidth, HpBarSpriteHeight, TextureFormat.RGBA32, false)
+            {
+                filterMode = FilterMode.Bilinear,
+                wrapMode = TextureWrapMode.Clamp,
+            };
+
+            var pixels = new Color32[HpBarSpriteWidth * HpBarSpriteHeight];
+            for (var y = 0; y < HpBarSpriteHeight; y++)
+            {
+                for (var x = 0; x < HpBarSpriteWidth; x++)
+                {
+                    pixels[y * HpBarSpriteWidth + x] = new Color32(255, 255, 255, CalculateWideHexOutlineAlpha(x, y));
+                }
+            }
+
+            texture.SetPixels32(pixels);
+            texture.Apply(updateMipmaps: false, makeNoLongerReadable: false);
+            File.WriteAllBytes(HpBarOutlineSpritePath, texture.EncodeToPNG());
+            Object.DestroyImmediate(texture);
+            AssetDatabase.ImportAsset(HpBarOutlineSpritePath, ImportAssetOptions.ForceSynchronousImport);
+
+            if (AssetImporter.GetAtPath(HpBarOutlineSpritePath) is TextureImporter importer)
+            {
+                importer.textureType = TextureImporterType.Sprite;
+                importer.spriteImportMode = SpriteImportMode.Single;
+                importer.mipmapEnabled = false;
+                importer.alphaIsTransparency = true;
+                importer.filterMode = FilterMode.Bilinear;
+                importer.textureCompression = TextureImporterCompression.Uncompressed;
+                importer.maxTextureSize = 2048;
+                importer.SaveAndReimport();
+            }
+
+            return AssetDatabase.LoadAssetAtPath<Sprite>(HpBarOutlineSpritePath);
+        }
+
+        private static byte CalculateWideHexAlpha(int x, int y)
+        {
+            var insideSamples = 0;
+            for (var sampleY = 0; sampleY < HpBarSpriteSamplesPerAxis; sampleY++)
+            {
+                for (var sampleX = 0; sampleX < HpBarSpriteSamplesPerAxis; sampleX++)
+                {
+                    var samplePosition = new Vector2(
+                        x + (sampleX + 0.5f) / HpBarSpriteSamplesPerAxis,
+                        y + (sampleY + 0.5f) / HpBarSpriteSamplesPerAxis);
+                    if (IsInsideWideHexBar(samplePosition))
+                    {
+                        insideSamples++;
+                    }
+                }
+            }
+
+            var totalSamples = HpBarSpriteSamplesPerAxis * HpBarSpriteSamplesPerAxis;
+            return (byte)Mathf.RoundToInt(255f * insideSamples / totalSamples);
+        }
+
+        private static byte CalculateWideHexOutlineAlpha(int x, int y)
+        {
+            var outlineSamples = 0;
+            for (var sampleY = 0; sampleY < HpBarSpriteSamplesPerAxis; sampleY++)
+            {
+                for (var sampleX = 0; sampleX < HpBarSpriteSamplesPerAxis; sampleX++)
+                {
+                    var samplePosition = new Vector2(
+                        x + (sampleX + 0.5f) / HpBarSpriteSamplesPerAxis,
+                        y + (sampleY + 0.5f) / HpBarSpriteSamplesPerAxis);
+                    if (IsInsideWideHexBar(samplePosition) &&
+                        CalculateDistanceToWideHexEdge(samplePosition) <= HpBarOutlineThicknessPixels)
+                    {
+                        outlineSamples++;
+                    }
+                }
+            }
+
+            var totalSamples = HpBarSpriteSamplesPerAxis * HpBarSpriteSamplesPerAxis;
+            return (byte)Mathf.RoundToInt(255f * outlineSamples / totalSamples);
+        }
+
+        private static bool IsInsideWideHexBar(Vector2 point)
+        {
+            if (point.y < 0f || point.y > HpBarSpriteHeight)
+            {
+                return false;
+            }
+
+            var leftInset = CalculateWideHexLeftInset(point.y);
+            return point.x >= leftInset && point.x <= HpBarSpriteWidth - leftInset;
+        }
+
+        private static float CalculateDistanceToWideHexEdge(Vector2 point)
+        {
+            var halfHeight = HpBarSpriteHeight * 0.5f;
+            var leftPoint = new Vector2(0f, halfHeight);
+            var topLeft = new Vector2(HpBarPointLengthPixels, 0f);
+            var topRight = new Vector2(HpBarSpriteWidth - HpBarPointLengthPixels, 0f);
+            var rightPoint = new Vector2(HpBarSpriteWidth, halfHeight);
+            var bottomRight = new Vector2(HpBarSpriteWidth - HpBarPointLengthPixels, HpBarSpriteHeight);
+            var bottomLeft = new Vector2(HpBarPointLengthPixels, HpBarSpriteHeight);
+
+            var distance = DistanceToSegment(point, leftPoint, topLeft);
+            distance = Mathf.Min(distance, DistanceToSegment(point, topLeft, topRight));
+            distance = Mathf.Min(distance, DistanceToSegment(point, topRight, rightPoint));
+            distance = Mathf.Min(distance, DistanceToSegment(point, rightPoint, bottomRight));
+            distance = Mathf.Min(distance, DistanceToSegment(point, bottomRight, bottomLeft));
+            distance = Mathf.Min(distance, DistanceToSegment(point, bottomLeft, leftPoint));
+            return distance;
+        }
+
+        private static float CalculateWideHexLeftInset(float y)
+        {
+            var clampedY = Mathf.Clamp(y, 0f, HpBarSpriteHeight);
+            var halfHeight = HpBarSpriteHeight * 0.5f;
+            var distanceFromCenter = Mathf.Abs(clampedY - halfHeight);
+            return HpBarPointLengthPixels * distanceFromCenter / halfHeight;
+        }
+
+        private static float DistanceToSegment(Vector2 point, Vector2 start, Vector2 end)
+        {
+            var segment = end - start;
+            var lengthSquared = Vector2.Dot(segment, segment);
+            if (lengthSquared <= Mathf.Epsilon)
+            {
+                return Vector2.Distance(point, start);
+            }
+
+            var t = Mathf.Clamp01(Vector2.Dot(point - start, segment) / lengthSquared);
+            return Vector2.Distance(point, start + segment * t);
         }
 
         private static void SetStretch(RectTransform rect, Vector2 anchorMin, Vector2 anchorMax, Vector2 offsetMin, Vector2 offsetMax)
@@ -765,12 +1151,13 @@ namespace Project2048.PrototypeEditor
                 var rootObject = new GameObject(rootName, typeof(RectTransform), typeof(HorizontalLayoutGroup));
                 rootObject.transform.SetParent(hpRoot, false);
                 root = rootObject.GetComponent<RectTransform>();
-                root.anchorMin = new Vector2(0f, 0f);
-                root.anchorMax = new Vector2(0f, 0f);
-                root.pivot = new Vector2(0f, 1f);
-                root.anchoredPosition = anchoredPosition;
-                root.sizeDelta = new Vector2(160f, 32f);
             }
+
+            root.anchorMin = new Vector2(0f, 0f);
+            root.anchorMax = new Vector2(0f, 0f);
+            root.pivot = new Vector2(0f, 1f);
+            root.anchoredPosition = anchoredPosition;
+            root.sizeDelta = new Vector2(160f, 32f);
 
             var layout = root.GetComponent<HorizontalLayoutGroup>();
             if (layout == null)
@@ -837,12 +1224,13 @@ namespace Project2048.PrototypeEditor
                 var iconObject = new GameObject("BlockIcon", typeof(RectTransform), typeof(Image));
                 iconObject.transform.SetParent(hpRoot, false);
                 icon = iconObject.GetComponent<RectTransform>();
-                icon.anchorMin = new Vector2(1f, 0.5f);
-                icon.anchorMax = new Vector2(1f, 0.5f);
-                icon.pivot = new Vector2(0f, 0.5f);
-                icon.anchoredPosition = new Vector2(8f, 0f);
-                icon.sizeDelta = new Vector2(34f, 24f);
             }
+
+            icon.anchorMin = new Vector2(1f, 0.5f);
+            icon.anchorMax = new Vector2(1f, 0.5f);
+            icon.pivot = new Vector2(0f, 0.5f);
+            icon.anchoredPosition = new Vector2(12f, 0f);
+            icon.sizeDelta = new Vector2(34f, 24f);
 
             var image = icon.GetComponent<Image>() ?? icon.gameObject.AddComponent<Image>();
             image.color = new Color(0.42f, 0.46f, 0.5f, 0.95f);

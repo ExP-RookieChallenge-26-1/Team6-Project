@@ -68,6 +68,7 @@ namespace Project2048.Combat
         public bool IsDead { get; set; }
         public string AiProfileLabel { get; set; }
         public EnemyIntent Intent { get; set; }
+        public List<EnemyIntent> Intents { get; set; } = new();
         public List<CombatStatusEffectSnapshot> StatusEffects { get; set; } = new();
     }
 

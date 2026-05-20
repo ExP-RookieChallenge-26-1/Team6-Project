@@ -9,16 +9,20 @@ namespace Project2048.Presentation
         public AudioClip sfxClip;
         public GameObject vfxPrefab;
         public AnimationClip animationClip;
+        public CombatParticleEffectBinding particleEffect;
         [Min(0f)] public float volumeScale = 1f;
         [Min(0.01f)] public float minPitch = 1f;
         [Min(0.01f)] public float maxPitch = 1f;
+        [Min(0f)] public float sfxDelaySeconds;
         public Vector3 localOffset;
         [Min(0f)] public float autoDestroySeconds = 1.25f;
 
-        public bool HasAnyAsset => sfxClip != null || vfxPrefab != null || animationClip != null;
+        public bool HasAnyAsset => sfxClip != null || HasAuthoredVisual;
+        public bool HasAuthoredVisual => vfxPrefab != null || animationClip != null || (particleEffect?.HasParticleVisual ?? false);
         public float EffectiveVolumeScale => Mathf.Max(0f, volumeScale);
         public float EffectiveMinPitch => Mathf.Max(0.01f, Mathf.Min(minPitch, maxPitch));
         public float EffectiveMaxPitch => Mathf.Max(0.01f, Mathf.Max(minPitch, maxPitch));
+        public float EffectiveSfxDelaySeconds => Mathf.Max(0f, sfxDelaySeconds);
         public float EffectiveAutoDestroySeconds => Mathf.Max(0f, autoDestroySeconds);
 
         public float ResolvePitch()

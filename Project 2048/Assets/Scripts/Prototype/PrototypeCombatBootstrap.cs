@@ -25,7 +25,6 @@ namespace Project2048.Prototype
         [SerializeField] private RewardTableSO rewardTable;
         [SerializeField] private List<EnemySO> enemyPool = new();
         [SerializeField] private bool randomizeEnemyOnStart = true;
-        [SerializeField] private int boardMoveCount = 4;
         [SerializeField] private bool autoStartOnPlay = true;
         [SerializeField] private float enemyTurnDelaySeconds = 1.2f;
         [SerializeField] private RunProgress runProgress = new();
@@ -121,7 +120,6 @@ namespace Project2048.Prototype
             {
                 playerData = setupPlayerData,
                 enemyDataList = new List<EnemySO> { setupEnemyData },
-                boardMoveCount = boardMoveCount,
                 runProgress = runProgress,
             });
         }

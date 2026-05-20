@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Project2048.Audio;
 using Project2048.Board2048;
 using Project2048.Combat;
 using Project2048.Enemy;
@@ -10,6 +11,7 @@ using Project2048.Score;
 using Project2048.Skills;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -29,6 +31,24 @@ namespace Project2048.Prototype
         public const float BoardToActionPanelDelaySeconds = 0.45f;
         public const float CombatVfxDurationSeconds = 0.65f;
         public const float EnemyDeathFadeDurationSeconds = 0.6f;
+        public const float HpDamageTrailDelaySeconds = 0.25f;
+        public const float HpDamageTrailDurationSeconds = 0.55f;
+        public const float HpHitShakeDurationSeconds = 0.12f;
+        public static readonly Color ThemeHpFillColor = new(73f / 255f, 175f / 255f, 181f / 255f, 1f);
+        public static readonly Color ThemeHpDarkColor = new(12f / 255f, 13f / 255f, 14f / 255f, 1f);
+        public static readonly Color ThemeHpBarBackgroundColor = ThemeHpDarkColor;
+        public static readonly Color ThemeHpDamageTrailColor = new(20f / 255f, 79f / 255f, 84f / 255f, 0.90f);
+        public static readonly Color ThemeHpTextOutlineColor = new(42f / 255f, 127f / 255f, 133f / 255f, 1f);
+        public static readonly Color ThemeHpBorderColor = new(0f, 0f, 0f, 1f);
+        public const float HpStatusEffectXOffset = 18f;
+        public const float HpTextMinFontSize = 22f;
+        public const float HpTextOutlineWidth = 0.26f;
+        public const float HpTextOutlineDistance = 1.65f;
+        private const float HpDamageFlashDurationSeconds = 0.12f;
+        private const float HpHitShakeMagnitude = 12f;
+        private const float HpBarBorderThickness = 2.75f;
+        private const string HpBarInteriorName = "HpBarInterior";
+        private const string HpBarOutlineName = "HpBarOutline";
         private const float UiSfxDistance = 10000f;
 
         [Header("Top bar")]
@@ -45,6 +65,7 @@ namespace Project2048.Prototype
         [SerializeField] private TMP_Text playerBattleHpText;
         [SerializeField] private Image enemyHpBarFill;
         [SerializeField] private TMP_Text enemyHpText;
+        [SerializeField] private GameObject enemyHpRoot;
         [SerializeField] private RectTransform playerBattleStatusEffectsRoot;
         [SerializeField] private RectTransform enemyStatusEffectsRoot;
         [SerializeField] private GameObject statusTooltip;
@@ -101,6 +122,8 @@ namespace Project2048.Prototype
 
         [Header("Board effects")]
         [SerializeField] private AudioSource audioSource;
+        [SerializeField] private AudioMixerGroup sfxMixerGroup;
+        [SerializeField] private SimpleBgmDucker bgmDucker;
         [SerializeField] private BoardTileEffectProfileSO boardTileEffectProfile;
 
         [Header("Theme")]
@@ -112,9 +135,12 @@ namespace Project2048.Prototype
         [SerializeField] private Color defenseIntentColor = new(0.12f, 0.32f, 0.90f, 1f);
         [SerializeField] private Color darknessIntentColor = new(0.20f, 0.07f, 0.34f, 1f);
         [SerializeField] private Color fearIntentColor = new(0.45f, 0.03f, 0.06f, 1f);
-        [SerializeField] private Color playerHpFillColor = new(0.18f, 0.86f, 0.34f, 1f);
-        [SerializeField] private Color enemyHpFillColor = new(0.88f, 0.14f, 0.14f, 1f);
-        [SerializeField] private Color hpBarBackgroundColor = new(0.08f, 0.09f, 0.10f, 1f);
+        [SerializeField] private Color playerHpFillColor = ThemeHpFillColor;
+        [SerializeField] private Color enemyHpFillColor = ThemeHpFillColor;
+        [SerializeField] private Color hpBarBackgroundColor = ThemeHpBarBackgroundColor;
+        [SerializeField] private Color playerHpDamageTrailColor = ThemeHpDamageTrailColor;
+        [SerializeField] private Color hpDamageTrailColor = ThemeHpDamageTrailColor;
+        [SerializeField] private Color hpDamageFlashColor = new(1f, 1f, 1f, 0.95f);
         [SerializeField] private Color blockFrameColor = new(0.66f, 0.70f, 0.74f, 1f);
         [SerializeField] private Color blockIconColor = new(0.42f, 0.46f, 0.50f, 0.95f);
         [SerializeField] private Color buffStatusColor = new(0.20f, 0.46f, 0.30f, 0.95f);
@@ -131,11 +157,18 @@ namespace Project2048.Prototype
         private Coroutine boardAnimationCoroutine;
         private Coroutine combatVfxCoroutine;
         private Coroutine enemyDeathFadeCoroutine;
+        private Coroutine enemyHpHideCoroutine;
         private bool boardTransitionAnimating;
         private bool lastEnemyWasDead;
         private int lastPlayedCombatVfxSequence;
         private RectTransform combatVfxPulseRect;
         private Vector3 combatVfxOriginalScale = Vector3.one;
+        private readonly Dictionary<Image, float> hpMainFillRatios = new();
+        private readonly Dictionary<Image, float> hpDamageTrailRatios = new();
+        private readonly Dictionary<Image, Coroutine> hpDamageTrailCoroutines = new();
+        private readonly Dictionary<Image, Coroutine> hpDamageFlashCoroutines = new();
+        private readonly Dictionary<Image, Coroutine> hpHitShakeCoroutines = new();
+        private readonly Dictionary<RectTransform, Vector2> hpHitShakeRestPositions = new();
 
         private void Awake()
         {
@@ -192,6 +225,8 @@ namespace Project2048.Prototype
             ClearBoardAnimationOverlay();
             ClearCombatVfx();
             ClearEnemyDeathFade();
+            ClearEnemyHpHide();
+            ClearHpDamageTrailAnimations();
         }
 
         private void UnbindCombatEvents()
@@ -285,6 +320,13 @@ namespace Project2048.Prototype
             }
 
             button.onClick.RemoveAllListeners();
+            var clickEmitter = button.GetComponent<ButtonClickAudioEmitter>();
+            if (clickEmitter == null)
+            {
+                clickEmitter = button.gameObject.AddComponent<ButtonClickAudioEmitter>();
+            }
+
+            clickEmitter.EnsureBound();
             button.onClick.AddListener(() =>
             {
                 handler?.Invoke();
@@ -383,6 +425,7 @@ namespace Project2048.Prototype
 
             RenderTopBar();
             RenderBattleScene();
+            RenderBoardPlayerStatus();
             RenderPanelVisibility();
 
             switch (uiState.ScreenMode)
@@ -420,6 +463,7 @@ namespace Project2048.Prototype
         {
             var enemy = snapshot?.Enemies?.FirstOrDefault();
             var player = snapshot?.Player;
+            var enemyIsAlive = enemy != null && !enemy.IsDead;
             if (enemyNameText != null)
             {
                 var enemyStatusFallback = enemyHpText == null && enemy != null
@@ -437,16 +481,17 @@ namespace Project2048.Prototype
 
             if (intentBubble != null)
             {
-                var hasIntent = enemy?.Intent != null && !enemy.IsDead;
+                var visibleIntents = GetVisibleIntents(enemy);
+                var hasIntent = visibleIntents.Count > 0 && enemyIsAlive;
                 intentBubble.SetActive(hasIntent);
                 if (hasIntent && intentBubbleText != null)
                 {
-                    intentBubbleText.text = PrototypeCombatText.FormatIntent(enemy.Intent);
+                    intentBubbleText.text = PrototypeCombatText.FormatIntents(visibleIntents);
                 }
 
                 if (hasIntent && intentBubble.TryGetComponent<Image>(out var intentBubbleImage))
                 {
-                    intentBubbleImage.color = GetIntentBubbleColor(enemy.Intent);
+                    intentBubbleImage.color = GetIntentBubbleColor(visibleIntents[0]);
                 }
             }
 
@@ -489,6 +534,19 @@ namespace Project2048.Prototype
             SetBlockIndicator(playerBattleHpBarFill, player?.Block ?? 0);
             RenderStatusEffects(playerBattleStatusEffectsRoot, player?.StatusEffects);
 
+            if (enemyIsAlive)
+            {
+                ShowEnemyHp();
+            }
+            else if (enemy != null)
+            {
+                HideEnemyHpAfterDamageTrail();
+            }
+            else
+            {
+                HideEnemyHpImmediately();
+            }
+
             if (enemyHpBarFill != null && enemy != null && enemy.MaxHp > 0)
             {
                 SetHpBarValue(enemyHpBarFill, enemy.CurrentHp, enemy.MaxHp);
@@ -499,8 +557,8 @@ namespace Project2048.Prototype
                 enemyHpText.text = PrototypeCombatText.FormatEnemyHp(enemy.CurrentHp, enemy.MaxHp, enemy.Block);
             }
 
-            SetBlockIndicator(enemyHpBarFill, enemy?.Block ?? 0);
-            RenderStatusEffects(enemyStatusEffectsRoot, enemy?.StatusEffects);
+            SetBlockIndicator(enemyHpBarFill, enemyIsAlive ? enemy.Block : 0);
+            RenderStatusEffects(enemyStatusEffectsRoot, enemyIsAlive ? enemy.StatusEffects : null);
 
             if (actionDescriptionText != null)
             {
@@ -575,20 +633,6 @@ namespace Project2048.Prototype
                 return;
             }
 
-            var player = snapshot.Player;
-            if (hpBarFill != null && player != null && player.MaxHp > 0)
-            {
-                SetHpBarValue(hpBarFill, player.CurrentHp, player.MaxHp);
-            }
-
-            if (hpText != null && player != null)
-            {
-                hpText.text = PrototypeCombatText.FormatPlayerHp(player.CurrentHp, player.MaxHp, player.Block);
-            }
-
-            SetBlockIndicator(hpBarFill, player?.Block ?? 0);
-            RenderStatusEffects(playerBoardStatusEffectsRoot, player?.StatusEffects);
-
             if (turnLimitText != null)
             {
                 turnLimitText.text = PrototypeCombatText.FormatRemainingMoves(snapshot.RemainingBoardMoves);
@@ -605,7 +649,7 @@ namespace Project2048.Prototype
                 }
 
                 var value = snapshot.Board[row, col];
-                cell.SetValue(value, emptyCellColor, filledCellColor, highlightCellColor, obstacleCellColor);
+                cell.SetValue(value, emptyCellColor, filledCellColor, highlightCellColor, GetObstacleCellColor());
             }
         }
 
@@ -803,7 +847,7 @@ namespace Project2048.Prototype
         {
             if (value < 0)
             {
-                return obstacleCellColor;
+                return GetObstacleCellColor();
             }
 
             if (value == 0)
@@ -918,10 +962,83 @@ namespace Project2048.Prototype
             return intent.intentType switch
             {
                 EnemyIntentType.Defense => defenseIntentColor,
-                EnemyIntentType.Debuff when intent.debuffType == DebuffType.Darkness => darknessIntentColor,
-                EnemyIntentType.Debuff when intent.debuffType == DebuffType.Fear => fearIntentColor,
+                EnemyIntentType.Debuff => GetDebuffColor(intent.debuffType),
                 _ => attackIntentColor,
             };
+        }
+
+        private Color GetStatusEffectColor(CombatStatusEffectSnapshot effect)
+        {
+            if (effect == null || string.IsNullOrWhiteSpace(effect.Id))
+            {
+                return debuffStatusColor;
+            }
+
+            if (effect.Id == "attack-up" || effect.Id == "attack-down")
+            {
+                return WithAlpha(attackIntentColor, 0.95f);
+            }
+
+            if (effect.Id == "fear")
+            {
+                return WithAlpha(GetDebuffColor(DebuffType.Fear), 0.95f);
+            }
+
+            if (effect.Id == "darkness")
+            {
+                return WithAlpha(GetDebuffColor(DebuffType.Darkness), 0.95f);
+            }
+
+            return effect.IsBuff ? buffStatusColor : debuffStatusColor;
+        }
+
+        private Color GetDebuffColor(DebuffType debuffType)
+        {
+            return debuffType switch
+            {
+                DebuffType.Darkness => darknessIntentColor,
+                DebuffType.Fear => fearIntentColor,
+                _ => debuffStatusColor,
+            };
+        }
+
+        private Color GetObstacleCellColor()
+        {
+            return GetDebuffColor(DebuffType.Darkness);
+        }
+
+        private static Color WithAlpha(Color color, float alpha)
+        {
+            color.a = alpha;
+            return color;
+        }
+
+        private static List<EnemyIntent> GetVisibleIntents(EnemyCombatSnapshot enemy)
+        {
+            var intents = new List<EnemyIntent>();
+            if (enemy?.Intents != null)
+            {
+                foreach (var intent in enemy.Intents)
+                {
+                    if (intent == null)
+                    {
+                        continue;
+                    }
+
+                    intents.Add(intent);
+                    if (intents.Count >= EnemySO.MaximumActionsPerTurn)
+                    {
+                        break;
+                    }
+                }
+            }
+
+            if (intents.Count == 0 && enemy?.Intent != null)
+            {
+                intents.Add(enemy.Intent);
+            }
+
+            return intents;
         }
 
         private void ResolveMissingReferences()
@@ -937,6 +1054,7 @@ namespace Project2048.Prototype
             playerBattleHpText ??= FindNestedComponentByName<TMP_Text>("PlayerBattleHp", "Text");
             enemyHpBarFill ??= FindNestedComponentByName<Image>("EnemyHp", "Fill");
             enemyHpText ??= FindNestedComponentByName<TMP_Text>("EnemyHp", "Text");
+            ResolveEnemyHpRoot();
             playerBattleStatusEffectsRoot ??= FindComponentInChildrenByName<RectTransform>("PlayerBattleStatusEffects");
             enemyStatusEffectsRoot ??= FindComponentInChildrenByName<RectTransform>("EnemyStatusEffects");
             statusTooltip ??= FindChildByName("StatusTooltip")?.gameObject;
@@ -948,18 +1066,105 @@ namespace Project2048.Prototype
             enemyTurnText ??= FindComponentInChildrenByName<TMP_Text>("EnemyTurnText");
         }
 
+        private void ResolveEnemyHpRoot()
+        {
+            if (enemyHpRoot != null)
+            {
+                return;
+            }
+
+            enemyHpRoot = FindChildByName("EnemyHp")?.gameObject
+                ?? enemyHpBarFill?.transform.parent?.gameObject
+                ?? enemyHpText?.transform.parent?.gameObject;
+        }
+
+        private void SetEnemyHpVisible(bool visible)
+        {
+            ResolveEnemyHpRoot();
+            if (enemyHpRoot != null && enemyHpRoot.activeSelf != visible)
+            {
+                enemyHpRoot.SetActive(visible);
+            }
+        }
+
+        private void ShowEnemyHp()
+        {
+            ClearEnemyHpHide();
+            SetEnemyHpVisible(true);
+        }
+
+        private void HideEnemyHpImmediately()
+        {
+            ClearEnemyHpHide();
+            SetEnemyHpVisible(false);
+        }
+
+        private void HideEnemyHpAfterDamageTrail()
+        {
+            ResolveEnemyHpRoot();
+            if (enemyHpRoot == null || enemyHpHideCoroutine != null || !enemyHpRoot.activeSelf)
+            {
+                return;
+            }
+
+            if (!Application.isPlaying || !isActiveAndEnabled)
+            {
+                SetEnemyHpVisible(false);
+                return;
+            }
+
+            enemyHpHideCoroutine = StartCoroutine(EnemyHpHideAfterDamageTrailRoutine());
+        }
+
+        private IEnumerator EnemyHpHideAfterDamageTrailRoutine()
+        {
+            var delaySeconds = HpDamageTrailDelaySeconds + HpDamageTrailDurationSeconds + 0.05f;
+            if (delaySeconds > 0f)
+            {
+                yield return new WaitForSecondsRealtime(delaySeconds);
+            }
+
+            SetEnemyHpVisible(false);
+            enemyHpHideCoroutine = null;
+        }
+
+        private void ClearEnemyHpHide()
+        {
+            if (enemyHpHideCoroutine != null)
+            {
+                StopCoroutine(enemyHpHideCoroutine);
+                enemyHpHideCoroutine = null;
+            }
+        }
+
         private void EnsureHpBarDefaults()
         {
-            ConfigureHpBarFill(playerBattleHpBarFill, playerHpFillColor, hpBarBackgroundColor);
-            ConfigureHpBarFill(enemyHpBarFill, enemyHpFillColor, hpBarBackgroundColor);
-            ConfigureHpBarFill(hpBarFill, playerHpFillColor, hpBarBackgroundColor);
+            NormalizeHpBarTheme();
+            ConfigureHpText(playerBattleHpText);
+            ConfigureHpText(enemyHpText);
+            ConfigureHpText(hpText);
+            ConfigureHpBarFill(playerBattleHpBarFill, hpBarBackgroundColor);
+            ConfigureHpBarFill(enemyHpBarFill, hpBarBackgroundColor);
+            ConfigureHpBarFill(hpBarFill, hpBarBackgroundColor);
+            EnsureDamageTrailFill(playerBattleHpBarFill);
+            EnsureDamageTrailFill(enemyHpBarFill);
+            EnsureDamageTrailFill(hpBarFill);
             playerBoardStatusEffectsRoot = EnsureStatusEffectsRoot(hpBarFill, "PlayerBoardStatusEffects") ?? playerBoardStatusEffectsRoot;
             playerBattleStatusEffectsRoot = EnsureStatusEffectsRoot(playerBattleHpBarFill, "PlayerBattleStatusEffects") ?? playerBattleStatusEffectsRoot;
             enemyStatusEffectsRoot = EnsureStatusEffectsRoot(enemyHpBarFill, "EnemyStatusEffects") ?? enemyStatusEffectsRoot;
             EnsureStatusTooltip();
         }
 
-        private static void ConfigureHpBarFill(Image fillImage, Color fillColor, Color backgroundColor)
+        private void NormalizeHpBarTheme()
+        {
+            playerHpFillColor = ThemeHpFillColor;
+            enemyHpFillColor = ThemeHpFillColor;
+            hpBarBackgroundColor = ThemeHpBarBackgroundColor;
+            playerHpDamageTrailColor = ThemeHpDamageTrailColor;
+            hpDamageTrailColor = ThemeHpDamageTrailColor;
+        }
+
+        private static void ConfigureHpBarFill(Image fillImage, Color backgroundColor)
         {
             if (fillImage == null)
             {
@@ -971,34 +1176,562 @@ namespace Project2048.Prototype
             fillImage.fillOrigin = (int)Image.OriginHorizontal.Left;
             fillImage.fillClockwise = true;
             fillImage.fillAmount = Mathf.Clamp01(fillImage.fillAmount);
-            fillImage.color = fillColor;
+            fillImage.color = ThemeHpFillColor;
             fillImage.raycastTarget = false;
 
             var rectTransform = fillImage.rectTransform;
-            rectTransform.anchorMin = Vector2.zero;
-            rectTransform.anchorMax = Vector2.one;
-            rectTransform.offsetMin = Vector2.zero;
-            rectTransform.offsetMax = Vector2.zero;
+            ConfigureHpBarContentRect(rectTransform);
             rectTransform.pivot = new Vector2(0f, 0.5f);
 
             if (fillImage.transform.parent != null &&
                 fillImage.transform.parent.TryGetComponent<Image>(out var backgroundImage))
             {
-                backgroundImage.color = backgroundColor;
+                backgroundImage.type = Image.Type.Simple;
+                backgroundImage.color = Color.clear;
                 backgroundImage.raycastTarget = false;
+            }
+
+            var hpRoot = ResolveHpRoot(fillImage);
+            var interior = hpRoot != null ? hpRoot.Find(HpBarInteriorName)?.GetComponent<Image>() : null;
+            if (interior != null)
+            {
+                interior.sprite = fillImage.sprite;
+                interior.type = Image.Type.Simple;
+                interior.color = backgroundColor;
+                interior.raycastTarget = false;
+                ConfigureHpBarContentRect(interior.rectTransform);
+            }
+
+            SetHpBarLayerOrder(hpRoot, fillImage, null, null);
+            ConfigureHpBarOutline(hpRoot);
+        }
+
+        private static void ConfigureHpBarOutline(RectTransform hpRoot)
+        {
+            var outline = hpRoot != null ? hpRoot.Find(HpBarOutlineName)?.GetComponent<Image>() : null;
+            if (outline == null)
+            {
+                return;
+            }
+
+            outline.type = Image.Type.Simple;
+            outline.color = ThemeHpBorderColor;
+            outline.raycastTarget = false;
+            var outlineRect = outline.rectTransform;
+            outlineRect.anchorMin = Vector2.zero;
+            outlineRect.anchorMax = Vector2.one;
+            outlineRect.offsetMin = Vector2.zero;
+            outlineRect.offsetMax = Vector2.zero;
+            outline.transform.SetAsLastSibling();
+        }
+
+        private static void ConfigureHpText(TMP_Text text)
+        {
+            if (text == null)
+            {
+                return;
+            }
+
+            text.color = Color.white;
+            text.fontSize = Mathf.Max(text.fontSize, HpTextMinFontSize);
+            text.outlineColor = ThemeHpTextOutlineColor;
+            text.outlineWidth = HpTextOutlineWidth;
+            var outline = text.GetComponent<Outline>();
+            if (outline != null)
+            {
+                outline.effectColor = ThemeHpTextOutlineColor;
+                outline.effectDistance = new Vector2(HpTextOutlineDistance, -HpTextOutlineDistance);
+                outline.useGraphicAlpha = true;
             }
         }
 
-        private static void SetHpBarValue(Image fillImage, int currentHp, int maxHp)
+        private void RenderBoardPlayerStatus()
+        {
+            var player = snapshot?.Player;
+            if (hpBarFill != null && player != null && player.MaxHp > 0)
+            {
+                SetHpBarValue(hpBarFill, player.CurrentHp, player.MaxHp);
+            }
+
+            if (hpText != null && player != null)
+            {
+                hpText.text = PrototypeCombatText.FormatPlayerHp(player.CurrentHp, player.MaxHp, player.Block);
+            }
+
+            SetBlockIndicator(hpBarFill, player?.Block ?? 0);
+            RenderStatusEffects(playerBoardStatusEffectsRoot, player?.StatusEffects);
+        }
+
+        private static void ConfigureHpBarContentRect(RectTransform rectTransform)
+        {
+            if (rectTransform == null)
+            {
+                return;
+            }
+
+            rectTransform.anchorMin = Vector2.zero;
+            rectTransform.anchorMax = Vector2.one;
+            rectTransform.offsetMin = new Vector2(HpBarBorderThickness, HpBarBorderThickness);
+            rectTransform.offsetMax = new Vector2(-HpBarBorderThickness, -HpBarBorderThickness);
+        }
+
+        private void SetHpBarValue(Image fillImage, int currentHp, int maxHp)
         {
             var ratio = maxHp > 0 ? Mathf.Clamp01(currentHp / (float)maxHp) : 0f;
+            var damageTrailFill = EnsureDamageTrailFill(fillImage);
+            var hasPreviousMainRatio = hpMainFillRatios.TryGetValue(fillImage, out var previousMainRatio);
+            if (!hasPreviousMainRatio)
+            {
+                previousMainRatio = ratio;
+            }
+
+            SetHpFillRatio(fillImage, ratio);
+
+            if (damageTrailFill != null)
+            {
+                if (!hasPreviousMainRatio)
+                {
+                    SetHpDamageTrailRatio(fillImage, damageTrailFill, ratio);
+                }
+                else if (ratio < previousMainRatio - 0.001f)
+                {
+                    var startRatio = Mathf.Max(ResolveHpDamageTrailRatio(fillImage), previousMainRatio);
+                    SetHpDamageTrailRatio(fillImage, damageTrailFill, startRatio);
+                    PlayHpDamageFlash(fillImage, startRatio, ratio);
+                    PlayHpHitShake(fillImage);
+                    PlayHpDamageTrail(fillImage, damageTrailFill, startRatio, ratio);
+                }
+                else if (ratio > previousMainRatio + 0.001f)
+                {
+                    StopHpDamageTrail(fillImage);
+                    StopHpDamageFlash(fillImage, hideFlash: true);
+                    SetHpDamageTrailRatio(fillImage, damageTrailFill, ratio);
+                }
+            }
+
+            hpMainFillRatios[fillImage] = ratio;
+        }
+
+        private static void SetHpFillRatio(Image fillImage, float ratio, bool applyFixedThemeColor = true)
+        {
+            if (fillImage == null)
+            {
+                return;
+            }
+
+            ratio = Mathf.Clamp01(ratio);
+            if (applyFixedThemeColor)
+            {
+                fillImage.color = ThemeHpFillColor;
+            }
+
             fillImage.fillAmount = ratio;
 
             var rectTransform = fillImage.rectTransform;
             rectTransform.anchorMin = new Vector2(0f, 0f);
-            rectTransform.anchorMax = new Vector2(ratio, 1f);
-            rectTransform.offsetMin = Vector2.zero;
-            rectTransform.offsetMax = Vector2.zero;
+            rectTransform.anchorMax = new Vector2(1f, 1f);
+            rectTransform.offsetMin = new Vector2(HpBarBorderThickness, HpBarBorderThickness);
+            rectTransform.offsetMax = new Vector2(-HpBarBorderThickness, -HpBarBorderThickness);
+        }
+
+        private Image EnsureDamageTrailFill(Image fillImage)
+        {
+            var hpRoot = ResolveHpRoot(fillImage);
+            if (fillImage == null || hpRoot == null)
+            {
+                return null;
+            }
+
+            var existing = hpRoot.Find("DamageTrailFill");
+            Image trailImage;
+            RectTransform trailRect;
+            if (existing != null)
+            {
+                trailImage = existing.GetComponent<Image>();
+                if (trailImage == null)
+                {
+                    trailImage = existing.gameObject.AddComponent<Image>();
+                }
+
+                trailRect = existing as RectTransform ?? existing.gameObject.AddComponent<RectTransform>();
+            }
+            else
+            {
+                var trailObject = new GameObject("DamageTrailFill", typeof(RectTransform), typeof(Image));
+                trailObject.transform.SetParent(hpRoot, false);
+                trailImage = trailObject.GetComponent<Image>();
+                trailRect = trailObject.GetComponent<RectTransform>();
+            }
+
+            trailImage.sprite = fillImage.sprite;
+            trailImage.type = Image.Type.Filled;
+            trailImage.fillMethod = Image.FillMethod.Horizontal;
+            trailImage.fillOrigin = (int)Image.OriginHorizontal.Left;
+            trailImage.fillClockwise = true;
+            trailImage.color = ResolveHpDamageTrailColor(fillImage);
+            trailImage.raycastTarget = false;
+
+            trailRect.anchorMin = Vector2.zero;
+            trailRect.anchorMax = Vector2.one;
+            ConfigureHpBarContentRect(trailRect);
+            trailRect.pivot = new Vector2(0f, 0.5f);
+            SetHpFillRatio(trailImage, ResolveHpDamageTrailRatio(fillImage), applyFixedThemeColor: false);
+            SetHpBarLayerOrder(hpRoot, fillImage, trailImage, null);
+            return trailImage;
+        }
+
+        private Color ResolveHpDamageTrailColor(Image fillImage)
+        {
+            return fillImage == playerBattleHpBarFill || fillImage == hpBarFill
+                ? playerHpDamageTrailColor
+                : hpDamageTrailColor;
+        }
+
+        private Image EnsureDamageFlashFill(Image fillImage)
+        {
+            var hpRoot = ResolveHpRoot(fillImage);
+            if (fillImage == null || hpRoot == null)
+            {
+                return null;
+            }
+
+            var existing = hpRoot.Find("DamageFlashFill");
+            Image flashImage;
+            RectTransform flashRect;
+            if (existing != null)
+            {
+                flashImage = existing.GetComponent<Image>();
+                if (flashImage == null)
+                {
+                    flashImage = existing.gameObject.AddComponent<Image>();
+                }
+
+                flashRect = existing as RectTransform ?? existing.gameObject.AddComponent<RectTransform>();
+            }
+            else
+            {
+                var flashObject = new GameObject("DamageFlashFill", typeof(RectTransform), typeof(Image));
+                flashObject.transform.SetParent(hpRoot, false);
+                flashImage = flashObject.GetComponent<Image>();
+                flashRect = flashObject.GetComponent<RectTransform>();
+            }
+
+            flashImage.sprite = fillImage.sprite;
+            flashImage.type = Image.Type.Simple;
+            flashImage.color = hpDamageFlashColor;
+            flashImage.raycastTarget = false;
+            ConfigureHpBarContentRect(flashRect);
+            flashRect.pivot = new Vector2(0f, 0.5f);
+            SetHpBarLayerOrder(hpRoot, fillImage, hpRoot.Find("DamageTrailFill")?.GetComponent<Image>(), flashImage);
+            return flashImage;
+        }
+
+        private static void SetHpBarLayerOrder(RectTransform hpRoot, Image fillImage, Image trailImage, Image flashImage)
+        {
+            if (hpRoot == null)
+            {
+                return;
+            }
+
+            var nextIndex = 0;
+            var interior = hpRoot.Find(HpBarInteriorName);
+            if (interior != null)
+            {
+                interior.SetSiblingIndex(nextIndex++);
+            }
+
+            if (trailImage != null)
+            {
+                trailImage.transform.SetSiblingIndex(Mathf.Min(nextIndex++, hpRoot.childCount - 1));
+            }
+
+            if (fillImage != null)
+            {
+                fillImage.transform.SetSiblingIndex(Mathf.Min(nextIndex++, hpRoot.childCount - 1));
+            }
+
+            if (flashImage != null)
+            {
+                flashImage.transform.SetSiblingIndex(Mathf.Min(nextIndex, hpRoot.childCount - 1));
+            }
+
+            var outline = hpRoot.Find(HpBarOutlineName);
+            if (outline != null)
+            {
+                outline.SetAsLastSibling();
+            }
+        }
+
+        private float ResolveHpDamageTrailRatio(Image fillImage)
+        {
+            if (fillImage != null && hpDamageTrailRatios.TryGetValue(fillImage, out var ratio))
+            {
+                return ratio;
+            }
+
+            return fillImage != null && hpMainFillRatios.TryGetValue(fillImage, out var mainRatio)
+                ? mainRatio
+                : fillImage != null ? Mathf.Clamp01(fillImage.fillAmount) : 0f;
+        }
+
+        private void SetHpDamageTrailRatio(Image fillImage, Image trailImage, float ratio)
+        {
+            if (fillImage == null || trailImage == null)
+            {
+                return;
+            }
+
+            ratio = Mathf.Clamp01(ratio);
+            trailImage.color = ResolveHpDamageTrailColor(fillImage);
+            SetHpFillRatio(trailImage, ratio, applyFixedThemeColor: false);
+            hpDamageTrailRatios[fillImage] = ratio;
+        }
+
+        private void PlayHpDamageTrail(Image fillImage, Image trailImage, float fromRatio, float toRatio)
+        {
+            StopHpDamageTrail(fillImage);
+            if (!Application.isPlaying || !isActiveAndEnabled || fillImage == null || trailImage == null)
+            {
+                return;
+            }
+
+            hpDamageTrailCoroutines[fillImage] = StartCoroutine(HpDamageTrailRoutine(fillImage, trailImage, fromRatio, toRatio));
+        }
+
+        private void PlayHpDamageFlash(Image fillImage, float fromRatio, float toRatio)
+        {
+            var flashImage = EnsureDamageFlashFill(fillImage);
+            if (fillImage == null || flashImage == null)
+            {
+                return;
+            }
+
+            StopHpDamageFlash(fillImage, hideFlash: false);
+            SetHpDamageFlashSegment(flashImage, fromRatio, toRatio, hpDamageFlashColor.a);
+            if (!Application.isPlaying || !isActiveAndEnabled)
+            {
+                return;
+            }
+
+            hpDamageFlashCoroutines[fillImage] = StartCoroutine(HpDamageFlashRoutine(fillImage, flashImage, fromRatio, toRatio));
+        }
+
+        private IEnumerator HpDamageFlashRoutine(Image fillImage, Image flashImage, float fromRatio, float toRatio)
+        {
+            var elapsed = 0f;
+            while (elapsed < HpDamageFlashDurationSeconds)
+            {
+                if (fillImage == null || flashImage == null)
+                {
+                    yield break;
+                }
+
+                elapsed += Time.unscaledDeltaTime;
+                var alpha = Mathf.Lerp(hpDamageFlashColor.a, 0f, Mathf.Clamp01(elapsed / HpDamageFlashDurationSeconds));
+                SetHpDamageFlashSegment(flashImage, fromRatio, toRatio, alpha);
+                yield return null;
+            }
+
+            SetHpDamageFlashSegment(flashImage, fromRatio, toRatio, 0f);
+            hpDamageFlashCoroutines.Remove(fillImage);
+        }
+
+        private void SetHpDamageFlashSegment(Image flashImage, float fromRatio, float toRatio, float alpha)
+        {
+            if (flashImage == null)
+            {
+                return;
+            }
+
+            fromRatio = Mathf.Clamp01(fromRatio);
+            toRatio = Mathf.Clamp01(toRatio);
+            var left = Mathf.Min(fromRatio, toRatio);
+            var right = Mathf.Max(fromRatio, toRatio);
+            flashImage.gameObject.SetActive(right > left + 0.001f && alpha > 0.001f);
+            var rectTransform = flashImage.rectTransform;
+            rectTransform.anchorMin = new Vector2(left, 0f);
+            rectTransform.anchorMax = new Vector2(right, 1f);
+            rectTransform.offsetMin = new Vector2(HpBarBorderThickness, HpBarBorderThickness);
+            rectTransform.offsetMax = new Vector2(-HpBarBorderThickness, -HpBarBorderThickness);
+
+            var color = hpDamageFlashColor;
+            color.a = Mathf.Clamp01(alpha);
+            flashImage.color = color;
+        }
+
+        private IEnumerator HpDamageTrailRoutine(Image fillImage, Image trailImage, float fromRatio, float toRatio)
+        {
+            if (HpDamageTrailDelaySeconds > 0f)
+            {
+                yield return new WaitForSecondsRealtime(HpDamageTrailDelaySeconds);
+            }
+
+            var elapsed = 0f;
+            while (elapsed < HpDamageTrailDurationSeconds)
+            {
+                if (fillImage == null || trailImage == null)
+                {
+                    yield break;
+                }
+
+                elapsed += Time.unscaledDeltaTime;
+                var t = Mathf.SmoothStep(0f, 1f, Mathf.Clamp01(elapsed / HpDamageTrailDurationSeconds));
+                SetHpDamageTrailRatio(fillImage, trailImage, Mathf.Lerp(fromRatio, toRatio, t));
+                yield return null;
+            }
+
+            SetHpDamageTrailRatio(fillImage, trailImage, toRatio);
+            hpDamageTrailCoroutines.Remove(fillImage);
+        }
+
+        private void StopHpDamageTrail(Image fillImage)
+        {
+            if (fillImage == null || !hpDamageTrailCoroutines.TryGetValue(fillImage, out var routine))
+            {
+                return;
+            }
+
+            if (routine != null)
+            {
+                StopCoroutine(routine);
+            }
+
+            hpDamageTrailCoroutines.Remove(fillImage);
+        }
+
+        private void StopHpDamageFlash(Image fillImage, bool hideFlash)
+        {
+            if (fillImage != null && hpDamageFlashCoroutines.TryGetValue(fillImage, out var routine) && routine != null)
+            {
+                StopCoroutine(routine);
+            }
+
+            if (fillImage != null)
+            {
+                hpDamageFlashCoroutines.Remove(fillImage);
+            }
+
+            if (hideFlash)
+            {
+                var flash = ResolveHpRoot(fillImage)?.Find("DamageFlashFill")?.GetComponent<Image>();
+                if (flash != null)
+                {
+                    SetHpDamageFlashSegment(flash, 0f, 0f, 0f);
+                }
+            }
+        }
+
+        private void PlayHpHitShake(Image fillImage)
+        {
+            var hpRoot = ResolveHpRoot(fillImage);
+            if (fillImage == null || hpRoot == null)
+            {
+                return;
+            }
+
+            StopHpHitShake(fillImage, restorePosition: true);
+            if (!hpHitShakeRestPositions.ContainsKey(hpRoot))
+            {
+                hpHitShakeRestPositions[hpRoot] = hpRoot.anchoredPosition;
+            }
+
+            if (!Application.isPlaying || !isActiveAndEnabled)
+            {
+                return;
+            }
+
+            hpHitShakeCoroutines[fillImage] = StartCoroutine(HpHitShakeRoutine(fillImage, hpRoot));
+        }
+
+        private IEnumerator HpHitShakeRoutine(Image fillImage, RectTransform hpRoot)
+        {
+            var restPosition = hpHitShakeRestPositions.TryGetValue(hpRoot, out var storedPosition)
+                ? storedPosition
+                : hpRoot.anchoredPosition;
+            var elapsed = 0f;
+            while (elapsed < HpHitShakeDurationSeconds)
+            {
+                if (fillImage == null || hpRoot == null)
+                {
+                    yield break;
+                }
+
+                elapsed += Time.unscaledDeltaTime;
+                var t = Mathf.Clamp01(elapsed / HpHitShakeDurationSeconds);
+                var offset = Mathf.Sin(t * Mathf.PI * 4f) * HpHitShakeMagnitude * (1f - t);
+                hpRoot.anchoredPosition = restPosition + new Vector2(offset, 0f);
+                yield return null;
+            }
+
+            hpRoot.anchoredPosition = restPosition;
+            hpHitShakeCoroutines.Remove(fillImage);
+        }
+
+        private void StopHpHitShake(Image fillImage, bool restorePosition)
+        {
+            if (fillImage == null)
+            {
+                return;
+            }
+
+            if (hpHitShakeCoroutines.TryGetValue(fillImage, out var routine) && routine != null)
+            {
+                StopCoroutine(routine);
+            }
+
+            hpHitShakeCoroutines.Remove(fillImage);
+            if (!restorePosition)
+            {
+                return;
+            }
+
+            var hpRoot = ResolveHpRoot(fillImage);
+            if (hpRoot != null && hpHitShakeRestPositions.TryGetValue(hpRoot, out var restPosition))
+            {
+                hpRoot.anchoredPosition = restPosition;
+            }
+        }
+
+        private void ClearHpDamageTrailAnimations()
+        {
+            foreach (var routine in hpDamageTrailCoroutines.Values)
+            {
+                if (routine != null)
+                {
+                    StopCoroutine(routine);
+                }
+            }
+
+            hpDamageTrailCoroutines.Clear();
+            foreach (var routine in hpDamageFlashCoroutines.Values)
+            {
+                if (routine != null)
+                {
+                    StopCoroutine(routine);
+                }
+            }
+
+            hpDamageFlashCoroutines.Clear();
+            foreach (var routine in hpHitShakeCoroutines.Values)
+            {
+                if (routine != null)
+                {
+                    StopCoroutine(routine);
+                }
+            }
+
+            hpHitShakeCoroutines.Clear();
+            foreach (var entry in hpHitShakeRestPositions)
+            {
+                if (entry.Key != null)
+                {
+                    entry.Key.anchoredPosition = entry.Value;
+                }
+            }
+
+            hpHitShakeRestPositions.Clear();
+            hpMainFillRatios.Clear();
+            hpDamageTrailRatios.Clear();
         }
 
         private void SetBlockIndicator(Image fillImage, int block)
@@ -1010,17 +1743,17 @@ namespace Project2048.Prototype
             }
 
             var outline = hpRoot.GetComponent<Outline>();
-            if (outline == null)
+            if (outline != null)
             {
-                outline = hpRoot.gameObject.AddComponent<Outline>();
+                outline.enabled = false;
             }
 
-            outline.effectColor = blockFrameColor;
-            outline.effectDistance = new Vector2(2f, -2f);
-            outline.useGraphicAlpha = false;
-            outline.enabled = block > 0;
-
             var icon = EnsureBlockIcon(hpRoot);
+            if (icon == null)
+            {
+                return;
+            }
+
             icon.gameObject.SetActive(block > 0);
             if (block <= 0)
             {
@@ -1039,43 +1772,20 @@ namespace Project2048.Prototype
             var existing = hpRoot.Find("BlockIcon") as RectTransform;
             if (existing != null)
             {
+                ConfigureBlockIconRect(existing);
                 return existing;
             }
 
-            var iconObject = new GameObject("BlockIcon", typeof(RectTransform), typeof(Image));
-            iconObject.transform.SetParent(hpRoot, false);
-            var icon = iconObject.GetComponent<RectTransform>();
+            return null;
+        }
+
+        private static void ConfigureBlockIconRect(RectTransform icon)
+        {
             icon.anchorMin = new Vector2(1f, 0.5f);
             icon.anchorMax = new Vector2(1f, 0.5f);
             icon.pivot = new Vector2(0f, 0.5f);
-            icon.anchoredPosition = new Vector2(8f, 0f);
+            icon.anchoredPosition = new Vector2(12f, 0f);
             icon.sizeDelta = new Vector2(34f, 24f);
-
-            var image = iconObject.GetComponent<Image>();
-            image.color = blockIconColor;
-            image.raycastTarget = false;
-
-            var textObject = new GameObject("Text", typeof(RectTransform), typeof(TextMeshProUGUI));
-            textObject.transform.SetParent(icon, false);
-            var textRect = textObject.GetComponent<RectTransform>();
-            textRect.anchorMin = Vector2.zero;
-            textRect.anchorMax = Vector2.one;
-            textRect.offsetMin = Vector2.zero;
-            textRect.offsetMax = Vector2.zero;
-
-            var label = textObject.GetComponent<TextMeshProUGUI>();
-            label.alignment = TextAlignmentOptions.Center;
-            label.fontSize = 16f;
-            label.fontStyle = FontStyles.Bold;
-            label.color = Color.white;
-            label.textWrappingMode = TextWrappingModes.NoWrap;
-            label.raycastTarget = false;
-            if (actionDescriptionText != null && actionDescriptionText.font != null)
-            {
-                label.font = actionDescriptionText.font;
-            }
-
-            return icon;
         }
 
         private static RectTransform ResolveHpRoot(Image fillImage)
@@ -1160,7 +1870,9 @@ namespace Project2048.Prototype
             root.anchorMin = new Vector2(0f, 0f);
             root.anchorMax = new Vector2(0f, 0f);
             root.pivot = new Vector2(0f, 1f);
-            root.anchoredPosition = isPlayerBattleStatusRoot ? new Vector2(0f, -39f) : new Vector2(0f, -6f);
+            root.anchoredPosition = isPlayerBattleStatusRoot
+                ? new Vector2(HpStatusEffectXOffset, -39f)
+                : new Vector2(HpStatusEffectXOffset, -6f);
             root.sizeDelta = new Vector2(160f, 32f);
         }
 
@@ -1206,7 +1918,7 @@ namespace Project2048.Prototype
             chipRect.sizeDelta = new Vector2(32f, 32f);
 
             var image = chipObject.GetComponent<Image>();
-            image.color = effect.IsBuff ? buffStatusColor : debuffStatusColor;
+            image.color = GetStatusEffectColor(effect);
             image.raycastTarget = true;
 
             chipObject.GetComponent<StatusEffectTooltipTarget>()
@@ -1298,15 +2010,42 @@ namespace Project2048.Prototype
                 audioSource = gameObject.AddComponent<AudioSource>();
             }
 
+            ResolveAudioRouting();
             audioSource.playOnAwake = false;
             audioSource.spatialBlend = 0f;
             audioSource.volume = 1f;
             audioSource.mute = false;
             audioSource.loop = false;
+            if (sfxMixerGroup != null)
+            {
+                audioSource.outputAudioMixerGroup = sfxMixerGroup;
+            }
             // Keep prototype UI sounds audible regardless of camera distance.
             audioSource.maxDistance = UiSfxDistance;
             audioSource.minDistance = UiSfxDistance;
             audioSource.rolloffMode = AudioRolloffMode.Linear;
+        }
+
+        private void ResolveAudioRouting()
+        {
+            var settings = Project2048AudioSettings.LoadDefault();
+            if (sfxMixerGroup == null)
+            {
+                sfxMixerGroup = settings != null ? settings.SfxGroup : null;
+            }
+
+            if (bgmDucker == null)
+            {
+                bgmDucker = SimpleBgmDucker.Active != null
+                    ? SimpleBgmDucker.Active
+                    : FindAnyObjectByType<SimpleBgmDucker>(FindObjectsInactive.Include);
+            }
+        }
+
+        private void DuckBgmForImportantSfx()
+        {
+            ResolveAudioRouting();
+            bgmDucker?.DuckBgm();
         }
 
         private Transform FindChildByName(string childName)
@@ -1373,7 +2112,7 @@ namespace Project2048.Prototype
                     continue;
                 }
 
-                PlayEffectAudio(effect);
+                PlayEffectAudio(effect, cue.CueType == BoardTileEffectCueType.Merge);
                 SpawnBoardEffectPrefab(effect, cue.Position);
             }
         }
@@ -1388,11 +2127,16 @@ namespace Project2048.Prototype
             };
         }
 
-        private bool PlayEffectAudio(CombatEffectBinding effect)
+        private bool PlayEffectAudio(CombatEffectBinding effect, bool duckBgm)
         {
             if (effect?.sfxClip == null || audioSource == null)
             {
                 return false;
+            }
+
+            if (duckBgm)
+            {
+                DuckBgmForImportantSfx();
             }
 
             return CombatEffectAudioPlayer.PlayOneShot(audioSource, effect, 1f, transform);
@@ -1643,14 +2387,16 @@ namespace Project2048.Prototype
             }
         }
 
-        private static Color GetDebuffVfxColor(DebuffType debuffType)
+        private Color GetDebuffVfxColor(DebuffType debuffType)
         {
-            return debuffType switch
+            var color = GetDebuffColor(debuffType);
+            color.a = debuffType switch
             {
-                DebuffType.Fear => new Color(0.45f, 0.02f, 0.10f, 0.42f),
-                DebuffType.Darkness => new Color(0.14f, 0.02f, 0.24f, 0.48f),
-                _ => new Color(0f, 0f, 0f, 0.35f),
+                DebuffType.Fear => 0.42f,
+                DebuffType.Darkness => 0.48f,
+                _ => 0.35f,
             };
+            return color;
         }
 
         private void ClearCombatVfx()
@@ -1792,5 +2538,6 @@ namespace Project2048.Prototype
 
             return sb.ToString();
         }
+
     }
 }

@@ -1,7 +1,9 @@
+using Project2048.Audio;
 using Project2048.Combat;
 using Project2048.Presentation;
 using Project2048.Rewards;
 using UnityEngine;
+using UnityEngine.Audio;
 
 namespace Project2048.Prototype
 {
@@ -15,6 +17,8 @@ namespace Project2048.Prototype
 
         [SerializeField] private AudioSource audioSource;
         [SerializeField] private PrototypeCombatEventAudioProfileSO eventAudioProfile;
+        [SerializeField] private AudioMixerGroup sfxMixerGroup;
+        [SerializeField] private SimpleBgmDucker bgmDucker;
 
         private CombatManager combatManager;
         private RewardManager rewardManager;
@@ -126,6 +130,7 @@ namespace Project2048.Prototype
             var effect = eventAudioProfile != null ? eventAudioProfile.Resolve(cue) : null;
             if (effect?.sfxClip != null && audioSource != null)
             {
+                DuckBgmForImportantSfx();
                 CombatEffectAudioPlayer.PlayOneShot(audioSource, effect, 1f, transform);
             }
         }
@@ -147,9 +152,36 @@ namespace Project2048.Prototype
             audioSource.volume = 1f;
             audioSource.mute = false;
             audioSource.loop = false;
+            ResolveAudioRouting();
+            if (sfxMixerGroup != null)
+            {
+                audioSource.outputAudioMixerGroup = sfxMixerGroup;
+            }
             audioSource.minDistance = EventSfxDistance;
             audioSource.maxDistance = EventSfxDistance;
             audioSource.rolloffMode = AudioRolloffMode.Linear;
+        }
+
+        private void ResolveAudioRouting()
+        {
+            var settings = Project2048AudioSettings.LoadDefault();
+            if (sfxMixerGroup == null)
+            {
+                sfxMixerGroup = settings != null ? settings.SfxGroup : null;
+            }
+
+            if (bgmDucker == null)
+            {
+                bgmDucker = SimpleBgmDucker.Active != null
+                    ? SimpleBgmDucker.Active
+                    : FindAnyObjectByType<SimpleBgmDucker>(FindObjectsInactive.Include);
+            }
+        }
+
+        private void DuckBgmForImportantSfx()
+        {
+            ResolveAudioRouting();
+            bgmDucker?.DuckBgm();
         }
     }
 }

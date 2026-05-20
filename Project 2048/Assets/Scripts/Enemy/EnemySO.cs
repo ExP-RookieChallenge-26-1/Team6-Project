@@ -8,12 +8,16 @@ namespace Project2048.Enemy
     [CreateAssetMenu(menuName = "Game/Enemy")]
     public class EnemySO : ScriptableObject
     {
+        public const int MaximumActionsPerTurn = 2;
+
         public string enemyName;
         public int maxHp = 10;
         public int attackPower = 3;
         public int defensePower = 3;
         public int debuffPower = 1;
         public int difficultyScore = 1;
+        [Range(1, MaximumActionsPerTurn)]
+        public int actionsPerTurn = 1;
         public Sprite portrait;
         public List<CombatantActionEffectBinding> actionEffects = new();
 
@@ -27,6 +31,8 @@ namespace Project2048.Enemy
         public int aiDebuffInterval = 3;
 
         public event Action<EnemySO> OnRuntimeValidated;
+
+        public int ActionsPerTurn => Mathf.Clamp(actionsPerTurn, 1, MaximumActionsPerTurn);
 
         public string GetAiProfileLabel()
         {
@@ -45,6 +51,7 @@ namespace Project2048.Enemy
             defensePower = Mathf.Max(0, defensePower);
             debuffPower = Mathf.Max(0, debuffPower);
             difficultyScore = Mathf.Max(0, difficultyScore);
+            actionsPerTurn = ActionsPerTurn;
             aiDebuffInterval = Mathf.Max(0, aiDebuffInterval);
             if (Application.isPlaying)
             {

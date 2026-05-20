@@ -38,6 +38,7 @@ MonoBehaviour:
     volumeScale: 1.05
     minPitch: 0.96
     maxPitch: 1.04
+    sfxDelaySeconds: 0.88
     localOffset: {x: 0, y: 0, z: 0}
     autoDestroySeconds: 1.55
   description: "\uAC15\uD55C \uACF5\uACA9."

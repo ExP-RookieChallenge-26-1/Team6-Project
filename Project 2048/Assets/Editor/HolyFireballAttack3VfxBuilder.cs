@@ -755,6 +755,7 @@ namespace Project2048.EditorTools
             skill.activationEffect.volumeScale = 1.05f;
             skill.activationEffect.minPitch = 0.96f;
             skill.activationEffect.maxPitch = 1.04f;
+            skill.activationEffect.sfxDelaySeconds = 0.88f;
             EditorUtility.SetDirty(skill);
         }
     }

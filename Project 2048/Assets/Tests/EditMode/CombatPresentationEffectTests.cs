@@ -893,6 +893,55 @@ namespace Project2048.Tests
             Assert.That(viewObject.transform.Find("CombatEffectAudio"), Is.Not.Null);
         }
 
+        [UnityTest]
+        public IEnumerator CombatWorldSpriteView_PlayerProjectileSkill_DelaysActivationSfx()
+        {
+            var viewObject = CreateOwnedGameObject("WorldSpriteView");
+            var view = viewObject.AddComponent<CombatWorldSpriteView>();
+            var playerRenderer = CreateOwnedGameObject("PlayerSprite").AddComponent<SpriteRenderer>();
+            var enemyRenderer = CreateOwnedGameObject("EnemySprite").AddComponent<SpriteRenderer>();
+            var manager = CreateOwnedGameObject("CombatManager").AddComponent<CombatManager>();
+            var player = CreateOwnedGameObject("Player").AddComponent<PlayerCombatController>();
+            var enemy = CreateOwnedGameObject("Enemy").AddComponent<EnemyController>();
+            var bootstrap = CreateOwnedGameObject("Bootstrap").AddComponent<PrototypeCombatBootstrap>();
+            var playerData = CreatePlayerData(maxHp: 20, attackPower: 2);
+            var enemyData = CreateEnemyData(maxHp: 10, attackValue: 0);
+            var attack = CreateSkill("attack", SkillType.Attack, cost: 0, power: 1);
+            var activationClip = AudioClip.Create("DelayedSkillActivation", 512, 1, 44100, false);
+            var projectilePrefab = CreateOwnedGameObject("ProjectilePrefab");
+            projectilePrefab.AddComponent<CombatProjectileEffect>();
+            ownedObjects.Add(activationClip);
+            attack.activationEffect = new CombatEffectBinding
+            {
+                sfxClip = activationClip,
+                vfxPrefab = projectilePrefab,
+                minPitch = 0.8f,
+                maxPitch = 0.8f,
+                sfxDelaySeconds = 0.15f,
+            };
+
+            SetPrivateField(view, "playerRenderer", playerRenderer);
+            SetPrivateField(view, "enemyRenderer", enemyRenderer);
+            SetPrivateField(bootstrap, "combatManager", manager);
+
+            manager.SetCombatants(player, new[] { enemy });
+            view.Initialize(bootstrap);
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new List<EnemySO> { enemyData },
+                boardMoveCount = 1,
+            });
+            manager.ResolveBoardPhase();
+
+            Assert.That(manager.RequestUseSkill(attack, enemy), Is.True);
+            Assert.That(viewObject.transform.Find("CombatEffectAudio"), Is.Null);
+
+            yield return new WaitForSecondsRealtime(0.2f);
+
+            Assert.That(viewObject.transform.Find("CombatEffectAudio"), Is.Not.Null);
+        }
+
         [Test]
         public void CombatWorldSpriteView_EnemyDefenseIntent_PlaysDefendEffectFromEnemySo()
         {
@@ -1193,6 +1242,10 @@ namespace Project2048.Tests
 
                 Assert.That(skill?.activationEffect, Is.Not.Null, path);
                 Assert.That(skill.activationEffect.sfxClip, Is.Not.Null, path);
+                if (path.EndsWith("Attack_3.asset", System.StringComparison.Ordinal))
+                {
+                    Assert.That(skill.activationEffect.EffectiveSfxDelaySeconds, Is.EqualTo(0.88f).Within(0.0001f), path);
+                }
             }
         }
 

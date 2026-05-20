@@ -431,6 +431,24 @@ namespace Project2048.Prototype
                 return;
             }
 
+            var delay = effect.EffectiveSfxDelaySeconds;
+            if (delay > 0f && isActiveAndEnabled)
+            {
+                StartCoroutine(PlayCombatantActionAudioEffectAfterDelay(effect, delay));
+                return;
+            }
+
+            PlayCombatantActionAudioEffectNow(effect);
+        }
+
+        private IEnumerator PlayCombatantActionAudioEffectAfterDelay(CombatEffectBinding effect, float delaySeconds)
+        {
+            yield return new WaitForSeconds(delaySeconds);
+            PlayCombatantActionAudioEffectNow(effect);
+        }
+
+        private void PlayCombatantActionAudioEffectNow(CombatEffectBinding effect)
+        {
             EnsureAudioSource();
             if (audioSource == null)
             {

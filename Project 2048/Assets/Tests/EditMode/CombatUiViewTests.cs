@@ -247,13 +247,18 @@ namespace Project2048.Tests
 
             var battleTrail = playerBattleHp.transform.Find("DamageTrailFill")?.GetComponent<Image>();
             var boardTrail = boardHpFill.transform.Find("DamageTrailFill")?.GetComponent<Image>();
+            var enemyTrail = enemyHp.transform.Find("DamageTrailFill")?.GetComponent<Image>();
             Assert.That(battleTrail, Is.Not.Null);
             Assert.That(boardTrail, Is.Not.Null);
+            Assert.That(enemyTrail, Is.Not.Null);
             Assert.That(playerBattleHpFill.rectTransform.anchorMax.x, Is.EqualTo(0.8f).Within(0.001f));
             Assert.That(battleTrail.rectTransform.anchorMax.x, Is.EqualTo(1f).Within(0.001f));
             Assert.That(boardHpFill.rectTransform.anchorMax.x, Is.EqualTo(0.8f).Within(0.001f));
             Assert.That(boardTrail.rectTransform.anchorMax.x, Is.EqualTo(1f).Within(0.001f));
             Assert.That(battleTrail.transform.GetSiblingIndex(), Is.LessThan(playerBattleHpFill.transform.GetSiblingIndex()));
+            Assert.That(battleTrail.color, Is.EqualTo(new Color(0.04f, 0.24f, 0.10f, 0.90f)));
+            Assert.That(boardTrail.color, Is.EqualTo(new Color(0.04f, 0.24f, 0.10f, 0.90f)));
+            Assert.That(enemyTrail.color, Is.EqualTo(new Color(0.32f, 0.06f, 0.08f, 0.90f)));
         }
 
         [Test]

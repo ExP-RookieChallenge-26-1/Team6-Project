@@ -125,6 +125,7 @@ namespace Project2048.Prototype
         [SerializeField] private Color playerHpFillColor = new(0.18f, 0.86f, 0.34f, 1f);
         [SerializeField] private Color enemyHpFillColor = new(0.88f, 0.14f, 0.14f, 1f);
         [SerializeField] private Color hpBarBackgroundColor = new(0.08f, 0.09f, 0.10f, 1f);
+        [SerializeField] private Color playerHpDamageTrailColor = new(0.04f, 0.24f, 0.10f, 0.90f);
         [SerializeField] private Color hpDamageTrailColor = new(0.32f, 0.06f, 0.08f, 0.90f);
         [SerializeField] private Color hpDamageFlashColor = new(1f, 1f, 1f, 0.95f);
         [SerializeField] private Color blockFrameColor = new(0.66f, 0.70f, 0.74f, 1f);
@@ -1268,7 +1269,7 @@ namespace Project2048.Prototype
             trailImage.fillMethod = Image.FillMethod.Horizontal;
             trailImage.fillOrigin = (int)Image.OriginHorizontal.Left;
             trailImage.fillClockwise = true;
-            trailImage.color = hpDamageTrailColor;
+            trailImage.color = ResolveHpDamageTrailColor(fillImage);
             trailImage.raycastTarget = false;
 
             trailRect.anchorMin = Vector2.zero;
@@ -1279,6 +1280,13 @@ namespace Project2048.Prototype
             trailImage.transform.SetAsFirstSibling();
             SetHpFillRatio(trailImage, ResolveHpDamageTrailRatio(fillImage));
             return trailImage;
+        }
+
+        private Color ResolveHpDamageTrailColor(Image fillImage)
+        {
+            return fillImage == playerBattleHpBarFill || fillImage == hpBarFill
+                ? playerHpDamageTrailColor
+                : hpDamageTrailColor;
         }
 
         private Image EnsureDamageFlashFill(Image fillImage)

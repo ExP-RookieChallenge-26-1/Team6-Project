@@ -9,7 +9,6 @@ namespace Project2048.Rewards
         [SerializeField] private RewardTableSO rewardTable;
         [SerializeField] private RunProgress runProgress = new();
 
-        private CombatManager combatManager;
         private BattleRewardSO pendingReward;
         private BattleRewardSO runtimeDefaultReward;
         private bool rewardClaimed = true;
@@ -25,8 +24,6 @@ namespace Project2048.Rewards
 
         private void OnDestroy()
         {
-            UnbindCombat();
-
             if (runtimeDefaultReward != null)
             {
                 if (Application.isPlaying)
@@ -47,25 +44,6 @@ namespace Project2048.Rewards
             {
                 rewardTable = table;
             }
-        }
-
-        public void BindCombat(CombatManager manager)
-        {
-            if (combatManager == manager)
-            {
-                return;
-            }
-
-            UnbindCombat();
-            combatManager = manager;
-
-            if (combatManager == null)
-            {
-                return;
-            }
-
-            combatManager.OnCombatVictory += HandleCombatVictory;
-            combatManager.OnCombatDefeat += HandleCombatDefeat;
         }
 
         public void OfferReward(CombatResult combatResult, PlayerCombatController player)
@@ -110,26 +88,9 @@ namespace Project2048.Rewards
             return CompleteChoice(RewardChoiceKind.Enhance, pendingReward.extraBoardMoveCount);
         }
 
-        private void UnbindCombat()
+        public void ClearReward(PlayerCombatController player)
         {
-            if (combatManager == null)
-            {
-                return;
-            }
-
-            combatManager.OnCombatVictory -= HandleCombatVictory;
-            combatManager.OnCombatDefeat -= HandleCombatDefeat;
-            combatManager = null;
-        }
-
-        private void HandleCombatVictory(CombatResult combatResult)
-        {
-            OfferReward(combatResult, combatManager != null ? combatManager.Player : null);
-        }
-
-        private void HandleCombatDefeat()
-        {
-            RunProgress.CapturePlayer(combatManager != null ? combatManager.Player : null);
+            RunProgress.CapturePlayer(player);
             pendingReward = null;
             rewardClaimed = true;
             LastChoiceResult = default;

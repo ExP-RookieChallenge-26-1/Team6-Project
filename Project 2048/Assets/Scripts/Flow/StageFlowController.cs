@@ -67,7 +67,6 @@ namespace Project2048.Flow
             OnStageFlowStarted?.Invoke(currentStageIndex);
 
             rewardManager.Initialize(RunProgress, rewardTable);
-            rewardManager.BindCombat(combatManager);
 
             var selectedEnemyData = SelectEnemyData(enemyData);
             var combatEnemies = new List<EnemySO> { selectedEnemyData };
@@ -189,11 +188,13 @@ namespace Project2048.Flow
             lastCombatResult = combatResult;
             ChangeState(StageFlowState.Reward);
             OnRewardStarted?.Invoke(combatResult);
+            rewardManager.OfferReward(combatResult, combatManager.Player);
         }
 
         private void HandleCombatDefeat()
         {
             ChangeState(StageFlowState.Failed);
+            rewardManager.ClearReward(combatManager.Player);
             OnStageFailed?.Invoke();
         }
 

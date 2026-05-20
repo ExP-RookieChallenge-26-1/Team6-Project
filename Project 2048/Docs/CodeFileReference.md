@@ -2,7 +2,7 @@
 
 이 문서는 `Assets` 아래 C# 코드 파일을 하나씩 설명한다. 처음 보는 사람이 "이 파일이 왜 있는지", "어디와 연결되는지", "고칠 때 뭘 조심해야 하는지"를 빠르게 잡는 용도다.
 
-UI 클릭음은 이 작업의 담당 범위가 아니다. 전투 피드백 사운드는 버튼 자체가 아니라 전투 이벤트와 ScriptableObject 효과 데이터에서 재생되도록 분리되어 있다.
+UI 클릭음은 전역 `ButtonClickAudioRouter`가 담당한다. 전투 피드백 사운드는 버튼 자체가 아니라 전투 이벤트와 ScriptableObject 효과 데이터에서 재생되도록 분리되어 있다.
 
 코스트 변환표도 테스트와 전투 루프 검증을 위한 임시 수치다. 정식 밸런스가 정해지면 `CostConverter.cs`의 표와 관련 테스트 기대값을 같이 바꾸면 된다.
 
@@ -16,17 +16,35 @@ UI 클릭음은 이 작업의 담당 범위가 아니다. 전투 피드백 사�
 | `Assets/Scripts/Cost` | 1 | 행동 코스트 보관과 소비 |
 | `Assets/Scripts/Enemy` | 11 | 적 상태, 인텐트, AI 브레인, AI 타입 표시, 디버프 |
 | `Assets/Scripts/Flow` | 6 | 씬 로딩 요청, 로딩 UI 종료 후 전투 시작 이벤트 연결 |
+| `Assets/Scripts/Audio` | 7 | 전역 BGM, 버튼 클릭음, 믹서 그룹, BGM ducking |
 | `Assets/Scripts/Skills` | 3 | 스킬 데이터와 실행 |
-| `Assets/Scripts/Presentation` | 5 | 전투/보드 효과 바인딩, actionId, 사운드/VFX 공용 데이터 |
-| `Assets/Scripts/Prototype` | 13 | 전투 확인용 임시 UI, 전투 presentation 사운드 재생, 임시 데이터 |
+| `Assets/Scripts/Presentation` | 7 | 전투/보드 효과 바인딩, actionId, 사운드/VFX/흔들림 공용 데이터 |
+| `Assets/Scripts/Prototype` | 14 | 전투 확인용 임시 UI, 전투 presentation 사운드 재생, 임시 데이터 |
 | `Assets/Scripts/Rewards` | 6 | 전투 보상, 진행 성장, 보상 선택 결과 이벤트 |
 | `Assets/Scripts/Score` | 2 | 점수 계산과 점수 규칙 데이터 |
 | `Assets/Scripts/Story` | 3 | 스토리 진행 데이터와 컨트롤러 |
 | `Assets/Scripts/UI` | 6 | 메인 메뉴, 로딩, 팝업, 스토리 텍스트 UI |
-| `Assets/Editor` | 1 | 임시 UI 생성 메뉴 |
-| `Assets/Tests/EditMode` | 17 | 전투 규칙과 외부 연결 계약 검증 |
+| `Assets/Editor` | 2 | 임시 UI/몬스터 데이터 생성 메뉴 |
+| `Assets/Tests/EditMode` | 18 | 전투 규칙과 외부 연결 계약 검증 |
 
 ## Core / Flow / UI 코드
+
+### `Assets/Scripts/Core/GameContext.cs`
+
+현재 런의 큰 상태를 담는 순수 C# 컨텍스트다.
+
+- 현재 게임 상태, 스테이지 ID, 점수, 런 활성 여부를 가진다.
+- 점수가 바뀌면 `OnScoreChanged`를 발생시킨다.
+- `FlowController`가 씬 흐름에 맞춰 상태를 바꾼다.
+
+연결:
+
+- `GameManager`가 생성하고 `FlowController.Initialized`에 넘긴다.
+- 이후 저장/불러오기나 스테이지 흐름이 붙을 때 중심 상태 저장소로 확장될 수 있다.
+
+조심할 점:
+
+- Unity 오브젝트가 아니므로 씬 참조나 presentation 로직을 넣지 않는다.
 
 ### `Assets/Scripts/Core/GameManager.cs`
 
@@ -61,6 +79,21 @@ UI 클릭음은 이 작업의 담당 범위가 아니다. 전투 피드백 사�
 조심할 점:
 
 - `OnGameStarted`는 전투 시작 허가 신호다. 로딩 UI가 아직 보일 때 호출하면 등장 사운드가 로딩 중에 날 수 있다.
+
+### `Assets/Scripts/Flow/StageFlowController.cs`
+
+스테이지 반복 흐름을 위한 자리다.
+
+- 현재 파일은 `Start`, `Update`만 있는 빈 MonoBehaviour다.
+- 스테이지 진행, 다음 전투 선택, 클리어/게임오버 연결이 들어갈 후보 위치다.
+
+연결:
+
+- README의 A 파트 작업 범위에 언급되어 있지만 아직 실제 전투 루프에 연결되어 있지는 않다.
+
+조심할 점:
+
+- 기능을 붙일 때는 `GameContext`, `FlowController`, `ScoreManager`, `RewardManager`의 책임과 겹치지 않게 역할을 먼저 나누는 편이 좋다.
 
 ### `Assets/Scripts/Flow/SceneFlowManager.cs`
 
@@ -110,6 +143,21 @@ UI 클릭음은 이 작업의 담당 범위가 아니다. 전투 피드백 사�
 
 - 로딩 UI를 숨기는 호출과 실제 비활성화 완료 시점은 다를 수 있다. 완료 대기는 `LoadingUI.IsVisible`을 봐야 한다.
 
+### `Assets/Scripts/Flow/Binder/StoryFlowBinder.cs`
+
+스토리 완료와 게임 플로우를 연결하는 바인더다.
+
+- `StoryController.OnStoryFinished`를 `FlowController.CompleteOpeningStory`에 연결한다.
+- `GameManager.Instance.FlowController`를 우선 사용한다.
+
+연결:
+
+- `StoryScene`에서 스토리가 끝나면 로딩을 거쳐 `BattleScene` 요청으로 넘어간다.
+
+조심할 점:
+
+- 스토리 씬에 `GameManager`가 없으면 플로우 연결이 되지 않는다.
+
 ### `Assets/Scripts/UI/Loading/LoadingUI.cs`
 
 로딩 화면 표시와 진행률 표시를 담당한다.
@@ -122,6 +170,171 @@ UI 클릭음은 이 작업의 담당 범위가 아니다. 전투 피드백 사�
 
 - `LoadingFlowBinder`가 표시와 진행률을 갱신한다.
 - `BattleSceneBinder`가 `IsVisible`을 보고 전투 시작 타이밍을 늦춘다.
+
+### `Assets/Scripts/UI/MainMenuController.cs`
+
+메인 메뉴 버튼을 플로우에 연결한다.
+
+- 새 게임 버튼은 확인 팝업을 띄운 뒤 `GameManager.Instance.StartNewGame()`을 호출한다.
+- 설정 버튼은 `SettingPopup`을 연다.
+- 종료 버튼은 확인 팝업 뒤 에디터 Play 중지 또는 앱 종료를 호출한다.
+- `LateUpdate`에서 EventSystem 선택 오브젝트를 비워 버튼 포커스 하이라이트를 없앤다.
+
+연결:
+
+- `ConfirmPopup`, `SettingPopup`, `FadeController`, `GameManager`와 연결된다.
+- `MainMenuControllerTests.cs`가 한국어 문구와 씬 바인딩을 검증한다.
+
+조심할 점:
+
+- 현재 클래스는 `Project2048` 네임스페이스 밖에 있다. 테스트도 `global::MainMenuController`로 찾는다.
+- 새 게임 대상 씬 이름은 `GameSceneName = "BattleScene"`이며 Build Settings에 있어야 한다.
+
+### `Assets/Scripts/UI/ConfirmPopup.cs`
+
+예/아니오 확인 팝업이다.
+
+- 메시지 텍스트와 예/아니오 콜백을 받아 root를 켠다.
+- 예 버튼은 `onYesAction`, 아니오와 배경 버튼은 `onNoAction`을 실행한다.
+
+연결:
+
+- `MainMenuController`의 새 게임/종료 확인에 쓰인다.
+
+조심할 점:
+
+- 현재 클래스는 전역 네임스페이스에 있다.
+- `Show` 내부에 같은 대입 블록이 한 번 더 들어가 있으므로 기능 변경 시 중복을 정리해도 된다.
+
+### `Assets/Scripts/UI/SettingPopup.cs`
+
+설정 팝업의 열기/닫기만 담당한다.
+
+- 종료 버튼과 배경 버튼을 `Close`에 연결한다.
+- 시작 시 `popupRoot`를 비활성화한다.
+
+조심할 점:
+
+- 실제 볼륨 슬라이더나 저장 로직은 아직 없다. 오디오 설정을 붙일 때는 `Project2048AudioSettings`의 믹서 파라미터를 쓰는 편이 맞다.
+
+### `Assets/Scripts/UI/FadeController.cs`
+
+화면 페이드용 Image 알파를 조정한다.
+
+- `FadeOut`은 0에서 1로, `FadeIn`은 1에서 0으로 알파를 바꾼다.
+- 페이드 중에는 `raycastTarget`을 켜서 입력을 막는다.
+
+연결:
+
+- `MainMenuController`가 새 게임 시작 전에 `FadeOut`을 호출한다.
+
+### `Assets/Scripts/UI/Story/StoryTextView.cs`
+
+스토리 텍스트 UI를 `StoryController` 이벤트에 연결한다.
+
+- `OnStoryStepChanged`를 받아 TMP 텍스트를 갱신한다.
+- 컨트롤러나 텍스트 참조가 없으면 부모/자기 오브젝트에서 찾는다.
+
+조심할 점:
+
+- 텍스트 표시만 담당한다. 다음/스킵 입력과 씬 이동은 `StoryController`, `StoryFlowBinder` 쪽 책임이다.
+
+## Audio 코드
+
+### `Assets/Scripts/Audio/Project2048AudioSettings.cs`
+
+전역 오디오 설정 ScriptableObject다.
+
+- 기본 리소스 경로는 `Resources/Audio/Project2048AudioSettings`다.
+- 메인 테마, 버튼 클릭 클립, Master Mixer, BGM/SFX/UI/Ambience 그룹을 가진다.
+- 채널별 믹서 그룹 적용과 볼륨 파라미터 설정 helper를 제공한다.
+
+연결:
+
+- `Project2048AudioBootstrap`, `PersistentBgmPlayer`, `ButtonClickAudioRouter`, 전투 presentation 스크립트들이 이 설정을 읽는다.
+- 실제 에셋은 `Assets/Resources/Audio/Project2048AudioSettings.asset`이다.
+
+조심할 점:
+
+- 믹서 파라미터 이름은 상수 기본값을 유지해야 `AudioMixerStructureTests.cs`가 통과한다.
+
+### `Assets/Scripts/Audio/Project2048AudioChannel.cs`
+
+오디오 믹서 채널 enum이다.
+
+- `BGM`
+- `SFX`
+- `UI`
+- `Ambience`
+
+연결:
+
+- `Project2048AudioSettings.GetGroup`, `GetVolumeParameter`, `ApplyOutputGroup`에서 사용한다.
+
+### `Assets/Scripts/Audio/Project2048AudioBootstrap.cs`
+
+게임 시작 전 오디오 루트를 보장하는 부트스트랩이다.
+
+- `RuntimeInitializeOnLoadMethod`로 씬 로드 전 `Project2048Audio` 루트를 만든다.
+- `SimpleBgmDucker`, `PersistentBgmPlayer`, `ButtonClickAudioRouter`를 붙인다.
+- 이미 `PersistentBgmPlayer`가 있으면 그 오브젝트에 버튼 라우터만 보장한다.
+
+조심할 점:
+
+- `Project2048AudioSettings.LoadDefault()`가 실패하면 루트를 만들지 않는다.
+
+### `Assets/Scripts/Audio/PersistentBgmPlayer.cs`
+
+씬 전환 후에도 유지되는 BGM 플레이어다.
+
+- 메인 테마 클립을 루프 재생한다.
+- BGM 믹서 그룹을 `AudioSource`에 적용한다.
+- 중복 인스턴스가 생기면 새 오브젝트를 제거한다.
+
+연결:
+
+- `Project2048AudioBootstrap`이 생성/초기화한다.
+
+### `Assets/Scripts/Audio/ButtonClickAudioRouter.cs`
+
+전역 UI 버튼 클릭음을 담당한다.
+
+- 씬 안의 모든 `Button`에 `ButtonClickAudioEmitter`를 붙이고 바인딩한다.
+- 버튼 클릭음은 UI 믹서 그룹으로 재생한다.
+- 기본 피치 변주는 `0.995 ~ 1.005`로 아주 작게 둔다.
+- 런타임에 버튼 listener가 교체되어도 주기적으로 재바인딩한다.
+
+연결:
+
+- `ButtonClickAudioEmitter`가 클릭 때 `PlayGlobal()`을 호출한다.
+- `AudioMixerStructureTests.cs`가 UI 그룹, 피치 범위, 재바인딩을 검증한다.
+
+조심할 점:
+
+- 전투 스킬/보드/승패 사운드와 다르다. 버튼 자체 클릭 피드백만 담당한다.
+
+### `Assets/Scripts/Audio/ButtonClickAudioEmitter.cs`
+
+각 `Button`에 붙는 작은 클릭음 emitter다.
+
+- `Button.onClick`에 `ButtonClickAudioRouter.PlayGlobal` 호출을 연결한다.
+- 비활성화될 때 listener를 제거한다.
+
+조심할 점:
+
+- 버튼이 클릭 처리 중 비활성화되어도 클릭음이 빠지지 않게 router가 계속 재바인딩한다.
+
+### `Assets/Scripts/Audio/SimpleBgmDucker.cs`
+
+SFX가 또렷하게 들리도록 BGM 볼륨을 잠깐 낮추는 컴포넌트다.
+
+- 기본 BGM 볼륨은 `-14dB`, ducked 볼륨은 `-20dB`다.
+- attack/hold/release 곡선으로 BGM을 낮췄다가 되돌린다.
+- 전투 presentation 스크립트들이 SFX 재생 시 `DuckBgm`을 호출할 수 있다.
+
+조심할 점:
+
+- 믹서 파라미터가 없으면 내부 상태만 바뀌고 실제 믹서 볼륨은 변하지 않는다.
 
 ## Board2048 코드
 
@@ -205,9 +418,10 @@ UI 클릭음은 이 작업의 담당 범위가 아니다. 전투 피드백 사�
 - 전투 시작과 초기화를 처리한다.
 - 플레이어 턴, 보드 phase, 행동 phase, 적 턴, 승리, 패배를 전환한다.
 - UI가 쓸 수 있는 command 메서드와 `CombatSnapshot` 이벤트를 제공한다.
-- 보드가 끝나면 코스트를 만들고, 스킬을 쓰면 코스트를 소비하고, 턴 종료 시 적 인텐트를 실행한다.
+- 보드가 끝나면 코스트를 만들고, 스킬을 쓰면 코스트를 소비하고, 턴 종료 시 적 인텐트 목록을 순서대로 실행한다.
 - 디버프 인텐트가 실행되면 `CombatVfxCue`를 만들어 UI에 임시 VFX 신호를 보낸다.
 - 승리/패배 이벤트와 스킬 사용 이벤트를 내서 presentation 사운드가 UI 버튼과 분리되어 반응할 수 있게 한다.
+- `RunProgress`가 있으면 이전 보상 선택으로 저장된 현재 HP와 추가 보드 이동 횟수를 반영한다.
 
 주요 외부 연결점:
 
@@ -224,10 +438,11 @@ RequestEndPlayerTurn()
 
 연결:
 
-- `Board2048Manager`, `ActionCostWallet`, `SkillExecutor`, `EnemyIntentSystem`, `DamageCalculator`를 묶는다.
+- `Board2048Manager`, `ActionCostWallet`, `SkillExecutor`, `EnemyIntentSystem`, `DamageCalculator`, `RunProgress`를 묶는다.
 - 임시 UI는 `CombatUiView`에서 이 파일의 command와 snapshot만 쓴다.
 - 전투 결과음은 `PrototypeCombatEventAudioPlayer`가 `OnCombatVictory`와 `OnCombatDefeat`을 구독해서 처리한다.
 - 스킬 사용음은 `CombatWorldSpriteView`가 `OnPlayerSkillUsed`를 구독하고 `SkillSO.activationEffect`를 재생한다.
+- 점수는 `ScoreManager`, 보상은 `RewardManager`가 승리/패배 이벤트를 구독해서 처리한다.
 - 테스트는 `CombatManagerTests.cs`와 `CombatUiContractTests.cs`에서 전투 계약을 검증한다.
 
 조심할 점:
@@ -275,7 +490,7 @@ RequestEndPlayerTurn()
 
 조심할 점:
 
-- 현재는 결과 저장이나 보상 시스템에 연결되어 있지 않다.
+- `ScoreManager`와 `RewardManager`가 승리 이벤트에서 이 값을 읽는다.
 
 ### `Assets/Scripts/Combat/CombatSetup.cs`
 
@@ -284,6 +499,7 @@ RequestEndPlayerTurn()
 - 플레이어 데이터 `PlayerSO`
 - 적 데이터 목록 `List<EnemySO>`
 - 기본 보드 이동 횟수
+- 런 진행 상태 `RunProgress`
 
 연결:
 
@@ -293,6 +509,8 @@ RequestEndPlayerTurn()
 조심할 점:
 
 - 적 데이터 수보다 실제 `EnemyController` 수가 적으면 `CombatManager`가 예외를 낸다.
+- `boardMoveCount`가 `UsePlayerInitialBoardMoveCount`이면 `PlayerSO.initialBoardMoveCount`를 기준으로 시작한다.
+- `runProgress.ExtraBoardMoveCount`는 기본 이동 횟수에 더해진다.
 
 ### `Assets/Scripts/Combat/CombatSnapshot.cs`
 
@@ -300,8 +518,9 @@ RequestEndPlayerTurn()
 
 - `CombatSnapshot`은 현재 phase, 코스트, 보드, 플레이어, 적, 스킬 정보를 담는다.
 - `PlayerCombatSnapshot`은 플레이어 HP, 공격력, 방어도, 방어 보너스를 담는다.
-- `EnemyCombatSnapshot`은 적 표시 이름, HP, 방어도, 사망 여부, 인텐트를 담는다.
+- `EnemyCombatSnapshot`은 적 표시 이름, HP, 방어도, 사망 여부, 단일 호환 인텐트와 인텐트 목록을 담는다.
 - `EnemyCombatSnapshot.AiProfileLabel`은 적 머리 위에 표시할 AI 타입 문구를 담는다.
+- `CombatStatusEffectSnapshot`은 플레이어/적 상태효과 아이콘과 툴팁에 필요한 표시 데이터를 담는다.
 - `SkillSnapshot`은 UI가 버튼을 만들 때 필요한 스킬 정보를 담는다.
 - `CombatVfxCue`는 디버프 발동 VFX를 한 번만 틀 수 있게 순번, 디버프 종류, 수치를 담는다.
 
@@ -527,7 +746,7 @@ AI가 디버프 턴에 공포와 암흑을 어떤 순서로 낼지 나타낸다.
 
 전투 중 적 하나의 상태를 관리한다.
 
-- HP, 방어도, 공격력 보정, 현재 인텐트를 가진다.
+- HP, 방어도, 공격력 보정, 현재 인텐트와 현재 인텐트 목록을 가진다.
 - 피해를 받을 때 방어도부터 깎는다.
 - HP가 0이 되면 `OnDead`를 발생시킨다.
 - 공격력 보정이 바뀌면 공격 인텐트 표시값도 갱신한다.
@@ -540,7 +759,7 @@ AI가 디버프 턴에 공포와 암흑을 어떤 순서로 낼지 나타낸다.
 
 조심할 점:
 
-- `CurrentIntent`는 `baseIntent`를 복사해서 만든 표시값이다.
+- `CurrentIntents`는 `baseIntent`들을 복사해서 만든 표시값이고, `CurrentIntent`는 그중 첫 번째를 가리키는 호환용 값이다.
 - 공격력 보정은 공격 인텐트에만 반영된다.
 
 ### `Assets/Scripts/Enemy/EnemyIntent.cs`
@@ -555,7 +774,7 @@ AI가 디버프 턴에 공포와 암흑을 어떤 순서로 낼지 나타낸다.
 연결:
 
 - `EnemySO.intentPattern`에 들어간다.
-- `EnemyController.CurrentIntent`에 저장된다.
+- `EnemyController.CurrentIntents`에 저장되고, 첫 번째 값은 `CurrentIntent`에도 들어간다.
 - `EnemyIntentSystem`이 실행한다.
 
 조심할 점:
@@ -567,6 +786,7 @@ AI가 디버프 턴에 공포와 암흑을 어떤 순서로 낼지 나타낸다.
 적의 다음 행동을 정하고 적 턴에 실행한다.
 
 - `SetNextIntent`는 적 데이터의 패턴을 순서대로 반복한다.
+- `SetNextIntents`는 `EnemySO.ActionsPerTurn`에 맞춰 최대 2개 인텐트를 미리 만든다.
 - 패턴이 없으면 `EnemyAiBrain`으로 다음 행동을 만든다.
 - `ExecuteIntent`는 공격, 방어, 디버프를 실행한다.
 - `Fear`는 플레이어 방어 보너스를 낮춘다.
@@ -580,7 +800,7 @@ AI가 디버프 턴에 공포와 암흑을 어떤 순서로 낼지 나타낸다.
 
 조심할 점:
 
-- 인텐트는 미리 보여주는 값과 실제 실행값이 어긋나면 안 된다.
+- 인텐트 목록은 미리 보여주는 값과 실제 실행값이 어긋나면 안 된다.
 - 적마다 패턴 진행 위치를 따로 기억한다.
 - 고정 패턴이 있는 적은 AI 브레인을 타지 않는다.
 - 디버프 VFX 신호는 이 파일이 아니라 `CombatManager`가 snapshot 경계에서 만든다.
@@ -611,6 +831,7 @@ AI가 디버프 턴에 공포와 암흑을 어떤 순서로 낼지 나타낸다.
 - 방어 인텐트 수치
 - 디버프 인텐트 수치
 - 난이도 점수
+- 턴당 행동 수 `actionsPerTurn`
 - 초상화
 - 인텐트 패턴
 - AI 공격/방어 성향
@@ -631,6 +852,7 @@ AI가 디버프 턴에 공포와 암흑을 어떤 순서로 낼지 나타낸다.
 
 - `intentPattern`에 값이 있으면 AI 브레인보다 고정 패턴을 우선한다.
 - 몬스터 등장 사운드는 `actionEffects`에 `actionId = "appear"`로 넣는다.
+- `actionsPerTurn`은 현재 1~2 사이로 제한된다.
 - `OnValidate`가 음수 HP/공격력/방어력/디버프 수치/난이도 점수를 막는다.
 
 ## Skills 코드
@@ -795,6 +1017,42 @@ SO action effect에서 쓰는 문자열 키 모음이다.
 - 병합에는 default fallback이 없다. 지원하는 병합 타일 값은 `mergeEffects`에 모두 명시해야 한다.
 - 큰 타일일수록 웅장하게 들리도록 각 타일별 `volumeScale`과 pitch를 SO에서 조정한다.
 
+### `Assets/Scripts/Presentation/CombatParticleEffectBinding.cs`
+
+월드 파티클 피드백 하나의 기본 설정을 담는다.
+
+- 파티클 프리팹
+- 파티클 머테리얼
+- 색상 override
+- 수명, burst 개수, 시작 속도, 시작 크기
+- 소용돌이 여부
+
+연결:
+
+- `CombatWorldVfxProfileSO`가 보호막 피격, 공포 시전, 암흑 시전 파티클 설정으로 사용한다.
+- `CombatWorldSpriteView`가 이 값을 읽어 런타임 파티클을 만든다.
+
+조심할 점:
+
+- 이 파일은 데이터만 담는다. 실제 생성 위치와 재생 타이밍은 `CombatWorldSpriteView`가 결정한다.
+
+### `Assets/Scripts/Presentation/WorldShake.cs`
+
+전경 월드 오브젝트를 짧게 흔드는 컴포넌트다.
+
+- 원래 `localPosition`을 저장했다가 흔들림 종료 시 복구한다.
+- duration과 magnitude를 받아 랜덤 오프셋을 감쇠시키며 적용한다.
+- 비활성화되면 흔들림을 멈추고 위치를 복구한다.
+
+연결:
+
+- `CombatWorldSpriteView`가 적 등장이나 피격 연출에 사용할 수 있다.
+- `CombatPresentationEffectTests.cs`와 `RewardGrowthTests.cs`가 전경 흔들림/씬 바인딩을 검증한다.
+
+조심할 점:
+
+- 카메라, 배경, UI 전체를 흔드는 용도가 아니다. 전경 스프라이트 묶음에 붙이는 것을 기준으로 한다.
+
 ## Prototype 코드
 
 ### `Assets/Scripts/Prototype/BoardCellView.cs`
@@ -841,13 +1099,15 @@ SO action effect에서 쓰는 문자열 키 모음이다.
 - 적 HP 텍스트에는 방어도가 있으면 `방어 N`을 함께 표시한다.
 - 전용 적 HP 텍스트가 없는 오래된 임시 씬에서는 적 머리 위 라벨에 체력과 방어도를 함께 표시한다.
 - 보드, 액션 선택, 적 턴, 결과 오버레이 패널을 전환한다.
+- 보상 대기 중에는 reward overlay를 보여주고, 선택이 끝나면 결과 overlay로 넘어간다.
+- 상태효과 아이콘에 `StatusEffectTooltipTarget`을 붙여 툴팁 표시를 연결한다.
 - 스킬 버튼, 턴 종료 버튼, 재시작 버튼을 command에 연결한다.
 - `BoardTransition`을 받아 임시 타일 이동 애니메이션을 재생한다.
 
 연결:
 
 - `PrototypeCombatBootstrap`이 초기화한다.
-- `CombatManager`, `BoardSwipeHandler`, `BoardCellView`, `PrototypeCombatText`, `PrototypeCombatUiState`, `PrototypeCombatAudioRouter`, `BoardTileEffectProfileSO`와 연결된다.
+- `CombatManager`, `RewardManager`, `ScoreManager`, `BoardSwipeHandler`, `BoardCellView`, `PrototypeCombatText`, `PrototypeCombatUiState`, `PrototypeCombatAudioRouter`, `BoardTileEffectProfileSO`와 연결된다.
 
 조심할 점:
 
@@ -862,6 +1122,8 @@ SO action effect에서 쓰는 문자열 키 모음이다.
 
 - 플레이어/적 초상화 스프라이트를 표시한다.
 - 플레이어 피격, 적 피격, 적 사망 action effect를 재생한다.
+- 보호막 피격, 공포/암흑 시전 파티클을 `CombatWorldVfxProfileSO`로 재생한다.
+- 적 등장 시 전경 스프라이트 묶음에 `WorldShake`를 적용할 수 있다.
 - 몬스터가 등장하면 화면 오른쪽에서 점프하듯 들어오는 인트로를 보여준 뒤 `EnemySO.actionEffects`의 `appear` effect를 재생한다.
 - 플레이어가 스킬을 쓰면 `SkillSO.activationEffect`를 재생한다.
 
@@ -870,6 +1132,7 @@ SO action effect에서 쓰는 문자열 키 모음이다.
 - `CombatManager.OnCombatStateChanged`를 구독한다.
 - `CombatManager.OnPlayerSkillUsed`를 구독한다.
 - `PlayerSO`, `EnemySO`, `SkillSO`의 `CombatEffectBinding`을 읽는다.
+- `CombatWorldVfxProfileSO`의 파티클 설정을 읽는다.
 
 조심할 점:
 
@@ -942,6 +1205,8 @@ SO action effect에서 쓰는 문자열 키 모음이다.
 - `randomizeEnemyOnStart`가 켜져 있으면 전투 시작마다 임시 적 AI 풀에서 랜덤 적을 뽑는다.
 - `FlowController`가 있으면 `OnGameStarted`를 받은 뒤 `StartCombat`을 호출한다.
 - `FlowController`가 없는 단독 테스트/임시 실행에서는 기존처럼 `Start()`에서 바로 시작한다.
+- 씬에 작성된 `RewardManager`와 `ScoreManager`가 있으면 전투 이벤트에 바인딩한다.
+- `RunProgress`를 `CombatSetup`에 넘겨 HP와 추가 보드 이동 횟수를 전투 간 이어준다.
 - 재시작도 처리한다.
 - `CombatUiView`, `CombatWorldSpriteView`, `PrototypeCombatEventAudioPlayer`를 초기화한다.
 
@@ -949,10 +1214,45 @@ SO action effect에서 쓰는 문자열 키 모음이다.
 
 - 씬의 임시 UI와 전투 코어를 이어준다.
 - `CombatUiView.Initialize`, `CombatWorldSpriteView.Initialize`, `PrototypeCombatEventAudioPlayer.Initialize`을 호출한다.
+- `RewardManager.Initialize`, `RewardManager.BindCombat`, `ScoreManager.BindCombat`을 호출한다.
 
 조심할 점:
 
 - 자동 시작 흐름을 바꿀 때는 로딩 UI가 사라지기 전에 전투가 시작되지 않는지 확인해야 한다.
+- `RewardManager`와 `ScoreManager`는 없으면 자동 생성하지 않는다. 씬에 실제로 둔 매니저만 연결한다.
+
+### `Assets/Scripts/Prototype/CombatWorldVfxProfileSO.cs`
+
+전투 월드 VFX 기본값을 담는 ScriptableObject다.
+
+- 보호막 피격 파티클
+- 공포 디버프 시전 파티클
+- 암흑 디버프 시전 파티클
+- 디버프 타입별 파티클 resolve helper
+
+연결:
+
+- `Assets/Resources/PrototypeCombatWorldVfxProfile.asset`이 실제 프로토타입 값을 가진다.
+- `CombatWorldSpriteView`가 디버프/보호막 피드백을 재생할 때 읽는다.
+
+조심할 점:
+
+- 전투 코어가 아니라 presentation 데이터다. 디버프 규칙 자체는 `EnemyIntentSystem`과 `CombatManager`에 있다.
+
+### `Assets/Scripts/Prototype/StatusEffectTooltipTarget.cs`
+
+상태효과 아이콘에 붙는 툴팁 트리거다.
+
+- pointer enter 때 설명과 RectTransform을 show callback에 넘긴다.
+- pointer exit 때 hide callback을 호출한다.
+
+연결:
+
+- `CombatUiView`가 플레이어/적 상태효과 아이콘을 만들 때 초기화한다.
+
+조심할 점:
+
+- 툴팁 UI 자체를 만들지 않는다. 표시/숨김 콜백만 호출한다.
 
 ### `Assets/Scripts/Prototype/PrototypeCombatFactory.cs`
 
@@ -1029,6 +1329,170 @@ SO action effect에서 쓰는 문자열 키 모음이다.
 
 - 전투 phase와 UI 패널 모드를 분리해 둔 파일이다. 전투 규칙은 여기 넣지 않는다.
 
+## Rewards 코드
+
+### `Assets/Scripts/Rewards/BattleRewardSO.cs`
+
+전투 승리 후 제시할 보상 데이터를 담는다.
+
+- 보상 ID
+- 조력자 표시 이름
+- 휴식 선택 시 최대 HP 기준 회복 비율
+- 강화 선택 시 추가 보드 이동 횟수
+- 보상 설명 문구
+
+연결:
+
+- `RewardTableSO`가 후보로 들고 있고, `RewardManager`가 선택 결과에 반영한다.
+
+조심할 점:
+
+- `OnValidate`가 회복 비율을 0~1로, 추가 이동 횟수를 0 이상으로 제한한다.
+
+### `Assets/Scripts/Rewards/RewardTableSO.cs`
+
+전투 결과에 맞는 보상을 고르는 테이블이다.
+
+- 현재 구현은 목록에서 첫 번째 null이 아닌 보상을 반환한다.
+
+연결:
+
+- `RewardManager.ResolveReward`가 호출한다.
+
+조심할 점:
+
+- 정식 보상 확률이나 조건이 생기면 이 파일과 관련 테스트를 같이 확장하면 된다.
+
+### `Assets/Scripts/Rewards/RewardManager.cs`
+
+전투 승리 후 보상 제시와 선택 처리를 담당한다.
+
+- `CombatManager.OnCombatVictory`를 받아 보상을 제시한다.
+- 휴식 선택은 플레이어 HP를 최대 HP 비율만큼 회복한다.
+- 강화 선택은 `RunProgress.ExtraBoardMoveCount`를 올린다.
+- 선택 결과를 `OnRewardClaimed`로 알린다.
+- 패배 시 pending reward를 지우고 현재 HP를 `RunProgress`에 기록한다.
+
+연결:
+
+- `PrototypeCombatBootstrap`이 전투 매니저와 바인딩한다.
+- `CombatUiView`가 reward overlay 버튼과 표시를 연결한다.
+- `PrototypeCombatEventAudioPlayer`가 `OnRewardClaimed`를 듣고 보상 선택 사운드를 재생한다.
+
+조심할 점:
+
+- 보상 선택은 `PlayerSO` 값을 직접 바꾸지 않는다. 다음 전투 반영값은 `RunProgress`에 저장한다.
+
+### `Assets/Scripts/Rewards/RunProgress.cs`
+
+한 런 안에서 전투 사이에 유지할 플레이어 진행 상태다.
+
+- 현재 HP 보존 여부와 현재 HP를 가진다.
+- 보상 강화로 얻은 추가 보드 이동 횟수를 누적한다.
+- 다음 전투 시작 HP와 보드 이동 횟수 보정에 쓰인다.
+
+연결:
+
+- `CombatSetup.runProgress`로 `CombatManager`에 들어간다.
+- `RewardManager`가 휴식/강화 선택 결과를 저장한다.
+- `PrototypeCombatBootstrap`이 같은 인스턴스를 계속 넘긴다.
+
+조심할 점:
+
+- 플레이어 데이터 에셋을 오염시키지 않기 위한 런타임 상태다.
+
+### `Assets/Scripts/Rewards/RewardChoiceKind.cs`
+
+보상 선택 종류 enum이다.
+
+- `None`
+- `Rest`
+- `Enhance`
+
+### `Assets/Scripts/Rewards/RewardChoiceResult.cs`
+
+보상 선택 결과 DTO다.
+
+- 선택 종류
+- 적용량
+- 현재 HP
+- 추가 보드 이동 횟수
+- 선택된 보상 데이터
+
+## Score 코드
+
+### `Assets/Scripts/Score/ScoreManager.cs`
+
+전투 결과를 점수로 누적하고 로컬 최고 점수를 저장한다.
+
+- 승리 시 `CombatResult`로 스테이지 점수를 계산해 누적한다.
+- 패배 시 `PlayerPrefs`에 최고 점수를 기록한다.
+- `ScoreRuleSO`가 있으면 그 규칙을 우선 사용하고, 없으면 기본 공식을 쓴다.
+
+기본 공식:
+
+```text
+enemyDifficultyScore * 100
++ remainingMoveCount * 20
++ overCost * 5
+- turnCount * 10
+```
+
+연결:
+
+- `PrototypeCombatBootstrap`이 전투 매니저와 바인딩한다.
+- `ScoreManagerTests.cs`가 계산식과 로컬 최고 점수 기록을 검증한다.
+
+조심할 점:
+
+- 저장 키는 비어 있으면 `Project2048.LocalLeaderboard.BestScore`로 fallback된다.
+
+### `Assets/Scripts/Score/ScoreRuleSO.cs`
+
+점수 계산 규칙 ScriptableObject다.
+
+- 난이도, 남은 이동 횟수, 초과 코스트, 턴 페널티 multiplier를 가진다.
+- 최소 스테이지 점수를 둘 수 있다.
+
+조심할 점:
+
+- 정식 밸런스 조정은 코드보다 이 SO 값으로 처리하는 편이 낫다.
+
+## Story 코드
+
+### `Assets/Scripts/Story/StoryController.cs`
+
+스토리 단계 진행을 담당한다.
+
+- `StartStory`로 스토리 데이터를 시작한다.
+- `Next`로 다음 단계로 넘어가고 끝나면 `OnStoryFinished`를 발생시킨다.
+- `Skip`은 바로 끝낸다.
+
+연결:
+
+- `StoryTextView`가 단계 변경 이벤트를 받아 텍스트를 표시한다.
+- `StoryFlowBinder`가 완료 이벤트를 전투 씬 로드 요청으로 이어준다.
+
+조심할 점:
+
+- `Next`의 종료 조건은 현재 `openingStory.steps.Count`를 기준으로 본다. 다른 스토리 데이터를 동적으로 넣는 구조로 확장하면 `currentStory` 기준으로 정리해야 한다.
+
+### `Assets/Scripts/Story/StoryDataSO.cs`
+
+스토리 단계 목록을 담는 ScriptableObject다.
+
+- `List<StoryStep>`만 가진 단순 데이터다.
+
+### `Assets/Scripts/Story/StoryStep.cs`
+
+스토리 한 줄 데이터를 담는다.
+
+- 현재는 `text`만 있다.
+
+조심할 점:
+
+- 캐릭터명, 초상화, 선택지를 추가하려면 이 DTO와 `StoryTextView` 표시 방식을 같이 확장해야 한다.
+
 ## Editor 코드
 
 ### `Assets/Editor/CombatUiBuilder.cs`
@@ -1051,6 +1515,20 @@ SO action effect에서 쓰는 문자열 키 모음이다.
 - 이 파일도 정식 UI 담당 범위가 아니다. 전투를 눈으로 확인하기 위한 임시 생성 도구다.
 - 정식 UI가 들어오면 이 생성 방식은 버려도 된다.
 - 사운드까지 자동 생성하는 도구가 아니므로, 필요한 경우 SO 에셋과 presentation 컴포넌트 연결을 별도로 확인한다.
+
+### `Assets/Editor/SelectedMonsterRosterBuilder.cs`
+
+선별한 몬스터 컷아웃을 `EnemySO` 데이터와 전투 씬 enemy pool에 연결하는 에디터 메뉴다.
+
+- 메뉴: `Project2048/Build Selected Monster Enemy Assets`
+- `Assets/Data/Enemies` 아래 01~12 적 데이터를 만들거나 갱신한다.
+- 몬스터 컷아웃 import 설정을 Sprite/무압축/alpha transparency로 맞춘다.
+- 현재 씬의 `PrototypeCombatBootstrap.enemyPool`에 적 목록을 바인딩하고 랜덤 선택을 켠다.
+
+조심할 점:
+
+- 실행하면 에셋과 현재 씬을 dirty로 만들고 저장한다. 의도한 데이터 작업일 때만 사용한다.
+- 표시 이름과 수치는 이 파일의 seed가 기준이므로 정식 밸런스가 생기면 seed와 테스트/문서를 같이 확인한다.
 
 ## EditMode 테스트 코드
 
@@ -1090,6 +1568,7 @@ SO action effect에서 쓰는 문자열 키 모음이다.
 
 - 마지막 적을 죽이면 승리 이벤트가 발생한다.
 - 턴 종료 시 적 공격이 실행되고 다음 플레이어 턴으로 넘어간다.
+- 적이 복수 인텐트를 가진 경우 표시된 순서대로 실행한다.
 - 방어 보너스가 이후 방어 스킬에 누적 적용된다.
 - 다음 플레이어 턴이 시작되면 현재 방어도는 지워진다.
 
@@ -1104,6 +1583,7 @@ UI가 전투 내부 객체를 직접 잡지 않고 snapshot/command만으로 전
 - `RequestUseSkillById`가 ID 기반 입력으로 스킬을 쓴다.
 - `RequestEndPlayerTurn` 후 적 행동 문구가 snapshot에 반영된다.
 - 적 턴이 끝나면 다음 플레이어 턴 snapshot에 다음 인텐트가 반영된다.
+- 복수 인텐트가 snapshot의 `Intents`에 실리고 기존 `Intent` 호환값도 유지된다.
 - 공포/암흑 디버프가 실행되면 `LastVfxCue`가 snapshot에 실린다.
 - 공포는 플레이어 상태효과에만 표시되고 적 상태효과에는 표시되지 않는다.
 - 암흑 디버프 후 다음 보드에 방해 블록이 배치된다.
@@ -1121,6 +1601,18 @@ UI가 전투 내부 객체를 직접 잡지 않고 snapshot/command만으로 전
 - 몬스터 등장 사운드는 `EnemySO.actionEffects`의 `appear`에서 나온다.
 - 스킬 사용 사운드는 `SkillSO.activationEffect`에서 나온다.
 - 보드 병합 사운드는 타일 값별 `BoardTileEffectProfileSO.mergeEffects`에 모두 명시되어야 한다.
+- `WorldShake`, 보호막/CC 파티클 profile, combatant effect 재생 경계를 검증한다.
+
+### `Assets/Tests/EditMode/AudioMixerStructureTests.cs`
+
+전역 오디오 루트와 믹서 연결을 검증한다.
+
+보호하는 규칙:
+
+- `Project2048AudioSettings.asset`이 Master Mixer, BGM/SFX/UI/Ambience 그룹, 메인 테마, 버튼 클릭 클립을 가진다.
+- 전투 presentation `AudioSource`는 SFX 그룹으로 라우팅된다.
+- 버튼 클릭 라우터는 씬 버튼에 emitter를 붙이고 UI 그룹으로 재생한다.
+- BGM ducking 기본 곡선과 버튼 피치 변주 기본값을 유지한다.
 
 ### `Assets/Tests/EditMode/CombatUiViewTests.cs`
 
@@ -1170,6 +1662,17 @@ UI가 전투 내부 객체를 직접 잡지 않고 snapshot/command만으로 전
 - 패턴이 비어 있으면 AI가 공격/방어/디버프를 만든다.
 - 공격 몰빵과 방어 몰빵 설정은 실제 선택 분포를 바꾼다.
 - 강화형 설정은 생성된 인텐트 수치를 올린다.
+- `actionsPerTurn` 기반 복수 인텐트 생성 시 패턴 진행 순서를 유지한다.
+
+### `Assets/Tests/EditMode/MainMenuControllerTests.cs`
+
+메인 메뉴와 스토리 씬의 scene-authored UI 바인딩을 검증한다.
+
+보호하는 규칙:
+
+- 새 게임/이어하기/종료 한국어 문구가 깨지지 않는다.
+- `MainMenu` 버튼 참조와 팝업/페이드 참조가 씬에 연결되어 있다.
+- 메인 메뉴와 스토리 배경, CanvasScaler 기준 해상도가 유지된다.
 
 ### `Assets/Tests/EditMode/PlayerCombatControllerTests.cs`
 
@@ -1214,6 +1717,28 @@ UI가 전투 내부 객체를 직접 잡지 않고 snapshot/command만으로 전
 - 액션 phase에서는 카테고리 선택 또는 스킬 목록 화면이 나온다.
 - 선택한 카테고리의 스킬만 보인다.
 
+### `Assets/Tests/EditMode/RewardGrowthTests.cs`
+
+전투 보상, 런 성장, 보상 UI overlay, 씬 바인딩을 검증한다.
+
+보호하는 규칙:
+
+- `RunProgress.ExtraBoardMoveCount`가 다음 전투 보드 이동 횟수에 더해진다.
+- 휴식 보상은 최대 HP 비율만큼 회복하고 현재 HP를 저장한다.
+- 강화 보상은 `PlayerSO`를 직접 바꾸지 않고 런 진행 상태만 갱신한다.
+- 승리 후 보상 overlay가 먼저 뜨고 선택 후 결과 overlay로 넘어간다.
+- `BattleScene`의 보상/점수 매니저와 월드 스프라이트 참조가 씬에 작성되어 있다.
+
+### `Assets/Tests/EditMode/ScoreManagerTests.cs`
+
+점수 계산과 로컬 최고 점수 저장을 검증한다.
+
+보호하는 규칙:
+
+- 난이도, 남은 이동 횟수, 초과 코스트, 턴 패널티가 점수에 반영된다.
+- 스테이지 점수가 누적된다.
+- 게임오버 시 `PlayerPrefs`에 최고 점수가 기록된다.
+
 ## 문서 읽는 순서
 
 처음에는 아래 순서로 보면 된다.
@@ -1224,5 +1749,6 @@ UI가 전투 내부 객체를 직접 잡지 않고 snapshot/command만으로 전
 4. `CostConverter.cs` 섹션
 5. `SkillExecutor.cs` 섹션
 6. `EnemyIntentSystem.cs` 섹션
-7. `Presentation` 코드 섹션
-8. 필요한 테스트 파일 섹션
+7. `Rewards` / `Score` 코드 섹션
+8. `Audio` / `Presentation` 코드 섹션
+9. 필요한 테스트 파일 섹션

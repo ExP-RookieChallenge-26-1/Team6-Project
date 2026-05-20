@@ -659,6 +659,110 @@ namespace Project2048.Tests
         }
 
         [UnityTest]
+        public IEnumerator CombatWorldSpriteView_EnemyHitWithAuthoredVisual_DelaysHitSfxUntilVisualEnds()
+        {
+            var viewObject = CreateOwnedGameObject("WorldSpriteView");
+            var view = viewObject.AddComponent<CombatWorldSpriteView>();
+            var enemyRenderer = CreateOwnedGameObject("EnemySprite").AddComponent<SpriteRenderer>();
+            var manager = CreateOwnedGameObject("CombatManager").AddComponent<CombatManager>();
+            var player = CreateOwnedGameObject("Player").AddComponent<PlayerCombatController>();
+            var enemy = CreateOwnedGameObject("Enemy").AddComponent<EnemyController>();
+            var bootstrap = CreateOwnedGameObject("Bootstrap").AddComponent<PrototypeCombatBootstrap>();
+            var playerData = CreatePlayerData(maxHp: 20, attackPower: 2);
+            var enemyData = CreateEnemyData(maxHp: 10, attackValue: 0);
+            var attack = CreateSkill("attack", SkillType.Attack, cost: 0, power: 4);
+            var hitClip = AudioClip.Create("EnemyHitDelayed", 512, 1, 44100, false);
+            var hitVfxPrefab = CreateOwnedGameObject("EnemyHitVfx");
+            ownedObjects.Add(hitClip);
+            enemyData.actionEffects = new List<CombatantActionEffectBinding>
+            {
+                new()
+                {
+                    actionId = CombatActionIds.Hit,
+                    effect = new CombatEffectBinding
+                    {
+                        sfxClip = hitClip,
+                        vfxPrefab = hitVfxPrefab,
+                        minPitch = 0.8f,
+                        maxPitch = 0.8f,
+                        autoDestroySeconds = 0.15f,
+                    },
+                },
+            };
+
+            SetPrivateField(view, "enemyRenderer", enemyRenderer);
+            SetPrivateField(bootstrap, "combatManager", manager);
+
+            manager.SetCombatants(player, new[] { enemy });
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new List<EnemySO> { enemyData },
+                boardMoveCount = 1,
+            });
+            manager.ResolveBoardPhase();
+            view.Initialize(bootstrap);
+
+            Assert.That(manager.RequestUseSkill(attack, enemy), Is.True);
+            Assert.That(enemyRenderer.transform.Find("EnemyHitVfx(Clone)"), Is.Not.Null);
+            Assert.That(viewObject.transform.Find("CombatEffectAudio"), Is.Null);
+
+            yield return new WaitForSecondsRealtime(0.1f);
+
+            Assert.That(viewObject.transform.Find("CombatEffectAudio"), Is.Null);
+
+            yield return new WaitForSecondsRealtime(0.1f);
+
+            Assert.That(viewObject.transform.Find("CombatEffectAudio"), Is.Not.Null);
+        }
+
+        [Test]
+        public void CombatWorldSpriteView_EnemyHitWithoutAuthoredVisual_PlaysHitSfxImmediately()
+        {
+            var viewObject = CreateOwnedGameObject("WorldSpriteView");
+            var view = viewObject.AddComponent<CombatWorldSpriteView>();
+            var enemyRenderer = CreateOwnedGameObject("EnemySprite").AddComponent<SpriteRenderer>();
+            var manager = CreateOwnedGameObject("CombatManager").AddComponent<CombatManager>();
+            var player = CreateOwnedGameObject("Player").AddComponent<PlayerCombatController>();
+            var enemy = CreateOwnedGameObject("Enemy").AddComponent<EnemyController>();
+            var bootstrap = CreateOwnedGameObject("Bootstrap").AddComponent<PrototypeCombatBootstrap>();
+            var playerData = CreatePlayerData(maxHp: 20, attackPower: 2);
+            var enemyData = CreateEnemyData(maxHp: 10, attackValue: 0);
+            var attack = CreateSkill("attack", SkillType.Attack, cost: 0, power: 4);
+            var hitClip = AudioClip.Create("EnemyHitImmediate", 512, 1, 44100, false);
+            ownedObjects.Add(hitClip);
+            enemyData.actionEffects = new List<CombatantActionEffectBinding>
+            {
+                new()
+                {
+                    actionId = CombatActionIds.Hit,
+                    effect = new CombatEffectBinding
+                    {
+                        sfxClip = hitClip,
+                        minPitch = 0.8f,
+                        maxPitch = 0.8f,
+                    },
+                },
+            };
+
+            SetPrivateField(view, "enemyRenderer", enemyRenderer);
+            SetPrivateField(bootstrap, "combatManager", manager);
+
+            manager.SetCombatants(player, new[] { enemy });
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new List<EnemySO> { enemyData },
+                boardMoveCount = 1,
+            });
+            manager.ResolveBoardPhase();
+            view.Initialize(bootstrap);
+
+            Assert.That(manager.RequestUseSkill(attack, enemy), Is.True);
+            Assert.That(viewObject.transform.Find("CombatEffectAudio"), Is.Not.Null);
+        }
+
+        [UnityTest]
         public IEnumerator CombatWorldSpriteView_EnemyDebuffIntent_SpawnsDebuffCastParticlesFromEnemyThenPlayer()
         {
             var viewObject = CreateOwnedGameObject("WorldSpriteView");

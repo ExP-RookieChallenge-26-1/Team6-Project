@@ -194,7 +194,6 @@ namespace Project2048.Tests
             var runProgress = new RunProgress();
 
             rewardManager.Initialize(runProgress, CreateRewardTable(reward));
-            rewardManager.BindCombat(manager);
             SetPrivateField(bootstrap, "combatManager", manager);
             SetPrivateField(bootstrap, "rewardManager", rewardManager);
 
@@ -212,6 +211,7 @@ namespace Project2048.Tests
             Assert.That(manager.RequestUseSkill(attack, enemy), Is.True);
             Assert.That(audioPlayer.LastPlayedCue, Is.EqualTo(PrototypeCombatEventSoundCue.Victory));
 
+            rewardManager.OfferReward(new CombatResult { enemyDifficultyScore = 1 }, player);
             rewardManager.ChooseEnhance(player);
 
             Assert.That(audioPlayer.LastPlayedCue, Is.EqualTo(PrototypeCombatEventSoundCue.RewardEnhance));
@@ -229,7 +229,6 @@ namespace Project2048.Tests
             var playerData = CreatePlayerData(maxHp: 10, attackPower: 2);
             var enemyData = CreateEnemyData(maxHp: 10, attackValue: 20);
 
-            rewardManager.BindCombat(manager);
             SetPrivateField(bootstrap, "combatManager", manager);
             SetPrivateField(bootstrap, "rewardManager", rewardManager);
 

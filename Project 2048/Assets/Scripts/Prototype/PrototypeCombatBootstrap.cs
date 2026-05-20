@@ -270,7 +270,6 @@ namespace Project2048.Prototype
             if (rewardManager != null)
             {
                 rewardManager.Initialize(runProgress, rewardTable);
-                rewardManager.BindCombat(combatManager);
             }
 
             if (scoreManager == null)

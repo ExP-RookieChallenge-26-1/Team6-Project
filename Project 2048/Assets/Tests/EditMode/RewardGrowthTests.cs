@@ -149,7 +149,6 @@ namespace Project2048.Tests
             var runProgress = new RunProgress();
 
             rewardManager.Initialize(runProgress, table);
-            rewardManager.BindCombat(manager);
             SetPrivateField(bootstrap, "combatManager", manager);
             SetPrivateField(bootstrap, "rewardManager", rewardManager);
 
@@ -168,6 +167,7 @@ namespace Project2048.Tests
             Assert.That(resultOverlay.activeSelf, Is.False);
 
             manager.RequestUseSkill(attack, enemy);
+            rewardManager.OfferReward(new CombatResult { enemyDifficultyScore = 1 }, player);
 
             Assert.That(rewardOverlay.activeSelf, Is.True);
             Assert.That(resultOverlay.activeSelf, Is.False);
@@ -197,7 +197,6 @@ namespace Project2048.Tests
             var defeatRaised = false;
 
             rewardManager.Initialize(runProgress, CreateRewardTable(CreateReward(0.3f, 1)));
-            rewardManager.BindCombat(manager);
             manager.OnCombatDefeat += () => defeatRaised = true;
 
             manager.SetCombatants(player, new[] { enemy });
@@ -218,6 +217,7 @@ namespace Project2048.Tests
 
             manager.ResolveBoardPhase();
             manager.RequestEndPlayerTurn();
+            rewardManager.ClearReward(player);
 
             Assert.That(defeatRaised, Is.True);
             Assert.That(manager.CurrentPhase, Is.EqualTo(CombatPhase.Defeat));

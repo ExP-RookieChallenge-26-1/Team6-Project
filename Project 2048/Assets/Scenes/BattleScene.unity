@@ -9923,6 +9923,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1494109877}
   - component: {fileID: 1494109876}
+  - component: {fileID: 1494109881}
   - component: {fileID: 1494109878}
   - component: {fileID: 1494109879}
   - component: {fileID: 1494109880}
@@ -9969,9 +9970,49 @@ MonoBehaviour:
   - {fileID: 11400000, guid: cec2f8495581cf34bbf1e19b4f0ec0aa, type: 2}
   - {fileID: 11400000, guid: 89bd2abaeb2b1a74bbbcb196d5936544, type: 2}
   - {fileID: 11400000, guid: e41a6edb3293a5c48908ac0e3de93328, type: 2}
-  randomizeEnemyOnStart: 1
+  randomizeEnemyOnStart: 0
   boardMoveCount: 12
-  autoStartOnPlay: 1
+  autoStartOnPlay: 0
+  enemyTurnDelaySeconds: 1.2
+  runProgress:
+    hasCurrentHp: 0
+    currentHp: 0
+    extraBoardMoveCount: 0
+--- !u!114 &1494109881
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1494109875}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97f63ff0f3121894ab947aebb6b1899c, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Game.Core::Project2048.Flow.StageFlowController
+  combatManager: {fileID: 1012314542}
+  playerController: {fileID: 1089451522}
+  enemyControllers:
+  - {fileID: 1999228549}
+  rewardManager: {fileID: 1327107009}
+  playerData: {fileID: 11400000, guid: 032b4bdf9c2ffc847bd27ec8e3af0335, type: 2}
+  enemyData: {fileID: 11400000, guid: 06eaa3c71a8251b49b93faea191f399e, type: 2}
+  rewardTable: {fileID: 11400000, guid: e82aa82acecfe504ab3cc5e0b5d7248c, type: 2}
+  enemyPool:
+  - {fileID: 11400000, guid: 06eaa3c71a8251b49b93faea191f399e, type: 2}
+  - {fileID: 11400000, guid: 376a581031f59df40ac736276a0a8728, type: 2}
+  - {fileID: 11400000, guid: 831ac131a4390444ebe7ac3fd53792e4, type: 2}
+  - {fileID: 11400000, guid: aa9c8c7cdce3cbd4b9c2f022330851db, type: 2}
+  - {fileID: 11400000, guid: cdaaac025227dcf4d8318ff118f4d344, type: 2}
+  - {fileID: 11400000, guid: bc9047c32898cce46b25ea3f49d79a0c, type: 2}
+  - {fileID: 11400000, guid: 0080f1161f9b82d41916849717b89639, type: 2}
+  - {fileID: 11400000, guid: 96b6afafa2ae7e7469eb3250899c6578, type: 2}
+  - {fileID: 11400000, guid: a48d0adc9e651b7469557e689b98ba72, type: 2}
+  - {fileID: 11400000, guid: cec2f8495581cf34bbf1e19b4f0ec0aa, type: 2}
+  - {fileID: 11400000, guid: 89bd2abaeb2b1a74bbbcb196d5936544, type: 2}
+  - {fileID: 11400000, guid: e41a6edb3293a5c48908ac0e3de93328, type: 2}
+  randomizeEnemyOnStart: 0
+  boardMoveCount: 12
   enemyTurnDelaySeconds: 1.2
   runProgress:
     hasCurrentHp: 0

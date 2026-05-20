@@ -114,7 +114,6 @@ namespace Project2048.Flow
                 Debug.LogError("StageFlowController is not present in the battle scene.");
                 return;
             }
-            Debug.Log("FlowController StartStage");
             stageFlowController.StartStage(gameContext.CurrentStageIndex);
         }
 

@@ -84,8 +84,6 @@ namespace Project2048.Flow
                 boardMoveCount = boardMoveCount,
                 runProgress = RunProgress,
             });
-
-            Debug.Log("StageContoller StartCombat");
         }
 
         private void ResolveSceneReferences()
@@ -185,20 +183,28 @@ namespace Project2048.Flow
 
         private void HandleCombatVictory(CombatResult combatResult)
         {
+            BeginReward(combatResult);
+        }
+
+        private void HandleCombatDefeat()
+        {
+            FailStage();
+        }
+
+        private void HandleRewardClaimed(RewardChoiceResult rewardResult)
+        {
+            CompleteStage(rewardResult);
+        }
+
+        private void BeginReward(CombatResult combatResult)
+        {
             lastCombatResult = combatResult;
             ChangeState(StageFlowState.Reward);
             OnRewardStarted?.Invoke(combatResult);
             rewardManager.OfferReward(combatResult, combatManager.Player);
         }
 
-        private void HandleCombatDefeat()
-        {
-            ChangeState(StageFlowState.Failed);
-            rewardManager.ClearReward(combatManager.Player);
-            OnStageFailed?.Invoke();
-        }
-
-        private void HandleRewardClaimed(RewardChoiceResult rewardResult)
+        private void CompleteStage(RewardChoiceResult rewardResult)
         {
             ChangeState(StageFlowState.Completed);
 
@@ -206,8 +212,13 @@ namespace Project2048.Flow
                 currentStageIndex,
                 lastCombatResult,
                 rewardResult));
+        }
 
-            Debug.Log("StageController EndStage");
+        private void FailStage()
+        {
+            ChangeState(StageFlowState.Failed);
+            rewardManager.ClearReward(combatManager.Player);
+            OnStageFailed?.Invoke();
         }
 
         private EnemySO SelectEnemyData(EnemySO fallback)

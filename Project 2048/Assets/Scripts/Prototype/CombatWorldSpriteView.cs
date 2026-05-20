@@ -177,6 +177,11 @@ namespace Project2048.Prototype
             }
 
             var isAttack = skill.skillType == SkillType.Attack;
+            if (isAttack && TryPlayProjectileSkillEffect(skill.activationEffect, target))
+            {
+                return;
+            }
+
             var anchor = isAttack && target != null && enemyRenderer != null
                 ? enemyRenderer.transform
                 : playerRenderer != null
@@ -184,6 +189,43 @@ namespace Project2048.Prototype
                     : transform;
             var animator = isAttack ? enemyAnimator : playerAnimator;
             PlayCombatantActionEffect(skill.activationEffect, anchor, animator);
+        }
+
+        private bool TryPlayProjectileSkillEffect(CombatEffectBinding effect, EnemyController target)
+        {
+            if (effect?.vfxPrefab == null || target == null)
+            {
+                return false;
+            }
+
+            var prefabProjectile = effect.vfxPrefab.GetComponentInChildren<CombatProjectileEffect>(true);
+            if (prefabProjectile == null)
+            {
+                return false;
+            }
+
+            var sourceTransform = playerRenderer != null ? playerRenderer.transform : transform;
+            var targetTransform = enemyRenderer != null ? enemyRenderer.transform : transform;
+            PlayCombatantActionAudioEffect(effect);
+
+            var instance = Instantiate(effect.vfxPrefab, sourceTransform.position, Quaternion.identity, transform);
+            var projectile = instance.GetComponentInChildren<CombatProjectileEffect>(true);
+            projectile?.Launch(sourceTransform, targetTransform, effect.localOffset);
+
+            if (effect.animationClip != null && enemyAnimator != null && enemyAnimator.runtimeAnimatorController != null)
+            {
+                enemyAnimator.Play(effect.animationClip.name, 0, 0f);
+            }
+
+            var lifetime = projectile != null
+                ? Mathf.Max(effect.EffectiveAutoDestroySeconds, projectile.EstimatedLifetimeSeconds + 0.2f)
+                : effect.EffectiveAutoDestroySeconds;
+            if (lifetime > 0f)
+            {
+                Destroy(instance, lifetime);
+            }
+
+            return true;
         }
 
         private void Render(CombatSnapshot currentSnapshot)
@@ -261,7 +303,8 @@ namespace Project2048.Prototype
             PlayCombatantActionEffect(
                 enemyData?.FindActionEffect(CombatActionIds.Hit),
                 enemyRenderer != null ? enemyRenderer.transform : transform,
-                enemyAnimator);
+                enemyAnimator,
+                delayAudioUntilAuthoredVisualEnds: true);
         }
 
         private void PlayEnemyDefenseEffectIfNeeded(bool enemyUsedDefense)
@@ -339,14 +382,24 @@ namespace Project2048.Prototype
             return enemies[enemyIndex]?.Data;
         }
 
-        private void PlayCombatantActionEffect(CombatEffectBinding effect, Transform anchor, Animator animator)
+        private void PlayCombatantActionEffect(
+            CombatEffectBinding effect,
+            Transform anchor,
+            Animator animator,
+            bool delayAudioUntilAuthoredVisualEnds = false)
         {
             if (effect == null || !effect.HasAnyAsset)
             {
                 return;
             }
 
-            PlayCombatantActionAudioEffect(effect);
+            var audioDelay = delayAudioUntilAuthoredVisualEnds
+                ? ResolveAuthoredVisualDurationSeconds(effect)
+                : 0f;
+            if (audioDelay <= 0f)
+            {
+                PlayCombatantActionAudioEffect(effect);
+            }
 
             if (effect.vfxPrefab != null)
             {
@@ -380,15 +433,64 @@ namespace Project2048.Prototype
             {
                 animator.Play(effect.animationClip.name, 0, 0f);
             }
+
+            if (audioDelay > 0f)
+            {
+                PlayCombatantActionAudioEffect(effect, audioDelay);
+            }
         }
 
-        private void PlayCombatantActionAudioEffect(CombatEffectBinding effect)
+        private static float ResolveAuthoredVisualDurationSeconds(CombatEffectBinding effect)
+        {
+            if (effect == null || !effect.HasAuthoredVisual)
+            {
+                return 0f;
+            }
+
+            var duration = 0f;
+            if (effect.vfxPrefab != null)
+            {
+                duration = Mathf.Max(duration, effect.EffectiveAutoDestroySeconds);
+            }
+
+            if (effect.particleEffect?.HasParticleVisual == true)
+            {
+                duration = Mathf.Max(duration, effect.particleEffect.EffectiveLifetimeSeconds);
+            }
+
+            if (effect.animationClip != null)
+            {
+                duration = Mathf.Max(duration, effect.animationClip.length);
+            }
+
+            return duration;
+        }
+
+        private void PlayCombatantActionAudioEffect(CombatEffectBinding effect, float extraDelaySeconds = 0f)
         {
             if (effect?.sfxClip == null)
             {
                 return;
             }
 
+            var delay = effect.EffectiveSfxDelaySeconds + Mathf.Max(0f, extraDelaySeconds);
+            if (delay > 0f && isActiveAndEnabled)
+            {
+                StartCoroutine(PlayCombatantActionAudioEffectAfterDelay(effect, delay));
+                return;
+            }
+
+            PlayCombatantActionAudioEffectNow(effect);
+        }
+
+        private IEnumerator PlayCombatantActionAudioEffectAfterDelay(CombatEffectBinding effect, float delaySeconds)
+        {
+            yield return new WaitForSeconds(delaySeconds);
+            PlayCombatantActionAudioEffectNow(effect);
+        }
+
+        private void PlayCombatantActionAudioEffectNow(CombatEffectBinding effect)
+        {
             EnsureAudioSource();
             if (audioSource == null)
             {

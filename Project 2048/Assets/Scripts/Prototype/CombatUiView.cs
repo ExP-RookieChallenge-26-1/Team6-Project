@@ -32,10 +32,23 @@ namespace Project2048.Prototype
         public const float CombatVfxDurationSeconds = 0.65f;
         public const float EnemyDeathFadeDurationSeconds = 0.6f;
         public const float HpDamageTrailDelaySeconds = 0.25f;
-        public const float HpDamageTrailDurationSeconds = 0.35f;
+        public const float HpDamageTrailDurationSeconds = 0.55f;
         public const float HpHitShakeDurationSeconds = 0.12f;
+        public static readonly Color ThemeHpFillColor = new(73f / 255f, 175f / 255f, 181f / 255f, 1f);
+        public static readonly Color ThemeHpDarkColor = new(12f / 255f, 13f / 255f, 14f / 255f, 1f);
+        public static readonly Color ThemeHpBarBackgroundColor = ThemeHpDarkColor;
+        public static readonly Color ThemeHpDamageTrailColor = new(20f / 255f, 79f / 255f, 84f / 255f, 0.90f);
+        public static readonly Color ThemeHpTextOutlineColor = new(42f / 255f, 127f / 255f, 133f / 255f, 1f);
+        public static readonly Color ThemeHpBorderColor = new(0f, 0f, 0f, 1f);
+        public const float HpStatusEffectXOffset = 18f;
+        public const float HpTextMinFontSize = 22f;
+        public const float HpTextOutlineWidth = 0.26f;
+        public const float HpTextOutlineDistance = 1.65f;
         private const float HpDamageFlashDurationSeconds = 0.12f;
         private const float HpHitShakeMagnitude = 12f;
+        private const float HpBarBorderThickness = 2.75f;
+        private const string HpBarInteriorName = "HpBarInterior";
+        private const string HpBarOutlineName = "HpBarOutline";
         private const float UiSfxDistance = 10000f;
 
         [Header("Top bar")]
@@ -122,11 +135,11 @@ namespace Project2048.Prototype
         [SerializeField] private Color defenseIntentColor = new(0.12f, 0.32f, 0.90f, 1f);
         [SerializeField] private Color darknessIntentColor = new(0.20f, 0.07f, 0.34f, 1f);
         [SerializeField] private Color fearIntentColor = new(0.45f, 0.03f, 0.06f, 1f);
-        [SerializeField] private Color playerHpFillColor = new(0.18f, 0.86f, 0.34f, 1f);
-        [SerializeField] private Color enemyHpFillColor = new(0.88f, 0.14f, 0.14f, 1f);
-        [SerializeField] private Color hpBarBackgroundColor = new(0.08f, 0.09f, 0.10f, 1f);
-        [SerializeField] private Color playerHpDamageTrailColor = new(0.04f, 0.24f, 0.10f, 0.90f);
-        [SerializeField] private Color hpDamageTrailColor = new(0.32f, 0.06f, 0.08f, 0.90f);
+        [SerializeField] private Color playerHpFillColor = ThemeHpFillColor;
+        [SerializeField] private Color enemyHpFillColor = ThemeHpFillColor;
+        [SerializeField] private Color hpBarBackgroundColor = ThemeHpBarBackgroundColor;
+        [SerializeField] private Color playerHpDamageTrailColor = ThemeHpDamageTrailColor;
+        [SerializeField] private Color hpDamageTrailColor = ThemeHpDamageTrailColor;
         [SerializeField] private Color hpDamageFlashColor = new(1f, 1f, 1f, 0.95f);
         [SerializeField] private Color blockFrameColor = new(0.66f, 0.70f, 0.74f, 1f);
         [SerializeField] private Color blockIconColor = new(0.42f, 0.46f, 0.50f, 0.95f);
@@ -412,6 +425,7 @@ namespace Project2048.Prototype
 
             RenderTopBar();
             RenderBattleScene();
+            RenderBoardPlayerStatus();
             RenderPanelVisibility();
 
             switch (uiState.ScreenMode)
@@ -618,20 +632,6 @@ namespace Project2048.Prototype
             {
                 return;
             }
-
-            var player = snapshot.Player;
-            if (hpBarFill != null && player != null && player.MaxHp > 0)
-            {
-                SetHpBarValue(hpBarFill, player.CurrentHp, player.MaxHp);
-            }
-
-            if (hpText != null && player != null)
-            {
-                hpText.text = PrototypeCombatText.FormatPlayerHp(player.CurrentHp, player.MaxHp, player.Block);
-            }
-
-            SetBlockIndicator(hpBarFill, player?.Block ?? 0);
-            RenderStatusEffects(playerBoardStatusEffectsRoot, player?.StatusEffects);
 
             if (turnLimitText != null)
             {
@@ -1139,9 +1139,13 @@ namespace Project2048.Prototype
 
         private void EnsureHpBarDefaults()
         {
-            ConfigureHpBarFill(playerBattleHpBarFill, playerHpFillColor, hpBarBackgroundColor);
-            ConfigureHpBarFill(enemyHpBarFill, enemyHpFillColor, hpBarBackgroundColor);
-            ConfigureHpBarFill(hpBarFill, playerHpFillColor, hpBarBackgroundColor);
+            NormalizeHpBarTheme();
+            ConfigureHpText(playerBattleHpText);
+            ConfigureHpText(enemyHpText);
+            ConfigureHpText(hpText);
+            ConfigureHpBarFill(playerBattleHpBarFill, hpBarBackgroundColor);
+            ConfigureHpBarFill(enemyHpBarFill, hpBarBackgroundColor);
+            ConfigureHpBarFill(hpBarFill, hpBarBackgroundColor);
             EnsureDamageTrailFill(playerBattleHpBarFill);
             EnsureDamageTrailFill(enemyHpBarFill);
             EnsureDamageTrailFill(hpBarFill);
@@ -1151,7 +1155,16 @@ namespace Project2048.Prototype
             EnsureStatusTooltip();
         }
 
-        private static void ConfigureHpBarFill(Image fillImage, Color fillColor, Color backgroundColor)
+        private void NormalizeHpBarTheme()
+        {
+            playerHpFillColor = ThemeHpFillColor;
+            enemyHpFillColor = ThemeHpFillColor;
+            hpBarBackgroundColor = ThemeHpBarBackgroundColor;
+            playerHpDamageTrailColor = ThemeHpDamageTrailColor;
+            hpDamageTrailColor = ThemeHpDamageTrailColor;
+        }
+
+        private static void ConfigureHpBarFill(Image fillImage, Color backgroundColor)
         {
             if (fillImage == null)
             {
@@ -1163,22 +1176,103 @@ namespace Project2048.Prototype
             fillImage.fillOrigin = (int)Image.OriginHorizontal.Left;
             fillImage.fillClockwise = true;
             fillImage.fillAmount = Mathf.Clamp01(fillImage.fillAmount);
-            fillImage.color = fillColor;
+            fillImage.color = ThemeHpFillColor;
             fillImage.raycastTarget = false;
 
             var rectTransform = fillImage.rectTransform;
-            rectTransform.anchorMin = Vector2.zero;
-            rectTransform.anchorMax = Vector2.one;
-            rectTransform.offsetMin = Vector2.zero;
-            rectTransform.offsetMax = Vector2.zero;
+            ConfigureHpBarContentRect(rectTransform);
             rectTransform.pivot = new Vector2(0f, 0.5f);
 
             if (fillImage.transform.parent != null &&
                 fillImage.transform.parent.TryGetComponent<Image>(out var backgroundImage))
             {
-                backgroundImage.color = backgroundColor;
+                backgroundImage.type = Image.Type.Simple;
+                backgroundImage.color = Color.clear;
                 backgroundImage.raycastTarget = false;
             }
+
+            var hpRoot = ResolveHpRoot(fillImage);
+            var interior = hpRoot != null ? hpRoot.Find(HpBarInteriorName)?.GetComponent<Image>() : null;
+            if (interior != null)
+            {
+                interior.sprite = fillImage.sprite;
+                interior.type = Image.Type.Simple;
+                interior.color = backgroundColor;
+                interior.raycastTarget = false;
+                ConfigureHpBarContentRect(interior.rectTransform);
+            }
+
+            SetHpBarLayerOrder(hpRoot, fillImage, null, null);
+            ConfigureHpBarOutline(hpRoot);
+        }
+
+        private static void ConfigureHpBarOutline(RectTransform hpRoot)
+        {
+            var outline = hpRoot != null ? hpRoot.Find(HpBarOutlineName)?.GetComponent<Image>() : null;
+            if (outline == null)
+            {
+                return;
+            }
+
+            outline.type = Image.Type.Simple;
+            outline.color = ThemeHpBorderColor;
+            outline.raycastTarget = false;
+            var outlineRect = outline.rectTransform;
+            outlineRect.anchorMin = Vector2.zero;
+            outlineRect.anchorMax = Vector2.one;
+            outlineRect.offsetMin = Vector2.zero;
+            outlineRect.offsetMax = Vector2.zero;
+            outline.transform.SetAsLastSibling();
+        }
+
+        private static void ConfigureHpText(TMP_Text text)
+        {
+            if (text == null)
+            {
+                return;
+            }
+
+            text.color = Color.white;
+            text.fontSize = Mathf.Max(text.fontSize, HpTextMinFontSize);
+            text.outlineColor = ThemeHpTextOutlineColor;
+            text.outlineWidth = HpTextOutlineWidth;
+            var outline = text.GetComponent<Outline>();
+            if (outline != null)
+            {
+                outline.effectColor = ThemeHpTextOutlineColor;
+                outline.effectDistance = new Vector2(HpTextOutlineDistance, -HpTextOutlineDistance);
+                outline.useGraphicAlpha = true;
+            }
+        }
+
+        private void RenderBoardPlayerStatus()
+        {
+            var player = snapshot?.Player;
+            if (hpBarFill != null && player != null && player.MaxHp > 0)
+            {
+                SetHpBarValue(hpBarFill, player.CurrentHp, player.MaxHp);
+            }
+
+            if (hpText != null && player != null)
+            {
+                hpText.text = PrototypeCombatText.FormatPlayerHp(player.CurrentHp, player.MaxHp, player.Block);
+            }
+
+            SetBlockIndicator(hpBarFill, player?.Block ?? 0);
+            RenderStatusEffects(playerBoardStatusEffectsRoot, player?.StatusEffects);
+        }
+
+        private static void ConfigureHpBarContentRect(RectTransform rectTransform)
+        {
+            if (rectTransform == null)
+            {
+                return;
+            }
+
+            rectTransform.anchorMin = Vector2.zero;
+            rectTransform.anchorMax = Vector2.one;
+            rectTransform.offsetMin = new Vector2(HpBarBorderThickness, HpBarBorderThickness);
+            rectTransform.offsetMax = new Vector2(-HpBarBorderThickness, -HpBarBorderThickness);
         }
 
         private void SetHpBarValue(Image fillImage, int currentHp, int maxHp)
@@ -1218,7 +1312,7 @@ namespace Project2048.Prototype
             hpMainFillRatios[fillImage] = ratio;
         }
 
-        private static void SetHpFillRatio(Image fillImage, float ratio)
+        private static void SetHpFillRatio(Image fillImage, float ratio, bool applyFixedThemeColor = true)
         {
             if (fillImage == null)
             {
@@ -1226,13 +1320,18 @@ namespace Project2048.Prototype
             }
 
             ratio = Mathf.Clamp01(ratio);
+            if (applyFixedThemeColor)
+            {
+                fillImage.color = ThemeHpFillColor;
+            }
+
             fillImage.fillAmount = ratio;
 
             var rectTransform = fillImage.rectTransform;
             rectTransform.anchorMin = new Vector2(0f, 0f);
-            rectTransform.anchorMax = new Vector2(ratio, 1f);
-            rectTransform.offsetMin = Vector2.zero;
-            rectTransform.offsetMax = Vector2.zero;
+            rectTransform.anchorMax = new Vector2(1f, 1f);
+            rectTransform.offsetMin = new Vector2(HpBarBorderThickness, HpBarBorderThickness);
+            rectTransform.offsetMax = new Vector2(-HpBarBorderThickness, -HpBarBorderThickness);
         }
 
         private Image EnsureDamageTrailFill(Image fillImage)
@@ -1274,11 +1373,10 @@ namespace Project2048.Prototype
 
             trailRect.anchorMin = Vector2.zero;
             trailRect.anchorMax = Vector2.one;
-            trailRect.offsetMin = Vector2.zero;
-            trailRect.offsetMax = Vector2.zero;
+            ConfigureHpBarContentRect(trailRect);
             trailRect.pivot = new Vector2(0f, 0.5f);
-            trailImage.transform.SetAsFirstSibling();
-            SetHpFillRatio(trailImage, ResolveHpDamageTrailRatio(fillImage));
+            SetHpFillRatio(trailImage, ResolveHpDamageTrailRatio(fillImage), applyFixedThemeColor: false);
+            SetHpBarLayerOrder(hpRoot, fillImage, trailImage, null);
             return trailImage;
         }
 
@@ -1322,11 +1420,46 @@ namespace Project2048.Prototype
             flashImage.type = Image.Type.Simple;
             flashImage.color = hpDamageFlashColor;
             flashImage.raycastTarget = false;
-            flashRect.offsetMin = Vector2.zero;
-            flashRect.offsetMax = Vector2.zero;
+            ConfigureHpBarContentRect(flashRect);
             flashRect.pivot = new Vector2(0f, 0.5f);
-            flashImage.transform.SetSiblingIndex(Mathf.Max(0, fillImage.transform.GetSiblingIndex()));
+            SetHpBarLayerOrder(hpRoot, fillImage, hpRoot.Find("DamageTrailFill")?.GetComponent<Image>(), flashImage);
             return flashImage;
+        }
+
+        private static void SetHpBarLayerOrder(RectTransform hpRoot, Image fillImage, Image trailImage, Image flashImage)
+        {
+            if (hpRoot == null)
+            {
+                return;
+            }
+
+            var nextIndex = 0;
+            var interior = hpRoot.Find(HpBarInteriorName);
+            if (interior != null)
+            {
+                interior.SetSiblingIndex(nextIndex++);
+            }
+
+            if (trailImage != null)
+            {
+                trailImage.transform.SetSiblingIndex(Mathf.Min(nextIndex++, hpRoot.childCount - 1));
+            }
+
+            if (fillImage != null)
+            {
+                fillImage.transform.SetSiblingIndex(Mathf.Min(nextIndex++, hpRoot.childCount - 1));
+            }
+
+            if (flashImage != null)
+            {
+                flashImage.transform.SetSiblingIndex(Mathf.Min(nextIndex, hpRoot.childCount - 1));
+            }
+
+            var outline = hpRoot.Find(HpBarOutlineName);
+            if (outline != null)
+            {
+                outline.SetAsLastSibling();
+            }
         }
 
         private float ResolveHpDamageTrailRatio(Image fillImage)
@@ -1349,7 +1482,8 @@ namespace Project2048.Prototype
             }
 
             ratio = Mathf.Clamp01(ratio);
-            SetHpFillRatio(trailImage, ratio);
+            trailImage.color = ResolveHpDamageTrailColor(fillImage);
+            SetHpFillRatio(trailImage, ratio, applyFixedThemeColor: false);
             hpDamageTrailRatios[fillImage] = ratio;
         }
 
@@ -1417,8 +1551,8 @@ namespace Project2048.Prototype
             var rectTransform = flashImage.rectTransform;
             rectTransform.anchorMin = new Vector2(left, 0f);
             rectTransform.anchorMax = new Vector2(right, 1f);
-            rectTransform.offsetMin = Vector2.zero;
-            rectTransform.offsetMax = Vector2.zero;
+            rectTransform.offsetMin = new Vector2(HpBarBorderThickness, HpBarBorderThickness);
+            rectTransform.offsetMax = new Vector2(-HpBarBorderThickness, -HpBarBorderThickness);
 
             var color = hpDamageFlashColor;
             color.a = Mathf.Clamp01(alpha);
@@ -1609,17 +1743,17 @@ namespace Project2048.Prototype
             }
 
             var outline = hpRoot.GetComponent<Outline>();
-            if (outline == null)
+            if (outline != null)
             {
-                outline = hpRoot.gameObject.AddComponent<Outline>();
+                outline.enabled = false;
             }
 
-            outline.effectColor = blockFrameColor;
-            outline.effectDistance = new Vector2(2f, -2f);
-            outline.useGraphicAlpha = false;
-            outline.enabled = block > 0;
-
             var icon = EnsureBlockIcon(hpRoot);
+            if (icon == null)
+            {
+                return;
+            }
+
             icon.gameObject.SetActive(block > 0);
             if (block <= 0)
             {
@@ -1638,43 +1772,20 @@ namespace Project2048.Prototype
             var existing = hpRoot.Find("BlockIcon") as RectTransform;
             if (existing != null)
             {
+                ConfigureBlockIconRect(existing);
                 return existing;
             }
 
-            var iconObject = new GameObject("BlockIcon", typeof(RectTransform), typeof(Image));
-            iconObject.transform.SetParent(hpRoot, false);
-            var icon = iconObject.GetComponent<RectTransform>();
+            return null;
+        }
+
+        private static void ConfigureBlockIconRect(RectTransform icon)
+        {
             icon.anchorMin = new Vector2(1f, 0.5f);
             icon.anchorMax = new Vector2(1f, 0.5f);
             icon.pivot = new Vector2(0f, 0.5f);
-            icon.anchoredPosition = new Vector2(8f, 0f);
+            icon.anchoredPosition = new Vector2(12f, 0f);
             icon.sizeDelta = new Vector2(34f, 24f);
-
-            var image = iconObject.GetComponent<Image>();
-            image.color = blockIconColor;
-            image.raycastTarget = false;
-
-            var textObject = new GameObject("Text", typeof(RectTransform), typeof(TextMeshProUGUI));
-            textObject.transform.SetParent(icon, false);
-            var textRect = textObject.GetComponent<RectTransform>();
-            textRect.anchorMin = Vector2.zero;
-            textRect.anchorMax = Vector2.one;
-            textRect.offsetMin = Vector2.zero;
-            textRect.offsetMax = Vector2.zero;
-
-            var label = textObject.GetComponent<TextMeshProUGUI>();
-            label.alignment = TextAlignmentOptions.Center;
-            label.fontSize = 16f;
-            label.fontStyle = FontStyles.Bold;
-            label.color = Color.white;
-            label.textWrappingMode = TextWrappingModes.NoWrap;
-            label.raycastTarget = false;
-            if (actionDescriptionText != null && actionDescriptionText.font != null)
-            {
-                label.font = actionDescriptionText.font;
-            }
-
-            return icon;
         }
 
         private static RectTransform ResolveHpRoot(Image fillImage)
@@ -1759,7 +1870,9 @@ namespace Project2048.Prototype
             root.anchorMin = new Vector2(0f, 0f);
             root.anchorMax = new Vector2(0f, 0f);
             root.pivot = new Vector2(0f, 1f);
-            root.anchoredPosition = isPlayerBattleStatusRoot ? new Vector2(0f, -39f) : new Vector2(0f, -6f);
+            root.anchoredPosition = isPlayerBattleStatusRoot
+                ? new Vector2(HpStatusEffectXOffset, -39f)
+                : new Vector2(HpStatusEffectXOffset, -6f);
             root.sizeDelta = new Vector2(160f, 32f);
         }
 

@@ -58,6 +58,13 @@
   {
     "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
     "from_class": "CombatUiBuilder",
+    "to_type": "Outline",
+    "relation_type": "component-access",
+    "strength": 3
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
+    "from_class": "CombatUiBuilder",
     "to_type": "PrototypeCombatBootstrap",
     "relation_type": "component-access",
     "strength": 3
@@ -86,7 +93,21 @@
   {
     "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
     "from_class": "CombatUiBuilder",
+    "to_type": "TMP_Text",
+    "relation_type": "component-access",
+    "strength": 3
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
+    "from_class": "CombatUiBuilder",
     "to_type": "Color",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
+    "from_class": "CombatUiBuilder",
+    "to_type": "Color32",
     "relation_type": "creates",
     "strength": 2
   },
@@ -128,6 +149,13 @@
   {
     "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
     "from_class": "CombatUiBuilder",
+    "to_type": "Texture2D",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
+    "from_class": "CombatUiBuilder",
     "to_type": "Vector2",
     "relation_type": "creates",
     "strength": 2
@@ -138,20 +166,6 @@
     "to_type": "ViewRefs",
     "relation_type": "creates",
     "strength": 2
-  },
-  {
-    "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
-    "from_class": "CombatUiBuilder",
-    "to_type": "ActionDescriptionBg",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
-    "from_class": "CombatUiBuilder",
-    "to_type": "ActionDescriptionText",
-    "relation_type": "uses",
-    "strength": 1
   },
   {
     "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
@@ -255,13 +269,6 @@
     "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
     "from_class": "CombatUiBuilder",
     "to_type": "BindViewReferences",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
-    "from_class": "CombatUiBuilder",
-    "to_type": "BoardPanel",
     "relation_type": "uses",
     "strength": 1
   },
@@ -471,13 +478,6 @@
   {
     "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
     "from_class": "CombatUiBuilder",
-    "to_type": "CreateStatusBar",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
-    "from_class": "CombatUiBuilder",
     "to_type": "Data",
     "relation_type": "uses",
     "strength": 1
@@ -597,20 +597,6 @@
   {
     "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
     "from_class": "CombatUiBuilder",
-    "to_type": "EnemyHpFill",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
-    "from_class": "CombatUiBuilder",
-    "to_type": "EnemyHpText",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
-    "from_class": "CombatUiBuilder",
     "to_type": "EnemyIntent",
     "relation_type": "uses",
     "strength": 1
@@ -647,13 +633,6 @@
     "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
     "from_class": "CombatUiBuilder",
     "to_type": "EnemyStatusEffects",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
-    "from_class": "CombatUiBuilder",
-    "to_type": "EnemyStatusEffectsRoot",
     "relation_type": "uses",
     "strength": 1
   },
@@ -702,6 +681,20 @@
   {
     "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
     "from_class": "CombatUiBuilder",
+    "to_type": "EnsureHpBarAuthoring",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
+    "from_class": "CombatUiBuilder",
+    "to_type": "EnsureHpTextAuthoring",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
+    "from_class": "CombatUiBuilder",
     "to_type": "EnsurePrototypeDataAssets",
     "relation_type": "uses",
     "strength": 1
@@ -744,20 +737,6 @@
   {
     "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
     "from_class": "CombatUiBuilder",
-    "to_type": "Filled",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
-    "from_class": "CombatUiBuilder",
-    "to_type": "FillMethod",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
-    "from_class": "CombatUiBuilder",
     "to_type": "Find",
     "relation_type": "uses",
     "strength": 1
@@ -772,6 +751,13 @@
   {
     "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
     "from_class": "CombatUiBuilder",
+    "to_type": "FindHpText",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
+    "from_class": "CombatUiBuilder",
     "to_type": "FindObjectsInactive",
     "relation_type": "uses",
     "strength": 1
@@ -780,6 +766,13 @@
     "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
     "from_class": "CombatUiBuilder",
     "to_type": "FindProperty",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
+    "from_class": "CombatUiBuilder",
+    "to_type": "float",
     "relation_type": "uses",
     "strength": 1
   },
@@ -849,13 +842,6 @@
   {
     "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
     "from_class": "CombatUiBuilder",
-    "to_type": "Horizontal",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
-    "from_class": "CombatUiBuilder",
     "to_type": "HpBarBg",
     "relation_type": "uses",
     "strength": 1
@@ -863,14 +849,63 @@
   {
     "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
     "from_class": "CombatUiBuilder",
-    "to_type": "HpBarFill",
+    "to_type": "HpBarBorderThickness",
     "relation_type": "uses",
     "strength": 1
   },
   {
     "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
     "from_class": "CombatUiBuilder",
-    "to_type": "HpText",
+    "to_type": "HpBarOutlineSpritePath",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
+    "from_class": "CombatUiBuilder",
+    "to_type": "HpBarOutlineThicknessPixels",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
+    "from_class": "CombatUiBuilder",
+    "to_type": "HpBarPointLengthPixels",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
+    "from_class": "CombatUiBuilder",
+    "to_type": "HpBarSpriteHeight",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
+    "from_class": "CombatUiBuilder",
+    "to_type": "HpBarSpritePath",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
+    "from_class": "CombatUiBuilder",
+    "to_type": "HpBarSpriteSamplesPerAxis",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
+    "from_class": "CombatUiBuilder",
+    "to_type": "HpBarSpriteWidth",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
+    "from_class": "CombatUiBuilder",
+    "to_type": "HpStatusEffectXOffset",
     "relation_type": "uses",
     "strength": 1
   },
@@ -905,6 +940,13 @@
   {
     "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
     "from_class": "CombatUiBuilder",
+    "to_type": "int",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
+    "from_class": "CombatUiBuilder",
     "to_type": "IntentBubble",
     "relation_type": "uses",
     "strength": 1
@@ -926,6 +968,13 @@
   {
     "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
     "from_class": "CombatUiBuilder",
+    "to_type": "IO",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
+    "from_class": "CombatUiBuilder",
     "to_type": "IsValidFolder",
     "relation_type": "uses",
     "strength": 1
@@ -941,13 +990,6 @@
     "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
     "from_class": "CombatUiBuilder",
     "to_type": "KoreanFontAssetPath",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
-    "from_class": "CombatUiBuilder",
-    "to_type": "Left",
     "relation_type": "uses",
     "strength": 1
   },
@@ -1073,20 +1115,6 @@
   {
     "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
     "from_class": "CombatUiBuilder",
-    "to_type": "PlayerBattleHpFill",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
-    "from_class": "CombatUiBuilder",
-    "to_type": "PlayerBattleHpText",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
-    "from_class": "CombatUiBuilder",
     "to_type": "PlayerBattleStatusEffects",
     "relation_type": "uses",
     "strength": 1
@@ -1094,21 +1122,7 @@
   {
     "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
     "from_class": "CombatUiBuilder",
-    "to_type": "PlayerBattleStatusEffectsRoot",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
-    "from_class": "CombatUiBuilder",
     "to_type": "PlayerBoardStatusEffects",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
-    "from_class": "CombatUiBuilder",
-    "to_type": "PlayerBoardStatusEffectsRoot",
     "relation_type": "uses",
     "strength": 1
   },
@@ -1186,13 +1200,6 @@
     "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
     "from_class": "CombatUiBuilder",
     "to_type": "PrototypePlayerCutout",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
-    "from_class": "CombatUiBuilder",
-    "to_type": "PrototypeVfxText",
     "relation_type": "uses",
     "strength": 1
   },
@@ -1444,7 +1451,28 @@
   {
     "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
     "from_class": "CombatUiBuilder",
+    "to_type": "ThemeHpBarBackgroundColor",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
+    "from_class": "CombatUiBuilder",
+    "to_type": "ThemeHpFillColor",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
+    "from_class": "CombatUiBuilder",
     "to_type": "TMP_FontAsset",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
+    "from_class": "CombatUiBuilder",
+    "to_type": "TMP_Text",
     "relation_type": "uses",
     "strength": 1
   },
@@ -1466,20 +1494,6 @@
     "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
     "from_class": "CombatUiBuilder",
     "to_type": "TurnCounterText",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
-    "from_class": "CombatUiBuilder",
-    "to_type": "TurnLimitText",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
-    "from_class": "CombatUiBuilder",
-    "to_type": "Type",
     "relation_type": "uses",
     "strength": 1
   },
@@ -1536,6 +1550,1525 @@
     "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
     "from_class": "CombatUiBuilder",
     "to_type": "Vector2",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
+    "from_class": "CombatUiBuilder",
+    "to_type": "WideHexHpBar",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
+    "from_class": "CombatUiBuilder",
+    "to_type": "WideHexHpBarOutline",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "ParticleSystem",
+    "relation_type": "component-access",
+    "strength": 3
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "ParticleSystemRenderer",
+    "relation_type": "component-access",
+    "strength": 3
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "AnimationCurve",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "Color",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "CombatEffectBinding",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "GameObject",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "Gradient",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "GradientAlphaKey",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "GradientColorKey",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "Keyframe",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "Material",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "SerializedObject",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "Texture2D",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "Vector2",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "Vector3",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "Abs",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "AddComponent",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "AnimationCurve",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "Apply",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "ApplyColorOverLife",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "ApplyModifiedPropertiesWithoutUndo",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "ApplyNoise",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "ApplySizeOverLife",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "ApplyVelocityOverLifeY",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "Art",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "AssetDatabase",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "AssetImporter",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "Assets",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "AssignAttack3",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "Attack",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "Attack_3",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "Attack3Path",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "Bilinear",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "BlendMode",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "BuildHalo",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "BuildPrefab",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "BuildSoftOrb",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "BuildSpark",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "BuildWisp",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "Burst",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "Circle",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "Clamp",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "Clamp01",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "Color",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "CombatProjectileEffect",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "ConfigureAdditiveParticleMaterial",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "CopyAsset",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "Core",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "Could",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "CreateAsset",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "CreateCore",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "CreateFolder",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "CreateImpactFlash",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "CreateImpactRing",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "CreateImpactSparks",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "CreateImpactWisps",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "CreateInnerFlame",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "CreateMaterial",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "CreateParticleObject",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "CreateTexture",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "CreateTrail",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "CreateTravelHalo",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "CreateTravelSparks",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "Cross",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "CullMode",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "Current",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "Data",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "Default",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "DeleteAsset",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "DepthNormalsOnly",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "DepthOnly",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "DestroyImmediate",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "DisableKeyword",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "EditorTools",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "EditorUtility",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "Effects",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "EnableKeyword",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "EncodeToPNG",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "EnsureFolder",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "EnsureShaderGraph",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "Exists",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "Exp",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "FadeOutGradient",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "Falling",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "File",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "FilterMode",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "Find",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "FindProperty",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "Fireball",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "float",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "ForceUpdate",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "FromInput",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "GetArrayElementAtIndex",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "GetAtPath",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "GetFileNameWithoutExtension",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "GoldCyanSparks",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "Graph",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "GraphTemplates",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "HasProperty",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "Holy",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "HolyFire_Halo",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "HolyFire_Orb",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "HolyFire_Spark",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "HolyFire_Wisp",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "HolyFireball",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "HolyFireball_Attack3",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "HolyFireball_Core",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "HolyFireball_Halo",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "HolyFireball_Spark",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "HolyFireball_Wisp",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "HolyFireParticle",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "HolyWhiteGradient",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "ImpactWhiteFlash",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "ImportAsset",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "ImportAssetOptions",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "InnerFlameWisps",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "int",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "IO",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "IsValidFolder",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "Keyframe",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "Length",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "Lerp",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "LoadAssetAtPath",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "LoadHolyParticleShader",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "Local",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "Log",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "LogWarning",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "Material",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "Materials",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "MenuItem",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "MinMaxCurve",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "MinMaxGradient",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "Object",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "Off",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "One",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "Packages",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "Particles",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "ParticleSystem",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "ParticleSystemInheritVelocityMode",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "ParticleSystemShapeType",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "ParticleSystemSimulationSpace",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "Path",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "PI",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "Pipeline",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "PixelUv",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "Pow",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "PrefabPath",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "Prefabs",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "PrefabUtility",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "Presentation",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "Project2048",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "RadiantHalo",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "Rebuild",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "Rebuilt",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "Refresh",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "Render",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "Rendering",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "RenderQueue",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "RenderType",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "RGBA32",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "SaveAndReimport",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "SaveAsPrefabAsset",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "SaveAssets",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "SerializedObject",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "SerializedProperty",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "SetBursts",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "SetColor",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "SetColorIfPresent",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "SetDirty",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "SetFloat",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "SetFloatIfPresent",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "SetOverrideTag",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "SetParticleArray",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "SetPixels",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "SetShaderPassEnabled",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "SetTexture",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "SetVector",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "SetVectorIfPresent",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "Shader",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "ShaderGraphPath",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "ShaderGraphTemplatePath",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "Shaders",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "SHADOWCASTER",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "Sin",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "Skills",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "SmoothStep",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "Split",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "Sprites",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "SrcAlpha",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "Standard",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "string",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "System",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "Texture2D",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "TextureFormat",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "TextureImporter",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "TextureImporterAlphaSource",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "TextureImporterCompression",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "TextureImporterType",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "TextureWrapMode",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "Tools",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "TrailingSacredFlame",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "Transparent",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "Uncompressed",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "UnityEditor",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "UnityEngine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "Universal",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "Unlit",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "URP",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "Vector2",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "Vector3",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "Vector4",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "VFX",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "VisualScale",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "World",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
+    "from_class": "HolyFireballAttack3VfxBuilder",
+    "to_type": "WriteAllBytes",
     "relation_type": "uses",
     "strength": 1
   },
@@ -10943,6 +12476,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Presentation/CombatEffectBinding.cs",
     "from_class": "CombatEffectBinding",
+    "to_type": "EffectiveSfxDelaySeconds",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/CombatEffectBinding.cs",
+    "from_class": "CombatEffectBinding",
     "to_type": "EffectiveVolumeScale",
     "relation_type": "uses",
     "strength": 1
@@ -11196,6 +12736,216 @@
     "from_file": "Project 2048/Assets/Scripts/Presentation/CombatParticleEffectBinding.cs",
     "from_class": "CombatParticleEffectBinding",
     "to_type": "UnityEngine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/CombatProjectileEffect.cs",
+    "from_class": "CombatProjectileEffect",
+    "to_type": "MonoBehaviour",
+    "relation_type": "inherits",
+    "strength": 4
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/CombatProjectileEffect.cs",
+    "from_class": "CombatProjectileEffect",
+    "to_type": "bool",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/CombatProjectileEffect.cs",
+    "from_class": "CombatProjectileEffect",
+    "to_type": "Clamp01",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/CombatProjectileEffect.cs",
+    "from_class": "CombatProjectileEffect",
+    "to_type": "Destroy",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/CombatProjectileEffect.cs",
+    "from_class": "CombatProjectileEffect",
+    "to_type": "EstimatedLifetimeSeconds",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/CombatProjectileEffect.cs",
+    "from_class": "CombatProjectileEffect",
+    "to_type": "float",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/CombatProjectileEffect.cs",
+    "from_class": "CombatProjectileEffect",
+    "to_type": "Impact",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/CombatProjectileEffect.cs",
+    "from_class": "CombatProjectileEffect",
+    "to_type": "Launch",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/CombatProjectileEffect.cs",
+    "from_class": "CombatProjectileEffect",
+    "to_type": "Lerp",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/CombatProjectileEffect.cs",
+    "from_class": "CombatProjectileEffect",
+    "to_type": "Max",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/CombatProjectileEffect.cs",
+    "from_class": "CombatProjectileEffect",
+    "to_type": "Min",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/CombatProjectileEffect.cs",
+    "from_class": "CombatProjectileEffect",
+    "to_type": "ParticleSystem",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/CombatProjectileEffect.cs",
+    "from_class": "CombatProjectileEffect",
+    "to_type": "ParticleSystemStopBehavior",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/CombatProjectileEffect.cs",
+    "from_class": "CombatProjectileEffect",
+    "to_type": "PI",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/CombatProjectileEffect.cs",
+    "from_class": "CombatProjectileEffect",
+    "to_type": "Play",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/CombatProjectileEffect.cs",
+    "from_class": "CombatProjectileEffect",
+    "to_type": "PlayParticles",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/CombatProjectileEffect.cs",
+    "from_class": "CombatProjectileEffect",
+    "to_type": "Presentation",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/CombatProjectileEffect.cs",
+    "from_class": "CombatProjectileEffect",
+    "to_type": "Project2048",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/CombatProjectileEffect.cs",
+    "from_class": "CombatProjectileEffect",
+    "to_type": "ResolveSourcePosition",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/CombatProjectileEffect.cs",
+    "from_class": "CombatProjectileEffect",
+    "to_type": "ResolveTargetPosition",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/CombatProjectileEffect.cs",
+    "from_class": "CombatProjectileEffect",
+    "to_type": "SetParent",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/CombatProjectileEffect.cs",
+    "from_class": "CombatProjectileEffect",
+    "to_type": "Sin",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/CombatProjectileEffect.cs",
+    "from_class": "CombatProjectileEffect",
+    "to_type": "Stop",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/CombatProjectileEffect.cs",
+    "from_class": "CombatProjectileEffect",
+    "to_type": "StopEmitting",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/CombatProjectileEffect.cs",
+    "from_class": "CombatProjectileEffect",
+    "to_type": "StopEmittingAndClear",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/CombatProjectileEffect.cs",
+    "from_class": "CombatProjectileEffect",
+    "to_type": "StopParticles",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/CombatProjectileEffect.cs",
+    "from_class": "CombatProjectileEffect",
+    "to_type": "TransformVector",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/CombatProjectileEffect.cs",
+    "from_class": "CombatProjectileEffect",
+    "to_type": "UnityEngine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/CombatProjectileEffect.cs",
+    "from_class": "CombatProjectileEffect",
+    "to_type": "Update",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/CombatProjectileEffect.cs",
+    "from_class": "CombatProjectileEffect",
+    "to_type": "Vector3",
     "relation_type": "uses",
     "strength": 1
   },
@@ -12322,13 +14072,6 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
-    "to_type": "Data",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
-    "from_class": "CombatUiView",
     "to_type": "Defense",
     "relation_type": "uses",
     "strength": 1
@@ -12441,13 +14184,6 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
-    "to_type": "FormatActionDescription",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
-    "from_class": "CombatUiView",
     "to_type": "FormatEnemyHeader",
     "relation_type": "uses",
     "strength": 1
@@ -12470,13 +14206,6 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
     "to_type": "FormatPlayerHp",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
-    "from_class": "CombatUiView",
-    "to_type": "FormatRemainingMoves",
     "relation_type": "uses",
     "strength": 1
   },
@@ -12512,13 +14241,6 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
     "to_type": "GetIntentBubbleColor",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
-    "from_class": "CombatUiView",
-    "to_type": "GetObstacleCellColor",
     "relation_type": "uses",
     "strength": 1
   },
@@ -12581,14 +14303,42 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
-    "to_type": "HideEnemyHpImmediately",
+    "to_type": "HideRuntimeOverlays",
     "relation_type": "uses",
     "strength": 1
   },
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
-    "to_type": "HideRuntimeOverlays",
+    "to_type": "HpBarBorderThickness",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
+    "from_class": "CombatUiView",
+    "to_type": "HpBarInterior",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
+    "from_class": "CombatUiView",
+    "to_type": "HpBarInteriorName",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
+    "from_class": "CombatUiView",
+    "to_type": "HpBarOutline",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
+    "from_class": "CombatUiView",
+    "to_type": "HpBarOutlineName",
     "relation_type": "uses",
     "strength": 1
   },
@@ -12624,6 +14374,34 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
     "to_type": "HpHitShakeMagnitude",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
+    "from_class": "CombatUiView",
+    "to_type": "HpStatusEffectXOffset",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
+    "from_class": "CombatUiView",
+    "to_type": "HpTextMinFontSize",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
+    "from_class": "CombatUiView",
+    "to_type": "HpTextOutlineDistance",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
+    "from_class": "CombatUiView",
+    "to_type": "HpTextOutlineWidth",
     "relation_type": "uses",
     "strength": 1
   },
@@ -12672,21 +14450,7 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
-    "to_type": "IsRewardReplacementVisible",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
-    "from_class": "CombatUiView",
     "to_type": "Keyboard",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
-    "from_class": "CombatUiView",
-    "to_type": "LastActionDescription",
     "relation_type": "uses",
     "strength": 1
   },
@@ -12729,13 +14493,6 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
     "to_type": "MaxHp",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
-    "from_class": "CombatUiView",
-    "to_type": "Movements",
     "relation_type": "uses",
     "strength": 1
   },
@@ -12806,13 +14563,6 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
     "to_type": "PlayBoardTransition",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
-    "from_class": "CombatUiView",
-    "to_type": "PlayBoardTransitionRoutine",
     "relation_type": "uses",
     "strength": 1
   },
@@ -12896,21 +14646,7 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
-    "to_type": "PulseTransitionTargets",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
-    "from_class": "CombatUiView",
     "to_type": "RectTransform",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
-    "from_class": "CombatUiView",
-    "to_type": "RemainingBoardMoves",
     "relation_type": "uses",
     "strength": 1
   },
@@ -12946,6 +14682,13 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
     "to_type": "RenderBoardPanel",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
+    "from_class": "CombatUiView",
+    "to_type": "RenderBoardPlayerStatus",
     "relation_type": "uses",
     "strength": 1
   },
@@ -13002,13 +14745,6 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
     "to_type": "RequestUseSkillById",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
-    "from_class": "CombatUiView",
-    "to_type": "ResolveBoardAnimationOverlay",
     "relation_type": "uses",
     "strength": 1
   },
@@ -13141,13 +14877,6 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
-    "to_type": "SetValue",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
-    "from_class": "CombatUiView",
     "to_type": "ShowEnemyHp",
     "relation_type": "uses",
     "strength": 1
@@ -13197,20 +14926,6 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
-    "to_type": "Sprite",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
-    "from_class": "CombatUiView",
-    "to_type": "StartCoroutine",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
-    "from_class": "CombatUiView",
     "to_type": "StatusEffects",
     "relation_type": "uses",
     "strength": 1
@@ -13218,7 +14933,7 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
-    "to_type": "StopCoroutine",
+    "to_type": "string",
     "relation_type": "uses",
     "strength": 1
   },
@@ -13246,14 +14961,49 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
-    "to_type": "The",
+    "to_type": "Theme",
     "relation_type": "uses",
     "strength": 1
   },
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
-    "to_type": "Theme",
+    "to_type": "ThemeHpBarBackgroundColor",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
+    "from_class": "CombatUiView",
+    "to_type": "ThemeHpBorderColor",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
+    "from_class": "CombatUiView",
+    "to_type": "ThemeHpDamageTrailColor",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
+    "from_class": "CombatUiView",
+    "to_type": "ThemeHpDarkColor",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
+    "from_class": "CombatUiView",
+    "to_type": "ThemeHpFillColor",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
+    "from_class": "CombatUiView",
+    "to_type": "ThemeHpTextOutlineColor",
     "relation_type": "uses",
     "strength": 1
   },
@@ -13512,6 +15262,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
+    "to_type": "WaitForSeconds",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
     "to_type": "WaitForSecondsRealtime",
     "relation_type": "creates",
     "strength": 2
@@ -13701,6 +15458,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
+    "to_type": "CombatProjectileEffect",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
     "to_type": "CombatSnapshot",
     "relation_type": "uses",
     "strength": 1
@@ -13716,13 +15480,6 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
     "to_type": "CombatWorldVfxProfileSO",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
-    "from_class": "CombatWorldSpriteView",
-    "to_type": "ConfigureDamageNumberGlow",
     "relation_type": "uses",
     "strength": 1
   },
@@ -13807,13 +15564,6 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
     "to_type": "DamageNumberPopupGlowPower",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
-    "from_class": "CombatWorldSpriteView",
-    "to_type": "DamageNumberPopupMaterial",
     "relation_type": "uses",
     "strength": 1
   },
@@ -13967,7 +15717,14 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
-    "to_type": "EnableKeyword",
+    "to_type": "EffectiveLifetimeSeconds",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "EffectiveSfxDelaySeconds",
     "relation_type": "uses",
     "strength": 1
   },
@@ -14128,6 +15885,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
+    "to_type": "EstimatedLifetimeSeconds",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
     "to_type": "EventSystems",
     "relation_type": "uses",
     "strength": 1
@@ -14177,6 +15941,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
+    "to_type": "GetComponentInChildren",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
     "to_type": "GetSnapshot",
     "relation_type": "uses",
     "strength": 1
@@ -14205,6 +15976,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
+    "to_type": "HasAuthoredVisual",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
     "to_type": "HasParticleVisual",
     "relation_type": "uses",
     "strength": 1
@@ -14212,42 +15990,7 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
-    "to_type": "HasProperty",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
-    "from_class": "CombatWorldSpriteView",
     "to_type": "Hit",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
-    "from_class": "CombatWorldSpriteView",
-    "to_type": "ID_FaceColor",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
-    "from_class": "CombatWorldSpriteView",
-    "to_type": "ID_GlowColor",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
-    "from_class": "CombatWorldSpriteView",
-    "to_type": "ID_OutlineColor",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
-    "from_class": "CombatWorldSpriteView",
-    "to_type": "ID_OutlineWidth",
     "relation_type": "uses",
     "strength": 1
   },
@@ -14289,21 +16032,14 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
-    "to_type": "Keyword_Glow",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
-    "from_class": "CombatWorldSpriteView",
-    "to_type": "Keyword_Outline",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
-    "from_class": "CombatWorldSpriteView",
     "to_type": "LastVfxCue",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "Launch",
     "relation_type": "uses",
     "strength": 1
   },
@@ -14318,6 +16054,13 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
     "to_type": "Material",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "Max",
     "relation_type": "uses",
     "strength": 1
   },
@@ -14388,6 +16131,20 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
     "to_type": "PlayCombatantActionAudioEffect",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "PlayCombatantActionAudioEffectAfterDelay",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "PlayCombatantActionAudioEffectNow",
     "relation_type": "uses",
     "strength": 1
   },
@@ -14597,6 +16354,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
+    "to_type": "ResolveAuthoredVisualDurationSeconds",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
     "to_type": "ResolveCurrentEnemyData",
     "relation_type": "uses",
     "strength": 1
@@ -14702,13 +16466,6 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
-    "to_type": "SetColor",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
-    "from_class": "CombatWorldSpriteView",
     "to_type": "SetEnemyRendererAlpha",
     "relation_type": "uses",
     "strength": 1
@@ -14716,21 +16473,7 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
-    "to_type": "SetFloat",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
-    "from_class": "CombatWorldSpriteView",
     "to_type": "SetParent",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
-    "from_class": "CombatWorldSpriteView",
-    "to_type": "ShaderUtilities",
     "relation_type": "uses",
     "strength": 1
   },
@@ -14891,6 +16634,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
+    "to_type": "TryPlayProjectileSkillEffect",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
     "to_type": "UnbindCombatEvents",
     "relation_type": "uses",
     "strength": 1
@@ -14913,6 +16663,13 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
     "to_type": "Vector3",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "WaitForSeconds",
     "relation_type": "uses",
     "strength": 1
   },
@@ -24845,6 +26602,13 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
+    "to_type": "ActionSkills",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
+    "from_class": "CombatUiViewTests",
     "to_type": "Add",
     "relation_type": "uses",
     "strength": 1
@@ -24881,6 +26645,13 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
     "to_type": "ApplyFear",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
+    "from_class": "CombatUiViewTests",
+    "to_type": "Art",
     "relation_type": "uses",
     "strength": 1
   },
@@ -24930,27 +26701,6 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
     "to_type": "AudioSource",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
-    "from_class": "CombatUiViewTests",
-    "to_type": "BattleScene",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
-    "from_class": "CombatUiViewTests",
-    "to_type": "BattleScene_CombatUiView_HasBoardEffectProfileOnly",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
-    "from_class": "CombatUiViewTests",
-    "to_type": "BindButton",
     "relation_type": "uses",
     "strength": 1
   },
@@ -25055,41 +26805,6 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
-    "to_type": "Button",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
-    "from_class": "CombatUiViewTests",
-    "to_type": "ButtonAudioRoot",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
-    "from_class": "CombatUiViewTests",
-    "to_type": "ButtonClickAudioRouter",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
-    "from_class": "CombatUiViewTests",
-    "to_type": "ButtonClickClip",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
-    "from_class": "CombatUiViewTests",
-    "to_type": "ButtonClickPlayed",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
-    "from_class": "CombatUiViewTests",
     "to_type": "Clear",
     "relation_type": "uses",
     "strength": 1
@@ -25161,13 +26876,6 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
     "to_type": "Contain",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
-    "from_class": "CombatUiViewTests",
-    "to_type": "CountPlay",
     "relation_type": "uses",
     "strength": 1
   },
@@ -25300,13 +27008,6 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
-    "to_type": "EditorSceneManager",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
-    "from_class": "CombatUiViewTests",
     "to_type": "Enemy",
     "relation_type": "uses",
     "strength": 1
@@ -25426,20 +27127,6 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
-    "to_type": "FindAnyObjectByType",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
-    "from_class": "CombatUiViewTests",
-    "to_type": "FindObjectsInactive",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
-    "from_class": "CombatUiViewTests",
     "to_type": "FloatingStatusLayer",
     "relation_type": "uses",
     "strength": 1
@@ -25496,6 +27183,13 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
+    "to_type": "GetPrivateField",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
+    "from_class": "CombatUiViewTests",
     "to_type": "GetRawConstantValue",
     "relation_type": "uses",
     "strength": 1
@@ -25538,6 +27232,13 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
+    "to_type": "HpBarBg",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
+    "from_class": "CombatUiViewTests",
     "to_type": "HpBarDamageFeedback_FlashesDamagedSegmentAndUsesShortShake",
     "relation_type": "uses",
     "strength": 1
@@ -25553,6 +27254,34 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
     "to_type": "HpBarFill",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
+    "from_class": "CombatUiViewTests",
+    "to_type": "HpBarRender_ReappliesFixedThemeFillColor",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
+    "from_class": "CombatUiViewTests",
+    "to_type": "HpBarSpritePath",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
+    "from_class": "CombatUiViewTests",
+    "to_type": "HpDamageTrailDuration_IsLongEnoughToRead",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
+    "from_class": "CombatUiViewTests",
+    "to_type": "HpDamageTrailDurationSeconds",
     "relation_type": "uses",
     "strength": 1
   },
@@ -25581,13 +27310,6 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
     "to_type": "Image",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
-    "from_class": "CombatUiViewTests",
-    "to_type": "Include",
     "relation_type": "uses",
     "strength": 1
   },
@@ -25658,13 +27380,6 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
     "to_type": "IntentBubbleText",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
-    "from_class": "CombatUiViewTests",
-    "to_type": "Invoke",
     "relation_type": "uses",
     "strength": 1
   },
@@ -25825,13 +27540,6 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
-    "to_type": "OpenScene",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
-    "from_class": "CombatUiViewTests",
     "to_type": "Outline",
     "relation_type": "uses",
     "strength": 1
@@ -25874,6 +27582,13 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
+    "to_type": "PlayerDamage_UpdatesBoardHpWhileActionScreenIsVisible",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
+    "from_class": "CombatUiViewTests",
     "to_type": "PointerEventData",
     "relation_type": "uses",
     "strength": 1
@@ -25909,7 +27624,21 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
+    "to_type": "PrototypeCombatScreenMode",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
+    "from_class": "CombatUiViewTests",
     "to_type": "PrototypeCombatText",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
+    "from_class": "CombatUiViewTests",
+    "to_type": "PrototypeCombatUiState",
     "relation_type": "uses",
     "strength": 1
   },
@@ -25958,21 +27687,7 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
-    "to_type": "Resources",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
-    "from_class": "CombatUiViewTests",
     "to_type": "Right",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
-    "from_class": "CombatUiViewTests",
-    "to_type": "RuntimeCombatButton",
     "relation_type": "uses",
     "strength": 1
   },
@@ -25986,7 +27701,14 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
-    "to_type": "Scenes",
+    "to_type": "ScreenMode",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
+    "from_class": "CombatUiViewTests",
+    "to_type": "SelectCategory",
     "relation_type": "uses",
     "strength": 1
   },
@@ -26008,6 +27730,13 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
     "to_type": "SetEnemyActionsPerTurn",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
+    "from_class": "CombatUiViewTests",
+    "to_type": "SetHpBarValue",
     "relation_type": "uses",
     "strength": 1
   },
@@ -26105,6 +27834,13 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
+    "to_type": "string",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
+    "from_class": "CombatUiViewTests",
     "to_type": "Swipe",
     "relation_type": "uses",
     "strength": 1
@@ -26168,6 +27904,20 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
+    "to_type": "ThemeHpDamageTrailColor",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
+    "from_class": "CombatUiViewTests",
+    "to_type": "ThemeHpFillColor",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
+    "from_class": "CombatUiViewTests",
     "to_type": "TMP_Text",
     "relation_type": "uses",
     "strength": 1
@@ -26225,6 +27975,13 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
     "to_type": "Vector3",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
+    "from_class": "CombatUiViewTests",
+    "to_type": "WideHexHpBar",
     "relation_type": "uses",
     "strength": 1
   },

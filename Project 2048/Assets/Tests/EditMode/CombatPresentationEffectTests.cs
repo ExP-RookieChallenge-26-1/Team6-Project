@@ -1244,7 +1244,7 @@ namespace Project2048.Tests
                 Assert.That(skill.activationEffect.sfxClip, Is.Not.Null, path);
                 if (path.EndsWith("Attack_3.asset", System.StringComparison.Ordinal))
                 {
-                    Assert.That(skill.activationEffect.EffectiveSfxDelaySeconds, Is.EqualTo(0.88f).Within(0.0001f), path);
+                    Assert.That(skill.activationEffect.EffectiveSfxDelaySeconds, Is.EqualTo(0.3f).Within(0.0001f), path);
                 }
             }
         }

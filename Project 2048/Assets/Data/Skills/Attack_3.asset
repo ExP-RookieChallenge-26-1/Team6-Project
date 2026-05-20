@@ -22,11 +22,22 @@ MonoBehaviour:
   icon: {fileID: 0}
   activationEffect:
     sfxClip: {fileID: 8300000, guid: 06f7a7d7eadbff146932fb42d28e1a78, type: 3}
-    vfxPrefab: {fileID: 0}
+    vfxPrefab: {fileID: 899824043960030591, guid: 5f8cf79947e4ddf47aee451b2b9de40a, type: 3}
     animationClip: {fileID: 0}
-    volumeScale: 1
-    minPitch: 1
-    maxPitch: 1
+    particleEffect:
+      objectName:
+      particlePrefab: {fileID: 0}
+      particleMaterial: {fileID: 0}
+      useParticleColor: 0
+      particleColor: {r: 1, g: 1, b: 1, a: 1}
+      lifetimeSeconds: 0.8
+      burstCount: 16
+      startSpeed: 0.6
+      startSize: 0.12
+      swirl: 0
+    volumeScale: 1.05
+    minPitch: 0.96
+    maxPitch: 1.04
     localOffset: {x: 0, y: 0, z: 0}
-    autoDestroySeconds: 1.25
+    autoDestroySeconds: 1.55
   description: "\uAC15\uD55C \uACF5\uACA9."

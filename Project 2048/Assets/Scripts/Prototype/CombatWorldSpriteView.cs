@@ -177,6 +177,11 @@ namespace Project2048.Prototype
             }
 
             var isAttack = skill.skillType == SkillType.Attack;
+            if (isAttack && TryPlayProjectileSkillEffect(skill.activationEffect, target))
+            {
+                return;
+            }
+
             var anchor = isAttack && target != null && enemyRenderer != null
                 ? enemyRenderer.transform
                 : playerRenderer != null
@@ -184,6 +189,43 @@ namespace Project2048.Prototype
                     : transform;
             var animator = isAttack ? enemyAnimator : playerAnimator;
             PlayCombatantActionEffect(skill.activationEffect, anchor, animator);
+        }
+
+        private bool TryPlayProjectileSkillEffect(CombatEffectBinding effect, EnemyController target)
+        {
+            if (effect?.vfxPrefab == null || target == null)
+            {
+                return false;
+            }
+
+            var prefabProjectile = effect.vfxPrefab.GetComponentInChildren<CombatProjectileEffect>(true);
+            if (prefabProjectile == null)
+            {
+                return false;
+            }
+
+            var sourceTransform = playerRenderer != null ? playerRenderer.transform : transform;
+            var targetTransform = enemyRenderer != null ? enemyRenderer.transform : transform;
+            PlayCombatantActionAudioEffect(effect);
+
+            var instance = Instantiate(effect.vfxPrefab, sourceTransform.position, Quaternion.identity, transform);
+            var projectile = instance.GetComponentInChildren<CombatProjectileEffect>(true);
+            projectile?.Launch(sourceTransform, targetTransform, effect.localOffset);
+
+            if (effect.animationClip != null && enemyAnimator != null && enemyAnimator.runtimeAnimatorController != null)
+            {
+                enemyAnimator.Play(effect.animationClip.name, 0, 0f);
+            }
+
+            var lifetime = projectile != null
+                ? Mathf.Max(effect.EffectiveAutoDestroySeconds, projectile.EstimatedLifetimeSeconds + 0.2f)
+                : effect.EffectiveAutoDestroySeconds;
+            if (lifetime > 0f)
+            {
+                Destroy(instance, lifetime);
+            }
+
+            return true;
         }
 
         private void Render(CombatSnapshot currentSnapshot)

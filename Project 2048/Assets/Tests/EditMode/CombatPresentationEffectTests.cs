@@ -518,6 +518,67 @@ namespace Project2048.Tests
         }
 
         [Test]
+        public void CombatWorldSpriteView_EnemyAttack_SpawnsThreeClawStripsAtPlayer()
+        {
+            var viewObject = CreateOwnedGameObject("WorldSpriteView");
+            var view = viewObject.AddComponent<CombatWorldSpriteView>();
+            var playerRenderer = CreateOwnedGameObject("PlayerSprite").AddComponent<SpriteRenderer>();
+            var enemyRenderer = CreateOwnedGameObject("EnemySprite").AddComponent<SpriteRenderer>();
+            var manager = CreateOwnedGameObject("CombatManager").AddComponent<CombatManager>();
+            var player = CreateOwnedGameObject("Player").AddComponent<PlayerCombatController>();
+            var enemy = CreateOwnedGameObject("Enemy").AddComponent<EnemyController>();
+            var bootstrap = CreateOwnedGameObject("Bootstrap").AddComponent<PrototypeCombatBootstrap>();
+            var playerData = CreatePlayerData(maxHp: 20, attackPower: 2);
+            var enemyData = CreateEnemyData(maxHp: 10, attackValue: 3);
+
+            playerRenderer.sortingOrder = 7;
+            playerRenderer.transform.localPosition = new Vector3(-1f, 0f, 0f);
+            enemyRenderer.transform.localPosition = new Vector3(1f, 0f, 0f);
+            SetPrivateField(view, "playerRenderer", playerRenderer);
+            SetPrivateField(view, "enemyRenderer", enemyRenderer);
+            SetPrivateField(bootstrap, "combatManager", manager);
+
+            manager.SetCombatants(player, new[] { enemy });
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new List<EnemySO> { enemyData },
+                boardMoveCount = 1,
+            });
+            manager.ResolveBoardPhase();
+            view.Initialize(bootstrap);
+
+            manager.RequestEndPlayerTurn();
+
+            var slash = playerRenderer.transform.Find("EnemyClawSlash2D")?.GetComponent<CombatClawSlash2DEffect>();
+            Assert.That(slash, Is.Not.Null);
+            Assert.That(slash.transform.localPosition.x, Is.GreaterThan(0.2f));
+            Assert.That(slash.GetComponentInChildren<ParticleSystem>(), Is.Null);
+            Assert.That(slash.GetComponentInChildren<LineRenderer>(), Is.Null);
+
+            var renderers = slash.GetComponentsInChildren<MeshRenderer>();
+            Assert.That(renderers.Length, Is.EqualTo(6));
+
+            var coreRenderers = renderers
+                .Where(renderer => renderer.gameObject.name.StartsWith("Claw_Core", System.StringComparison.Ordinal))
+                .ToList();
+            Assert.That(coreRenderers.Count, Is.EqualTo(3));
+            Assert.That(coreRenderers.All(renderer => renderer.sortingOrder > playerRenderer.sortingOrder), Is.True);
+            Assert.That(coreRenderers.All(renderer => renderer.sharedMaterial != null), Is.True);
+            Assert.That(coreRenderers.All(renderer => renderer.sharedMaterial.shader.name == CombatClawSlash2DEffect.ShaderName), Is.True);
+
+            var backBounds = coreRenderers.Single(renderer => renderer.gameObject.name.EndsWith("Back")).GetComponent<MeshFilter>().sharedMesh.bounds;
+            var midMesh = coreRenderers.Single(renderer => renderer.gameObject.name.EndsWith("Mid")).GetComponent<MeshFilter>().sharedMesh;
+            var midBounds = midMesh.bounds;
+            var frontBounds = coreRenderers.Single(renderer => renderer.gameObject.name.EndsWith("Front")).GetComponent<MeshFilter>().sharedMesh.bounds;
+
+            Assert.That(midMesh.vertexCount, Is.EqualTo(CombatClawSlash2DEffect.DefaultSegmentCount * 2));
+            Assert.That(midBounds.center.x, Is.GreaterThan(0f));
+            Assert.That(Vector3.Distance(backBounds.center, midBounds.center), Is.GreaterThan(0.1f));
+            Assert.That(Vector3.Distance(frontBounds.center, midBounds.center), Is.GreaterThan(0.1f));
+        }
+
+        [Test]
         public void CombatWorldSpriteView_PlayerAttackAgainstEnemyBlock_SpawnsEnemyShieldParticles()
         {
             var viewObject = CreateOwnedGameObject("WorldSpriteView");

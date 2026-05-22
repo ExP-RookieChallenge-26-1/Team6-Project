@@ -53,7 +53,13 @@ namespace Project2048.Core
 
         public void SetGameState(GameState state)
         {
+            if (currentGameState == state)
+            {
+                return;
+            }
+
             currentGameState = state;
+            OnGameStateChanged?.Invoke(currentGameState);
         }
     }
 }

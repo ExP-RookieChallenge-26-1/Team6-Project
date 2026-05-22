@@ -71,6 +71,10 @@ namespace Project2048.Prototype
         [SerializeField] private Material shieldImpactParticleMaterial;
         [SerializeField] private Material fearDebuffParticleMaterial;
         [SerializeField] private Material darknessDebuffParticleMaterial;
+        [SerializeField] private CombatClawSlash2DEffect enemyClawSlashEffectPrefab;
+        [SerializeField] private bool playEnemyClawSlashEffect = true;
+        [SerializeField] private Vector3 enemyClawSlashLocalOffset = new(0.28f, 0.2f, 0f);
+        [SerializeField, Min(0.01f)] private float enemyClawSlashScale = 1f;
 
         private CombatManager combatManager;
         private CombatSnapshot snapshot;
@@ -831,7 +835,7 @@ namespace Project2048.Prototype
         {
             if (enemyRenderer == null)
             {
-                PlayCombatantActionEffect(effect, transform, enemyAnimator);
+                PlayEnemyAttackImpactEffects(effect);
                 return;
             }
 
@@ -842,11 +846,65 @@ namespace Project2048.Prototype
             if (!Application.isPlaying || !isActiveAndEnabled)
             {
                 RestoreEnemyRendererTransform();
-                PlayCombatantActionEffect(effect, enemyRenderer.transform, enemyAnimator);
+                PlayEnemyAttackImpactEffects(effect);
                 return;
             }
 
             enemyAttackLungeCoroutine = StartCoroutine(EnemyAttackLungeRoutine(effect));
+        }
+
+        private void PlayEnemyAttackImpactEffects(CombatEffectBinding effect)
+        {
+            PlayEnemyClawSlashEffect();
+            PlayCombatantActionEffect(
+                effect,
+                enemyRenderer != null ? enemyRenderer.transform : transform,
+                enemyAnimator);
+        }
+
+        private void PlayEnemyClawSlashEffect()
+        {
+            if (!playEnemyClawSlashEffect)
+            {
+                return;
+            }
+
+            var sortingReference = playerRenderer != null ? playerRenderer : enemyRenderer;
+            var parent = sortingReference != null ? sortingReference.transform : transform;
+            var slash = enemyClawSlashEffectPrefab != null
+                ? Instantiate(enemyClawSlashEffectPrefab, parent)
+                : CreateRuntimeEnemyClawSlashEffect(parent);
+            if (slash == null)
+            {
+                return;
+            }
+
+            slash.gameObject.name = "EnemyClawSlash2D";
+            slash.transform.localPosition = enemyClawSlashLocalOffset;
+            slash.transform.localRotation = Quaternion.identity;
+            slash.transform.localScale = Vector3.one * Mathf.Max(0.01f, enemyClawSlashScale);
+            slash.Play(
+                ResolveEnemyAttackDirectionSign(),
+                sortingReference,
+                previewComplete: !Application.isPlaying || !isActiveAndEnabled);
+        }
+
+        private static CombatClawSlash2DEffect CreateRuntimeEnemyClawSlashEffect(Transform parent)
+        {
+            var slashObject = new GameObject("EnemyClawSlash2D");
+            slashObject.transform.SetParent(parent, false);
+            return slashObject.AddComponent<CombatClawSlash2DEffect>();
+        }
+
+        private float ResolveEnemyAttackDirectionSign()
+        {
+            if (enemyRenderer == null || playerRenderer == null)
+            {
+                return -1f;
+            }
+
+            var deltaX = playerRenderer.transform.position.x - enemyRenderer.transform.position.x;
+            return deltaX >= 0f ? 1f : -1f;
         }
 
         private IEnumerator EnemyAppearIntroRoutine(CombatEffectBinding effect)
@@ -901,7 +959,7 @@ namespace Project2048.Prototype
                 if (!playedImpactEffect && t >= EnemyAttackLungeImpactTime)
                 {
                     playedImpactEffect = true;
-                    PlayCombatantActionEffect(effect, enemyRenderer.transform, enemyAnimator);
+                    PlayEnemyAttackImpactEffects(effect);
                 }
 
                 Vector3 position;
@@ -933,7 +991,7 @@ namespace Project2048.Prototype
             RestoreEnemyRendererTransform();
             if (!playedImpactEffect)
             {
-                PlayCombatantActionEffect(effect, enemyRenderer.transform, enemyAnimator);
+                PlayEnemyAttackImpactEffects(effect);
             }
 
             enemyAttackLungeCoroutine = null;

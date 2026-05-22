@@ -238,6 +238,15 @@ namespace Project2048.Tests
         }
 
         [Test]
+        public void HpBarTheme_UsesDarkArcanePalette()
+        {
+            Assert.That(CombatUiView.ThemeHpFillColor.b, Is.GreaterThan(CombatUiView.ThemeHpFillColor.r));
+            Assert.That(CombatUiView.ThemeHpFillColor.g, Is.LessThan(0.15f));
+            Assert.That(CombatUiView.ThemeHpBarBackgroundColor.maxColorComponent, Is.LessThan(0.06f));
+            Assert.That(CombatUiView.ThemeHpDamageTrailColor.a, Is.GreaterThanOrEqualTo(0.9f));
+        }
+
+        [Test]
         public void PlayerDamage_UpdatesBoardHpWhileActionScreenIsVisible()
         {
             var viewObject = CreateOwnedGameObject("CombatView");

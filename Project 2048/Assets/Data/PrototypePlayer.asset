@@ -12,11 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5d4448f93dfa1c4c8ee4774c46926d9, type: 3}
   m_Name: PrototypePlayer
   m_EditorClassIdentifier: Game.Core::Project2048.Combat.PlayerSO
-  usePokemonHpFormula: 1
-  statLevel: 50
-  baseHp: 40
-  hpIndividualValue: 0
-  hpEffortValue: 0
   maxHp: 100
   attackPower: 2
   baseDefensePower: 0

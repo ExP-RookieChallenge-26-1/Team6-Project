@@ -9,7 +9,7 @@ namespace Project2048.Tests
     public class PrototypeCombatFactoryTests
     {
         [Test]
-        public void CreateDefaultLoadout_EquipsFourPrototypeSkills_ForPokemonStyleSlots()
+        public void CreateDefaultLoadout_EquipsFourPrototypeSkills()
         {
             var loadout = PrototypeCombatFactory.CreateDefaultLoadout();
 
@@ -17,6 +17,7 @@ namespace Project2048.Tests
             {
                 Assert.That(loadout.PlayerData, Is.Not.Null);
                 Assert.That(loadout.EnemyData, Is.Not.Null);
+                Assert.That(loadout.PlayerData.maxHp, Is.EqualTo(100));
                 Assert.That(loadout.Skills.Count, Is.EqualTo(6));
                 Assert.That(loadout.Skills.Select(skill => skill.skillId), Is.EqualTo(new[]
                 {

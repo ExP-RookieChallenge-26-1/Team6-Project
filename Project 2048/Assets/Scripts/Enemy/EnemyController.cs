@@ -11,6 +11,8 @@ namespace Project2048.Enemy
         public EnemySO Data { get; private set; }
         public int MaxHp { get; private set; }
         public int CurrentHp { get; private set; }
+        public int AttackPower { get; private set; }
+        public int EffectiveAttackPower => Mathf.Max(0, AttackPower + AttackModifier);
         public int BaseDefensePower { get; private set; }
         public int DefenseModifier { get; private set; }
         public int EffectiveDefensePower => Mathf.Max(0, BaseDefensePower + DefenseModifier);
@@ -41,6 +43,7 @@ namespace Project2048.Enemy
             BindDataValidation();
             MaxHp = Mathf.Max(1, data.maxHp);
             CurrentHp = MaxHp;
+            AttackPower = Mathf.Max(0, data.attackPower);
             BaseDefensePower = Mathf.Max(0, data.baseDefensePower);
             DefenseModifier = 0;
             Block = 0;
@@ -66,6 +69,7 @@ namespace Project2048.Enemy
 
             MaxHp = Mathf.Max(1, Data.maxHp);
             CurrentHp = Mathf.Clamp(CurrentHp, 0, MaxHp);
+            AttackPower = Mathf.Max(0, Data.attackPower);
             BaseDefensePower = Mathf.Max(0, Data.baseDefensePower);
             CriticalChance = Mathf.Clamp01(Data.criticalChance);
             CriticalDamageMultiplier = Mathf.Max(1f, Data.criticalDamageMultiplier);
@@ -222,11 +226,6 @@ namespace Project2048.Enemy
                 if (currentIntent == null)
                 {
                     continue;
-                }
-
-                if (currentIntent.intentType == EnemyIntentType.Attack)
-                {
-                    currentIntent.value = Mathf.Max(0, currentIntent.value + AttackModifier);
                 }
 
                 currentIntents.Add(currentIntent);

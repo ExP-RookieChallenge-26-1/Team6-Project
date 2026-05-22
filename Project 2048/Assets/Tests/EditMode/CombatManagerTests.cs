@@ -34,7 +34,7 @@ namespace Project2048.Tests
             var enemy = CreateGameObject<EnemyController>("Enemy");
             var attackSkill = CreateSkill("basic-attack", SkillType.Attack, 5, 3);
             var playerData = CreatePlayerData(maxHp: 20, attackPower: 2);
-            var enemyData = CreateEnemyData(maxHp: 5, attackValue: 4);
+            var enemyData = CreateEnemyData(maxHp: 4, attackValue: 4);
 
             manager.SetCombatants(player, new[] { enemy });
             manager.StartCombat(new CombatSetup
@@ -95,13 +95,13 @@ namespace Project2048.Tests
             manager.ResolveBoardPhase();
             manager.RequestEndPlayerTurn();
 
-            Assert.That(player.CurrentHp, Is.EqualTo(16));
+            Assert.That(player.CurrentHp, Is.InRange(4, 6));
             Assert.That(manager.CurrentPhase, Is.EqualTo(CombatPhase.BoardPhase));
             Assert.That(manager.TurnController.TurnCount, Is.EqualTo(2));
         }
 
         [Test]
-        public void DamageCalculator_AppliesDefenseVarianceAndCriticalMultiplier()
+        public void DamageCalculator_UsesPokemonStyleAttackTimesMovePower_WithVarianceAndCriticalMultiplier()
         {
             var playerObject = CreateGameObject<PlayerCombatController>("Player");
             var enemyObject = CreateGameObject<EnemyController>("Enemy");
@@ -111,14 +111,23 @@ namespace Project2048.Tests
 
             playerData.criticalChance = 1f;
             playerData.criticalDamageMultiplier = 1.5f;
-            enemyData.baseDefensePower = 100;
+            enemyData.baseDefensePower = 10;
             playerObject.Init(playerData);
             enemyObject.Init(enemyData);
 
             var damage = new DamageCalculator(new System.Random(1))
                 .CalculatePlayerSkillDamage(playerObject, skill, enemyObject);
 
+            var strongerMoveDamage = new DamageCalculator(new System.Random(1))
+                .CalculateMoveDamage(
+                    attackPower: 10,
+                    movePower: 20,
+                    defensePower: 10,
+                    criticalChance: 1f,
+                    criticalDamageMultiplier: 1.5f);
+
             Assert.That(damage, Is.InRange(13, 15));
+            Assert.That(strongerMoveDamage, Is.GreaterThan(damage));
         }
 
         [Test]
@@ -330,7 +339,7 @@ namespace Project2048.Tests
             manager.ResolveBoardPhase();
             manager.RequestEndPlayerTurn();
 
-            Assert.That(player.CurrentHp, Is.EqualTo(16));
+            Assert.That(player.CurrentHp, Is.InRange(4, 6));
             Assert.That(enemy.Block, Is.EqualTo(5));
             Assert.That(manager.CurrentPhase, Is.EqualTo(CombatPhase.BoardPhase));
         }
@@ -605,7 +614,7 @@ namespace Project2048.Tests
 
             manager.RequestEndPlayerTurn();
 
-            Assert.That(player.CurrentHp, Is.EqualTo(26));
+            Assert.That(player.CurrentHp, Is.InRange(14, 16));
             Assert.That(enemy.Block, Is.EqualTo(5));
             Assert.That(player.FearStacks, Is.EqualTo(PlayerCombatController.FearDefenseGainPenalty));
             Assert.That(manager.CurrentPhase, Is.EqualTo(CombatPhase.BoardPhase));
@@ -653,7 +662,7 @@ namespace Project2048.Tests
         {
             var player = CreateGameObject<PlayerCombatController>("Player");
             var enemy = CreateGameObject<EnemyController>("Enemy");
-            var playerData = CreatePlayerData(maxHp: 20, attackPower: 0);
+            var playerData = CreatePlayerData(maxHp: 20, attackPower: 1);
             var enemyData = CreateEnemyData(maxHp: 100, attackValue: 0);
             var split = CreateSkill("split", SkillType.Defense, cost: 0, power: 0);
             split.effectKind = SkillEffectKind.SplitAttack;

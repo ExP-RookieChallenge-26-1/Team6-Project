@@ -6,7 +6,7 @@ namespace Project2048.Combat
 {
     public class DamageCalculator
     {
-        private const float DefenseScale = 100f;
+        private const int MinimumDefenseStat = 1;
         private const float MinimumDamageVariance = 0.85f;
         private const float MaximumDamageVariance = 1f;
 
@@ -39,9 +39,9 @@ namespace Project2048.Combat
                 return 0;
             }
 
-            var attackValue = Mathf.Max(0, player.EffectiveAttackPower + skillPower + player.EchoDamageBonus);
-            return CalculateDamage(
-                attackValue,
+            return CalculateMoveDamage(
+                player.EffectiveAttackPower,
+                skillPower + player.EchoDamageBonus,
                 target?.EffectiveDefensePower ?? 0,
                 player.CriticalChance,
                 player.CriticalDamageMultiplier);
@@ -59,11 +59,37 @@ namespace Project2048.Combat
                 return 0;
             }
 
-            return CalculateDamage(
-                Mathf.Max(0, intent.value),
+            return CalculateMoveDamage(
+                enemy?.EffectiveAttackPower ?? 0,
+                intent.movePower > 0 ? intent.movePower : intent.value,
                 target?.EffectiveDefensePower ?? 0,
                 enemy?.CriticalChance ?? 0f,
                 enemy?.CriticalDamageMultiplier ?? 1f);
+        }
+
+        public int CalculateMoveDamage(
+            int attackPower,
+            int movePower,
+            int defensePower,
+            float criticalChance,
+            float criticalDamageMultiplier)
+        {
+            movePower = Mathf.Max(0, movePower);
+            attackPower = Mathf.Max(0, attackPower);
+            if (attackPower == 0 || movePower == 0)
+            {
+                return 0;
+            }
+
+            var attackDefenseRatio = attackPower / (float)Mathf.Max(MinimumDefenseStat, defensePower);
+            var baseDamage = movePower * attackDefenseRatio;
+            var varied = baseDamage * RollDamageVariance();
+            if (RollCritical(criticalChance))
+            {
+                varied *= Mathf.Max(1f, criticalDamageMultiplier);
+            }
+
+            return Mathf.Max(1, Mathf.CeilToInt(varied));
         }
 
         public int CalculateDamage(
@@ -72,20 +98,12 @@ namespace Project2048.Combat
             float criticalChance,
             float criticalDamageMultiplier)
         {
-            attackValue = Mathf.Max(0, attackValue);
-            if (attackValue == 0)
-            {
-                return 0;
-            }
-
-            var mitigated = attackValue * DefenseScale / (DefenseScale + Mathf.Max(0, defensePower));
-            var varied = mitigated * RollDamageVariance();
-            if (RollCritical(criticalChance))
-            {
-                varied *= Mathf.Max(1f, criticalDamageMultiplier);
-            }
-
-            return Mathf.Max(1, Mathf.CeilToInt(varied));
+            return CalculateMoveDamage(
+                attackValue,
+                movePower: 1,
+                defensePower,
+                criticalChance,
+                criticalDamageMultiplier);
         }
 
         private float RollDamageVariance()

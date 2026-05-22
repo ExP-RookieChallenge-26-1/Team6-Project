@@ -9,13 +9,6 @@ namespace Project2048.Combat
     [CreateAssetMenu(menuName = "Game/Player")]
     public class PlayerSO : ScriptableObject
     {
-        [Header("HP Formula")]
-        public bool usePokemonHpFormula;
-        [Min(1)] public int statLevel = 50;
-        [Min(1)] public int baseHp = 40;
-        [Range(0, 31)] public int hpIndividualValue;
-        [Range(0, 252)] public int hpEffortValue;
-
         [Header("Combat Stats")]
         public int maxHp = 100;
         public int attackPower = 3;
@@ -42,32 +35,11 @@ namespace Project2048.Combat
 
         public int ResolveMaxHp()
         {
-            if (!usePokemonHpFormula)
-            {
-                return Mathf.Max(1, maxHp);
-            }
-
-            return CalculatePokemonHp(baseHp, statLevel, hpIndividualValue, hpEffortValue);
-        }
-
-        public static int CalculatePokemonHp(int baseHp, int level, int individualValue, int effortValue)
-        {
-            baseHp = Mathf.Max(1, baseHp);
-            level = Mathf.Max(1, level);
-            individualValue = Mathf.Clamp(individualValue, 0, 31);
-            effortValue = Mathf.Clamp(effortValue, 0, 252);
-
-            return Mathf.Max(
-                1,
-                Mathf.FloorToInt(((2 * baseHp + individualValue + Mathf.FloorToInt(effortValue / 4f)) * level) / 100f) + level + 10);
+            return Mathf.Max(1, maxHp);
         }
 
         private void OnValidate()
         {
-            statLevel = Mathf.Max(1, statLevel);
-            baseHp = Mathf.Max(1, baseHp);
-            hpIndividualValue = Mathf.Clamp(hpIndividualValue, 0, 31);
-            hpEffortValue = Mathf.Clamp(hpEffortValue, 0, 252);
             maxHp = Mathf.Max(1, maxHp);
             attackPower = Mathf.Max(0, attackPower);
             baseDefensePower = Mathf.Max(0, baseDefensePower);

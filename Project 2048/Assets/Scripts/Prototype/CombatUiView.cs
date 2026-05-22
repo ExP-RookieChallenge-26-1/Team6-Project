@@ -57,6 +57,7 @@ namespace Project2048.Prototype
         private const float HpBarBorderThickness = 2.75f;
         private const string HpBarInteriorName = "HpBarInterior";
         private const string HpBarOutlineName = "HpBarOutline";
+        private const string StatusEffectTemplateName = "StatusEffectIconSample";
         private const float UiSfxDistance = 10000f;
         private static readonly string CostFormulaTooltipDescription =
             $"2048 코스트 환산식\nlog2(전체 타일 합) + log2(가장 큰 타일) x {CostConverter.LargestTileBonusMultiplier} - (타일 개수 - 1) / {CostConverter.FragmentationPenaltyDivisor}\n빈 칸, 장애물, 2의 거듭제곱이 아닌 타일은 제외";
@@ -950,7 +951,7 @@ namespace Project2048.Prototype
                 if (button != null)
                 {
                     button.gameObject.SetActive(isSlot);
-                    button.interactable = hasSkill;
+                    button.interactable = hasSkill && canAfford;
                     ApplySkillSlotTheme(button, hasSkill ? visibleSkills[i] : null, canAfford);
                     var slotIndex = i;
                     BindButton(button, () => OnSkillSlotClicked(slotIndex));
@@ -1249,9 +1250,9 @@ namespace Project2048.Prototype
             EnsureDamageTrailFill(playerBattleHpBarFill);
             EnsureDamageTrailFill(enemyHpBarFill);
             EnsureDamageTrailFill(hpBarFill);
-            playerBoardStatusEffectsRoot = EnsureStatusEffectsRoot(hpBarFill, "PlayerBoardStatusEffects") ?? playerBoardStatusEffectsRoot;
-            playerBattleStatusEffectsRoot = EnsureStatusEffectsRoot(playerBattleHpBarFill, "PlayerBattleStatusEffects") ?? playerBattleStatusEffectsRoot;
-            enemyStatusEffectsRoot = EnsureStatusEffectsRoot(enemyHpBarFill, "EnemyStatusEffects") ?? enemyStatusEffectsRoot;
+            playerBoardStatusEffectsRoot = ResolveStatusEffectsRoot(hpBarFill, "PlayerBoardStatusEffects") ?? playerBoardStatusEffectsRoot;
+            playerBattleStatusEffectsRoot = ResolveStatusEffectsRoot(playerBattleHpBarFill, "PlayerBattleStatusEffects") ?? playerBattleStatusEffectsRoot;
+            enemyStatusEffectsRoot = ResolveStatusEffectsRoot(enemyHpBarFill, "EnemyStatusEffects") ?? enemyStatusEffectsRoot;
             EnsureStatusTooltip();
         }
 
@@ -1443,24 +1444,16 @@ namespace Project2048.Prototype
             }
 
             var existing = hpRoot.Find("DamageTrailFill");
-            Image trailImage;
-            RectTransform trailRect;
-            if (existing != null)
+            if (existing == null)
             {
-                trailImage = existing.GetComponent<Image>();
-                if (trailImage == null)
-                {
-                    trailImage = existing.gameObject.AddComponent<Image>();
-                }
-
-                trailRect = existing as RectTransform ?? existing.gameObject.AddComponent<RectTransform>();
+                return null;
             }
-            else
+
+            var trailImage = existing.GetComponent<Image>();
+            var trailRect = existing as RectTransform;
+            if (trailImage == null || trailRect == null)
             {
-                var trailObject = new GameObject("DamageTrailFill", typeof(RectTransform), typeof(Image));
-                trailObject.transform.SetParent(hpRoot, false);
-                trailImage = trailObject.GetComponent<Image>();
-                trailRect = trailObject.GetComponent<RectTransform>();
+                return null;
             }
 
             trailImage.sprite = fillImage.sprite;
@@ -1496,24 +1489,16 @@ namespace Project2048.Prototype
             }
 
             var existing = hpRoot.Find("DamageFlashFill");
-            Image flashImage;
-            RectTransform flashRect;
-            if (existing != null)
+            if (existing == null)
             {
-                flashImage = existing.GetComponent<Image>();
-                if (flashImage == null)
-                {
-                    flashImage = existing.gameObject.AddComponent<Image>();
-                }
-
-                flashRect = existing as RectTransform ?? existing.gameObject.AddComponent<RectTransform>();
+                return null;
             }
-            else
+
+            var flashImage = existing.GetComponent<Image>();
+            var flashRect = existing as RectTransform;
+            if (flashImage == null || flashRect == null)
             {
-                var flashObject = new GameObject("DamageFlashFill", typeof(RectTransform), typeof(Image));
-                flashObject.transform.SetParent(hpRoot, false);
-                flashImage = flashObject.GetComponent<Image>();
-                flashRect = flashObject.GetComponent<RectTransform>();
+                return null;
             }
 
             flashImage.sprite = fillImage.sprite;
@@ -1898,7 +1883,7 @@ namespace Project2048.Prototype
             return fillImage.transform.parent as RectTransform ?? fillImage.rectTransform;
         }
 
-        private RectTransform EnsureStatusEffectsRoot(Image fillImage, string rootName)
+        private RectTransform ResolveStatusEffectsRoot(Image fillImage, string rootName)
         {
             var hpRoot = ResolveHpRoot(fillImage);
             if (hpRoot == null)
@@ -1914,14 +1899,7 @@ namespace Project2048.Prototype
                 return existing;
             }
 
-            var rootObject = new GameObject(rootName, typeof(RectTransform), typeof(HorizontalLayoutGroup));
-            rootObject.transform.SetParent(hpRoot, false);
-            var root = rootObject.GetComponent<RectTransform>();
-            ConfigureStatusEffectsRoot(root);
-
-            ConfigureStatusEffectsLayout(rootObject.GetComponent<HorizontalLayoutGroup>());
-            root.SetAsLastSibling();
-            return root;
+            return null;
         }
 
         private static void EnsureStatusEffectsLayout(RectTransform root, bool preserveExistingLayout)
@@ -1934,8 +1912,7 @@ namespace Project2048.Prototype
             var layout = root.GetComponent<HorizontalLayoutGroup>();
             if (layout == null)
             {
-                layout = root.gameObject.AddComponent<HorizontalLayoutGroup>();
-                preserveExistingLayout = false;
+                return;
             }
 
             if (!preserveExistingLayout)
@@ -1989,7 +1966,14 @@ namespace Project2048.Prototype
 
             for (var i = root.childCount - 1; i >= 0; i--)
             {
-                DestroyAnimationObject(root.GetChild(i).gameObject);
+                var child = root.GetChild(i);
+                if (child.name == StatusEffectTemplateName)
+                {
+                    child.gameObject.SetActive(false);
+                    continue;
+                }
+
+                DestroyAnimationObject(child.gameObject);
             }
 
             var hasEffects = effects != null && effects.Count > 0;
@@ -2012,17 +1996,29 @@ namespace Project2048.Prototype
                 return;
             }
 
-            var chipObject = new GameObject($"StatusEffect_{effect.Id}", typeof(RectTransform), typeof(Image), typeof(StatusEffectTooltipTarget));
-            chipObject.transform.SetParent(root, false);
-            var chipRect = chipObject.GetComponent<RectTransform>();
-            chipRect.sizeDelta = new Vector2(32f, 32f);
+            var template = root.Find(StatusEffectTemplateName);
+            if (template == null)
+            {
+                return;
+            }
 
+            var chipObject = Instantiate(template.gameObject, root);
+            chipObject.name = $"StatusEffect_{effect.Id}";
+            chipObject.SetActive(true);
+            var chipRect = chipObject.GetComponent<RectTransform>();
             var image = chipObject.GetComponent<Image>();
+            if (chipRect == null || image == null)
+            {
+                DestroyAnimationObject(chipObject);
+                return;
+            }
+
+            chipRect.sizeDelta = new Vector2(32f, 32f);
             image.color = GetStatusEffectColor(effect);
             image.raycastTarget = true;
 
-            chipObject.GetComponent<StatusEffectTooltipTarget>()
-                .Initialize(effect.Description, ShowStatusTooltip, HideStatusTooltip);
+            var tooltipTarget = chipObject.GetComponent<StatusEffectTooltipTarget>();
+            tooltipTarget?.Initialize(effect.Description, ShowStatusTooltip, HideStatusTooltip);
         }
 
         private void ConfigureCostFormulaHelp()
@@ -2051,46 +2047,34 @@ namespace Project2048.Prototype
                 label.raycastTarget = false;
             }
 
-            if (!icon.TryGetComponent<StatusEffectTooltipTarget>(out var target))
+            if (icon.TryGetComponent<StatusEffectTooltipTarget>(out var target))
             {
-                target = icon.AddComponent<StatusEffectTooltipTarget>();
+                target.Initialize(CostFormulaTooltipDescription, ShowStatusTooltip, HideStatusTooltip);
             }
-
-            target.Initialize(CostFormulaTooltipDescription, ShowStatusTooltip, HideStatusTooltip);
         }
 
         private void EnsureStatusTooltip()
         {
             if (statusTooltip == null)
             {
-                statusTooltip = new GameObject("StatusTooltip", typeof(RectTransform), typeof(Image));
-                statusTooltip.transform.SetParent(transform, false);
-                var rect = statusTooltip.GetComponent<RectTransform>();
-                rect.anchorMin = new Vector2(0.5f, 0.5f);
-                rect.anchorMax = new Vector2(0.5f, 0.5f);
-                rect.pivot = new Vector2(0.5f, 0f);
-                rect.anchoredPosition = new Vector2(0f, 48f);
-                rect.sizeDelta = new Vector2(320f, 56f);
+                return;
             }
 
-            if (!statusTooltip.TryGetComponent<Image>(out var image))
+            if (statusTooltip.TryGetComponent<Image>(out var image))
             {
-                image = statusTooltip.AddComponent<Image>();
+                image.color = statusTooltipColor;
+                image.raycastTarget = false;
             }
-
-            image.color = statusTooltipColor;
-            image.raycastTarget = false;
 
             if (statusTooltipText == null)
             {
-                var textObject = new GameObject("Text", typeof(RectTransform), typeof(TextMeshProUGUI));
-                textObject.transform.SetParent(statusTooltip.transform, false);
-                var textRect = textObject.GetComponent<RectTransform>();
-                textRect.anchorMin = Vector2.zero;
-                textRect.anchorMax = Vector2.one;
-                textRect.offsetMin = new Vector2(10f, 6f);
-                textRect.offsetMax = new Vector2(-10f, -6f);
-                statusTooltipText = textObject.GetComponent<TextMeshProUGUI>();
+                statusTooltipText = statusTooltip.GetComponentInChildren<TMP_Text>(true);
+            }
+
+            if (statusTooltipText == null)
+            {
+                statusTooltip.SetActive(false);
+                return;
             }
 
             statusTooltipText.alignment = TextAlignmentOptions.Center;

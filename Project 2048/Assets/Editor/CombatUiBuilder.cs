@@ -318,11 +318,6 @@ namespace Project2048.PrototypeEditor
             var skills = new List<SkillSO> { attack1, attack2, attack3, defense1, defense2, defense3 };
 
             var player = CreateOrLoadAsset<PlayerSO>(DataFolder + "/PrototypePlayer.asset");
-            player.usePokemonHpFormula = true;
-            player.statLevel = 50;
-            player.baseHp = 40;
-            player.hpIndividualValue = 0;
-            player.hpEffortValue = 0;
             player.maxHp = 100;
             player.attackPower = 2;
             player.initialBoardMoveCount = 12;

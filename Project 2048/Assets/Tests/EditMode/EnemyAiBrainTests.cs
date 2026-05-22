@@ -310,6 +310,7 @@ namespace Project2048.Tests
             Assert.That(enemy.CurrentIntent.displayName, Is.EqualTo("빛 발사"));
             Assert.That(enemy.CurrentIntent.intentType, Is.EqualTo(EnemyIntentType.Attack));
             Assert.That(enemy.CurrentIntent.value, Is.EqualTo(data.attackPower + 5));
+            Assert.That(enemy.CurrentIntent.movePower, Is.EqualTo(5));
         }
 
         private EnemyController CreateEnemy(string name)

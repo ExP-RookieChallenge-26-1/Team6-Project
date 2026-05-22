@@ -10,6 +10,7 @@ namespace Project2048.Enemy
         public SkillEffectKind skillEffectKind;
         public EnemyIntentType intentType;
         public int value;
+        public int movePower;
         public DebuffType debuffType;
         public bool isThornGuard;
         public int retaliationDamage;
@@ -30,6 +31,7 @@ namespace Project2048.Enemy
                 skillEffectKind = skillEffectKind,
                 intentType = intentType,
                 value = value,
+                movePower = movePower,
                 debuffType = debuffType,
                 isThornGuard = isThornGuard,
                 retaliationDamage = retaliationDamage,

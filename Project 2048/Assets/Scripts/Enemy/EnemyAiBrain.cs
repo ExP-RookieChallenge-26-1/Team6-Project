@@ -140,10 +140,12 @@ namespace Project2048.Enemy
                     return intent;
                 case SkillEffectKind.ChargeAttack:
                     intent.intentType = EnemyIntentType.Attack;
+                    intent.movePower = ScaleByStrength(Mathf.Max(skill.chargedPower, skill.power), data.aiStrength);
                     intent.value = ScaleByStrength(data.attackPower + Mathf.Max(skill.chargedPower, skill.power), data.aiStrength);
                     return intent;
                 default:
                     intent.intentType = EnemyIntentType.Attack;
+                    intent.movePower = ScaleByStrength(skill.power, data.aiStrength);
                     intent.value = ScaleByStrength(data.attackPower + skill.power, data.aiStrength);
                     return intent;
             }
@@ -188,6 +190,7 @@ namespace Project2048.Enemy
             return new EnemyIntent
             {
                 intentType = EnemyIntentType.Attack,
+                movePower = ScaleByStrength(data.attackPower, data.aiStrength),
                 value = ScaleByStrength(data.attackPower, data.aiStrength),
             };
         }
@@ -220,6 +223,7 @@ namespace Project2048.Enemy
             {
                 displayName = "황소 돌진",
                 intentType = EnemyIntentType.Attack,
+                movePower = ScaleByStrength(data.bullRushBonusDamage, data.aiStrength),
                 value = ScaleByStrength(data.attackPower + data.bullRushBonusDamage, data.aiStrength),
             };
         }

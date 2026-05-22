@@ -173,7 +173,7 @@ namespace Project2048.Tests
         }
 
         [Test]
-        public void ActionPhase_KeepsUnaffordableAuthoredSkillButtonsSelectable()
+        public void ActionPhase_DisablesUnaffordableAuthoredSkillButtons()
         {
             var viewObject = CreateOwnedGameObject("CombatView");
             var view = viewObject.AddComponent<CombatUiView>();
@@ -224,7 +224,7 @@ namespace Project2048.Tests
             manager.ResolveBoardPhase();
             view.Initialize(bootstrap);
 
-            Assert.That(skillButtons[0].interactable, Is.True);
+            Assert.That(skillButtons[0].interactable, Is.False);
             Assert.That(skillLabels[0].text, Does.Contain("COST LOW"));
         }
 
@@ -237,10 +237,15 @@ namespace Project2048.Tests
             var helpLabel = CreateTextChild(helpIcon.transform, "Label");
             var boardHelpIcon = CreateImageChild(viewObject.transform, "BoardCostFormulaHelpIcon");
             var boardHelpLabel = CreateTextChild(boardHelpIcon.transform, "Label");
+            helpIcon.gameObject.AddComponent<StatusEffectTooltipTarget>();
+            boardHelpIcon.gameObject.AddComponent<StatusEffectTooltipTarget>();
+            var tooltipRoot = CreateStatusTooltipForTest(viewObject.transform);
             SetPrivateField(view, "costFormulaHelpIcon", helpIcon.gameObject);
             SetPrivateField(view, "costFormulaHelpLabel", helpLabel);
             SetPrivateField(view, "boardCostFormulaHelpIcon", boardHelpIcon.gameObject);
             SetPrivateField(view, "boardCostFormulaHelpLabel", boardHelpLabel);
+            SetPrivateField(view, "statusTooltip", tooltipRoot.gameObject);
+            SetPrivateField(view, "statusTooltipText", tooltipRoot.GetComponentInChildren<TMPro.TMP_Text>(true));
 
             InvokePrivate(view, "EnsureStatusTooltip");
             InvokePrivate(view, "ConfigureCostFormulaHelp");
@@ -683,6 +688,10 @@ namespace Project2048.Tests
             var boardHp = CreateImageChild(viewObject.transform, "BoardHp");
             CreateImageChild(boardHp.transform, "HpBarFill");
             var boardHpRoot = boardHp.transform;
+            CreateAuthoredStatusEffectsRootForTest(playerBattleHp.transform, "PlayerBattleStatusEffects", new Vector2(CombatUiView.HpStatusEffectXOffset, -39f));
+            CreateAuthoredStatusEffectsRootForTest(boardHpRoot, "PlayerBoardStatusEffects", new Vector2(CombatUiView.HpStatusEffectXOffset, -6f));
+            CreateAuthoredStatusEffectsRootForTest(enemyHp.transform, "EnemyStatusEffects", new Vector2(CombatUiView.HpStatusEffectXOffset, -6f));
+            CreateStatusTooltipForTest(viewObject.transform);
 
             var manager = CreateOwnedGameObject("CombatManager").AddComponent<CombatManager>();
             var player = CreateOwnedGameObject("Player").AddComponent<PlayerCombatController>();
@@ -786,7 +795,7 @@ namespace Project2048.Tests
             authoredRect.pivot = new Vector2(0f, 1f);
             authoredRect.anchoredPosition = new Vector2(17f, -84f);
             authoredRect.sizeDelta = new Vector2(180f, 36f);
-            CreateImageChild(authoredRoot.transform, "StatusEffectIconSample");
+            CreateStatusEffectTemplateForTest(authoredRoot.transform);
 
             var manager = CreateOwnedGameObject("CombatManager").AddComponent<CombatManager>();
             var player = CreateOwnedGameObject("Player").AddComponent<PlayerCombatController>();
@@ -828,6 +837,9 @@ namespace Project2048.Tests
             var boardHp = CreateImageChild(viewObject.transform, "BoardHp");
             CreateImageChild(boardHp.transform, "HpBarFill");
             CreateTextChild(viewObject.transform, "HpText");
+            CreateAuthoredStatusEffectsRootForTest(playerBattleHp.transform, "PlayerBattleStatusEffects", new Vector2(CombatUiView.HpStatusEffectXOffset, -39f));
+            CreateAuthoredStatusEffectsRootForTest(boardHp.transform, "PlayerBoardStatusEffects", new Vector2(CombatUiView.HpStatusEffectXOffset, -6f));
+            CreateAuthoredStatusEffectsRootForTest(enemyHp.transform, "EnemyStatusEffects", new Vector2(CombatUiView.HpStatusEffectXOffset, -6f));
 
             var manager = CreateOwnedGameObject("CombatManager").AddComponent<CombatManager>();
             var player = CreateOwnedGameObject("Player").AddComponent<PlayerCombatController>();
@@ -1141,6 +1153,75 @@ namespace Project2048.Tests
             label.color = Color.white;
             label.textWrappingMode = TMPro.TextWrappingModes.NoWrap;
             label.raycastTarget = false;
+        }
+
+        private RectTransform CreateAuthoredStatusEffectsRootForTest(
+            Transform parent,
+            string rootName,
+            Vector2 anchoredPosition)
+        {
+            var rootObject = new GameObject(rootName, typeof(RectTransform), typeof(HorizontalLayoutGroup));
+            rootObject.transform.SetParent(parent, false);
+            ownedObjects.Add(rootObject);
+
+            var root = rootObject.GetComponent<RectTransform>();
+            root.anchorMin = new Vector2(0f, 0f);
+            root.anchorMax = new Vector2(0f, 0f);
+            root.pivot = new Vector2(0f, 1f);
+            root.anchoredPosition = anchoredPosition;
+            root.sizeDelta = new Vector2(160f, 32f);
+
+            var layout = rootObject.GetComponent<HorizontalLayoutGroup>();
+            layout.spacing = 4f;
+            layout.childAlignment = TextAnchor.MiddleLeft;
+            layout.childControlWidth = false;
+            layout.childControlHeight = false;
+            layout.childForceExpandWidth = false;
+            layout.childForceExpandHeight = false;
+
+            CreateStatusEffectTemplateForTest(root);
+            return root;
+        }
+
+        private Image CreateStatusEffectTemplateForTest(Transform parent)
+        {
+            var template = CreateImageChild(parent, "StatusEffectIconSample");
+            template.gameObject.AddComponent<StatusEffectTooltipTarget>();
+            template.rectTransform.sizeDelta = new Vector2(32f, 32f);
+            return template;
+        }
+
+        private RectTransform CreateStatusTooltipForTest(Transform parent)
+        {
+            var tooltipObject = new GameObject("StatusTooltip", typeof(RectTransform), typeof(Image));
+            tooltipObject.transform.SetParent(parent, false);
+            tooltipObject.SetActive(false);
+            ownedObjects.Add(tooltipObject);
+
+            var tooltipRect = tooltipObject.GetComponent<RectTransform>();
+            tooltipRect.anchorMin = new Vector2(0.5f, 0.5f);
+            tooltipRect.anchorMax = new Vector2(0.5f, 0.5f);
+            tooltipRect.pivot = new Vector2(0.5f, 0f);
+            tooltipRect.anchoredPosition = new Vector2(0f, 48f);
+            tooltipRect.sizeDelta = new Vector2(320f, 56f);
+
+            var image = tooltipObject.GetComponent<Image>();
+            image.color = new Color(0.02f, 0.025f, 0.03f, 0.96f);
+            image.raycastTarget = false;
+
+            var textObject = new GameObject("Text", typeof(RectTransform), typeof(TMPro.TextMeshProUGUI));
+            textObject.transform.SetParent(tooltipRect, false);
+            ownedObjects.Add(textObject);
+            SetStretchForTest(textObject.GetComponent<RectTransform>(), new Vector2(10f, 6f), new Vector2(-10f, -6f));
+
+            var label = textObject.GetComponent<TMPro.TMP_Text>();
+            label.alignment = TMPro.TextAlignmentOptions.Center;
+            label.fontSize = 15f;
+            label.color = Color.white;
+            label.textWrappingMode = TMPro.TextWrappingModes.Normal;
+            label.raycastTarget = false;
+
+            return tooltipRect;
         }
 
         private static void SetStretchForTest(RectTransform rect, Vector2 offsetMin, Vector2 offsetMax)

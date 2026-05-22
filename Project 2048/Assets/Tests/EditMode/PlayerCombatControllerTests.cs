@@ -62,25 +62,21 @@ namespace Project2048.Tests
         }
 
         [Test]
-        public void Init_UsesPokemonHpFormula_WhenEnabledOnPlayerData()
+        public void Init_UsesFixedMaxHp_FromPlayerData()
         {
             var playerObject = new GameObject("Player");
             var playerData = ScriptableObject.CreateInstance<PlayerSO>();
 
             try
             {
-                playerData.usePokemonHpFormula = true;
-                playerData.statLevel = 50;
-                playerData.baseHp = 40;
-                playerData.hpIndividualValue = 0;
-                playerData.hpEffortValue = 0;
+                playerData.maxHp = 123;
 
                 var player = playerObject.AddComponent<PlayerCombatController>();
 
                 player.Init(playerData);
 
-                Assert.That(player.MaxHp, Is.EqualTo(100));
-                Assert.That(player.CurrentHp, Is.EqualTo(100));
+                Assert.That(player.MaxHp, Is.EqualTo(123));
+                Assert.That(player.CurrentHp, Is.EqualTo(123));
             }
             finally
             {

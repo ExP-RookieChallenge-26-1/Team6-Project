@@ -97,11 +97,6 @@ namespace Project2048.Prototype
 
             var player = ScriptableObject.CreateInstance<PlayerSO>();
             player.name = "PrototypePlayer";
-            player.usePokemonHpFormula = true;
-            player.statLevel = 50;
-            player.baseHp = 40;
-            player.hpIndividualValue = 0;
-            player.hpEffortValue = 0;
             player.maxHp = 100;
             player.attackPower = 2;
             player.baseDefensePower = 0;

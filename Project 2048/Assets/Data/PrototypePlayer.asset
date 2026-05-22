@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5d4448f93dfa1c4c8ee4774c46926d9, type: 3}
   m_Name: PrototypePlayer
   m_EditorClassIdentifier: Game.Core::Project2048.Combat.PlayerSO
-  maxHp: 100
-  attackPower: 2
+  maxHp: 240
+  attackPower: 10
   baseDefensePower: 2
   initialBoardMoveCount: 12
   boardMoveCountBonus: 0

@@ -98,8 +98,8 @@ namespace Project2048.Prototype
 
             var player = ScriptableObject.CreateInstance<PlayerSO>();
             player.name = "PrototypePlayer";
-            player.maxHp = 100;
-            player.attackPower = 2;
+            player.maxHp = 240;
+            player.attackPower = 10;
             player.baseDefensePower = 2;
             player.criticalChance = 0.1f;
             player.criticalDamageMultiplier = 1.5f;
@@ -160,7 +160,7 @@ namespace Project2048.Prototype
             var enemy = ScriptableObject.CreateInstance<EnemySO>();
             enemy.name = seed.Name;
             enemy.enemyName = seed.Name;
-            enemy.maxHp = seed.Strength == EnemyAiStrength.Enhanced ? 40 : 32;
+            enemy.maxHp = seed.Strength == EnemyAiStrength.Enhanced ? 210 : 160;
             enemy.attackPower = seed.Strength == EnemyAiStrength.Enhanced ? 6 : 5;
             enemy.baseDefensePower = seed.Strength == EnemyAiStrength.Enhanced ? 2 : 1;
             enemy.defensePower = seed.Strength == EnemyAiStrength.Enhanced ? 4 : 3;

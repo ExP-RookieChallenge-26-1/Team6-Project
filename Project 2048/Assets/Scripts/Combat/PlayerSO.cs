@@ -10,9 +10,9 @@ namespace Project2048.Combat
     public class PlayerSO : ScriptableObject
     {
         [Header("Combat Stats")]
-        public int maxHp = 100;
-        public int attackPower = 3;
-        public int baseDefensePower;
+        public int maxHp = 240;
+        public int attackPower = 10;
+        public int baseDefensePower = 2;
         [Min(0)] public int initialBoardMoveCount = 4;
         public int boardMoveCountBonus;
         [Range(0f, 1f)] public float criticalChance;

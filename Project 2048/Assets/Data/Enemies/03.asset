@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Game.Core::Project2048.Enemy.EnemySO
   enemyName: "\uAC70\uC9D3\uB41C \uBBF8\uC18C"
   encounterRank: 0
-  maxHp: 30
+  maxHp: 140
   attackPower: 4
   baseDefensePower: 0
   defensePower: 4

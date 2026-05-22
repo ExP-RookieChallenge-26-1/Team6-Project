@@ -838,14 +838,14 @@ namespace Project2048.Combat
             AddStatusEffect(effects, "echo-damage", player.EchoDamageBonus, "빛의 메아리", "다음 공격 위력 배율", "메", true);
             AddStatusEffect(effects, "split-attack", player.ExtraAttackHits, "빛의 분산", "다음 공격 추가 타격", "분", true);
             AddStatusEffect(effects, "next-board-moves", Mathf.Abs(player.NextTurnBoardMoveCountModifier), "다음 보드 이동", "다음 보드 이동 횟수 변화", "이", player.NextTurnBoardMoveCountModifier > 0);
-            AddStatusEffect(effects, "next-cost-gain", Mathf.Abs(player.NextTurnCostGainModifier), "다음 코스트", "다음 코스트 획득 변화", "PP", player.NextTurnCostGainModifier > 0);
+            AddStatusEffect(effects, "next-cost-gain", Mathf.Abs(player.NextTurnCostGainModifier), "다음 코스트", "다음 코스트 획득 변화", "코", player.NextTurnCostGainModifier > 0);
             AddStatusEffect(
                 effects,
                 "next-cost-gain-rate",
                 Mathf.RoundToInt(Mathf.Abs(1f - player.NextTurnCostGainMultiplier) * 100f),
                 "다음 코스트",
                 "다음 코스트 획득 비율 변화",
-                "PP",
+                "코",
                 player.NextTurnCostGainMultiplier > 1f);
             if (player.HasPendingChargedAttack)
             {

@@ -95,8 +95,8 @@ namespace Project2048.Prototype
             }
 
             var available = currentCost >= 0 ? currentCost : 0;
-            var status = canAfford ? string.Empty : " - COST LOW";
-            return $"{skill.DisplayName}\nPP {available}/{skill.Cost}{status}";
+            var status = canAfford ? string.Empty : " - 부족";
+            return $"{skill.DisplayName}\n코스트 {available}/{skill.Cost}{status}";
         }
 
         public static string FormatSkillReplacementLabel(int slotIndex, SkillSnapshot skill)
@@ -186,7 +186,7 @@ namespace Project2048.Prototype
             var effectivePower = chargedPower > 0 && chargedPower != power
                 ? chargedPower
                 : power;
-            return $"{ResolveSkillElement(skillId, displayName, debuffType)} / {ResolveSkillCategory(skillType, effectKind)}   위력 {FormatPower(effectivePower)}   명중 100   PP {cost}";
+            return $"{ResolveSkillElement(skillId, displayName, debuffType)} / {ResolveSkillCategory(skillType, effectKind)}   위력 {FormatPower(effectivePower)}   명중 100   코스트 {cost}";
         }
 
         private static string ResolveSkillElement(string skillId, string displayName, DebuffType debuffType)

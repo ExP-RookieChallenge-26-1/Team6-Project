@@ -23,7 +23,7 @@ namespace Project2048.Enemy
 
         public string enemyName;
         public EnemyEncounterRank encounterRank = EnemyEncounterRank.Normal;
-        public int maxHp = 10;
+        public int maxHp = 160;
         public int attackPower = 3;
         public int baseDefensePower;
         public int defensePower = 3;

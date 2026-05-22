@@ -185,7 +185,7 @@ namespace Project2048.Tests
             Assert.That(tooltipRoot.GetComponentInChildren<TMPro.TMP_Text>(true).text, Does.Contain("빛 발사"));
             Assert.That(tooltipRoot.GetComponentInChildren<TMPro.TMP_Text>(true).text, Does.Contain("위력 40"));
             Assert.That(tooltipRoot.GetComponentInChildren<TMPro.TMP_Text>(true).text, Does.Contain("명중 100"));
-            Assert.That(tooltipRoot.GetComponentInChildren<TMPro.TMP_Text>(true).text, Does.Contain("PP 0"));
+            Assert.That(tooltipRoot.GetComponentInChildren<TMPro.TMP_Text>(true).text, Does.Contain("코스트 0"));
             Assert.That(tooltipRoot.GetComponentInChildren<TMPro.TMP_Text>(true).text, Does.Contain("적에게 위력 40 피해"));
             Assert.That(tooltipRoot.GetComponentInChildren<TMPro.TMP_Text>(true).alignment, Is.EqualTo(TMPro.TextAlignmentOptions.Left));
             ReleaseLongPressTooltip(tooltipTarget);
@@ -334,7 +334,7 @@ namespace Project2048.Tests
             view.Initialize(bootstrap);
 
             Assert.That(skillButtons[0].interactable, Is.False);
-            Assert.That(skillLabels[0].text, Does.Contain("COST LOW"));
+            Assert.That(skillLabels[0].text, Does.Contain("부족"));
         }
 
         [UnityTest]

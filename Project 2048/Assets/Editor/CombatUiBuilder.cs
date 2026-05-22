@@ -318,8 +318,8 @@ namespace Project2048.PrototypeEditor
             var skills = new List<SkillSO> { attack1, attack2, attack3, defense1, defense2, defense3 };
 
             var player = CreateOrLoadAsset<PlayerSO>(DataFolder + "/PrototypePlayer.asset");
-            player.maxHp = 100;
-            player.attackPower = 2;
+            player.maxHp = 240;
+            player.attackPower = 10;
             player.initialBoardMoveCount = 12;
             player.boardMoveCountBonus = 0;
             player.startingSkills = new List<SkillSO>(skills);
@@ -329,7 +329,7 @@ namespace Project2048.PrototypeEditor
             var enemy = CreateOrLoadAsset<EnemySO>(EnemyFolder + "/01.asset");
             enemy.name = "그림자 늑대";
             enemy.enemyName = "그림자 늑대";
-            enemy.maxHp = 32;
+            enemy.maxHp = 160;
             enemy.attackPower = 5;
             enemy.defensePower = 3;
             enemy.debuffPower = 1;

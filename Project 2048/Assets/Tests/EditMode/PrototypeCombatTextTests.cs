@@ -20,8 +20,8 @@ namespace Project2048.Tests
                 Power = 40,
             };
 
-            Assert.That(PrototypeCombatText.FormatSkillLabel(1, skill, canAfford: true), Is.EqualTo("빛 발사\nPP 0/9"));
-            Assert.That(PrototypeCombatText.FormatSkillLabel(1, skill, canAfford: false), Is.EqualTo("빛 발사\nPP 0/9 - COST LOW"));
+            Assert.That(PrototypeCombatText.FormatSkillLabel(1, skill, canAfford: true), Is.EqualTo("빛 발사\n코스트 0/9"));
+            Assert.That(PrototypeCombatText.FormatSkillLabel(1, skill, canAfford: false), Is.EqualTo("빛 발사\n코스트 0/9 - 부족"));
             Assert.That(PrototypeCombatText.FormatEmptySkillSlotLabel(3), Is.EqualTo("4. 빈 슬롯"));
         }
 
@@ -186,7 +186,7 @@ namespace Project2048.Tests
 
             Assert.That(
                 PrototypeCombatText.FormatSkillTooltip(skill),
-                Is.EqualTo("방패 밀치기\n전투 / 공격   위력 60   명중 100   PP 5\n현재 보호막 수치로 계산하여 적에게 위력 60 피해를 준다."));
+                Is.EqualTo("방패 밀치기\n전투 / 공격   위력 60   명중 100   코스트 5\n현재 보호막 수치로 계산하여 적에게 위력 60 피해를 준다."));
             Assert.That(PrototypeCombatText.FormatSkillTooltip(skill), Does.Not.Contain("변경점"));
             Assert.That(PrototypeCombatText.FormatSkillTooltip(skill), Does.Not.Contain("Solar"));
         }

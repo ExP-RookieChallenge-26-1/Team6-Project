@@ -787,12 +787,12 @@ namespace Project2048.PrototypeEditor
             SetAnchor(icon.rectTransform, anchor, new Vector2(46f, 46f), Vector2.zero);
 
             var outline = icon.gameObject.AddComponent<Outline>();
-            outline.effectColor = CombatUiView.ThemePrimaryColor;
+            outline.effectColor = CombatUiView.ThemeBoardHelpOutlineColor;
             outline.effectDistance = new Vector2(2f, -2f);
             outline.useGraphicAlpha = true;
 
             label = CreateLabel(icon.transform, "Label", "?", 28f, TextAlignmentOptions.Center, font);
-            label.color = CombatUiView.ThemePrimaryColor;
+            label.color = CombatUiView.ThemeBoardHelpIconColor;
             label.fontStyle = FontStyles.Bold;
             label.raycastTarget = false;
             SetStretch(label.rectTransform, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
@@ -821,14 +821,14 @@ namespace Project2048.PrototypeEditor
             image.raycastTarget = true;
 
             var outline = icon.GetComponent<Outline>() ?? icon.AddComponent<Outline>();
-            outline.effectColor = CombatUiView.ThemePrimaryColor;
+            outline.effectColor = CombatUiView.ThemeBoardHelpOutlineColor;
             outline.effectDistance = new Vector2(2f, -2f);
             outline.useGraphicAlpha = true;
 
             label = icon.transform.Find("Label")?.GetComponent<TMP_Text>()
                 ?? CreateLabel(icon.transform, "Label", "?", 28f, TextAlignmentOptions.Center, font);
             label.text = "?";
-            label.color = CombatUiView.ThemePrimaryColor;
+            label.color = CombatUiView.ThemeBoardHelpIconColor;
             label.fontStyle = FontStyles.Bold;
             label.raycastTarget = false;
             SetStretch(label.rectTransform, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);

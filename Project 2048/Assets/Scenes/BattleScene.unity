@@ -626,7 +626,7 @@ MonoBehaviour:
   m_fontColor32:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontColor: {r: 0.28627452, g: 0.6862745, b: 0.70980394, a: 1}
+  m_fontColor: {r: 0.42, g: 0.46, b: 0.5, a: 0.95}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -5446,7 +5446,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Outline
-  m_EffectColor: {r: 0.28627452, g: 0.6862745, b: 0.70980394, a: 1}
+  m_EffectColor: {r: 0.2, g: 0.2, b: 0.22, a: 1}
   m_EffectDistance: {x: 2, y: -2}
   m_UseGraphicAlpha: 1
 --- !u!114 &621240929
@@ -7869,7 +7869,7 @@ MonoBehaviour:
   m_fontColor32:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontColor: {r: 0.28627452, g: 0.6862745, b: 0.70980394, a: 1}
+  m_fontColor: {r: 0.42, g: 0.46, b: 0.5, a: 0.95}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -9008,7 +9008,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Outline
-  m_EffectColor: {r: 0.28627452, g: 0.6862745, b: 0.70980394, a: 1}
+  m_EffectColor: {r: 0.2, g: 0.2, b: 0.22, a: 1}
   m_EffectDistance: {x: 2, y: -2}
   m_UseGraphicAlpha: 1
 --- !u!1 &1228453856

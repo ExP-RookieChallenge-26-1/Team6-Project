@@ -44,6 +44,9 @@ namespace Project2048.Prototype
         public static readonly Color ThemeSkillAttackColor = new(79f / 255f, 106f / 255f, 90f / 255f, 1f);
         public static readonly Color ThemeSkillDefenseColor = new(45f / 255f, 103f / 255f, 107f / 255f, 1f);
         public static readonly Color ThemeSkillChangeColor = new(68f / 255f, 88f / 255f, 105f / 255f, 1f);
+        public static readonly Color ThemeBoardCellColor = new(0.20f, 0.20f, 0.22f, 1f);
+        public static readonly Color ThemeBoardHelpIconColor = new(0.42f, 0.46f, 0.50f, 0.95f);
+        public static readonly Color ThemeBoardHelpOutlineColor = ThemeBoardCellColor;
         private static readonly Color ThemeSkillEmptyColor = new(22f / 255f, 25f / 255f, 28f / 255f, 1f);
         public const float HpStatusEffectXOffset = 18f;
         public const float HpTextMinFontSize = 22f;
@@ -139,7 +142,7 @@ namespace Project2048.Prototype
 
         [Header("Theme")]
         [SerializeField] private Color emptyCellColor = new(0.10f, 0.10f, 0.10f, 1f);
-        [SerializeField] private Color filledCellColor = new(0.20f, 0.20f, 0.22f, 1f);
+        [SerializeField] private Color filledCellColor = ThemeBoardCellColor;
         [SerializeField] private Color highlightCellColor = new(0.92f, 0.90f, 0.85f, 1f);
         [SerializeField] private Color obstacleCellColor = new(0.55f, 0.10f, 0.55f, 1f);
         [SerializeField] private Color attackIntentColor = new(0.85f, 0.12f, 0.12f, 1f);
@@ -153,7 +156,7 @@ namespace Project2048.Prototype
         [SerializeField] private Color hpDamageTrailColor = ThemeHpDamageTrailColor;
         [SerializeField] private Color hpDamageFlashColor = new(1f, 1f, 1f, 0.95f);
         [SerializeField] private Color blockFrameColor = new(0.66f, 0.70f, 0.74f, 1f);
-        [SerializeField] private Color blockIconColor = new(0.42f, 0.46f, 0.50f, 0.95f);
+        [SerializeField] private Color blockIconColor = ThemeBoardHelpIconColor;
         [SerializeField] private Color buffStatusColor = new(0.20f, 0.46f, 0.30f, 0.95f);
         [SerializeField] private Color debuffStatusColor = new(0.46f, 0.16f, 0.20f, 0.95f);
         [SerializeField] private Color statusTooltipColor = new(0.06f, 0.07f, 0.08f, 0.96f);

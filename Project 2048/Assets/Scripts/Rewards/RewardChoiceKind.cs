@@ -5,5 +5,17 @@ namespace Project2048.Rewards
         None,
         Rest,
         Enhance,
+        HealOne,
+        HealTwo,
+        HealThree,
+        TemporaryAttackPower,
+        TemporaryDefensePower,
+        TemporaryBoardMoveCount,
+        PermanentMaxHp,
+        PermanentAttackPower,
+        PermanentDefensePower,
+        PermanentCriticalChance,
+        PermanentCriticalDamageMultiplier,
+        LearnSkill,
     }
 }

@@ -2,6 +2,7 @@ using System.Linq;
 using NUnit.Framework;
 using Project2048.Enemy;
 using Project2048.Prototype;
+using Project2048.Skills;
 using UnityEngine;
 
 namespace Project2048.Tests
@@ -9,7 +10,7 @@ namespace Project2048.Tests
     public class PrototypeCombatFactoryTests
     {
         [Test]
-        public void CreateDefaultLoadout_BuildsSixPrototypeSkills_ForTemporaryUi()
+        public void CreateDefaultLoadout_EquipsFourPrototypeSkills()
         {
             var loadout = PrototypeCombatFactory.CreateDefaultLoadout();
 
@@ -17,17 +18,25 @@ namespace Project2048.Tests
             {
                 Assert.That(loadout.PlayerData, Is.Not.Null);
                 Assert.That(loadout.EnemyData, Is.Not.Null);
-                Assert.That(loadout.Skills.Count, Is.EqualTo(6));
+                Assert.That(loadout.PlayerData.maxHp, Is.EqualTo(240));
+                Assert.That(loadout.PlayerData.attackPower, Is.EqualTo(10));
+                Assert.That(loadout.Skills.Count, Is.EqualTo(11));
                 Assert.That(loadout.Skills.Select(skill => skill.skillId), Is.EqualTo(new[]
                 {
-                    "attack_1",
-                    "attack_2",
-                    "attack_3",
-                    "defense_1",
-                    "defense_2",
-                    "defense_3",
+                    "quick-stab",
+                    "light-shot",
+                    "heavy-strike",
+                    "gather-light",
+                    "low-stance",
+                    "light-guard",
+                    "shield-bash",
+                    "shield-burst",
+                    "iron-wall",
+                    "body-press",
+                    "flash",
                 }));
-                Assert.That(loadout.PlayerData.startingSkills.Count, Is.EqualTo(6));
+                Assert.That(loadout.PlayerData.startingSkills.Count, Is.EqualTo(4));
+                Assert.That(loadout.PlayerData.startingSkills.Select(skill => skill.cost), Is.EqualTo(new[] { 6, 6, 5, 4 }));
             }
             finally
             {
@@ -36,7 +45,7 @@ namespace Project2048.Tests
         }
 
         [Test]
-        public void CreateDefaultLoadout_UsesKoreanTieredAttackAndDefenseSkillNames()
+        public void CreateDefaultLoadout_UsesCurrentPrototypeSkillNames()
         {
             var loadout = PrototypeCombatFactory.CreateDefaultLoadout();
 
@@ -44,13 +53,49 @@ namespace Project2048.Tests
             {
                 Assert.That(loadout.Skills.Select(skill => skill.skillName), Is.EqualTo(new[]
                 {
-                    "1단계 공격",
-                    "2단계 공격",
-                    "3단계 공격",
-                    "1단계 방어",
-                    "2단계 방어",
-                    "3단계 방어",
+                    "Quick Stab",
+                    "Light Shot",
+                    "Heavy Strike",
+                    "Gather Light",
+                    "Low Stance",
+                    "Light Guard",
+                    "Shield Bash",
+                    "Shield Burst",
+                    "Iron Wall",
+                    "Body Press",
+                    "Flash",
                 }));
+            }
+            finally
+            {
+                loadout.Dispose();
+            }
+        }
+
+        [Test]
+        public void CreateDefaultLoadout_AssignsReusableVfxFamilies()
+        {
+            var loadout = PrototypeCombatFactory.CreateDefaultLoadout();
+
+            try
+            {
+                Assert.That(loadout.Skills.Select(skill => skill.vfxFamily), Is.EqualTo(new[]
+                {
+                    SkillVfxFamily.SlashArc,
+                    SkillVfxFamily.LightProjectile,
+                    SkillVfxFamily.SlashArc,
+                    SkillVfxFamily.LightProjectile,
+                    SkillVfxFamily.ShieldDome,
+                    SkillVfxFamily.ShieldDome,
+                    SkillVfxFamily.ShieldDome,
+                    SkillVfxFamily.ShieldDome,
+                    SkillVfxFamily.BuffAura,
+                    SkillVfxFamily.ImpactBurst,
+                    SkillVfxFamily.DebuffWave,
+                }));
+                Assert.That(loadout.Skills.All(skill => skill.vfxScale > 0f), Is.True);
+                Assert.That(loadout.Skills.All(skill => skill.vfxIntensity > 0f), Is.True);
+                Assert.That(loadout.Skills.All(skill => skill.vfxRepeatCount >= 1), Is.True);
             }
             finally
             {
@@ -81,6 +126,9 @@ namespace Project2048.Tests
                 }));
                 Assert.That(roster.All(enemy => enemy.intentPattern.Count == 0), Is.True);
                 Assert.That(roster.All(enemy => !string.IsNullOrWhiteSpace(enemy.GetAiProfileLabel())), Is.True);
+                Assert.That(roster.Where(enemy => enemy.aiStrength == EnemyAiStrength.Normal).Select(enemy => enemy.maxHp), Is.All.EqualTo(160));
+                Assert.That(roster.Where(enemy => enemy.aiStrength == EnemyAiStrength.Enhanced).Select(enemy => enemy.maxHp), Is.All.EqualTo(210));
+                Assert.That(roster.SelectMany(enemy => enemy.skills).All(skill => skill.vfxFamily != SkillVfxFamily.None), Is.True);
             }
             finally
             {

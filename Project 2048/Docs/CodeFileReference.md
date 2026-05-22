@@ -4,7 +4,7 @@
 
 UI 클릭음은 전역 `ButtonClickAudioRouter`가 담당한다. 전투 피드백 사운드는 버튼 자체가 아니라 전투 이벤트와 ScriptableObject 효과 데이터에서 재생되도록 분리되어 있다.
 
-코스트 변환표도 테스트와 전투 루프 검증을 위한 임시 수치다. 정식 밸런스가 정해지면 `CostConverter.cs`의 표와 관련 테스트 기대값을 같이 바꾸면 된다.
+코스트 변환 공식도 테스트와 전투 루프 검증을 위한 임시 수치다. 정식 밸런스가 정해지면 `CostConverter.cs`의 공식과 관련 테스트 기대값을 같이 바꾸면 된다.
 
 ## 빠른 지도
 
@@ -382,17 +382,17 @@ SFX가 또렷하게 들리도록 BGM 볼륨을 잠깐 낮추는 컴포넌트다.
 보드 숫자를 행동 코스트로 바꾸는 파일이다.
 
 - `ConvertTileToCost`는 타일 하나를 코스트로 바꾼다.
-- `ConvertBoardToCost`는 보드 전체 타일의 코스트를 합산한다.
-- 현재 변환표는 테스트와 전투 루프 검증을 위한 임시 수치다.
+- `ConvertBoardToCost`는 보드 전체 타일 양, 가장 큰 타일 보너스, 조각난 타일 페널티로 코스트를 계산한다.
+- 현재 변환 공식은 테스트와 전투 루프 검증을 위한 임시 수치다.
 
 연결:
 
 - `CombatManager.ResolveBoardPhase()`가 보드 종료 시 이 파일을 호출한다.
-- `CostConverterTests.cs`가 현재 임시 표와 합산 방식을 검증한다.
+- `CostConverterTests.cs`가 현재 임시 공식과 큰 타일 보상 방식을 검증한다.
 
 조심할 점:
 
-- 가장 큰 타일 하나만 계산하는 방식이 아니다. 보드 전체 숫자를 합산한다.
+- 가장 큰 타일 하나만 계산하는 방식이 아니다. 보드 전체 숫자 합계도 보되, 같은 총량이면 큰 타일로 압축한 쪽이 유리하다.
 - 정식 밸런스로 바꾸면 `CostConverterTests.cs`도 같이 바꿔야 한다.
 
 ### `Assets/Scripts/Board2048/Direction.cs`
@@ -432,7 +432,7 @@ OnCombatVictory
 OnCombatDefeat
 OnPlayerSkillUsed
 RequestBoardMove(Direction direction)
-RequestUseSkillById(string skillId, int targetIndex)
+RequestUseSkillById(string skillId)
 RequestEndPlayerTurn()
 ```
 
@@ -539,8 +539,8 @@ RequestEndPlayerTurn()
 
 피해량 계산만 담당하는 작은 파일이다.
 
-- 플레이어 스킬 피해는 `플레이어 공격력 + 스킬 위력`이다.
-- 적 피해는 현재 인텐트의 `value`다.
+- 플레이어 스킬 피해는 `스킬 위력 / 10 * 공격력 / 방어력`에 랜덤 편차와 치명타를 적용한다.
+- 적 피해도 공격 인텐트의 `movePower`를 같은 위력 스케일로 계산한다. `movePower`가 없는 오래된 인텐트 값은 10배 위력으로 환산된다.
 
 연결:
 
@@ -559,7 +559,7 @@ RequestEndPlayerTurn()
 - 시작 스킬 목록을 가진다.
 - 피해를 받을 때 방어도를 먼저 깎고 남은 피해를 HP에 적용한다.
 - 방어 스킬 사용 시 방어 보너스를 반영한다.
-- 공포가 걸려 있으면 이번 턴 방어도 획득량을 고정으로 6 줄인다.
+- Fear is a temporary attack-stage penalty. It does not change shield gain.
 
 연결:
 
@@ -789,7 +789,7 @@ AI가 디버프 턴에 공포와 암흑을 어떤 순서로 낼지 나타낸다.
 - `SetNextIntents`는 `EnemySO.ActionsPerTurn`에 맞춰 최대 2개 인텐트를 미리 만든다.
 - 패턴이 없으면 `EnemyAiBrain`으로 다음 행동을 만든다.
 - `ExecuteIntent`는 공격, 방어, 디버프를 실행한다.
-- `Fear`는 플레이어 방어 보너스를 낮춘다.
+- `Fear`는 플레이어 공격 랭크를 낮춘다.
 - `Darkness`는 다음 보드에 방해 블록을 예약한다.
 
 연결:
@@ -1631,17 +1631,17 @@ UI가 전투 내부 객체를 직접 잡지 않고 snapshot/command만으로 전
 
 ### `Assets/Tests/EditMode/CostConverterTests.cs`
 
-코스트 변환표와 보드 전체 합산 방식을 검증한다.
+코스트 변환 공식과 큰 타일 보상 방식을 검증한다.
 
 보호하는 규칙:
 
-- 현재 임시 코스트 표가 코드와 맞다.
-- 보드 전체 타일을 합산한다.
+- 현재 임시 코스트 공식이 코드와 맞다.
+- 같은 값 타일 2개를 큰 타일 하나로 합치면 보드 코스트가 더 높아진다.
 - 빈 칸, 방해 블록, 잘못된 값은 0으로 처리한다.
 
 조심할 점:
 
-- 정식 밸런스로 코스트 표를 바꾸면 이 테스트 기대값도 같이 바꾼다.
+- 정식 밸런스로 코스트 공식을 바꾸면 이 테스트 기대값도 같이 바꾼다.
 
 ### `Assets/Tests/EditMode/EnemyDebuffTests.cs`
 
@@ -1649,7 +1649,7 @@ UI가 전투 내부 객체를 직접 잡지 않고 snapshot/command만으로 전
 
 보호하는 규칙:
 
-- `Fear`는 플레이어 방어 획득량을 낮춘다.
+- `Fear`는 플레이어 공격 랭크를 낮춘다.
 - `Darkness`는 보드에 방해 블록을 예약한다.
 
 ### `Assets/Tests/EditMode/EnemyAiBrainTests.cs`

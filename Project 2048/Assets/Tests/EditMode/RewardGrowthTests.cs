@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Project2048.Combat;
 using Project2048.Enemy;
+using Project2048.Flow;
 using Project2048.Prototype;
 using Project2048.Rewards;
-using Project2048.Score;
 using Project2048.Skills;
 using TMPro;
 using UnityEngine;
@@ -73,13 +73,42 @@ namespace Project2048.Tests
             runProgress.CapturePlayer(player);
 
             rewardManager.Initialize(runProgress, table);
-            rewardManager.OfferReward(new CombatResult { enemyDifficultyScore = 1 }, player);
+            rewardManager.OfferReward(new CombatResult(), player);
             var result = rewardManager.ChooseRest(player);
 
             Assert.That(result.Kind, Is.EqualTo(RewardChoiceKind.Rest));
             Assert.That(result.AppliedAmount, Is.EqualTo(6));
             Assert.That(player.CurrentHp, Is.EqualTo(16));
             Assert.That(runProgress.CurrentHp, Is.EqualTo(16));
+        }
+
+        [TestCase(RewardChoiceKind.HealOne, 60)]
+        [TestCase(RewardChoiceKind.HealTwo, 120)]
+        [TestCase(RewardChoiceKind.HealThree, 180)]
+        public void RewardManager_HealTierChoice_HealsByTierPercentOfMaxHp(
+            RewardChoiceKind rewardKind,
+            int expectedHeal)
+        {
+            var player = CreateGameObject<PlayerCombatController>("Player");
+            var playerData = CreatePlayerData(maxHp: 240, attackPower: 2);
+            var reward = CreateReward(healPercentOfMaxHp: 0.3f, extraBoardMoveCount: 1);
+            var table = CreateRewardTable(reward);
+            var runProgress = new RunProgress();
+            var rewardManager = CreateGameObject<RewardManager>("RewardManager");
+
+            reward.rewardKind = rewardKind;
+            player.Init(playerData);
+            player.TakeDamage(220);
+            runProgress.CapturePlayer(player);
+
+            rewardManager.Initialize(runProgress, table);
+            rewardManager.OfferReward(new CombatResult(), player);
+            var result = rewardManager.ChooseReward(0, player);
+
+            Assert.That(result.Kind, Is.EqualTo(rewardKind));
+            Assert.That(result.AppliedAmount, Is.EqualTo(expectedHeal));
+            Assert.That(player.CurrentHp, Is.EqualTo(20 + expectedHeal));
+            Assert.That(runProgress.CurrentHp, Is.EqualTo(player.CurrentHp));
         }
 
         [Test]
@@ -96,13 +125,71 @@ namespace Project2048.Tests
             runProgress.CapturePlayer(player);
 
             rewardManager.Initialize(runProgress, table);
-            rewardManager.OfferReward(new CombatResult { enemyDifficultyScore = 1 }, player);
+            rewardManager.OfferReward(new CombatResult(), player);
             var result = rewardManager.ChooseEnhance(player);
 
             Assert.That(result.Kind, Is.EqualTo(RewardChoiceKind.Enhance));
             Assert.That(result.AppliedAmount, Is.EqualTo(2));
             Assert.That(runProgress.ExtraBoardMoveCount, Is.EqualTo(2));
             Assert.That(playerData.boardMoveCountBonus, Is.EqualTo(0));
+        }
+
+        [Test]
+        public void RewardManager_OfferReward_FillsThreeRogueliteChoices()
+        {
+            var player = CreateGameObject<PlayerCombatController>("Player");
+            var playerData = CreatePlayerData(maxHp: 20, attackPower: 2);
+            var reward = CreateReward(healPercentOfMaxHp: 0.3f, extraBoardMoveCount: 1);
+            var table = CreateRewardTable(reward);
+            var rewardManager = CreateGameObject<RewardManager>("RewardManager");
+
+            player.Init(playerData);
+            rewardManager.Initialize(new RunProgress(), table);
+            rewardManager.OfferReward(new CombatResult(), player);
+
+            Assert.That(rewardManager.PendingChoices.Count, Is.EqualTo(3));
+            Assert.That(rewardManager.PendingChoices[0], Is.SameAs(reward));
+        }
+
+        [Test]
+        public void TemporaryRewardBuff_AppliesToNextCombatOnce()
+        {
+            var manager = CreateGameObject<CombatManager>("CombatManager");
+            var player = CreateGameObject<PlayerCombatController>("Player");
+            var enemy = CreateGameObject<EnemyController>("Enemy");
+            var playerData = CreatePlayerData(maxHp: 20, attackPower: 2);
+            var enemyData = CreateEnemyData(maxHp: 10, attackValue: 0);
+            var runProgress = new RunProgress();
+
+            runProgress.AddNextCombatBuff(attackPowerBonus: 3, defensePowerBonus: 4, boardMoveCountBonus: 2);
+
+            manager.SetCombatants(player, new[] { enemy });
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new List<EnemySO> { enemyData },
+                boardMoveCount = 4,
+                runProgress = runProgress,
+            });
+
+            Assert.That(player.AttackPower, Is.EqualTo(5));
+            Assert.That(player.BaseDefensePower, Is.EqualTo(4));
+            Assert.That(manager.BoardManager.MoveCount, Is.EqualTo(6));
+            Assert.That(runProgress.NextCombatAttackPowerBonus, Is.EqualTo(0));
+            Assert.That(runProgress.NextCombatDefensePowerBonus, Is.EqualTo(0));
+            Assert.That(runProgress.NextCombatBoardMoveCountBonus, Is.EqualTo(0));
+        }
+
+        [Test]
+        public void StageFlow_UsesEliteStagesEveryFiveAndFinalBossAtTwenty()
+        {
+            var stageFlow = CreateGameObject<StageFlowController>("StageFlow");
+
+            Assert.That(stageFlow.ResolveEncounterType(1), Is.EqualTo(StageEncounterType.Normal));
+            Assert.That(stageFlow.ResolveEncounterType(5), Is.EqualTo(StageEncounterType.Elite));
+            Assert.That(stageFlow.ResolveEncounterType(10), Is.EqualTo(StageEncounterType.Elite));
+            Assert.That(stageFlow.ResolveEncounterType(15), Is.EqualTo(StageEncounterType.Elite));
+            Assert.That(stageFlow.ResolveEncounterType(20), Is.EqualTo(StageEncounterType.FinalBoss));
         }
 
         [Test]
@@ -122,8 +209,10 @@ namespace Project2048.Tests
             var rewardDescription = CreateTextChild(rewardOverlay.transform, "RewardDescription");
             var restText = CreateTextChild(rewardOverlay.transform, "RestText");
             var enhanceText = CreateTextChild(rewardOverlay.transform, "EnhanceText");
+            var thirdText = CreateTextChild(rewardOverlay.transform, "ThirdText");
             var restButton = CreateButtonChild(rewardOverlay.transform, "RestButton");
             var enhanceButton = CreateButtonChild(rewardOverlay.transform, "EnhanceButton");
+            var thirdButton = CreateButtonChild(rewardOverlay.transform, "ThirdButton");
 
             SetPrivateField(view, "rewardOverlay", rewardOverlay);
             SetPrivateField(view, "resultOverlay", resultOverlay);
@@ -135,6 +224,8 @@ namespace Project2048.Tests
             SetPrivateField(view, "rewardEnhanceText", enhanceText);
             SetPrivateField(view, "rewardRestButton", restButton);
             SetPrivateField(view, "rewardEnhanceButton", enhanceButton);
+            SetPrivateField(view, "rewardChoiceButtons", new List<Button> { restButton, enhanceButton, thirdButton });
+            SetPrivateField(view, "rewardChoiceLabels", new List<TMP_Text> { restText, enhanceText, thirdText });
 
             var manager = CreateGameObject<CombatManager>("CombatManager");
             var rewardManager = CreateGameObject<RewardManager>("RewardManager");
@@ -145,6 +236,8 @@ namespace Project2048.Tests
             var playerData = CreatePlayerData(maxHp: 20, attackPower: 2);
             var enemyData = CreateEnemyData(maxHp: 10, attackValue: 0);
             var reward = CreateReward(healPercentOfMaxHp: 0.3f, extraBoardMoveCount: 1);
+            reward.rewardKind = RewardChoiceKind.TemporaryBoardMoveCount;
+            reward.temporaryBoardMoveCountBonus = 2;
             var table = CreateRewardTable(reward);
             var runProgress = new RunProgress();
 
@@ -167,21 +260,22 @@ namespace Project2048.Tests
             Assert.That(resultOverlay.activeSelf, Is.False);
 
             manager.RequestUseSkill(attack, enemy);
-            rewardManager.OfferReward(new CombatResult { enemyDifficultyScore = 1 }, player);
+            rewardManager.OfferReward(new CombatResult(), player);
 
             Assert.That(rewardOverlay.activeSelf, Is.True);
             Assert.That(resultOverlay.activeSelf, Is.False);
             Assert.That(boardPanel.activeSelf, Is.False);
             Assert.That(actionPanel.activeSelf, Is.False);
-            Assert.That(rewardTitle.text, Is.EqualTo("나방"));
-            Assert.That(restText.text, Is.EqualTo("휴식 : 최대 체력의 30%를 회복합니다"));
-            Assert.That(enhanceText.text, Is.EqualTo("강화 : 제한 단수가 1회 증가합니다"));
+            Assert.That(rewardManager.PendingChoices.Count, Is.EqualTo(3));
+            Assert.That(rewardTitle.text, Is.EqualTo("보상 선택"));
+            Assert.That(restText.text, Is.EqualTo("다음 전투 이동 횟수 +2"));
+            Assert.That(enhanceText.text, Is.Not.Empty);
 
-            enhanceButton.onClick.Invoke();
+            restButton.onClick.Invoke();
 
             Assert.That(rewardOverlay.activeSelf, Is.False);
             Assert.That(resultOverlay.activeSelf, Is.True);
-            Assert.That(runProgress.ExtraBoardMoveCount, Is.EqualTo(1));
+            Assert.That(runProgress.NextCombatBoardMoveCountBonus, Is.EqualTo(2));
         }
 
         [Test]
@@ -227,7 +321,7 @@ namespace Project2048.Tests
         }
 
         [Test]
-        public void Bootstrap_WithMissingRewardAndScoreSceneReferences_DoesNotCreateRuntimeManagers()
+        public void Bootstrap_WithMissingRewardSceneReferences_DoesNotCreateRuntimeManagers()
         {
             var bootstrapObject = CreateOwnedGameObject("Bootstrap");
             var bootstrap = bootstrapObject.AddComponent<PrototypeCombatBootstrap>();
@@ -242,9 +336,7 @@ namespace Project2048.Tests
             InvokePrivateMethod(bootstrap, "EnsureRuntimeObjects");
 
             Assert.That(bootstrap.RewardManager, Is.Null);
-            Assert.That(bootstrap.ScoreManager, Is.Null);
             Assert.That(bootstrapObject.transform.Find("RewardManager"), Is.Null);
-            Assert.That(bootstrapObject.transform.Find("ScoreManager"), Is.Null);
         }
 
         [Test]
@@ -278,7 +370,6 @@ namespace Project2048.Tests
             var view = Object.FindAnyObjectByType<CombatUiView>(FindObjectsInactive.Include);
             var worldSpriteView = Object.FindAnyObjectByType<CombatWorldSpriteView>(FindObjectsInactive.Include);
             var rewardManager = Object.FindAnyObjectByType<RewardManager>(FindObjectsInactive.Include);
-            var scoreManager = Object.FindAnyObjectByType<ScoreManager>(FindObjectsInactive.Include);
             var combatCanvas = GameObject.Find("CombatCanvas")?.GetComponent<Canvas>();
             var backgroundSprite = GameObject.Find("BackgroundSprite")?.GetComponent<SpriteRenderer>();
             var playerSprite = GameObject.Find("PlayerSprite")?.GetComponent<SpriteRenderer>();
@@ -286,11 +377,12 @@ namespace Project2048.Tests
             var battleSceneBackground = GameObject.Find("BattleScene")?.GetComponent<Image>();
             var playerPortraitImage = GameObject.Find("PlayerPortrait")?.GetComponent<Image>();
             var enemyPortraitImage = GameObject.Find("EnemyPortrait")?.GetComponent<Image>();
+            var intentBubble = GameObject.Find("IntentBubble")?.GetComponent<RectTransform>();
+            var intentBubbleText = GameObject.Find("IntentBubbleText")?.GetComponent<TMP_Text>();
 
             Assert.That(view, Is.Not.Null);
             Assert.That(worldSpriteView, Is.Not.Null);
             Assert.That(rewardManager, Is.Not.Null);
-            Assert.That(scoreManager, Is.Not.Null);
             Assert.That(combatCanvas, Is.Not.Null);
             Assert.That(combatCanvas.renderMode, Is.EqualTo(RenderMode.ScreenSpaceOverlay));
             Assert.That(combatCanvas.worldCamera, Is.Null);
@@ -306,16 +398,23 @@ namespace Project2048.Tests
             Assert.That(battleSceneBackground, Is.Not.Null);
             Assert.That(playerPortraitImage, Is.Not.Null);
             Assert.That(enemyPortraitImage, Is.Not.Null);
+            Assert.That(intentBubble, Is.Not.Null);
+            Assert.That(intentBubbleText, Is.Not.Null);
             Assert.That(battleSceneBackground.enabled, Is.False);
             Assert.That(playerPortraitImage.enabled, Is.False);
             Assert.That(enemyPortraitImage.enabled, Is.False);
+            Assert.That(intentBubble.sizeDelta.x, Is.EqualTo(CombatUiView.IntentBubbleSquareSize).Within(0.001f));
+            Assert.That(intentBubble.sizeDelta.y, Is.EqualTo(CombatUiView.IntentBubbleSquareSize).Within(0.001f));
+            Assert.That(intentBubbleText.enableAutoSizing, Is.True);
+            Assert.That(intentBubbleText.fontSizeMax, Is.EqualTo(14f).Within(0.001f));
+            Assert.That(intentBubbleText.raycastTarget, Is.False);
+            Assert.That(intentBubbleText.rectTransform.sizeDelta, Is.EqualTo(new Vector2(-6f, -6f)));
 
             var serializedView = new SerializedObject(view);
             var rewardOverlay = serializedView.FindProperty("rewardOverlay").objectReferenceValue as GameObject;
             var resultOverlay = serializedView.FindProperty("resultOverlay").objectReferenceValue as GameObject;
 
             Assert.That(serializedView.FindProperty("rewardManager").objectReferenceValue, Is.EqualTo(rewardManager));
-            Assert.That(serializedView.FindProperty("scoreManager").objectReferenceValue, Is.EqualTo(scoreManager));
             Assert.That(rewardOverlay, Is.Not.Null);
             Assert.That(resultOverlay, Is.Not.Null);
             Assert.That(rewardOverlay.name, Is.EqualTo("RewardOverlay"));
@@ -402,6 +501,47 @@ namespace Project2048.Tests
 
             Assert.That(manager.RequestUseSkill(attack, enemy), Is.True);
             yield return null;
+
+            Assert.That(enemyRenderer.color.a, Is.LessThanOrEqualTo(0.05f));
+        }
+
+        [UnityTest]
+        public IEnumerator CombatWorldSpriteView_EnemyDeath_WaitsForPlayerAttackEffect()
+        {
+            var viewObject = CreateOwnedGameObject("WorldSpriteView");
+            var view = viewObject.AddComponent<CombatWorldSpriteView>();
+            var enemyRenderer = CreateGameObject<SpriteRenderer>("EnemySprite");
+            var manager = CreateGameObject<CombatManager>("CombatManager");
+            var player = CreateGameObject<PlayerCombatController>("Player");
+            var enemy = CreateGameObject<EnemyController>("Enemy");
+            var bootstrap = CreateGameObject<PrototypeCombatBootstrap>("Bootstrap");
+            var attack = CreateSkill("attack", SkillType.Attack, cost: 0, power: 99);
+            var playerData = CreatePlayerData(maxHp: 20, attackPower: 2);
+            var enemyData = CreateEnemyData(maxHp: 10, attackValue: 0);
+
+            attack.vfxFamily = SkillVfxFamily.BuffAura;
+            attack.vfxScale = 1f;
+            attack.vfxIntensity = 1f;
+            enemyData.portrait = CreateSprite("Enemy");
+            SetPrivateField(view, "enemyRenderer", enemyRenderer);
+            SetPrivateField(bootstrap, "combatManager", manager);
+
+            manager.SetCombatants(player, new[] { enemy });
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new List<EnemySO> { enemyData },
+                boardMoveCount = 1,
+            });
+            manager.ResolveBoardPhase();
+            view.Initialize(bootstrap);
+
+            Assert.That(manager.RequestUseSkill(attack, enemy), Is.True);
+            yield return new WaitForSecondsRealtime(0.2f);
+
+            Assert.That(enemyRenderer.color.a, Is.EqualTo(1f).Within(0.001f));
+
+            yield return new WaitForSecondsRealtime(CombatWorldSpriteView.EnemyDeathFadeDurationSeconds + 0.9f);
 
             Assert.That(enemyRenderer.color.a, Is.LessThanOrEqualTo(0.05f));
         }

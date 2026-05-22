@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using Project2048.Board2048;
 using Project2048.Combat;
+using Project2048.Skills;
+using UnityEngine;
 
 namespace Project2048.Enemy
 {
@@ -30,6 +32,11 @@ namespace Project2048.Enemy
 
         public void SetNextIntents(EnemyController enemy, int count)
         {
+            SetNextIntents(enemy, count, null);
+        }
+
+        public void SetNextIntents(EnemyController enemy, int count, PlayerCombatController player)
+        {
             if (enemy == null || enemy.Data == null)
             {
                 return;
@@ -42,10 +49,25 @@ namespace Project2048.Enemy
             }
 
             var intentCount = System.Math.Max(1, System.Math.Min(count, EnemySO.MaximumActionsPerTurn));
+            var nextIntents = ResolveNextIntents(enemy, player, intentCount);
+            enemy.SetIntents(nextIntents);
+        }
+
+        private List<EnemyIntent> ResolveNextIntents(EnemyController enemy, PlayerCombatController player, int intentCount)
+        {
+            var pattern = enemy.Data.intentPattern;
+            if (pattern == null || pattern.Count == 0)
+            {
+                var plannedIntents = aiBrain.ChooseIntents(enemy, player, intentCount, intentIndexMap[enemy]);
+                intentIndexMap[enemy] += intentCount;
+                return plannedIntents;
+            }
+
             var nextIntents = new List<EnemyIntent>(intentCount);
             for (var index = 0; index < intentCount; index++)
             {
-                var nextIntent = ResolveNextIntent(enemy);
+                var patternIndex = intentIndexMap[enemy] % pattern.Count;
+                var nextIntent = pattern[patternIndex]?.Clone();
                 if (nextIntent != null)
                 {
                     nextIntents.Add(nextIntent);
@@ -54,7 +76,7 @@ namespace Project2048.Enemy
                 intentIndexMap[enemy]++;
             }
 
-            enemy.SetIntents(nextIntents);
+            return nextIntents;
         }
 
         public void ExecuteIntent(
@@ -83,11 +105,55 @@ namespace Project2048.Enemy
             switch (intent.intentType)
             {
                 case EnemyIntentType.Attack:
-                    var damage = damageCalculator.CalculateEnemyDamage(intent);
-                    player.TakeDamage(damage);
+                    enemy.SpendHp(intent.hpCost, intent.hpCostLeavesOne);
+                    var damage = damageCalculator.CalculateEnemyDamage(enemy, intent, player);
+                    var shieldBeforeHit = player.ShieldHp;
+                    var shouldRetaliate = shieldBeforeHit > 0 && player.ThornRetaliationDamage > 0;
+                    var retaliationPower = player.ThornRetaliationDamage;
+                    var hpDamage = player.TakeDamage(damage);
+                    if (intent.lifeStealPercent > 0f && hpDamage > 0)
+                    {
+                        enemy.RestoreHp(Mathf.CeilToInt(hpDamage * Mathf.Clamp01(intent.lifeStealPercent)));
+                    }
+
+                    if (intent.nextBoardMoveCountModifier != 0)
+                    {
+                        player.ApplyNextTurnBoardMoveCountModifier(intent.nextBoardMoveCountModifier);
+                    }
+
+                    ApplyCostGainModifiers(intent, player);
+
+                    if (shouldRetaliate && retaliationPower > 0)
+                    {
+                        var retaliationDamage = damageCalculator.CalculatePlayerSkillDamageFromStat(
+                            shieldBeforeHit,
+                            retaliationPower,
+                            enemy,
+                            player.CriticalChance,
+                            player.CriticalDamageMultiplier);
+                        enemy.TakeDamage(retaliationDamage);
+                    }
+
+                    var counterDamage = player.CalculateCounterDamage(hpDamage);
+                    if (counterDamage > 0)
+                    {
+                        enemy.TakeDamage(counterDamage);
+                    }
                     break;
                 case EnemyIntentType.Defense:
-                    enemy.AddBlock(intent.value);
+                    if (intent.isThornGuard)
+                    {
+                        enemy.ApplyThornGuard(intent.value, intent.retaliationDamage);
+                    }
+                    else
+                    {
+                        enemy.AddBlock(intent.value);
+                    }
+
+                    if (intent.selfDefensePowerModifier != 0)
+                    {
+                        enemy.ApplyDefenseModifier(intent.selfDefensePowerModifier);
+                    }
                     break;
                 case EnemyIntentType.Debuff:
                     ApplyDebuff(intent, player, boardManager);
@@ -95,20 +161,26 @@ namespace Project2048.Enemy
             }
         }
 
-        private EnemyIntent ResolveNextIntent(EnemyController enemy)
-        {
-            var pattern = enemy.Data.intentPattern;
-            if (pattern == null || pattern.Count == 0)
-            {
-                return aiBrain.ChooseIntent(enemy.Data, intentIndexMap[enemy]);
-            }
-
-            var index = intentIndexMap[enemy] % pattern.Count;
-            return pattern[index]?.Clone();
-        }
-
         private static void ApplyDebuff(EnemyIntent intent, PlayerCombatController player, Board2048Manager boardManager)
         {
+            ApplyCostGainModifiers(intent, player);
+
+            if (intent.skillEffectKind == SkillEffectKind.AttackStageDown)
+            {
+                player.ApplyAttackPowerModifier(intent.targetAttackModifier != 0
+                    ? intent.targetAttackModifier
+                    : -Mathf.Max(0, intent.value));
+                return;
+            }
+
+            if (intent.skillEffectKind == SkillEffectKind.DefenseStageDown)
+            {
+                player.ApplyDefensePowerModifier(intent.targetDefenseModifier != 0
+                    ? intent.targetDefenseModifier
+                    : -Mathf.Max(0, intent.value));
+                return;
+            }
+
             switch (intent.debuffType)
             {
                 case DebuffType.Fear:
@@ -120,6 +192,24 @@ namespace Project2048.Enemy
                 case DebuffType.Darkness:
                     boardManager?.QueueObstacles(intent.value);
                     break;
+            }
+        }
+
+        private static void ApplyCostGainModifiers(EnemyIntent intent, PlayerCombatController player)
+        {
+            if (intent == null || player == null)
+            {
+                return;
+            }
+
+            if (intent.nextCostGainModifier != 0)
+            {
+                player.ApplyNextTurnCostGainModifier(intent.nextCostGainModifier);
+            }
+
+            if (!Mathf.Approximately(intent.nextCostGainMultiplier, 1f))
+            {
+                player.ApplyNextTurnCostGainMultiplier(intent.nextCostGainMultiplier);
             }
         }
     }

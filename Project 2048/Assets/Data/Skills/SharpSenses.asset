@@ -1,0 +1,76 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e39edfbbdac2c064e877e5f3f784bab9, type: 3}
+  m_Name: SharpSenses
+  m_EditorClassIdentifier: Game.Core::Project2048.Skills.SkillSO
+  skillId: sharp-senses
+  skillName: "예리한 감각"
+  skillType: 1
+  effectKind: 6
+  damageStatSource: 0
+  cost: 6
+  power: 0
+  targetAttackStageModifier: 0
+  targetDefenseStageModifier: 0
+  selfDefenseStageModifier: 0
+  selfCriticalStageModifier: 2
+  targetAttackModifier: 0
+  targetDefenseModifier: 0
+  selfDefenseBonus: 0
+  selfDefensePowerModifier: 0
+  selfThornRetaliationDamage: 0
+  selfCounterPercent: 0
+  selfEndureTurns: 0
+  selfEchoDamageBonus: 0
+  selfExtraAttackHits: 0
+  selfCriticalChanceBonus: 0
+  lifeStealPercent: 0
+  hpCost: 0
+  hpCostPercent: 0
+  hpCostLeavesOne: 1
+  nextBoardMoveCountModifier: 0
+  chargedPower: 0
+  consumesAllShield: 0
+  nextAttackPowerMultiplier: 1
+  nextAttackHitCount: 0
+  nextAttackHitPowerMultiplier: 1
+  healPercentOfMaxHp: 0
+  availability: 0
+  icon: {fileID: 0}
+  activationEffect:
+    sfxClip: {fileID: 0}
+    vfxPrefab: {fileID: 0}
+    animationClip: {fileID: 0}
+    particleEffect:
+      objectName: 
+      particlePrefab: {fileID: 0}
+      particleMaterial: {fileID: 0}
+      useParticleColor: 0
+      particleColor: {r: 1, g: 1, b: 1, a: 1}
+      lifetimeSeconds: 0.8
+      burstCount: 16
+      startSpeed: 0.6
+      startSize: 0.12
+      swirl: 0
+    volumeScale: 1
+    minPitch: 1
+    maxPitch: 1
+    sfxDelaySeconds: 0
+    localOffset: {x: 0, y: 0, z: 0}
+    autoDestroySeconds: 1.25
+  vfxFamily: 5
+  vfxPrimaryColor: {r: 0.62, g: 0.24, b: 1, a: 1}
+  vfxSecondaryColor: {r: 0.45, g: 0.86, b: 1, a: 1}
+  vfxScale: 1
+  vfxIntensity: 1.15
+  vfxRepeatCount: 1
+  description: "치명타 랭크를 2 올린다."

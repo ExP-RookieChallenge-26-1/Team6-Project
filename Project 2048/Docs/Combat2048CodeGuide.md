@@ -37,7 +37,7 @@ combatManager.GetSnapshot();
 combatManager.OnCombatStateChanged += RenderFromSnapshot;
 
 combatManager.RequestBoardMove(direction);
-combatManager.RequestUseSkillById(skillId, targetIndex);
+combatManager.RequestUseSkillById(skillId);
 combatManager.RequestEndPlayerTurn();
 ```
 
@@ -154,7 +154,7 @@ StartCombat(CombatSetup setup)
 GetSnapshot()
 RequestBoardMove(Direction direction)
 RequestUseSkill(SkillSO skill, EnemyController target)
-RequestUseSkillById(string skillId, int targetIndex)
+RequestUseSkillById(string skillId)
 RequestEndPlayerTurn()
 ```
 
@@ -232,25 +232,37 @@ flowchart TD
 
 파일: `Assets/Scripts/Board2048/CostConverter.cs`
 
-코스트는 보드에서 가장 큰 숫자 하나만 보는 것이 아니다. 보드에 남은 모든 숫자를 각각 코스트로 바꾼 뒤 합산한다.
+코스트는 보드에서 가장 큰 숫자 하나만 보는 것이 아니다. 보드 전체 타일 양, 가장 큰 타일, 타일이 얼마나 조각나 있는지를 함께 본다.
 
-현재 변환표는 테스트와 전투 루프 검증을 위한 임시 수치다. 정식 밸런스가 정해지면 이 표는 바뀔 수 있다.
+현재 변환식은 `2` 이상의 2의 거듭제곱 타일만 코스트 대상으로 삼고, 타일값 자체가 아니라 2048 단계(`log2`)를 쓴다. 정식 밸런스가 정해지면 이 공식과 테스트 기대값은 바뀔 수 있다.
 
-| 타일 | 코스트 |
+```text
+totalValueScore = floor(log2(보드의 숫자 타일 합계))
+largestTileBonus = floor(log2(가장 큰 타일)) * 2
+fragmentationPenalty = floor((숫자 타일 개수 - 1) / 2)
+
+최종 코스트 = max(0, totalValueScore + largestTileBonus - fragmentationPenalty)
+```
+
+타일 하나만 남았을 때의 코스트는 다음과 같다.
+
+| 타일 | 단일 타일 코스트 |
 |---:|---:|
-| 2 | 1 |
-| 4 | 2 |
-| 8 | 3 |
-| 16 | 5 |
-| 32 | 8 |
-| 64 | 13 |
+| 2 | 3 |
+| 4 | 6 |
+| 8 | 9 |
+| 16 | 12 |
+| 32 | 15 |
+| 64 | 18 |
 | 128 | 21 |
-| 256 | 34 |
-| 512 | 55 |
-| 1024 | 89 |
-| 2048 | 144 |
+| 256 | 24 |
+| 512 | 27 |
+| 1024 | 30 |
+| 2048 | 33 |
 
-빈 칸, 방해 블록, 표에 없는 값은 코스트 0이다.
+예를 들어 `8 + 8`이 남은 보드는 코스트 `10`이고, 합쳐서 `16` 하나만 남기면 코스트 `12`다. 같은 총량이라도 큰 타일 하나로 압축할수록 유리하고, 작은 숫자가 여러 개 흩어져 있으면 조각 페널티를 받는다.
+
+`4096`처럼 표보다 큰 2의 거듭제곱도 같은 공식으로 계산한다. 빈 칸, 방해 블록, 2의 거듭제곱이 아닌 값은 코스트 0이다.
 
 ## 스킬 규칙
 
@@ -260,19 +272,22 @@ flowchart TD
 
 공격 스킬:
 
-- 플레이어 공격력 + 스킬 위력만큼 적에게 피해를 준다.
-- `targetAttackModifier`가 있으면 적 공격력을 낮추거나 올린다.
+- `power`는 40 / 60 / 80 / 100 / 120 같은 10 단위 기술 위력이다.
+- 피해 공식은 `기술 위력 / 10 * 공격 측 능력치 / 방어 측 능력치`에 난수 보정과 치명타를 적용한다.
+- `DamageStatSource`로 공격 측 능력치를 고른다. 일반 공격은 공격력, `DefenseScalingAttack`은 방어력, `ShieldScalingAttack`과 `ShieldBurstAttack`은 현재 보호막 수치를 쓴다.
+- 공격/방어/치명타 변화는 고정 수치가 아니라 랭크 변화다. 예를 들어 `targetDefenseStageModifier = -1`은 적 방어 랭크 -1이다.
 
 방어 스킬:
 
-- 스킬 위력 + 현재 방어 보너스만큼 플레이어 방어도를 얻는다.
-- `selfDefenseBonus`가 있으면 이후 방어 스킬의 획득량이 바뀐다.
+- 방어 스킬의 `power`는 보호막 획득량이다. 방어력과 보호막은 별도 수치라서 방어 랭크가 보호막 획득량을 올리지 않는다.
+- `ThornGuard`는 보호막을 얻고, 보호막이 남아 있을 때 직접 공격을 받으면 현재 보호막 수치를 공격 측 능력치로 써서 반격한다.
+- `DefenseStageUp`은 보호막이 아니라 방어 랭크를 올린다. 이 랭크는 `DefenseScalingAttack` 피해 계산에 쓰인다.
 
 스킬 사용 순서는 다음과 같다.
 
 ```text
 UI 버튼
--> RequestUseSkillById(skillId, targetIndex)
+-> RequestUseSkillById(skillId)
 -> 스킬 찾기
 -> 코스트 확인
 -> 코스트 소비
@@ -292,17 +307,17 @@ UI 버튼
 | 타입 | 의미 |
 |---|---|
 | Attack | 플레이어에게 피해 |
-| Defense | 적이 방어도 획득 |
+| Defense | 적이 보호막 획득 |
 | Debuff | 플레이어 또는 보드에 방해 효과 |
 
 현재 디버프는 두 가지다.
 
 | 디버프 | 효과 |
 |---|---|
-| Fear | 플레이어가 이번 턴에 얻는 방어도 획득량 6 감소 |
+| Fear | 플레이어 공격 랭크 1 감소 |
 | Darkness | 다음 보드에 이동 불가능한 방해 블록 설치 |
 
-공포는 `PlayerCombatController.FearStacks`에 고정 페널티 `6`을 저장한다. 그래서 이번 플레이어 턴 동안 방어 스킬을 쓸 때 최종 방어 획득량은 `스킬 방어량 + DefenseBonus - 6`으로 계산된다. 최종 획득 방어도는 0 아래로 내려가지 않고, 플레이어가 턴을 넘기면 공포는 해제된다.
+공포는 `PlayerCombatController.FearStacks`에 임시 공격 랭크 페널티를 저장한다. 보호막 획득량과 방어력은 건드리지 않고, 플레이어가 턴을 넘기면 공포는 해제되면서 공격 랭크가 복구된다.
 
 암흑은 `Board2048Manager.QueueObstacles`로 방해 블록을 예약한다. 적 턴이 끝나고 다음 플레이어 보드가 시작될 때 `-1` 값의 방해 블록이 보드 안에 배치된다. 이 블록은 숫자 타일처럼 움직이거나 합쳐지지 않고, 2048 이동에서 벽처럼 동작한다.
 
@@ -312,7 +327,7 @@ UI 버튼
 
 | 디버프 | 임시 VFX |
 |---|---|
-| Fear | 붉은 화면 오버레이, "공포: 방어도 획득 -6" 문구, 플레이어 초상화 짧은 펄스 |
+| Fear | 붉은 화면 오버레이, "공포: 공격 랭크 -1" 문구, 플레이어 초상화 짧은 펄스 |
 | Darkness | 보라색 화면 오버레이, "암흑: 방해 블록 +N" 문구, 방해 블록 셀 펄스 |
 
 적 데이터에 `intentPattern`이 있으면 그 순서대로 반복한다. 이 방식은 보스처럼 정확한 순서를 가져야 하는 적에게 쓴다.

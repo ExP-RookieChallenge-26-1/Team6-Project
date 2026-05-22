@@ -7,7 +7,6 @@ using Project2048.Combat;
 using Project2048.Enemy;
 using Project2048.Presentation;
 using Project2048.Rewards;
-using Project2048.Score;
 using Project2048.Skills;
 using TMPro;
 using UnityEngine;
@@ -34,22 +33,37 @@ namespace Project2048.Prototype
         public const float HpDamageTrailDelaySeconds = 0.25f;
         public const float HpDamageTrailDurationSeconds = 0.55f;
         public const float HpHitShakeDurationSeconds = 0.12f;
-        public static readonly Color ThemeHpFillColor = new(73f / 255f, 175f / 255f, 181f / 255f, 1f);
+        public static readonly Color ThemePrimaryColor = new(73f / 255f, 175f / 255f, 181f / 255f, 1f);
+        public static readonly Color ThemeHpFillColor = ThemePrimaryColor;
         public static readonly Color ThemeHpDarkColor = new(12f / 255f, 13f / 255f, 14f / 255f, 1f);
         public static readonly Color ThemeHpBarBackgroundColor = ThemeHpDarkColor;
         public static readonly Color ThemeHpDamageTrailColor = new(20f / 255f, 79f / 255f, 84f / 255f, 0.90f);
         public static readonly Color ThemeHpTextOutlineColor = new(42f / 255f, 127f / 255f, 133f / 255f, 1f);
         public static readonly Color ThemeHpBorderColor = new(0f, 0f, 0f, 1f);
+        public static readonly Color ThemeSkillAttackColor = new(79f / 255f, 106f / 255f, 90f / 255f, 1f);
+        public static readonly Color ThemeSkillDefenseColor = new(45f / 255f, 103f / 255f, 107f / 255f, 1f);
+        public static readonly Color ThemeSkillChangeColor = new(68f / 255f, 88f / 255f, 105f / 255f, 1f);
+        public static readonly Color ThemeBoardCellColor = new(0.20f, 0.20f, 0.22f, 1f);
+        public static readonly Color ThemeBoardHelpIconColor = new(0.42f, 0.46f, 0.50f, 0.95f);
+        public static readonly Color ThemeBoardHelpOutlineColor = ThemeBoardCellColor;
+        private static readonly Color ThemeSkillEmptyColor = new(22f / 255f, 25f / 255f, 28f / 255f, 1f);
         public const float HpStatusEffectXOffset = 18f;
         public const float HpTextMinFontSize = 22f;
         public const float HpTextOutlineWidth = 0.26f;
         public const float HpTextOutlineDistance = 1.65f;
+        public const float IntentBubbleSquareSize = 60f;
         private const float HpDamageFlashDurationSeconds = 0.12f;
         private const float HpHitShakeMagnitude = 12f;
         private const float HpBarBorderThickness = 2.75f;
+        private const float IntentBubbleTextPadding = 3f;
+        private const float IntentBubbleTextMinFontSize = 8f;
+        private const float IntentBubbleTextMaxFontSize = 14f;
         private const string HpBarInteriorName = "HpBarInterior";
         private const string HpBarOutlineName = "HpBarOutline";
+        private const string StatusEffectTemplateName = "StatusEffectIconSample";
         private const float UiSfxDistance = 10000f;
+        private static readonly string CostFormulaTooltipDescription =
+            $"2048 코스트 환산식\nlog2(전체 타일 합) + log2(가장 큰 타일) x {CostConverter.LargestTileBonusMultiplier} - (타일 개수 - 1) / {CostConverter.FragmentationPenaltyDivisor}\n빈 칸, 장애물, 2의 거듭제곱이 아닌 타일은 제외";
 
         [Header("Top bar")]
         [SerializeField] private TMP_Text turnCounterText;
@@ -88,15 +102,14 @@ namespace Project2048.Prototype
 
         [Header("Action panel")]
         [SerializeField] private TMP_Text costText;
-        [SerializeField] private GameObject categoryView;
-        [SerializeField] private Button attackCategoryButton;
-        [SerializeField] private Button defenseCategoryButton;
-        [SerializeField] private Button categoryEndTurnButton;
+        [SerializeField] private GameObject costFormulaHelpIcon;
+        [SerializeField] private TMP_Text costFormulaHelpLabel;
+        [SerializeField] private GameObject boardCostFormulaHelpIcon;
+        [SerializeField] private TMP_Text boardCostFormulaHelpLabel;
         [SerializeField] private GameObject skillsView;
         [SerializeField] private TMP_Text skillsHeaderText;
         [SerializeField] private List<Button> skillTierButtons = new();
         [SerializeField] private List<TMP_Text> skillTierLabels = new();
-        [SerializeField] private Button skillsBackButton;
         [SerializeField] private Button skillsEndTurnButton;
 
         [Header("Enemy turn panel")]
@@ -111,7 +124,6 @@ namespace Project2048.Prototype
 
         [Header("Reward overlay")]
         [SerializeField] private RewardManager rewardManager;
-        [SerializeField] private ScoreManager scoreManager;
         [SerializeField] private GameObject rewardOverlay;
         [SerializeField] private TMP_Text rewardTitleText;
         [SerializeField] private TMP_Text rewardDescriptionText;
@@ -119,6 +131,11 @@ namespace Project2048.Prototype
         [SerializeField] private TMP_Text rewardEnhanceText;
         [SerializeField] private Button rewardRestButton;
         [SerializeField] private Button rewardEnhanceButton;
+        [SerializeField] private List<Button> rewardChoiceButtons = new();
+        [SerializeField] private List<TMP_Text> rewardChoiceLabels = new();
+        [SerializeField] private List<Button> skillReplacementButtons = new();
+        [SerializeField] private List<TMP_Text> skillReplacementLabels = new();
+        private int pendingSkillRewardChoiceIndex = -1;
 
         [Header("Board effects")]
         [SerializeField] private AudioSource audioSource;
@@ -128,7 +145,7 @@ namespace Project2048.Prototype
 
         [Header("Theme")]
         [SerializeField] private Color emptyCellColor = new(0.10f, 0.10f, 0.10f, 1f);
-        [SerializeField] private Color filledCellColor = new(0.20f, 0.20f, 0.22f, 1f);
+        [SerializeField] private Color filledCellColor = ThemeBoardCellColor;
         [SerializeField] private Color highlightCellColor = new(0.92f, 0.90f, 0.85f, 1f);
         [SerializeField] private Color obstacleCellColor = new(0.55f, 0.10f, 0.55f, 1f);
         [SerializeField] private Color attackIntentColor = new(0.85f, 0.12f, 0.12f, 1f);
@@ -142,7 +159,7 @@ namespace Project2048.Prototype
         [SerializeField] private Color hpDamageTrailColor = ThemeHpDamageTrailColor;
         [SerializeField] private Color hpDamageFlashColor = new(1f, 1f, 1f, 0.95f);
         [SerializeField] private Color blockFrameColor = new(0.66f, 0.70f, 0.74f, 1f);
-        [SerializeField] private Color blockIconColor = new(0.42f, 0.46f, 0.50f, 0.95f);
+        [SerializeField] private Color blockIconColor = ThemeBoardHelpIconColor;
         [SerializeField] private Color buffStatusColor = new(0.20f, 0.46f, 0.30f, 0.95f);
         [SerializeField] private Color debuffStatusColor = new(0.46f, 0.16f, 0.20f, 0.95f);
         [SerializeField] private Color statusTooltipColor = new(0.06f, 0.07f, 0.08f, 0.96f);
@@ -184,10 +201,11 @@ namespace Project2048.Prototype
             UnbindCombatEvents();
             combatManager = owner != null ? owner.CombatManager : null;
             rewardManager = owner != null ? owner.RewardManager : rewardManager;
-            scoreManager = owner != null ? owner.ScoreManager : scoreManager;
 
             ResolveMissingReferences();
+            EnsureIntentBubbleDefaults();
             EnsureHpBarDefaults();
+            ConfigureCostFormulaHelp();
             EnsureAudioDefaults();
             WireButtons();
             BindRewardEvents();
@@ -294,22 +312,16 @@ namespace Project2048.Prototype
                 boardSwipeHandler.OnSwipe += HandleSwipe;
             }
 
-            BindButton(attackCategoryButton, () => uiState.SelectCategory(SkillType.Attack));
-            BindButton(defenseCategoryButton, () => uiState.SelectCategory(SkillType.Defense));
-            BindButton(categoryEndTurnButton, () => combatManager?.RequestEndPlayerTurn());
-            BindButton(skillsBackButton, () => uiState.ClearCategory());
             BindButton(skillsEndTurnButton, () => combatManager?.RequestEndPlayerTurn());
 
             for (var i = 0; i < skillTierButtons.Count; i++)
             {
                 var index = i;
-                BindButton(skillTierButtons[i], () => OnSkillTierClicked(index));
+                BindButton(skillTierButtons[i], () => OnSkillSlotClicked(index));
             }
 
             BindButton(restartButton, () => bootstrap?.RestartCombat());
             BindButton(reloadSceneButton, () => SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex));
-            BindButton(rewardRestButton, () => rewardManager?.ChooseRest(combatManager != null ? combatManager.Player : null));
-            BindButton(rewardEnhanceButton, () => rewardManager?.ChooseEnhance(combatManager != null ? combatManager.Player : null));
         }
 
         private void BindButton(Button button, System.Action handler)
@@ -338,16 +350,24 @@ namespace Project2048.Prototype
             });
         }
 
-        private void OnSkillTierClicked(int tierIndex)
+        private void OnSkillSlotClicked(int slotIndex)
         {
-            if (combatManager == null || tierIndex < 0 || tierIndex >= visibleSkills.Count)
+            if (combatManager == null ||
+                snapshot == null ||
+                snapshot.Skills == null ||
+                slotIndex < 0 ||
+                slotIndex >= snapshot.Skills.Count)
             {
                 return;
             }
 
-            var skill = visibleSkills[tierIndex];
-            var targetIndex = skill.SkillType == SkillType.Attack ? 0 : -1;
-            combatManager.RequestUseSkillById(skill.SkillId, targetIndex);
+            var skill = snapshot.Skills[slotIndex];
+            if (skill == null)
+            {
+                return;
+            }
+
+            combatManager.RequestUseSkillById(skill.SkillId);
         }
 
         private void HandleCombatStateChanged(CombatSnapshot nextSnapshot)
@@ -384,8 +404,10 @@ namespace Project2048.Prototype
             }
 
             rewardManager.OnRewardOffered -= HandleRewardOffered;
+            rewardManager.OnRewardChoicesOffered -= HandleRewardChoicesOffered;
             rewardManager.OnRewardClaimed -= HandleRewardClaimed;
             rewardManager.OnRewardOffered += HandleRewardOffered;
+            rewardManager.OnRewardChoicesOffered += HandleRewardChoicesOffered;
             rewardManager.OnRewardClaimed += HandleRewardClaimed;
         }
 
@@ -397,16 +419,25 @@ namespace Project2048.Prototype
             }
 
             rewardManager.OnRewardOffered -= HandleRewardOffered;
+            rewardManager.OnRewardChoicesOffered -= HandleRewardChoicesOffered;
             rewardManager.OnRewardClaimed -= HandleRewardClaimed;
         }
 
         private void HandleRewardOffered(BattleRewardSO _)
         {
+            pendingSkillRewardChoiceIndex = -1;
+            Render();
+        }
+
+        private void HandleRewardChoicesOffered(IReadOnlyList<BattleRewardSO> _)
+        {
+            pendingSkillRewardChoiceIndex = -1;
             Render();
         }
 
         private void HandleRewardClaimed(RewardChoiceResult _)
         {
+            pendingSkillRewardChoiceIndex = -1;
             if (combatManager != null)
             {
                 snapshot = combatManager.GetSnapshot();
@@ -433,7 +464,6 @@ namespace Project2048.Prototype
                 case PrototypeCombatScreenMode.Board:
                     RenderBoardPanel();
                     break;
-                case PrototypeCombatScreenMode.ActionCategory:
                 case PrototypeCombatScreenMode.ActionSkills:
                     RenderActionPanel();
                     break;
@@ -481,6 +511,7 @@ namespace Project2048.Prototype
 
             if (intentBubble != null)
             {
+                EnsureIntentBubbleDefaults();
                 var visibleIntents = GetVisibleIntents(enemy);
                 var hasIntent = visibleIntents.Count > 0 && enemyIsAlive;
                 intentBubble.SetActive(hasIntent);
@@ -604,7 +635,6 @@ namespace Project2048.Prototype
             if (actionPanel != null)
             {
                 actionPanel.SetActive(!rewardReplacementVisible && !deferPanelSwapForBoardAnimation && (
-                    uiState.ScreenMode == PrototypeCombatScreenMode.ActionCategory ||
                     uiState.ScreenMode == PrototypeCombatScreenMode.ActionSkills));
             }
 
@@ -613,11 +643,6 @@ namespace Project2048.Prototype
                 enemyTurnPanel.SetActive(!rewardReplacementVisible &&
                     !deferPanelSwapForBoardAnimation &&
                     uiState.ScreenMode == PrototypeCombatScreenMode.EnemyTurn);
-            }
-
-            if (categoryView != null)
-            {
-                categoryView.SetActive(uiState.ScreenMode == PrototypeCombatScreenMode.ActionCategory);
             }
 
             if (skillsView != null)
@@ -909,24 +934,30 @@ namespace Project2048.Prototype
             }
 
             visibleSkills.Clear();
-            if (uiState.SelectedCategory.HasValue && snapshot != null)
+            if (snapshot != null)
             {
                 visibleSkills.AddRange(uiState.GetVisibleSkills(snapshot));
             }
 
             if (skillsHeaderText != null)
             {
-                skillsHeaderText.text = PrototypeCombatText.FormatSkillHeader(uiState.SelectedCategory);
+                skillsHeaderText.text = PrototypeCombatText.FormatSkillHeader();
             }
 
             for (var i = 0; i < skillTierButtons.Count; i++)
             {
-                var hasSkill = i < visibleSkills.Count;
+                var isSlot = i < PlayerCombatController.MaxEquippedSkillSlots;
+                var hasSkill = isSlot && i < visibleSkills.Count && visibleSkills[i] != null;
+                var canAfford = hasSkill && snapshot != null && visibleSkills[i].Cost <= snapshot.CurrentCost;
                 var button = skillTierButtons[i];
                 if (button != null)
                 {
-                    button.gameObject.SetActive(hasSkill);
-                    button.interactable = hasSkill && snapshot != null && visibleSkills[i].Cost <= snapshot.CurrentCost;
+                    button.gameObject.SetActive(isSlot);
+                    button.interactable = hasSkill && canAfford;
+                    ApplySkillSlotTheme(button, hasSkill ? visibleSkills[i] : null, canAfford);
+                    BindTooltip(button, hasSkill ? PrototypeCombatText.FormatSkillTooltip(visibleSkills[i]) : string.Empty);
+                    var slotIndex = i;
+                    BindButton(button, () => OnSkillSlotClicked(slotIndex));
                 }
 
                 if (i < skillTierLabels.Count && skillTierLabels[i] != null)
@@ -934,14 +965,83 @@ namespace Project2048.Prototype
                     if (hasSkill)
                     {
                         var skill = visibleSkills[i];
-                        skillTierLabels[i].text = PrototypeCombatText.FormatSkillLabel(i, skill);
+                        skillTierLabels[i].text = PrototypeCombatText.FormatSkillLabel(
+                            i,
+                            skill,
+                            canAfford,
+                            snapshot?.CurrentCost ?? 0);
                     }
                     else
                     {
-                        skillTierLabels[i].text = string.Empty;
+                        skillTierLabels[i].text = isSlot
+                            ? PrototypeCombatText.FormatEmptySkillSlotLabel(i)
+                            : string.Empty;
                     }
                 }
             }
+        }
+
+        private static void ApplySkillSlotTheme(Button button, SkillSnapshot skill, bool canAfford)
+        {
+            if (button == null)
+            {
+                return;
+            }
+
+            var image = button.targetGraphic as Image ?? button.GetComponent<Image>();
+            if (image == null)
+            {
+                return;
+            }
+
+            var baseColor = skill != null ? ResolveSkillTypeColor(skill.SkillType) : ThemeSkillEmptyColor;
+            var normalColor = skill != null && !canAfford ? DimSkillSlotColor(baseColor) : baseColor;
+            var highlightedColor = Color.Lerp(normalColor, ThemePrimaryColor, 0.18f);
+            var pressedColor = Color.Lerp(normalColor, Color.black, 0.18f);
+            normalColor.a = 1f;
+            highlightedColor.a = 1f;
+            pressedColor.a = 1f;
+
+            image.color = normalColor;
+            image.raycastTarget = true;
+            button.targetGraphic = image;
+
+            var colors = button.colors;
+            colors.normalColor = normalColor;
+            colors.highlightedColor = highlightedColor;
+            colors.selectedColor = highlightedColor;
+            colors.pressedColor = pressedColor;
+            colors.disabledColor = skill != null ? DimSkillSlotColor(baseColor) : ThemeSkillEmptyColor;
+            colors.colorMultiplier = 1f;
+            colors.fadeDuration = 0.08f;
+            button.colors = colors;
+
+            var outline = button.GetComponent<Outline>();
+            if (outline != null)
+            {
+                outline.effectColor = Color.Lerp(baseColor, ThemePrimaryColor, 0.28f);
+                outline.effectDistance = new Vector2(3f, -3f);
+                outline.useGraphicAlpha = true;
+            }
+        }
+
+        private static Color ResolveSkillTypeColor(SkillType skillType)
+        {
+            return skillType switch
+            {
+                SkillType.Attack => ThemeSkillAttackColor,
+                SkillType.Defense => ThemeSkillDefenseColor,
+                SkillType.Debuff => ThemeSkillChangeColor,
+                SkillType.Heal => ThemeSkillChangeColor,
+                _ => ThemeSkillChangeColor,
+            };
+        }
+
+        private static Color DimSkillSlotColor(Color color)
+        {
+            var dimmed = Color.Lerp(ThemeHpDarkColor, color, 0.45f);
+            dimmed.a = 1f;
+            return dimmed;
         }
 
         private void RenderEnemyTurnPanel()
@@ -1061,6 +1161,10 @@ namespace Project2048.Prototype
             statusTooltipText ??= FindNestedComponentByName<TMP_Text>("StatusTooltip", "Text");
             hpBarFill ??= FindComponentInChildrenByName<Image>("HpBarFill");
             hpText ??= FindComponentInChildrenByName<TMP_Text>("HpText");
+            costFormulaHelpIcon ??= FindChildByName("CostFormulaHelpIcon")?.gameObject;
+            costFormulaHelpLabel ??= FindNestedComponentByName<TMP_Text>("CostFormulaHelpIcon", "Label");
+            boardCostFormulaHelpIcon ??= FindChildByName("BoardCostFormulaHelpIcon")?.gameObject;
+            boardCostFormulaHelpLabel ??= FindNestedComponentByName<TMP_Text>("BoardCostFormulaHelpIcon", "Label");
             playerBoardStatusEffectsRoot ??= FindComponentInChildrenByName<RectTransform>("PlayerBoardStatusEffects");
             actionDescriptionText ??= FindComponentInChildrenByName<TMP_Text>("ActionDescriptionText");
             enemyTurnText ??= FindComponentInChildrenByName<TMP_Text>("EnemyTurnText");
@@ -1076,6 +1180,55 @@ namespace Project2048.Prototype
             enemyHpRoot = FindChildByName("EnemyHp")?.gameObject
                 ?? enemyHpBarFill?.transform.parent?.gameObject
                 ?? enemyHpText?.transform.parent?.gameObject;
+        }
+
+        private void EnsureIntentBubbleDefaults()
+        {
+            if (intentBubble != null && intentBubble.TryGetComponent<RectTransform>(out var bubbleRect))
+            {
+                var hasAuthoredSize = bubbleRect.sizeDelta.x > 0.01f && bubbleRect.sizeDelta.y > 0.01f;
+                if (!hasAuthoredSize)
+                {
+                    bubbleRect.sizeDelta = new Vector2(IntentBubbleSquareSize, IntentBubbleSquareSize);
+                }
+            }
+
+            if (intentBubbleText == null)
+            {
+                return;
+            }
+
+            intentBubbleText.alignment = TextAlignmentOptions.Center;
+            intentBubbleText.enableAutoSizing = true;
+            if (intentBubbleText.fontSizeMin <= 0f)
+            {
+                intentBubbleText.fontSizeMin = IntentBubbleTextMinFontSize;
+            }
+
+            if (intentBubbleText.fontSizeMax <= 0f || intentBubbleText.fontSizeMax > 40f)
+            {
+                intentBubbleText.fontSizeMax = IntentBubbleTextMaxFontSize;
+            }
+
+            intentBubbleText.textWrappingMode = TextWrappingModes.Normal;
+            intentBubbleText.overflowMode = TextOverflowModes.Ellipsis;
+            intentBubbleText.raycastTarget = false;
+
+            var textRect = intentBubbleText.rectTransform;
+            textRect.anchorMin = Vector2.zero;
+            textRect.anchorMax = Vector2.one;
+            var hasAuthoredPadding =
+                Mathf.Abs(textRect.offsetMin.x) > 0.01f ||
+                Mathf.Abs(textRect.offsetMin.y) > 0.01f ||
+                Mathf.Abs(textRect.offsetMax.x) > 0.01f ||
+                Mathf.Abs(textRect.offsetMax.y) > 0.01f;
+            if (!hasAuthoredPadding)
+            {
+                textRect.offsetMin = new Vector2(IntentBubbleTextPadding, IntentBubbleTextPadding);
+                textRect.offsetMax = new Vector2(-IntentBubbleTextPadding, -IntentBubbleTextPadding);
+            }
+
+            textRect.anchoredPosition = Vector2.zero;
         }
 
         private void SetEnemyHpVisible(bool visible)
@@ -1149,9 +1302,9 @@ namespace Project2048.Prototype
             EnsureDamageTrailFill(playerBattleHpBarFill);
             EnsureDamageTrailFill(enemyHpBarFill);
             EnsureDamageTrailFill(hpBarFill);
-            playerBoardStatusEffectsRoot = EnsureStatusEffectsRoot(hpBarFill, "PlayerBoardStatusEffects") ?? playerBoardStatusEffectsRoot;
-            playerBattleStatusEffectsRoot = EnsureStatusEffectsRoot(playerBattleHpBarFill, "PlayerBattleStatusEffects") ?? playerBattleStatusEffectsRoot;
-            enemyStatusEffectsRoot = EnsureStatusEffectsRoot(enemyHpBarFill, "EnemyStatusEffects") ?? enemyStatusEffectsRoot;
+            playerBoardStatusEffectsRoot = ResolveStatusEffectsRoot(hpBarFill, "PlayerBoardStatusEffects") ?? playerBoardStatusEffectsRoot;
+            playerBattleStatusEffectsRoot = ResolveStatusEffectsRoot(playerBattleHpBarFill, "PlayerBattleStatusEffects") ?? playerBattleStatusEffectsRoot;
+            enemyStatusEffectsRoot = ResolveStatusEffectsRoot(enemyHpBarFill, "EnemyStatusEffects") ?? enemyStatusEffectsRoot;
             EnsureStatusTooltip();
         }
 
@@ -1343,24 +1496,16 @@ namespace Project2048.Prototype
             }
 
             var existing = hpRoot.Find("DamageTrailFill");
-            Image trailImage;
-            RectTransform trailRect;
-            if (existing != null)
+            if (existing == null)
             {
-                trailImage = existing.GetComponent<Image>();
-                if (trailImage == null)
-                {
-                    trailImage = existing.gameObject.AddComponent<Image>();
-                }
-
-                trailRect = existing as RectTransform ?? existing.gameObject.AddComponent<RectTransform>();
+                return null;
             }
-            else
+
+            var trailImage = existing.GetComponent<Image>();
+            var trailRect = existing as RectTransform;
+            if (trailImage == null || trailRect == null)
             {
-                var trailObject = new GameObject("DamageTrailFill", typeof(RectTransform), typeof(Image));
-                trailObject.transform.SetParent(hpRoot, false);
-                trailImage = trailObject.GetComponent<Image>();
-                trailRect = trailObject.GetComponent<RectTransform>();
+                return null;
             }
 
             trailImage.sprite = fillImage.sprite;
@@ -1396,24 +1541,16 @@ namespace Project2048.Prototype
             }
 
             var existing = hpRoot.Find("DamageFlashFill");
-            Image flashImage;
-            RectTransform flashRect;
-            if (existing != null)
+            if (existing == null)
             {
-                flashImage = existing.GetComponent<Image>();
-                if (flashImage == null)
-                {
-                    flashImage = existing.gameObject.AddComponent<Image>();
-                }
-
-                flashRect = existing as RectTransform ?? existing.gameObject.AddComponent<RectTransform>();
+                return null;
             }
-            else
+
+            var flashImage = existing.GetComponent<Image>();
+            var flashRect = existing as RectTransform;
+            if (flashImage == null || flashRect == null)
             {
-                var flashObject = new GameObject("DamageFlashFill", typeof(RectTransform), typeof(Image));
-                flashObject.transform.SetParent(hpRoot, false);
-                flashImage = flashObject.GetComponent<Image>();
-                flashRect = flashObject.GetComponent<RectTransform>();
+                return null;
             }
 
             flashImage.sprite = fillImage.sprite;
@@ -1798,7 +1935,7 @@ namespace Project2048.Prototype
             return fillImage.transform.parent as RectTransform ?? fillImage.rectTransform;
         }
 
-        private RectTransform EnsureStatusEffectsRoot(Image fillImage, string rootName)
+        private RectTransform ResolveStatusEffectsRoot(Image fillImage, string rootName)
         {
             var hpRoot = ResolveHpRoot(fillImage);
             if (hpRoot == null)
@@ -1814,14 +1951,7 @@ namespace Project2048.Prototype
                 return existing;
             }
 
-            var rootObject = new GameObject(rootName, typeof(RectTransform), typeof(HorizontalLayoutGroup));
-            rootObject.transform.SetParent(hpRoot, false);
-            var root = rootObject.GetComponent<RectTransform>();
-            ConfigureStatusEffectsRoot(root);
-
-            ConfigureStatusEffectsLayout(rootObject.GetComponent<HorizontalLayoutGroup>());
-            root.SetAsLastSibling();
-            return root;
+            return null;
         }
 
         private static void EnsureStatusEffectsLayout(RectTransform root, bool preserveExistingLayout)
@@ -1834,8 +1964,7 @@ namespace Project2048.Prototype
             var layout = root.GetComponent<HorizontalLayoutGroup>();
             if (layout == null)
             {
-                layout = root.gameObject.AddComponent<HorizontalLayoutGroup>();
-                preserveExistingLayout = false;
+                return;
             }
 
             if (!preserveExistingLayout)
@@ -1889,7 +2018,14 @@ namespace Project2048.Prototype
 
             for (var i = root.childCount - 1; i >= 0; i--)
             {
-                DestroyAnimationObject(root.GetChild(i).gameObject);
+                var child = root.GetChild(i);
+                if (child.name == StatusEffectTemplateName)
+                {
+                    child.gameObject.SetActive(false);
+                    continue;
+                }
+
+                DestroyAnimationObject(child.gameObject);
             }
 
             var hasEffects = effects != null && effects.Count > 0;
@@ -1912,54 +2048,112 @@ namespace Project2048.Prototype
                 return;
             }
 
-            var chipObject = new GameObject($"StatusEffect_{effect.Id}", typeof(RectTransform), typeof(Image), typeof(StatusEffectTooltipTarget));
-            chipObject.transform.SetParent(root, false);
-            var chipRect = chipObject.GetComponent<RectTransform>();
-            chipRect.sizeDelta = new Vector2(32f, 32f);
+            var template = root.Find(StatusEffectTemplateName);
+            if (template == null)
+            {
+                return;
+            }
 
+            var chipObject = Instantiate(template.gameObject, root);
+            chipObject.name = $"StatusEffect_{effect.Id}";
+            chipObject.SetActive(true);
+            var chipRect = chipObject.GetComponent<RectTransform>();
             var image = chipObject.GetComponent<Image>();
+            if (chipRect == null || image == null)
+            {
+                DestroyAnimationObject(chipObject);
+                return;
+            }
+
+            chipRect.sizeDelta = new Vector2(32f, 32f);
             image.color = GetStatusEffectColor(effect);
             image.raycastTarget = true;
 
-            chipObject.GetComponent<StatusEffectTooltipTarget>()
-                .Initialize(effect.Description, ShowStatusTooltip, HideStatusTooltip);
+            var tooltipTarget = chipObject.GetComponent<StatusEffectTooltipTarget>();
+            tooltipTarget?.Initialize(effect.Description, ShowStatusTooltip, HideStatusTooltip);
+        }
+
+        private void ConfigureCostFormulaHelp()
+        {
+            ConfigureCostFormulaHelpIcon(costFormulaHelpIcon, ref costFormulaHelpLabel);
+            ConfigureCostFormulaHelpIcon(boardCostFormulaHelpIcon, ref boardCostFormulaHelpLabel);
+        }
+
+        private void ConfigureCostFormulaHelpIcon(GameObject icon, ref TMP_Text label)
+        {
+            if (icon == null)
+            {
+                return;
+            }
+
+            if (icon.TryGetComponent<Image>(out var image))
+            {
+                image.raycastTarget = true;
+            }
+
+            label ??= icon.GetComponentInChildren<TMP_Text>(true);
+            if (label != null)
+            {
+                label.text = "?";
+                label.alignment = TextAlignmentOptions.Center;
+                label.raycastTarget = false;
+            }
+
+            if (icon.TryGetComponent<StatusEffectTooltipTarget>(out var target))
+            {
+                target.Initialize(CostFormulaTooltipDescription, ShowStatusTooltip, HideStatusTooltip);
+            }
+        }
+
+        private void BindTooltip(Button button, string description)
+        {
+            if (button == null)
+            {
+                return;
+            }
+
+            var tooltipTarget = button.GetComponent<StatusEffectTooltipTarget>();
+            if (string.IsNullOrWhiteSpace(description))
+            {
+                if (tooltipTarget != null)
+                {
+                    tooltipTarget.enabled = false;
+                }
+
+                HideStatusTooltip();
+                return;
+            }
+
+            tooltipTarget ??= button.gameObject.AddComponent<StatusEffectTooltipTarget>();
+            tooltipTarget.enabled = true;
+            tooltipTarget.Initialize(description, ShowStatusTooltip, HideStatusTooltip);
         }
 
         private void EnsureStatusTooltip()
         {
             if (statusTooltip == null)
             {
-                statusTooltip = new GameObject("StatusTooltip", typeof(RectTransform), typeof(Image));
-                statusTooltip.transform.SetParent(transform, false);
-                var rect = statusTooltip.GetComponent<RectTransform>();
-                rect.anchorMin = new Vector2(0.5f, 0.5f);
-                rect.anchorMax = new Vector2(0.5f, 0.5f);
-                rect.pivot = new Vector2(0.5f, 0f);
-                rect.anchoredPosition = new Vector2(0f, 48f);
-                rect.sizeDelta = new Vector2(320f, 56f);
+                return;
             }
 
-            if (!statusTooltip.TryGetComponent<Image>(out var image))
+            if (statusTooltip.TryGetComponent<Image>(out var image))
             {
-                image = statusTooltip.AddComponent<Image>();
+                image.color = statusTooltipColor;
+                image.raycastTarget = false;
             }
-
-            image.color = statusTooltipColor;
-            image.raycastTarget = false;
 
             if (statusTooltipText == null)
             {
-                var textObject = new GameObject("Text", typeof(RectTransform), typeof(TextMeshProUGUI));
-                textObject.transform.SetParent(statusTooltip.transform, false);
-                var textRect = textObject.GetComponent<RectTransform>();
-                textRect.anchorMin = Vector2.zero;
-                textRect.anchorMax = Vector2.one;
-                textRect.offsetMin = new Vector2(10f, 6f);
-                textRect.offsetMax = new Vector2(-10f, -6f);
-                statusTooltipText = textObject.GetComponent<TextMeshProUGUI>();
+                statusTooltipText = statusTooltip.GetComponentInChildren<TMP_Text>(true);
             }
 
-            statusTooltipText.alignment = TextAlignmentOptions.Center;
+            if (statusTooltipText == null)
+            {
+                statusTooltip.SetActive(false);
+                return;
+            }
+
+            statusTooltipText.alignment = TextAlignmentOptions.Left;
             statusTooltipText.fontSize = 15f;
             statusTooltipText.color = Color.white;
             statusTooltipText.textWrappingMode = TextWrappingModes.Normal;
@@ -1980,11 +2174,28 @@ namespace Project2048.Prototype
 
             statusTooltipText.text = string.IsNullOrWhiteSpace(description) ? string.Empty : description;
             var ownerRect = transform as RectTransform;
-            if (source != null && ownerRect != null && statusTooltip.transform is RectTransform tooltipRect)
+            var tooltipRect = statusTooltip.transform as RectTransform;
+            if (tooltipRect != null)
+            {
+                var lineCount = string.IsNullOrEmpty(description) ? 1 : description.Count(character => character == '\n') + 1;
+                tooltipRect.sizeDelta = new Vector2(lineCount > 1 ? 540f : 320f, Mathf.Clamp(36f + lineCount * 28f, 64f, 220f));
+            }
+
+            if (source != null && ownerRect != null && tooltipRect != null)
             {
                 var worldPosition = source.TransformPoint(source.rect.center);
                 var localPosition = ownerRect.InverseTransformPoint(worldPosition);
-                tooltipRect.anchoredPosition = localPosition + new Vector3(0f, 28f, 0f);
+                var desiredPosition = localPosition + new Vector3(0f, 28f, 0f);
+                var margin = 8f;
+                var tooltipSize = tooltipRect.sizeDelta;
+                var ownerBounds = ownerRect.rect;
+                var minX = ownerBounds.xMin + tooltipSize.x * tooltipRect.pivot.x + margin;
+                var maxX = ownerBounds.xMax - tooltipSize.x * (1f - tooltipRect.pivot.x) - margin;
+                var minY = ownerBounds.yMin + tooltipSize.y * tooltipRect.pivot.y + margin;
+                var maxY = ownerBounds.yMax - tooltipSize.y * (1f - tooltipRect.pivot.y) - margin;
+                tooltipRect.anchoredPosition = new Vector2(
+                    minX <= maxX ? Mathf.Clamp(desiredPosition.x, minX, maxX) : ownerBounds.center.x,
+                    minY <= maxY ? Mathf.Clamp(desiredPosition.y, minY, maxY) : ownerBounds.center.y);
             }
 
             statusTooltip.SetActive(true);
@@ -2218,9 +2429,7 @@ namespace Project2048.Prototype
 
             if (resultDescriptionText != null)
             {
-                resultDescriptionText.text = scoreManager != null
-                    ? PrototypeCombatText.FormatResultDescription(snapshot, scoreManager.TotalScore)
-                    : PrototypeCombatText.FormatResultDescription(snapshot);
+                resultDescriptionText.text = PrototypeCombatText.FormatResultDescription(snapshot);
             }
 
             SetButtonLabel(restartButton, snapshot.Phase == CombatPhase.Victory ? "이어 하기" : "다시 하기");
@@ -2250,25 +2459,160 @@ namespace Project2048.Prototype
 
         private void RenderRewardOverlay()
         {
-            var reward = rewardManager != null ? rewardManager.PendingReward : null;
+            var choices = rewardManager != null ? rewardManager.PendingChoices : null;
+            var isReplacingSkill = pendingSkillRewardChoiceIndex >= 0;
             if (rewardTitleText != null)
             {
-                rewardTitleText.text = PrototypeCombatText.FormatRewardTitle(reward);
+                rewardTitleText.text = isReplacingSkill ? "기술 교체" : "보상 선택";
             }
 
             if (rewardDescriptionText != null)
             {
-                rewardDescriptionText.text = PrototypeCombatText.FormatRewardDescription(reward);
+                rewardDescriptionText.text = isReplacingSkill
+                    ? "잊을 기술을 선택하세요."
+                    : "보상 3개 중 하나를 선택하세요.";
             }
 
-            if (rewardRestText != null)
+            if (isReplacingSkill)
             {
-                rewardRestText.text = PrototypeCombatText.FormatRestReward(reward);
+                RenderSkillReplacementChoices();
+                return;
             }
 
-            if (rewardEnhanceText != null)
+            for (var index = 0; index < skillReplacementButtons.Count; index++)
             {
-                rewardEnhanceText.text = PrototypeCombatText.FormatEnhanceReward(reward);
+                var button = skillReplacementButtons[index];
+                if (button == null)
+                {
+                    continue;
+                }
+
+                button.gameObject.SetActive(false);
+                BindTooltip(button, string.Empty);
+            }
+
+            for (var index = 0; index < rewardChoiceButtons.Count; index++)
+            {
+                var button = rewardChoiceButtons[index];
+                if (button == null)
+                {
+                    continue;
+                }
+
+                var isChoiceSlot = index < RewardManager.OfferedChoiceCount;
+                var hasChoice = isChoiceSlot && choices != null && index < choices.Count && choices[index] != null;
+                button.gameObject.SetActive(isChoiceSlot);
+                button.interactable = hasChoice;
+                if (!hasChoice)
+                {
+                    BindTooltip(button, string.Empty);
+                    SetRewardChoiceLabel(index, string.Empty);
+                    continue;
+                }
+
+                var choiceIndex = index;
+                SetRewardChoiceLabel(index, PrototypeCombatText.FormatRewardChoice(choices[index]));
+                BindTooltip(button, PrototypeCombatText.FormatRewardTooltip(choices[index]));
+                BindButton(button, () => OnRewardChoiceClicked(choiceIndex));
+            }
+        }
+
+        private void RenderSkillReplacementChoices()
+        {
+            var skills = snapshot?.Skills;
+            for (var index = 0; index < rewardChoiceButtons.Count; index++)
+            {
+                var button = rewardChoiceButtons[index];
+                if (button == null)
+                {
+                    continue;
+                }
+
+                button.gameObject.SetActive(false);
+                BindTooltip(button, string.Empty);
+            }
+
+            for (var index = 0; index < skillReplacementButtons.Count; index++)
+            {
+                var isSlot = index < PlayerCombatController.MaxEquippedSkillSlots;
+                var hasSkill = isSlot && skills != null && index < skills.Count && skills[index] != null;
+                var button = skillReplacementButtons[index];
+                if (button == null)
+                {
+                    continue;
+                }
+
+                button.gameObject.SetActive(isSlot);
+                button.interactable = hasSkill;
+                BindTooltip(button, hasSkill ? PrototypeCombatText.FormatSkillTooltip(skills[index]) : string.Empty);
+
+                var replacementIndex = index;
+                SetSkillReplacementLabel(
+                    index,
+                    hasSkill
+                        ? PrototypeCombatText.FormatSkillReplacementLabel(index, skills[index])
+                        : PrototypeCombatText.FormatEmptySkillSlotLabel(index));
+
+                if (!hasSkill)
+                {
+                    continue;
+                }
+
+                BindButton(button, () => rewardManager?.ChooseReward(
+                    pendingSkillRewardChoiceIndex,
+                    combatManager != null ? combatManager.Player : null,
+                    replacementIndex));
+            }
+        }
+
+        private void OnRewardChoiceClicked(int choiceIndex)
+        {
+            var choices = rewardManager?.PendingChoices;
+            if (choices == null || choiceIndex < 0 || choiceIndex >= choices.Count)
+            {
+                return;
+            }
+
+            var player = combatManager != null ? combatManager.Player : null;
+            var reward = choices[choiceIndex];
+            if (reward != null &&
+                reward.IsSkillReward &&
+                player != null &&
+                player.Skills.Count >= PlayerCombatController.MaxEquippedSkillSlots)
+            {
+                pendingSkillRewardChoiceIndex = choiceIndex;
+                Render();
+                return;
+            }
+
+            rewardManager?.ChooseReward(choiceIndex, player);
+        }
+
+        private void SetRewardChoiceLabel(int index, string text)
+        {
+            var label = index >= 0 && index < rewardChoiceLabels.Count ? rewardChoiceLabels[index] : null;
+            if (label == null && index >= 0 && index < rewardChoiceButtons.Count && rewardChoiceButtons[index] != null)
+            {
+                label = rewardChoiceButtons[index].GetComponentInChildren<TMP_Text>(true);
+            }
+
+            if (label != null)
+            {
+                label.text = text;
+            }
+        }
+
+        private void SetSkillReplacementLabel(int index, string text)
+        {
+            var label = index >= 0 && index < skillReplacementLabels.Count ? skillReplacementLabels[index] : null;
+            if (label == null && index >= 0 && index < skillReplacementButtons.Count && skillReplacementButtons[index] != null)
+            {
+                label = skillReplacementButtons[index].GetComponentInChildren<TMP_Text>(true);
+            }
+
+            if (label != null)
+            {
+                label.text = text;
             }
         }
 

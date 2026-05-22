@@ -211,7 +211,7 @@ namespace Project2048.Tests
             Assert.That(manager.RequestUseSkill(attack, enemy), Is.True);
             Assert.That(audioPlayer.LastPlayedCue, Is.EqualTo(PrototypeCombatEventSoundCue.Victory));
 
-            rewardManager.OfferReward(new CombatResult { enemyDifficultyScore = 1 }, player);
+            rewardManager.OfferReward(new CombatResult(), player);
             rewardManager.ChooseEnhance(player);
 
             Assert.That(audioPlayer.LastPlayedCue, Is.EqualTo(PrototypeCombatEventSoundCue.RewardEnhance));
@@ -515,6 +515,68 @@ namespace Project2048.Tests
             yield return new WaitForSecondsRealtime(CombatWorldSpriteView.EnemyAttackLungeDurationSeconds + 0.1f);
 
             Assert.That(enemyRenderer.transform.localPosition.x, Is.EqualTo(restX).Within(0.001f));
+        }
+
+        [Test]
+        public void CombatWorldSpriteView_EnemyAttack_SpawnsThreeClawStripsAtPlayer()
+        {
+            var viewObject = CreateOwnedGameObject("WorldSpriteView");
+            var view = viewObject.AddComponent<CombatWorldSpriteView>();
+            var playerRenderer = CreateOwnedGameObject("PlayerSprite").AddComponent<SpriteRenderer>();
+            var enemyRenderer = CreateOwnedGameObject("EnemySprite").AddComponent<SpriteRenderer>();
+            var manager = CreateOwnedGameObject("CombatManager").AddComponent<CombatManager>();
+            var player = CreateOwnedGameObject("Player").AddComponent<PlayerCombatController>();
+            var enemy = CreateOwnedGameObject("Enemy").AddComponent<EnemyController>();
+            var bootstrap = CreateOwnedGameObject("Bootstrap").AddComponent<PrototypeCombatBootstrap>();
+            var playerData = CreatePlayerData(maxHp: 20, attackPower: 2);
+            var enemyData = CreateEnemyData(maxHp: 10, attackValue: 3);
+
+            playerRenderer.sortingOrder = 7;
+            playerRenderer.transform.localPosition = new Vector3(-1f, 0f, 0f);
+            enemyRenderer.transform.localPosition = new Vector3(1f, 0f, 0f);
+            SetPrivateField(view, "playerRenderer", playerRenderer);
+            SetPrivateField(view, "enemyRenderer", enemyRenderer);
+            SetPrivateField(bootstrap, "combatManager", manager);
+
+            manager.SetCombatants(player, new[] { enemy });
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new List<EnemySO> { enemyData },
+                boardMoveCount = 1,
+            });
+            manager.ResolveBoardPhase();
+            view.Initialize(bootstrap);
+
+            manager.RequestEndPlayerTurn();
+
+            var slash = playerRenderer.transform.Find("EnemyClawSlash2D")?.GetComponent<CombatClawSlash2DEffect>();
+            Assert.That(slash, Is.Not.Null);
+            Assert.That(slash.transform.localPosition.x, Is.GreaterThan(0.2f));
+            Assert.That(Mathf.DeltaAngle(slash.transform.localEulerAngles.z, 90f), Is.EqualTo(0f).Within(0.001f));
+            Assert.That(slash.GetComponentInChildren<ParticleSystem>(), Is.Null);
+            Assert.That(slash.GetComponentInChildren<LineRenderer>(), Is.Null);
+
+            var renderers = slash.GetComponentsInChildren<MeshRenderer>();
+            Assert.That(renderers.Length, Is.EqualTo(6));
+
+            var coreRenderers = renderers
+                .Where(renderer => renderer.gameObject.name.StartsWith("Claw_Core", System.StringComparison.Ordinal))
+                .ToList();
+            Assert.That(coreRenderers.Count, Is.EqualTo(3));
+            Assert.That(coreRenderers.All(renderer => renderer.sortingOrder > playerRenderer.sortingOrder), Is.True);
+            Assert.That(coreRenderers.All(renderer => renderer.sharedMaterial != null), Is.True);
+            Assert.That(coreRenderers.All(renderer => renderer.sharedMaterial.shader.name == CombatClawSlash2DEffect.ShaderName), Is.True);
+
+            var backBounds = coreRenderers.Single(renderer => renderer.gameObject.name.EndsWith("Back")).GetComponent<MeshFilter>().sharedMesh.bounds;
+            var midMesh = coreRenderers.Single(renderer => renderer.gameObject.name.EndsWith("Mid")).GetComponent<MeshFilter>().sharedMesh;
+            var midBounds = midMesh.bounds;
+            var frontBounds = coreRenderers.Single(renderer => renderer.gameObject.name.EndsWith("Front")).GetComponent<MeshFilter>().sharedMesh.bounds;
+
+            Assert.That(midMesh.vertexCount, Is.EqualTo(CombatClawSlash2DEffect.DefaultSegmentCount * 2));
+            Assert.That(midBounds.center.x, Is.GreaterThan(0f));
+            Assert.That(Vector3.Distance(backBounds.center, midBounds.center), Is.GreaterThan(0.1f));
+            Assert.That(Vector3.Distance(frontBounds.center, midBounds.center), Is.GreaterThan(0.1f));
         }
 
         [Test]
@@ -996,6 +1058,94 @@ namespace Project2048.Tests
             Assert.That(viewObject.transform.Find("CombatEffectAudio"), Is.Not.Null);
         }
 
+        [Test]
+        public void CombatWorldSpriteView_PlayerReusableSkill_AssignsGeneratedParticleMaterial()
+        {
+            var viewObject = CreateOwnedGameObject("WorldSpriteView");
+            var view = viewObject.AddComponent<CombatWorldSpriteView>();
+            var enemyRenderer = CreateOwnedGameObject("EnemySprite").AddComponent<SpriteRenderer>();
+            var manager = CreateOwnedGameObject("CombatManager").AddComponent<CombatManager>();
+            var player = CreateOwnedGameObject("Player").AddComponent<PlayerCombatController>();
+            var enemy = CreateOwnedGameObject("Enemy").AddComponent<EnemyController>();
+            var bootstrap = CreateOwnedGameObject("Bootstrap").AddComponent<PrototypeCombatBootstrap>();
+            var playerData = CreatePlayerData(maxHp: 20, attackPower: 2);
+            var enemyData = CreateEnemyData(maxHp: 10, attackValue: 0);
+            var attack = CreateSkill("attack", SkillType.Attack, cost: 0, power: 1);
+            var expectedColor = new Color(0.4f, 0.8f, 1f, 0.9f);
+            attack.vfxFamily = SkillVfxFamily.BuffAura;
+            attack.vfxPrimaryColor = expectedColor;
+
+            SetPrivateField(view, "enemyRenderer", enemyRenderer);
+            SetPrivateField(bootstrap, "combatManager", manager);
+
+            manager.SetCombatants(player, new[] { enemy });
+            view.Initialize(bootstrap);
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new List<EnemySO> { enemyData },
+                boardMoveCount = 1,
+            });
+            manager.ResolveBoardPhase();
+
+            Assert.That(manager.RequestUseSkill(attack, enemy), Is.True);
+
+            var particles = enemyRenderer.transform.Find("BuffAuraSkillParticles")?.GetComponent<ParticleSystem>();
+            Assert.That(particles, Is.Not.Null);
+            var renderer = particles.GetComponent<ParticleSystemRenderer>();
+            Assert.That(renderer.sharedMaterial, Is.Not.Null);
+            AssertColorApproximately(ResolveMaterialColor(renderer.sharedMaterial), expectedColor);
+            Assert.That(particles.main.startSize.constant, Is.LessThanOrEqualTo(0.22f));
+        }
+
+        [Test]
+        public void CombatWorldSpriteView_ChargedAttackRelease_SpawnsLightBeam()
+        {
+            var viewObject = CreateOwnedGameObject("WorldSpriteView");
+            var view = viewObject.AddComponent<CombatWorldSpriteView>();
+            var playerRenderer = CreateOwnedGameObject("PlayerSprite").AddComponent<SpriteRenderer>();
+            var enemyRenderer = CreateOwnedGameObject("EnemySprite").AddComponent<SpriteRenderer>();
+            var manager = CreateOwnedGameObject("CombatManager").AddComponent<CombatManager>();
+            var player = CreateOwnedGameObject("Player").AddComponent<PlayerCombatController>();
+            var enemy = CreateOwnedGameObject("Enemy").AddComponent<EnemyController>();
+            var bootstrap = CreateOwnedGameObject("Bootstrap").AddComponent<PrototypeCombatBootstrap>();
+            var playerData = CreatePlayerData(maxHp: 20, attackPower: 2);
+            var enemyData = CreateEnemyData(maxHp: 50, attackValue: 0);
+            var charge = CreateSkill("gather-light", SkillType.Attack, cost: 0, power: 0);
+            charge.effectKind = SkillEffectKind.ChargeAttack;
+            charge.chargedPower = 120;
+            playerData.startingSkills = new List<SkillSO> { charge };
+            playerRenderer.transform.localPosition = new Vector3(-1f, 0f, 0f);
+            enemyRenderer.transform.localPosition = new Vector3(1f, 0f, 0f);
+            enemyRenderer.sortingOrder = 5;
+
+            SetPrivateField(view, "playerRenderer", playerRenderer);
+            SetPrivateField(view, "enemyRenderer", enemyRenderer);
+            SetPrivateField(bootstrap, "combatManager", manager);
+
+            manager.SetCombatants(player, new[] { enemy });
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new List<EnemySO> { enemyData },
+                boardMoveCount = 1,
+            });
+            manager.ResolveBoardPhase();
+            view.Initialize(bootstrap);
+
+            Assert.That(manager.RequestUseSkillById("gather-light"), Is.True);
+            manager.RequestEndPlayerTurn();
+
+            var beam = viewObject.transform.Find("ChargedLightBeam")?.GetComponent<LineRenderer>();
+            Assert.That(beam, Is.Not.Null);
+            Assert.That(beam.positionCount, Is.EqualTo(2));
+            Assert.That(beam.sharedMaterial, Is.Not.Null);
+            Assert.That(beam.startWidth, Is.EqualTo(0.08f).Within(0.001f));
+            Assert.That(beam.endWidth, Is.EqualTo(0.16f).Within(0.001f));
+            Assert.That(beam.sortingOrder, Is.GreaterThan(enemyRenderer.sortingOrder));
+            Assert.That(enemyRenderer.transform.Find("ChargedLightBeamImpactParticles"), Is.Not.Null);
+        }
+
         [UnityTest]
         public IEnumerator CombatWorldSpriteView_PlayerProjectileSkill_DelaysActivationSfx()
         {
@@ -1333,21 +1483,32 @@ namespace Project2048.Tests
         }
 
         [Test]
-        public void PrototypeSkillAssets_HaveActivationEffectClips()
+        public void PrototypeSkillAssets_HaveReusableVfxMetadata()
         {
             var skillGuids = AssetDatabase.FindAssets("t:SkillSO", new[] { "Assets/Data/Skills" });
 
-            Assert.That(skillGuids.Length, Is.EqualTo(6));
+            Assert.That(skillGuids.Length, Is.EqualTo(32));
             foreach (var guid in skillGuids)
             {
                 var path = AssetDatabase.GUIDToAssetPath(guid);
                 var skill = AssetDatabase.LoadAssetAtPath<SkillSO>(path);
 
-                Assert.That(skill?.activationEffect, Is.Not.Null, path);
-                Assert.That(skill.activationEffect.sfxClip, Is.Not.Null, path);
-                if (path.EndsWith("Attack_3.asset", System.StringComparison.Ordinal))
+                Assert.That(skill, Is.Not.Null, path);
+                Assert.That(skill.vfxFamily, Is.Not.EqualTo(SkillVfxFamily.None), path);
+                Assert.That(skill.vfxScale, Is.GreaterThan(0f), path);
+                Assert.That(skill.vfxIntensity, Is.GreaterThan(0f), path);
+                Assert.That(skill.vfxRepeatCount, Is.GreaterThanOrEqualTo(1), path);
+                if (path.EndsWith("LightShot.asset", System.StringComparison.Ordinal) ||
+                    path.EndsWith("GatherLight.asset", System.StringComparison.Ordinal))
                 {
+                    Assert.That(skill.activationEffect?.vfxPrefab, Is.Not.Null, path);
+                    Assert.That(skill.activationEffect.EffectiveAutoDestroySeconds, Is.EqualTo(1.55f).Within(0.0001f), path);
                     Assert.That(skill.activationEffect.EffectiveSfxDelaySeconds, Is.EqualTo(0.3f).Within(0.0001f), path);
+                }
+                else if (path.EndsWith("LightEcho.asset", System.StringComparison.Ordinal))
+                {
+                    Assert.That(skill.vfxFamily, Is.EqualTo(SkillVfxFamily.SupportFire), path);
+                    Assert.That(skill.vfxRepeatCount, Is.GreaterThanOrEqualTo(3), path);
                 }
             }
         }

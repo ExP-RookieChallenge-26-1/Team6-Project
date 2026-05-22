@@ -23,7 +23,6 @@ namespace Project2048.PrototypeEditor
                 int attackPower,
                 int defensePower,
                 int debuffPower,
-                int difficultyScore,
                 EnemyAiActionBias actionBias,
                 EnemyDebuffPattern debuffPattern,
                 EnemyAiStrength strength,
@@ -37,7 +36,6 @@ namespace Project2048.PrototypeEditor
                 AttackPower = attackPower;
                 DefensePower = defensePower;
                 DebuffPower = debuffPower;
-                DifficultyScore = difficultyScore;
                 ActionBias = actionBias;
                 DebuffPattern = debuffPattern;
                 Strength = strength;
@@ -52,7 +50,6 @@ namespace Project2048.PrototypeEditor
             public int AttackPower { get; }
             public int DefensePower { get; }
             public int DebuffPower { get; }
-            public int DifficultyScore { get; }
             public EnemyAiActionBias ActionBias { get; }
             public EnemyDebuffPattern DebuffPattern { get; }
             public EnemyAiStrength Strength { get; }
@@ -73,11 +70,10 @@ namespace Project2048.PrototypeEditor
                 ConfigureEnemy(
                     wolf,
                     "\uADF8\uB9BC\uC790 \uB291\uB300",
-                    maxHp: 32,
+                    maxHp: 150,
                     attackPower: 5,
                     defensePower: 3,
                     debuffPower: 1,
-                    difficultyScore: 1,
                     actionBias: EnemyAiActionBias.Balanced,
                     debuffPattern: EnemyDebuffPattern.FearThenDarkness,
                     strength: EnemyAiStrength.Normal,
@@ -102,17 +98,17 @@ namespace Project2048.PrototypeEditor
         {
             return new[]
             {
-                new EnemySeed("02", "m05_coiled_whisperer", "\uC18D\uBC15\uB41C \uC804\uC728", 40, 5, 5, 2, 2, EnemyAiActionBias.Balanced, EnemyDebuffPattern.FearThenDarkness, EnemyAiStrength.Enhanced, 3, "Assets/Art/Monsters/Cutouts/m05_coiled_whisperer.png"),
-                new EnemySeed("03", "m02_masked_wisp", "\uAC70\uC9D3\uB41C \uBBF8\uC18C", 30, 4, 4, 2, 1, EnemyAiActionBias.Balanced, EnemyDebuffPattern.DarknessThenFear, EnemyAiStrength.Normal, 3, "Assets/Art/Monsters/Cutouts/m02_masked_wisp.png"),
-                new EnemySeed("04", "m10_blueheart_raven", "\uD478\uB978\uC2EC\uC7A5", 40, 5, 4, 2, 2, EnemyAiActionBias.Balanced, EnemyDebuffPattern.DarknessThenFear, EnemyAiStrength.Enhanced, 3, "Assets/Art/Monsters/Cutouts/m10_blueheart_raven.png"),
-                new EnemySeed("05", "m01_blue_ear_stalker", "\uD478\uB978\uADC0 \uB4E4\uC950", 32, 6, 2, 1, 1, EnemyAiActionBias.AttackHeavy, EnemyDebuffPattern.FearThenDarkness, EnemyAiStrength.Normal, 3, "Assets/Art/Monsters/Cutouts/m01_blue_ear_stalker.png"),
-                new EnemySeed("06", "m08_deep_serpent", "\uBB3C\uACB0\uCE58\uB294 \uC5ED\uBCD1", 42, 7, 3, 2, 2, EnemyAiActionBias.AttackHeavy, EnemyDebuffPattern.FearThenDarkness, EnemyAiStrength.Enhanced, 2, "Assets/Art/Monsters/Cutouts/m08_deep_serpent.png"),
-                new EnemySeed("07", "m04_one_eye_tallhorn", "\uC678\uB208 \uCD94\uC801\uC790", 34, 6, 3, 2, 1, EnemyAiActionBias.AttackHeavy, EnemyDebuffPattern.DarknessThenFear, EnemyAiStrength.Normal, 3, "Assets/Art/Monsters/Cutouts/m04_one_eye_tallhorn.png"),
-                new EnemySeed("08", "m11_cane_blackcat", "\uCE74\uB974\uBBFC\uB290", 42, 7, 3, 2, 2, EnemyAiActionBias.AttackHeavy, EnemyDebuffPattern.DarknessThenFear, EnemyAiStrength.Enhanced, 2, "Assets/Art/Monsters/Cutouts/m11_cane_blackcat.png"),
-                new EnemySeed("09", "m07_spiral_tail_beast", "\uC18C\uC6A9\uB3CC\uC774\uCE58\uB294 \uD63C\uB3C8", 36, 5, 5, 1, 1, EnemyAiActionBias.DefenseHeavy, EnemyDebuffPattern.FearThenDarkness, EnemyAiStrength.Normal, 3, "Assets/Art/Monsters/Cutouts/m07_spiral_tail_beast.png"),
-                new EnemySeed("10", "m03_spiral_horn_shepherd", "\uB098\uC120\uBFD4 \uBAA9\uB3D9", 46, 5, 6, 2, 2, EnemyAiActionBias.DefenseHeavy, EnemyDebuffPattern.FearThenDarkness, EnemyAiStrength.Enhanced, 3, "Assets/Art/Monsters/Cutouts/m03_spiral_horn_shepherd.png"),
-                new EnemySeed("11", "m06_shellback_pursuer", "\uB2E4\uCE35 \uAC11\uAC01", 38, 4, 6, 1, 1, EnemyAiActionBias.DefenseHeavy, EnemyDebuffPattern.DarknessThenFear, EnemyAiStrength.Normal, 4, "Assets/Art/Monsters/Cutouts/m06_shellback_pursuer.png"),
-                new EnemySeed("12", "m14_inverted_bat_doll", "\uB124\uD06C\uB9B4\uB77C", 44, 5, 6, 2, 2, EnemyAiActionBias.DefenseHeavy, EnemyDebuffPattern.DarknessThenFear, EnemyAiStrength.Enhanced, 3, "Assets/Art/Monsters/Cutouts/m14_inverted_bat_doll.png"),
+                new EnemySeed("02", "m05_coiled_whisperer", "\uC18D\uBC15\uB41C \uC804\uC728", 190, 5, 5, 2, EnemyAiActionBias.Balanced, EnemyDebuffPattern.FearThenDarkness, EnemyAiStrength.Enhanced, 3, "Assets/Art/Monsters/Cutouts/m05_coiled_whisperer.png"),
+                new EnemySeed("03", "m02_masked_wisp", "\uAC70\uC9D3\uB41C \uBBF8\uC18C", 140, 4, 4, 2, EnemyAiActionBias.Balanced, EnemyDebuffPattern.DarknessThenFear, EnemyAiStrength.Normal, 3, "Assets/Art/Monsters/Cutouts/m02_masked_wisp.png"),
+                new EnemySeed("04", "m10_blueheart_raven", "\uD478\uB978\uC2EC\uC7A5", 180, 5, 4, 2, EnemyAiActionBias.Balanced, EnemyDebuffPattern.DarknessThenFear, EnemyAiStrength.Enhanced, 3, "Assets/Art/Monsters/Cutouts/m10_blueheart_raven.png"),
+                new EnemySeed("05", "m01_blue_ear_stalker", "\uD478\uB978\uADC0 \uB4E4\uC950", 150, 6, 2, 1, EnemyAiActionBias.AttackHeavy, EnemyDebuffPattern.FearThenDarkness, EnemyAiStrength.Normal, 3, "Assets/Art/Monsters/Cutouts/m01_blue_ear_stalker.png"),
+                new EnemySeed("06", "m08_deep_serpent", "\uBB3C\uACB0\uCE58\uB294 \uC5ED\uBCD1", 210, 7, 3, 2, EnemyAiActionBias.AttackHeavy, EnemyDebuffPattern.FearThenDarkness, EnemyAiStrength.Enhanced, 2, "Assets/Art/Monsters/Cutouts/m08_deep_serpent.png"),
+                new EnemySeed("07", "m04_one_eye_tallhorn", "\uC678\uB208 \uCD94\uC801\uC790", 170, 6, 3, 2, EnemyAiActionBias.AttackHeavy, EnemyDebuffPattern.DarknessThenFear, EnemyAiStrength.Normal, 3, "Assets/Art/Monsters/Cutouts/m04_one_eye_tallhorn.png"),
+                new EnemySeed("08", "m11_cane_blackcat", "\uCE74\uB974\uBBFC\uB290", 220, 7, 3, 2, EnemyAiActionBias.AttackHeavy, EnemyDebuffPattern.DarknessThenFear, EnemyAiStrength.Enhanced, 2, "Assets/Art/Monsters/Cutouts/m11_cane_blackcat.png"),
+                new EnemySeed("09", "m07_spiral_tail_beast", "\uC18C\uC6A9\uB3CC\uC774\uCE58\uB294 \uD63C\uB3C8", 180, 5, 5, 1, EnemyAiActionBias.DefenseHeavy, EnemyDebuffPattern.FearThenDarkness, EnemyAiStrength.Normal, 3, "Assets/Art/Monsters/Cutouts/m07_spiral_tail_beast.png"),
+                new EnemySeed("10", "m03_spiral_horn_shepherd", "\uB098\uC120\uBFD4 \uBAA9\uB3D9", 240, 5, 6, 2, EnemyAiActionBias.DefenseHeavy, EnemyDebuffPattern.FearThenDarkness, EnemyAiStrength.Enhanced, 3, "Assets/Art/Monsters/Cutouts/m03_spiral_horn_shepherd.png"),
+                new EnemySeed("11", "m06_shellback_pursuer", "\uB2E4\uCE35 \uAC11\uAC01", 200, 4, 6, 1, EnemyAiActionBias.DefenseHeavy, EnemyDebuffPattern.DarknessThenFear, EnemyAiStrength.Normal, 4, "Assets/Art/Monsters/Cutouts/m06_shellback_pursuer.png"),
+                new EnemySeed("12", "m14_inverted_bat_doll", "\uB124\uD06C\uB9B4\uB77C", 230, 5, 6, 2, EnemyAiActionBias.DefenseHeavy, EnemyDebuffPattern.DarknessThenFear, EnemyAiStrength.Enhanced, 3, "Assets/Art/Monsters/Cutouts/m14_inverted_bat_doll.png"),
             };
         }
 
@@ -135,7 +131,6 @@ namespace Project2048.PrototypeEditor
                 seed.AttackPower,
                 seed.DefensePower,
                 seed.DebuffPower,
-                seed.DifficultyScore,
                 seed.ActionBias,
                 seed.DebuffPattern,
                 seed.Strength,
@@ -151,7 +146,6 @@ namespace Project2048.PrototypeEditor
             int attackPower,
             int defensePower,
             int debuffPower,
-            int difficultyScore,
             EnemyAiActionBias actionBias,
             EnemyDebuffPattern debuffPattern,
             EnemyAiStrength strength,
@@ -164,7 +158,6 @@ namespace Project2048.PrototypeEditor
             enemy.attackPower = attackPower;
             enemy.defensePower = defensePower;
             enemy.debuffPower = debuffPower;
-            enemy.difficultyScore = difficultyScore;
             enemy.intentPattern = new List<EnemyIntent>();
             enemy.aiActionBias = actionBias;
             enemy.aiDebuffPattern = debuffPattern;

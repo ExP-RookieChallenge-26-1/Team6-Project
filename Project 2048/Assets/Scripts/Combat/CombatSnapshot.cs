@@ -51,9 +51,13 @@ namespace Project2048.Combat
         public int CurrentHp { get; set; }
         public int MaxHp { get; set; }
         public int AttackPower { get; set; }
+        public int DefensePower { get; set; }
         public int Block { get; set; }
+        public int ShieldHp { get; set; }
         public int DefenseBonus { get; set; }
         public int FearStacks { get; set; }
+        public float CriticalChance { get; set; }
+        public float CriticalDamageMultiplier { get; set; }
         public List<CombatStatusEffectSnapshot> StatusEffects { get; set; } = new();
     }
 
@@ -64,7 +68,13 @@ namespace Project2048.Combat
         public string DisplayName { get; set; }
         public int CurrentHp { get; set; }
         public int MaxHp { get; set; }
+        public int DefensePower { get; set; }
         public int Block { get; set; }
+        public int ShieldHp { get; set; }
+        public int ThornRetaliationDamage { get; set; }
+        public EnemyEncounterRank EncounterRank { get; set; }
+        public float CriticalChance { get; set; }
+        public float CriticalDamageMultiplier { get; set; }
         public bool IsDead { get; set; }
         public string AiProfileLabel { get; set; }
         public EnemyIntent Intent { get; set; }
@@ -88,8 +98,10 @@ namespace Project2048.Combat
     {
         public string SkillId { get; set; }
         public string DisplayName { get; set; }
+        public string Description { get; set; }
         public SkillType SkillType { get; set; }
         public int Cost { get; set; }
         public int Power { get; set; }
+        public bool RequiresEnemyTarget { get; set; }
     }
 }

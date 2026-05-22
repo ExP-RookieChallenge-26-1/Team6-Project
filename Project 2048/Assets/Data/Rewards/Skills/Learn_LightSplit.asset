@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0a78af296a09024caf241aa0587e358, type: 3}
+  m_Name: Learn_LightSplit
+  m_EditorClassIdentifier: Game.Core::Project2048.Rewards.BattleRewardSO
+  rewardId: learn-light-split
+  mothDisplayName: "\uAE30\uC220 \uC2B5\uB4DD"
+  rewardKind: 14
+  healPercentOfMaxHp: 0.3
+  healAmount: 2
+  extraBoardMoveCount: 1
+  temporaryAttackPowerBonus: 3
+  temporaryDefensePowerBonus: 3
+  temporaryBoardMoveCountBonus: 2
+  permanentMaxHpBonus: 0
+  permanentAttackPowerBonus: 0
+  permanentDefensePowerBonus: 0
+  permanentCriticalChanceBonus: 0
+  permanentCriticalDamageMultiplierBonus: 0
+  skillToLearn: {fileID: 11400000, guid: 2fdf5da52452658439358305b3bde18d, type: 2}
+  enemySkillOfferChance: 0.1
+  encounterText: "\uBE5B\uC758 \uBD84\uC0B0 \uAE30\uC220\uC744 \uBC30\uC6C1\uB2C8\uB2E4."

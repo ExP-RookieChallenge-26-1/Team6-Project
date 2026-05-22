@@ -5,6 +5,7 @@ using Project2048.Board2048;
 using Project2048.Combat;
 using Project2048.Enemy;
 using Project2048.Prototype;
+using Project2048.Rewards;
 using Project2048.Skills;
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -91,12 +92,299 @@ namespace Project2048.Tests
             }
         }
 
+        [UnityTest]
+        public IEnumerator ActionPhase_UsesFourAuthoredSkillSlotsDirectly()
+        {
+            var viewObject = CreateOwnedGameObject("CombatView");
+            var view = viewObject.AddComponent<CombatUiView>();
+            var boardPanel = CreateOwnedGameObject("BoardPanel");
+            var actionPanel = CreateOwnedGameObject("ActionPanel");
+            var skillsView = CreateOwnedGameObject("SkillsView");
+            boardPanel.transform.SetParent(viewObject.transform, false);
+            actionPanel.transform.SetParent(viewObject.transform, false);
+            skillsView.transform.SetParent(actionPanel.transform, false);
+
+            var costText = CreateTextChild(actionPanel.transform, "CostText");
+            var skillsHeader = CreateTextChild(skillsView.transform, "SkillsHeader");
+            var endTurnButton = CreateButtonChild(skillsView.transform, "EndTurnButton");
+            var skillButtons = new System.Collections.Generic.List<Button>();
+            var skillLabels = new System.Collections.Generic.List<TMPro.TMP_Text>();
+            for (var index = 0; index < PlayerCombatController.MaxEquippedSkillSlots; index++)
+            {
+                var button = CreateButtonChild(skillsView.transform, $"SkillButton{index + 1}");
+                var label = CreateTextChild(button.transform, "Label");
+                skillButtons.Add(button);
+                skillLabels.Add(label);
+            }
+
+            SetPrivateField(view, "boardPanel", boardPanel);
+            SetPrivateField(view, "actionPanel", actionPanel);
+            SetPrivateField(view, "skillsView", skillsView);
+            SetPrivateField(view, "costText", costText);
+            SetPrivateField(view, "skillsHeaderText", skillsHeader);
+            SetPrivateField(view, "skillTierButtons", skillButtons);
+            SetPrivateField(view, "skillTierLabels", skillLabels);
+            SetPrivateField(view, "skillsEndTurnButton", endTurnButton);
+            var tooltipRoot = CreateStatusTooltipForTest(viewObject.transform);
+            SetPrivateField(view, "statusTooltip", tooltipRoot.gameObject);
+            SetPrivateField(view, "statusTooltipText", tooltipRoot.GetComponentInChildren<TMPro.TMP_Text>(true));
+
+            var manager = CreateOwnedGameObject("CombatManager").AddComponent<CombatManager>();
+            var player = CreateOwnedGameObject("Player").AddComponent<PlayerCombatController>();
+            var enemy = CreateOwnedGameObject("Enemy").AddComponent<EnemyController>();
+            var bootstrap = CreateOwnedGameObject("Bootstrap").AddComponent<PrototypeCombatBootstrap>();
+            SetPrivateField(bootstrap, "combatManager", manager);
+
+            var attack = CreateSkill(
+                "attack",
+                "빛 발사",
+                SkillType.Attack,
+                cost: 0,
+                power: 40,
+                description: "적에게 위력 40 피해를 준다.");
+            var defense = CreateSkill("guard", "가시 방어", SkillType.Defense, cost: 0, power: 5);
+            var flash = CreateSkill("flash", "섬광", SkillType.Debuff, cost: 0, power: 2);
+            var counter = CreateSkill("counter", "카운터", SkillType.Defense, cost: 0, power: 3);
+            var playerData = CreatePlayerData(20, 0, attack, defense, flash, counter);
+            var enemyData = CreateEnemyData("Enemy", 10, 0);
+
+            manager.SetCombatants(player, new[] { enemy });
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new System.Collections.Generic.List<EnemySO> { enemyData },
+                boardMoveCount = 1,
+            });
+            manager.ResolveBoardPhase();
+            view.Initialize(bootstrap);
+
+            Assert.That(skillsView.activeSelf, Is.True);
+            Assert.That(endTurnButton.gameObject.activeSelf, Is.True);
+            Assert.That(skillsHeader.text, Is.EqualTo("기술 선택"));
+            Assert.That(costText.text, Does.StartWith("보유 코스트"));
+
+            var renderedButtons = GetPrivateField(view, "skillTierButtons") as System.Collections.Generic.List<Button>;
+            Assert.That(renderedButtons, Is.Not.Null);
+            Assert.That(renderedButtons.Count, Is.EqualTo(PlayerCombatController.MaxEquippedSkillSlots));
+            for (var index = 0; index < PlayerCombatController.MaxEquippedSkillSlots; index++)
+            {
+                Assert.That(renderedButtons[index].gameObject.activeSelf, Is.True);
+            }
+
+            Assert.That(skillLabels[0].text, Does.Contain("빛 발사"));
+            Assert.That(skillLabels[1].text, Does.Contain("가시 방어"));
+            Assert.That(skillButtons[0].GetComponent<Image>().color, Is.EqualTo(CombatUiView.ThemeSkillAttackColor));
+            Assert.That(skillButtons[1].GetComponent<Image>().color, Is.EqualTo(CombatUiView.ThemeSkillDefenseColor));
+            Assert.That(skillButtons[2].GetComponent<Image>().color, Is.EqualTo(CombatUiView.ThemeSkillChangeColor));
+
+            var tooltipTarget = skillButtons[0].GetComponent<StatusEffectTooltipTarget>();
+            Assert.That(tooltipTarget, Is.InstanceOf<IPointerDownHandler>());
+            Assert.That(tooltipTarget, Is.Not.InstanceOf<IPointerEnterHandler>());
+            yield return ShowTooltipByLongPress(tooltipTarget);
+            Assert.That(tooltipRoot.gameObject.activeSelf, Is.True);
+            Assert.That(tooltipRoot.GetComponentInChildren<TMPro.TMP_Text>(true).text, Does.Contain("빛 발사"));
+            Assert.That(tooltipRoot.GetComponentInChildren<TMPro.TMP_Text>(true).text, Does.Contain("위력 40"));
+            Assert.That(tooltipRoot.GetComponentInChildren<TMPro.TMP_Text>(true).text, Does.Contain("명중 100"));
+            Assert.That(tooltipRoot.GetComponentInChildren<TMPro.TMP_Text>(true).text, Does.Contain("코스트 0"));
+            Assert.That(tooltipRoot.GetComponentInChildren<TMPro.TMP_Text>(true).text, Does.Contain("적에게 위력 40 피해"));
+            Assert.That(tooltipRoot.GetComponentInChildren<TMPro.TMP_Text>(true).alignment, Is.EqualTo(TMPro.TextAlignmentOptions.Left));
+            ReleaseLongPressTooltip(tooltipTarget);
+
+            var hpBeforeClick = enemy.CurrentHp;
+            skillButtons[0].onClick.Invoke();
+            Assert.That(enemy.CurrentHp, Is.LessThan(hpBeforeClick));
+        }
+
+        [UnityTest]
+        public IEnumerator RewardOverlay_BindsSkillChoiceTooltip()
+        {
+            var viewObject = CreateOwnedGameObject("CombatView");
+            var view = viewObject.AddComponent<CombatUiView>();
+            var rewardOverlay = CreateOwnedGameObject("RewardOverlay");
+            rewardOverlay.transform.SetParent(viewObject.transform, false);
+            var resultOverlay = CreateOwnedGameObject("ResultOverlay");
+            resultOverlay.transform.SetParent(viewObject.transform, false);
+            var boardPanel = CreateOwnedGameObject("BoardPanel");
+            boardPanel.transform.SetParent(viewObject.transform, false);
+            var actionPanel = CreateOwnedGameObject("ActionPanel");
+            actionPanel.transform.SetParent(viewObject.transform, false);
+            var rewardTitle = CreateTextChild(rewardOverlay.transform, "RewardTitle");
+            var rewardDescription = CreateTextChild(rewardOverlay.transform, "RewardDescription");
+            var firstText = CreateTextChild(rewardOverlay.transform, "FirstText");
+            var secondText = CreateTextChild(rewardOverlay.transform, "SecondText");
+            var thirdText = CreateTextChild(rewardOverlay.transform, "ThirdText");
+            var firstButton = CreateButtonChild(rewardOverlay.transform, "FirstButton");
+            var secondButton = CreateButtonChild(rewardOverlay.transform, "SecondButton");
+            var thirdButton = CreateButtonChild(rewardOverlay.transform, "ThirdButton");
+            var tooltipRoot = CreateStatusTooltipForTest(viewObject.transform);
+
+            SetPrivateField(view, "rewardOverlay", rewardOverlay);
+            SetPrivateField(view, "resultOverlay", resultOverlay);
+            SetPrivateField(view, "boardPanel", boardPanel);
+            SetPrivateField(view, "actionPanel", actionPanel);
+            SetPrivateField(view, "rewardTitleText", rewardTitle);
+            SetPrivateField(view, "rewardDescriptionText", rewardDescription);
+            SetPrivateField(view, "rewardChoiceButtons", new System.Collections.Generic.List<Button> { firstButton, secondButton, thirdButton });
+            SetPrivateField(view, "rewardChoiceLabels", new System.Collections.Generic.List<TMPro.TMP_Text> { firstText, secondText, thirdText });
+            SetPrivateField(view, "statusTooltip", tooltipRoot.gameObject);
+            SetPrivateField(view, "statusTooltipText", tooltipRoot.GetComponentInChildren<TMPro.TMP_Text>(true));
+
+            var manager = CreateOwnedGameObject("CombatManager").AddComponent<CombatManager>();
+            var rewardManager = CreateOwnedGameObject("RewardManager").AddComponent<RewardManager>();
+            var player = CreateOwnedGameObject("Player").AddComponent<PlayerCombatController>();
+            var enemy = CreateOwnedGameObject("Enemy").AddComponent<EnemyController>();
+            var bootstrap = CreateOwnedGameObject("Bootstrap").AddComponent<PrototypeCombatBootstrap>();
+            var finisher = CreateSkill("finisher", "강타", SkillType.Attack, cost: 0, power: 120);
+            var learnedSkill = CreateSkill(
+                "shield-bash",
+                "방패 밀치기",
+                SkillType.Attack,
+                cost: 5,
+                power: 60,
+                description: "현재 보호막 수치로 계산하여 적에게 위력 60 피해를 준다.");
+            var skillReward = ScriptableObject.CreateInstance<BattleRewardSO>();
+            skillReward.rewardKind = RewardChoiceKind.LearnSkill;
+            skillReward.skillToLearn = learnedSkill;
+            ownedObjects.Add(skillReward);
+            var rewardTable = ScriptableObject.CreateInstance<RewardTableSO>();
+            rewardTable.rewards = new System.Collections.Generic.List<BattleRewardSO> { skillReward };
+            ownedObjects.Add(rewardTable);
+
+            rewardManager.Initialize(new RunProgress(), rewardTable);
+            SetPrivateField(bootstrap, "combatManager", manager);
+            SetPrivateField(bootstrap, "rewardManager", rewardManager);
+
+            manager.SetCombatants(player, new[] { enemy });
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = CreatePlayerData(20, 999, finisher),
+                enemyDataList = new System.Collections.Generic.List<EnemySO> { CreateEnemyData("Enemy", 1, 0) },
+                boardMoveCount = 1,
+            });
+            manager.ResolveBoardPhase();
+            view.Initialize(bootstrap);
+
+            manager.RequestUseSkill(finisher, enemy);
+            rewardManager.OfferReward(new CombatResult(), player);
+
+            var tooltipTarget = firstButton.GetComponent<StatusEffectTooltipTarget>();
+            Assert.That(firstText.text, Does.Contain("방패 밀치기"));
+            Assert.That(tooltipTarget, Is.InstanceOf<IPointerDownHandler>());
+            Assert.That(tooltipTarget, Is.Not.InstanceOf<IPointerEnterHandler>());
+
+            yield return ShowTooltipByLongPress(tooltipTarget);
+
+            var tooltipText = tooltipRoot.GetComponentInChildren<TMPro.TMP_Text>(true).text;
+            Assert.That(tooltipRoot.gameObject.activeSelf, Is.True);
+            Assert.That(tooltipText, Does.Contain("방패 밀치기"));
+            Assert.That(tooltipText, Does.Contain("위력 60"));
+            Assert.That(tooltipText, Does.Contain("현재 보호막 수치"));
+        }
+
+        [Test]
+        public void ActionPhase_DisablesUnaffordableAuthoredSkillButtons()
+        {
+            var viewObject = CreateOwnedGameObject("CombatView");
+            var view = viewObject.AddComponent<CombatUiView>();
+            var boardPanel = CreateOwnedGameObject("BoardPanel");
+            var actionPanel = CreateOwnedGameObject("ActionPanel");
+            var skillsView = CreateOwnedGameObject("SkillsView");
+            boardPanel.transform.SetParent(viewObject.transform, false);
+            actionPanel.transform.SetParent(viewObject.transform, false);
+            skillsView.transform.SetParent(actionPanel.transform, false);
+
+            var costText = CreateTextChild(actionPanel.transform, "CostText");
+            var skillsHeader = CreateTextChild(skillsView.transform, "SkillsHeader");
+            var skillButtons = new System.Collections.Generic.List<Button>();
+            var skillLabels = new System.Collections.Generic.List<TMPro.TMP_Text>();
+            for (var index = 0; index < PlayerCombatController.MaxEquippedSkillSlots; index++)
+            {
+                var button = CreateButtonChild(skillsView.transform, $"SkillButton{index + 1}");
+                var label = CreateTextChild(button.transform, "Label");
+                skillButtons.Add(button);
+                skillLabels.Add(label);
+            }
+
+            SetPrivateField(view, "boardPanel", boardPanel);
+            SetPrivateField(view, "actionPanel", actionPanel);
+            SetPrivateField(view, "skillsView", skillsView);
+            SetPrivateField(view, "costText", costText);
+            SetPrivateField(view, "skillsHeaderText", skillsHeader);
+            SetPrivateField(view, "skillTierButtons", skillButtons);
+            SetPrivateField(view, "skillTierLabels", skillLabels);
+
+            var manager = CreateOwnedGameObject("CombatManager").AddComponent<CombatManager>();
+            var player = CreateOwnedGameObject("Player").AddComponent<PlayerCombatController>();
+            var enemy = CreateOwnedGameObject("Enemy").AddComponent<EnemyController>();
+            var bootstrap = CreateOwnedGameObject("Bootstrap").AddComponent<PrototypeCombatBootstrap>();
+            SetPrivateField(bootstrap, "combatManager", manager);
+
+            var expensive = CreateSkill("expensive", "큰 기술", SkillType.Attack, cost: 99, power: 4);
+            var playerData = CreatePlayerData(20, 0, expensive);
+            var enemyData = CreateEnemyData("Enemy", 10, 0);
+
+            manager.SetCombatants(player, new[] { enemy });
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new System.Collections.Generic.List<EnemySO> { enemyData },
+                boardMoveCount = 1,
+            });
+            manager.ResolveBoardPhase();
+            view.Initialize(bootstrap);
+
+            Assert.That(skillButtons[0].interactable, Is.False);
+            Assert.That(skillLabels[0].text, Does.Contain("부족"));
+        }
+
+        [UnityTest]
+        public IEnumerator CostFormulaHelpIcon_ShowsBoardCostFormulaOnLongPress()
+        {
+            var viewObject = CreateOwnedRectTransformObject("CombatView");
+            var view = viewObject.AddComponent<CombatUiView>();
+            var helpIcon = CreateImageChild(viewObject.transform, "CostFormulaHelpIcon");
+            var helpLabel = CreateTextChild(helpIcon.transform, "Label");
+            var boardHelpIcon = CreateImageChild(viewObject.transform, "BoardCostFormulaHelpIcon");
+            var boardHelpLabel = CreateTextChild(boardHelpIcon.transform, "Label");
+            helpIcon.gameObject.AddComponent<StatusEffectTooltipTarget>();
+            boardHelpIcon.gameObject.AddComponent<StatusEffectTooltipTarget>();
+            var tooltipRoot = CreateStatusTooltipForTest(viewObject.transform);
+            SetPrivateField(view, "costFormulaHelpIcon", helpIcon.gameObject);
+            SetPrivateField(view, "costFormulaHelpLabel", helpLabel);
+            SetPrivateField(view, "boardCostFormulaHelpIcon", boardHelpIcon.gameObject);
+            SetPrivateField(view, "boardCostFormulaHelpLabel", boardHelpLabel);
+            SetPrivateField(view, "statusTooltip", tooltipRoot.gameObject);
+            SetPrivateField(view, "statusTooltipText", tooltipRoot.GetComponentInChildren<TMPro.TMP_Text>(true));
+
+            InvokePrivate(view, "EnsureStatusTooltip");
+            InvokePrivate(view, "ConfigureCostFormulaHelp");
+
+            var target = helpIcon.GetComponent<StatusEffectTooltipTarget>();
+            Assert.That(target, Is.Not.Null);
+            Assert.That(boardHelpIcon.GetComponent<StatusEffectTooltipTarget>(), Is.Not.Null);
+            Assert.That(boardHelpLabel.text, Is.EqualTo("?"));
+
+            yield return ShowTooltipByLongPress(target);
+
+            var tooltip = GetPrivateField(view, "statusTooltip") as GameObject;
+            var tooltipText = GetPrivateField(view, "statusTooltipText") as TMPro.TMP_Text;
+            Assert.That(helpLabel.text, Is.EqualTo("?"));
+            Assert.That(tooltip.activeSelf, Is.True);
+            Assert.That(tooltipText.text, Does.Contain("log2(전체 타일 합)"));
+            Assert.That(tooltipText.text, Does.Contain("2의 거듭제곱"));
+
+            ReleaseLongPressTooltip(target);
+            Assert.That(tooltip.activeSelf, Is.False);
+        }
+
         [Test]
         public void Initialize_WithMissingSerializedBattleReferences_WiresEnemyHpAndIntentByName()
         {
             var viewObject = CreateOwnedGameObject("CombatView");
             var view = viewObject.AddComponent<CombatUiView>();
             var intentBubbleImage = CreateImageChild(viewObject.transform, "IntentBubble");
+            var authoredIntentBubbleSize = new Vector2(92f, 92f);
+            intentBubbleImage.rectTransform.sizeDelta = authoredIntentBubbleSize;
             var intentText = CreateTextChild(viewObject.transform.Find("IntentBubble"), "IntentBubbleText");
             var playerBattleHp = CreateImageChild(viewObject.transform, "PlayerBattleHp");
             var playerBattleHpFill = CreateImageChild(playerBattleHp.transform, "Fill");
@@ -128,6 +416,10 @@ namespace Project2048.Tests
             manager.ResolveBoardPhase();
 
             view.Initialize(bootstrap);
+            Assert.That(intentBubbleImage.rectTransform.sizeDelta.x, Is.EqualTo(authoredIntentBubbleSize.x).Within(0.001f));
+            Assert.That(intentBubbleImage.rectTransform.sizeDelta.y, Is.EqualTo(authoredIntentBubbleSize.y).Within(0.001f));
+            Assert.That(intentText.enableAutoSizing, Is.True);
+            Assert.That(intentText.alignment, Is.EqualTo(TMPro.TextAlignmentOptions.Center));
             Assert.That(intentText.text, Is.EqualTo("공격"));
             Assert.That(intentBubbleImage.color, Is.EqualTo(new Color(0.85f, 0.12f, 0.12f, 1f)));
             AssertHpFillIsRenderable(playerBattleHpFill);
@@ -150,7 +442,7 @@ namespace Project2048.Tests
                 value = 2,
             });
 
-            Assert.That(intentText.text, Is.EqualTo("암흑"));
+            Assert.That(intentText.text, Is.EqualTo("변화"));
             Assert.That(intentBubbleImage.color, Is.EqualTo(new Color(0.20f, 0.07f, 0.34f, 1f)));
 
             enemy.SetIntent(new EnemyIntent
@@ -160,7 +452,7 @@ namespace Project2048.Tests
                 value = 2,
             });
 
-            Assert.That(intentText.text, Is.EqualTo("공포"));
+            Assert.That(intentText.text, Is.EqualTo("변화"));
             Assert.That(intentBubbleImage.color, Is.EqualTo(new Color(0.45f, 0.03f, 0.06f, 1f)));
 
             manager.RequestUseSkillById("attack", 0);
@@ -238,6 +530,17 @@ namespace Project2048.Tests
         }
 
         [Test]
+        public void HpBarTheme_UsesOriginalTealPalette()
+        {
+            Assert.That(CombatUiView.ThemePrimaryColor, Is.EqualTo(new Color(73f / 255f, 175f / 255f, 181f / 255f, 1f)));
+            Assert.That(CombatUiView.ThemeHpFillColor, Is.EqualTo(CombatUiView.ThemePrimaryColor));
+            Assert.That(CombatUiView.ThemeHpFillColor.g, Is.GreaterThan(CombatUiView.ThemeHpFillColor.r));
+            Assert.That(CombatUiView.ThemeHpFillColor.b, Is.GreaterThan(CombatUiView.ThemeHpFillColor.r));
+            Assert.That(CombatUiView.ThemeHpBarBackgroundColor.maxColorComponent, Is.LessThan(0.06f));
+            Assert.That(CombatUiView.ThemeHpDamageTrailColor.a, Is.GreaterThanOrEqualTo(0.9f));
+        }
+
+        [Test]
         public void PlayerDamage_UpdatesBoardHpWhileActionScreenIsVisible()
         {
             var viewObject = CreateOwnedGameObject("CombatView");
@@ -272,7 +575,6 @@ namespace Project2048.Tests
             view.Initialize(bootstrap);
             manager.ResolveBoardPhase();
             var uiState = GetPrivateField(view, "uiState") as PrototypeCombatUiState;
-            uiState?.SelectCategory(SkillType.Attack);
 
             player.TakeDamage(4);
 
@@ -436,7 +738,7 @@ namespace Project2048.Tests
         }
 
         [Test]
-        public void Initialize_RendersTwoEnemyIntentsWhenEnemyCanActTwice()
+        public void Initialize_RendersThreeEnemyIntentsWhenEnemyCanActThreeTimes()
         {
             var viewObject = CreateOwnedGameObject("CombatView");
             var view = viewObject.AddComponent<CombatUiView>();
@@ -463,8 +765,15 @@ namespace Project2048.Tests
                     intentType = EnemyIntentType.Defense,
                     value = 3,
                 },
+                new()
+                {
+                    intentType = EnemyIntentType.Debuff,
+                    debuffType = DebuffType.Fear,
+                    value = 1,
+                },
             };
-            SetEnemyActionsPerTurn(enemyData, 2);
+            enemyData.aiComplexity = EnemyAiComplexity.Complex;
+            SetEnemyActionsPerTurn(enemyData, 3);
 
             manager.SetCombatants(player, new[] { enemy });
             manager.StartCombat(new CombatSetup
@@ -477,11 +786,11 @@ namespace Project2048.Tests
             view.Initialize(bootstrap);
 
             Assert.That(intentText.text, Is.EqualTo(
-                $"{PrototypeCombatText.FormatIntent(enemyData.intentPattern[0])}\n{PrototypeCombatText.FormatIntent(enemyData.intentPattern[1])}"));
+                $"{PrototypeCombatText.FormatIntent(enemyData.intentPattern[0])}\n{PrototypeCombatText.FormatIntent(enemyData.intentPattern[1])}\n{PrototypeCombatText.FormatIntent(enemyData.intentPattern[2])}"));
         }
 
-        [Test]
-        public void Initialize_BuildsBlockAndStatusEffectUiAroundHpBars()
+        [UnityTest]
+        public IEnumerator Initialize_BuildsBlockAndStatusEffectUiAroundHpBars()
         {
             var viewObject = CreateOwnedGameObject("CombatView");
             var view = viewObject.AddComponent<CombatUiView>();
@@ -494,6 +803,10 @@ namespace Project2048.Tests
             var boardHp = CreateImageChild(viewObject.transform, "BoardHp");
             CreateImageChild(boardHp.transform, "HpBarFill");
             var boardHpRoot = boardHp.transform;
+            CreateAuthoredStatusEffectsRootForTest(playerBattleHp.transform, "PlayerBattleStatusEffects", new Vector2(CombatUiView.HpStatusEffectXOffset, -39f));
+            CreateAuthoredStatusEffectsRootForTest(boardHpRoot, "PlayerBoardStatusEffects", new Vector2(CombatUiView.HpStatusEffectXOffset, -6f));
+            CreateAuthoredStatusEffectsRootForTest(enemyHp.transform, "EnemyStatusEffects", new Vector2(CombatUiView.HpStatusEffectXOffset, -6f));
+            CreateStatusTooltipForTest(viewObject.transform);
 
             var manager = CreateOwnedGameObject("CombatManager").AddComponent<CombatManager>();
             var player = CreateOwnedGameObject("Player").AddComponent<PlayerCombatController>();
@@ -562,15 +875,16 @@ namespace Project2048.Tests
             Assert.That(fearChipRect.sizeDelta.x, Is.GreaterThanOrEqualTo(28f));
 
             var tooltipTarget = fearChip.GetComponent<StatusEffectTooltipTarget>();
-            Assert.That(tooltipTarget, Is.InstanceOf<IPointerEnterHandler>());
-            ((IPointerEnterHandler)tooltipTarget).OnPointerEnter(new PointerEventData(null));
+            Assert.That(tooltipTarget, Is.InstanceOf<IPointerDownHandler>());
+            Assert.That(tooltipTarget, Is.Not.InstanceOf<IPointerEnterHandler>());
+            yield return ShowTooltipByLongPress(tooltipTarget);
 
             var tooltip = viewObject.transform.Find("StatusTooltip");
             Assert.That(tooltip, Is.Not.Null);
             Assert.That(tooltip.gameObject.activeSelf, Is.True);
-            Assert.That(tooltip.GetComponentInChildren<TMPro.TMP_Text>(true).text, Does.Contain("방어도"));
+            Assert.That(tooltip.GetComponentInChildren<TMPro.TMP_Text>(true).text, Does.Contain("공격 랭크"));
 
-            ((IPointerExitHandler)tooltipTarget).OnPointerExit(new PointerEventData(null));
+            ReleaseLongPressTooltip(tooltipTarget);
             Assert.That(tooltip.gameObject.activeSelf, Is.False);
         }
 
@@ -597,7 +911,7 @@ namespace Project2048.Tests
             authoredRect.pivot = new Vector2(0f, 1f);
             authoredRect.anchoredPosition = new Vector2(17f, -84f);
             authoredRect.sizeDelta = new Vector2(180f, 36f);
-            CreateImageChild(authoredRoot.transform, "StatusEffectIconSample");
+            CreateStatusEffectTemplateForTest(authoredRoot.transform);
 
             var manager = CreateOwnedGameObject("CombatManager").AddComponent<CombatManager>();
             var player = CreateOwnedGameObject("Player").AddComponent<PlayerCombatController>();
@@ -639,6 +953,9 @@ namespace Project2048.Tests
             var boardHp = CreateImageChild(viewObject.transform, "BoardHp");
             CreateImageChild(boardHp.transform, "HpBarFill");
             CreateTextChild(viewObject.transform, "HpText");
+            CreateAuthoredStatusEffectsRootForTest(playerBattleHp.transform, "PlayerBattleStatusEffects", new Vector2(CombatUiView.HpStatusEffectXOffset, -39f));
+            CreateAuthoredStatusEffectsRootForTest(boardHp.transform, "PlayerBoardStatusEffects", new Vector2(CombatUiView.HpStatusEffectXOffset, -6f));
+            CreateAuthoredStatusEffectsRootForTest(enemyHp.transform, "EnemyStatusEffects", new Vector2(CombatUiView.HpStatusEffectXOffset, -6f));
 
             var manager = CreateOwnedGameObject("CombatManager").AddComponent<CombatManager>();
             var player = CreateOwnedGameObject("Player").AddComponent<PlayerCombatController>();
@@ -869,6 +1186,14 @@ namespace Project2048.Tests
             return image;
         }
 
+        private Button CreateButtonChild(Transform parent, string name)
+        {
+            var child = new GameObject(name, typeof(RectTransform), typeof(Image), typeof(Button));
+            child.transform.SetParent(parent, false);
+            ownedObjects.Add(child);
+            return child.GetComponent<Button>();
+        }
+
         private void ConfigureAuthoredHpFillForTest(Transform hpRoot, Image fill)
         {
             var sprite = AssetDatabase.LoadAssetAtPath<Sprite>(HpBarSpritePath);
@@ -946,6 +1271,86 @@ namespace Project2048.Tests
             label.raycastTarget = false;
         }
 
+        private RectTransform CreateAuthoredStatusEffectsRootForTest(
+            Transform parent,
+            string rootName,
+            Vector2 anchoredPosition)
+        {
+            var rootObject = new GameObject(rootName, typeof(RectTransform), typeof(HorizontalLayoutGroup));
+            rootObject.transform.SetParent(parent, false);
+            ownedObjects.Add(rootObject);
+
+            var root = rootObject.GetComponent<RectTransform>();
+            root.anchorMin = new Vector2(0f, 0f);
+            root.anchorMax = new Vector2(0f, 0f);
+            root.pivot = new Vector2(0f, 1f);
+            root.anchoredPosition = anchoredPosition;
+            root.sizeDelta = new Vector2(160f, 32f);
+
+            var layout = rootObject.GetComponent<HorizontalLayoutGroup>();
+            layout.spacing = 4f;
+            layout.childAlignment = TextAnchor.MiddleLeft;
+            layout.childControlWidth = false;
+            layout.childControlHeight = false;
+            layout.childForceExpandWidth = false;
+            layout.childForceExpandHeight = false;
+
+            CreateStatusEffectTemplateForTest(root);
+            return root;
+        }
+
+        private Image CreateStatusEffectTemplateForTest(Transform parent)
+        {
+            var template = CreateImageChild(parent, "StatusEffectIconSample");
+            template.gameObject.AddComponent<StatusEffectTooltipTarget>();
+            template.rectTransform.sizeDelta = new Vector2(32f, 32f);
+            return template;
+        }
+
+        private RectTransform CreateStatusTooltipForTest(Transform parent)
+        {
+            var tooltipObject = new GameObject("StatusTooltip", typeof(RectTransform), typeof(Image));
+            tooltipObject.transform.SetParent(parent, false);
+            tooltipObject.SetActive(false);
+            ownedObjects.Add(tooltipObject);
+
+            var tooltipRect = tooltipObject.GetComponent<RectTransform>();
+            tooltipRect.anchorMin = new Vector2(0.5f, 0.5f);
+            tooltipRect.anchorMax = new Vector2(0.5f, 0.5f);
+            tooltipRect.pivot = new Vector2(0.5f, 0f);
+            tooltipRect.anchoredPosition = new Vector2(0f, 48f);
+            tooltipRect.sizeDelta = new Vector2(320f, 56f);
+
+            var image = tooltipObject.GetComponent<Image>();
+            image.color = new Color(0.02f, 0.025f, 0.03f, 0.96f);
+            image.raycastTarget = false;
+
+            var textObject = new GameObject("Text", typeof(RectTransform), typeof(TMPro.TextMeshProUGUI));
+            textObject.transform.SetParent(tooltipRect, false);
+            ownedObjects.Add(textObject);
+            SetStretchForTest(textObject.GetComponent<RectTransform>(), new Vector2(10f, 6f), new Vector2(-10f, -6f));
+
+            var label = textObject.GetComponent<TMPro.TMP_Text>();
+            label.alignment = TMPro.TextAlignmentOptions.Center;
+            label.fontSize = 15f;
+            label.color = Color.white;
+            label.textWrappingMode = TMPro.TextWrappingModes.Normal;
+            label.raycastTarget = false;
+
+            return tooltipRect;
+        }
+
+        private static IEnumerator ShowTooltipByLongPress(StatusEffectTooltipTarget target)
+        {
+            ((IPointerDownHandler)target).OnPointerDown(new PointerEventData(null));
+            yield return new WaitForSecondsRealtime(StatusEffectTooltipTarget.LongPressDelaySeconds + 0.02f);
+        }
+
+        private static void ReleaseLongPressTooltip(StatusEffectTooltipTarget target)
+        {
+            ((IPointerUpHandler)target).OnPointerUp(new PointerEventData(null));
+        }
+
         private static void SetStretchForTest(RectTransform rect, Vector2 offsetMin, Vector2 offsetMax)
         {
             rect.anchorMin = Vector2.zero;
@@ -991,7 +1396,13 @@ namespace Project2048.Tests
             return data;
         }
 
-        private SkillSO CreateSkill(string skillId, string skillName, SkillType skillType, int cost, int power)
+        private SkillSO CreateSkill(
+            string skillId,
+            string skillName,
+            SkillType skillType,
+            int cost,
+            int power,
+            string description = null)
         {
             var skill = ScriptableObject.CreateInstance<SkillSO>();
             skill.skillId = skillId;
@@ -999,6 +1410,7 @@ namespace Project2048.Tests
             skill.skillType = skillType;
             skill.cost = cost;
             skill.power = power;
+            skill.description = description;
             ownedObjects.Add(skill);
             return skill;
         }

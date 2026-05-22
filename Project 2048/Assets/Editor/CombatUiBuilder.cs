@@ -28,6 +28,7 @@ namespace Project2048.PrototypeEditor
         private const string SkillFolder = DataFolder + "/Skills";
         private const string BattleScenePath = "Assets/Scenes/BattleScene.unity";
         private const string PlayerSpritePath = "Assets/Art/Prototype/PrototypePlayerCutout.png";
+        private static readonly Vector2 SkillSlotSize = new(340f, 170f);
         private const string EnemySpritePath = "Assets/Art/Prototype/PrototypeEnemyCutout.png";
         private const string HpBarSpritePath = "Assets/Art/UI/WideHexHpBar.png";
         private const string HpBarOutlineSpritePath = "Assets/Art/UI/WideHexHpBarOutline.png";
@@ -148,6 +149,109 @@ namespace Project2048.PrototypeEditor
             Debug.Log("Combat status effect roots ensured.");
         }
 
+        [MenuItem("Project2048/Ensure Pokemon Skill Panel")]
+        public static void EnsurePokemonSkillPanel()
+        {
+            var scene = EditorSceneManager.OpenScene(BattleScenePath);
+            var view = Object.FindAnyObjectByType<CombatUiView>(FindObjectsInactive.Include);
+            if (view == null)
+            {
+                Debug.LogWarning("CombatUiView was not found in BattleScene.");
+                return;
+            }
+
+            var so = new SerializedObject(view);
+            var font = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(KoreanFontAssetPath);
+            var actionPanel = so.FindProperty("actionPanel")?.objectReferenceValue as GameObject
+                ?? GameObject.Find("ActionPanel");
+            var boardPanel = so.FindProperty("boardPanel")?.objectReferenceValue as GameObject
+                ?? GameObject.Find("BoardPanel");
+            if (actionPanel == null || boardPanel == null)
+            {
+                Debug.LogWarning("ActionPanel or BoardPanel was not found in BattleScene.");
+                return;
+            }
+
+            var skillsView = so.FindProperty("skillsView")?.objectReferenceValue as GameObject
+                ?? actionPanel.transform.Find("SkillsView")?.gameObject
+                ?? CreateRect("SkillsView", actionPanel.transform).gameObject;
+            var skillsRect = skillsView.GetComponent<RectTransform>();
+            SetAnchor(skillsRect, new Vector2(0.5f, 0.48f), new Vector2(820f, 560f), Vector2.zero);
+            skillsView.SetActive(false);
+
+            var layout = skillsView.GetComponent<VerticalLayoutGroup>();
+            if (layout != null)
+            {
+                Object.DestroyImmediate(layout);
+            }
+
+            var header = so.FindProperty("skillsHeaderText")?.objectReferenceValue as TMP_Text
+                ?? skillsView.transform.Find("SkillsHeader")?.GetComponent<TMP_Text>()
+                ?? CreateLabel(skillsView.transform, "SkillsHeader", "Skill Select", 28f, TextAlignmentOptions.Center, font);
+            header.text = "Skill Select";
+            header.fontStyle = FontStyles.Bold;
+            SetAnchor(header.rectTransform, new Vector2(0.5f, 0.92f), new Vector2(520f, 48f), Vector2.zero);
+
+            var buttons = new List<Button>();
+            var labels = new List<TMP_Text>();
+            var existingButtons = so.FindProperty("skillTierButtons");
+            var existingLabels = so.FindProperty("skillTierLabels");
+            var positions = new[]
+            {
+                new Vector2(-178f, 94f),
+                new Vector2(178f, 94f),
+                new Vector2(-178f, -94f),
+                new Vector2(178f, -94f),
+            };
+
+            for (var index = 0; index < PlayerCombatController.MaxEquippedSkillSlots; index++)
+            {
+                var button = existingButtons != null && index < existingButtons.arraySize
+                    ? existingButtons.GetArrayElementAtIndex(index).objectReferenceValue as Button
+                    : null;
+                button ??= skillsView.transform.Find($"SkillSlotButton_{index + 1}")?.GetComponent<Button>();
+                button ??= CreateImage(skillsView.transform, $"SkillSlotButton_{index + 1}", new Color(0.10f, 0.36f, 0.18f, 1f)).gameObject.AddComponent<Button>();
+
+                ConfigureSkillSlotButton(button, index, positions[index], font);
+                buttons.Add(button);
+
+                var label = existingLabels != null && index < existingLabels.arraySize
+                    ? existingLabels.GetArrayElementAtIndex(index).objectReferenceValue as TMP_Text
+                    : null;
+                label ??= button.transform.Find("Label")?.GetComponent<TMP_Text>();
+                label ??= CreateLabel(button.transform, "Label", string.Empty, 23f, TextAlignmentOptions.MidlineLeft, font);
+                ConfigureSkillSlotLabel(label, font);
+                labels.Add(label);
+            }
+
+            var costIcon = EnsureCostFormulaHelpIcon(
+                actionPanel.transform,
+                "CostFormulaHelpIcon",
+                new Vector2(0.94f, 0.88f),
+                font);
+            var boardCostIcon = EnsureCostFormulaHelpIcon(
+                boardPanel.transform,
+                "BoardCostFormulaHelpIcon",
+                new Vector2(0.06f, 0.91f),
+                font);
+
+            SetRef(so, "skillsView", skillsView);
+            SetRef(so, "skillsHeaderText", header);
+            SetListRef(so, "skillTierButtons", buttons);
+            SetListRef(so, "skillTierLabels", labels);
+            SetRef(so, "costFormulaHelpIcon", costIcon);
+            SetRef(so, "costFormulaHelpLabel", costIcon.transform.Find("Label")?.GetComponent<TMP_Text>());
+            SetRef(so, "boardCostFormulaHelpIcon", boardCostIcon);
+            SetRef(so, "boardCostFormulaHelpLabel", boardCostIcon.transform.Find("Label")?.GetComponent<TMP_Text>());
+            so.ApplyModifiedPropertiesWithoutUndo();
+
+            EditorUtility.SetDirty(view);
+            EditorSceneManager.MarkSceneDirty(scene);
+            EditorSceneManager.SaveScene(scene);
+            AssetDatabase.SaveAssets();
+            Debug.Log("Pokemon-style skill panel and board help icon ensured.");
+        }
+
         private static Canvas EnsureCanvas()
         {
             var canvasObject = GameObject.Find("CombatCanvas");
@@ -198,38 +302,48 @@ namespace Project2048.PrototypeEditor
             EnsureFolder(DataFolder, "Enemies");
             EnsureFolder(DataFolder, "Skills");
 
-            var attack1 = CreateOrLoadAsset<SkillSO>(SkillFolder + "/Attack_1.asset");
-            ConfigureSkill(attack1, "attack_1", "1단계 공격", SkillType.Attack, 5, 3, 0, 0, "기본 공격.");
-            var attack2 = CreateOrLoadAsset<SkillSO>(SkillFolder + "/Attack_2.asset");
-            ConfigureSkill(attack2, "attack_2", "2단계 공격", SkillType.Attack, 8, 4, -2, 0, "공격하고 적 공격력을 낮춘다.");
-            var attack3 = CreateOrLoadAsset<SkillSO>(SkillFolder + "/Attack_3.asset");
-            ConfigureSkill(attack3, "attack_3", "3단계 공격", SkillType.Attack, 12, 8, 0, 0, "강한 공격.");
-            var defense1 = CreateOrLoadAsset<SkillSO>(SkillFolder + "/Defense_1.asset");
-            ConfigureSkill(defense1, "defense_1", "1단계 방어", SkillType.Defense, 5, 3, 0, 0, "방어도 3을 얻는다.");
-            var defense2 = CreateOrLoadAsset<SkillSO>(SkillFolder + "/Defense_2.asset");
-            ConfigureSkill(defense2, "defense_2", "2단계 방어", SkillType.Defense, 8, 4, 0, 2, "방어도를 얻고 이후 획득 방어도를 증가시킨다.");
-            var defense3 = CreateOrLoadAsset<SkillSO>(SkillFolder + "/Defense_3.asset");
-            ConfigureSkill(defense3, "defense_3", "3단계 방어", SkillType.Defense, 12, 10, 0, 0, "강한 방어.");
+            var quickStab = LoadSkillAsset("QuickStab.asset");
+            var lightShot = LoadSkillAsset("LightShot.asset");
+            var heavyStrike = LoadSkillAsset("HeavyStrike.asset");
+            var gatherLight = LoadSkillAsset("GatherLight.asset");
+            var lowStance = LoadSkillAsset("LowStance.asset");
+            var lightGuard = LoadSkillAsset("LightGuard.asset");
+            var shieldBash = LoadSkillAsset("ShieldBash.asset");
+            var shieldBurst = LoadSkillAsset("ShieldBurst.asset");
+            var ironWall = LoadSkillAsset("IronWall.asset");
+            var bodyPress = LoadSkillAsset("BodyPress.asset");
+            var flash = LoadSkillAsset("Flash.asset");
 
-            var skills = new List<SkillSO> { attack1, attack2, attack3, defense1, defense2, defense3 };
-
+            var skills = new List<SkillSO>
+            {
+                quickStab,
+                lightShot,
+                heavyStrike,
+                gatherLight,
+                lowStance,
+                lightGuard,
+                shieldBash,
+                shieldBurst,
+                ironWall,
+                bodyPress,
+                flash,
+            };
             var player = CreateOrLoadAsset<PlayerSO>(DataFolder + "/PrototypePlayer.asset");
-            player.maxHp = 30;
-            player.attackPower = 2;
+            player.maxHp = 240;
+            player.attackPower = 10;
             player.initialBoardMoveCount = 12;
             player.boardMoveCountBonus = 0;
-            player.startingSkills = new List<SkillSO>(skills);
+            player.startingSkills = new List<SkillSO> { gatherLight, lightGuard, flash, quickStab };
             player.portrait = LoadSprite(PlayerSpritePath) ?? player.portrait;
             EditorUtility.SetDirty(player);
 
             var enemy = CreateOrLoadAsset<EnemySO>(EnemyFolder + "/01.asset");
             enemy.name = "그림자 늑대";
             enemy.enemyName = "그림자 늑대";
-            enemy.maxHp = 32;
+            enemy.maxHp = 160;
             enemy.attackPower = 5;
             enemy.defensePower = 3;
             enemy.debuffPower = 1;
-            enemy.difficultyScore = 1;
             enemy.portrait = LoadSprite(EnemySpritePath) ?? enemy.portrait;
             enemy.intentPattern = new List<EnemyIntent>();
             enemy.aiActionBias = EnemyAiActionBias.Balanced;
@@ -239,6 +353,11 @@ namespace Project2048.PrototypeEditor
             EditorUtility.SetDirty(enemy);
 
             return new PrototypeCombatLoadout(player, enemy, skills, ownsAssets: false);
+        }
+
+        private static SkillSO LoadSkillAsset(string fileName)
+        {
+            return AssetDatabase.LoadAssetAtPath<SkillSO>($"{SkillFolder}/{fileName}");
         }
 
         private static Sprite LoadSprite(string assetPath)
@@ -356,9 +475,19 @@ namespace Project2048.PrototypeEditor
             SetAnchor(refs.EnemyNameText.rectTransform, new Vector2(0.74f, 0.58f), new Vector2(360, 60), Vector2.zero);
 
             refs.IntentBubble = CreateImage(parent, "IntentBubble", new Color(0.65f, 0.10f, 0.10f, 1f));
-            SetAnchor(refs.IntentBubble.rectTransform, new Vector2(0.74f, 0.70f), new Vector2(180, 78), Vector2.zero);
-            refs.IntentBubbleText = CreateLabel(refs.IntentBubble.transform, "IntentBubbleText", "공격 5", 28, TextAlignmentOptions.Center, font);
-            SetStretch(refs.IntentBubbleText.rectTransform, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
+            SetAnchor(
+                refs.IntentBubble.rectTransform,
+                new Vector2(0.74f, 0.70f),
+                new Vector2(CombatUiView.IntentBubbleSquareSize, CombatUiView.IntentBubbleSquareSize),
+                Vector2.zero);
+            refs.IntentBubbleText = CreateLabel(refs.IntentBubble.transform, "IntentBubbleText", "공격", 14, TextAlignmentOptions.Center, font);
+            refs.IntentBubbleText.enableAutoSizing = true;
+            refs.IntentBubbleText.fontSizeMin = 8f;
+            refs.IntentBubbleText.fontSizeMax = 14f;
+            refs.IntentBubbleText.textWrappingMode = TextWrappingModes.Normal;
+            refs.IntentBubbleText.overflowMode = TextOverflowModes.Ellipsis;
+            refs.IntentBubbleText.raycastTarget = false;
+            SetStretch(refs.IntentBubbleText.rectTransform, Vector2.zero, Vector2.one, new Vector2(3f, 3f), new Vector2(-3f, -3f));
 
             CreateStatusBar(parent, "PlayerBattleHp", new Vector2(0.22f, 0.06f), new Vector2(300, 20), CombatUiView.ThemeHpBarBackgroundColor, CombatUiView.ThemeHpFillColor, font, out refs.PlayerBattleHpFill, out refs.PlayerBattleHpText);
             refs.PlayerBattleStatusEffectsRoot = EnsureStatusEffectAuthoringRoot(
@@ -417,6 +546,13 @@ namespace Project2048.PrototypeEditor
 
             refs.TurnLimitText = CreateLabel(boardRect, "TurnLimitText", "제한 턴 : 12회", 30, TextAlignmentOptions.Right, font);
             SetAnchor(refs.TurnLimitText.rectTransform, new Vector2(0.76f, 0.91f), new Vector2(360, 50), Vector2.zero);
+            CreateCostFormulaHelpIcon(
+                boardRect,
+                "BoardCostFormulaHelpIcon",
+                new Vector2(0.06f, 0.91f),
+                font,
+                out refs.BoardCostFormulaHelpIcon,
+                out refs.BoardCostFormulaHelpLabel);
 
             var boardTitle = CreateLabel(boardRect, "BoardPhaseTitle", "내 턴", 54, TextAlignmentOptions.Left, font);
             boardTitle.fontStyle = FontStyles.Bold;
@@ -471,11 +607,19 @@ namespace Project2048.PrototypeEditor
 
             refs.CostText = CreateLabel(refs.ActionPanel.transform, "CostText", "보유 코스트: 0", 32, TextAlignmentOptions.Right, font);
             SetAnchor(refs.CostText.rectTransform, new Vector2(0.74f, 0.88f), new Vector2(440, 58), Vector2.zero);
+            CreateCostFormulaHelpIcon(
+                refs.ActionPanel.transform,
+                "CostFormulaHelpIcon",
+                new Vector2(0.94f, 0.88f),
+                font,
+                out refs.CostFormulaHelpIcon,
+                out refs.CostFormulaHelpLabel);
 
             refs.CategoryView = CreateVerticalGroup(refs.ActionPanel.transform, "CategoryView", new Vector2(0.48f, 0.48f), new Vector2(700, 500), 30);
             refs.AttackCategory = CreateLabeledButton(refs.CategoryView.transform, "AttackButton", "공격", font);
             refs.DefenseCategory = CreateLabeledButton(refs.CategoryView.transform, "DefenseButton", "방어", font);
             refs.CategoryEndTurn = CreateLabeledButton(refs.CategoryView.transform, "EndTurnButton", "턴 종료", font);
+            refs.CategoryView.SetActive(false);
 
             refs.SkillsView = CreateVerticalGroup(refs.ActionPanel.transform, "SkillsView", new Vector2(0.5f, 0.48f), new Vector2(760, 660), 18);
             refs.SkillsView.SetActive(false);
@@ -485,6 +629,7 @@ namespace Project2048.PrototypeEditor
             refs.Tier1 = CreateLabeledButton(refs.SkillsView.transform, "Tier1Button", "1단계", font, out refs.Tier1Label);
             refs.Tier2 = CreateLabeledButton(refs.SkillsView.transform, "Tier2Button", "2단계", font, out refs.Tier2Label);
             refs.Tier3 = CreateLabeledButton(refs.SkillsView.transform, "Tier3Button", "3단계", font, out refs.Tier3Label);
+            refs.Tier4 = CreateLabeledButton(refs.SkillsView.transform, "SkillSlotButton_4", "4단계", font, out refs.Tier4Label);
             refs.SkillsBack = CreateLabeledButton(refs.SkillsView.transform, "BackButton", "뒤로", font);
             refs.SkillsEndTurn = CreateLabeledButton(refs.SkillsView.transform, "EndTurnButton", "턴 종료", font);
         }
@@ -647,6 +792,144 @@ namespace Project2048.PrototypeEditor
             labelText.fontStyle = FontStyles.Bold;
             SetStretch(labelText.rectTransform, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
             return button;
+        }
+
+        private static void CreateCostFormulaHelpIcon(
+            Transform parent,
+            string name,
+            Vector2 anchor,
+            TMP_FontAsset font,
+            out GameObject iconObject,
+            out TMP_Text label)
+        {
+            var icon = CreateImage(parent, name, new Color(0.06f, 0.07f, 0.08f, 0.94f));
+            icon.raycastTarget = true;
+            SetAnchor(icon.rectTransform, anchor, new Vector2(46f, 46f), Vector2.zero);
+
+            var outline = icon.gameObject.AddComponent<Outline>();
+            outline.effectColor = CombatUiView.ThemeBoardHelpOutlineColor;
+            outline.effectDistance = new Vector2(2f, -2f);
+            outline.useGraphicAlpha = true;
+
+            label = CreateLabel(icon.transform, "Label", "?", 28f, TextAlignmentOptions.Center, font);
+            label.color = CombatUiView.ThemeBoardHelpIconColor;
+            label.fontStyle = FontStyles.Bold;
+            label.raycastTarget = false;
+            SetStretch(label.rectTransform, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
+            iconObject = icon.gameObject;
+        }
+
+        private static GameObject EnsureCostFormulaHelpIcon(
+            Transform parent,
+            string name,
+            Vector2 anchor,
+            TMP_FontAsset font)
+        {
+            var icon = parent.Find(name)?.gameObject;
+            TMP_Text label;
+            if (icon == null)
+            {
+                CreateCostFormulaHelpIcon(parent, name, anchor, font, out icon, out label);
+                return icon;
+            }
+
+            var rect = icon.GetComponent<RectTransform>() ?? icon.AddComponent<RectTransform>();
+            SetAnchor(rect, anchor, new Vector2(46f, 46f), Vector2.zero);
+
+            var image = icon.GetComponent<Image>() ?? icon.AddComponent<Image>();
+            image.color = new Color(0.06f, 0.07f, 0.08f, 0.94f);
+            image.raycastTarget = true;
+
+            var outline = icon.GetComponent<Outline>() ?? icon.AddComponent<Outline>();
+            outline.effectColor = CombatUiView.ThemeBoardHelpOutlineColor;
+            outline.effectDistance = new Vector2(2f, -2f);
+            outline.useGraphicAlpha = true;
+
+            label = icon.transform.Find("Label")?.GetComponent<TMP_Text>()
+                ?? CreateLabel(icon.transform, "Label", "?", 28f, TextAlignmentOptions.Center, font);
+            label.text = "?";
+            label.color = CombatUiView.ThemeBoardHelpIconColor;
+            label.fontStyle = FontStyles.Bold;
+            label.raycastTarget = false;
+            SetStretch(label.rectTransform, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
+            return icon;
+        }
+
+        private static void ConfigureSkillSlotButton(Button button, int index, Vector2 anchoredPosition, TMP_FontAsset font)
+        {
+            if (button == null)
+            {
+                return;
+            }
+
+            button.name = $"SkillSlotButton_{index + 1}";
+            var rect = button.GetComponent<RectTransform>();
+            SetAnchor(rect, new Vector2(0.5f, 0.5f), SkillSlotSize, anchoredPosition);
+
+            var image = button.GetComponent<Image>() ?? button.gameObject.AddComponent<Image>();
+            var skillColor = ResolveDesignTimeSkillSlotColor(index);
+            image.color = skillColor;
+            image.sprite = null;
+            image.type = Image.Type.Simple;
+            image.raycastTarget = true;
+
+            var outline = button.GetComponent<Outline>() ?? button.gameObject.AddComponent<Outline>();
+            outline.effectColor = Color.Lerp(skillColor, CombatUiView.ThemePrimaryColor, 0.28f);
+            outline.effectDistance = new Vector2(2f, -2f);
+            outline.useGraphicAlpha = true;
+
+            var layout = button.GetComponent<LayoutElement>() ?? button.gameObject.AddComponent<LayoutElement>();
+            layout.ignoreLayout = true;
+
+            var label = button.transform.Find("Label")?.GetComponent<TMP_Text>();
+            if (label != null)
+            {
+                ConfigureSkillSlotLabel(label, font);
+            }
+        }
+
+        private static Color ResolveDesignTimeSkillSlotColor(int index)
+        {
+            return ResolveSkillTypeColor(index switch
+            {
+                0 => SkillType.Attack,
+                1 => SkillType.Defense,
+                2 => SkillType.Debuff,
+                _ => SkillType.Defense,
+            });
+        }
+
+        private static Color ResolveSkillTypeColor(SkillType skillType)
+        {
+            return skillType switch
+            {
+                SkillType.Attack => CombatUiView.ThemeSkillAttackColor,
+                SkillType.Defense => CombatUiView.ThemeSkillDefenseColor,
+                SkillType.Debuff => CombatUiView.ThemeSkillChangeColor,
+                SkillType.Heal => CombatUiView.ThemeSkillChangeColor,
+                _ => CombatUiView.ThemeSkillChangeColor,
+            };
+        }
+
+        private static void ConfigureSkillSlotLabel(TMP_Text label, TMP_FontAsset font)
+        {
+            if (label == null)
+            {
+                return;
+            }
+
+            label.fontSize = 23f;
+            label.fontStyle = FontStyles.Bold;
+            label.alignment = TextAlignmentOptions.Center;
+            label.color = Color.white;
+            label.textWrappingMode = TextWrappingModes.Normal;
+            label.raycastTarget = false;
+            if (font != null)
+            {
+                label.font = font;
+            }
+
+            SetStretch(label.rectTransform, Vector2.zero, Vector2.one, new Vector2(8f, 8f), new Vector2(-8f, -8f));
         }
 
         private static void CreateStatusBar(
@@ -1091,14 +1374,18 @@ namespace Project2048.PrototypeEditor
             SetRef(so, "boardSwipeHandler", refs.SwipeHandler);
             SetRef(so, "boardAnimationOverlay", refs.BoardAnimationOverlay);
             SetRef(so, "costText", refs.CostText);
+            SetRef(so, "costFormulaHelpIcon", refs.CostFormulaHelpIcon);
+            SetRef(so, "costFormulaHelpLabel", refs.CostFormulaHelpLabel);
+            SetRef(so, "boardCostFormulaHelpIcon", refs.BoardCostFormulaHelpIcon);
+            SetRef(so, "boardCostFormulaHelpLabel", refs.BoardCostFormulaHelpLabel);
             SetRef(so, "categoryView", refs.CategoryView);
             SetRef(so, "attackCategoryButton", refs.AttackCategory);
             SetRef(so, "defenseCategoryButton", refs.DefenseCategory);
             SetRef(so, "categoryEndTurnButton", refs.CategoryEndTurn);
             SetRef(so, "skillsView", refs.SkillsView);
             SetRef(so, "skillsHeaderText", refs.SkillsHeaderText);
-            SetListRef(so, "skillTierButtons", new List<Button> { refs.Tier1, refs.Tier2, refs.Tier3 });
-            SetListRef(so, "skillTierLabels", new List<TMP_Text> { refs.Tier1Label, refs.Tier2Label, refs.Tier3Label });
+            SetListRef(so, "skillTierButtons", new List<Button> { refs.Tier1, refs.Tier2, refs.Tier3, refs.Tier4 });
+            SetListRef(so, "skillTierLabels", new List<TMP_Text> { refs.Tier1Label, refs.Tier2Label, refs.Tier3Label, refs.Tier4Label });
             SetRef(so, "skillsBackButton", refs.SkillsBack);
             SetRef(so, "skillsEndTurnButton", refs.SkillsEndTurn);
             SetRef(so, "enemyTurnText", refs.EnemyTurnText);
@@ -1273,10 +1560,11 @@ namespace Project2048.PrototypeEditor
             public readonly List<BoardCellView> Cells = new();
             public BoardSwipeHandler SwipeHandler;
             public GameObject ActionPanel, CategoryView, SkillsView, EnemyTurnPanel, ResultOverlay, BoardPanel;
-            public TMP_Text CostText, SkillsHeaderText, EnemyTurnText, ResultTitle, ResultDesc;
+            public GameObject CostFormulaHelpIcon, BoardCostFormulaHelpIcon;
+            public TMP_Text CostText, CostFormulaHelpLabel, BoardCostFormulaHelpLabel, SkillsHeaderText, EnemyTurnText, ResultTitle, ResultDesc;
             public Button AttackCategory, DefenseCategory, CategoryEndTurn;
-            public Button Tier1, Tier2, Tier3, SkillsBack, SkillsEndTurn, Restart, ReloadScene;
-            public TMP_Text Tier1Label, Tier2Label, Tier3Label;
+            public Button Tier1, Tier2, Tier3, Tier4, SkillsBack, SkillsEndTurn, Restart, ReloadScene;
+            public TMP_Text Tier1Label, Tier2Label, Tier3Label, Tier4Label;
             public TMP_Text TurnCounterText, IntentHeaderText, EnemyNameText, IntentBubbleText;
             public TMP_Text HpText, TurnLimitText, PlayerBattleHpText, EnemyHpText, ActionDescriptionText;
             public Image PlayerPortrait, EnemyPortrait, IntentBubble, HpBarFill, PlayerBattleHpFill, EnemyHpFill;

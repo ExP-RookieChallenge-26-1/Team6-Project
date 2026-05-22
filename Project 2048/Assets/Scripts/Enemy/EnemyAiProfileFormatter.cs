@@ -5,18 +5,27 @@ namespace Project2048.Enemy
         public static string Format(
             EnemyAiActionBias actionBias,
             EnemyDebuffPattern debuffPattern,
+            EnemyAiStrength strength,
+            EnemyAiComplexity complexity)
+        {
+            return $"AI: {FormatComplexity(complexity)} / {FormatActionBias(actionBias)} / {FormatDebuffPattern(debuffPattern)} / {FormatStrength(strength)}";
+        }
+
+        public static string Format(
+            EnemyAiActionBias actionBias,
+            EnemyDebuffPattern debuffPattern,
             EnemyAiStrength strength)
         {
-            return $"AI: {FormatActionBias(actionBias)} / {FormatDebuffPattern(debuffPattern)} / {FormatStrength(strength)}";
+            return Format(actionBias, debuffPattern, strength, EnemyAiComplexity.Simple);
         }
 
         private static string FormatActionBias(EnemyAiActionBias actionBias)
         {
             return actionBias switch
             {
-                EnemyAiActionBias.AttackHeavy => "공격 몰빵",
-                EnemyAiActionBias.DefenseHeavy => "방어 몰빵",
-                _ => "밸런스",
+                EnemyAiActionBias.AttackHeavy => "공격 위주",
+                EnemyAiActionBias.DefenseHeavy => "방어 위주",
+                _ => "균형",
             };
         }
 
@@ -32,6 +41,16 @@ namespace Project2048.Enemy
         private static string FormatStrength(EnemyAiStrength strength)
         {
             return strength == EnemyAiStrength.Enhanced ? "강화" : "일반";
+        }
+
+        private static string FormatComplexity(EnemyAiComplexity complexity)
+        {
+            return complexity switch
+            {
+                EnemyAiComplexity.Complex => "복잡",
+                EnemyAiComplexity.Normal => "보통",
+                _ => "단순",
+            };
         }
     }
 }

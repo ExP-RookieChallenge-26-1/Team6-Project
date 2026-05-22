@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using NUnit.Framework;
+using Project2048.Combat;
 using Project2048.Enemy;
+using Project2048.Skills;
 using UnityEngine;
 
 namespace Project2048.Tests
@@ -252,13 +254,13 @@ namespace Project2048.Tests
             var data = CreateEnemyData();
             data.skills = new List<Project2048.Skills.SkillSO>
             {
-                CreateSkill("enemy-light-shot", "빛 발사", Project2048.Skills.SkillType.Attack, Project2048.Skills.SkillEffectKind.BasicAttack, power: 50),
+                CreateSkill("quick-stab", "빠른 찌르기", Project2048.Skills.SkillType.Attack, Project2048.Skills.SkillEffectKind.BasicAttack, power: 50),
             };
 
             Assert.That(data.AssignedSkillCount, Is.EqualTo(1));
             Assert.That(data.HasMinimumSkillSlots, Is.False);
 
-            data.skills.Add(CreateSkill("enemy-light-guard", "빛 방어", Project2048.Skills.SkillType.Defense, Project2048.Skills.SkillEffectKind.BasicDefense, power: 4));
+            data.skills.Add(CreateSkill("low-stance", "낮은 자세", Project2048.Skills.SkillType.Defense, Project2048.Skills.SkillEffectKind.BasicDefense, power: 4));
 
             Assert.That(data.AssignedSkillCount, Is.EqualTo(EnemySO.MinEquippedSkillSlots));
             Assert.That(data.HasMinimumSkillSlots, Is.True);
@@ -290,6 +292,127 @@ namespace Project2048.Tests
         }
 
         [Test]
+        public void SetNextIntents_CapsRequestedCountAtMaximumActionsPerTurn()
+        {
+            var enemy = CreateEnemy("CappedEnemy");
+            var data = CreateEnemyData();
+            data.intentPattern.Clear();
+            enemy.Init(data);
+
+            new EnemyIntentSystem(new System.Random(1)).SetNextIntents(enemy, 99);
+            var preview = GetCurrentIntents(enemy);
+
+            Assert.That(preview.Count, Is.GreaterThanOrEqualTo(1));
+            Assert.That(preview.Count, Is.LessThanOrEqualTo(EnemySO.MaximumActionsPerTurn));
+        }
+
+        [Test]
+        public void SetNextIntents_WithPlayerContext_AttackHeavyRepeatsLethalAttacks()
+        {
+            var enemy = CreateEnemy("Executioner");
+            var data = CreateEnemyData();
+            data.aiActionBias = EnemyAiActionBias.AttackHeavy;
+            data.aiDebuffInterval = 0;
+            data.attackPower = 8;
+            data.intentPattern.Clear();
+            enemy.Init(data);
+
+            var player = CreatePlayer("LowHpPlayer", maxHp: 6, attackPower: 2, defensePower: 1);
+
+            new EnemyIntentSystem(new System.Random(1)).SetNextIntents(enemy, 3, player);
+            var preview = GetCurrentIntents(enemy);
+
+            Assert.That(preview.Count, Is.EqualTo(3));
+            Assert.That(CountIntentType(preview, EnemyIntentType.Attack), Is.GreaterThanOrEqualTo(2));
+        }
+
+        [Test]
+        public void SetNextIntents_WithPlayerContext_DefenseHeavyLowHpPrefersThornGuard()
+        {
+            var enemy = CreateEnemy("LowHpGuardian");
+            var data = CreateEnemyData();
+            data.encounterRank = EnemyEncounterRank.Elite;
+            data.aiActionBias = EnemyAiActionBias.DefenseHeavy;
+            data.aiDebuffInterval = 0;
+            data.canUseThornGuard = true;
+            data.thornGuardShieldHp = 6;
+            data.thornGuardRetaliationDamage = 3;
+            data.intentPattern.Clear();
+            enemy.Init(data);
+            enemy.TakeDamage(16);
+
+            var player = CreatePlayer("ThreateningPlayer", maxHp: 30, attackPower: 10, defensePower: 1);
+
+            new EnemyIntentSystem(new System.Random(2)).SetNextIntents(enemy, 2, player);
+            var preview = GetCurrentIntents(enemy);
+
+            Assert.That(preview[0].intentType, Is.EqualTo(EnemyIntentType.Defense));
+            Assert.That(preview[0].isThornGuard, Is.True);
+        }
+
+        [Test]
+        public void SetNextIntents_DebuffIntervalUsesConfiguredDarknessPattern()
+        {
+            var enemy = CreateEnemy("DarkPlanner");
+            var data = CreateEnemyData();
+            data.aiDebuffInterval = 1;
+            data.aiDebuffPattern = EnemyDebuffPattern.DarknessThenFear;
+            data.intentPattern.Clear();
+            var darkness = CreateSkill(
+                "darkness",
+                "암흑",
+                SkillType.Debuff,
+                SkillEffectKind.BoardObstacleDebuff,
+                power: 0);
+            darkness.availability = SkillAvailability.EnemyOnly;
+            darkness.debuffType = DebuffType.Darkness;
+            darkness.debuffValue = 1;
+            data.skills = new List<SkillSO> { darkness };
+            enemy.Init(data);
+
+            var player = CreatePlayer("Player", maxHp: 30, attackPower: 5, defensePower: 1);
+
+            new EnemyIntentSystem(new System.Random(3)).SetNextIntents(enemy, 1, player);
+            var preview = GetCurrentIntents(enemy);
+
+            Assert.That(preview[0].intentType, Is.EqualTo(EnemyIntentType.Debuff));
+            Assert.That(preview[0].debuffType, Is.EqualTo(DebuffType.Darkness));
+        }
+
+        [Test]
+        public void SetNextIntents_LowHpEnemyPrefersEquippedLifeStealAttack()
+        {
+            var enemy = CreateEnemy("Leech");
+            var data = CreateEnemyData();
+            data.aiActionBias = EnemyAiActionBias.AttackHeavy;
+            data.aiDebuffInterval = 0;
+            data.intentPattern.Clear();
+            var lifeSteal = CreateSkill(
+                "life-drain",
+                "생명 흡수",
+                SkillType.Attack,
+                SkillEffectKind.LifeStealAttack,
+                power: 60);
+            lifeSteal.lifeStealPercent = 0.5f;
+            var heavyStrike = CreateSkill(
+                "heavy-strike",
+                "강타",
+                SkillType.Attack,
+                SkillEffectKind.BasicAttack,
+                power: 80);
+            data.skills = new List<SkillSO> { lifeSteal, heavyStrike };
+            enemy.Init(data);
+            enemy.TakeDamage(15);
+
+            var player = CreatePlayer("Player", maxHp: 40, attackPower: 4, defensePower: 1);
+
+            new EnemyIntentSystem(new System.Random(4)).SetNextIntents(enemy, 1, player);
+
+            Assert.That(enemy.CurrentIntent.skillId, Is.EqualTo("life-drain"));
+            Assert.That(enemy.CurrentIntent.lifeStealPercent, Is.EqualTo(0.5f));
+        }
+
+        [Test]
         public void SetNextIntent_WhenEnemyHasSkills_UsesEquippedSkillAsIntent()
         {
             var enemy = CreateEnemy("SkilledEnemy");
@@ -299,15 +422,15 @@ namespace Project2048.Tests
             data.intentPattern.Clear();
             data.skills = new List<Project2048.Skills.SkillSO>
             {
-                CreateSkill("enemy-light-shot", "빛 발사", Project2048.Skills.SkillType.Attack, Project2048.Skills.SkillEffectKind.BasicAttack, power: 50),
-                CreateSkill("enemy-light-guard", "빛 방어", Project2048.Skills.SkillType.Defense, Project2048.Skills.SkillEffectKind.BasicDefense, power: 4),
+                CreateSkill("quick-stab", "빠른 찌르기", Project2048.Skills.SkillType.Attack, Project2048.Skills.SkillEffectKind.BasicAttack, power: 50),
+                CreateSkill("low-stance", "낮은 자세", Project2048.Skills.SkillType.Defense, Project2048.Skills.SkillEffectKind.BasicDefense, power: 4),
             };
             enemy.Init(data);
 
             new EnemyIntentSystem(new System.Random(1)).SetNextIntent(enemy);
 
-            Assert.That(enemy.CurrentIntent.skillId, Is.EqualTo("enemy-light-shot"));
-            Assert.That(enemy.CurrentIntent.displayName, Is.EqualTo("빛 발사"));
+            Assert.That(enemy.CurrentIntent.skillId, Is.EqualTo("quick-stab"));
+            Assert.That(enemy.CurrentIntent.displayName, Is.EqualTo("빠른 찌르기"));
             Assert.That(enemy.CurrentIntent.intentType, Is.EqualTo(EnemyIntentType.Attack));
             Assert.That(enemy.CurrentIntent.value, Is.EqualTo(50));
             Assert.That(enemy.CurrentIntent.movePower, Is.EqualTo(50));
@@ -327,7 +450,7 @@ namespace Project2048.Tests
                 Project2048.Skills.SkillType.Attack,
                 Project2048.Skills.SkillEffectKind.LifeStealAttack,
                 power: 60);
-            playerLifeDrain.isEnemySkill = false;
+            playerLifeDrain.availability = Project2048.Skills.SkillAvailability.PlayerOnly;
             playerLifeDrain.lifeStealPercent = 0.5f;
             data.skills = new List<Project2048.Skills.SkillSO> { playerLifeDrain };
             enemy.Init(data);
@@ -338,6 +461,33 @@ namespace Project2048.Tests
             Assert.That(enemy.CurrentIntent.intentType, Is.EqualTo(EnemyIntentType.Attack));
             Assert.That(enemy.CurrentIntent.movePower, Is.EqualTo(data.attackPower * 10));
             Assert.That(enemy.CurrentIntent.lifeStealPercent, Is.EqualTo(0f));
+        }
+
+        [Test]
+        public void SetNextIntent_EnemyOnlyDarknessSkillCreatesDarknessDebuff()
+        {
+            var enemy = CreateEnemy("DarknessEnemy");
+            var data = CreateEnemyData();
+            data.aiDebuffInterval = 1;
+            data.intentPattern.Clear();
+            var darkness = CreateSkill(
+                "deep-darkness",
+                "깊은 암흑",
+                Project2048.Skills.SkillType.Debuff,
+                Project2048.Skills.SkillEffectKind.BoardObstacleDebuff,
+                power: 0);
+            darkness.availability = Project2048.Skills.SkillAvailability.EnemyOnly;
+            darkness.debuffType = DebuffType.Darkness;
+            darkness.debuffValue = 2;
+            data.skills = new List<Project2048.Skills.SkillSO> { darkness };
+            enemy.Init(data);
+
+            new EnemyIntentSystem(new System.Random(1)).SetNextIntent(enemy);
+
+            Assert.That(enemy.CurrentIntent.skillId, Is.EqualTo("deep-darkness"));
+            Assert.That(enemy.CurrentIntent.intentType, Is.EqualTo(EnemyIntentType.Debuff));
+            Assert.That(enemy.CurrentIntent.debuffType, Is.EqualTo(DebuffType.Darkness));
+            Assert.That(enemy.CurrentIntent.value, Is.EqualTo(2));
         }
 
         private EnemyController CreateEnemy(string name)
@@ -356,6 +506,20 @@ namespace Project2048.Tests
             data.debuffPower = 1;
             ownedObjects.Add(data);
             return data;
+        }
+
+        private PlayerCombatController CreatePlayer(string name, int maxHp, int attackPower, int defensePower)
+        {
+            var gameObject = new GameObject(name);
+            ownedObjects.Add(gameObject);
+            var player = gameObject.AddComponent<PlayerCombatController>();
+            var data = ScriptableObject.CreateInstance<PlayerSO>();
+            data.maxHp = maxHp;
+            data.attackPower = attackPower;
+            data.baseDefensePower = defensePower;
+            ownedObjects.Add(data);
+            player.Init(data);
+            return player;
         }
 
         private static (int Attacks, int Defenses) CountActions(
@@ -396,6 +560,20 @@ namespace Project2048.Tests
             return (IReadOnlyList<EnemyIntent>)property.GetValue(enemy);
         }
 
+        private static int CountIntentType(IReadOnlyList<EnemyIntent> intents, EnemyIntentType intentType)
+        {
+            var count = 0;
+            foreach (var intent in intents)
+            {
+                if (intent != null && intent.intentType == intentType)
+                {
+                    count++;
+                }
+            }
+
+            return count;
+        }
+
         private Project2048.Skills.SkillSO CreateSkill(
             string skillId,
             string skillName,
@@ -409,7 +587,7 @@ namespace Project2048.Tests
             skill.skillType = skillType;
             skill.effectKind = effectKind;
             skill.power = power;
-            skill.isEnemySkill = true;
+            skill.availability = Project2048.Skills.SkillAvailability.Shared;
             ownedObjects.Add(skill);
             return skill;
         }

@@ -8,6 +8,7 @@ namespace Project2048.Enemy
         public string skillId;
         public string displayName;
         public SkillEffectKind skillEffectKind;
+        public DamageStatSource damageStatSource = DamageStatSource.AttackPower;
         public EnemyIntentType intentType;
         public int value;
         public int movePower;
@@ -21,6 +22,8 @@ namespace Project2048.Enemy
         public int hpCost;
         public bool hpCostLeavesOne = true;
         public int nextBoardMoveCountModifier;
+        public int nextCostGainModifier;
+        public float nextCostGainMultiplier = 1f;
 
         public EnemyIntent Clone()
         {
@@ -29,6 +32,7 @@ namespace Project2048.Enemy
                 skillId = skillId,
                 displayName = displayName,
                 skillEffectKind = skillEffectKind,
+                damageStatSource = damageStatSource,
                 intentType = intentType,
                 value = value,
                 movePower = movePower,
@@ -42,6 +46,8 @@ namespace Project2048.Enemy
                 hpCost = hpCost,
                 hpCostLeavesOne = hpCostLeavesOne,
                 nextBoardMoveCountModifier = nextBoardMoveCountModifier,
+                nextCostGainModifier = nextCostGainModifier,
+                nextCostGainMultiplier = nextCostGainMultiplier,
             };
         }
     }

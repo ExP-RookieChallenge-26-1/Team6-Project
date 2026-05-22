@@ -11,17 +11,17 @@ namespace Project2048.Tests
     public class PrototypeCombatTextTests
     {
         [Test]
-        public void FormatSkillLabel_ShowsSlotCostPowerAndUsability()
+        public void FormatSkillLabel_ShowsNameCostAndAffordability()
         {
             var skill = new SkillSnapshot
             {
                 DisplayName = "빛 발사",
                 Cost = 9,
-                Power = 4,
+                Power = 40,
             };
 
-            Assert.That(PrototypeCombatText.FormatSkillLabel(1, skill, canAfford: true), Is.EqualTo("2. 빛 발사\n코스트 9 / 위력 4 / 사용 가능"));
-            Assert.That(PrototypeCombatText.FormatSkillLabel(1, skill, canAfford: false), Is.EqualTo("2. 빛 발사\n코스트 9 / 위력 4 / 코스트 부족"));
+            Assert.That(PrototypeCombatText.FormatSkillLabel(1, skill, canAfford: true), Is.EqualTo("빛 발사\nPP 0/9"));
+            Assert.That(PrototypeCombatText.FormatSkillLabel(1, skill, canAfford: false), Is.EqualTo("빛 발사\nPP 0/9 - COST LOW"));
             Assert.That(PrototypeCombatText.FormatEmptySkillSlotLabel(3), Is.EqualTo("4. 빈 슬롯"));
         }
 
@@ -103,7 +103,7 @@ namespace Project2048.Tests
             {
                 DebuffType = DebuffType.Fear,
                 Value = 6,
-            }), Is.EqualTo("공포: 방어력 -6"));
+            }), Is.EqualTo("공포: 공격 랭크 -6"));
 
             Assert.That(PrototypeCombatText.FormatDebuffVfxLabel(new CombatVfxCue
             {
@@ -146,6 +146,17 @@ namespace Project2048.Tests
         }
 
         [Test]
+        public void FormatResultDescription_ShowsOutcomeHintOnly()
+        {
+            Assert.That(
+                PrototypeCombatText.FormatResultDescription(new CombatSnapshot { Phase = CombatPhase.Victory }),
+                Is.EqualTo("보상을 선택하세요"));
+            Assert.That(
+                PrototypeCombatText.FormatResultDescription(new CombatSnapshot { Phase = CombatPhase.Defeat }),
+                Is.EqualTo("전투를 다시 시도하세요"));
+        }
+
+        [Test]
         public void FormatRewardChoice_UsesRogueliteRewardCopy()
         {
             var reward = ScriptableObject.CreateInstance<BattleRewardSO>();
@@ -159,6 +170,48 @@ namespace Project2048.Tests
             finally
             {
                 Object.DestroyImmediate(reward);
+            }
+        }
+
+        [Test]
+        public void FormatSkillTooltip_UsesCardStyleWithoutForeignNameOrChangeLabel()
+        {
+            var skill = new SkillSnapshot
+            {
+                DisplayName = "방패 밀치기",
+                Cost = 5,
+                Power = 60,
+                Description = "현재 보호막 수치로 계산하여 적에게 위력 60 피해를 준다.",
+            };
+
+            Assert.That(
+                PrototypeCombatText.FormatSkillTooltip(skill),
+                Is.EqualTo("방패 밀치기\n전투 / 공격   위력 60   명중 100   PP 5\n현재 보호막 수치로 계산하여 적에게 위력 60 피해를 준다."));
+            Assert.That(PrototypeCombatText.FormatSkillTooltip(skill), Does.Not.Contain("변경점"));
+            Assert.That(PrototypeCombatText.FormatSkillTooltip(skill), Does.Not.Contain("Solar"));
+        }
+
+        [Test]
+        public void FormatRewardTooltip_UsesSkillDescriptionForSkillRewards()
+        {
+            var skill = ScriptableObject.CreateInstance<SkillSO>();
+            var reward = ScriptableObject.CreateInstance<BattleRewardSO>();
+            try
+            {
+                skill.skillName = "육중한 압박";
+                skill.cost = 7;
+                skill.power = 80;
+                skill.description = "공격력 대신 방어력으로 계산하여 적에게 위력 80 피해를 준다.";
+                reward.rewardKind = RewardChoiceKind.LearnSkill;
+                reward.skillToLearn = skill;
+
+                Assert.That(PrototypeCombatText.FormatRewardTooltip(reward), Does.Contain("육중한 압박"));
+                Assert.That(PrototypeCombatText.FormatRewardTooltip(reward), Does.Contain("방어력으로 계산"));
+            }
+            finally
+            {
+                Object.DestroyImmediate(reward);
+                Object.DestroyImmediate(skill);
             }
         }
     }

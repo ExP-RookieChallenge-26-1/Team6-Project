@@ -32,43 +32,54 @@ namespace Project2048.Prototype
         {
             var quickStab = CreateSkill("quick-stab", "Quick Stab", SkillType.Attack, cost: 4, power: 40, targetAttackModifier: 0, selfDefenseBonus: 0, "Deal power 40 damage.");
             quickStab.effectKind = SkillEffectKind.BasicAttack;
+            quickStab.availability = SkillAvailability.Shared;
 
             var lightShot = CreateSkill("light-shot", "Light Shot", SkillType.Attack, cost: 6, power: 60, targetAttackModifier: 0, selfDefenseBonus: 0, "Deal power 60 light damage.");
             lightShot.effectKind = SkillEffectKind.BasicAttack;
+            lightShot.availability = SkillAvailability.PlayerOnly;
 
             var heavyStrike = CreateSkill("heavy-strike", "Heavy Strike", SkillType.Attack, cost: 8, power: 80, targetAttackModifier: 0, selfDefenseBonus: 0, "Deal power 80 damage.");
             heavyStrike.effectKind = SkillEffectKind.BasicAttack;
+            heavyStrike.availability = SkillAvailability.Shared;
 
             var gatherLight = CreateSkill("gather-light", "Gather Light", SkillType.Attack, cost: 6, power: 0, targetAttackModifier: 0, selfDefenseBonus: 0, "Charge this turn. At the next player turn start, automatically use a power 120 light attack.");
             gatherLight.effectKind = SkillEffectKind.ChargeAttack;
             gatherLight.chargedPower = 120;
+            gatherLight.availability = SkillAvailability.PlayerOnly;
 
             var lowStance = CreateSkill("low-stance", "Low Stance", SkillType.Defense, cost: 4, power: 30, targetAttackModifier: 0, selfDefenseBonus: 0, "Gain 30 shield.");
             lowStance.effectKind = SkillEffectKind.BasicDefense;
+            lowStance.availability = SkillAvailability.Shared;
 
             var lightGuard = CreateSkill("light-guard", "Light Guard", SkillType.Defense, cost: 6, power: 60, targetAttackModifier: 0, selfDefenseBonus: 0, "Gain 60 shield.");
             lightGuard.effectKind = SkillEffectKind.BasicDefense;
+            lightGuard.availability = SkillAvailability.PlayerOnly;
 
             var shieldBash = CreateSkill("shield-bash", "Shield Bash", SkillType.Attack, cost: 5, power: 60, targetAttackModifier: 0, selfDefenseBonus: 0, "Use current shield as the attacking stat to deal power 60 damage. Shield is not consumed.");
             shieldBash.effectKind = SkillEffectKind.ShieldScalingAttack;
             shieldBash.damageStatSource = DamageStatSource.ShieldHp;
+            shieldBash.availability = SkillAvailability.Shared;
 
             var shieldBurst = CreateSkill("shield-burst", "Shield Burst", SkillType.Attack, cost: 7, power: 100, targetAttackModifier: 0, selfDefenseBonus: 0, "Use current shield as the attacking stat to deal power 100 damage, then lose all shield.");
             shieldBurst.effectKind = SkillEffectKind.ShieldBurstAttack;
             shieldBurst.damageStatSource = DamageStatSource.ShieldHp;
             shieldBurst.consumesAllShield = true;
+            shieldBurst.availability = SkillAvailability.Shared;
 
             var ironWall = CreateSkill("iron-wall", "Iron Wall", SkillType.Defense, cost: 6, power: 0, targetAttackModifier: 0, selfDefenseBonus: 0, "Raise defense stage by 2.");
             ironWall.effectKind = SkillEffectKind.DefenseStageUp;
             ironWall.selfDefenseStageModifier = 2;
+            ironWall.availability = SkillAvailability.Shared;
 
             var bodyPress = CreateSkill("body-press", "Body Press", SkillType.Attack, cost: 7, power: 80, targetAttackModifier: 0, selfDefenseBonus: 0, "Use defense instead of attack to deal power 80 damage.");
             bodyPress.effectKind = SkillEffectKind.DefenseScalingAttack;
             bodyPress.damageStatSource = DamageStatSource.DefensePower;
+            bodyPress.availability = SkillAvailability.Shared;
 
             var flash = CreateSkill("flash", "Flash", SkillType.Debuff, cost: 5, power: 0, targetAttackModifier: 0, selfDefenseBonus: 0, "Lower enemy attack stage by 1.");
             flash.effectKind = SkillEffectKind.AttackStageDown;
             flash.targetAttackStageModifier = -1;
+            flash.availability = SkillAvailability.Shared;
 
             var skills = new List<SkillSO>
             {
@@ -154,7 +165,6 @@ namespace Project2048.Prototype
             enemy.baseDefensePower = seed.Strength == EnemyAiStrength.Enhanced ? 2 : 1;
             enemy.defensePower = seed.Strength == EnemyAiStrength.Enhanced ? 4 : 3;
             enemy.debuffPower = 1;
-            enemy.difficultyScore = seed.Strength == EnemyAiStrength.Enhanced ? 2 : 1;
             enemy.criticalChance = seed.Strength == EnemyAiStrength.Enhanced ? 0.08f : 0.05f;
             enemy.criticalDamageMultiplier = 1.5f;
             enemy.intentPattern = new List<EnemyIntent>();
@@ -178,7 +188,7 @@ namespace Project2048.Prototype
         private static List<SkillSO> CreateEnemySkills(EnemyProfileSeed seed)
         {
             var attack = CreateSkill(
-                "enemy-light-shot",
+                seed.Strength == EnemyAiStrength.Enhanced ? "heavy-strike" : "quick-stab",
                 "빛 발사",
                 SkillType.Attack,
                 cost: 0,
@@ -187,9 +197,11 @@ namespace Project2048.Prototype
                 selfDefenseBonus: 0,
                 "적 기본 공격.");
             attack.effectKind = SkillEffectKind.BasicAttack;
+            attack.availability = SkillAvailability.Shared;
+            attack.skillName = seed.Strength == EnemyAiStrength.Enhanced ? "Heavy Strike" : "Quick Stab";
 
             var guard = CreateSkill(
-                "enemy-light-guard",
+                "low-stance",
                 "빛 방어",
                 SkillType.Defense,
                 cost: 0,
@@ -198,9 +210,11 @@ namespace Project2048.Prototype
                 selfDefenseBonus: 0,
                 "적 기본 보호.");
             guard.effectKind = SkillEffectKind.BasicDefense;
+            guard.availability = SkillAvailability.Shared;
+            guard.skillName = "Low Stance";
 
             var debuff = CreateSkill(
-                seed.DebuffPattern == EnemyDebuffPattern.DarknessThenFear ? "enemy-howl" : "enemy-fear",
+                "howl",
                 seed.DebuffPattern == EnemyDebuffPattern.DarknessThenFear ? "울부짖기" : "공포",
                 SkillType.Debuff,
                 cost: 0,
@@ -210,27 +224,31 @@ namespace Project2048.Prototype
                 "플레이어 방어력을 낮춘다.");
             debuff.effectKind = SkillEffectKind.DefenseStageDown;
             debuff.targetDefenseStageModifier = seed.Strength == EnemyAiStrength.Enhanced ? -2 : -1;
+            debuff.availability = SkillAvailability.Shared;
+            debuff.skillName = "Howl";
 
             if (seed.ActionBias == EnemyAiActionBias.AttackHeavy)
             {
                 var rush = CreateSkill(
-                    "enemy-tentacle-strike",
+                    "dark-shackle",
                     "촉수 치기",
                     SkillType.Attack,
                     cost: 0,
-                    power: seed.Strength == EnemyAiStrength.Enhanced ? 110 : 90,
+                    power: seed.Strength == EnemyAiStrength.Enhanced ? 60 : 40,
                     targetAttackModifier: 0,
                     selfDefenseBonus: 0,
                     "강하게 공격하고 다음 보드 이동을 줄인다.");
                 rush.effectKind = SkillEffectKind.BoardMovePenaltyAttack;
                 rush.nextBoardMoveCountModifier = -1;
+                rush.availability = SkillAvailability.EnemyOnly;
+                rush.skillName = "Dark Shackle";
                 return new List<SkillSO> { attack, rush, guard, debuff };
             }
 
             if (seed.ActionBias == EnemyAiActionBias.DefenseHeavy)
             {
                 var thorn = CreateSkill(
-                    "enemy-thorn-guard",
+                    "thorn-guard",
                     "가시 방어",
                     SkillType.Defense,
                     cost: 0,
@@ -240,6 +258,8 @@ namespace Project2048.Prototype
                     "보호막과 반사 피해.");
                 thorn.effectKind = SkillEffectKind.ThornGuard;
                 thorn.selfThornRetaliationDamage = 40;
+                thorn.availability = SkillAvailability.Shared;
+                thorn.skillName = "Thorn Guard";
                 return new List<SkillSO> { attack, thorn, guard, debuff };
             }
 
@@ -261,7 +281,6 @@ namespace Project2048.Prototype
             skill.skillId = skillId;
             skill.skillName = skillName;
             skill.skillType = skillType;
-            skill.isEnemySkill = skillId.StartsWith("enemy-", System.StringComparison.Ordinal);
             skill.cost = cost;
             skill.power = power;
             skill.targetAttackModifier = targetAttackModifier;

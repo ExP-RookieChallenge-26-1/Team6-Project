@@ -600,6 +600,53 @@ namespace Project2048.Tests
         }
 
         [Test]
+        public void EnemyCostGainDebuff_ReducesNextBoardPhaseCostOnce()
+        {
+            var manager = CreateGameObject<CombatManager>("CombatManager");
+            var player = CreateGameObject<PlayerCombatController>("Player");
+            var enemy = CreateGameObject<EnemyController>("Enemy");
+            var playerData = CreatePlayerData(maxHp: 20, attackPower: 1);
+            var enemyData = CreateEnemyData(maxHp: 50, attackValue: 0);
+            enemyData.intentPattern = new List<EnemyIntent>
+            {
+                new()
+                {
+                    intentType = EnemyIntentType.Debuff,
+                    skillEffectKind = SkillEffectKind.CostGainDown,
+                    nextCostGainMultiplier = 0.5f,
+                },
+            };
+            var board = new[,]
+            {
+                { 64, 0, 0, 0 },
+                { 0, 0, 0, 0 },
+                { 0, 0, 0, 0 },
+                { 0, 0, 0, 0 },
+            };
+            var fullCost = new CostConverter().ConvertBoardToCost(board);
+
+            manager.SetCombatants(player, new[] { enemy });
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new List<EnemySO> { enemyData },
+                boardMoveCount = 1,
+            });
+            manager.BoardManager.SetBoardState(board, 0);
+            Assert.That(manager.ResolveBoardPhase(), Is.EqualTo(fullCost));
+
+            manager.RequestEndPlayerTurn();
+            manager.BoardManager.SetBoardState(board, 0);
+
+            Assert.That(manager.ResolveBoardPhase(), Is.EqualTo(fullCost / 2));
+
+            manager.RequestEndPlayerTurn();
+            manager.BoardManager.SetBoardState(board, 0);
+
+            Assert.That(manager.ResolveBoardPhase(), Is.EqualTo(fullCost / 2));
+        }
+
+        [Test]
         public void ChargeAttack_FiresAtNextPlayerTurnStart()
         {
             var manager = CreateGameObject<CombatManager>("CombatManager");
@@ -701,12 +748,12 @@ namespace Project2048.Tests
             flash.skillName = "섬광";
             flash.effectKind = SkillEffectKind.AttackStageDown;
             flash.targetAttackStageModifier = -1;
-            flash.isEnemySkill = true;
+            flash.availability = SkillAvailability.Shared;
             enemyData.aiActionBias = EnemyAiActionBias.Balanced;
             enemyData.aiDebuffInterval = 1;
             var guard = CreateSkill("enemy-guard", SkillType.Defense, cost: 0, power: 2);
             guard.effectKind = SkillEffectKind.BasicDefense;
-            guard.isEnemySkill = true;
+            guard.availability = SkillAvailability.Shared;
             enemyData.skills = new List<SkillSO> { flash, guard };
             enemyData.intentPattern.Clear();
 

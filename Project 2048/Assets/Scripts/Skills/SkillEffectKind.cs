@@ -31,5 +31,8 @@ namespace Project2048.Skills
         Heal = 18,
         NextAttackPowerMultiplier = 19,
         NextAttackSplit = 20,
+
+        CostGainDown = 21,
+        BoardObstacleDebuff = 22,
     }
 }

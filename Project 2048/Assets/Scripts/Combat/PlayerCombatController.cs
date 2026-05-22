@@ -34,6 +34,8 @@ namespace Project2048.Combat
         public int FearStacks { get; private set; }
         public int BoardMoveCountBonus { get; private set; }
         public int NextTurnBoardMoveCountModifier { get; private set; }
+        public int NextTurnCostGainModifier { get; private set; }
+        public float NextTurnCostGainMultiplier { get; private set; } = 1f;
         public int CriticalStage { get; private set; }
         public float CriticalChance => Mathf.Clamp01(baseCriticalChance + CriticalStage * CriticalChancePerStage);
         public float CriticalDamageMultiplier { get; private set; } = 1.5f;
@@ -88,6 +90,8 @@ namespace Project2048.Combat
             DefenseStage = 0;
             FearStacks = 0;
             NextTurnBoardMoveCountModifier = 0;
+            NextTurnCostGainModifier = 0;
+            NextTurnCostGainMultiplier = 1f;
             CounterPercent = 0;
             EndureTurns = 0;
             CriticalStage = 0;
@@ -475,6 +479,45 @@ namespace Project2048.Combat
             }
 
             return modifier;
+        }
+
+        public void ApplyNextTurnCostGainModifier(int amount)
+        {
+            if (amount == 0)
+            {
+                return;
+            }
+
+            NextTurnCostGainModifier += amount;
+            OnStatusEffectsChanged?.Invoke();
+        }
+
+        public void ApplyNextTurnCostGainMultiplier(float multiplier)
+        {
+            multiplier = Mathf.Max(0f, multiplier);
+            if (Mathf.Approximately(multiplier, 1f))
+            {
+                return;
+            }
+
+            NextTurnCostGainMultiplier *= multiplier;
+            OnStatusEffectsChanged?.Invoke();
+        }
+
+        public int ApplyAndConsumeNextTurnCostGainModifiers(int baseCost)
+        {
+            baseCost = Mathf.Max(0, baseCost);
+            var multiplier = Mathf.Max(0f, NextTurnCostGainMultiplier);
+            var modifiedCost = Mathf.Max(0, Mathf.FloorToInt(baseCost * multiplier) + NextTurnCostGainModifier);
+            var changed = NextTurnCostGainModifier != 0 || !Mathf.Approximately(NextTurnCostGainMultiplier, 1f);
+            NextTurnCostGainModifier = 0;
+            NextTurnCostGainMultiplier = 1f;
+            if (changed)
+            {
+                OnStatusEffectsChanged?.Invoke();
+            }
+
+            return modifiedCost;
         }
 
         public int SpendHp(int amount, bool leaveOne)

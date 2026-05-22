@@ -211,7 +211,7 @@ namespace Project2048.Tests
             Assert.That(manager.RequestUseSkill(attack, enemy), Is.True);
             Assert.That(audioPlayer.LastPlayedCue, Is.EqualTo(PrototypeCombatEventSoundCue.Victory));
 
-            rewardManager.OfferReward(new CombatResult { enemyDifficultyScore = 1 }, player);
+            rewardManager.OfferReward(new CombatResult(), player);
             rewardManager.ChooseEnhance(player);
 
             Assert.That(audioPlayer.LastPlayedCue, Is.EqualTo(PrototypeCombatEventSoundCue.RewardEnhance));

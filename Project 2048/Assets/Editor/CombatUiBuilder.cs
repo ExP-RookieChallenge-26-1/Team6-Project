@@ -333,7 +333,6 @@ namespace Project2048.PrototypeEditor
             enemy.attackPower = 5;
             enemy.defensePower = 3;
             enemy.debuffPower = 1;
-            enemy.difficultyScore = 1;
             enemy.portrait = LoadSprite(EnemySpritePath) ?? enemy.portrait;
             enemy.intentPattern = new List<EnemyIntent>();
             enemy.aiActionBias = EnemyAiActionBias.Balanced;
@@ -460,9 +459,18 @@ namespace Project2048.PrototypeEditor
             SetAnchor(refs.EnemyNameText.rectTransform, new Vector2(0.74f, 0.58f), new Vector2(360, 60), Vector2.zero);
 
             refs.IntentBubble = CreateImage(parent, "IntentBubble", new Color(0.65f, 0.10f, 0.10f, 1f));
-            SetAnchor(refs.IntentBubble.rectTransform, new Vector2(0.74f, 0.70f), new Vector2(180, 78), Vector2.zero);
-            refs.IntentBubbleText = CreateLabel(refs.IntentBubble.transform, "IntentBubbleText", "공격 5", 28, TextAlignmentOptions.Center, font);
-            SetStretch(refs.IntentBubbleText.rectTransform, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
+            SetAnchor(
+                refs.IntentBubble.rectTransform,
+                new Vector2(0.74f, 0.70f),
+                new Vector2(CombatUiView.IntentBubbleSquareSize, CombatUiView.IntentBubbleSquareSize),
+                Vector2.zero);
+            refs.IntentBubbleText = CreateLabel(refs.IntentBubble.transform, "IntentBubbleText", "공격 5", 26, TextAlignmentOptions.Center, font);
+            refs.IntentBubbleText.enableAutoSizing = true;
+            refs.IntentBubbleText.fontSizeMin = 14f;
+            refs.IntentBubbleText.fontSizeMax = 26f;
+            refs.IntentBubbleText.textWrappingMode = TextWrappingModes.Normal;
+            refs.IntentBubbleText.overflowMode = TextOverflowModes.Ellipsis;
+            SetStretch(refs.IntentBubbleText.rectTransform, Vector2.zero, Vector2.one, new Vector2(8f, 8f), new Vector2(-8f, -8f));
 
             CreateStatusBar(parent, "PlayerBattleHp", new Vector2(0.22f, 0.06f), new Vector2(300, 20), CombatUiView.ThemeHpBarBackgroundColor, CombatUiView.ThemeHpFillColor, font, out refs.PlayerBattleHpFill, out refs.PlayerBattleHpText);
             refs.PlayerBattleStatusEffectsRoot = EnsureStatusEffectAuthoringRoot(

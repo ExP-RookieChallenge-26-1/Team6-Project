@@ -1,8 +1,17 @@
+using Project2048.Enemy;
 using Project2048.Presentation;
 using UnityEngine;
 
 namespace Project2048.Skills
 {
+    public enum SkillAvailability
+    {
+        Shared,
+        PlayerOnly,
+        EnemyOnly,
+        Disabled,
+    }
+
     [CreateAssetMenu(menuName = "Game/Skill")]
     public class SkillSO : ScriptableObject
     {
@@ -21,6 +30,8 @@ namespace Project2048.Skills
         public int selfCriticalStageModifier;
         public int targetAttackModifier;
         public int targetDefenseModifier;
+        public DebuffType debuffType;
+        public int debuffValue;
         public int selfDefenseBonus;
         public int selfDefensePowerModifier;
         public int selfThornRetaliationDamage;
@@ -34,17 +45,26 @@ namespace Project2048.Skills
         [Range(0f, 1f)] public float hpCostPercent;
         public bool hpCostLeavesOne = true;
         public int nextBoardMoveCountModifier;
+        public int nextCostGainModifier;
+        [Min(0f)] public float nextCostGainMultiplier = 1f;
         public int chargedPower;
         public bool consumesAllShield;
         [Min(0f)] public float nextAttackPowerMultiplier = 1f;
         public int nextAttackHitCount;
         [Min(0f)] public float nextAttackHitPowerMultiplier = 1f;
         [Range(0f, 1f)] public float healPercentOfMaxHp;
-        public bool canAppearAsReward = true;
-        public bool isEnemySkill;
+        public SkillAvailability availability = SkillAvailability.Shared;
         public Sprite icon;
         public CombatEffectBinding activationEffect = new();
         [TextArea] public string description;
+
+        public bool CanAppearAsReward =>
+            availability == SkillAvailability.Shared ||
+            availability == SkillAvailability.PlayerOnly;
+
+        public bool CanEnemyUse =>
+            availability == SkillAvailability.Shared ||
+            availability == SkillAvailability.EnemyOnly;
 
         public bool RequiresEnemyTarget => ResolveEffectKind() switch
         {
@@ -83,6 +103,7 @@ namespace Project2048.Skills
             power = Mathf.Max(0, power);
             targetAttackStageModifier = Mathf.Clamp(targetAttackStageModifier, -6, 6);
             targetDefenseStageModifier = Mathf.Clamp(targetDefenseStageModifier, -6, 6);
+            debuffValue = Mathf.Max(0, debuffValue);
             selfDefenseStageModifier = Mathf.Clamp(selfDefenseStageModifier, -6, 6);
             selfCriticalStageModifier = Mathf.Clamp(selfCriticalStageModifier, 0, 4);
             selfCounterPercent = Mathf.Clamp(selfCounterPercent, 0, 400);
@@ -93,6 +114,7 @@ namespace Project2048.Skills
             hpCost = Mathf.Max(0, hpCost);
             hpCostPercent = Mathf.Clamp01(hpCostPercent);
             chargedPower = Mathf.Max(0, chargedPower);
+            nextCostGainMultiplier = Mathf.Max(0f, nextCostGainMultiplier);
             nextAttackPowerMultiplier = Mathf.Max(0f, nextAttackPowerMultiplier);
             nextAttackHitCount = Mathf.Max(0, nextAttackHitCount);
             nextAttackHitPowerMultiplier = Mathf.Max(0f, nextAttackHitPowerMultiplier);

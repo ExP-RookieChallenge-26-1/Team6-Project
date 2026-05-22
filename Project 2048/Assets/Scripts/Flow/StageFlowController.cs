@@ -308,7 +308,6 @@ namespace Project2048.Flow
             if (desiredRank != EnemyEncounterRank.Normal)
             {
                 runtimeEncounterEnemy.aiStrength = EnemyAiStrength.Enhanced;
-                runtimeEncounterEnemy.difficultyScore = Mathf.Max(runtimeEncounterEnemy.difficultyScore, 2);
                 runtimeEncounterEnemy.aiComplexity = EnemyAiComplexity.Normal;
                 runtimeEncounterEnemy.actionsPerTurn = EnemySO.ResolveDefaultActionsPerTurn(runtimeEncounterEnemy.aiComplexity);
             }
@@ -317,7 +316,6 @@ namespace Project2048.Flow
             {
                 runtimeEncounterEnemy.maxHp = Mathf.CeilToInt(runtimeEncounterEnemy.maxHp * 1.5f);
                 runtimeEncounterEnemy.attackPower = Mathf.CeilToInt(runtimeEncounterEnemy.attackPower * 1.25f);
-                runtimeEncounterEnemy.difficultyScore = Mathf.Max(runtimeEncounterEnemy.difficultyScore, 5);
                 runtimeEncounterEnemy.aiComplexity = EnemyAiComplexity.Complex;
                 runtimeEncounterEnemy.actionsPerTurn = EnemySO.ResolveDefaultActionsPerTurn(runtimeEncounterEnemy.aiComplexity);
             }

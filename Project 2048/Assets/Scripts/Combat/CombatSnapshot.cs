@@ -98,6 +98,7 @@ namespace Project2048.Combat
     {
         public string SkillId { get; set; }
         public string DisplayName { get; set; }
+        public string Description { get; set; }
         public SkillType SkillType { get; set; }
         public int Cost { get; set; }
         public int Power { get; set; }

@@ -24,7 +24,7 @@ namespace Project2048.Rewards
                 return new List<BattleRewardSO>();
             }
 
-            var validRewards = rewards.Where(reward => reward != null).ToList();
+            var validRewards = rewards.Where(CanOfferReward).ToList();
             var selectedRewards = new List<BattleRewardSO>(count);
             while (validRewards.Count > 0 && selectedRewards.Count < count)
             {
@@ -34,6 +34,17 @@ namespace Project2048.Rewards
             }
 
             return selectedRewards;
+        }
+
+        private static bool CanOfferReward(BattleRewardSO reward)
+        {
+            if (reward == null)
+            {
+                return false;
+            }
+
+            return !reward.IsSkillReward ||
+                   (reward.skillToLearn != null && reward.skillToLearn.CanAppearAsReward);
         }
     }
 }

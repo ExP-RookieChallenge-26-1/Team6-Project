@@ -4,7 +4,6 @@ using Project2048.Core;
 using Project2048.Enemy;
 using Project2048.Flow;
 using Project2048.Rewards;
-using Project2048.Score;
 using UnityEngine;
 
 namespace Project2048.Prototype
@@ -19,7 +18,6 @@ namespace Project2048.Prototype
         [SerializeField] private PrototypeCombatEventAudioPlayer combatEventAudioPlayer;
         [SerializeField] private FlowController flowController;
         [SerializeField] private RewardManager rewardManager;
-        [SerializeField] private ScoreManager scoreManager;
         [SerializeField] private PlayerSO playerData;
         [SerializeField] private EnemySO enemyData;
         [SerializeField] private RewardTableSO rewardTable;
@@ -35,7 +33,6 @@ namespace Project2048.Prototype
         public CombatManager CombatManager => combatManager;
         public PrototypeCombatEventAudioPlayer CombatEventAudioPlayer => combatEventAudioPlayer;
         public RewardManager RewardManager => rewardManager;
-        public ScoreManager ScoreManager => scoreManager;
         public RunProgress RunProgress => runProgress;
         public PlayerSO PlayerData => playerData;
         public EnemySO EnemyData => enemyData;
@@ -87,7 +84,6 @@ namespace Project2048.Prototype
             if (combatManager != null && combatManager.CurrentPhase == CombatPhase.Defeat)
             {
                 runProgress.Reset();
-                scoreManager?.ResetScore();
             }
 
             StartPrototypeCombat();
@@ -270,16 +266,6 @@ namespace Project2048.Prototype
             if (rewardManager != null)
             {
                 rewardManager.Initialize(runProgress, rewardTable);
-            }
-
-            if (scoreManager == null)
-            {
-                scoreManager = GetComponentInChildren<ScoreManager>(true);
-            }
-
-            if (scoreManager != null)
-            {
-                scoreManager.BindCombat(combatManager);
             }
 
             if (combatEventAudioPlayer == null)

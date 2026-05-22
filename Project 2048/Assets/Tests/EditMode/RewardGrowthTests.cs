@@ -8,7 +8,6 @@ using Project2048.Enemy;
 using Project2048.Flow;
 using Project2048.Prototype;
 using Project2048.Rewards;
-using Project2048.Score;
 using Project2048.Skills;
 using TMPro;
 using UnityEngine;
@@ -74,7 +73,7 @@ namespace Project2048.Tests
             runProgress.CapturePlayer(player);
 
             rewardManager.Initialize(runProgress, table);
-            rewardManager.OfferReward(new CombatResult { enemyDifficultyScore = 1 }, player);
+            rewardManager.OfferReward(new CombatResult(), player);
             var result = rewardManager.ChooseRest(player);
 
             Assert.That(result.Kind, Is.EqualTo(RewardChoiceKind.Rest));
@@ -97,7 +96,7 @@ namespace Project2048.Tests
             runProgress.CapturePlayer(player);
 
             rewardManager.Initialize(runProgress, table);
-            rewardManager.OfferReward(new CombatResult { enemyDifficultyScore = 1 }, player);
+            rewardManager.OfferReward(new CombatResult(), player);
             var result = rewardManager.ChooseEnhance(player);
 
             Assert.That(result.Kind, Is.EqualTo(RewardChoiceKind.Enhance));
@@ -117,7 +116,7 @@ namespace Project2048.Tests
 
             player.Init(playerData);
             rewardManager.Initialize(new RunProgress(), table);
-            rewardManager.OfferReward(new CombatResult { enemyDifficultyScore = 1 }, player);
+            rewardManager.OfferReward(new CombatResult(), player);
 
             Assert.That(rewardManager.PendingChoices.Count, Is.EqualTo(3));
             Assert.That(rewardManager.PendingChoices[0], Is.SameAs(reward));
@@ -232,7 +231,7 @@ namespace Project2048.Tests
             Assert.That(resultOverlay.activeSelf, Is.False);
 
             manager.RequestUseSkill(attack, enemy);
-            rewardManager.OfferReward(new CombatResult { enemyDifficultyScore = 1 }, player);
+            rewardManager.OfferReward(new CombatResult(), player);
 
             Assert.That(rewardOverlay.activeSelf, Is.True);
             Assert.That(resultOverlay.activeSelf, Is.False);
@@ -293,7 +292,7 @@ namespace Project2048.Tests
         }
 
         [Test]
-        public void Bootstrap_WithMissingRewardAndScoreSceneReferences_DoesNotCreateRuntimeManagers()
+        public void Bootstrap_WithMissingRewardSceneReferences_DoesNotCreateRuntimeManagers()
         {
             var bootstrapObject = CreateOwnedGameObject("Bootstrap");
             var bootstrap = bootstrapObject.AddComponent<PrototypeCombatBootstrap>();
@@ -308,9 +307,7 @@ namespace Project2048.Tests
             InvokePrivateMethod(bootstrap, "EnsureRuntimeObjects");
 
             Assert.That(bootstrap.RewardManager, Is.Null);
-            Assert.That(bootstrap.ScoreManager, Is.Null);
             Assert.That(bootstrapObject.transform.Find("RewardManager"), Is.Null);
-            Assert.That(bootstrapObject.transform.Find("ScoreManager"), Is.Null);
         }
 
         [Test]
@@ -344,7 +341,6 @@ namespace Project2048.Tests
             var view = Object.FindAnyObjectByType<CombatUiView>(FindObjectsInactive.Include);
             var worldSpriteView = Object.FindAnyObjectByType<CombatWorldSpriteView>(FindObjectsInactive.Include);
             var rewardManager = Object.FindAnyObjectByType<RewardManager>(FindObjectsInactive.Include);
-            var scoreManager = Object.FindAnyObjectByType<ScoreManager>(FindObjectsInactive.Include);
             var combatCanvas = GameObject.Find("CombatCanvas")?.GetComponent<Canvas>();
             var backgroundSprite = GameObject.Find("BackgroundSprite")?.GetComponent<SpriteRenderer>();
             var playerSprite = GameObject.Find("PlayerSprite")?.GetComponent<SpriteRenderer>();
@@ -356,7 +352,6 @@ namespace Project2048.Tests
             Assert.That(view, Is.Not.Null);
             Assert.That(worldSpriteView, Is.Not.Null);
             Assert.That(rewardManager, Is.Not.Null);
-            Assert.That(scoreManager, Is.Not.Null);
             Assert.That(combatCanvas, Is.Not.Null);
             Assert.That(combatCanvas.renderMode, Is.EqualTo(RenderMode.ScreenSpaceOverlay));
             Assert.That(combatCanvas.worldCamera, Is.Null);
@@ -381,7 +376,6 @@ namespace Project2048.Tests
             var resultOverlay = serializedView.FindProperty("resultOverlay").objectReferenceValue as GameObject;
 
             Assert.That(serializedView.FindProperty("rewardManager").objectReferenceValue, Is.EqualTo(rewardManager));
-            Assert.That(serializedView.FindProperty("scoreManager").objectReferenceValue, Is.EqualTo(scoreManager));
             Assert.That(rewardOverlay, Is.Not.Null);
             Assert.That(resultOverlay, Is.Not.Null);
             Assert.That(rewardOverlay.name, Is.EqualTo("RewardOverlay"));

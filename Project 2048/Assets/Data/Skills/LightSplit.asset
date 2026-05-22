@@ -44,8 +44,7 @@ MonoBehaviour:
   nextAttackHitCount: 2
   nextAttackHitPowerMultiplier: 0.6
   healPercentOfMaxHp: 0
-  canAppearAsReward: 1
-  isEnemySkill: 0
+  availability: 1
   icon: {fileID: 0}
   activationEffect:
     sfxClip: {fileID: 0}

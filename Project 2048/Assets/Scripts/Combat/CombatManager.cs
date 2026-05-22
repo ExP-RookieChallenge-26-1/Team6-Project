@@ -156,7 +156,10 @@ namespace Project2048.Combat
                 return CostWallet.CurrentCost;
             }
 
-            var cost = costConverter.ConvertBoardToCost(BoardManager.GetBoardSnapshot());
+            var rawCost = costConverter.ConvertBoardToCost(BoardManager.GetBoardSnapshot());
+            var cost = player != null
+                ? player.ApplyAndConsumeNextTurnCostGainModifiers(rawCost)
+                : rawCost;
             lastActionDescription = $"코스트 획득: {cost}";
             CostWallet.SetCost(cost);
             ChangePhase(CombatPhase.ActionPhase);
@@ -465,7 +468,7 @@ namespace Project2048.Combat
         {
             foreach (var enemy in enemies.Where(enemy => enemy != null && !enemy.IsDead))
             {
-                enemyIntentSystem.SetNextIntents(enemy, GetEnemyActionsPerTurn(enemy));
+                enemyIntentSystem.SetNextIntents(enemy, GetEnemyActionsPerTurn(enemy), player);
             }
         }
 
@@ -530,11 +533,6 @@ namespace Project2048.Combat
             return new CombatResult
             {
                 turnCount = TurnController.TurnCount,
-                remainingMoveCount = BoardManager.MoveCount,
-                overCost = CostWallet.CurrentCost,
-                enemyDifficultyScore = enemies
-                    .Where(enemy => enemy != null && enemy.Data != null)
-                    .Sum(enemy => enemy.Data.difficultyScore),
             };
         }
 
@@ -840,6 +838,15 @@ namespace Project2048.Combat
             AddStatusEffect(effects, "echo-damage", player.EchoDamageBonus, "빛의 메아리", "다음 공격 위력 배율", "메", true);
             AddStatusEffect(effects, "split-attack", player.ExtraAttackHits, "빛의 분산", "다음 공격 추가 타격", "분", true);
             AddStatusEffect(effects, "next-board-moves", Mathf.Abs(player.NextTurnBoardMoveCountModifier), "다음 보드 이동", "다음 보드 이동 횟수 변화", "이", player.NextTurnBoardMoveCountModifier > 0);
+            AddStatusEffect(effects, "next-cost-gain", Mathf.Abs(player.NextTurnCostGainModifier), "다음 코스트", "다음 코스트 획득 변화", "PP", player.NextTurnCostGainModifier > 0);
+            AddStatusEffect(
+                effects,
+                "next-cost-gain-rate",
+                Mathf.RoundToInt(Mathf.Abs(1f - player.NextTurnCostGainMultiplier) * 100f),
+                "다음 코스트",
+                "다음 코스트 획득 비율 변화",
+                "PP",
+                player.NextTurnCostGainMultiplier > 1f);
             if (player.HasPendingChargedAttack)
             {
                 AddStatusEffect(effects, "charged-attack", 1, "빛 모으기", "다음 플레이어 턴 시작에 공격이 발동합니다.", "충", true);
@@ -971,6 +978,7 @@ namespace Project2048.Combat
                 {
                     SkillId = skill.skillId,
                     DisplayName = string.IsNullOrWhiteSpace(skill.skillName) ? skill.skillId : skill.skillName,
+                    Description = skill.description,
                     SkillType = skill.skillType,
                     Cost = skill.cost,
                     Power = skill.power,

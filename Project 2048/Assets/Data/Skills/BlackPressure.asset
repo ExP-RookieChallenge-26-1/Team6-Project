@@ -10,21 +10,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e39edfbbdac2c064e877e5f3f784bab9, type: 3}
-  m_Name: TentacleStrike
+  m_Name: BlackPressure
   m_EditorClassIdentifier: Game.Core::Project2048.Skills.SkillSO
-  skillId: tentacle-strike
-  skillName: "촉수 치기"
-  skillType: 0
-  effectKind: 17
+  skillId: black-pressure
+  skillName: "검은 압박"
+  skillType: 2
+  effectKind: 21
   damageStatSource: 0
-  cost: 6
-  power: 90
+  cost: 0
+  power: 0
   targetAttackStageModifier: 0
   targetDefenseStageModifier: 0
   selfDefenseStageModifier: 0
   selfCriticalStageModifier: 0
   targetAttackModifier: 0
   targetDefenseModifier: 0
+  debuffType: 0
+  debuffValue: 0
   selfDefenseBonus: 0
   selfDefensePowerModifier: 0
   selfThornRetaliationDamage: 0
@@ -37,21 +39,23 @@ MonoBehaviour:
   hpCost: 0
   hpCostPercent: 0
   hpCostLeavesOne: 1
-  nextBoardMoveCountModifier: -1
+  nextBoardMoveCountModifier: 0
+  nextCostGainModifier: 0
+  nextCostGainMultiplier: 0.7
   chargedPower: 0
   consumesAllShield: 0
   nextAttackPowerMultiplier: 1
   nextAttackHitCount: 0
   nextAttackHitPowerMultiplier: 1
   healPercentOfMaxHp: 0
-  availability: 0
+  availability: 2
   icon: {fileID: 0}
   activationEffect:
     sfxClip: {fileID: 0}
     vfxPrefab: {fileID: 0}
     animationClip: {fileID: 0}
     particleEffect:
-      objectName: 
+      objectName:
       particlePrefab: {fileID: 0}
       particleMaterial: {fileID: 0}
       useParticleColor: 0
@@ -67,4 +71,4 @@ MonoBehaviour:
     sfxDelaySeconds: 0
     localOffset: {x: 0, y: 0, z: 0}
     autoDestroySeconds: 1.25
-  description: "적에게 위력 90 피해를 준다. 다음 플레이어 턴의 보드 이동 횟수가 1 감소한다."
+  description: "다음 플레이어 턴에 보드에서 얻는 코스트가 30% 감소한다."

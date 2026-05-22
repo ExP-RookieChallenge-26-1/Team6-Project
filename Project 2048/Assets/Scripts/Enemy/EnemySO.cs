@@ -28,7 +28,6 @@ namespace Project2048.Enemy
         public int baseDefensePower;
         public int defensePower = 3;
         public int debuffPower = 1;
-        public int difficultyScore = 1;
         [Range(0f, 1f)] public float criticalChance;
         [Min(1f)] public float criticalDamageMultiplier = 1.5f;
         public EnemyAiComplexity aiComplexity = EnemyAiComplexity.Simple;
@@ -73,7 +72,7 @@ namespace Project2048.Enemy
                 var limit = Mathf.Min(skills.Count, MaxEquippedSkillSlots);
                 for (var index = 0; index < limit; index++)
                 {
-                    if (skills[index] != null && skills[index].isEnemySkill)
+                    if (skills[index] != null && skills[index].CanEnemyUse)
                     {
                         count++;
                     }
@@ -112,7 +111,6 @@ namespace Project2048.Enemy
             baseDefensePower = Mathf.Max(0, baseDefensePower);
             defensePower = Mathf.Max(0, defensePower);
             debuffPower = Mathf.Max(0, debuffPower);
-            difficultyScore = Mathf.Max(0, difficultyScore);
             criticalChance = Mathf.Clamp01(criticalChance);
             criticalDamageMultiplier = Mathf.Max(1f, criticalDamageMultiplier);
             actionsPerTurn = ActionsPerTurn;

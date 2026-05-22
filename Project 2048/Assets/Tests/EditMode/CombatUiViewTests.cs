@@ -5,6 +5,7 @@ using Project2048.Board2048;
 using Project2048.Combat;
 using Project2048.Enemy;
 using Project2048.Prototype;
+using Project2048.Rewards;
 using Project2048.Skills;
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -91,8 +92,8 @@ namespace Project2048.Tests
             }
         }
 
-        [Test]
-        public void ActionPhase_UsesFourAuthoredSkillSlotsDirectly()
+        [UnityTest]
+        public IEnumerator ActionPhase_UsesFourAuthoredSkillSlotsDirectly()
         {
             var viewObject = CreateOwnedGameObject("CombatView");
             var view = viewObject.AddComponent<CombatUiView>();
@@ -124,6 +125,9 @@ namespace Project2048.Tests
             SetPrivateField(view, "skillTierButtons", skillButtons);
             SetPrivateField(view, "skillTierLabels", skillLabels);
             SetPrivateField(view, "skillsEndTurnButton", endTurnButton);
+            var tooltipRoot = CreateStatusTooltipForTest(viewObject.transform);
+            SetPrivateField(view, "statusTooltip", tooltipRoot.gameObject);
+            SetPrivateField(view, "statusTooltipText", tooltipRoot.GetComponentInChildren<TMPro.TMP_Text>(true));
 
             var manager = CreateOwnedGameObject("CombatManager").AddComponent<CombatManager>();
             var player = CreateOwnedGameObject("Player").AddComponent<PlayerCombatController>();
@@ -131,7 +135,13 @@ namespace Project2048.Tests
             var bootstrap = CreateOwnedGameObject("Bootstrap").AddComponent<PrototypeCombatBootstrap>();
             SetPrivateField(bootstrap, "combatManager", manager);
 
-            var attack = CreateSkill("attack", "빛 발사", SkillType.Attack, cost: 0, power: 4);
+            var attack = CreateSkill(
+                "attack",
+                "빛 발사",
+                SkillType.Attack,
+                cost: 0,
+                power: 40,
+                description: "적에게 위력 40 피해를 준다.");
             var defense = CreateSkill("guard", "가시 방어", SkillType.Defense, cost: 0, power: 5);
             var flash = CreateSkill("flash", "섬광", SkillType.Debuff, cost: 0, power: 2);
             var counter = CreateSkill("counter", "카운터", SkillType.Defense, cost: 0, power: 3);
@@ -167,9 +177,108 @@ namespace Project2048.Tests
             Assert.That(skillButtons[1].GetComponent<Image>().color, Is.EqualTo(CombatUiView.ThemeSkillDefenseColor));
             Assert.That(skillButtons[2].GetComponent<Image>().color, Is.EqualTo(CombatUiView.ThemeSkillChangeColor));
 
+            var tooltipTarget = skillButtons[0].GetComponent<StatusEffectTooltipTarget>();
+            Assert.That(tooltipTarget, Is.InstanceOf<IPointerDownHandler>());
+            Assert.That(tooltipTarget, Is.Not.InstanceOf<IPointerEnterHandler>());
+            yield return ShowTooltipByLongPress(tooltipTarget);
+            Assert.That(tooltipRoot.gameObject.activeSelf, Is.True);
+            Assert.That(tooltipRoot.GetComponentInChildren<TMPro.TMP_Text>(true).text, Does.Contain("빛 발사"));
+            Assert.That(tooltipRoot.GetComponentInChildren<TMPro.TMP_Text>(true).text, Does.Contain("위력 40"));
+            Assert.That(tooltipRoot.GetComponentInChildren<TMPro.TMP_Text>(true).text, Does.Contain("명중 100"));
+            Assert.That(tooltipRoot.GetComponentInChildren<TMPro.TMP_Text>(true).text, Does.Contain("PP 0"));
+            Assert.That(tooltipRoot.GetComponentInChildren<TMPro.TMP_Text>(true).text, Does.Contain("적에게 위력 40 피해"));
+            Assert.That(tooltipRoot.GetComponentInChildren<TMPro.TMP_Text>(true).alignment, Is.EqualTo(TMPro.TextAlignmentOptions.Left));
+            ReleaseLongPressTooltip(tooltipTarget);
+
             var hpBeforeClick = enemy.CurrentHp;
             skillButtons[0].onClick.Invoke();
             Assert.That(enemy.CurrentHp, Is.LessThan(hpBeforeClick));
+        }
+
+        [UnityTest]
+        public IEnumerator RewardOverlay_BindsSkillChoiceTooltip()
+        {
+            var viewObject = CreateOwnedGameObject("CombatView");
+            var view = viewObject.AddComponent<CombatUiView>();
+            var rewardOverlay = CreateOwnedGameObject("RewardOverlay");
+            rewardOverlay.transform.SetParent(viewObject.transform, false);
+            var resultOverlay = CreateOwnedGameObject("ResultOverlay");
+            resultOverlay.transform.SetParent(viewObject.transform, false);
+            var boardPanel = CreateOwnedGameObject("BoardPanel");
+            boardPanel.transform.SetParent(viewObject.transform, false);
+            var actionPanel = CreateOwnedGameObject("ActionPanel");
+            actionPanel.transform.SetParent(viewObject.transform, false);
+            var rewardTitle = CreateTextChild(rewardOverlay.transform, "RewardTitle");
+            var rewardDescription = CreateTextChild(rewardOverlay.transform, "RewardDescription");
+            var firstText = CreateTextChild(rewardOverlay.transform, "FirstText");
+            var secondText = CreateTextChild(rewardOverlay.transform, "SecondText");
+            var thirdText = CreateTextChild(rewardOverlay.transform, "ThirdText");
+            var firstButton = CreateButtonChild(rewardOverlay.transform, "FirstButton");
+            var secondButton = CreateButtonChild(rewardOverlay.transform, "SecondButton");
+            var thirdButton = CreateButtonChild(rewardOverlay.transform, "ThirdButton");
+            var tooltipRoot = CreateStatusTooltipForTest(viewObject.transform);
+
+            SetPrivateField(view, "rewardOverlay", rewardOverlay);
+            SetPrivateField(view, "resultOverlay", resultOverlay);
+            SetPrivateField(view, "boardPanel", boardPanel);
+            SetPrivateField(view, "actionPanel", actionPanel);
+            SetPrivateField(view, "rewardTitleText", rewardTitle);
+            SetPrivateField(view, "rewardDescriptionText", rewardDescription);
+            SetPrivateField(view, "rewardChoiceButtons", new System.Collections.Generic.List<Button> { firstButton, secondButton, thirdButton });
+            SetPrivateField(view, "rewardChoiceLabels", new System.Collections.Generic.List<TMPro.TMP_Text> { firstText, secondText, thirdText });
+            SetPrivateField(view, "statusTooltip", tooltipRoot.gameObject);
+            SetPrivateField(view, "statusTooltipText", tooltipRoot.GetComponentInChildren<TMPro.TMP_Text>(true));
+
+            var manager = CreateOwnedGameObject("CombatManager").AddComponent<CombatManager>();
+            var rewardManager = CreateOwnedGameObject("RewardManager").AddComponent<RewardManager>();
+            var player = CreateOwnedGameObject("Player").AddComponent<PlayerCombatController>();
+            var enemy = CreateOwnedGameObject("Enemy").AddComponent<EnemyController>();
+            var bootstrap = CreateOwnedGameObject("Bootstrap").AddComponent<PrototypeCombatBootstrap>();
+            var finisher = CreateSkill("finisher", "강타", SkillType.Attack, cost: 0, power: 120);
+            var learnedSkill = CreateSkill(
+                "shield-bash",
+                "방패 밀치기",
+                SkillType.Attack,
+                cost: 5,
+                power: 60,
+                description: "현재 보호막 수치로 계산하여 적에게 위력 60 피해를 준다.");
+            var skillReward = ScriptableObject.CreateInstance<BattleRewardSO>();
+            skillReward.rewardKind = RewardChoiceKind.LearnSkill;
+            skillReward.skillToLearn = learnedSkill;
+            ownedObjects.Add(skillReward);
+            var rewardTable = ScriptableObject.CreateInstance<RewardTableSO>();
+            rewardTable.rewards = new System.Collections.Generic.List<BattleRewardSO> { skillReward };
+            ownedObjects.Add(rewardTable);
+
+            rewardManager.Initialize(new RunProgress(), rewardTable);
+            SetPrivateField(bootstrap, "combatManager", manager);
+            SetPrivateField(bootstrap, "rewardManager", rewardManager);
+
+            manager.SetCombatants(player, new[] { enemy });
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = CreatePlayerData(20, 999, finisher),
+                enemyDataList = new System.Collections.Generic.List<EnemySO> { CreateEnemyData("Enemy", 1, 0) },
+                boardMoveCount = 1,
+            });
+            manager.ResolveBoardPhase();
+            view.Initialize(bootstrap);
+
+            manager.RequestUseSkill(finisher, enemy);
+            rewardManager.OfferReward(new CombatResult(), player);
+
+            var tooltipTarget = firstButton.GetComponent<StatusEffectTooltipTarget>();
+            Assert.That(firstText.text, Does.Contain("방패 밀치기"));
+            Assert.That(tooltipTarget, Is.InstanceOf<IPointerDownHandler>());
+            Assert.That(tooltipTarget, Is.Not.InstanceOf<IPointerEnterHandler>());
+
+            yield return ShowTooltipByLongPress(tooltipTarget);
+
+            var tooltipText = tooltipRoot.GetComponentInChildren<TMPro.TMP_Text>(true).text;
+            Assert.That(tooltipRoot.gameObject.activeSelf, Is.True);
+            Assert.That(tooltipText, Does.Contain("방패 밀치기"));
+            Assert.That(tooltipText, Does.Contain("위력 60"));
+            Assert.That(tooltipText, Does.Contain("현재 보호막 수치"));
         }
 
         [Test]
@@ -228,8 +337,8 @@ namespace Project2048.Tests
             Assert.That(skillLabels[0].text, Does.Contain("COST LOW"));
         }
 
-        [Test]
-        public void CostFormulaHelpIcon_ShowsBoardCostFormulaOnHover()
+        [UnityTest]
+        public IEnumerator CostFormulaHelpIcon_ShowsBoardCostFormulaOnLongPress()
         {
             var viewObject = CreateOwnedRectTransformObject("CombatView");
             var view = viewObject.AddComponent<CombatUiView>();
@@ -255,7 +364,7 @@ namespace Project2048.Tests
             Assert.That(boardHelpIcon.GetComponent<StatusEffectTooltipTarget>(), Is.Not.Null);
             Assert.That(boardHelpLabel.text, Is.EqualTo("?"));
 
-            target.OnPointerEnter(new PointerEventData(null));
+            yield return ShowTooltipByLongPress(target);
 
             var tooltip = GetPrivateField(view, "statusTooltip") as GameObject;
             var tooltipText = GetPrivateField(view, "statusTooltipText") as TMPro.TMP_Text;
@@ -264,7 +373,7 @@ namespace Project2048.Tests
             Assert.That(tooltipText.text, Does.Contain("log2(전체 타일 합)"));
             Assert.That(tooltipText.text, Does.Contain("2의 거듭제곱"));
 
-            target.OnPointerExit(new PointerEventData(null));
+            ReleaseLongPressTooltip(target);
             Assert.That(tooltip.activeSelf, Is.False);
         }
 
@@ -305,6 +414,10 @@ namespace Project2048.Tests
             manager.ResolveBoardPhase();
 
             view.Initialize(bootstrap);
+            Assert.That(intentBubbleImage.rectTransform.sizeDelta.x, Is.EqualTo(CombatUiView.IntentBubbleSquareSize).Within(0.001f));
+            Assert.That(intentBubbleImage.rectTransform.sizeDelta.y, Is.EqualTo(CombatUiView.IntentBubbleSquareSize).Within(0.001f));
+            Assert.That(intentText.enableAutoSizing, Is.True);
+            Assert.That(intentText.alignment, Is.EqualTo(TMPro.TextAlignmentOptions.Center));
             Assert.That(intentText.text, Is.EqualTo("공격"));
             Assert.That(intentBubbleImage.color, Is.EqualTo(new Color(0.85f, 0.12f, 0.12f, 1f)));
             AssertHpFillIsRenderable(playerBattleHpFill);
@@ -674,8 +787,8 @@ namespace Project2048.Tests
                 $"{PrototypeCombatText.FormatIntent(enemyData.intentPattern[0])}\n{PrototypeCombatText.FormatIntent(enemyData.intentPattern[1])}\n{PrototypeCombatText.FormatIntent(enemyData.intentPattern[2])}"));
         }
 
-        [Test]
-        public void Initialize_BuildsBlockAndStatusEffectUiAroundHpBars()
+        [UnityTest]
+        public IEnumerator Initialize_BuildsBlockAndStatusEffectUiAroundHpBars()
         {
             var viewObject = CreateOwnedGameObject("CombatView");
             var view = viewObject.AddComponent<CombatUiView>();
@@ -760,15 +873,16 @@ namespace Project2048.Tests
             Assert.That(fearChipRect.sizeDelta.x, Is.GreaterThanOrEqualTo(28f));
 
             var tooltipTarget = fearChip.GetComponent<StatusEffectTooltipTarget>();
-            Assert.That(tooltipTarget, Is.InstanceOf<IPointerEnterHandler>());
-            ((IPointerEnterHandler)tooltipTarget).OnPointerEnter(new PointerEventData(null));
+            Assert.That(tooltipTarget, Is.InstanceOf<IPointerDownHandler>());
+            Assert.That(tooltipTarget, Is.Not.InstanceOf<IPointerEnterHandler>());
+            yield return ShowTooltipByLongPress(tooltipTarget);
 
             var tooltip = viewObject.transform.Find("StatusTooltip");
             Assert.That(tooltip, Is.Not.Null);
             Assert.That(tooltip.gameObject.activeSelf, Is.True);
-            Assert.That(tooltip.GetComponentInChildren<TMPro.TMP_Text>(true).text, Does.Contain("방어도"));
+            Assert.That(tooltip.GetComponentInChildren<TMPro.TMP_Text>(true).text, Does.Contain("공격 랭크"));
 
-            ((IPointerExitHandler)tooltipTarget).OnPointerExit(new PointerEventData(null));
+            ReleaseLongPressTooltip(tooltipTarget);
             Assert.That(tooltip.gameObject.activeSelf, Is.False);
         }
 
@@ -1224,6 +1338,17 @@ namespace Project2048.Tests
             return tooltipRect;
         }
 
+        private static IEnumerator ShowTooltipByLongPress(StatusEffectTooltipTarget target)
+        {
+            ((IPointerDownHandler)target).OnPointerDown(new PointerEventData(null));
+            yield return new WaitForSecondsRealtime(StatusEffectTooltipTarget.LongPressDelaySeconds + 0.02f);
+        }
+
+        private static void ReleaseLongPressTooltip(StatusEffectTooltipTarget target)
+        {
+            ((IPointerUpHandler)target).OnPointerUp(new PointerEventData(null));
+        }
+
         private static void SetStretchForTest(RectTransform rect, Vector2 offsetMin, Vector2 offsetMax)
         {
             rect.anchorMin = Vector2.zero;
@@ -1269,7 +1394,13 @@ namespace Project2048.Tests
             return data;
         }
 
-        private SkillSO CreateSkill(string skillId, string skillName, SkillType skillType, int cost, int power)
+        private SkillSO CreateSkill(
+            string skillId,
+            string skillName,
+            SkillType skillType,
+            int cost,
+            int power,
+            string description = null)
         {
             var skill = ScriptableObject.CreateInstance<SkillSO>();
             skill.skillId = skillId;
@@ -1277,6 +1408,7 @@ namespace Project2048.Tests
             skill.skillType = skillType;
             skill.cost = cost;
             skill.power = power;
+            skill.description = description;
             ownedObjects.Add(skill);
             return skill;
         }

@@ -36,7 +36,6 @@ namespace Project2048.Flow
 
             gameContext.SetGameState(GameContext.GameState.Loading);
             gameContext.SetStageIndex(FirstStageIndex);
-            gameContext.SetScore(0);
             gameContext.SetRunActive(true);
 
             // TODO: PlayerManager.InitializeDefaultPlayer();

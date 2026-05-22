@@ -85,7 +85,7 @@ namespace Project2048.Combat
             }
 
             return CalculateMoveDamage(
-                enemy?.EffectiveAttackPower ?? 0,
+                ResolveEnemyDamageStat(enemy, intent.damageStatSource),
                 intent.movePower > 0 ? intent.movePower : Mathf.Max(0, intent.value) * (int)MovePowerScale,
                 target?.EffectiveDefensePower ?? 0,
                 enemy?.CriticalChance ?? 0f,
@@ -148,6 +148,21 @@ namespace Project2048.Combat
                 DamageStatSource.DefensePower => player.EffectiveDefensePower,
                 DamageStatSource.ShieldHp => player.ShieldHp,
                 _ => player.EffectiveAttackPower,
+            };
+        }
+
+        private static int ResolveEnemyDamageStat(EnemyController enemy, DamageStatSource statSource)
+        {
+            if (enemy == null)
+            {
+                return 0;
+            }
+
+            return statSource switch
+            {
+                DamageStatSource.DefensePower => enemy.EffectiveDefensePower,
+                DamageStatSource.ShieldHp => enemy.ShieldHp,
+                _ => enemy.EffectiveAttackPower,
             };
         }
 

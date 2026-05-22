@@ -109,6 +109,140 @@ namespace Project2048.Prototype
             return $"{slotIndex + 1}. {skill.DisplayName}\n잊고 새 기술 배우기";
         }
 
+        public static string FormatSkillTooltip(SkillSnapshot skill)
+        {
+            if (skill == null)
+            {
+                return string.Empty;
+            }
+
+            return FormatSkillTooltip(
+                skill.DisplayName,
+                skill.SkillId,
+                skill.SkillType,
+                SkillEffectKind.Default,
+                skill.Cost,
+                skill.Power,
+                chargedPower: 0,
+                skill.Description,
+                DebuffType.None);
+        }
+
+        public static string FormatSkillTooltip(SkillSO skill)
+        {
+            if (skill == null)
+            {
+                return string.Empty;
+            }
+
+            var displayName = string.IsNullOrWhiteSpace(skill.skillName) ? skill.skillId : skill.skillName;
+            return FormatSkillTooltip(
+                displayName,
+                skill.skillId,
+                skill.skillType,
+                skill.ResolveEffectKind(),
+                skill.cost,
+                skill.power,
+                skill.chargedPower,
+                skill.description,
+                skill.debuffType);
+        }
+
+        private static string FormatSkillTooltip(
+            string displayName,
+            string skillId,
+            SkillType skillType,
+            SkillEffectKind effectKind,
+            int cost,
+            int power,
+            int chargedPower,
+            string description,
+            DebuffType debuffType)
+        {
+            var lines = new List<string>
+            {
+                displayName,
+                FormatSkillMetaLine(skillId, displayName, skillType, effectKind, cost, power, chargedPower, debuffType),
+            };
+
+            if (!string.IsNullOrWhiteSpace(description))
+            {
+                lines.Add(description);
+            }
+
+            return string.Join("\n", lines.Where(line => !string.IsNullOrWhiteSpace(line)));
+        }
+
+        private static string FormatSkillMetaLine(
+            string skillId,
+            string displayName,
+            SkillType skillType,
+            SkillEffectKind effectKind,
+            int cost,
+            int power,
+            int chargedPower,
+            DebuffType debuffType)
+        {
+            var effectivePower = chargedPower > 0 && chargedPower != power
+                ? chargedPower
+                : power;
+            return $"{ResolveSkillElement(skillId, displayName, debuffType)} / {ResolveSkillCategory(skillType, effectKind)}   위력 {FormatPower(effectivePower)}   명중 100   PP {cost}";
+        }
+
+        private static string ResolveSkillElement(string skillId, string displayName, DebuffType debuffType)
+        {
+            var normalizedId = skillId ?? string.Empty;
+            var normalizedName = displayName ?? string.Empty;
+            if (debuffType == DebuffType.Darkness ||
+                normalizedId.Contains("dark") ||
+                normalizedId.Contains("black") ||
+                normalizedName.Contains("암흑") ||
+                normalizedName.Contains("어둠"))
+            {
+                return "어둠";
+            }
+
+            if (normalizedId.Contains("light") ||
+                normalizedName.Contains("빛"))
+            {
+                return "빛";
+            }
+
+            return "전투";
+        }
+
+        private static string ResolveSkillCategory(SkillType skillType, SkillEffectKind effectKind)
+        {
+            if (skillType == SkillType.Debuff ||
+                effectKind == SkillEffectKind.AttackStageDown ||
+                effectKind == SkillEffectKind.DefenseStageDown ||
+                effectKind == SkillEffectKind.CostGainDown ||
+                effectKind == SkillEffectKind.BoardObstacleDebuff)
+            {
+                return "방해";
+            }
+
+            if (skillType == SkillType.Heal ||
+                effectKind == SkillEffectKind.BasicDefense ||
+                effectKind == SkillEffectKind.ThornGuard ||
+                effectKind == SkillEffectKind.Counter ||
+                effectKind == SkillEffectKind.Endure ||
+                effectKind == SkillEffectKind.DefenseStageUp ||
+                effectKind == SkillEffectKind.CriticalStageUp ||
+                effectKind == SkillEffectKind.NextAttackPowerMultiplier ||
+                effectKind == SkillEffectKind.NextAttackSplit)
+            {
+                return "보조";
+            }
+
+            return "공격";
+        }
+
+        private static string FormatPower(int power)
+        {
+            return power > 0 ? power.ToString() : "-";
+        }
+
         public static string FormatIntent(EnemyIntent intent)
         {
             if (intent == null)
@@ -178,20 +312,8 @@ namespace Project2048.Prototype
             }
 
             return snapshot.Phase == CombatPhase.Victory
-                ? $"전투 점수 {CalculatePrototypeScore(snapshot)}"
-                : $"최종 점수 {CalculatePrototypeScore(snapshot)}";
-        }
-
-        public static string FormatResultDescription(CombatSnapshot snapshot, int totalScore)
-        {
-            if (snapshot == null)
-            {
-                return string.Empty;
-            }
-
-            return snapshot.Phase == CombatPhase.Victory
-                ? $"전투 점수 {totalScore}"
-                : $"최종 점수 {totalScore}";
+                ? "보상을 선택하세요"
+                : "전투를 다시 시도하세요";
         }
 
         public static string FormatRewardTitle(BattleRewardSO reward)
@@ -251,10 +373,15 @@ namespace Project2048.Prototype
             };
         }
 
-        private static int CalculatePrototypeScore(CombatSnapshot snapshot)
+        public static string FormatRewardTooltip(BattleRewardSO reward)
         {
-            var defeatedEnemies = snapshot.Enemies == null ? 0 : snapshot.Enemies.Count;
-            return defeatedEnemies * 100 + snapshot.CurrentCost * 10;
+            if (reward == null || !reward.IsSkillReward)
+            {
+                return string.Empty;
+            }
+
+            return FormatSkillTooltip(reward.skillToLearn);
         }
+
     }
 }

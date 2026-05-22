@@ -19,12 +19,15 @@ MonoBehaviour:
   baseDefensePower: 0
   defensePower: 3
   debuffPower: 2
-  difficultyScore: 1
   criticalChance: 0
   criticalDamageMultiplier: 1.5
   aiComplexity: 1
   actionsPerTurn: 2
   skills:
+  - {fileID: 11400000, guid: 002a7e7b62e948f09848929ca26569f5, type: 2}
+  - {fileID: 11400000, guid: c1744bc96e754468b74f2e389042e23f, type: 2}
+  - {fileID: 11400000, guid: ced275c3ac4587d4f9f513c34c461400, type: 2}
+  - {fileID: 11400000, guid: 00966bf157b01874e90775ed704b2b9b, type: 2}
   portrait: {fileID: 21300000, guid: 1c2a79710dab0d04d9c087425a25b6e5, type: 3}
   actionEffects:
   - actionId: appear

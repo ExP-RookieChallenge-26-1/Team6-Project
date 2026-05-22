@@ -259,6 +259,7 @@ namespace Project2048.Rewards
             }
 
             var lightShot = CreateRuntimeSkill("light-shot", "빛 발사", SkillType.Attack, SkillEffectKind.BasicAttack, cost: 6, power: 60);
+            lightShot.availability = SkillAvailability.PlayerOnly;
             var shieldBash = CreateRuntimeSkill(
                 "shield-bash",
                 "방패 밀치기",

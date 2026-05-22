@@ -7,7 +7,6 @@ using Project2048.Combat;
 using Project2048.Enemy;
 using Project2048.Presentation;
 using Project2048.Rewards;
-using Project2048.Score;
 using Project2048.Skills;
 using TMPro;
 using UnityEngine;
@@ -52,6 +51,7 @@ namespace Project2048.Prototype
         public const float HpTextMinFontSize = 22f;
         public const float HpTextOutlineWidth = 0.26f;
         public const float HpTextOutlineDistance = 1.65f;
+        public const float IntentBubbleSquareSize = 136f;
         private const float HpDamageFlashDurationSeconds = 0.12f;
         private const float HpHitShakeMagnitude = 12f;
         private const float HpBarBorderThickness = 2.75f;
@@ -121,7 +121,6 @@ namespace Project2048.Prototype
 
         [Header("Reward overlay")]
         [SerializeField] private RewardManager rewardManager;
-        [SerializeField] private ScoreManager scoreManager;
         [SerializeField] private GameObject rewardOverlay;
         [SerializeField] private TMP_Text rewardTitleText;
         [SerializeField] private TMP_Text rewardDescriptionText;
@@ -199,9 +198,9 @@ namespace Project2048.Prototype
             UnbindCombatEvents();
             combatManager = owner != null ? owner.CombatManager : null;
             rewardManager = owner != null ? owner.RewardManager : rewardManager;
-            scoreManager = owner != null ? owner.ScoreManager : scoreManager;
 
             ResolveMissingReferences();
+            EnsureIntentBubbleDefaults();
             EnsureHpBarDefaults();
             ConfigureCostFormulaHelp();
             EnsureAudioDefaults();
@@ -509,6 +508,7 @@ namespace Project2048.Prototype
 
             if (intentBubble != null)
             {
+                EnsureIntentBubbleDefaults();
                 var visibleIntents = GetVisibleIntents(enemy);
                 var hasIntent = visibleIntents.Count > 0 && enemyIsAlive;
                 intentBubble.SetActive(hasIntent);
@@ -952,6 +952,7 @@ namespace Project2048.Prototype
                     button.gameObject.SetActive(isSlot);
                     button.interactable = hasSkill && canAfford;
                     ApplySkillSlotTheme(button, hasSkill ? visibleSkills[i] : null, canAfford);
+                    BindTooltip(button, hasSkill ? PrototypeCombatText.FormatSkillTooltip(visibleSkills[i]) : string.Empty);
                     var slotIndex = i;
                     BindButton(button, () => OnSkillSlotClicked(slotIndex));
                 }
@@ -1176,6 +1177,34 @@ namespace Project2048.Prototype
             enemyHpRoot = FindChildByName("EnemyHp")?.gameObject
                 ?? enemyHpBarFill?.transform.parent?.gameObject
                 ?? enemyHpText?.transform.parent?.gameObject;
+        }
+
+        private void EnsureIntentBubbleDefaults()
+        {
+            if (intentBubble != null && intentBubble.TryGetComponent<RectTransform>(out var bubbleRect))
+            {
+                bubbleRect.sizeDelta = new Vector2(IntentBubbleSquareSize, IntentBubbleSquareSize);
+            }
+
+            if (intentBubbleText == null)
+            {
+                return;
+            }
+
+            intentBubbleText.alignment = TextAlignmentOptions.Center;
+            intentBubbleText.enableAutoSizing = true;
+            intentBubbleText.fontSizeMin = 14f;
+            intentBubbleText.fontSizeMax = 26f;
+            intentBubbleText.textWrappingMode = TextWrappingModes.Normal;
+            intentBubbleText.overflowMode = TextOverflowModes.Ellipsis;
+            intentBubbleText.raycastTarget = false;
+
+            var textRect = intentBubbleText.rectTransform;
+            textRect.anchorMin = Vector2.zero;
+            textRect.anchorMax = Vector2.one;
+            textRect.offsetMin = new Vector2(8f, 8f);
+            textRect.offsetMax = new Vector2(-8f, -8f);
+            textRect.anchoredPosition = Vector2.zero;
         }
 
         private void SetEnemyHpVisible(bool visible)
@@ -2052,6 +2081,30 @@ namespace Project2048.Prototype
             }
         }
 
+        private void BindTooltip(Button button, string description)
+        {
+            if (button == null)
+            {
+                return;
+            }
+
+            var tooltipTarget = button.GetComponent<StatusEffectTooltipTarget>();
+            if (string.IsNullOrWhiteSpace(description))
+            {
+                if (tooltipTarget != null)
+                {
+                    tooltipTarget.enabled = false;
+                }
+
+                HideStatusTooltip();
+                return;
+            }
+
+            tooltipTarget ??= button.gameObject.AddComponent<StatusEffectTooltipTarget>();
+            tooltipTarget.enabled = true;
+            tooltipTarget.Initialize(description, ShowStatusTooltip, HideStatusTooltip);
+        }
+
         private void EnsureStatusTooltip()
         {
             if (statusTooltip == null)
@@ -2076,7 +2129,7 @@ namespace Project2048.Prototype
                 return;
             }
 
-            statusTooltipText.alignment = TextAlignmentOptions.Center;
+            statusTooltipText.alignment = TextAlignmentOptions.Left;
             statusTooltipText.fontSize = 15f;
             statusTooltipText.color = Color.white;
             statusTooltipText.textWrappingMode = TextWrappingModes.Normal;
@@ -2101,7 +2154,7 @@ namespace Project2048.Prototype
             if (tooltipRect != null)
             {
                 var lineCount = string.IsNullOrEmpty(description) ? 1 : description.Count(character => character == '\n') + 1;
-                tooltipRect.sizeDelta = new Vector2(lineCount > 1 ? 500f : 320f, Mathf.Clamp(30f + lineCount * 24f, 56f, 112f));
+                tooltipRect.sizeDelta = new Vector2(lineCount > 1 ? 540f : 320f, Mathf.Clamp(36f + lineCount * 28f, 64f, 220f));
             }
 
             if (source != null && ownerRect != null && tooltipRect != null)
@@ -2352,9 +2405,7 @@ namespace Project2048.Prototype
 
             if (resultDescriptionText != null)
             {
-                resultDescriptionText.text = scoreManager != null
-                    ? PrototypeCombatText.FormatResultDescription(snapshot, scoreManager.TotalScore)
-                    : PrototypeCombatText.FormatResultDescription(snapshot);
+                resultDescriptionText.text = PrototypeCombatText.FormatResultDescription(snapshot);
             }
 
             SetButtonLabel(restartButton, snapshot.Phase == CombatPhase.Victory ? "이어 하기" : "다시 하기");
@@ -2406,7 +2457,14 @@ namespace Project2048.Prototype
 
             for (var index = 0; index < skillReplacementButtons.Count; index++)
             {
-                skillReplacementButtons[index]?.gameObject.SetActive(false);
+                var button = skillReplacementButtons[index];
+                if (button == null)
+                {
+                    continue;
+                }
+
+                button.gameObject.SetActive(false);
+                BindTooltip(button, string.Empty);
             }
 
             for (var index = 0; index < rewardChoiceButtons.Count; index++)
@@ -2423,12 +2481,14 @@ namespace Project2048.Prototype
                 button.interactable = hasChoice;
                 if (!hasChoice)
                 {
+                    BindTooltip(button, string.Empty);
                     SetRewardChoiceLabel(index, string.Empty);
                     continue;
                 }
 
                 var choiceIndex = index;
                 SetRewardChoiceLabel(index, PrototypeCombatText.FormatRewardChoice(choices[index]));
+                BindTooltip(button, PrototypeCombatText.FormatRewardTooltip(choices[index]));
                 BindButton(button, () => OnRewardChoiceClicked(choiceIndex));
             }
         }
@@ -2438,7 +2498,14 @@ namespace Project2048.Prototype
             var skills = snapshot?.Skills;
             for (var index = 0; index < rewardChoiceButtons.Count; index++)
             {
-                rewardChoiceButtons[index]?.gameObject.SetActive(false);
+                var button = rewardChoiceButtons[index];
+                if (button == null)
+                {
+                    continue;
+                }
+
+                button.gameObject.SetActive(false);
+                BindTooltip(button, string.Empty);
             }
 
             for (var index = 0; index < skillReplacementButtons.Count; index++)
@@ -2453,6 +2520,7 @@ namespace Project2048.Prototype
 
                 button.gameObject.SetActive(isSlot);
                 button.interactable = hasSkill;
+                BindTooltip(button, hasSkill ? PrototypeCombatText.FormatSkillTooltip(skills[index]) : string.Empty);
 
                 var replacementIndex = index;
                 SetSkillReplacementLabel(

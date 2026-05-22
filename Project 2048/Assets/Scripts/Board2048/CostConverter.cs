@@ -36,17 +36,17 @@ namespace Project2048.Board2048
                 return 0;
             }
 
-            var totalValueScore = CalculateLog2Score(totalTileValue);
-            var largestTileBonus = CalculateLog2Score(largestTileValue) * LargestTileBonusMultiplier;
+            var totalValueWeight = CalculateLog2CostWeight(totalTileValue);
+            var largestTileBonus = CalculateLog2CostWeight(largestTileValue) * LargestTileBonusMultiplier;
             var fragmentationPenalty = (playableTileCount - 1) / FragmentationPenaltyDivisor;
 
-            return System.Math.Max(0, totalValueScore + largestTileBonus - fragmentationPenalty);
+            return System.Math.Max(0, totalValueWeight + largestTileBonus - fragmentationPenalty);
         }
 
         public int ConvertTileToCost(int tileValue)
         {
             return IsPlayableTileValue(tileValue)
-                ? CalculateLog2Score(tileValue) * (1 + LargestTileBonusMultiplier)
+                ? CalculateLog2CostWeight(tileValue) * (1 + LargestTileBonusMultiplier)
                 : 0;
         }
 
@@ -55,16 +55,16 @@ namespace Project2048.Board2048
             return tileValue >= 2 && (tileValue & (tileValue - 1)) == 0;
         }
 
-        private static int CalculateLog2Score(long value)
+        private static int CalculateLog2CostWeight(long value)
         {
-            var score = 0;
+            var weight = 0;
             while (value > 1)
             {
                 value >>= 1;
-                score++;
+                weight++;
             }
 
-            return score;
+            return weight;
         }
     }
 }

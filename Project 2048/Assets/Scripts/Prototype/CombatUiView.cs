@@ -34,12 +34,12 @@ namespace Project2048.Prototype
         public const float HpDamageTrailDelaySeconds = 0.25f;
         public const float HpDamageTrailDurationSeconds = 0.55f;
         public const float HpHitShakeDurationSeconds = 0.12f;
-        public static readonly Color ThemeHpFillColor = new(82f / 255f, 31f / 255f, 117f / 255f, 1f);
-        public static readonly Color ThemeHpDarkColor = new(7f / 255f, 8f / 255f, 12f / 255f, 1f);
+        public static readonly Color ThemeHpFillColor = new(73f / 255f, 175f / 255f, 181f / 255f, 1f);
+        public static readonly Color ThemeHpDarkColor = new(12f / 255f, 13f / 255f, 14f / 255f, 1f);
         public static readonly Color ThemeHpBarBackgroundColor = ThemeHpDarkColor;
-        public static readonly Color ThemeHpDamageTrailColor = new(31f / 255f, 12f / 255f, 46f / 255f, 0.92f);
-        public static readonly Color ThemeHpTextOutlineColor = new(138f / 255f, 61f / 255f, 199f / 255f, 1f);
-        public static readonly Color ThemeHpBorderColor = new(2f / 255f, 2f / 255f, 5f / 255f, 1f);
+        public static readonly Color ThemeHpDamageTrailColor = new(20f / 255f, 79f / 255f, 84f / 255f, 0.90f);
+        public static readonly Color ThemeHpTextOutlineColor = new(42f / 255f, 127f / 255f, 133f / 255f, 1f);
+        public static readonly Color ThemeHpBorderColor = new(0f, 0f, 0f, 1f);
         public const float HpStatusEffectXOffset = 18f;
         public const float HpTextMinFontSize = 22f;
         public const float HpTextOutlineWidth = 0.26f;

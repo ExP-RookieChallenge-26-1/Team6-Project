@@ -28,10 +28,10 @@ namespace Project2048.Presentation
         [SerializeField, Min(0.05f)] private float auraLifeSeconds = 0.38f;
         [SerializeField, Min(0.01f)] private float revealDelay = 0.18f;
         [SerializeField, Min(0.01f)] private float revealSharpness = 0.08f;
-        [SerializeField] private Color coreColor = new(0.78f, 0.98f, 1f, 0.98f);
-        [SerializeField] private Color outerColor = new(0.62f, 0.16f, 1f, 0.42f);
-        [SerializeField, Min(0.1f)] private float coreIntensity = 1.55f;
-        [SerializeField, Min(0.1f)] private float auraIntensity = 0.95f;
+        [SerializeField] private Color coreColor = new(0.20f, 0.58f, 0.62f, 0.98f);
+        [SerializeField] private Color outerColor = new(0.04f, 0.24f, 0.28f, 0.54f);
+        [SerializeField, Min(0.1f)] private float coreIntensity = 1.35f;
+        [SerializeField, Min(0.1f)] private float auraIntensity = 0.85f;
 
         private readonly MeshFilter[] coreFilters = new MeshFilter[ClawCount];
         private readonly MeshFilter[] auraFilters = new MeshFilter[ClawCount];

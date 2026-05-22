@@ -383,6 +383,8 @@ namespace Project2048.Tests
             var viewObject = CreateOwnedGameObject("CombatView");
             var view = viewObject.AddComponent<CombatUiView>();
             var intentBubbleImage = CreateImageChild(viewObject.transform, "IntentBubble");
+            var authoredIntentBubbleSize = new Vector2(92f, 92f);
+            intentBubbleImage.rectTransform.sizeDelta = authoredIntentBubbleSize;
             var intentText = CreateTextChild(viewObject.transform.Find("IntentBubble"), "IntentBubbleText");
             var playerBattleHp = CreateImageChild(viewObject.transform, "PlayerBattleHp");
             var playerBattleHpFill = CreateImageChild(playerBattleHp.transform, "Fill");
@@ -414,8 +416,8 @@ namespace Project2048.Tests
             manager.ResolveBoardPhase();
 
             view.Initialize(bootstrap);
-            Assert.That(intentBubbleImage.rectTransform.sizeDelta.x, Is.EqualTo(CombatUiView.IntentBubbleSquareSize).Within(0.001f));
-            Assert.That(intentBubbleImage.rectTransform.sizeDelta.y, Is.EqualTo(CombatUiView.IntentBubbleSquareSize).Within(0.001f));
+            Assert.That(intentBubbleImage.rectTransform.sizeDelta.x, Is.EqualTo(authoredIntentBubbleSize.x).Within(0.001f));
+            Assert.That(intentBubbleImage.rectTransform.sizeDelta.y, Is.EqualTo(authoredIntentBubbleSize.y).Within(0.001f));
             Assert.That(intentText.enableAutoSizing, Is.True);
             Assert.That(intentText.alignment, Is.EqualTo(TMPro.TextAlignmentOptions.Center));
             Assert.That(intentText.text, Is.EqualTo("공격"));
@@ -430,7 +432,7 @@ namespace Project2048.Tests
                 value = 3,
             });
 
-            Assert.That(intentText.text, Is.EqualTo("보호"));
+            Assert.That(intentText.text, Is.EqualTo("방어"));
             Assert.That(intentBubbleImage.color, Is.EqualTo(new Color(0.12f, 0.32f, 0.90f, 1f)));
 
             enemy.SetIntent(new EnemyIntent
@@ -440,7 +442,7 @@ namespace Project2048.Tests
                 value = 2,
             });
 
-            Assert.That(intentText.text, Is.EqualTo("섬광"));
+            Assert.That(intentText.text, Is.EqualTo("변화"));
             Assert.That(intentBubbleImage.color, Is.EqualTo(new Color(0.20f, 0.07f, 0.34f, 1f)));
 
             enemy.SetIntent(new EnemyIntent
@@ -450,7 +452,7 @@ namespace Project2048.Tests
                 value = 2,
             });
 
-            Assert.That(intentText.text, Is.EqualTo("공포"));
+            Assert.That(intentText.text, Is.EqualTo("변화"));
             Assert.That(intentBubbleImage.color, Is.EqualTo(new Color(0.45f, 0.03f, 0.06f, 1f)));
 
             manager.RequestUseSkillById("attack", 0);

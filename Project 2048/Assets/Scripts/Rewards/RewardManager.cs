@@ -10,6 +10,9 @@ namespace Project2048.Rewards
     public class RewardManager : MonoBehaviour
     {
         public const int OfferedChoiceCount = 3;
+        public const float HealTierOneMaxHpPercent = 0.25f;
+        public const float HealTierTwoMaxHpPercent = 0.5f;
+        public const float HealTierThreeMaxHpPercent = 0.75f;
 
         [SerializeField] private RewardTableSO rewardTable;
         [SerializeField] private RunProgress runProgress = new();
@@ -130,7 +133,10 @@ namespace Project2048.Rewards
                 case RewardChoiceKind.HealOne:
                 case RewardChoiceKind.HealTwo:
                 case RewardChoiceKind.HealThree:
-                    appliedAmount = ResolveHealAmount(reward);
+                    var maxHpForHeal = player != null
+                        ? player.MaxHp
+                        : Mathf.Max(1, RunProgress.CurrentHp);
+                    appliedAmount = ResolveHealAmount(reward, maxHpForHeal);
                     if (player != null)
                     {
                         appliedAmount = player.RestoreHp(appliedAmount);
@@ -277,7 +283,7 @@ namespace Project2048.Rewards
                 power: 0,
                 selfDefenseStageModifier: 2);
 
-            runtimeDefaultRewards.Add(CreateRuntimeReward("heal-2", "회복 2", RewardChoiceKind.HealTwo, healAmount: 2));
+            runtimeDefaultRewards.Add(CreateRuntimeReward("heal-2", "회복 2단계", RewardChoiceKind.HealTwo));
             runtimeDefaultRewards.Add(CreateRuntimeReward("next-attack", "다음 전투 공격", RewardChoiceKind.TemporaryAttackPower, temporaryAttack: 3));
             runtimeDefaultRewards.Add(CreateRuntimeReward("perm-attack", "공격력 영구 증가", RewardChoiceKind.PermanentAttackPower, permanentAttack: 1));
             runtimeDefaultRewards.Add(CreateRuntimeReward(
@@ -337,14 +343,20 @@ namespace Project2048.Rewards
             return reward;
         }
 
-        private static int ResolveHealAmount(BattleRewardSO reward)
+        private static int ResolveHealAmount(BattleRewardSO reward, int maxHp)
         {
-            return reward.rewardKind switch
+            maxHp = Mathf.Max(1, maxHp);
+            var percentOfMaxHp = reward.rewardKind switch
             {
-                RewardChoiceKind.HealOne => 1,
-                RewardChoiceKind.HealThree => 3,
-                _ => Mathf.Max(1, reward.healAmount),
+                RewardChoiceKind.HealOne => HealTierOneMaxHpPercent,
+                RewardChoiceKind.HealTwo => HealTierTwoMaxHpPercent,
+                RewardChoiceKind.HealThree => HealTierThreeMaxHpPercent,
+                _ => 0f,
             };
+
+            return percentOfMaxHp > 0f
+                ? Mathf.CeilToInt(maxHp * percentOfMaxHp)
+                : Mathf.Max(1, reward.healAmount);
         }
 
         private void DestroyRuntimeObjects()

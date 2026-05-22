@@ -80,16 +80,19 @@ namespace Project2048.Prototype
         private CombatManager combatManager;
         private CombatSnapshot snapshot;
         private Coroutine enemyDeathFadeCoroutine;
+        private Coroutine enemyDeathFadeDelayCoroutine;
         private Coroutine enemyAppearIntroCoroutine;
         private Coroutine enemyAttackLungeCoroutine;
         private Vector3 enemyRendererRestLocalPosition;
         private Vector3 enemyRendererRestLocalScale = Vector3.one;
         private bool hasEnemyRendererRestTransform;
         private bool lastEnemyWasDead;
+        private float delayEnemyDeathFadeUntilRealtime;
         private int lastPlayedEnemyDebuffVfxSequence;
         private Material runtimeShieldImpactParticleMaterial;
         private Material runtimeFearDebuffParticleMaterial;
         private Material runtimeDarknessDebuffParticleMaterial;
+        private readonly System.Collections.Generic.Dictionary<string, Material> runtimeSkillParticleMaterials = new();
         private RectTransform damageNumberPopupLayer;
         private readonly System.Collections.Generic.List<GameObject> damageNumberPopups = new();
 
@@ -118,6 +121,7 @@ namespace Project2048.Prototype
             snapshot = combatManager.GetSnapshot();
             lastEnemyWasDead = snapshot?.Enemies?.FirstOrDefault()?.IsDead ?? false;
             lastPlayedEnemyDebuffVfxSequence = 0;
+            delayEnemyDeathFadeUntilRealtime = 0f;
             Render(snapshot);
             SetEnemyRendererAlpha(lastEnemyWasDead ? 0f : 1f);
         }
@@ -188,8 +192,9 @@ namespace Project2048.Prototype
             }
 
             var isAttack = skill.skillType == SkillType.Attack;
-            if (isAttack && TryPlayProjectileSkillEffect(effect, target))
+            if (isAttack && TryPlayProjectileSkillEffect(effect, target, out var projectileLifetimeSeconds))
             {
+                DelayEnemyDeathFade(projectileLifetimeSeconds);
                 return;
             }
 
@@ -208,10 +213,13 @@ namespace Project2048.Prototype
             {
                 PlayReusableSkillParticleEffect(skill, anchor);
             }
+
+            DelayEnemyDeathFadeForSkillEffect(skill, effect);
         }
 
-        private bool TryPlayProjectileSkillEffect(CombatEffectBinding effect, EnemyController target)
+        private bool TryPlayProjectileSkillEffect(CombatEffectBinding effect, EnemyController target, out float lifetimeSeconds)
         {
+            lifetimeSeconds = 0f;
             if (effect?.vfxPrefab == null || target == null)
             {
                 return false;
@@ -239,12 +247,35 @@ namespace Project2048.Prototype
             var lifetime = projectile != null
                 ? Mathf.Max(effect.EffectiveAutoDestroySeconds, projectile.EstimatedLifetimeSeconds + 0.2f)
                 : effect.EffectiveAutoDestroySeconds;
+            lifetimeSeconds = lifetime;
             if (lifetime > 0f)
             {
                 Destroy(instance, lifetime);
             }
 
             return true;
+        }
+
+        private void DelayEnemyDeathFadeForSkillEffect(SkillSO skill, CombatEffectBinding effect)
+        {
+            if (skill == null || skill.skillType != SkillType.Attack)
+            {
+                return;
+            }
+
+            DelayEnemyDeathFade(ResolveSkillEffectVisualDurationSeconds(skill, effect));
+        }
+
+        private void DelayEnemyDeathFade(float durationSeconds)
+        {
+            if (durationSeconds <= 0f)
+            {
+                return;
+            }
+
+            delayEnemyDeathFadeUntilRealtime = Mathf.Max(
+                delayEnemyDeathFadeUntilRealtime,
+                Time.realtimeSinceStartup + durationSeconds);
         }
 
         private void Render(CombatSnapshot currentSnapshot)
@@ -480,6 +511,26 @@ namespace Project2048.Prototype
             if (effect.animationClip != null)
             {
                 duration = Mathf.Max(duration, effect.animationClip.length);
+            }
+
+            return duration;
+        }
+
+        private static float ResolveSkillEffectVisualDurationSeconds(SkillSO skill, CombatEffectBinding effect)
+        {
+            var duration = effect?.HasAuthoredVisual == true
+                ? ResolveAuthoredVisualDurationSeconds(effect)
+                : 0f;
+            if (effect?.HasAuthoredVisual != true && skill != null && skill.vfxFamily != SkillVfxFamily.None)
+            {
+                ResolveReusableSkillParticleDefaults(
+                    skill.vfxFamily,
+                    out var lifetimeSeconds,
+                    out _,
+                    out _,
+                    out _,
+                    out _);
+                duration = Mathf.Max(duration, lifetimeSeconds);
             }
 
             return duration;
@@ -1235,15 +1286,26 @@ namespace Project2048.Prototype
             if ((enemyJustDied || nextEnemyDead) &&
                 enemyRenderer != null &&
                 enemyDeathFadeCoroutine == null &&
+                enemyDeathFadeDelayCoroutine == null &&
                 enemyRenderer.color.a > 0.001f)
             {
-                PlayEnemyDeathFade();
+                var delaySeconds = Mathf.Max(0f, delayEnemyDeathFadeUntilRealtime - Time.realtimeSinceStartup);
+                if (delaySeconds > 0f && isActiveAndEnabled)
+                {
+                    enemyDeathFadeDelayCoroutine = StartCoroutine(EnemyDeathFadeDelayRoutine(delaySeconds));
+                }
+                else
+                {
+                    PlayEnemyDeathFade();
+                }
+
                 return;
             }
 
             if (!nextEnemyDead && enemyRenderer != null)
             {
                 ClearEnemyDeathFade();
+                delayEnemyDeathFadeUntilRealtime = 0f;
                 SetEnemyRendererAlpha(1f);
             }
         }
@@ -1265,6 +1327,14 @@ namespace Project2048.Prototype
             }
 
             enemyDeathFadeCoroutine = StartCoroutine(EnemyDeathFadeRoutine());
+        }
+
+        private IEnumerator EnemyDeathFadeDelayRoutine(float delaySeconds)
+        {
+            yield return new WaitForSecondsRealtime(Mathf.Max(0f, delaySeconds));
+            enemyDeathFadeDelayCoroutine = null;
+            delayEnemyDeathFadeUntilRealtime = 0f;
+            PlayEnemyDeathFade();
         }
 
         private IEnumerator EnemyDeathFadeRoutine()
@@ -1292,6 +1362,12 @@ namespace Project2048.Prototype
 
         private void ClearEnemyDeathFade()
         {
+            if (enemyDeathFadeDelayCoroutine != null)
+            {
+                StopCoroutine(enemyDeathFadeDelayCoroutine);
+                enemyDeathFadeDelayCoroutine = null;
+            }
+
             if (enemyDeathFadeCoroutine != null)
             {
                 StopCoroutine(enemyDeathFadeCoroutine);
@@ -1606,7 +1682,8 @@ namespace Project2048.Prototype
 
             particles.gameObject.name = objectName;
             particles.transform.localPosition = localOffset;
-            ConfigureParticleBurst(particles, color, material, lifetimeSeconds, burstCount, startSpeed, startSize, parent, swirl);
+            var resolvedMaterial = material ?? ResolveRuntimeSkillParticleMaterial(objectName, color);
+            ConfigureParticleBurst(particles, color, resolvedMaterial, lifetimeSeconds, burstCount, startSpeed, startSize, parent, swirl);
             particles.Play(true);
             if (swirl && Application.isPlaying && isActiveAndEnabled)
             {
@@ -1799,6 +1876,23 @@ namespace Project2048.Prototype
             };
         }
 
+        private Material ResolveRuntimeSkillParticleMaterial(string objectName, Color color)
+        {
+            var materialKey = $"{objectName}:{ColorUtility.ToHtmlStringRGBA(color)}";
+            if (runtimeSkillParticleMaterials.TryGetValue(materialKey, out var material) && material != null)
+            {
+                return material;
+            }
+
+            material = CreateParticleMaterial($"{objectName}Material", color);
+            if (material != null)
+            {
+                runtimeSkillParticleMaterials[materialKey] = material;
+            }
+
+            return material;
+        }
+
         private static Material CreateParticleMaterial(string materialName, Color color)
         {
             var shader = Shader.Find("Universal Render Pipeline/Particles/Unlit")
@@ -1870,9 +1964,26 @@ namespace Project2048.Prototype
             DestroyRuntimeMaterial(ref runtimeShieldImpactParticleMaterial);
             DestroyRuntimeMaterial(ref runtimeFearDebuffParticleMaterial);
             DestroyRuntimeMaterial(ref runtimeDarknessDebuffParticleMaterial);
+            foreach (var material in runtimeSkillParticleMaterials.Values)
+            {
+                DestroyRuntimeMaterialInstance(material);
+            }
+
+            runtimeSkillParticleMaterials.Clear();
         }
 
         private static void DestroyRuntimeMaterial(ref Material material)
+        {
+            if (material == null)
+            {
+                return;
+            }
+
+            DestroyRuntimeMaterialInstance(material);
+            material = null;
+        }
+
+        private static void DestroyRuntimeMaterialInstance(Material material)
         {
             if (material == null)
             {
@@ -1887,8 +1998,6 @@ namespace Project2048.Prototype
             {
                 DestroyImmediate(material);
             }
-
-            material = null;
         }
 
         private static string ResolveDebuffActionId(DebuffType debuffType)

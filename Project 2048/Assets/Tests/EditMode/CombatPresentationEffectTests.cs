@@ -1058,6 +1058,45 @@ namespace Project2048.Tests
             Assert.That(viewObject.transform.Find("CombatEffectAudio"), Is.Not.Null);
         }
 
+        [Test]
+        public void CombatWorldSpriteView_PlayerReusableSkill_AssignsGeneratedParticleMaterial()
+        {
+            var viewObject = CreateOwnedGameObject("WorldSpriteView");
+            var view = viewObject.AddComponent<CombatWorldSpriteView>();
+            var enemyRenderer = CreateOwnedGameObject("EnemySprite").AddComponent<SpriteRenderer>();
+            var manager = CreateOwnedGameObject("CombatManager").AddComponent<CombatManager>();
+            var player = CreateOwnedGameObject("Player").AddComponent<PlayerCombatController>();
+            var enemy = CreateOwnedGameObject("Enemy").AddComponent<EnemyController>();
+            var bootstrap = CreateOwnedGameObject("Bootstrap").AddComponent<PrototypeCombatBootstrap>();
+            var playerData = CreatePlayerData(maxHp: 20, attackPower: 2);
+            var enemyData = CreateEnemyData(maxHp: 10, attackValue: 0);
+            var attack = CreateSkill("attack", SkillType.Attack, cost: 0, power: 1);
+            var expectedColor = new Color(0.4f, 0.8f, 1f, 0.9f);
+            attack.vfxFamily = SkillVfxFamily.BuffAura;
+            attack.vfxPrimaryColor = expectedColor;
+
+            SetPrivateField(view, "enemyRenderer", enemyRenderer);
+            SetPrivateField(bootstrap, "combatManager", manager);
+
+            manager.SetCombatants(player, new[] { enemy });
+            view.Initialize(bootstrap);
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new List<EnemySO> { enemyData },
+                boardMoveCount = 1,
+            });
+            manager.ResolveBoardPhase();
+
+            Assert.That(manager.RequestUseSkill(attack, enemy), Is.True);
+
+            var particles = enemyRenderer.transform.Find("BuffAuraSkillParticles")?.GetComponent<ParticleSystem>();
+            Assert.That(particles, Is.Not.Null);
+            var renderer = particles.GetComponent<ParticleSystemRenderer>();
+            Assert.That(renderer.sharedMaterial, Is.Not.Null);
+            AssertColorApproximately(ResolveMaterialColor(renderer.sharedMaterial), expectedColor);
+        }
+
         [UnityTest]
         public IEnumerator CombatWorldSpriteView_PlayerProjectileSkill_DelaysActivationSfx()
         {

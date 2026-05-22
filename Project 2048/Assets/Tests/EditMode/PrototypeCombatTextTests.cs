@@ -39,7 +39,7 @@ namespace Project2048.Tests
         }
 
         [Test]
-        public void FormatIntent_UsesFourIntentLabels()
+        public void FormatIntent_UsesActionDefenseChangeLabels()
         {
             Assert.That(PrototypeCombatText.FormatIntent(new EnemyIntent
             {
@@ -51,21 +51,21 @@ namespace Project2048.Tests
             {
                 intentType = EnemyIntentType.Defense,
                 value = 3,
-            }), Is.EqualTo("보호"));
+            }), Is.EqualTo("방어"));
 
             Assert.That(PrototypeCombatText.FormatIntent(new EnemyIntent
             {
                 intentType = EnemyIntentType.Debuff,
                 debuffType = DebuffType.Darkness,
                 value = 2,
-            }), Is.EqualTo("섬광"));
+            }), Is.EqualTo("변화"));
 
             Assert.That(PrototypeCombatText.FormatIntent(new EnemyIntent
             {
                 intentType = EnemyIntentType.Debuff,
                 debuffType = DebuffType.Fear,
                 value = 2,
-            }), Is.EqualTo("공포"));
+            }), Is.EqualTo("변화"));
         }
 
         [Test]
@@ -79,7 +79,7 @@ namespace Project2048.Tests
                 new EnemyIntent { displayName = "네번째", intentType = EnemyIntentType.Attack },
             };
 
-            Assert.That(PrototypeCombatText.FormatIntents(intents), Is.EqualTo("빛 발사\n가시 방어\n공포"));
+            Assert.That(PrototypeCombatText.FormatIntents(intents), Is.EqualTo("공격\n방어\n변화"));
         }
 
         [Test]
@@ -166,6 +166,12 @@ namespace Project2048.Tests
                 reward.temporaryBoardMoveCountBonus = 2;
 
                 Assert.That(PrototypeCombatText.FormatRewardChoice(reward), Is.EqualTo("다음 전투 이동 횟수 +2"));
+                reward.rewardKind = RewardChoiceKind.HealOne;
+                Assert.That(PrototypeCombatText.FormatRewardChoice(reward), Is.EqualTo("회복 1단계"));
+                reward.rewardKind = RewardChoiceKind.HealTwo;
+                Assert.That(PrototypeCombatText.FormatRewardChoice(reward), Is.EqualTo("회복 2단계"));
+                reward.rewardKind = RewardChoiceKind.HealThree;
+                Assert.That(PrototypeCombatText.FormatRewardChoice(reward), Is.EqualTo("회복 3단계"));
             }
             finally
             {

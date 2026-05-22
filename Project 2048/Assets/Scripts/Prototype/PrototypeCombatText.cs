@@ -250,22 +250,12 @@ namespace Project2048.Prototype
                 return string.Empty;
             }
 
-            if (!string.IsNullOrWhiteSpace(intent.displayName))
-            {
-                return intent.displayName;
-            }
-
             return intent.intentType switch
             {
-                EnemyIntentType.Defense => "보호",
                 EnemyIntentType.Attack => "공격",
-                EnemyIntentType.Debuff => intent.debuffType switch
-                {
-                    DebuffType.Darkness => "섬광",
-                    DebuffType.Fear => "공포",
-                    _ => "약화",
-                },
-                _ => intent.intentType.ToString(),
+                EnemyIntentType.Defense => "방어",
+                EnemyIntentType.Debuff => "변화",
+                _ => "변화",
             };
         }
 
@@ -353,9 +343,9 @@ namespace Project2048.Prototype
 
             return reward.rewardKind switch
             {
-                RewardChoiceKind.HealOne => "회복 1",
-                RewardChoiceKind.HealTwo => "회복 2",
-                RewardChoiceKind.HealThree => "회복 3",
+                RewardChoiceKind.HealOne => "회복 1단계",
+                RewardChoiceKind.HealTwo => "회복 2단계",
+                RewardChoiceKind.HealThree => "회복 3단계",
                 RewardChoiceKind.TemporaryAttackPower => $"다음 전투 공격력 +{reward.temporaryAttackPowerBonus}",
                 RewardChoiceKind.TemporaryDefensePower => $"다음 전투 방어력 +{reward.temporaryDefensePowerBonus}",
                 RewardChoiceKind.TemporaryBoardMoveCount => $"다음 전투 이동 횟수 +{reward.temporaryBoardMoveCountBonus}",

@@ -51,10 +51,13 @@ namespace Project2048.Prototype
         public const float HpTextMinFontSize = 22f;
         public const float HpTextOutlineWidth = 0.26f;
         public const float HpTextOutlineDistance = 1.65f;
-        public const float IntentBubbleSquareSize = 136f;
+        public const float IntentBubbleSquareSize = 104f;
         private const float HpDamageFlashDurationSeconds = 0.12f;
         private const float HpHitShakeMagnitude = 12f;
         private const float HpBarBorderThickness = 2.75f;
+        private const float IntentBubbleTextPadding = 6f;
+        private const float IntentBubbleTextMinFontSize = 12f;
+        private const float IntentBubbleTextMaxFontSize = 22f;
         private const string HpBarInteriorName = "HpBarInterior";
         private const string HpBarOutlineName = "HpBarOutline";
         private const string StatusEffectTemplateName = "StatusEffectIconSample";
@@ -1183,7 +1186,11 @@ namespace Project2048.Prototype
         {
             if (intentBubble != null && intentBubble.TryGetComponent<RectTransform>(out var bubbleRect))
             {
-                bubbleRect.sizeDelta = new Vector2(IntentBubbleSquareSize, IntentBubbleSquareSize);
+                var hasAuthoredSize = bubbleRect.sizeDelta.x > 0.01f && bubbleRect.sizeDelta.y > 0.01f;
+                if (!hasAuthoredSize)
+                {
+                    bubbleRect.sizeDelta = new Vector2(IntentBubbleSquareSize, IntentBubbleSquareSize);
+                }
             }
 
             if (intentBubbleText == null)
@@ -1193,8 +1200,16 @@ namespace Project2048.Prototype
 
             intentBubbleText.alignment = TextAlignmentOptions.Center;
             intentBubbleText.enableAutoSizing = true;
-            intentBubbleText.fontSizeMin = 14f;
-            intentBubbleText.fontSizeMax = 26f;
+            if (intentBubbleText.fontSizeMin <= 0f)
+            {
+                intentBubbleText.fontSizeMin = IntentBubbleTextMinFontSize;
+            }
+
+            if (intentBubbleText.fontSizeMax <= 0f || intentBubbleText.fontSizeMax > 40f)
+            {
+                intentBubbleText.fontSizeMax = IntentBubbleTextMaxFontSize;
+            }
+
             intentBubbleText.textWrappingMode = TextWrappingModes.Normal;
             intentBubbleText.overflowMode = TextOverflowModes.Ellipsis;
             intentBubbleText.raycastTarget = false;
@@ -1202,8 +1217,17 @@ namespace Project2048.Prototype
             var textRect = intentBubbleText.rectTransform;
             textRect.anchorMin = Vector2.zero;
             textRect.anchorMax = Vector2.one;
-            textRect.offsetMin = new Vector2(8f, 8f);
-            textRect.offsetMax = new Vector2(-8f, -8f);
+            var hasAuthoredPadding =
+                Mathf.Abs(textRect.offsetMin.x) > 0.01f ||
+                Mathf.Abs(textRect.offsetMin.y) > 0.01f ||
+                Mathf.Abs(textRect.offsetMax.x) > 0.01f ||
+                Mathf.Abs(textRect.offsetMax.y) > 0.01f;
+            if (!hasAuthoredPadding)
+            {
+                textRect.offsetMin = new Vector2(IntentBubbleTextPadding, IntentBubbleTextPadding);
+                textRect.offsetMax = new Vector2(-IntentBubbleTextPadding, -IntentBubbleTextPadding);
+            }
+
             textRect.anchoredPosition = Vector2.zero;
         }
 

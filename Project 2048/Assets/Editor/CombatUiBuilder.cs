@@ -28,6 +28,7 @@ namespace Project2048.PrototypeEditor
         private const string SkillFolder = DataFolder + "/Skills";
         private const string BattleScenePath = "Assets/Scenes/BattleScene.unity";
         private const string PlayerSpritePath = "Assets/Art/Prototype/PrototypePlayerCutout.png";
+        private const float SkillSlotSize = 150f;
         private const string EnemySpritePath = "Assets/Art/Prototype/PrototypeEnemyCutout.png";
         private const string HpBarSpritePath = "Assets/Art/UI/WideHexHpBar.png";
         private const string HpBarOutlineSpritePath = "Assets/Art/UI/WideHexHpBarOutline.png";
@@ -197,10 +198,10 @@ namespace Project2048.PrototypeEditor
             var existingLabels = so.FindProperty("skillTierLabels");
             var positions = new[]
             {
-                new Vector2(-205f, 110f),
-                new Vector2(205f, 110f),
-                new Vector2(-205f, -40f),
-                new Vector2(205f, -40f),
+                new Vector2(-88f, 84f),
+                new Vector2(88f, 84f),
+                new Vector2(-88f, -84f),
+                new Vector2(88f, -84f),
             };
 
             for (var index = 0; index < PlayerCombatController.MaxEquippedSkillSlots; index++)
@@ -843,18 +844,18 @@ namespace Project2048.PrototypeEditor
 
             button.name = $"SkillSlotButton_{index + 1}";
             var rect = button.GetComponent<RectTransform>();
-            SetAnchor(rect, new Vector2(0.5f, 0.5f), new Vector2(360f, 118f), anchoredPosition);
+            SetAnchor(rect, new Vector2(0.5f, 0.5f), new Vector2(SkillSlotSize, SkillSlotSize), anchoredPosition);
 
             var image = button.GetComponent<Image>() ?? button.gameObject.AddComponent<Image>();
             var skillColor = ResolveDesignTimeSkillSlotColor(index);
             image.color = skillColor;
-            image.sprite = EnsureHpBarSpriteAsset();
+            image.sprite = null;
             image.type = Image.Type.Simple;
             image.raycastTarget = true;
 
             var outline = button.GetComponent<Outline>() ?? button.gameObject.AddComponent<Outline>();
-            outline.effectColor = Color.Lerp(skillColor, Color.white, 0.28f);
-            outline.effectDistance = new Vector2(3f, -3f);
+            outline.effectColor = Color.Lerp(skillColor, CombatUiView.ThemePrimaryColor, 0.28f);
+            outline.effectDistance = new Vector2(2f, -2f);
             outline.useGraphicAlpha = true;
 
             var layout = button.GetComponent<LayoutElement>() ?? button.gameObject.AddComponent<LayoutElement>();
@@ -897,9 +898,9 @@ namespace Project2048.PrototypeEditor
                 return;
             }
 
-            label.fontSize = 23f;
+            label.fontSize = 20f;
             label.fontStyle = FontStyles.Bold;
-            label.alignment = TextAlignmentOptions.MidlineLeft;
+            label.alignment = TextAlignmentOptions.Center;
             label.color = Color.white;
             label.textWrappingMode = TextWrappingModes.Normal;
             label.raycastTarget = false;
@@ -908,7 +909,7 @@ namespace Project2048.PrototypeEditor
                 label.font = font;
             }
 
-            SetStretch(label.rectTransform, Vector2.zero, Vector2.one, new Vector2(34f, 6f), new Vector2(-18f, -6f));
+            SetStretch(label.rectTransform, Vector2.zero, Vector2.one, new Vector2(8f, 8f), new Vector2(-8f, -8f));
         }
 
         private static void CreateStatusBar(

@@ -41,9 +41,9 @@ namespace Project2048.Prototype
         public static readonly Color ThemeHpDamageTrailColor = new(20f / 255f, 79f / 255f, 84f / 255f, 0.90f);
         public static readonly Color ThemeHpTextOutlineColor = new(42f / 255f, 127f / 255f, 133f / 255f, 1f);
         public static readonly Color ThemeHpBorderColor = new(0f, 0f, 0f, 1f);
-        public static readonly Color ThemeSkillAttackColor = new(237f / 255f, 92f / 255f, 75f / 255f, 1f);
-        public static readonly Color ThemeSkillDefenseColor = ThemePrimaryColor;
-        public static readonly Color ThemeSkillChangeColor = new(146f / 255f, 110f / 255f, 211f / 255f, 1f);
+        public static readonly Color ThemeSkillAttackColor = new(79f / 255f, 106f / 255f, 90f / 255f, 1f);
+        public static readonly Color ThemeSkillDefenseColor = new(45f / 255f, 103f / 255f, 107f / 255f, 1f);
+        public static readonly Color ThemeSkillChangeColor = new(68f / 255f, 88f / 255f, 105f / 255f, 1f);
         private static readonly Color ThemeSkillEmptyColor = new(22f / 255f, 25f / 255f, 28f / 255f, 1f);
         public const float HpStatusEffectXOffset = 18f;
         public const float HpTextMinFontSize = 22f;
@@ -947,7 +947,7 @@ namespace Project2048.Prototype
                 if (button != null)
                 {
                     button.gameObject.SetActive(isSlot);
-                    button.interactable = canAfford;
+                    button.interactable = hasSkill;
                     ApplySkillSlotTheme(button, hasSkill ? visibleSkills[i] : null, canAfford);
                     var slotIndex = i;
                     BindButton(button, () => OnSkillSlotClicked(slotIndex));
@@ -989,7 +989,7 @@ namespace Project2048.Prototype
 
             var baseColor = skill != null ? ResolveSkillTypeColor(skill.SkillType) : ThemeSkillEmptyColor;
             var normalColor = skill != null && !canAfford ? DimSkillSlotColor(baseColor) : baseColor;
-            var highlightedColor = Color.Lerp(normalColor, Color.white, 0.14f);
+            var highlightedColor = Color.Lerp(normalColor, ThemePrimaryColor, 0.18f);
             var pressedColor = Color.Lerp(normalColor, Color.black, 0.18f);
             normalColor.a = 1f;
             highlightedColor.a = 1f;
@@ -1012,7 +1012,7 @@ namespace Project2048.Prototype
             var outline = button.GetComponent<Outline>();
             if (outline != null)
             {
-                outline.effectColor = Color.Lerp(baseColor, Color.white, 0.28f);
+                outline.effectColor = Color.Lerp(baseColor, ThemePrimaryColor, 0.28f);
                 outline.effectDistance = new Vector2(3f, -3f);
                 outline.useGraphicAlpha = true;
             }

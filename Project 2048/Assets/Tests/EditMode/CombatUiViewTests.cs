@@ -166,6 +166,66 @@ namespace Project2048.Tests
             Assert.That(skillButtons[0].GetComponent<Image>().color, Is.EqualTo(CombatUiView.ThemeSkillAttackColor));
             Assert.That(skillButtons[1].GetComponent<Image>().color, Is.EqualTo(CombatUiView.ThemeSkillDefenseColor));
             Assert.That(skillButtons[2].GetComponent<Image>().color, Is.EqualTo(CombatUiView.ThemeSkillChangeColor));
+
+            var hpBeforeClick = enemy.CurrentHp;
+            skillButtons[0].onClick.Invoke();
+            Assert.That(enemy.CurrentHp, Is.LessThan(hpBeforeClick));
+        }
+
+        [Test]
+        public void ActionPhase_KeepsUnaffordableAuthoredSkillButtonsSelectable()
+        {
+            var viewObject = CreateOwnedGameObject("CombatView");
+            var view = viewObject.AddComponent<CombatUiView>();
+            var boardPanel = CreateOwnedGameObject("BoardPanel");
+            var actionPanel = CreateOwnedGameObject("ActionPanel");
+            var skillsView = CreateOwnedGameObject("SkillsView");
+            boardPanel.transform.SetParent(viewObject.transform, false);
+            actionPanel.transform.SetParent(viewObject.transform, false);
+            skillsView.transform.SetParent(actionPanel.transform, false);
+
+            var costText = CreateTextChild(actionPanel.transform, "CostText");
+            var skillsHeader = CreateTextChild(skillsView.transform, "SkillsHeader");
+            var skillButtons = new System.Collections.Generic.List<Button>();
+            var skillLabels = new System.Collections.Generic.List<TMPro.TMP_Text>();
+            for (var index = 0; index < PlayerCombatController.MaxEquippedSkillSlots; index++)
+            {
+                var button = CreateButtonChild(skillsView.transform, $"SkillButton{index + 1}");
+                var label = CreateTextChild(button.transform, "Label");
+                skillButtons.Add(button);
+                skillLabels.Add(label);
+            }
+
+            SetPrivateField(view, "boardPanel", boardPanel);
+            SetPrivateField(view, "actionPanel", actionPanel);
+            SetPrivateField(view, "skillsView", skillsView);
+            SetPrivateField(view, "costText", costText);
+            SetPrivateField(view, "skillsHeaderText", skillsHeader);
+            SetPrivateField(view, "skillTierButtons", skillButtons);
+            SetPrivateField(view, "skillTierLabels", skillLabels);
+
+            var manager = CreateOwnedGameObject("CombatManager").AddComponent<CombatManager>();
+            var player = CreateOwnedGameObject("Player").AddComponent<PlayerCombatController>();
+            var enemy = CreateOwnedGameObject("Enemy").AddComponent<EnemyController>();
+            var bootstrap = CreateOwnedGameObject("Bootstrap").AddComponent<PrototypeCombatBootstrap>();
+            SetPrivateField(bootstrap, "combatManager", manager);
+
+            var expensive = CreateSkill("expensive", "큰 기술", SkillType.Attack, cost: 99, power: 4);
+            var playerData = CreatePlayerData(20, 0, expensive);
+            var enemyData = CreateEnemyData("Enemy", 10, 0);
+
+            manager.SetCombatants(player, new[] { enemy });
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new System.Collections.Generic.List<EnemySO> { enemyData },
+                boardMoveCount = 1,
+            });
+            manager.ResolveBoardPhase();
+            view.Initialize(bootstrap);
+
+            Assert.That(skillButtons[0].interactable, Is.True);
+            Assert.That(skillLabels[0].text, Does.Contain("COST LOW"));
         }
 
         [Test]

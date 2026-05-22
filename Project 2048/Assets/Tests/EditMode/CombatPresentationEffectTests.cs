@@ -553,6 +553,7 @@ namespace Project2048.Tests
             var slash = playerRenderer.transform.Find("EnemyClawSlash2D")?.GetComponent<CombatClawSlash2DEffect>();
             Assert.That(slash, Is.Not.Null);
             Assert.That(slash.transform.localPosition.x, Is.GreaterThan(0.2f));
+            Assert.That(Mathf.DeltaAngle(slash.transform.localEulerAngles.z, 90f), Is.EqualTo(0f).Within(0.001f));
             Assert.That(slash.GetComponentInChildren<ParticleSystem>(), Is.Null);
             Assert.That(slash.GetComponentInChildren<LineRenderer>(), Is.Null);
 

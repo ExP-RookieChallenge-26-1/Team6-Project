@@ -74,6 +74,7 @@ namespace Project2048.Prototype
         [SerializeField] private CombatClawSlash2DEffect enemyClawSlashEffectPrefab;
         [SerializeField] private bool playEnemyClawSlashEffect = true;
         [SerializeField] private Vector3 enemyClawSlashLocalOffset = new(0.28f, 0.2f, 0f);
+        [SerializeField] private Vector3 enemyClawSlashLocalEulerAngles = new(0f, 0f, 90f);
         [SerializeField, Min(0.01f)] private float enemyClawSlashScale = 1f;
 
         private CombatManager combatManager;
@@ -881,7 +882,7 @@ namespace Project2048.Prototype
 
             slash.gameObject.name = "EnemyClawSlash2D";
             slash.transform.localPosition = enemyClawSlashLocalOffset;
-            slash.transform.localRotation = Quaternion.identity;
+            slash.transform.localRotation = Quaternion.Euler(enemyClawSlashLocalEulerAngles);
             slash.transform.localScale = Vector3.one * Mathf.Max(0.01f, enemyClawSlashScale);
             slash.Play(
                 ResolveEnemyAttackDirectionSign(),

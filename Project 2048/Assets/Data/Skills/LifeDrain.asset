@@ -67,4 +67,10 @@ MonoBehaviour:
     sfxDelaySeconds: 0
     localOffset: {x: 0, y: 0, z: 0}
     autoDestroySeconds: 1.25
+  vfxFamily: 7
+  vfxPrimaryColor: {r: 0.18, g: 0.82, b: 0.34, a: 1}
+  vfxSecondaryColor: {r: 0.02, g: 0.08, b: 0.04, a: 1}
+  vfxScale: 1
+  vfxIntensity: 1.1
+  vfxRepeatCount: 1
   description: "적에게 위력 60 피해를 준다. 실제 체력 피해의 50%만큼 체력을 회복한다."

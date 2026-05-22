@@ -67,4 +67,10 @@ MonoBehaviour:
     sfxDelaySeconds: 0
     localOffset: {x: 0, y: 0, z: 0}
     autoDestroySeconds: 1.25
+  vfxFamily: 5
+  vfxPrimaryColor: {r: 0.42, g: 0.55, b: 0.72, a: 1}
+  vfxSecondaryColor: {r: 0.82, g: 0.86, b: 0.9, a: 1}
+  vfxScale: 1
+  vfxIntensity: 1
+  vfxRepeatCount: 1
   description: "내 방어 랭크를 2 올린다."

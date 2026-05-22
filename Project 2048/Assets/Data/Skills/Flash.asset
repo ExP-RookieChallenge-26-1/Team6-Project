@@ -67,4 +67,10 @@ MonoBehaviour:
     sfxDelaySeconds: 0
     localOffset: {x: 0, y: 0, z: 0}
     autoDestroySeconds: 1.25
+  vfxFamily: 6
+  vfxPrimaryColor: {r: 1, g: 1, b: 1, a: 1}
+  vfxSecondaryColor: {r: 1, g: 0.9, b: 0.32, a: 1}
+  vfxScale: 1
+  vfxIntensity: 1.2
+  vfxRepeatCount: 1
   description: "적의 공격 랭크를 1 낮춘다."

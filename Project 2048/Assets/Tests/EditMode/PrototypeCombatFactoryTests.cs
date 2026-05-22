@@ -2,6 +2,7 @@ using System.Linq;
 using NUnit.Framework;
 using Project2048.Enemy;
 using Project2048.Prototype;
+using Project2048.Skills;
 using UnityEngine;
 
 namespace Project2048.Tests
@@ -72,6 +73,37 @@ namespace Project2048.Tests
         }
 
         [Test]
+        public void CreateDefaultLoadout_AssignsReusableVfxFamilies()
+        {
+            var loadout = PrototypeCombatFactory.CreateDefaultLoadout();
+
+            try
+            {
+                Assert.That(loadout.Skills.Select(skill => skill.vfxFamily), Is.EqualTo(new[]
+                {
+                    SkillVfxFamily.SlashArc,
+                    SkillVfxFamily.LightProjectile,
+                    SkillVfxFamily.SlashArc,
+                    SkillVfxFamily.LightProjectile,
+                    SkillVfxFamily.ShieldDome,
+                    SkillVfxFamily.ShieldDome,
+                    SkillVfxFamily.ShieldDome,
+                    SkillVfxFamily.ShieldDome,
+                    SkillVfxFamily.BuffAura,
+                    SkillVfxFamily.ImpactBurst,
+                    SkillVfxFamily.DebuffWave,
+                }));
+                Assert.That(loadout.Skills.All(skill => skill.vfxScale > 0f), Is.True);
+                Assert.That(loadout.Skills.All(skill => skill.vfxIntensity > 0f), Is.True);
+                Assert.That(loadout.Skills.All(skill => skill.vfxRepeatCount >= 1), Is.True);
+            }
+            finally
+            {
+                loadout.Dispose();
+            }
+        }
+
+        [Test]
         public void CreatePrototypeEnemyRoster_BuildsTwelveTemporaryAiProfiles()
         {
             var roster = PrototypeCombatFactory.CreatePrototypeEnemyRoster();
@@ -96,6 +128,7 @@ namespace Project2048.Tests
                 Assert.That(roster.All(enemy => !string.IsNullOrWhiteSpace(enemy.GetAiProfileLabel())), Is.True);
                 Assert.That(roster.Where(enemy => enemy.aiStrength == EnemyAiStrength.Normal).Select(enemy => enemy.maxHp), Is.All.EqualTo(160));
                 Assert.That(roster.Where(enemy => enemy.aiStrength == EnemyAiStrength.Enhanced).Select(enemy => enemy.maxHp), Is.All.EqualTo(210));
+                Assert.That(roster.SelectMany(enemy => enemy.skills).All(skill => skill.vfxFamily != SkillVfxFamily.None), Is.True);
             }
             finally
             {

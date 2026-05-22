@@ -48,7 +48,7 @@ MonoBehaviour:
   icon: {fileID: 0}
   activationEffect:
     sfxClip: {fileID: 0}
-    vfxPrefab: {fileID: 0}
+    vfxPrefab: {fileID: 899824043960030591, guid: 5f8cf79947e4ddf47aee451b2b9de40a, type: 3}
     animationClip: {fileID: 0}
     particleEffect:
       objectName: 
@@ -64,7 +64,13 @@ MonoBehaviour:
     volumeScale: 1
     minPitch: 1
     maxPitch: 1
-    sfxDelaySeconds: 0
+    sfxDelaySeconds: 0.3
     localOffset: {x: 0, y: 0, z: 0}
-    autoDestroySeconds: 1.25
+    autoDestroySeconds: 1.55
+  vfxFamily: 2
+  vfxPrimaryColor: {r: 1, g: 0.78, b: 0.18, a: 1}
+  vfxSecondaryColor: {r: 1, g: 1, b: 0.82, a: 1}
+  vfxScale: 1.8
+  vfxIntensity: 1.4
+  vfxRepeatCount: 1
   description: "이번 턴에는 빛을 모은다. 다음 플레이어 턴 시작 시 적에게 위력 120의 빛 공격을 자동으로 사용한다."

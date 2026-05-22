@@ -67,4 +67,10 @@ MonoBehaviour:
     sfxDelaySeconds: 0
     localOffset: {x: 0, y: 0, z: 0}
     autoDestroySeconds: 1.25
+  vfxFamily: 1
+  vfxPrimaryColor: {r: 1, g: 0.12, b: 0.06, a: 1}
+  vfxSecondaryColor: {r: 0.45, g: 0.02, b: 0.02, a: 1}
+  vfxScale: 1.5
+  vfxIntensity: 1.4
+  vfxRepeatCount: 1
   description: "적에게 위력 110 피해를 준다. 다음 플레이어 턴의 보드 이동 횟수가 2 감소한다."

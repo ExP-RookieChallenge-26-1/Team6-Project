@@ -176,13 +176,19 @@ namespace Project2048.Prototype
 
         private void HandlePlayerSkillUsed(SkillSO skill, EnemyController target)
         {
-            if (skill?.activationEffect == null || !skill.activationEffect.HasAnyAsset)
+            if (skill == null)
+            {
+                return;
+            }
+
+            var effect = skill.activationEffect;
+            if ((effect == null || !effect.HasAnyAsset) && skill.vfxFamily == SkillVfxFamily.None)
             {
                 return;
             }
 
             var isAttack = skill.skillType == SkillType.Attack;
-            if (isAttack && TryPlayProjectileSkillEffect(skill.activationEffect, target))
+            if (isAttack && TryPlayProjectileSkillEffect(effect, target))
             {
                 return;
             }
@@ -193,7 +199,15 @@ namespace Project2048.Prototype
                     ? playerRenderer.transform
                     : transform;
             var animator = isAttack ? enemyAnimator : playerAnimator;
-            PlayCombatantActionEffect(skill.activationEffect, anchor, animator);
+            if (effect?.HasAnyAsset == true)
+            {
+                PlayCombatantActionEffect(effect, anchor, animator);
+            }
+
+            if (effect?.HasAuthoredVisual != true)
+            {
+                PlayReusableSkillParticleEffect(skill, anchor);
+            }
         }
 
         private bool TryPlayProjectileSkillEffect(CombatEffectBinding effect, EnemyController target)
@@ -469,6 +483,131 @@ namespace Project2048.Prototype
             }
 
             return duration;
+        }
+
+        private void PlayReusableSkillParticleEffect(SkillSO skill, Transform anchor)
+        {
+            if (skill == null || skill.vfxFamily == SkillVfxFamily.None)
+            {
+                return;
+            }
+
+            ResolveReusableSkillParticleDefaults(
+                skill.vfxFamily,
+                out var lifetimeSeconds,
+                out var burstCount,
+                out var startSpeed,
+                out var startSize,
+                out var swirl);
+
+            var scale = Mathf.Max(0.01f, skill.vfxScale);
+            var intensity = Mathf.Max(0.1f, skill.vfxIntensity);
+            var repeatCount = Mathf.Max(1, skill.vfxRepeatCount);
+            SpawnParticleBurst(
+                null,
+                anchor,
+                $"{skill.vfxFamily}SkillParticles",
+                ResolveReusableSkillParticleColor(skill),
+                null,
+                lifetimeSeconds,
+                Mathf.RoundToInt(burstCount * intensity * repeatCount),
+                startSpeed * Mathf.Sqrt(scale),
+                startSize * scale,
+                swirl);
+        }
+
+        private static void ResolveReusableSkillParticleDefaults(
+            SkillVfxFamily family,
+            out float lifetimeSeconds,
+            out int burstCount,
+            out float startSpeed,
+            out float startSize,
+            out bool swirl)
+        {
+            switch (family)
+            {
+                case SkillVfxFamily.SlashArc:
+                    lifetimeSeconds = 0.55f;
+                    burstCount = 22;
+                    startSpeed = 0.8f;
+                    startSize = 0.32f;
+                    swirl = false;
+                    break;
+                case SkillVfxFamily.LightProjectile:
+                    lifetimeSeconds = 0.75f;
+                    burstCount = 28;
+                    startSpeed = 0.75f;
+                    startSize = 0.42f;
+                    swirl = false;
+                    break;
+                case SkillVfxFamily.ShieldDome:
+                    lifetimeSeconds = 0.8f;
+                    burstCount = 32;
+                    startSpeed = 0.35f;
+                    startSize = 0.46f;
+                    swirl = true;
+                    break;
+                case SkillVfxFamily.ImpactBurst:
+                    lifetimeSeconds = 0.55f;
+                    burstCount = 34;
+                    startSpeed = 1f;
+                    startSize = 0.54f;
+                    swirl = false;
+                    break;
+                case SkillVfxFamily.BuffAura:
+                    lifetimeSeconds = 0.85f;
+                    burstCount = 28;
+                    startSpeed = 0.3f;
+                    startSize = 0.38f;
+                    swirl = true;
+                    break;
+                case SkillVfxFamily.DebuffWave:
+                    lifetimeSeconds = 0.7f;
+                    burstCount = 26;
+                    startSpeed = 0.55f;
+                    startSize = 0.36f;
+                    swirl = true;
+                    break;
+                case SkillVfxFamily.DrainTether:
+                    lifetimeSeconds = 0.8f;
+                    burstCount = 30;
+                    startSpeed = 0.45f;
+                    startSize = 0.4f;
+                    swirl = true;
+                    break;
+                case SkillVfxFamily.CounterReady:
+                    lifetimeSeconds = 0.75f;
+                    burstCount = 28;
+                    startSpeed = 0.35f;
+                    startSize = 0.38f;
+                    swirl = true;
+                    break;
+                case SkillVfxFamily.BoardDisturb:
+                    lifetimeSeconds = 0.85f;
+                    burstCount = 34;
+                    startSpeed = 0.42f;
+                    startSize = 0.44f;
+                    swirl = true;
+                    break;
+                default:
+                    lifetimeSeconds = 0.65f;
+                    burstCount = 24;
+                    startSpeed = 0.6f;
+                    startSize = 0.34f;
+                    swirl = false;
+                    break;
+            }
+        }
+
+        private static Color ResolveReusableSkillParticleColor(SkillSO skill)
+        {
+            var primary = skill.vfxPrimaryColor;
+            if (primary.a <= 0f)
+            {
+                primary.a = 1f;
+            }
+
+            return primary;
         }
 
         private void PlayCombatantActionAudioEffect(CombatEffectBinding effect, float extraDelaySeconds = 0f)
@@ -1349,10 +1488,6 @@ namespace Project2048.Prototype
             var prefab = effect?.particlePrefab != null ? effect.particlePrefab : fallbackPrefab;
             var material = effect?.particleMaterial != null ? effect.particleMaterial : fallbackMaterial;
             var color = effect != null ? effect.ResolveColor(fallbackColor) : fallbackColor;
-            if (material != null)
-            {
-                color = Color.white;
-            }
 
             var objectName = effect?.ResolveObjectName(fallbackObjectName) ?? fallbackObjectName;
             var lifetimeSeconds = effect != null ? effect.EffectiveLifetimeSeconds : fallbackLifetimeSeconds;

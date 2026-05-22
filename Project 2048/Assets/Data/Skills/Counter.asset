@@ -67,4 +67,10 @@ MonoBehaviour:
     sfxDelaySeconds: 0
     localOffset: {x: 0, y: 0, z: 0}
     autoDestroySeconds: 1.25
+  vfxFamily: 8
+  vfxPrimaryColor: {r: 0.95, g: 0.08, b: 0.04, a: 1}
+  vfxSecondaryColor: {r: 1, g: 0.42, b: 0.12, a: 1}
+  vfxScale: 1
+  vfxIntensity: 1.2
+  vfxRepeatCount: 1
   description: "다음 적 턴 동안 실제 체력 피해를 받으면, 그 피해의 2배를 적에게 되돌린다."

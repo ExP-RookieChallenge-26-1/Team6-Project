@@ -14,8 +14,13 @@ namespace Project2048.EditorTools
 
         private const string ShaderGraphPath = "Assets/Shaders/Effects/HolyFireParticle.shadergraph";
         private const string PrefabPath = "Assets/Prefabs/Effects/HolyFireball_Attack3.prefab";
-        private const string Attack3Path = "Assets/Data/Skills/Attack_3.asset";
         private const float VisualScale = 3f;
+
+        private static readonly string[] LightProjectileSkillPaths =
+        {
+            "Assets/Data/Skills/LightShot.asset",
+            "Assets/Data/Skills/GatherLight.asset",
+        };
 
         [MenuItem("Tools/Project2048/VFX/Rebuild Holy Fireball Attack 3")]
         public static void Rebuild()
@@ -39,11 +44,11 @@ namespace Project2048.EditorTools
             var sparkMaterial = CreateMaterial("Assets/Materials/Effects/HolyFireball_Spark.mat", shader, sparkTexture);
 
             var prefab = BuildPrefab(coreMaterial, wispMaterial, haloMaterial, sparkMaterial);
-            AssignAttack3(prefab);
+            AssignLightProjectileSkills(prefab);
 
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
-            Debug.Log($"Rebuilt holy fireball VFX and assigned it to Attack_3: {PrefabPath}");
+            Debug.Log($"Rebuilt holy fireball VFX and assigned it to light projectile skills: {PrefabPath}");
         }
 
         private static void EnsureFolder(string path)
@@ -739,24 +744,30 @@ namespace Project2048.EditorTools
             return gradient;
         }
 
-        private static void AssignAttack3(GameObject prefab)
+        private static void AssignLightProjectileSkills(GameObject prefab)
         {
-            var skill = AssetDatabase.LoadAssetAtPath<SkillSO>(Attack3Path);
-            if (skill == null)
+            foreach (var skillPath in LightProjectileSkillPaths)
             {
-                Debug.LogError($"Could not find Attack_3 skill asset at {Attack3Path}");
-                return;
-            }
+                var skill = AssetDatabase.LoadAssetAtPath<SkillSO>(skillPath);
+                if (skill == null)
+                {
+                    Debug.LogError($"Could not find light projectile skill asset at {skillPath}");
+                    continue;
+                }
 
-            skill.activationEffect ??= new CombatEffectBinding();
-            skill.activationEffect.vfxPrefab = prefab;
-            skill.activationEffect.localOffset = Vector3.zero;
-            skill.activationEffect.autoDestroySeconds = 1.55f;
-            skill.activationEffect.volumeScale = 1.05f;
-            skill.activationEffect.minPitch = 0.96f;
-            skill.activationEffect.maxPitch = 1.04f;
-            skill.activationEffect.sfxDelaySeconds = 0.3f;
-            EditorUtility.SetDirty(skill);
+                skill.activationEffect ??= new CombatEffectBinding();
+                skill.activationEffect.vfxPrefab = prefab;
+                skill.activationEffect.localOffset = Vector3.zero;
+                skill.activationEffect.autoDestroySeconds = 1.55f;
+                skill.activationEffect.volumeScale = 1.05f;
+                skill.activationEffect.minPitch = 0.96f;
+                skill.activationEffect.maxPitch = 1.04f;
+                skill.activationEffect.sfxDelaySeconds = 0.3f;
+                skill.vfxFamily = SkillVfxFamily.LightProjectile;
+                skill.vfxScale = skill.skillId == "gather-light" ? 1.8f : 1f;
+                skill.vfxIntensity = skill.skillId == "gather-light" ? 1.4f : 1.1f;
+                EditorUtility.SetDirty(skill);
+            }
         }
     }
 }

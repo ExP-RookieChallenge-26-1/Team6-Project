@@ -56,6 +56,13 @@ namespace Project2048.Skills
         public SkillAvailability availability = SkillAvailability.Shared;
         public Sprite icon;
         public CombatEffectBinding activationEffect = new();
+        [Header("Reusable VFX")]
+        public SkillVfxFamily vfxFamily;
+        public Color vfxPrimaryColor = Color.white;
+        public Color vfxSecondaryColor = Color.white;
+        [Min(0.01f)] public float vfxScale = 1f;
+        [Min(0f)] public float vfxIntensity = 1f;
+        [Min(1)] public int vfxRepeatCount = 1;
         [TextArea] public string description;
 
         public bool CanAppearAsReward =>
@@ -119,6 +126,9 @@ namespace Project2048.Skills
             nextAttackHitCount = Mathf.Max(0, nextAttackHitCount);
             nextAttackHitPowerMultiplier = Mathf.Max(0f, nextAttackHitPowerMultiplier);
             healPercentOfMaxHp = Mathf.Clamp01(healPercentOfMaxHp);
+            vfxScale = Mathf.Max(0.01f, vfxScale);
+            vfxIntensity = Mathf.Max(0f, vfxIntensity);
+            vfxRepeatCount = Mathf.Max(1, vfxRepeatCount);
         }
     }
 }

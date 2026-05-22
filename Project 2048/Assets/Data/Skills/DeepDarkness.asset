@@ -71,4 +71,10 @@ MonoBehaviour:
     sfxDelaySeconds: 0
     localOffset: {x: 0, y: 0, z: 0}
     autoDestroySeconds: 1.25
+  vfxFamily: 9
+  vfxPrimaryColor: {r: 0, g: 0, b: 0.02, a: 1}
+  vfxSecondaryColor: {r: 0.22, g: 0.02, b: 0.38, a: 1}
+  vfxScale: 1.4
+  vfxIntensity: 1.4
+  vfxRepeatCount: 1
   description: "다음 플레이어 보드에 암흑 장애물 2개를 생성한다."

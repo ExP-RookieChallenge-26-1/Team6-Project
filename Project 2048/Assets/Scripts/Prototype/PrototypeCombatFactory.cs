@@ -286,7 +286,128 @@ namespace Project2048.Prototype
             skill.targetAttackModifier = targetAttackModifier;
             skill.selfDefenseBonus = selfDefenseBonus;
             skill.description = description;
+            ConfigureReusableVfx(skill);
             return skill;
+        }
+
+        private static void ConfigureReusableVfx(SkillSO skill)
+        {
+            switch (skill.skillId)
+            {
+                case "quick-stab":
+                    ConfigureReusableVfx(skill, SkillVfxFamily.SlashArc, new Color(1f, 1f, 1f), new Color(0.75f, 0.82f, 0.9f), 0.7f, 0.8f);
+                    break;
+                case "heavy-strike":
+                    ConfigureReusableVfx(skill, SkillVfxFamily.SlashArc, new Color(1f, 0.55f, 0.16f), new Color(0.55f, 0.08f, 0.04f), 1.2f, 1.2f);
+                    break;
+                case "flow-strike":
+                    ConfigureReusableVfx(skill, SkillVfxFamily.SlashArc, new Color(0.25f, 0.68f, 1f), new Color(0.78f, 0.95f, 1f));
+                    break;
+                case "tentacle-strike":
+                    ConfigureReusableVfx(skill, SkillVfxFamily.BoardDisturb, new Color(0.2f, 0.04f, 0.28f), new Color(0.55f, 0.18f, 0.72f), 1.1f, 1.1f);
+                    break;
+                case "reckless-blow":
+                    ConfigureReusableVfx(skill, SkillVfxFamily.SlashArc, new Color(1f, 0.12f, 0.06f), new Color(0.45f, 0.02f, 0.02f), 1.5f, 1.4f);
+                    break;
+                case "light-shot":
+                    ConfigureReusableVfx(skill, SkillVfxFamily.LightProjectile, new Color(1f, 0.96f, 0.62f), Color.white, intensity: 1.1f);
+                    break;
+                case "gather-light":
+                    ConfigureReusableVfx(skill, SkillVfxFamily.LightProjectile, new Color(1f, 0.78f, 0.18f), new Color(1f, 1f, 0.82f), 1.8f, 1.4f);
+                    break;
+                case "light-guard":
+                    ConfigureReusableVfx(skill, SkillVfxFamily.ShieldDome, new Color(1f, 0.86f, 0.28f), new Color(0.45f, 0.86f, 1f), 1.2f, 1.15f);
+                    break;
+                case "light-recover":
+                    ConfigureReusableVfx(skill, SkillVfxFamily.BuffAura, new Color(1f, 0.84f, 0.25f), new Color(1f, 1f, 0.88f), intensity: 1.1f);
+                    break;
+                case "light-echo":
+                    ConfigureReusableVfx(skill, SkillVfxFamily.BuffAura, new Color(1f, 0.76f, 0.18f), new Color(1f, 0.95f, 0.58f), 1.1f, 1.2f);
+                    break;
+                case "light-split":
+                    ConfigureReusableVfx(skill, SkillVfxFamily.BuffAura, new Color(1f, 0.8f, 0.22f), Color.white, repeatCount: 2);
+                    break;
+                case "low-stance":
+                    ConfigureReusableVfx(skill, SkillVfxFamily.ShieldDome, new Color(0.58f, 0.68f, 0.82f), new Color(0.82f, 0.9f, 1f), 0.9f, 0.85f);
+                    break;
+                case "thorn-guard":
+                    ConfigureReusableVfx(skill, SkillVfxFamily.ShieldDome, new Color(0.1f, 0.72f, 0.48f), new Color(0.42f, 1f, 0.62f), 1.1f, 1.15f);
+                    break;
+                case "shield-bash":
+                    ConfigureReusableVfx(skill, SkillVfxFamily.ShieldDome, new Color(0.28f, 0.58f, 1f), new Color(0.78f, 0.86f, 0.95f), intensity: 1.05f);
+                    break;
+                case "shield-burst":
+                    ConfigureReusableVfx(skill, SkillVfxFamily.ShieldDome, new Color(0.72f, 0.9f, 1f), new Color(0.2f, 0.46f, 1f), 1.4f, 1.3f);
+                    break;
+                case "iron-wall":
+                    ConfigureReusableVfx(skill, SkillVfxFamily.BuffAura, new Color(0.42f, 0.55f, 0.72f), new Color(0.82f, 0.86f, 0.9f));
+                    break;
+                case "body-press":
+                    ConfigureReusableVfx(skill, SkillVfxFamily.ImpactBurst, new Color(0.62f, 0.62f, 0.62f), new Color(0.28f, 0.34f, 0.42f), 1.2f, 1.2f);
+                    break;
+                case "flash":
+                    ConfigureReusableVfx(skill, SkillVfxFamily.DebuffWave, Color.white, new Color(1f, 0.9f, 0.32f), intensity: 1.2f);
+                    break;
+                case "howl":
+                    ConfigureReusableVfx(skill, SkillVfxFamily.DebuffWave, new Color(0.55f, 0.28f, 0.82f), new Color(0.5f, 0.5f, 0.58f), 1.1f);
+                    break;
+                case "guard-break":
+                    ConfigureReusableVfx(skill, SkillVfxFamily.SlashArc, new Color(0.68f, 0.7f, 0.72f), new Color(0.25f, 0.25f, 0.28f), 1.1f, 1.1f);
+                    break;
+                case "intimidating-shot":
+                    ConfigureReusableVfx(skill, SkillVfxFamily.DebuffWave, new Color(0.58f, 0.04f, 0.04f), new Color(0.12f, 0.02f, 0.02f), intensity: 1.1f);
+                    break;
+                case "life-drain":
+                    ConfigureReusableVfx(skill, SkillVfxFamily.DrainTether, new Color(0.18f, 0.82f, 0.34f), new Color(0.02f, 0.08f, 0.04f), intensity: 1.1f);
+                    break;
+                case "blood-fang":
+                    ConfigureReusableVfx(skill, SkillVfxFamily.DrainTether, new Color(0.86f, 0.04f, 0.05f), new Color(0.28f, 0f, 0.02f), 1.1f, 1.15f);
+                    break;
+                case "bioluminescence":
+                    ConfigureReusableVfx(skill, SkillVfxFamily.DrainTether, new Color(0.22f, 1f, 0.88f), Color.white, 1.4f, 1.5f);
+                    break;
+                case "counter":
+                    ConfigureReusableVfx(skill, SkillVfxFamily.CounterReady, new Color(0.95f, 0.08f, 0.04f), new Color(1f, 0.42f, 0.12f), intensity: 1.2f);
+                    break;
+                case "endure":
+                    ConfigureReusableVfx(skill, SkillVfxFamily.CounterReady, new Color(0.92f, 0.92f, 0.9f), new Color(0.55f, 0.56f, 0.58f));
+                    break;
+                case "focus-breath":
+                    ConfigureReusableVfx(skill, SkillVfxFamily.BuffAura, Color.white, new Color(0.55f, 0.82f, 1f), 0.8f, 0.9f);
+                    break;
+                case "sharp-senses":
+                    ConfigureReusableVfx(skill, SkillVfxFamily.BuffAura, new Color(0.62f, 0.24f, 1f), new Color(0.45f, 0.86f, 1f), intensity: 1.15f);
+                    break;
+                case "darkness":
+                    ConfigureReusableVfx(skill, SkillVfxFamily.BoardDisturb, new Color(0.02f, 0.02f, 0.04f), new Color(0.28f, 0.08f, 0.45f), intensity: 1.1f);
+                    break;
+                case "deep-darkness":
+                    ConfigureReusableVfx(skill, SkillVfxFamily.BoardDisturb, new Color(0f, 0f, 0.02f), new Color(0.22f, 0.02f, 0.38f), 1.4f, 1.4f);
+                    break;
+                case "dark-shackle":
+                    ConfigureReusableVfx(skill, SkillVfxFamily.BoardDisturb, new Color(0.02f, 0.02f, 0.04f), new Color(0.5f, 0.04f, 0.18f), 1.2f, 1.2f);
+                    break;
+                case "black-pressure":
+                    ConfigureReusableVfx(skill, SkillVfxFamily.BoardDisturb, new Color(0.01f, 0.01f, 0.03f), new Color(0.04f, 0.12f, 0.32f), 1.1f, 1.15f);
+                    break;
+            }
+        }
+
+        private static void ConfigureReusableVfx(
+            SkillSO skill,
+            SkillVfxFamily family,
+            Color primaryColor,
+            Color secondaryColor,
+            float scale = 1f,
+            float intensity = 1f,
+            int repeatCount = 1)
+        {
+            skill.vfxFamily = family;
+            skill.vfxPrimaryColor = primaryColor;
+            skill.vfxSecondaryColor = secondaryColor;
+            skill.vfxScale = Mathf.Max(0.01f, scale);
+            skill.vfxIntensity = Mathf.Max(0f, intensity);
+            skill.vfxRepeatCount = Mathf.Max(1, repeatCount);
         }
     }
 }

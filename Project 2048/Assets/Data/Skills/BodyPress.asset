@@ -67,4 +67,10 @@ MonoBehaviour:
     sfxDelaySeconds: 0
     localOffset: {x: 0, y: 0, z: 0}
     autoDestroySeconds: 1.25
+  vfxFamily: 4
+  vfxPrimaryColor: {r: 0.62, g: 0.62, b: 0.62, a: 1}
+  vfxSecondaryColor: {r: 0.28, g: 0.34, b: 0.42, a: 1}
+  vfxScale: 1.2
+  vfxIntensity: 1.2
+  vfxRepeatCount: 1
   description: "공격력 대신 방어력으로 계산하여 적에게 위력 80 피해를 준다."

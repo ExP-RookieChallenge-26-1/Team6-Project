@@ -67,4 +67,10 @@ MonoBehaviour:
     sfxDelaySeconds: 0
     localOffset: {x: 0, y: 0, z: 0}
     autoDestroySeconds: 1.25
+  vfxFamily: 7
+  vfxPrimaryColor: {r: 0.22, g: 1, b: 0.88, a: 1}
+  vfxSecondaryColor: {r: 1, g: 1, b: 1, a: 1}
+  vfxScale: 1.4
+  vfxIntensity: 1.5
+  vfxRepeatCount: 1
   description: "최대 체력의 25%를 지불하고 적에게 위력 120 피해를 준다. 이 비용으로 체력은 1 아래로 내려가지 않는다."

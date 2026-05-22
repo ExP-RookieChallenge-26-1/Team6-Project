@@ -67,4 +67,10 @@ MonoBehaviour:
     sfxDelaySeconds: 0
     localOffset: {x: 0, y: 0, z: 0}
     autoDestroySeconds: 1.25
+  vfxFamily: 8
+  vfxPrimaryColor: {r: 0.92, g: 0.92, b: 0.9, a: 1}
+  vfxSecondaryColor: {r: 0.55, g: 0.56, b: 0.58, a: 1}
+  vfxScale: 1
+  vfxIntensity: 1
+  vfxRepeatCount: 1
   description: "다음 적 턴 동안 체력이 1 아래로 내려가지 않는다."

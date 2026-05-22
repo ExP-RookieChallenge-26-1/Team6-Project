@@ -67,4 +67,10 @@ MonoBehaviour:
     sfxDelaySeconds: 0
     localOffset: {x: 0, y: 0, z: 0}
     autoDestroySeconds: 1.25
+  vfxFamily: 5
+  vfxPrimaryColor: {r: 1, g: 0.8, b: 0.22, a: 1}
+  vfxSecondaryColor: {r: 1, g: 1, b: 1, a: 1}
+  vfxScale: 1
+  vfxIntensity: 1.1
+  vfxRepeatCount: 2
   description: "다음 공격이 2회 공격으로 바뀐다. 각 공격은 원래 기술 위력의 60%로 계산된다."

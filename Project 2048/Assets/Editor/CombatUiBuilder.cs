@@ -302,27 +302,38 @@ namespace Project2048.PrototypeEditor
             EnsureFolder(DataFolder, "Enemies");
             EnsureFolder(DataFolder, "Skills");
 
-            var attack1 = CreateOrLoadAsset<SkillSO>(SkillFolder + "/Attack_1.asset");
-            ConfigureSkill(attack1, "attack_1", "1단계 공격", SkillType.Attack, 5, 3, 0, 0, "기본 공격.");
-            var attack2 = CreateOrLoadAsset<SkillSO>(SkillFolder + "/Attack_2.asset");
-            ConfigureSkill(attack2, "attack_2", "2단계 공격", SkillType.Attack, 8, 4, -2, 0, "공격하고 적 공격력을 낮춘다.");
-            var attack3 = CreateOrLoadAsset<SkillSO>(SkillFolder + "/Attack_3.asset");
-            ConfigureSkill(attack3, "attack_3", "3단계 공격", SkillType.Attack, 12, 8, 0, 0, "강한 공격.");
-            var defense1 = CreateOrLoadAsset<SkillSO>(SkillFolder + "/Defense_1.asset");
-            ConfigureSkill(defense1, "defense_1", "1단계 방어", SkillType.Defense, 5, 3, 0, 0, "방어도 3을 얻는다.");
-            var defense2 = CreateOrLoadAsset<SkillSO>(SkillFolder + "/Defense_2.asset");
-            ConfigureSkill(defense2, "defense_2", "2단계 방어", SkillType.Defense, 8, 4, 0, 2, "방어도를 얻고 이후 획득 방어도를 증가시킨다.");
-            var defense3 = CreateOrLoadAsset<SkillSO>(SkillFolder + "/Defense_3.asset");
-            ConfigureSkill(defense3, "defense_3", "3단계 방어", SkillType.Defense, 12, 10, 0, 0, "강한 방어.");
+            var quickStab = LoadSkillAsset("QuickStab.asset");
+            var lightShot = LoadSkillAsset("LightShot.asset");
+            var heavyStrike = LoadSkillAsset("HeavyStrike.asset");
+            var gatherLight = LoadSkillAsset("GatherLight.asset");
+            var lowStance = LoadSkillAsset("LowStance.asset");
+            var lightGuard = LoadSkillAsset("LightGuard.asset");
+            var shieldBash = LoadSkillAsset("ShieldBash.asset");
+            var shieldBurst = LoadSkillAsset("ShieldBurst.asset");
+            var ironWall = LoadSkillAsset("IronWall.asset");
+            var bodyPress = LoadSkillAsset("BodyPress.asset");
+            var flash = LoadSkillAsset("Flash.asset");
 
-            var skills = new List<SkillSO> { attack1, attack2, attack3, defense1, defense2, defense3 };
-
+            var skills = new List<SkillSO>
+            {
+                quickStab,
+                lightShot,
+                heavyStrike,
+                gatherLight,
+                lowStance,
+                lightGuard,
+                shieldBash,
+                shieldBurst,
+                ironWall,
+                bodyPress,
+                flash,
+            };
             var player = CreateOrLoadAsset<PlayerSO>(DataFolder + "/PrototypePlayer.asset");
             player.maxHp = 240;
             player.attackPower = 10;
             player.initialBoardMoveCount = 12;
             player.boardMoveCountBonus = 0;
-            player.startingSkills = new List<SkillSO>(skills);
+            player.startingSkills = new List<SkillSO> { gatherLight, lightGuard, flash, quickStab };
             player.portrait = LoadSprite(PlayerSpritePath) ?? player.portrait;
             EditorUtility.SetDirty(player);
 
@@ -342,6 +353,11 @@ namespace Project2048.PrototypeEditor
             EditorUtility.SetDirty(enemy);
 
             return new PrototypeCombatLoadout(player, enemy, skills, ownsAssets: false);
+        }
+
+        private static SkillSO LoadSkillAsset(string fileName)
+        {
+            return AssetDatabase.LoadAssetAtPath<SkillSO>($"{SkillFolder}/{fileName}");
         }
 
         private static Sprite LoadSprite(string assetPath)

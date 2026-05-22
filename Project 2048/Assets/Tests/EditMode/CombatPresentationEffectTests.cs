@@ -1395,20 +1395,26 @@ namespace Project2048.Tests
         }
 
         [Test]
-        public void PrototypeSkillAssets_HaveActivationEffectClips()
+        public void PrototypeSkillAssets_HaveReusableVfxMetadata()
         {
             var skillGuids = AssetDatabase.FindAssets("t:SkillSO", new[] { "Assets/Data/Skills" });
 
-            Assert.That(skillGuids.Length, Is.EqualTo(6));
+            Assert.That(skillGuids.Length, Is.EqualTo(32));
             foreach (var guid in skillGuids)
             {
                 var path = AssetDatabase.GUIDToAssetPath(guid);
                 var skill = AssetDatabase.LoadAssetAtPath<SkillSO>(path);
 
-                Assert.That(skill?.activationEffect, Is.Not.Null, path);
-                Assert.That(skill.activationEffect.sfxClip, Is.Not.Null, path);
-                if (path.EndsWith("Attack_3.asset", System.StringComparison.Ordinal))
+                Assert.That(skill, Is.Not.Null, path);
+                Assert.That(skill.vfxFamily, Is.Not.EqualTo(SkillVfxFamily.None), path);
+                Assert.That(skill.vfxScale, Is.GreaterThan(0f), path);
+                Assert.That(skill.vfxIntensity, Is.GreaterThan(0f), path);
+                Assert.That(skill.vfxRepeatCount, Is.GreaterThanOrEqualTo(1), path);
+                if (path.EndsWith("LightShot.asset", System.StringComparison.Ordinal) ||
+                    path.EndsWith("GatherLight.asset", System.StringComparison.Ordinal))
                 {
+                    Assert.That(skill.activationEffect?.vfxPrefab, Is.Not.Null, path);
+                    Assert.That(skill.activationEffect.EffectiveAutoDestroySeconds, Is.EqualTo(1.55f).Within(0.0001f), path);
                     Assert.That(skill.activationEffect.EffectiveSfxDelaySeconds, Is.EqualTo(0.3f).Within(0.0001f), path);
                 }
             }

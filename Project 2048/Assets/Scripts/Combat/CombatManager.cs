@@ -35,6 +35,7 @@ namespace Project2048.Combat
         private bool costEventsBound;
         private bool playerEventsBound;
         private bool suppressStateNotifications;
+        private int activeNextCombatBoardMoveCountBonus;
         // UI에 보여줄 최근 행동 문구다. 실제 전투 규칙은 CombatManager 안에 남기고 UI는 문자열만 렌더한다.
         private string lastActionDescription = "대기";
         private CombatVfxCue lastVfxCue;
@@ -109,6 +110,7 @@ namespace Project2048.Combat
             lastActionDescription = "2048 진행";
             lastVfxCue = null;
             vfxCueSequence = 0;
+            activeNextCombatBoardMoveCountBonus = 0;
             TurnController.Reset();
             CostWallet.Clear();
             UnbindEntityEvents();
@@ -169,7 +171,7 @@ namespace Project2048.Combat
                 return false;
             }
 
-            if (skill.skillType == SkillType.Attack && (target == null || target.IsDead))
+            if (skill.RequiresEnemyTarget && (target == null || target.IsDead))
             {
                 return false;
             }
@@ -183,7 +185,11 @@ namespace Project2048.Combat
             CostWallet.Spend(skill.cost);
             OnPlayerSkillUsed?.Invoke(skill, target);
             skillExecutor.Execute(skill, player, target, damageCalculator);
-            CheckVictory();
+            if (!CheckVictory())
+            {
+                NotifyStateChanged();
+            }
+
             return true;
         }
 
@@ -202,18 +208,28 @@ namespace Project2048.Combat
                 return false;
             }
 
-            EnemyController target = null;
-            if (skill.skillType == SkillType.Attack)
+            var target = ResolveSkillTarget(skill, targetIndex);
+            if (skill.RequiresEnemyTarget && target == null)
             {
-                if (targetIndex < 0 || targetIndex >= enemies.Count)
-                {
-                    return false;
-                }
-
-                target = enemies[targetIndex];
+                return false;
             }
 
             return RequestUseSkill(skill, target);
+        }
+
+        private EnemyController ResolveSkillTarget(SkillSO skill, int targetIndex)
+        {
+            if (skill == null || !skill.RequiresEnemyTarget)
+            {
+                return null;
+            }
+
+            if (targetIndex >= 0 && targetIndex < enemies.Count && enemies[targetIndex] != null && !enemies[targetIndex].IsDead)
+            {
+                return enemies[targetIndex];
+            }
+
+            return enemies.FirstOrDefault(enemy => enemy != null && !enemy.IsDead);
         }
 
         public bool RequestBoardMove(Direction direction)
@@ -271,17 +287,43 @@ namespace Project2048.Combat
         {
             // 방어도는 턴마다 사라지고, 방어 보너스/디버프는 별도 값으로 유지된다.
             player.ClearBlock();
+            player.ClearTurnLimitedSkillEffects();
             TurnController.StartPlayerTurn();
             ChangePhase(CombatPhase.PlayerTurnStart);
+            if (ResolvePendingChargedAttack())
+            {
+                return;
+            }
+
             ChangePhase(CombatPhase.BoardPhase);
 
             // 이번 턴에 2048을 움직일 수 있는 횟수다. 0이 되면 보드 전체가 코스트로 바뀐다.
+            var skillMoveModifier = player.ConsumeNextTurnBoardMoveCountModifier();
             var runMoveBonus = currentSetup.runProgress != null
-                ? currentSetup.runProgress.ExtraBoardMoveCount
+                ? currentSetup.runProgress.ExtraBoardMoveCount + activeNextCombatBoardMoveCountBonus
                 : 0;
             var baseMoveCount = ResolveInitialBoardMoveCount();
-            var moveCount = Mathf.Max(0, baseMoveCount + player.BoardMoveCountBonus + runMoveBonus);
+            var moveCount = Mathf.Max(0, baseMoveCount + player.BoardMoveCountBonus + runMoveBonus + skillMoveModifier);
             BoardManager.InitBoard(moveCount);
+        }
+
+        private bool ResolvePendingChargedAttack()
+        {
+            if (player == null || !player.TryConsumePendingChargedAttack(out var skillName, out var chargedPower))
+            {
+                return false;
+            }
+
+            var target = enemies.FirstOrDefault(enemy => enemy != null && !enemy.IsDead);
+            if (target == null)
+            {
+                return CheckVictory();
+            }
+
+            lastActionDescription = $"{skillName} 발동";
+            skillExecutor.ExecuteChargedAttack(player, target, chargedPower, damageCalculator);
+            NotifyStateChanged();
+            return CheckVictory();
         }
 
         private int ResolveInitialBoardMoveCount()
@@ -388,6 +430,16 @@ namespace Project2048.Combat
                 {
                     return true;
                 }
+
+                if (CheckVictory())
+                {
+                    return true;
+                }
+
+                if (enemy.IsDead)
+                {
+                    break;
+                }
             }
 
             return false;
@@ -458,6 +510,19 @@ namespace Project2048.Combat
             {
                 currentSetup.runProgress.CapturePlayer(player);
             }
+
+            player.ApplyPermanentStatBonuses(
+                currentSetup.runProgress.PermanentMaxHpBonus,
+                currentSetup.runProgress.PermanentAttackPowerBonus,
+                currentSetup.runProgress.PermanentDefensePowerBonus,
+                currentSetup.runProgress.PermanentCriticalChanceBonus,
+                currentSetup.runProgress.PermanentCriticalDamageMultiplierBonus);
+
+            var nextCombatBuff = currentSetup.runProgress.ConsumeNextCombatBuffs();
+            activeNextCombatBoardMoveCountBonus = nextCombatBuff.BoardMoveCountBonus;
+            player.ApplyTemporaryCombatBuffs(
+                nextCombatBuff.AttackPowerBonus,
+                nextCombatBuff.DefensePowerBonus);
         }
 
         private CombatResult BuildCombatResult()
@@ -537,6 +602,7 @@ namespace Project2048.Combat
             player.OnBlockChanged += HandlePlayerBlockChanged;
             player.OnDefenseBonusChanged += HandlePlayerDefenseBonusChanged;
             player.OnStatusEffectsChanged += HandlePlayerStatusEffectsChanged;
+            player.OnSkillsChanged += HandlePlayerSkillsChanged;
             playerEventsBound = true;
         }
 
@@ -563,6 +629,7 @@ namespace Project2048.Combat
                 player.OnBlockChanged -= HandlePlayerBlockChanged;
                 player.OnDefenseBonusChanged -= HandlePlayerDefenseBonusChanged;
                 player.OnStatusEffectsChanged -= HandlePlayerStatusEffectsChanged;
+                player.OnSkillsChanged -= HandlePlayerSkillsChanged;
                 playerEventsBound = false;
             }
 
@@ -595,6 +662,11 @@ namespace Project2048.Combat
         }
 
         private void HandlePlayerStatusEffectsChanged()
+        {
+            NotifyStateChanged();
+        }
+
+        private void HandlePlayerSkillsChanged()
         {
             NotifyStateChanged();
         }
@@ -635,10 +707,14 @@ namespace Project2048.Combat
             {
                 CurrentHp = player.CurrentHp,
                 MaxHp = player.MaxHp,
-                AttackPower = player.AttackPower,
+                AttackPower = player.EffectiveAttackPower,
+                DefensePower = player.EffectiveDefensePower,
                 Block = player.Block,
+                ShieldHp = player.ShieldHp,
                 DefenseBonus = player.DefenseBonus,
                 FearStacks = player.FearStacks,
+                CriticalChance = player.CriticalChance,
+                CriticalDamageMultiplier = player.CriticalDamageMultiplier,
                 StatusEffects = BuildPlayerStatusEffects(),
             };
         }
@@ -664,7 +740,13 @@ namespace Project2048.Combat
                         : enemy.name,
                     CurrentHp = enemy.CurrentHp,
                     MaxHp = enemy.MaxHp,
+                    DefensePower = enemy.EffectiveDefensePower,
                     Block = enemy.Block,
+                    ShieldHp = enemy.ShieldHp,
+                    ThornRetaliationDamage = enemy.ThornRetaliationDamage,
+                    EncounterRank = enemy.Data != null ? enemy.Data.encounterRank : EnemyEncounterRank.Normal,
+                    CriticalChance = enemy.CriticalChance,
+                    CriticalDamageMultiplier = enemy.CriticalDamageMultiplier,
                     IsDead = enemy.IsDead,
                     AiProfileLabel = enemy.Data != null ? enemy.Data.GetAiProfileLabel() : string.Empty,
                     Intent = intents.Count > 0 ? intents[0].Clone() : enemy.CurrentIntent?.Clone(),
@@ -748,14 +830,62 @@ namespace Project2048.Combat
                 });
             }
 
+            AddStatusEffect(effects, "defense-power-up", player.DefensePowerModifier, "방어력 강화", "방어력", "DEF", true);
+            AddStatusEffect(effects, "defense-power-down", -player.DefensePowerModifier, "방어력 약화", "방어력", "DEF", false);
+            AddStatusEffect(effects, "attack-power-up", player.AttackPowerModifier, "공격력 강화", "공격력", "ATK", true);
+            AddStatusEffect(effects, "attack-power-down", -player.AttackPowerModifier, "공격력 약화", "공격력", "ATK", false);
+            AddStatusEffect(effects, "thorn-guard", player.ThornRetaliationDamage, "가시 방어", "반사 피해", "가", true);
+            AddStatusEffect(effects, "counter", player.CounterPercent, "카운터", "받은 체력 피해 반사율", "반", true);
+            AddStatusEffect(effects, "endure", player.EndureTurns, "이악물기", "이번 적 턴에 체력 1로 버팁니다.", "버", true);
+            AddStatusEffect(effects, "echo-damage", player.EchoDamageBonus, "빛의 메아리", "공격 추가 피해", "메", true);
+            AddStatusEffect(effects, "split-attack", player.ExtraAttackHits, "빛의 분산", "추가 공격 횟수", "분", true);
+            AddStatusEffect(effects, "next-board-moves", Mathf.Abs(player.NextTurnBoardMoveCountModifier), "다음 보드 이동", "다음 보드 이동 횟수 변화", "이", player.NextTurnBoardMoveCountModifier > 0);
+            if (player.HasPendingChargedAttack)
+            {
+                AddStatusEffect(effects, "charged-attack", 1, "빛 모으기", "다음 플레이어 턴 시작에 공격이 발동합니다.", "충", true);
+            }
+
             return effects;
+        }
+
+        private static void AddStatusEffect(
+            List<CombatStatusEffectSnapshot> effects,
+            string id,
+            int value,
+            string displayName,
+            string descriptionPrefix,
+            string iconText,
+            bool isBuff)
+        {
+            if (effects == null || value <= 0)
+            {
+                return;
+            }
+
+            effects.Add(new CombatStatusEffectSnapshot
+            {
+                Id = id,
+                DisplayName = displayName,
+                Description = descriptionPrefix.Contains("{0}")
+                    ? string.Format(descriptionPrefix, value)
+                    : $"{descriptionPrefix}: {value}",
+                Value = value,
+                IsBuff = isBuff,
+                IconText = iconText,
+            });
         }
 
         private static List<CombatStatusEffectSnapshot> BuildEnemyStatusEffects(EnemyController enemy)
         {
             var effects = new List<CombatStatusEffectSnapshot>();
-            if (enemy == null || enemy.AttackModifier == 0)
+            if (enemy == null)
             {
+                return effects;
+            }
+
+            if (enemy.AttackModifier == 0)
+            {
+                AddEnemyDefenseStatusEffect(effects, enemy);
                 return effects;
             }
 
@@ -773,7 +903,30 @@ namespace Project2048.Combat
                 IconText = isBuff ? "공+" : "공-",
             });
 
+            AddEnemyDefenseStatusEffect(effects, enemy);
             return effects;
+        }
+
+        private static void AddEnemyDefenseStatusEffect(List<CombatStatusEffectSnapshot> effects, EnemyController enemy)
+        {
+            if (effects == null || enemy == null || enemy.DefenseModifier == 0)
+            {
+                return;
+            }
+
+            var isBuff = enemy.DefenseModifier > 0;
+            var value = Mathf.Abs(enemy.DefenseModifier);
+            effects.Add(new CombatStatusEffectSnapshot
+            {
+                Id = isBuff ? "defense-up" : "defense-down",
+                DisplayName = isBuff ? "방어력 강화" : "방어력 약화",
+                Description = isBuff
+                    ? $"방어력이 {value} 증가합니다."
+                    : $"방어력이 {value} 감소합니다.",
+                Value = value,
+                IsBuff = isBuff,
+                IconText = isBuff ? "방" : "약",
+            });
         }
 
         private int CountDarknessStacks()
@@ -821,6 +974,7 @@ namespace Project2048.Combat
                     SkillType = skill.skillType,
                     Cost = skill.cost,
                     Power = skill.power,
+                    RequiresEnemyTarget = skill.RequiresEnemyTarget,
                 });
             }
 
@@ -854,6 +1008,11 @@ namespace Project2048.Combat
             if (intent == null)
             {
                 return "행동 없음";
+            }
+
+            if (!string.IsNullOrWhiteSpace(intent.displayName))
+            {
+                return intent.displayName;
             }
 
             return intent.intentType switch

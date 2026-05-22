@@ -148,6 +148,109 @@ namespace Project2048.PrototypeEditor
             Debug.Log("Combat status effect roots ensured.");
         }
 
+        [MenuItem("Project2048/Ensure Pokemon Skill Panel")]
+        public static void EnsurePokemonSkillPanel()
+        {
+            var scene = EditorSceneManager.OpenScene(BattleScenePath);
+            var view = Object.FindAnyObjectByType<CombatUiView>(FindObjectsInactive.Include);
+            if (view == null)
+            {
+                Debug.LogWarning("CombatUiView was not found in BattleScene.");
+                return;
+            }
+
+            var so = new SerializedObject(view);
+            var font = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(KoreanFontAssetPath);
+            var actionPanel = so.FindProperty("actionPanel")?.objectReferenceValue as GameObject
+                ?? GameObject.Find("ActionPanel");
+            var boardPanel = so.FindProperty("boardPanel")?.objectReferenceValue as GameObject
+                ?? GameObject.Find("BoardPanel");
+            if (actionPanel == null || boardPanel == null)
+            {
+                Debug.LogWarning("ActionPanel or BoardPanel was not found in BattleScene.");
+                return;
+            }
+
+            var skillsView = so.FindProperty("skillsView")?.objectReferenceValue as GameObject
+                ?? actionPanel.transform.Find("SkillsView")?.gameObject
+                ?? CreateRect("SkillsView", actionPanel.transform).gameObject;
+            var skillsRect = skillsView.GetComponent<RectTransform>();
+            SetAnchor(skillsRect, new Vector2(0.5f, 0.48f), new Vector2(820f, 560f), Vector2.zero);
+            skillsView.SetActive(false);
+
+            var layout = skillsView.GetComponent<VerticalLayoutGroup>();
+            if (layout != null)
+            {
+                Object.DestroyImmediate(layout);
+            }
+
+            var header = so.FindProperty("skillsHeaderText")?.objectReferenceValue as TMP_Text
+                ?? skillsView.transform.Find("SkillsHeader")?.GetComponent<TMP_Text>()
+                ?? CreateLabel(skillsView.transform, "SkillsHeader", "Skill Select", 28f, TextAlignmentOptions.Center, font);
+            header.text = "Skill Select";
+            header.fontStyle = FontStyles.Bold;
+            SetAnchor(header.rectTransform, new Vector2(0.5f, 0.92f), new Vector2(520f, 48f), Vector2.zero);
+
+            var buttons = new List<Button>();
+            var labels = new List<TMP_Text>();
+            var existingButtons = so.FindProperty("skillTierButtons");
+            var existingLabels = so.FindProperty("skillTierLabels");
+            var positions = new[]
+            {
+                new Vector2(-205f, 110f),
+                new Vector2(205f, 110f),
+                new Vector2(-205f, -40f),
+                new Vector2(205f, -40f),
+            };
+
+            for (var index = 0; index < PlayerCombatController.MaxEquippedSkillSlots; index++)
+            {
+                var button = existingButtons != null && index < existingButtons.arraySize
+                    ? existingButtons.GetArrayElementAtIndex(index).objectReferenceValue as Button
+                    : null;
+                button ??= skillsView.transform.Find($"SkillSlotButton_{index + 1}")?.GetComponent<Button>();
+                button ??= CreateImage(skillsView.transform, $"SkillSlotButton_{index + 1}", new Color(0.10f, 0.36f, 0.18f, 1f)).gameObject.AddComponent<Button>();
+
+                ConfigureSkillSlotButton(button, index, positions[index], font);
+                buttons.Add(button);
+
+                var label = existingLabels != null && index < existingLabels.arraySize
+                    ? existingLabels.GetArrayElementAtIndex(index).objectReferenceValue as TMP_Text
+                    : null;
+                label ??= button.transform.Find("Label")?.GetComponent<TMP_Text>();
+                label ??= CreateLabel(button.transform, "Label", string.Empty, 23f, TextAlignmentOptions.MidlineLeft, font);
+                ConfigureSkillSlotLabel(label, font);
+                labels.Add(label);
+            }
+
+            var costIcon = EnsureCostFormulaHelpIcon(
+                actionPanel.transform,
+                "CostFormulaHelpIcon",
+                new Vector2(0.94f, 0.88f),
+                font);
+            var boardCostIcon = EnsureCostFormulaHelpIcon(
+                boardPanel.transform,
+                "BoardCostFormulaHelpIcon",
+                new Vector2(0.94f, 0.91f),
+                font);
+
+            SetRef(so, "skillsView", skillsView);
+            SetRef(so, "skillsHeaderText", header);
+            SetListRef(so, "skillTierButtons", buttons);
+            SetListRef(so, "skillTierLabels", labels);
+            SetRef(so, "costFormulaHelpIcon", costIcon);
+            SetRef(so, "costFormulaHelpLabel", costIcon.transform.Find("Label")?.GetComponent<TMP_Text>());
+            SetRef(so, "boardCostFormulaHelpIcon", boardCostIcon);
+            SetRef(so, "boardCostFormulaHelpLabel", boardCostIcon.transform.Find("Label")?.GetComponent<TMP_Text>());
+            so.ApplyModifiedPropertiesWithoutUndo();
+
+            EditorUtility.SetDirty(view);
+            EditorSceneManager.MarkSceneDirty(scene);
+            EditorSceneManager.SaveScene(scene);
+            AssetDatabase.SaveAssets();
+            Debug.Log("Pokemon-style skill panel and board help icon ensured.");
+        }
+
         private static Canvas EnsureCanvas()
         {
             var canvasObject = GameObject.Find("CombatCanvas");
@@ -214,7 +317,12 @@ namespace Project2048.PrototypeEditor
             var skills = new List<SkillSO> { attack1, attack2, attack3, defense1, defense2, defense3 };
 
             var player = CreateOrLoadAsset<PlayerSO>(DataFolder + "/PrototypePlayer.asset");
-            player.maxHp = 30;
+            player.usePokemonHpFormula = true;
+            player.statLevel = 50;
+            player.baseHp = 40;
+            player.hpIndividualValue = 0;
+            player.hpEffortValue = 0;
+            player.maxHp = 100;
             player.attackPower = 2;
             player.initialBoardMoveCount = 12;
             player.boardMoveCountBonus = 0;
@@ -417,6 +525,13 @@ namespace Project2048.PrototypeEditor
 
             refs.TurnLimitText = CreateLabel(boardRect, "TurnLimitText", "제한 턴 : 12회", 30, TextAlignmentOptions.Right, font);
             SetAnchor(refs.TurnLimitText.rectTransform, new Vector2(0.76f, 0.91f), new Vector2(360, 50), Vector2.zero);
+            CreateCostFormulaHelpIcon(
+                boardRect,
+                "BoardCostFormulaHelpIcon",
+                new Vector2(0.94f, 0.91f),
+                font,
+                out refs.BoardCostFormulaHelpIcon,
+                out refs.BoardCostFormulaHelpLabel);
 
             var boardTitle = CreateLabel(boardRect, "BoardPhaseTitle", "내 턴", 54, TextAlignmentOptions.Left, font);
             boardTitle.fontStyle = FontStyles.Bold;
@@ -471,11 +586,19 @@ namespace Project2048.PrototypeEditor
 
             refs.CostText = CreateLabel(refs.ActionPanel.transform, "CostText", "보유 코스트: 0", 32, TextAlignmentOptions.Right, font);
             SetAnchor(refs.CostText.rectTransform, new Vector2(0.74f, 0.88f), new Vector2(440, 58), Vector2.zero);
+            CreateCostFormulaHelpIcon(
+                refs.ActionPanel.transform,
+                "CostFormulaHelpIcon",
+                new Vector2(0.94f, 0.88f),
+                font,
+                out refs.CostFormulaHelpIcon,
+                out refs.CostFormulaHelpLabel);
 
             refs.CategoryView = CreateVerticalGroup(refs.ActionPanel.transform, "CategoryView", new Vector2(0.48f, 0.48f), new Vector2(700, 500), 30);
             refs.AttackCategory = CreateLabeledButton(refs.CategoryView.transform, "AttackButton", "공격", font);
             refs.DefenseCategory = CreateLabeledButton(refs.CategoryView.transform, "DefenseButton", "방어", font);
             refs.CategoryEndTurn = CreateLabeledButton(refs.CategoryView.transform, "EndTurnButton", "턴 종료", font);
+            refs.CategoryView.SetActive(false);
 
             refs.SkillsView = CreateVerticalGroup(refs.ActionPanel.transform, "SkillsView", new Vector2(0.5f, 0.48f), new Vector2(760, 660), 18);
             refs.SkillsView.SetActive(false);
@@ -485,6 +608,7 @@ namespace Project2048.PrototypeEditor
             refs.Tier1 = CreateLabeledButton(refs.SkillsView.transform, "Tier1Button", "1단계", font, out refs.Tier1Label);
             refs.Tier2 = CreateLabeledButton(refs.SkillsView.transform, "Tier2Button", "2단계", font, out refs.Tier2Label);
             refs.Tier3 = CreateLabeledButton(refs.SkillsView.transform, "Tier3Button", "3단계", font, out refs.Tier3Label);
+            refs.Tier4 = CreateLabeledButton(refs.SkillsView.transform, "SkillSlotButton_4", "4단계", font, out refs.Tier4Label);
             refs.SkillsBack = CreateLabeledButton(refs.SkillsView.transform, "BackButton", "뒤로", font);
             refs.SkillsEndTurn = CreateLabeledButton(refs.SkillsView.transform, "EndTurnButton", "턴 종료", font);
         }
@@ -647,6 +771,122 @@ namespace Project2048.PrototypeEditor
             labelText.fontStyle = FontStyles.Bold;
             SetStretch(labelText.rectTransform, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
             return button;
+        }
+
+        private static void CreateCostFormulaHelpIcon(
+            Transform parent,
+            string name,
+            Vector2 anchor,
+            TMP_FontAsset font,
+            out GameObject iconObject,
+            out TMP_Text label)
+        {
+            var icon = CreateImage(parent, name, new Color(0.06f, 0.07f, 0.08f, 0.94f));
+            icon.raycastTarget = true;
+            SetAnchor(icon.rectTransform, anchor, new Vector2(46f, 46f), Vector2.zero);
+
+            var outline = icon.gameObject.AddComponent<Outline>();
+            outline.effectColor = new Color(0.34f, 0.74f, 0.48f, 1f);
+            outline.effectDistance = new Vector2(2f, -2f);
+            outline.useGraphicAlpha = true;
+
+            label = CreateLabel(icon.transform, "Label", "?", 28f, TextAlignmentOptions.Center, font);
+            label.fontStyle = FontStyles.Bold;
+            label.raycastTarget = false;
+            SetStretch(label.rectTransform, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
+            iconObject = icon.gameObject;
+        }
+
+        private static GameObject EnsureCostFormulaHelpIcon(
+            Transform parent,
+            string name,
+            Vector2 anchor,
+            TMP_FontAsset font)
+        {
+            var icon = parent.Find(name)?.gameObject;
+            TMP_Text label;
+            if (icon == null)
+            {
+                CreateCostFormulaHelpIcon(parent, name, anchor, font, out icon, out label);
+                return icon;
+            }
+
+            var rect = icon.GetComponent<RectTransform>() ?? icon.AddComponent<RectTransform>();
+            SetAnchor(rect, anchor, new Vector2(46f, 46f), Vector2.zero);
+
+            var image = icon.GetComponent<Image>() ?? icon.AddComponent<Image>();
+            image.color = new Color(0.06f, 0.07f, 0.08f, 0.94f);
+            image.raycastTarget = true;
+
+            var outline = icon.GetComponent<Outline>() ?? icon.AddComponent<Outline>();
+            outline.effectColor = new Color(0.34f, 0.74f, 0.48f, 1f);
+            outline.effectDistance = new Vector2(2f, -2f);
+            outline.useGraphicAlpha = true;
+
+            label = icon.transform.Find("Label")?.GetComponent<TMP_Text>()
+                ?? CreateLabel(icon.transform, "Label", "?", 28f, TextAlignmentOptions.Center, font);
+            label.text = "?";
+            label.fontStyle = FontStyles.Bold;
+            label.raycastTarget = false;
+            SetStretch(label.rectTransform, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
+            return icon;
+        }
+
+        private static void ConfigureSkillSlotButton(Button button, int index, Vector2 anchoredPosition, TMP_FontAsset font)
+        {
+            if (button == null)
+            {
+                return;
+            }
+
+            button.name = $"SkillSlotButton_{index + 1}";
+            var rect = button.GetComponent<RectTransform>();
+            SetAnchor(rect, new Vector2(0.5f, 0.5f), new Vector2(360f, 118f), anchoredPosition);
+
+            var image = button.GetComponent<Image>() ?? button.gameObject.AddComponent<Image>();
+            image.color = index == 2
+                ? new Color(0.22f, 0.22f, 0.24f, 1f)
+                : new Color(0.10f, 0.36f, 0.18f, 1f);
+            image.sprite = EnsureHpBarSpriteAsset();
+            image.type = Image.Type.Simple;
+            image.raycastTarget = true;
+
+            var outline = button.GetComponent<Outline>() ?? button.gameObject.AddComponent<Outline>();
+            outline.effectColor = index == 2
+                ? new Color(0.82f, 0.82f, 0.82f, 1f)
+                : new Color(0.30f, 0.72f, 0.36f, 1f);
+            outline.effectDistance = new Vector2(3f, -3f);
+            outline.useGraphicAlpha = true;
+
+            var layout = button.GetComponent<LayoutElement>() ?? button.gameObject.AddComponent<LayoutElement>();
+            layout.ignoreLayout = true;
+
+            var label = button.transform.Find("Label")?.GetComponent<TMP_Text>();
+            if (label != null)
+            {
+                ConfigureSkillSlotLabel(label, font);
+            }
+        }
+
+        private static void ConfigureSkillSlotLabel(TMP_Text label, TMP_FontAsset font)
+        {
+            if (label == null)
+            {
+                return;
+            }
+
+            label.fontSize = 23f;
+            label.fontStyle = FontStyles.Bold;
+            label.alignment = TextAlignmentOptions.MidlineLeft;
+            label.color = Color.white;
+            label.textWrappingMode = TextWrappingModes.Normal;
+            label.raycastTarget = false;
+            if (font != null)
+            {
+                label.font = font;
+            }
+
+            SetStretch(label.rectTransform, Vector2.zero, Vector2.one, new Vector2(34f, 6f), new Vector2(-18f, -6f));
         }
 
         private static void CreateStatusBar(
@@ -1091,14 +1331,18 @@ namespace Project2048.PrototypeEditor
             SetRef(so, "boardSwipeHandler", refs.SwipeHandler);
             SetRef(so, "boardAnimationOverlay", refs.BoardAnimationOverlay);
             SetRef(so, "costText", refs.CostText);
+            SetRef(so, "costFormulaHelpIcon", refs.CostFormulaHelpIcon);
+            SetRef(so, "costFormulaHelpLabel", refs.CostFormulaHelpLabel);
+            SetRef(so, "boardCostFormulaHelpIcon", refs.BoardCostFormulaHelpIcon);
+            SetRef(so, "boardCostFormulaHelpLabel", refs.BoardCostFormulaHelpLabel);
             SetRef(so, "categoryView", refs.CategoryView);
             SetRef(so, "attackCategoryButton", refs.AttackCategory);
             SetRef(so, "defenseCategoryButton", refs.DefenseCategory);
             SetRef(so, "categoryEndTurnButton", refs.CategoryEndTurn);
             SetRef(so, "skillsView", refs.SkillsView);
             SetRef(so, "skillsHeaderText", refs.SkillsHeaderText);
-            SetListRef(so, "skillTierButtons", new List<Button> { refs.Tier1, refs.Tier2, refs.Tier3 });
-            SetListRef(so, "skillTierLabels", new List<TMP_Text> { refs.Tier1Label, refs.Tier2Label, refs.Tier3Label });
+            SetListRef(so, "skillTierButtons", new List<Button> { refs.Tier1, refs.Tier2, refs.Tier3, refs.Tier4 });
+            SetListRef(so, "skillTierLabels", new List<TMP_Text> { refs.Tier1Label, refs.Tier2Label, refs.Tier3Label, refs.Tier4Label });
             SetRef(so, "skillsBackButton", refs.SkillsBack);
             SetRef(so, "skillsEndTurnButton", refs.SkillsEndTurn);
             SetRef(so, "enemyTurnText", refs.EnemyTurnText);
@@ -1273,10 +1517,11 @@ namespace Project2048.PrototypeEditor
             public readonly List<BoardCellView> Cells = new();
             public BoardSwipeHandler SwipeHandler;
             public GameObject ActionPanel, CategoryView, SkillsView, EnemyTurnPanel, ResultOverlay, BoardPanel;
-            public TMP_Text CostText, SkillsHeaderText, EnemyTurnText, ResultTitle, ResultDesc;
+            public GameObject CostFormulaHelpIcon, BoardCostFormulaHelpIcon;
+            public TMP_Text CostText, CostFormulaHelpLabel, BoardCostFormulaHelpLabel, SkillsHeaderText, EnemyTurnText, ResultTitle, ResultDesc;
             public Button AttackCategory, DefenseCategory, CategoryEndTurn;
-            public Button Tier1, Tier2, Tier3, SkillsBack, SkillsEndTurn, Restart, ReloadScene;
-            public TMP_Text Tier1Label, Tier2Label, Tier3Label;
+            public Button Tier1, Tier2, Tier3, Tier4, SkillsBack, SkillsEndTurn, Restart, ReloadScene;
+            public TMP_Text Tier1Label, Tier2Label, Tier3Label, Tier4Label;
             public TMP_Text TurnCounterText, IntentHeaderText, EnemyNameText, IntentBubbleText;
             public TMP_Text HpText, TurnLimitText, PlayerBattleHpText, EnemyHpText, ActionDescriptionText;
             public Image PlayerPortrait, EnemyPortrait, IntentBubble, HpBarFill, PlayerBattleHpFill, EnemyHpFill;

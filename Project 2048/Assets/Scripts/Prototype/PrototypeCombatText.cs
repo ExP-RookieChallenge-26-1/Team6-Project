@@ -11,12 +11,12 @@ namespace Project2048.Prototype
     {
         public static string FormatCost(int cost)
         {
-            return $"보유 코스트: {cost}";
+            return $"보유 코스트 {cost}";
         }
 
         public static string FormatHp(int currentHp, int maxHp)
         {
-            return $"체력 {currentHp}/{maxHp}";
+            return $"{currentHp}/{maxHp}";
         }
 
         public static string FormatEnemyHp(int currentHp, int maxHp, int block)
@@ -39,8 +39,8 @@ namespace Project2048.Prototype
         public static string FormatEnemyTurnAction(string description)
         {
             return string.IsNullOrWhiteSpace(description)
-                ? "적 턴\n행동 대기 중"
-                : $"적 턴\n{description}";
+                ? "적 행동 대기 중"
+                : $"적 행동\n{description}";
         }
 
         public static string FormatEnemyHeader(string displayName, string aiProfileLabel)
@@ -64,22 +64,49 @@ namespace Project2048.Prototype
 
         public static string FormatRemainingMoves(int moves)
         {
-            return $"제한 턴 : {moves}회";
+            return $"이동 횟수 {moves}";
         }
 
-        public static string FormatSkillHeader(SkillType? skillType)
+        public static string FormatSkillHeader()
         {
-            return skillType == SkillType.Defense ? "방어 스킬 선택" : "공격 스킬 선택";
+            return "기술 선택";
         }
 
-        public static string FormatSkillLabel(int tierIndex, SkillSnapshot skill)
+        public static string FormatEmptySkillSlotLabel(int slotIndex)
+        {
+            return $"{slotIndex + 1}. 빈 슬롯";
+        }
+
+        public static string FormatSkillLabel(int slotIndex, SkillSnapshot skill)
+        {
+            return FormatSkillLabel(slotIndex, skill, canAfford: true);
+        }
+
+        public static string FormatSkillLabel(int slotIndex, SkillSnapshot skill, bool canAfford)
+        {
+            return FormatSkillLabel(slotIndex, skill, canAfford, -1);
+        }
+
+        public static string FormatSkillLabel(int slotIndex, SkillSnapshot skill, bool canAfford, int currentCost)
         {
             if (skill == null)
             {
-                return string.Empty;
+                return FormatEmptySkillSlotLabel(slotIndex);
             }
 
-            return $"{tierIndex + 1}단계 · {skill.DisplayName} (코스트 {skill.Cost} / 위력 {skill.Power})";
+            var available = currentCost >= 0 ? currentCost : 0;
+            var status = canAfford ? string.Empty : " - COST LOW";
+            return $"{skill.DisplayName}\nPP {available}/{skill.Cost}{status}";
+        }
+
+        public static string FormatSkillReplacementLabel(int slotIndex, SkillSnapshot skill)
+        {
+            if (skill == null)
+            {
+                return FormatEmptySkillSlotLabel(slotIndex);
+            }
+
+            return $"{slotIndex + 1}. {skill.DisplayName}\n잊고 새 기술 배우기";
         }
 
         public static string FormatIntent(EnemyIntent intent)
@@ -89,15 +116,20 @@ namespace Project2048.Prototype
                 return string.Empty;
             }
 
+            if (!string.IsNullOrWhiteSpace(intent.displayName))
+            {
+                return intent.displayName;
+            }
+
             return intent.intentType switch
             {
-                EnemyIntentType.Defense => "방어",
+                EnemyIntentType.Defense => "보호",
                 EnemyIntentType.Attack => "공격",
                 EnemyIntentType.Debuff => intent.debuffType switch
                 {
-                    DebuffType.Darkness => "암흑",
+                    DebuffType.Darkness => "섬광",
                     DebuffType.Fear => "공포",
-                    _ => "디버프",
+                    _ => "약화",
                 },
                 _ => intent.intentType.ToString(),
             };
@@ -127,15 +159,15 @@ namespace Project2048.Prototype
 
             return cue.DebuffType switch
             {
-                DebuffType.Fear => $"공포: 방어도 획득 -{cue.Value}",
-                DebuffType.Darkness => $"암흑: 방해 블록 +{cue.Value}",
-                _ => $"디버프: {cue.Value}",
+                DebuffType.Fear => $"공포: 방어력 -{cue.Value}",
+                DebuffType.Darkness => $"섬광: 방해 블록 +{cue.Value}",
+                _ => $"약화 {cue.Value}",
             };
         }
 
         public static string FormatResultTitle(CombatPhase phase)
         {
-            return phase == CombatPhase.Victory ? "클리어!" : "죽었습니다!";
+            return phase == CombatPhase.Victory ? "승리" : "패배";
         }
 
         public static string FormatResultDescription(CombatSnapshot snapshot)
@@ -146,8 +178,8 @@ namespace Project2048.Prototype
             }
 
             return snapshot.Phase == CombatPhase.Victory
-                ? $"얻은 스코어 : {CalculatePrototypeScore(snapshot)}"
-                : $"스코어 : {CalculatePrototypeScore(snapshot)}";
+                ? $"전투 점수 {CalculatePrototypeScore(snapshot)}"
+                : $"최종 점수 {CalculatePrototypeScore(snapshot)}";
         }
 
         public static string FormatResultDescription(CombatSnapshot snapshot, int totalScore)
@@ -158,22 +190,22 @@ namespace Project2048.Prototype
             }
 
             return snapshot.Phase == CombatPhase.Victory
-                ? $"총점 : {totalScore}"
-                : $"최종 점수 : {totalScore}";
+                ? $"전투 점수 {totalScore}"
+                : $"최종 점수 {totalScore}";
         }
 
         public static string FormatRewardTitle(BattleRewardSO reward)
         {
             return reward != null && !string.IsNullOrWhiteSpace(reward.mothDisplayName)
                 ? reward.mothDisplayName
-                : "나방";
+                : "보상";
         }
 
         public static string FormatRewardDescription(BattleRewardSO reward)
         {
             return reward != null && !string.IsNullOrWhiteSpace(reward.encounterText)
                 ? reward.encounterText
-                : "조력자가 다음 전투를 준비할 기회를 줍니다.";
+                : "다음 전투를 준비할 보상을 선택합니다.";
         }
 
         public static string FormatRestReward(BattleRewardSO reward)
@@ -181,13 +213,42 @@ namespace Project2048.Prototype
             var percent = reward != null
                 ? UnityEngine.Mathf.RoundToInt(UnityEngine.Mathf.Clamp01(reward.healPercentOfMaxHp) * 100f)
                 : 30;
-            return $"휴식 : 최대 체력의 {percent}%를 회복합니다";
+            return $"회복: 최대 체력 {percent}% 회복";
         }
 
         public static string FormatEnhanceReward(BattleRewardSO reward)
         {
             var count = reward != null ? UnityEngine.Mathf.Max(0, reward.extraBoardMoveCount) : 1;
-            return $"강화 : 제한 단수가 {count}회 증가합니다";
+            return $"강화: 보드 이동 횟수 +{count}";
+        }
+
+        public static string FormatRewardChoice(BattleRewardSO reward)
+        {
+            if (reward == null)
+            {
+                return string.Empty;
+            }
+
+            return reward.rewardKind switch
+            {
+                RewardChoiceKind.HealOne => "회복 1",
+                RewardChoiceKind.HealTwo => "회복 2",
+                RewardChoiceKind.HealThree => "회복 3",
+                RewardChoiceKind.TemporaryAttackPower => $"다음 전투 공격력 +{reward.temporaryAttackPowerBonus}",
+                RewardChoiceKind.TemporaryDefensePower => $"다음 전투 방어력 +{reward.temporaryDefensePowerBonus}",
+                RewardChoiceKind.TemporaryBoardMoveCount => $"다음 전투 이동 횟수 +{reward.temporaryBoardMoveCountBonus}",
+                RewardChoiceKind.PermanentMaxHp => $"최대 체력 +{reward.permanentMaxHpBonus}",
+                RewardChoiceKind.PermanentAttackPower => $"공격력 +{reward.permanentAttackPowerBonus}",
+                RewardChoiceKind.PermanentDefensePower => $"방어력 +{reward.permanentDefensePowerBonus}",
+                RewardChoiceKind.PermanentCriticalChance => $"치명타 확률 +{UnityEngine.Mathf.RoundToInt(reward.permanentCriticalChanceBonus * 100f)}%",
+                RewardChoiceKind.PermanentCriticalDamageMultiplier => $"치명타 배율 +{reward.permanentCriticalDamageMultiplierBonus:0.##}배",
+                RewardChoiceKind.LearnSkill => reward.skillToLearn != null
+                    ? $"기술 습득: {reward.skillToLearn.skillName}"
+                    : "기술 습득",
+                RewardChoiceKind.Rest => FormatRestReward(reward),
+                RewardChoiceKind.Enhance => FormatEnhanceReward(reward),
+                _ => FormatRewardTitle(reward),
+            };
         }
 
         private static int CalculatePrototypeScore(CombatSnapshot snapshot)

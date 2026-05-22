@@ -15,7 +15,7 @@ MonoBehaviour:
   skillId: attack_1
   skillName: "1\uB2E8\uACC4 \uACF5\uACA9"
   skillType: 0
-  cost: 5
+  cost: 9
   power: 3
   targetAttackModifier: 0
   selfDefenseBonus: 0

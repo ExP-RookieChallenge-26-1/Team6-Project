@@ -1,12 +1,8 @@
-using System;
+using Project2048.Skills;
 using UnityEngine;
 
 namespace Project2048.Enemy
 {
-    /// <summary>
-    /// 고정 인텐트 패턴이 없는 적의 다음 행동을 만든다.
-    /// 공격/방어 성향, 디버프 순서, 강화형 배율은 EnemySO 데이터에서 읽는다.
-    /// </summary>
     public class EnemyAiBrain
     {
         private readonly System.Random random;
@@ -23,36 +19,164 @@ namespace Project2048.Enemy
                 return null;
             }
 
-            // 디버프는 일정 턴마다 끼워 넣고, 나머지 턴은 공격/방어 가중치로 고른다.
+            if (CanUseSpecialActions(data) &&
+                data.canUseBullRush &&
+                data.bullRushInterval > 0 &&
+                (turnIndex + 1) % data.bullRushInterval == 0)
+            {
+                return BuildBullRushIntent(data);
+            }
+
             var debuffInterval = Mathf.Max(0, data.aiDebuffInterval);
             if (debuffInterval > 0 && (turnIndex + 1) % debuffInterval == 0)
             {
-                return BuildDebuffIntent(data, ((turnIndex + 1) / debuffInterval) - 1);
+                return ChooseSkillIntent(data, EnemyIntentType.Debuff) ??
+                       BuildDebuffIntent(data, ((turnIndex + 1) / debuffInterval) - 1);
             }
 
-            return ChooseAttackOrDefense(data);
+            var selectedType = ChooseAttackOrDefenseType(data);
+            if (selectedType == EnemyIntentType.Defense && CanUseSpecialActions(data) && data.canUseThornGuard)
+            {
+                return BuildDefenseIntent(data);
+            }
+
+            return ChooseSkillIntent(data, selectedType) ?? BuildFallbackIntent(data, selectedType);
         }
 
-        private EnemyIntent ChooseAttackOrDefense(EnemySO data)
+        private EnemyIntent ChooseSkillIntent(EnemySO data, EnemyIntentType requestedType)
+        {
+            if (data.skills == null || data.skills.Count == 0)
+            {
+                return null;
+            }
+
+            var matchingSkills = new SkillSO[EnemySO.MaxEquippedSkillSlots];
+            var count = 0;
+            for (var index = 0; index < data.skills.Count && index < EnemySO.MaxEquippedSkillSlots; index++)
+            {
+                var skill = data.skills[index];
+                if (skill == null || ResolveIntentType(skill) != requestedType)
+                {
+                    continue;
+                }
+
+                matchingSkills[count++] = skill;
+            }
+
+            if (count == 0)
+            {
+                return null;
+            }
+
+            return BuildSkillIntent(data, matchingSkills[random.Next(count)]);
+        }
+
+        private EnemyIntentType ChooseAttackOrDefenseType(EnemySO data)
         {
             var (attackWeight, defenseWeight) = GetActionWeights(data.aiActionBias);
             var totalWeight = attackWeight + defenseWeight;
             if (totalWeight <= 0)
             {
-                return BuildAttackIntent(data);
+                return EnemyIntentType.Attack;
             }
 
             var roll = random.NextDouble() * totalWeight;
-            return roll < attackWeight
-                ? BuildAttackIntent(data)
-                : BuildDefenseIntent(data);
+            return roll < attackWeight ? EnemyIntentType.Attack : EnemyIntentType.Defense;
+        }
+
+        private EnemyIntent BuildFallbackIntent(EnemySO data, EnemyIntentType intentType)
+        {
+            return intentType == EnemyIntentType.Defense
+                ? BuildDefenseIntent(data)
+                : BuildAttackIntent(data);
+        }
+
+        private EnemyIntent BuildSkillIntent(EnemySO data, SkillSO skill)
+        {
+            var effectKind = skill.ResolveEffectKind();
+            var intent = new EnemyIntent
+            {
+                skillId = skill.skillId,
+                displayName = string.IsNullOrWhiteSpace(skill.skillName) ? skill.skillId : skill.skillName,
+                skillEffectKind = effectKind,
+                hpCost = skill.hpCost,
+                hpCostLeavesOne = skill.hpCostLeavesOne,
+                lifeStealPercent = skill.lifeStealPercent,
+                nextBoardMoveCountModifier = skill.nextBoardMoveCountModifier,
+                targetAttackModifier = skill.targetAttackModifier,
+                targetDefenseModifier = skill.targetDefenseModifier,
+                selfDefensePowerModifier = skill.selfDefensePowerModifier,
+            };
+
+            switch (effectKind)
+            {
+                case SkillEffectKind.AttackDown:
+                    intent.intentType = EnemyIntentType.Debuff;
+                    intent.value = Mathf.Abs(skill.targetAttackModifier != 0 ? skill.targetAttackModifier : skill.power);
+                    intent.targetAttackModifier = skill.targetAttackModifier != 0 ? skill.targetAttackModifier : -skill.power;
+                    return intent;
+                case SkillEffectKind.DefenseDown:
+                    intent.intentType = EnemyIntentType.Debuff;
+                    intent.value = Mathf.Abs(skill.targetDefenseModifier != 0 ? skill.targetDefenseModifier : skill.power);
+                    intent.targetDefenseModifier = skill.targetDefenseModifier != 0 ? skill.targetDefenseModifier : -skill.power;
+                    return intent;
+                case SkillEffectKind.ThornGuard:
+                    intent.intentType = EnemyIntentType.Defense;
+                    intent.value = ScaleByStrength(skill.power, data.aiStrength);
+                    intent.isThornGuard = true;
+                    intent.retaliationDamage = ScaleByStrength(skill.selfThornRetaliationDamage, data.aiStrength);
+                    return intent;
+                case SkillEffectKind.LightGuard:
+                case SkillEffectKind.BasicDefense:
+                    intent.intentType = EnemyIntentType.Defense;
+                    intent.value = ScaleByStrength(skill.power, data.aiStrength);
+                    return intent;
+                case SkillEffectKind.IronWall:
+                    intent.intentType = EnemyIntentType.Defense;
+                    intent.value = 0;
+                    intent.selfDefensePowerModifier = skill.selfDefensePowerModifier != 0
+                        ? skill.selfDefensePowerModifier
+                        : skill.power;
+                    return intent;
+                case SkillEffectKind.ChargeAttack:
+                    intent.intentType = EnemyIntentType.Attack;
+                    intent.value = ScaleByStrength(data.attackPower + Mathf.Max(skill.chargedPower, skill.power), data.aiStrength);
+                    return intent;
+                default:
+                    intent.intentType = EnemyIntentType.Attack;
+                    intent.value = ScaleByStrength(data.attackPower + skill.power, data.aiStrength);
+                    return intent;
+            }
+        }
+
+        private static EnemyIntentType ResolveIntentType(SkillSO skill)
+        {
+            if (skill == null)
+            {
+                return EnemyIntentType.Attack;
+            }
+
+            return skill.ResolveEffectKind() switch
+            {
+                SkillEffectKind.AttackDown => EnemyIntentType.Debuff,
+                SkillEffectKind.DefenseDown => EnemyIntentType.Debuff,
+                SkillEffectKind.BasicDefense => EnemyIntentType.Defense,
+                SkillEffectKind.ThornGuard => EnemyIntentType.Defense,
+                SkillEffectKind.LightGuard => EnemyIntentType.Defense,
+                SkillEffectKind.Counter => EnemyIntentType.Defense,
+                SkillEffectKind.Endure => EnemyIntentType.Defense,
+                SkillEffectKind.CriticalFocus => EnemyIntentType.Defense,
+                SkillEffectKind.SplitAttack => EnemyIntentType.Defense,
+                SkillEffectKind.EchoDamage => EnemyIntentType.Defense,
+                SkillEffectKind.IronWall => EnemyIntentType.Defense,
+                _ => EnemyIntentType.Attack,
+            };
         }
 
         private static (int AttackWeight, int DefenseWeight) GetActionWeights(EnemyAiActionBias bias)
         {
             return bias switch
             {
-                // 80:20 비율은 AI 성향 확인용 기본값이다. 정식 몬스터 밸런스에서 조정한다.
                 EnemyAiActionBias.AttackHeavy => (80, 20),
                 EnemyAiActionBias.DefenseHeavy => (20, 80),
                 _ => (50, 50),
@@ -70,10 +194,33 @@ namespace Project2048.Enemy
 
         private static EnemyIntent BuildDefenseIntent(EnemySO data)
         {
+            if (CanUseSpecialActions(data) && data.canUseThornGuard)
+            {
+                return new EnemyIntent
+                {
+                    displayName = "가시 방어",
+                    skillEffectKind = SkillEffectKind.ThornGuard,
+                    intentType = EnemyIntentType.Defense,
+                    value = ScaleByStrength(data.thornGuardShieldHp, data.aiStrength),
+                    isThornGuard = true,
+                    retaliationDamage = ScaleByStrength(data.thornGuardRetaliationDamage, data.aiStrength),
+                };
+            }
+
             return new EnemyIntent
             {
                 intentType = EnemyIntentType.Defense,
                 value = ScaleByStrength(data.defensePower, data.aiStrength),
+            };
+        }
+
+        private static EnemyIntent BuildBullRushIntent(EnemySO data)
+        {
+            return new EnemyIntent
+            {
+                displayName = "황소 돌진",
+                intentType = EnemyIntentType.Attack,
+                value = ScaleByStrength(data.attackPower + data.bullRushBonusDamage, data.aiStrength),
             };
         }
 
@@ -100,10 +247,14 @@ namespace Project2048.Enemy
         private static int ScaleByStrength(int value, EnemyAiStrength strength)
         {
             var baseValue = Mathf.Max(0, value);
-            // 강화형 몬스터는 같은 브레인 설정을 쓰되 수치만 1.5배로 올린다.
             return strength == EnemyAiStrength.Enhanced
                 ? Mathf.CeilToInt(baseValue * 1.5f)
                 : baseValue;
+        }
+
+        private static bool CanUseSpecialActions(EnemySO data)
+        {
+            return data.encounterRank != EnemyEncounterRank.Normal;
         }
     }
 }

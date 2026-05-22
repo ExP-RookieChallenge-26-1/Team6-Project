@@ -50,6 +50,8 @@ namespace Project2048.Prototype
         private const string HpBarInteriorName = "HpBarInterior";
         private const string HpBarOutlineName = "HpBarOutline";
         private const float UiSfxDistance = 10000f;
+        private static readonly string CostFormulaTooltipDescription =
+            $"2048 코스트 환산식\nlog2(전체 타일 합) + log2(가장 큰 타일) x {CostConverter.LargestTileBonusMultiplier} - (타일 개수 - 1) / {CostConverter.FragmentationPenaltyDivisor}\n빈 칸, 장애물, 2의 거듭제곱이 아닌 타일은 제외";
 
         [Header("Top bar")]
         [SerializeField] private TMP_Text turnCounterText;
@@ -88,15 +90,14 @@ namespace Project2048.Prototype
 
         [Header("Action panel")]
         [SerializeField] private TMP_Text costText;
-        [SerializeField] private GameObject categoryView;
-        [SerializeField] private Button attackCategoryButton;
-        [SerializeField] private Button defenseCategoryButton;
-        [SerializeField] private Button categoryEndTurnButton;
+        [SerializeField] private GameObject costFormulaHelpIcon;
+        [SerializeField] private TMP_Text costFormulaHelpLabel;
+        [SerializeField] private GameObject boardCostFormulaHelpIcon;
+        [SerializeField] private TMP_Text boardCostFormulaHelpLabel;
         [SerializeField] private GameObject skillsView;
         [SerializeField] private TMP_Text skillsHeaderText;
         [SerializeField] private List<Button> skillTierButtons = new();
         [SerializeField] private List<TMP_Text> skillTierLabels = new();
-        [SerializeField] private Button skillsBackButton;
         [SerializeField] private Button skillsEndTurnButton;
 
         [Header("Enemy turn panel")]
@@ -119,6 +120,11 @@ namespace Project2048.Prototype
         [SerializeField] private TMP_Text rewardEnhanceText;
         [SerializeField] private Button rewardRestButton;
         [SerializeField] private Button rewardEnhanceButton;
+        [SerializeField] private List<Button> rewardChoiceButtons = new();
+        [SerializeField] private List<TMP_Text> rewardChoiceLabels = new();
+        [SerializeField] private List<Button> skillReplacementButtons = new();
+        [SerializeField] private List<TMP_Text> skillReplacementLabels = new();
+        private int pendingSkillRewardChoiceIndex = -1;
 
         [Header("Board effects")]
         [SerializeField] private AudioSource audioSource;
@@ -188,6 +194,7 @@ namespace Project2048.Prototype
 
             ResolveMissingReferences();
             EnsureHpBarDefaults();
+            ConfigureCostFormulaHelp();
             EnsureAudioDefaults();
             WireButtons();
             BindRewardEvents();
@@ -294,22 +301,16 @@ namespace Project2048.Prototype
                 boardSwipeHandler.OnSwipe += HandleSwipe;
             }
 
-            BindButton(attackCategoryButton, () => uiState.SelectCategory(SkillType.Attack));
-            BindButton(defenseCategoryButton, () => uiState.SelectCategory(SkillType.Defense));
-            BindButton(categoryEndTurnButton, () => combatManager?.RequestEndPlayerTurn());
-            BindButton(skillsBackButton, () => uiState.ClearCategory());
             BindButton(skillsEndTurnButton, () => combatManager?.RequestEndPlayerTurn());
 
             for (var i = 0; i < skillTierButtons.Count; i++)
             {
                 var index = i;
-                BindButton(skillTierButtons[i], () => OnSkillTierClicked(index));
+                BindButton(skillTierButtons[i], () => OnSkillSlotClicked(index));
             }
 
             BindButton(restartButton, () => bootstrap?.RestartCombat());
             BindButton(reloadSceneButton, () => SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex));
-            BindButton(rewardRestButton, () => rewardManager?.ChooseRest(combatManager != null ? combatManager.Player : null));
-            BindButton(rewardEnhanceButton, () => rewardManager?.ChooseEnhance(combatManager != null ? combatManager.Player : null));
         }
 
         private void BindButton(Button button, System.Action handler)
@@ -338,15 +339,24 @@ namespace Project2048.Prototype
             });
         }
 
-        private void OnSkillTierClicked(int tierIndex)
+        private void OnSkillSlotClicked(int slotIndex)
         {
-            if (combatManager == null || tierIndex < 0 || tierIndex >= visibleSkills.Count)
+            if (combatManager == null ||
+                snapshot == null ||
+                snapshot.Skills == null ||
+                slotIndex < 0 ||
+                slotIndex >= snapshot.Skills.Count)
             {
                 return;
             }
 
-            var skill = visibleSkills[tierIndex];
-            var targetIndex = skill.SkillType == SkillType.Attack ? 0 : -1;
+            var skill = snapshot.Skills[slotIndex];
+            if (skill == null)
+            {
+                return;
+            }
+
+            var targetIndex = skill.RequiresEnemyTarget ? 0 : -1;
             combatManager.RequestUseSkillById(skill.SkillId, targetIndex);
         }
 
@@ -384,8 +394,10 @@ namespace Project2048.Prototype
             }
 
             rewardManager.OnRewardOffered -= HandleRewardOffered;
+            rewardManager.OnRewardChoicesOffered -= HandleRewardChoicesOffered;
             rewardManager.OnRewardClaimed -= HandleRewardClaimed;
             rewardManager.OnRewardOffered += HandleRewardOffered;
+            rewardManager.OnRewardChoicesOffered += HandleRewardChoicesOffered;
             rewardManager.OnRewardClaimed += HandleRewardClaimed;
         }
 
@@ -397,16 +409,25 @@ namespace Project2048.Prototype
             }
 
             rewardManager.OnRewardOffered -= HandleRewardOffered;
+            rewardManager.OnRewardChoicesOffered -= HandleRewardChoicesOffered;
             rewardManager.OnRewardClaimed -= HandleRewardClaimed;
         }
 
         private void HandleRewardOffered(BattleRewardSO _)
         {
+            pendingSkillRewardChoiceIndex = -1;
+            Render();
+        }
+
+        private void HandleRewardChoicesOffered(IReadOnlyList<BattleRewardSO> _)
+        {
+            pendingSkillRewardChoiceIndex = -1;
             Render();
         }
 
         private void HandleRewardClaimed(RewardChoiceResult _)
         {
+            pendingSkillRewardChoiceIndex = -1;
             if (combatManager != null)
             {
                 snapshot = combatManager.GetSnapshot();
@@ -433,7 +454,6 @@ namespace Project2048.Prototype
                 case PrototypeCombatScreenMode.Board:
                     RenderBoardPanel();
                     break;
-                case PrototypeCombatScreenMode.ActionCategory:
                 case PrototypeCombatScreenMode.ActionSkills:
                     RenderActionPanel();
                     break;
@@ -604,7 +624,6 @@ namespace Project2048.Prototype
             if (actionPanel != null)
             {
                 actionPanel.SetActive(!rewardReplacementVisible && !deferPanelSwapForBoardAnimation && (
-                    uiState.ScreenMode == PrototypeCombatScreenMode.ActionCategory ||
                     uiState.ScreenMode == PrototypeCombatScreenMode.ActionSkills));
             }
 
@@ -613,11 +632,6 @@ namespace Project2048.Prototype
                 enemyTurnPanel.SetActive(!rewardReplacementVisible &&
                     !deferPanelSwapForBoardAnimation &&
                     uiState.ScreenMode == PrototypeCombatScreenMode.EnemyTurn);
-            }
-
-            if (categoryView != null)
-            {
-                categoryView.SetActive(uiState.ScreenMode == PrototypeCombatScreenMode.ActionCategory);
             }
 
             if (skillsView != null)
@@ -909,24 +923,28 @@ namespace Project2048.Prototype
             }
 
             visibleSkills.Clear();
-            if (uiState.SelectedCategory.HasValue && snapshot != null)
+            if (snapshot != null)
             {
                 visibleSkills.AddRange(uiState.GetVisibleSkills(snapshot));
             }
 
             if (skillsHeaderText != null)
             {
-                skillsHeaderText.text = PrototypeCombatText.FormatSkillHeader(uiState.SelectedCategory);
+                skillsHeaderText.text = PrototypeCombatText.FormatSkillHeader();
             }
 
             for (var i = 0; i < skillTierButtons.Count; i++)
             {
-                var hasSkill = i < visibleSkills.Count;
+                var isSlot = i < PlayerCombatController.MaxEquippedSkillSlots;
+                var hasSkill = isSlot && i < visibleSkills.Count && visibleSkills[i] != null;
+                var canAfford = hasSkill && snapshot != null && visibleSkills[i].Cost <= snapshot.CurrentCost;
                 var button = skillTierButtons[i];
                 if (button != null)
                 {
-                    button.gameObject.SetActive(hasSkill);
-                    button.interactable = hasSkill && snapshot != null && visibleSkills[i].Cost <= snapshot.CurrentCost;
+                    button.gameObject.SetActive(isSlot);
+                    button.interactable = canAfford;
+                    var slotIndex = i;
+                    BindButton(button, () => OnSkillSlotClicked(slotIndex));
                 }
 
                 if (i < skillTierLabels.Count && skillTierLabels[i] != null)
@@ -934,11 +952,17 @@ namespace Project2048.Prototype
                     if (hasSkill)
                     {
                         var skill = visibleSkills[i];
-                        skillTierLabels[i].text = PrototypeCombatText.FormatSkillLabel(i, skill);
+                        skillTierLabels[i].text = PrototypeCombatText.FormatSkillLabel(
+                            i,
+                            skill,
+                            canAfford,
+                            snapshot?.CurrentCost ?? 0);
                     }
                     else
                     {
-                        skillTierLabels[i].text = string.Empty;
+                        skillTierLabels[i].text = isSlot
+                            ? PrototypeCombatText.FormatEmptySkillSlotLabel(i)
+                            : string.Empty;
                     }
                 }
             }
@@ -1061,6 +1085,10 @@ namespace Project2048.Prototype
             statusTooltipText ??= FindNestedComponentByName<TMP_Text>("StatusTooltip", "Text");
             hpBarFill ??= FindComponentInChildrenByName<Image>("HpBarFill");
             hpText ??= FindComponentInChildrenByName<TMP_Text>("HpText");
+            costFormulaHelpIcon ??= FindChildByName("CostFormulaHelpIcon")?.gameObject;
+            costFormulaHelpLabel ??= FindNestedComponentByName<TMP_Text>("CostFormulaHelpIcon", "Label");
+            boardCostFormulaHelpIcon ??= FindChildByName("BoardCostFormulaHelpIcon")?.gameObject;
+            boardCostFormulaHelpLabel ??= FindNestedComponentByName<TMP_Text>("BoardCostFormulaHelpIcon", "Label");
             playerBoardStatusEffectsRoot ??= FindComponentInChildrenByName<RectTransform>("PlayerBoardStatusEffects");
             actionDescriptionText ??= FindComponentInChildrenByName<TMP_Text>("ActionDescriptionText");
             enemyTurnText ??= FindComponentInChildrenByName<TMP_Text>("EnemyTurnText");
@@ -1925,6 +1953,40 @@ namespace Project2048.Prototype
                 .Initialize(effect.Description, ShowStatusTooltip, HideStatusTooltip);
         }
 
+        private void ConfigureCostFormulaHelp()
+        {
+            ConfigureCostFormulaHelpIcon(costFormulaHelpIcon, ref costFormulaHelpLabel);
+            ConfigureCostFormulaHelpIcon(boardCostFormulaHelpIcon, ref boardCostFormulaHelpLabel);
+        }
+
+        private void ConfigureCostFormulaHelpIcon(GameObject icon, ref TMP_Text label)
+        {
+            if (icon == null)
+            {
+                return;
+            }
+
+            if (icon.TryGetComponent<Image>(out var image))
+            {
+                image.raycastTarget = true;
+            }
+
+            label ??= icon.GetComponentInChildren<TMP_Text>(true);
+            if (label != null)
+            {
+                label.text = "?";
+                label.alignment = TextAlignmentOptions.Center;
+                label.raycastTarget = false;
+            }
+
+            if (!icon.TryGetComponent<StatusEffectTooltipTarget>(out var target))
+            {
+                target = icon.AddComponent<StatusEffectTooltipTarget>();
+            }
+
+            target.Initialize(CostFormulaTooltipDescription, ShowStatusTooltip, HideStatusTooltip);
+        }
+
         private void EnsureStatusTooltip()
         {
             if (statusTooltip == null)
@@ -1980,11 +2042,28 @@ namespace Project2048.Prototype
 
             statusTooltipText.text = string.IsNullOrWhiteSpace(description) ? string.Empty : description;
             var ownerRect = transform as RectTransform;
-            if (source != null && ownerRect != null && statusTooltip.transform is RectTransform tooltipRect)
+            var tooltipRect = statusTooltip.transform as RectTransform;
+            if (tooltipRect != null)
+            {
+                var lineCount = string.IsNullOrEmpty(description) ? 1 : description.Count(character => character == '\n') + 1;
+                tooltipRect.sizeDelta = new Vector2(lineCount > 1 ? 500f : 320f, Mathf.Clamp(30f + lineCount * 24f, 56f, 112f));
+            }
+
+            if (source != null && ownerRect != null && tooltipRect != null)
             {
                 var worldPosition = source.TransformPoint(source.rect.center);
                 var localPosition = ownerRect.InverseTransformPoint(worldPosition);
-                tooltipRect.anchoredPosition = localPosition + new Vector3(0f, 28f, 0f);
+                var desiredPosition = localPosition + new Vector3(0f, 28f, 0f);
+                var margin = 8f;
+                var tooltipSize = tooltipRect.sizeDelta;
+                var ownerBounds = ownerRect.rect;
+                var minX = ownerBounds.xMin + tooltipSize.x * tooltipRect.pivot.x + margin;
+                var maxX = ownerBounds.xMax - tooltipSize.x * (1f - tooltipRect.pivot.x) - margin;
+                var minY = ownerBounds.yMin + tooltipSize.y * tooltipRect.pivot.y + margin;
+                var maxY = ownerBounds.yMax - tooltipSize.y * (1f - tooltipRect.pivot.y) - margin;
+                tooltipRect.anchoredPosition = new Vector2(
+                    minX <= maxX ? Mathf.Clamp(desiredPosition.x, minX, maxX) : ownerBounds.center.x,
+                    minY <= maxY ? Mathf.Clamp(desiredPosition.y, minY, maxY) : ownerBounds.center.y);
             }
 
             statusTooltip.SetActive(true);
@@ -2250,25 +2329,143 @@ namespace Project2048.Prototype
 
         private void RenderRewardOverlay()
         {
-            var reward = rewardManager != null ? rewardManager.PendingReward : null;
+            var choices = rewardManager != null ? rewardManager.PendingChoices : null;
+            var isReplacingSkill = pendingSkillRewardChoiceIndex >= 0;
             if (rewardTitleText != null)
             {
-                rewardTitleText.text = PrototypeCombatText.FormatRewardTitle(reward);
+                rewardTitleText.text = isReplacingSkill ? "기술 교체" : "보상 선택";
             }
 
             if (rewardDescriptionText != null)
             {
-                rewardDescriptionText.text = PrototypeCombatText.FormatRewardDescription(reward);
+                rewardDescriptionText.text = isReplacingSkill
+                    ? "잊을 기술을 선택하세요."
+                    : "보상 3개 중 하나를 선택하세요.";
             }
 
-            if (rewardRestText != null)
+            if (isReplacingSkill)
             {
-                rewardRestText.text = PrototypeCombatText.FormatRestReward(reward);
+                RenderSkillReplacementChoices();
+                return;
             }
 
-            if (rewardEnhanceText != null)
+            for (var index = 0; index < skillReplacementButtons.Count; index++)
             {
-                rewardEnhanceText.text = PrototypeCombatText.FormatEnhanceReward(reward);
+                skillReplacementButtons[index]?.gameObject.SetActive(false);
+            }
+
+            for (var index = 0; index < rewardChoiceButtons.Count; index++)
+            {
+                var button = rewardChoiceButtons[index];
+                if (button == null)
+                {
+                    continue;
+                }
+
+                var isChoiceSlot = index < RewardManager.OfferedChoiceCount;
+                var hasChoice = isChoiceSlot && choices != null && index < choices.Count && choices[index] != null;
+                button.gameObject.SetActive(isChoiceSlot);
+                button.interactable = hasChoice;
+                if (!hasChoice)
+                {
+                    SetRewardChoiceLabel(index, string.Empty);
+                    continue;
+                }
+
+                var choiceIndex = index;
+                SetRewardChoiceLabel(index, PrototypeCombatText.FormatRewardChoice(choices[index]));
+                BindButton(button, () => OnRewardChoiceClicked(choiceIndex));
+            }
+        }
+
+        private void RenderSkillReplacementChoices()
+        {
+            var skills = snapshot?.Skills;
+            for (var index = 0; index < rewardChoiceButtons.Count; index++)
+            {
+                rewardChoiceButtons[index]?.gameObject.SetActive(false);
+            }
+
+            for (var index = 0; index < skillReplacementButtons.Count; index++)
+            {
+                var isSlot = index < PlayerCombatController.MaxEquippedSkillSlots;
+                var hasSkill = isSlot && skills != null && index < skills.Count && skills[index] != null;
+                var button = skillReplacementButtons[index];
+                if (button == null)
+                {
+                    continue;
+                }
+
+                button.gameObject.SetActive(isSlot);
+                button.interactable = hasSkill;
+
+                var replacementIndex = index;
+                SetSkillReplacementLabel(
+                    index,
+                    hasSkill
+                        ? PrototypeCombatText.FormatSkillReplacementLabel(index, skills[index])
+                        : PrototypeCombatText.FormatEmptySkillSlotLabel(index));
+
+                if (!hasSkill)
+                {
+                    continue;
+                }
+
+                BindButton(button, () => rewardManager?.ChooseReward(
+                    pendingSkillRewardChoiceIndex,
+                    combatManager != null ? combatManager.Player : null,
+                    replacementIndex));
+            }
+        }
+
+        private void OnRewardChoiceClicked(int choiceIndex)
+        {
+            var choices = rewardManager?.PendingChoices;
+            if (choices == null || choiceIndex < 0 || choiceIndex >= choices.Count)
+            {
+                return;
+            }
+
+            var player = combatManager != null ? combatManager.Player : null;
+            var reward = choices[choiceIndex];
+            if (reward != null &&
+                reward.IsSkillReward &&
+                player != null &&
+                player.Skills.Count >= PlayerCombatController.MaxEquippedSkillSlots)
+            {
+                pendingSkillRewardChoiceIndex = choiceIndex;
+                Render();
+                return;
+            }
+
+            rewardManager?.ChooseReward(choiceIndex, player);
+        }
+
+        private void SetRewardChoiceLabel(int index, string text)
+        {
+            var label = index >= 0 && index < rewardChoiceLabels.Count ? rewardChoiceLabels[index] : null;
+            if (label == null && index >= 0 && index < rewardChoiceButtons.Count && rewardChoiceButtons[index] != null)
+            {
+                label = rewardChoiceButtons[index].GetComponentInChildren<TMP_Text>(true);
+            }
+
+            if (label != null)
+            {
+                label.text = text;
+            }
+        }
+
+        private void SetSkillReplacementLabel(int index, string text)
+        {
+            var label = index >= 0 && index < skillReplacementLabels.Count ? skillReplacementLabels[index] : null;
+            if (label == null && index >= 0 && index < skillReplacementButtons.Count && skillReplacementButtons[index] != null)
+            {
+                label = skillReplacementButtons[index].GetComponentInChildren<TMP_Text>(true);
+            }
+
+            if (label != null)
+            {
+                label.text = text;
             }
         }
 

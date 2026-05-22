@@ -92,6 +92,115 @@ namespace Project2048.Tests
         }
 
         [Test]
+        public void ActionPhase_UsesFourAuthoredSkillSlotsDirectly()
+        {
+            var viewObject = CreateOwnedGameObject("CombatView");
+            var view = viewObject.AddComponent<CombatUiView>();
+            var boardPanel = CreateOwnedGameObject("BoardPanel");
+            var actionPanel = CreateOwnedGameObject("ActionPanel");
+            var skillsView = CreateOwnedGameObject("SkillsView");
+            boardPanel.transform.SetParent(viewObject.transform, false);
+            actionPanel.transform.SetParent(viewObject.transform, false);
+            skillsView.transform.SetParent(actionPanel.transform, false);
+
+            var costText = CreateTextChild(actionPanel.transform, "CostText");
+            var skillsHeader = CreateTextChild(skillsView.transform, "SkillsHeader");
+            var endTurnButton = CreateButtonChild(skillsView.transform, "EndTurnButton");
+            var skillButtons = new System.Collections.Generic.List<Button>();
+            var skillLabels = new System.Collections.Generic.List<TMPro.TMP_Text>();
+            for (var index = 0; index < PlayerCombatController.MaxEquippedSkillSlots; index++)
+            {
+                var button = CreateButtonChild(skillsView.transform, $"SkillButton{index + 1}");
+                var label = CreateTextChild(button.transform, "Label");
+                skillButtons.Add(button);
+                skillLabels.Add(label);
+            }
+
+            SetPrivateField(view, "boardPanel", boardPanel);
+            SetPrivateField(view, "actionPanel", actionPanel);
+            SetPrivateField(view, "skillsView", skillsView);
+            SetPrivateField(view, "costText", costText);
+            SetPrivateField(view, "skillsHeaderText", skillsHeader);
+            SetPrivateField(view, "skillTierButtons", skillButtons);
+            SetPrivateField(view, "skillTierLabels", skillLabels);
+            SetPrivateField(view, "skillsEndTurnButton", endTurnButton);
+
+            var manager = CreateOwnedGameObject("CombatManager").AddComponent<CombatManager>();
+            var player = CreateOwnedGameObject("Player").AddComponent<PlayerCombatController>();
+            var enemy = CreateOwnedGameObject("Enemy").AddComponent<EnemyController>();
+            var bootstrap = CreateOwnedGameObject("Bootstrap").AddComponent<PrototypeCombatBootstrap>();
+            SetPrivateField(bootstrap, "combatManager", manager);
+
+            var attack = CreateSkill("attack", "빛 발사", SkillType.Attack, cost: 0, power: 4);
+            var defense = CreateSkill("guard", "가시 방어", SkillType.Defense, cost: 0, power: 5);
+            var flash = CreateSkill("flash", "섬광", SkillType.Attack, cost: 0, power: 2);
+            var counter = CreateSkill("counter", "카운터", SkillType.Defense, cost: 0, power: 3);
+            var playerData = CreatePlayerData(20, 0, attack, defense, flash, counter);
+            var enemyData = CreateEnemyData("Enemy", 10, 0);
+
+            manager.SetCombatants(player, new[] { enemy });
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new System.Collections.Generic.List<EnemySO> { enemyData },
+                boardMoveCount = 1,
+            });
+            manager.ResolveBoardPhase();
+            view.Initialize(bootstrap);
+
+            Assert.That(skillsView.activeSelf, Is.True);
+            Assert.That(endTurnButton.gameObject.activeSelf, Is.True);
+            Assert.That(skillsHeader.text, Is.EqualTo("기술 선택"));
+            Assert.That(costText.text, Does.StartWith("보유 코스트"));
+
+            var renderedButtons = GetPrivateField(view, "skillTierButtons") as System.Collections.Generic.List<Button>;
+            Assert.That(renderedButtons, Is.Not.Null);
+            Assert.That(renderedButtons.Count, Is.EqualTo(PlayerCombatController.MaxEquippedSkillSlots));
+            for (var index = 0; index < PlayerCombatController.MaxEquippedSkillSlots; index++)
+            {
+                Assert.That(renderedButtons[index].gameObject.activeSelf, Is.True);
+            }
+
+            Assert.That(skillLabels[0].text, Does.Contain("빛 발사"));
+            Assert.That(skillLabels[1].text, Does.Contain("가시 방어"));
+        }
+
+        [Test]
+        public void CostFormulaHelpIcon_ShowsBoardCostFormulaOnHover()
+        {
+            var viewObject = CreateOwnedRectTransformObject("CombatView");
+            var view = viewObject.AddComponent<CombatUiView>();
+            var helpIcon = CreateImageChild(viewObject.transform, "CostFormulaHelpIcon");
+            var helpLabel = CreateTextChild(helpIcon.transform, "Label");
+            var boardHelpIcon = CreateImageChild(viewObject.transform, "BoardCostFormulaHelpIcon");
+            var boardHelpLabel = CreateTextChild(boardHelpIcon.transform, "Label");
+            SetPrivateField(view, "costFormulaHelpIcon", helpIcon.gameObject);
+            SetPrivateField(view, "costFormulaHelpLabel", helpLabel);
+            SetPrivateField(view, "boardCostFormulaHelpIcon", boardHelpIcon.gameObject);
+            SetPrivateField(view, "boardCostFormulaHelpLabel", boardHelpLabel);
+
+            InvokePrivate(view, "EnsureStatusTooltip");
+            InvokePrivate(view, "ConfigureCostFormulaHelp");
+
+            var target = helpIcon.GetComponent<StatusEffectTooltipTarget>();
+            Assert.That(target, Is.Not.Null);
+            Assert.That(boardHelpIcon.GetComponent<StatusEffectTooltipTarget>(), Is.Not.Null);
+            Assert.That(boardHelpLabel.text, Is.EqualTo("?"));
+
+            target.OnPointerEnter(new PointerEventData(null));
+
+            var tooltip = GetPrivateField(view, "statusTooltip") as GameObject;
+            var tooltipText = GetPrivateField(view, "statusTooltipText") as TMPro.TMP_Text;
+            Assert.That(helpLabel.text, Is.EqualTo("?"));
+            Assert.That(tooltip.activeSelf, Is.True);
+            Assert.That(tooltipText.text, Does.Contain("log2(전체 타일 합)"));
+            Assert.That(tooltipText.text, Does.Contain("2의 거듭제곱"));
+
+            target.OnPointerExit(new PointerEventData(null));
+            Assert.That(tooltip.activeSelf, Is.False);
+        }
+
+        [Test]
         public void Initialize_WithMissingSerializedBattleReferences_WiresEnemyHpAndIntentByName()
         {
             var viewObject = CreateOwnedGameObject("CombatView");
@@ -140,7 +249,7 @@ namespace Project2048.Tests
                 value = 3,
             });
 
-            Assert.That(intentText.text, Is.EqualTo("방어"));
+            Assert.That(intentText.text, Is.EqualTo("보호"));
             Assert.That(intentBubbleImage.color, Is.EqualTo(new Color(0.12f, 0.32f, 0.90f, 1f)));
 
             enemy.SetIntent(new EnemyIntent
@@ -150,7 +259,7 @@ namespace Project2048.Tests
                 value = 2,
             });
 
-            Assert.That(intentText.text, Is.EqualTo("암흑"));
+            Assert.That(intentText.text, Is.EqualTo("섬광"));
             Assert.That(intentBubbleImage.color, Is.EqualTo(new Color(0.20f, 0.07f, 0.34f, 1f)));
 
             enemy.SetIntent(new EnemyIntent
@@ -281,7 +390,6 @@ namespace Project2048.Tests
             view.Initialize(bootstrap);
             manager.ResolveBoardPhase();
             var uiState = GetPrivateField(view, "uiState") as PrototypeCombatUiState;
-            uiState?.SelectCategory(SkillType.Attack);
 
             player.TakeDamage(4);
 
@@ -445,7 +553,7 @@ namespace Project2048.Tests
         }
 
         [Test]
-        public void Initialize_RendersTwoEnemyIntentsWhenEnemyCanActTwice()
+        public void Initialize_RendersThreeEnemyIntentsWhenEnemyCanActThreeTimes()
         {
             var viewObject = CreateOwnedGameObject("CombatView");
             var view = viewObject.AddComponent<CombatUiView>();
@@ -472,8 +580,15 @@ namespace Project2048.Tests
                     intentType = EnemyIntentType.Defense,
                     value = 3,
                 },
+                new()
+                {
+                    intentType = EnemyIntentType.Debuff,
+                    debuffType = DebuffType.Fear,
+                    value = 1,
+                },
             };
-            SetEnemyActionsPerTurn(enemyData, 2);
+            enemyData.aiComplexity = EnemyAiComplexity.Complex;
+            SetEnemyActionsPerTurn(enemyData, 3);
 
             manager.SetCombatants(player, new[] { enemy });
             manager.StartCombat(new CombatSetup
@@ -486,7 +601,7 @@ namespace Project2048.Tests
             view.Initialize(bootstrap);
 
             Assert.That(intentText.text, Is.EqualTo(
-                $"{PrototypeCombatText.FormatIntent(enemyData.intentPattern[0])}\n{PrototypeCombatText.FormatIntent(enemyData.intentPattern[1])}"));
+                $"{PrototypeCombatText.FormatIntent(enemyData.intentPattern[0])}\n{PrototypeCombatText.FormatIntent(enemyData.intentPattern[1])}\n{PrototypeCombatText.FormatIntent(enemyData.intentPattern[2])}"));
         }
 
         [Test]
@@ -876,6 +991,14 @@ namespace Project2048.Tests
             }
 
             return image;
+        }
+
+        private Button CreateButtonChild(Transform parent, string name)
+        {
+            var child = new GameObject(name, typeof(RectTransform), typeof(Image), typeof(Button));
+            child.transform.SetParent(parent, false);
+            ownedObjects.Add(child);
+            return child.GetComponent<Button>();
         }
 
         private void ConfigureAuthoredHpFillForTest(Transform hpRoot, Image fill)

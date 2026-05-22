@@ -7,8 +7,8 @@ namespace Project2048.Board2048
     /// </summary>
     public class CostConverter
     {
-        private const int LargestTileBonusMultiplier = 2;
-        private const int FragmentationPenaltyDivisor = 2;
+        public const int LargestTileBonusMultiplier = 2;
+        public const int FragmentationPenaltyDivisor = 2;
 
         public int ConvertBoardToCost(int[,] board)
         {

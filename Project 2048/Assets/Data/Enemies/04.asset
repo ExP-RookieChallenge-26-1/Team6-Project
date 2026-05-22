@@ -13,12 +13,22 @@ MonoBehaviour:
   m_Name: 04
   m_EditorClassIdentifier: Game.Core::Project2048.Enemy.EnemySO
   enemyName: "\uD478\uB978\uC2EC\uC7A5"
+  encounterRank: 0
   maxHp: 40
   attackPower: 5
+  baseDefensePower: 0
   defensePower: 4
   debuffPower: 2
   difficultyScore: 2
+  criticalChance: 0
+  criticalDamageMultiplier: 1.5
+  aiComplexity: 0
   actionsPerTurn: 1
+  skills:
+  - {fileID: 11400000, guid: f4882f31e6dbe5d4a9bb1b51c44e2f03, type: 2}
+  - {fileID: 11400000, guid: 196a2ff8be3c4184095e9caf8e804177, type: 2}
+  - {fileID: 11400000, guid: 08c7e51f0519cf5468b34cb3448f917c, type: 2}
+  - {fileID: 11400000, guid: d80901184dc15f746930695614dd83f4, type: 2}
   portrait: {fileID: 21300000, guid: 4568f48d7b08b7a449294129ab9312b0, type: 3}
   actionEffects:
   - actionId: appear
@@ -27,7 +37,7 @@ MonoBehaviour:
       vfxPrefab: {fileID: 0}
       animationClip: {fileID: 0}
       particleEffect:
-        objectName:
+        objectName: 
         particlePrefab: {fileID: 0}
         particleMaterial: {fileID: 0}
         useParticleColor: 0
@@ -40,6 +50,7 @@ MonoBehaviour:
       volumeScale: 0.78
       minPitch: 1.06
       maxPitch: 1.18
+      sfxDelaySeconds: 0
       localOffset: {x: 0, y: 0, z: 0}
       autoDestroySeconds: 1.25
   - actionId: defend
@@ -48,7 +59,7 @@ MonoBehaviour:
       vfxPrefab: {fileID: 0}
       animationClip: {fileID: 0}
       particleEffect:
-        objectName:
+        objectName: 
         particlePrefab: {fileID: 0}
         particleMaterial: {fileID: 0}
         useParticleColor: 0
@@ -61,6 +72,7 @@ MonoBehaviour:
       volumeScale: 1
       minPitch: 0.96
       maxPitch: 1.04
+      sfxDelaySeconds: 0
       localOffset: {x: 0, y: 0, z: 0}
       autoDestroySeconds: 1.25
   - actionId: attack
@@ -69,7 +81,7 @@ MonoBehaviour:
       vfxPrefab: {fileID: 0}
       animationClip: {fileID: 0}
       particleEffect:
-        objectName:
+        objectName: 
         particlePrefab: {fileID: 0}
         particleMaterial: {fileID: 0}
         useParticleColor: 0
@@ -82,6 +94,7 @@ MonoBehaviour:
       volumeScale: 0.7176
       minPitch: 1.06
       maxPitch: 1.18
+      sfxDelaySeconds: 0
       localOffset: {x: 0, y: 0, z: 0}
       autoDestroySeconds: 1.25
   - actionId: hit
@@ -90,7 +103,7 @@ MonoBehaviour:
       vfxPrefab: {fileID: 0}
       animationClip: {fileID: 0}
       particleEffect:
-        objectName:
+        objectName: 
         particlePrefab: {fileID: 0}
         particleMaterial: {fileID: 0}
         useParticleColor: 0
@@ -103,10 +116,17 @@ MonoBehaviour:
       volumeScale: 0.6083999
       minPitch: 1.06
       maxPitch: 1.18
+      sfxDelaySeconds: 0
       localOffset: {x: 0, y: 0, z: 0}
       autoDestroySeconds: 1.25
   intentPattern: []
   aiActionBias: 0
   aiDebuffPattern: 1
-  aiStrength: 1
+  aiStrength: 0
   aiDebuffInterval: 3
+  canUseThornGuard: 0
+  thornGuardShieldHp: 4
+  thornGuardRetaliationDamage: 2
+  canUseBullRush: 0
+  bullRushInterval: 3
+  bullRushBonusDamage: 3

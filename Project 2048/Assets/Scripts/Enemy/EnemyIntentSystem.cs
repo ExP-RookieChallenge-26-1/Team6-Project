@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using Project2048.Board2048;
 using Project2048.Combat;
+using Project2048.Skills;
+using UnityEngine;
 
 namespace Project2048.Enemy
 {
@@ -83,11 +85,46 @@ namespace Project2048.Enemy
             switch (intent.intentType)
             {
                 case EnemyIntentType.Attack:
-                    var damage = damageCalculator.CalculateEnemyDamage(intent);
-                    player.TakeDamage(damage);
+                    enemy.SpendHp(intent.hpCost, intent.hpCostLeavesOne);
+                    var damage = damageCalculator.CalculateEnemyDamage(enemy, intent, player);
+                    var shouldRetaliate = player.ShieldHp > 0 && player.ThornRetaliationDamage > 0;
+                    var retaliationDamage = player.ThornRetaliationDamage;
+                    var hpDamage = player.TakeDamage(damage);
+                    if (intent.lifeStealPercent > 0f && hpDamage > 0)
+                    {
+                        enemy.RestoreHp(Mathf.CeilToInt(hpDamage * Mathf.Clamp01(intent.lifeStealPercent)));
+                    }
+
+                    if (intent.nextBoardMoveCountModifier != 0)
+                    {
+                        player.ApplyNextTurnBoardMoveCountModifier(intent.nextBoardMoveCountModifier);
+                    }
+
+                    if (shouldRetaliate && retaliationDamage > 0)
+                    {
+                        enemy.TakeDamage(retaliationDamage);
+                    }
+
+                    var counterDamage = player.CalculateCounterDamage(hpDamage);
+                    if (counterDamage > 0)
+                    {
+                        enemy.TakeDamage(counterDamage);
+                    }
                     break;
                 case EnemyIntentType.Defense:
-                    enemy.AddBlock(intent.value);
+                    if (intent.isThornGuard)
+                    {
+                        enemy.ApplyThornGuard(intent.value, intent.retaliationDamage);
+                    }
+                    else
+                    {
+                        enemy.AddBlock(intent.value);
+                    }
+
+                    if (intent.selfDefensePowerModifier != 0)
+                    {
+                        enemy.ApplyDefenseModifier(intent.selfDefensePowerModifier);
+                    }
                     break;
                 case EnemyIntentType.Debuff:
                     ApplyDebuff(intent, player, boardManager);
@@ -109,6 +146,22 @@ namespace Project2048.Enemy
 
         private static void ApplyDebuff(EnemyIntent intent, PlayerCombatController player, Board2048Manager boardManager)
         {
+            if (intent.skillEffectKind == SkillEffectKind.AttackDown)
+            {
+                player.ApplyAttackPowerModifier(intent.targetAttackModifier != 0
+                    ? intent.targetAttackModifier
+                    : -Mathf.Max(0, intent.value));
+                return;
+            }
+
+            if (intent.skillEffectKind == SkillEffectKind.DefenseDown)
+            {
+                player.ApplyDefensePowerModifier(intent.targetDefenseModifier != 0
+                    ? intent.targetDefenseModifier
+                    : -Mathf.Max(0, intent.value));
+                return;
+            }
+
             switch (intent.debuffType)
             {
                 case DebuffType.Fear:

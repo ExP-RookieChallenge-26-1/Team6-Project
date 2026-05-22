@@ -34,7 +34,7 @@ namespace Project2048.Prototype
                 "attack_1",
                 "1단계 공격",
                 SkillType.Attack,
-                cost: 5,
+                cost: SkillSO.DefaultCost,
                 power: 3,
                 targetAttackModifier: 0,
                 selfDefenseBonus: 0,
@@ -43,7 +43,7 @@ namespace Project2048.Prototype
                 "attack_2",
                 "2단계 공격",
                 SkillType.Attack,
-                cost: 8,
+                cost: SkillSO.DefaultCost,
                 power: 4,
                 targetAttackModifier: -2,
                 selfDefenseBonus: 0,
@@ -52,7 +52,7 @@ namespace Project2048.Prototype
                 "attack_3",
                 "3단계 공격",
                 SkillType.Attack,
-                cost: 12,
+                cost: SkillSO.DefaultCost,
                 power: 8,
                 targetAttackModifier: 0,
                 selfDefenseBonus: 0,
@@ -61,7 +61,7 @@ namespace Project2048.Prototype
                 "defense_1",
                 "1단계 방어",
                 SkillType.Defense,
-                cost: 5,
+                cost: SkillSO.DefaultCost,
                 power: 3,
                 targetAttackModifier: 0,
                 selfDefenseBonus: 0,
@@ -70,7 +70,7 @@ namespace Project2048.Prototype
                 "defense_2",
                 "2단계 방어",
                 SkillType.Defense,
-                cost: 8,
+                cost: SkillSO.DefaultCost,
                 power: 4,
                 targetAttackModifier: 0,
                 selfDefenseBonus: 2,
@@ -79,7 +79,7 @@ namespace Project2048.Prototype
                 "defense_3",
                 "3단계 방어",
                 SkillType.Defense,
-                cost: 12,
+                cost: SkillSO.DefaultCost,
                 power: 10,
                 targetAttackModifier: 0,
                 selfDefenseBonus: 0,
@@ -97,11 +97,25 @@ namespace Project2048.Prototype
 
             var player = ScriptableObject.CreateInstance<PlayerSO>();
             player.name = "PrototypePlayer";
-            player.maxHp = 30;
+            player.usePokemonHpFormula = true;
+            player.statLevel = 50;
+            player.baseHp = 40;
+            player.hpIndividualValue = 0;
+            player.hpEffortValue = 0;
+            player.maxHp = 100;
             player.attackPower = 2;
+            player.baseDefensePower = 0;
+            player.criticalChance = 0.1f;
+            player.criticalDamageMultiplier = 1.5f;
             player.initialBoardMoveCount = 4;
             player.boardMoveCountBonus = 0;
-            player.startingSkills = new List<SkillSO>(skills);
+            player.startingSkills = new List<SkillSO>
+            {
+                attack1,
+                attack2,
+                defense1,
+                defense2,
+            };
 
             var enemy = CreateRandomPrototypeEnemy();
 
@@ -152,15 +166,99 @@ namespace Project2048.Prototype
             enemy.enemyName = seed.Name;
             enemy.maxHp = seed.Strength == EnemyAiStrength.Enhanced ? 40 : 32;
             enemy.attackPower = seed.Strength == EnemyAiStrength.Enhanced ? 6 : 5;
+            enemy.baseDefensePower = seed.Strength == EnemyAiStrength.Enhanced ? 2 : 1;
             enemy.defensePower = seed.Strength == EnemyAiStrength.Enhanced ? 4 : 3;
             enemy.debuffPower = 1;
             enemy.difficultyScore = seed.Strength == EnemyAiStrength.Enhanced ? 2 : 1;
+            enemy.criticalChance = seed.Strength == EnemyAiStrength.Enhanced ? 0.08f : 0.05f;
+            enemy.criticalDamageMultiplier = 1.5f;
             enemy.intentPattern = new List<EnemyIntent>();
             enemy.aiActionBias = seed.ActionBias;
             enemy.aiDebuffPattern = seed.DebuffPattern;
             enemy.aiStrength = seed.Strength;
             enemy.aiDebuffInterval = 3;
+            enemy.encounterRank = seed.Strength == EnemyAiStrength.Enhanced
+                ? EnemyEncounterRank.Elite
+                : EnemyEncounterRank.Normal;
+            enemy.aiComplexity = seed.Strength == EnemyAiStrength.Enhanced
+                ? EnemyAiComplexity.Normal
+                : EnemyAiComplexity.Simple;
+            enemy.actionsPerTurn = EnemySO.ResolveDefaultActionsPerTurn(enemy.aiComplexity);
+            enemy.skills = CreateEnemySkills(seed);
+            enemy.canUseThornGuard = seed.ActionBias == EnemyAiActionBias.DefenseHeavy;
+            enemy.canUseBullRush = seed.ActionBias == EnemyAiActionBias.AttackHeavy;
             return enemy;
+        }
+
+        private static List<SkillSO> CreateEnemySkills(EnemyProfileSeed seed)
+        {
+            var attack = CreateSkill(
+                "enemy-light-shot",
+                "빛 발사",
+                SkillType.Attack,
+                cost: 0,
+                power: seed.Strength == EnemyAiStrength.Enhanced ? 6 : 4,
+                targetAttackModifier: 0,
+                selfDefenseBonus: 0,
+                "적 기본 공격.");
+            attack.effectKind = SkillEffectKind.BasicAttack;
+
+            var guard = CreateSkill(
+                "enemy-light-guard",
+                "빛 방어",
+                SkillType.Defense,
+                cost: 0,
+                power: seed.Strength == EnemyAiStrength.Enhanced ? 8 : 5,
+                targetAttackModifier: 0,
+                selfDefenseBonus: 0,
+                "적 기본 보호.");
+            guard.effectKind = SkillEffectKind.LightGuard;
+
+            var debuff = CreateSkill(
+                seed.DebuffPattern == EnemyDebuffPattern.DarknessThenFear ? "enemy-howl" : "enemy-fear",
+                seed.DebuffPattern == EnemyDebuffPattern.DarknessThenFear ? "울부짖기" : "공포",
+                SkillType.Debuff,
+                cost: 0,
+                power: 0,
+                targetAttackModifier: 0,
+                selfDefenseBonus: 0,
+                "플레이어 방어력을 낮춘다.");
+            debuff.effectKind = SkillEffectKind.DefenseDown;
+            debuff.targetDefenseModifier = seed.Strength == EnemyAiStrength.Enhanced ? -4 : -2;
+
+            if (seed.ActionBias == EnemyAiActionBias.AttackHeavy)
+            {
+                var rush = CreateSkill(
+                    "enemy-tentacle-strike",
+                    "촉수 치기",
+                    SkillType.Attack,
+                    cost: 0,
+                    power: seed.Strength == EnemyAiStrength.Enhanced ? 8 : 5,
+                    targetAttackModifier: 0,
+                    selfDefenseBonus: 0,
+                    "강하게 공격하고 다음 보드 이동을 줄인다.");
+                rush.effectKind = SkillEffectKind.BoardMovePenaltyAttack;
+                rush.nextBoardMoveCountModifier = -1;
+                return new List<SkillSO> { attack, rush, guard, debuff };
+            }
+
+            if (seed.ActionBias == EnemyAiActionBias.DefenseHeavy)
+            {
+                var thorn = CreateSkill(
+                    "enemy-thorn-guard",
+                    "가시 방어",
+                    SkillType.Defense,
+                    cost: 0,
+                    power: seed.Strength == EnemyAiStrength.Enhanced ? 8 : 5,
+                    targetAttackModifier: 0,
+                    selfDefenseBonus: 0,
+                    "보호막과 반사 피해.");
+                thorn.effectKind = SkillEffectKind.ThornGuard;
+                thorn.selfThornRetaliationDamage = seed.Strength == EnemyAiStrength.Enhanced ? 3 : 2;
+                return new List<SkillSO> { attack, thorn, guard, debuff };
+            }
+
+            return new List<SkillSO> { attack, guard, debuff };
         }
 
         private static SkillSO CreateSkill(

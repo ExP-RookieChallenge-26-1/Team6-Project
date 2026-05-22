@@ -133,6 +133,50 @@ namespace Project2048.Tests
         }
 
         [Test]
+        public void SetNextIntent_EliteThornGuardCreatesRetaliatingShield()
+        {
+            var enemy = CreateEnemy("EliteHedgehog");
+            var data = CreateEnemyData();
+            data.encounterRank = EnemyEncounterRank.Elite;
+            data.aiStrength = EnemyAiStrength.Enhanced;
+            data.aiActionBias = EnemyAiActionBias.DefenseHeavy;
+            data.aiDebuffInterval = 0;
+            data.canUseThornGuard = true;
+            data.thornGuardShieldHp = 5;
+            data.thornGuardRetaliationDamage = 2;
+            data.intentPattern.Clear();
+            enemy.Init(data);
+
+            new EnemyIntentSystem(new System.Random(0)).SetNextIntent(enemy);
+
+            Assert.That(enemy.CurrentIntent.intentType, Is.EqualTo(EnemyIntentType.Defense));
+            Assert.That(enemy.CurrentIntent.isThornGuard, Is.True);
+            Assert.That(enemy.CurrentIntent.value, Is.EqualTo(8));
+            Assert.That(enemy.CurrentIntent.retaliationDamage, Is.EqualTo(3));
+        }
+
+        [Test]
+        public void SetNextIntent_EliteBullRushOverridesNormalAttackOnInterval()
+        {
+            var enemy = CreateEnemy("EliteBull");
+            var data = CreateEnemyData();
+            data.encounterRank = EnemyEncounterRank.Elite;
+            data.aiStrength = EnemyAiStrength.Enhanced;
+            data.attackPower = 4;
+            data.aiDebuffInterval = 0;
+            data.canUseBullRush = true;
+            data.bullRushInterval = 1;
+            data.bullRushBonusDamage = 3;
+            data.intentPattern.Clear();
+            enemy.Init(data);
+
+            new EnemyIntentSystem(new System.Random(99)).SetNextIntent(enemy);
+
+            Assert.That(enemy.CurrentIntent.intentType, Is.EqualTo(EnemyIntentType.Attack));
+            Assert.That(enemy.CurrentIntent.value, Is.EqualTo(11));
+        }
+
+        [Test]
         public void SetNextIntents_UsesConsecutivePatternEntriesForPreview()
         {
             var enemy = CreateEnemy("MultiActionEnemy");
@@ -182,6 +226,90 @@ namespace Project2048.Tests
             Assert.That(secondPreview[0].intentType, Is.EqualTo(EnemyIntentType.Debuff));
             Assert.That(secondPreview[0].debuffType, Is.EqualTo(DebuffType.Fear));
             Assert.That(secondPreview[1].intentType, Is.EqualTo(EnemyIntentType.Attack));
+        }
+
+        [Test]
+        public void ActionsPerTurn_UsesComplexityDefaultsUpToThreeActions()
+        {
+            var simple = CreateEnemyData();
+            simple.aiComplexity = EnemyAiComplexity.Simple;
+            simple.actionsPerTurn = 1;
+            var normal = CreateEnemyData();
+            normal.aiComplexity = EnemyAiComplexity.Normal;
+            normal.actionsPerTurn = 1;
+            var complex = CreateEnemyData();
+            complex.aiComplexity = EnemyAiComplexity.Complex;
+            complex.actionsPerTurn = 1;
+
+            Assert.That(simple.ActionsPerTurn, Is.EqualTo(1));
+            Assert.That(normal.ActionsPerTurn, Is.EqualTo(2));
+            Assert.That(complex.ActionsPerTurn, Is.EqualTo(3));
+        }
+
+        [Test]
+        public void EnemySO_AssignedSkillCount_RequiresAtLeastTwoSkills()
+        {
+            var data = CreateEnemyData();
+            data.skills = new List<Project2048.Skills.SkillSO>
+            {
+                CreateSkill("enemy-light-shot", "빛 발사", Project2048.Skills.SkillType.Attack, Project2048.Skills.SkillEffectKind.BasicAttack, power: 5),
+            };
+
+            Assert.That(data.AssignedSkillCount, Is.EqualTo(1));
+            Assert.That(data.HasMinimumSkillSlots, Is.False);
+
+            data.skills.Add(CreateSkill("enemy-light-guard", "빛 방어", Project2048.Skills.SkillType.Defense, Project2048.Skills.SkillEffectKind.LightGuard, power: 4));
+
+            Assert.That(data.AssignedSkillCount, Is.EqualTo(EnemySO.MinEquippedSkillSlots));
+            Assert.That(data.HasMinimumSkillSlots, Is.True);
+        }
+
+        [Test]
+        public void SetNextIntents_ComplexEnemyPreviewsThreeActions()
+        {
+            var enemy = CreateEnemy("ComplexEnemy");
+            var data = CreateEnemyData();
+            data.aiComplexity = EnemyAiComplexity.Complex;
+            data.actionsPerTurn = 1;
+            data.intentPattern = new List<EnemyIntent>
+            {
+                new() { intentType = EnemyIntentType.Attack, value = 4 },
+                new() { intentType = EnemyIntentType.Defense, value = 5 },
+                new() { intentType = EnemyIntentType.Debuff, debuffType = DebuffType.Fear, value = 1 },
+                new() { intentType = EnemyIntentType.Attack, value = 6 },
+            };
+            enemy.Init(data);
+
+            new EnemyIntentSystem(new System.Random(1)).SetNextIntents(enemy, data.ActionsPerTurn);
+            var preview = GetCurrentIntents(enemy);
+
+            Assert.That(preview.Count, Is.EqualTo(3));
+            Assert.That(preview[0].intentType, Is.EqualTo(EnemyIntentType.Attack));
+            Assert.That(preview[1].intentType, Is.EqualTo(EnemyIntentType.Defense));
+            Assert.That(preview[2].intentType, Is.EqualTo(EnemyIntentType.Debuff));
+        }
+
+        [Test]
+        public void SetNextIntent_WhenEnemyHasSkills_UsesEquippedSkillAsIntent()
+        {
+            var enemy = CreateEnemy("SkilledEnemy");
+            var data = CreateEnemyData();
+            data.aiActionBias = EnemyAiActionBias.AttackHeavy;
+            data.aiDebuffInterval = 0;
+            data.intentPattern.Clear();
+            data.skills = new List<Project2048.Skills.SkillSO>
+            {
+                CreateSkill("enemy-light-shot", "빛 발사", Project2048.Skills.SkillType.Attack, Project2048.Skills.SkillEffectKind.BasicAttack, power: 5),
+                CreateSkill("enemy-light-guard", "빛 방어", Project2048.Skills.SkillType.Defense, Project2048.Skills.SkillEffectKind.LightGuard, power: 4),
+            };
+            enemy.Init(data);
+
+            new EnemyIntentSystem(new System.Random(1)).SetNextIntent(enemy);
+
+            Assert.That(enemy.CurrentIntent.skillId, Is.EqualTo("enemy-light-shot"));
+            Assert.That(enemy.CurrentIntent.displayName, Is.EqualTo("빛 발사"));
+            Assert.That(enemy.CurrentIntent.intentType, Is.EqualTo(EnemyIntentType.Attack));
+            Assert.That(enemy.CurrentIntent.value, Is.EqualTo(data.attackPower + 5));
         }
 
         private EnemyController CreateEnemy(string name)
@@ -238,6 +366,23 @@ namespace Project2048.Tests
             var property = typeof(EnemyController).GetProperty("CurrentIntents");
             Assert.That(property, Is.Not.Null, "EnemyController should expose all previewed intents.");
             return (IReadOnlyList<EnemyIntent>)property.GetValue(enemy);
+        }
+
+        private Project2048.Skills.SkillSO CreateSkill(
+            string skillId,
+            string skillName,
+            Project2048.Skills.SkillType skillType,
+            Project2048.Skills.SkillEffectKind effectKind,
+            int power)
+        {
+            var skill = ScriptableObject.CreateInstance<Project2048.Skills.SkillSO>();
+            skill.skillId = skillId;
+            skill.skillName = skillName;
+            skill.skillType = skillType;
+            skill.effectKind = effectKind;
+            skill.power = power;
+            ownedObjects.Add(skill);
+            return skill;
         }
     }
 }

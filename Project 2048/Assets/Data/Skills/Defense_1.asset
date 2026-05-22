@@ -15,7 +15,7 @@ MonoBehaviour:
   skillId: defense_1
   skillName: "1\uB2E8\uACC4 \uBC29\uC5B4"
   skillType: 1
-  cost: 5
+  cost: 9
   power: 3
   targetAttackModifier: 0
   selfDefenseBonus: 0

@@ -176,6 +176,13 @@ namespace Project2048.Flow
                 return;
             }
 
+            if (result.RunCompleted)
+            {
+                gameContext.SetRunActive(false);
+                gameContext.SetGameState(GameContext.GameState.Result);
+                return;
+            }
+
             gameContext.AdvanceStage();
 
             if (restartStageCoroutine != null)

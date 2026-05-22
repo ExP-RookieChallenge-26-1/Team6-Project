@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Project2048.Combat;
 using Project2048.Enemy;
+using Project2048.Flow;
 using Project2048.Prototype;
 using Project2048.Rewards;
 using Project2048.Score;
@@ -106,6 +107,64 @@ namespace Project2048.Tests
         }
 
         [Test]
+        public void RewardManager_OfferReward_FillsThreeRogueliteChoices()
+        {
+            var player = CreateGameObject<PlayerCombatController>("Player");
+            var playerData = CreatePlayerData(maxHp: 20, attackPower: 2);
+            var reward = CreateReward(healPercentOfMaxHp: 0.3f, extraBoardMoveCount: 1);
+            var table = CreateRewardTable(reward);
+            var rewardManager = CreateGameObject<RewardManager>("RewardManager");
+
+            player.Init(playerData);
+            rewardManager.Initialize(new RunProgress(), table);
+            rewardManager.OfferReward(new CombatResult { enemyDifficultyScore = 1 }, player);
+
+            Assert.That(rewardManager.PendingChoices.Count, Is.EqualTo(3));
+            Assert.That(rewardManager.PendingChoices[0], Is.SameAs(reward));
+        }
+
+        [Test]
+        public void TemporaryRewardBuff_AppliesToNextCombatOnce()
+        {
+            var manager = CreateGameObject<CombatManager>("CombatManager");
+            var player = CreateGameObject<PlayerCombatController>("Player");
+            var enemy = CreateGameObject<EnemyController>("Enemy");
+            var playerData = CreatePlayerData(maxHp: 20, attackPower: 2);
+            var enemyData = CreateEnemyData(maxHp: 10, attackValue: 0);
+            var runProgress = new RunProgress();
+
+            runProgress.AddNextCombatBuff(attackPowerBonus: 3, defensePowerBonus: 4, boardMoveCountBonus: 2);
+
+            manager.SetCombatants(player, new[] { enemy });
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new List<EnemySO> { enemyData },
+                boardMoveCount = 4,
+                runProgress = runProgress,
+            });
+
+            Assert.That(player.AttackPower, Is.EqualTo(5));
+            Assert.That(player.BaseDefensePower, Is.EqualTo(4));
+            Assert.That(manager.BoardManager.MoveCount, Is.EqualTo(6));
+            Assert.That(runProgress.NextCombatAttackPowerBonus, Is.EqualTo(0));
+            Assert.That(runProgress.NextCombatDefensePowerBonus, Is.EqualTo(0));
+            Assert.That(runProgress.NextCombatBoardMoveCountBonus, Is.EqualTo(0));
+        }
+
+        [Test]
+        public void StageFlow_UsesEliteStagesEveryFiveAndFinalBossAtTwenty()
+        {
+            var stageFlow = CreateGameObject<StageFlowController>("StageFlow");
+
+            Assert.That(stageFlow.ResolveEncounterType(1), Is.EqualTo(StageEncounterType.Normal));
+            Assert.That(stageFlow.ResolveEncounterType(5), Is.EqualTo(StageEncounterType.Elite));
+            Assert.That(stageFlow.ResolveEncounterType(10), Is.EqualTo(StageEncounterType.Elite));
+            Assert.That(stageFlow.ResolveEncounterType(15), Is.EqualTo(StageEncounterType.Elite));
+            Assert.That(stageFlow.ResolveEncounterType(20), Is.EqualTo(StageEncounterType.FinalBoss));
+        }
+
+        [Test]
         public void CombatUiView_VictoryShowsRewardOverlayUntilRewardChoiceIsClaimed()
         {
             var viewObject = CreateOwnedGameObject("CombatView");
@@ -122,8 +181,10 @@ namespace Project2048.Tests
             var rewardDescription = CreateTextChild(rewardOverlay.transform, "RewardDescription");
             var restText = CreateTextChild(rewardOverlay.transform, "RestText");
             var enhanceText = CreateTextChild(rewardOverlay.transform, "EnhanceText");
+            var thirdText = CreateTextChild(rewardOverlay.transform, "ThirdText");
             var restButton = CreateButtonChild(rewardOverlay.transform, "RestButton");
             var enhanceButton = CreateButtonChild(rewardOverlay.transform, "EnhanceButton");
+            var thirdButton = CreateButtonChild(rewardOverlay.transform, "ThirdButton");
 
             SetPrivateField(view, "rewardOverlay", rewardOverlay);
             SetPrivateField(view, "resultOverlay", resultOverlay);
@@ -135,6 +196,8 @@ namespace Project2048.Tests
             SetPrivateField(view, "rewardEnhanceText", enhanceText);
             SetPrivateField(view, "rewardRestButton", restButton);
             SetPrivateField(view, "rewardEnhanceButton", enhanceButton);
+            SetPrivateField(view, "rewardChoiceButtons", new List<Button> { restButton, enhanceButton, thirdButton });
+            SetPrivateField(view, "rewardChoiceLabels", new List<TMP_Text> { restText, enhanceText, thirdText });
 
             var manager = CreateGameObject<CombatManager>("CombatManager");
             var rewardManager = CreateGameObject<RewardManager>("RewardManager");
@@ -145,6 +208,8 @@ namespace Project2048.Tests
             var playerData = CreatePlayerData(maxHp: 20, attackPower: 2);
             var enemyData = CreateEnemyData(maxHp: 10, attackValue: 0);
             var reward = CreateReward(healPercentOfMaxHp: 0.3f, extraBoardMoveCount: 1);
+            reward.rewardKind = RewardChoiceKind.TemporaryBoardMoveCount;
+            reward.temporaryBoardMoveCountBonus = 2;
             var table = CreateRewardTable(reward);
             var runProgress = new RunProgress();
 
@@ -173,15 +238,16 @@ namespace Project2048.Tests
             Assert.That(resultOverlay.activeSelf, Is.False);
             Assert.That(boardPanel.activeSelf, Is.False);
             Assert.That(actionPanel.activeSelf, Is.False);
-            Assert.That(rewardTitle.text, Is.EqualTo("나방"));
-            Assert.That(restText.text, Is.EqualTo("휴식 : 최대 체력의 30%를 회복합니다"));
-            Assert.That(enhanceText.text, Is.EqualTo("강화 : 제한 단수가 1회 증가합니다"));
+            Assert.That(rewardManager.PendingChoices.Count, Is.EqualTo(3));
+            Assert.That(rewardTitle.text, Is.EqualTo("보상 선택"));
+            Assert.That(restText.text, Is.EqualTo("다음 전투 이동 횟수 +2"));
+            Assert.That(enhanceText.text, Is.Not.Empty);
 
-            enhanceButton.onClick.Invoke();
+            restButton.onClick.Invoke();
 
             Assert.That(rewardOverlay.activeSelf, Is.False);
             Assert.That(resultOverlay.activeSelf, Is.True);
-            Assert.That(runProgress.ExtraBoardMoveCount, Is.EqualTo(1));
+            Assert.That(runProgress.NextCombatBoardMoveCountBonus, Is.EqualTo(2));
         }
 
         [Test]

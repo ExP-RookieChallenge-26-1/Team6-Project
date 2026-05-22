@@ -54,11 +54,11 @@
     "risk_score": 95
   },
   {
-    "file_id": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
-    "class_name": "CombatPresentationEffectTests",
+    "file_id": "Project 2048/Assets/Scripts/Presentation/CombatClawSlash2DEffect.cs",
+    "class_name": "CombatClawSlash2DEffect",
     "risk_flags": [
+      "update-heavy",
       "high-coupling",
-      "getcomponent-heavy",
       "find-heavy",
       "magic-number-heavy",
       "large-class",
@@ -67,8 +67,8 @@
       "state-owner"
     ],
     "risk_reasons": [
+      "Unity 업데이트 루프 사용",
       "참조 타입 또는 관계 수가 많음",
-      "GetComponent/TryGetComponent 호출이 많음",
       "Find 계열 탐색 사용",
       "숫자 리터럴이 많아 의미 파악이 어려울 수 있음",
       "파일/메서드/필드 수가 많아 책임이 커질 가능성",
@@ -76,7 +76,7 @@
       "UI와 런타임 책임이 한 파일에 섞였을 가능성",
       "상태 중심 또는 관리 중심 클래스일 가능성"
     ],
-    "risk_score": 95
+    "risk_score": 93
   },
   {
     "file_id": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
@@ -129,6 +129,29 @@
     "risk_score": 88
   },
   {
+    "file_id": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "class_name": "CombatPresentationEffectTests",
+    "risk_flags": [
+      "high-coupling",
+      "getcomponent-heavy",
+      "find-heavy",
+      "magic-number-heavy",
+      "large-class",
+      "ui-runtime-mixed",
+      "state-owner"
+    ],
+    "risk_reasons": [
+      "참조 타입 또는 관계 수가 많음",
+      "GetComponent/TryGetComponent 호출이 많음",
+      "Find 계열 탐색 사용",
+      "숫자 리터럴이 많아 의미 파악이 어려울 수 있음",
+      "파일/메서드/필드 수가 많아 책임이 커질 가능성",
+      "UI와 런타임 책임이 한 파일에 섞였을 가능성",
+      "상태 중심 또는 관리 중심 클래스일 가능성"
+    ],
+    "risk_score": 83
+  },
+  {
     "file_id": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "class_name": "CombatUiViewTests",
     "risk_flags": [
@@ -173,6 +196,29 @@
       "상태 중심 또는 관리 중심 클래스일 가능성"
     ],
     "risk_score": 83
+  },
+  {
+    "file_id": "Project 2048/Assets/Scripts/Enemy/EnemySO.cs",
+    "class_name": "EnemySO",
+    "risk_flags": [
+      "high-coupling",
+      "public-field-heavy",
+      "find-heavy",
+      "magic-number-heavy",
+      "large-class",
+      "ui-runtime-mixed",
+      "state-owner"
+    ],
+    "risk_reasons": [
+      "참조 타입 또는 관계 수가 많음",
+      "public 필드 노출 수가 많음",
+      "Find 계열 탐색 사용",
+      "숫자 리터럴이 많아 의미 파악이 어려울 수 있음",
+      "파일/메서드/필드 수가 많아 책임이 커질 가능성",
+      "UI와 런타임 책임이 한 파일에 섞였을 가능성",
+      "상태 중심 또는 관리 중심 클래스일 가능성"
+    ],
+    "risk_score": 81
   },
   {
     "file_id": "Project 2048/Assets/Scripts/UI/Loading/LoadingUI.cs",
@@ -282,6 +328,69 @@
     "risk_score": 71
   },
   {
+    "file_id": "Project 2048/Assets/Scripts/Flow/StageFlowController.cs",
+    "class_name": "StageFlowController",
+    "risk_flags": [
+      "high-coupling",
+      "magic-number-heavy",
+      "large-class",
+      "init-order-sensitive",
+      "save-load-sensitive",
+      "state-owner"
+    ],
+    "risk_reasons": [
+      "참조 타입 또는 관계 수가 많음",
+      "숫자 리터럴이 많아 의미 파악이 어려울 수 있음",
+      "파일/메서드/필드 수가 많아 책임이 커질 가능성",
+      "초기화 순서에 민감할 가능성",
+      "저장/불러오기 관련 로직 포함",
+      "상태 중심 또는 관리 중심 클래스일 가능성"
+    ],
+    "risk_score": 71
+  },
+  {
+    "file_id": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatFactory.cs",
+    "class_name": "PrototypeCombatFactory",
+    "risk_flags": [
+      "high-coupling",
+      "magic-number-heavy",
+      "large-class",
+      "save-load-sensitive",
+      "ui-runtime-mixed",
+      "state-owner"
+    ],
+    "risk_reasons": [
+      "참조 타입 또는 관계 수가 많음",
+      "숫자 리터럴이 많아 의미 파악이 어려울 수 있음",
+      "파일/메서드/필드 수가 많아 책임이 커질 가능성",
+      "저장/불러오기 관련 로직 포함",
+      "UI와 런타임 책임이 한 파일에 섞였을 가능성",
+      "상태 중심 또는 관리 중심 클래스일 가능성"
+    ],
+    "risk_score": 71
+  },
+  {
+    "file_id": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
+    "class_name": "RewardManager",
+    "risk_flags": [
+      "high-coupling",
+      "public-field-heavy",
+      "magic-number-heavy",
+      "large-class",
+      "save-load-sensitive",
+      "state-owner"
+    ],
+    "risk_reasons": [
+      "참조 타입 또는 관계 수가 많음",
+      "public 필드 노출 수가 많음",
+      "숫자 리터럴이 많아 의미 파악이 어려울 수 있음",
+      "파일/메서드/필드 수가 많아 책임이 커질 가능성",
+      "저장/불러오기 관련 로직 포함",
+      "상태 중심 또는 관리 중심 클래스일 가능성"
+    ],
+    "risk_score": 71
+  },
+  {
     "file_id": "Project 2048/Assets/Scripts/Flow/Binder/BattleSceneBinder.cs",
     "class_name": "BattleSceneBinder",
     "risk_flags": [
@@ -322,6 +431,27 @@
       "상태 중심 또는 관리 중심 클래스일 가능성"
     ],
     "risk_score": 70
+  },
+  {
+    "file_id": "Project 2048/Assets/Scripts/Skills/SkillSO.cs",
+    "class_name": "SkillSO",
+    "risk_flags": [
+      "high-coupling",
+      "public-field-heavy",
+      "magic-number-heavy",
+      "large-class",
+      "ui-runtime-mixed",
+      "state-owner"
+    ],
+    "risk_reasons": [
+      "참조 타입 또는 관계 수가 많음",
+      "public 필드 노출 수가 많음",
+      "숫자 리터럴이 많아 의미 파악이 어려울 수 있음",
+      "파일/메서드/필드 수가 많아 책임이 커질 가능성",
+      "UI와 런타임 책임이 한 파일에 섞였을 가능성",
+      "상태 중심 또는 관리 중심 클래스일 가능성"
+    ],
+    "risk_score": 69
   },
   {
     "file_id": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
@@ -404,6 +534,63 @@
     "risk_score": 61
   },
   {
+    "file_id": "Project 2048/Assets/Scripts/Combat/PlayerCombatController.cs",
+    "class_name": "PlayerCombatController",
+    "risk_flags": [
+      "high-coupling",
+      "magic-number-heavy",
+      "large-class",
+      "ui-runtime-mixed",
+      "state-owner"
+    ],
+    "risk_reasons": [
+      "참조 타입 또는 관계 수가 많음",
+      "숫자 리터럴이 많아 의미 파악이 어려울 수 있음",
+      "파일/메서드/필드 수가 많아 책임이 커질 가능성",
+      "UI와 런타임 책임이 한 파일에 섞였을 가능성",
+      "상태 중심 또는 관리 중심 클래스일 가능성"
+    ],
+    "risk_score": 59
+  },
+  {
+    "file_id": "Project 2048/Assets/Scripts/Enemy/EnemyAiBrain.cs",
+    "class_name": "EnemyAiBrain",
+    "risk_flags": [
+      "high-coupling",
+      "magic-number-heavy",
+      "large-class",
+      "ui-runtime-mixed",
+      "state-owner"
+    ],
+    "risk_reasons": [
+      "참조 타입 또는 관계 수가 많음",
+      "숫자 리터럴이 많아 의미 파악이 어려울 수 있음",
+      "파일/메서드/필드 수가 많아 책임이 커질 가능성",
+      "UI와 런타임 책임이 한 파일에 섞였을 가능성",
+      "상태 중심 또는 관리 중심 클래스일 가능성"
+    ],
+    "risk_score": 59
+  },
+  {
+    "file_id": "Project 2048/Assets/Tests/EditMode/EnemyAiBrainTests.cs",
+    "class_name": "EnemyAiBrainTests",
+    "risk_flags": [
+      "high-coupling",
+      "magic-number-heavy",
+      "large-class",
+      "ui-runtime-mixed",
+      "state-owner"
+    ],
+    "risk_reasons": [
+      "참조 타입 또는 관계 수가 많음",
+      "숫자 리터럴이 많아 의미 파악이 어려울 수 있음",
+      "파일/메서드/필드 수가 많아 책임이 커질 가능성",
+      "UI와 런타임 책임이 한 파일에 섞였을 가능성",
+      "상태 중심 또는 관리 중심 클래스일 가능성"
+    ],
+    "risk_score": 59
+  },
+  {
     "file_id": "Project 2048/Assets/Editor/SelectedMonsterRosterBuilder.cs",
     "class_name": "SelectedMonsterRosterBuilder",
     "risk_flags": [
@@ -459,6 +646,25 @@
       "상태 중심 또는 관리 중심 클래스일 가능성"
     ],
     "risk_score": 58
+  },
+  {
+    "file_id": "Project 2048/Assets/Scripts/Combat/PlayerSO.cs",
+    "class_name": "PlayerSO",
+    "risk_flags": [
+      "high-coupling",
+      "public-field-heavy",
+      "find-heavy",
+      "magic-number-heavy",
+      "state-owner"
+    ],
+    "risk_reasons": [
+      "참조 타입 또는 관계 수가 많음",
+      "public 필드 노출 수가 많음",
+      "Find 계열 탐색 사용",
+      "숫자 리터럴이 많아 의미 파악이 어려울 수 있음",
+      "상태 중심 또는 관리 중심 클래스일 가능성"
+    ],
+    "risk_score": 56
   },
   {
     "file_id": "Project 2048/Assets/Scripts/Presentation/CombatProjectileEffect.cs",
@@ -556,23 +762,6 @@
     "risk_score": 56
   },
   {
-    "file_id": "Project 2048/Assets/Scripts/Combat/PlayerCombatController.cs",
-    "class_name": "PlayerCombatController",
-    "risk_flags": [
-      "high-coupling",
-      "large-class",
-      "save-load-sensitive",
-      "state-owner"
-    ],
-    "risk_reasons": [
-      "참조 타입 또는 관계 수가 많음",
-      "파일/메서드/필드 수가 많아 책임이 커질 가능성",
-      "저장/불러오기 관련 로직 포함",
-      "상태 중심 또는 관리 중심 클래스일 가능성"
-    ],
-    "risk_score": 53
-  },
-  {
     "file_id": "Project 2048/Assets/Scripts/Board2048/Board2048Manager.cs",
     "class_name": "Board2048Manager",
     "risk_flags": [
@@ -585,23 +774,6 @@
       "참조 타입 또는 관계 수가 많음",
       "파일/메서드/필드 수가 많아 책임이 커질 가능성",
       "UI와 런타임 책임이 한 파일에 섞였을 가능성",
-      "상태 중심 또는 관리 중심 클래스일 가능성"
-    ],
-    "risk_score": 51
-  },
-  {
-    "file_id": "Project 2048/Assets/Scripts/Flow/StageFlowController.cs",
-    "class_name": "StageFlowController",
-    "risk_flags": [
-      "high-coupling",
-      "large-class",
-      "init-order-sensitive",
-      "state-owner"
-    ],
-    "risk_reasons": [
-      "참조 타입 또는 관계 수가 많음",
-      "파일/메서드/필드 수가 많아 책임이 커질 가능성",
-      "초기화 순서에 민감할 가능성",
       "상태 중심 또는 관리 중심 클래스일 가능성"
     ],
     "risk_score": 51
@@ -622,6 +794,23 @@
       "상태 중심 또는 관리 중심 클래스일 가능성"
     ],
     "risk_score": 50
+  },
+  {
+    "file_id": "Project 2048/Assets/Scripts/Skills/SkillExecutor.cs",
+    "class_name": "SkillExecutor",
+    "risk_flags": [
+      "high-coupling",
+      "magic-number-heavy",
+      "large-class",
+      "state-owner"
+    ],
+    "risk_reasons": [
+      "참조 타입 또는 관계 수가 많음",
+      "숫자 리터럴이 많아 의미 파악이 어려울 수 있음",
+      "파일/메서드/필드 수가 많아 책임이 커질 가능성",
+      "상태 중심 또는 관리 중심 클래스일 가능성"
+    ],
+    "risk_score": 49
   },
   {
     "file_id": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
@@ -658,40 +847,6 @@
     "risk_score": 49
   },
   {
-    "file_id": "Project 2048/Assets/Scripts/Combat/PlayerSO.cs",
-    "class_name": "PlayerSO",
-    "risk_flags": [
-      "high-coupling",
-      "public-field-heavy",
-      "find-heavy",
-      "state-owner"
-    ],
-    "risk_reasons": [
-      "참조 타입 또는 관계 수가 많음",
-      "public 필드 노출 수가 많음",
-      "Find 계열 탐색 사용",
-      "상태 중심 또는 관리 중심 클래스일 가능성"
-    ],
-    "risk_score": 48
-  },
-  {
-    "file_id": "Project 2048/Assets/Scripts/Enemy/EnemySO.cs",
-    "class_name": "EnemySO",
-    "risk_flags": [
-      "high-coupling",
-      "public-field-heavy",
-      "find-heavy",
-      "state-owner"
-    ],
-    "risk_reasons": [
-      "참조 타입 또는 관계 수가 많음",
-      "public 필드 노출 수가 많음",
-      "Find 계열 탐색 사용",
-      "상태 중심 또는 관리 중심 클래스일 가능성"
-    ],
-    "risk_score": 48
-  },
-  {
     "file_id": "Project 2048/Assets/Scripts/Flow/SceneFlowManager.cs",
     "class_name": "SceneFlowManager",
     "risk_flags": [
@@ -707,40 +862,6 @@
       "상태 중심 또는 관리 중심 클래스일 가능성"
     ],
     "risk_score": 48
-  },
-  {
-    "file_id": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatFactory.cs",
-    "class_name": "PrototypeCombatFactory",
-    "risk_flags": [
-      "high-coupling",
-      "magic-number-heavy",
-      "save-load-sensitive",
-      "state-owner"
-    ],
-    "risk_reasons": [
-      "참조 타입 또는 관계 수가 많음",
-      "숫자 리터럴이 많아 의미 파악이 어려울 수 있음",
-      "저장/불러오기 관련 로직 포함",
-      "상태 중심 또는 관리 중심 클래스일 가능성"
-    ],
-    "risk_score": 46
-  },
-  {
-    "file_id": "Project 2048/Assets/Tests/EditMode/ScoreManagerTests.cs",
-    "class_name": "ScoreManagerTests",
-    "risk_flags": [
-      "high-coupling",
-      "magic-number-heavy",
-      "save-load-sensitive",
-      "state-owner"
-    ],
-    "risk_reasons": [
-      "참조 타입 또는 관계 수가 많음",
-      "숫자 리터럴이 많아 의미 파악이 어려울 수 있음",
-      "저장/불러오기 관련 로직 포함",
-      "상태 중심 또는 관리 중심 클래스일 가능성"
-    ],
-    "risk_score": 46
   },
   {
     "file_id": "Project 2048/Assets/Scripts/Core/GameManager.cs",
@@ -760,25 +881,25 @@
     "risk_score": 45
   },
   {
-    "file_id": "Project 2048/Assets/Scripts/Enemy/EnemyAiBrain.cs",
-    "class_name": "EnemyAiBrain",
+    "file_id": "Project 2048/Assets/Scripts/Presentation/CombatParticleEffectBinding.cs",
+    "class_name": "CombatParticleEffectBinding",
     "risk_flags": [
       "high-coupling",
+      "public-field-heavy",
       "magic-number-heavy",
-      "ui-runtime-mixed",
       "state-owner"
     ],
     "risk_reasons": [
       "참조 타입 또는 관계 수가 많음",
+      "public 필드 노출 수가 많음",
       "숫자 리터럴이 많아 의미 파악이 어려울 수 있음",
-      "UI와 런타임 책임이 한 파일에 섞였을 가능성",
       "상태 중심 또는 관리 중심 클래스일 가능성"
     ],
     "risk_score": 44
   },
   {
-    "file_id": "Project 2048/Assets/Scripts/Presentation/CombatParticleEffectBinding.cs",
-    "class_name": "CombatParticleEffectBinding",
+    "file_id": "Project 2048/Assets/Scripts/Rewards/BattleRewardSO.cs",
+    "class_name": "BattleRewardSO",
     "risk_flags": [
       "high-coupling",
       "public-field-heavy",
@@ -809,6 +930,21 @@
       "상태 중심 또는 관리 중심 클래스일 가능성"
     ],
     "risk_score": 44
+  },
+  {
+    "file_id": "Project 2048/Assets/Scripts/Enemy/EnemyController.cs",
+    "class_name": "EnemyController",
+    "risk_flags": [
+      "high-coupling",
+      "large-class",
+      "state-owner"
+    ],
+    "risk_reasons": [
+      "참조 타입 또는 관계 수가 많음",
+      "파일/메서드/필드 수가 많아 책임이 커질 가능성",
+      "상태 중심 또는 관리 중심 클래스일 가능성"
+    ],
+    "risk_score": 41
   },
   {
     "file_id": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatText.cs",
@@ -941,38 +1077,8 @@
     "risk_score": 38
   },
   {
-    "file_id": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
-    "class_name": "RewardManager",
-    "risk_flags": [
-      "high-coupling",
-      "save-load-sensitive",
-      "state-owner"
-    ],
-    "risk_reasons": [
-      "참조 타입 또는 관계 수가 많음",
-      "저장/불러오기 관련 로직 포함",
-      "상태 중심 또는 관리 중심 클래스일 가능성"
-    ],
-    "risk_score": 38
-  },
-  {
     "file_id": "Project 2048/Assets/Scripts/Rewards/RunProgress.cs",
     "class_name": "RunProgress",
-    "risk_flags": [
-      "high-coupling",
-      "save-load-sensitive",
-      "state-owner"
-    ],
-    "risk_reasons": [
-      "참조 타입 또는 관계 수가 많음",
-      "저장/불러오기 관련 로직 포함",
-      "상태 중심 또는 관리 중심 클래스일 가능성"
-    ],
-    "risk_score": 38
-  },
-  {
-    "file_id": "Project 2048/Assets/Scripts/Score/ScoreManager.cs",
-    "class_name": "ScoreManager",
     "risk_flags": [
       "high-coupling",
       "save-load-sensitive",
@@ -1076,6 +1182,21 @@
     "risk_score": 36
   },
   {
+    "file_id": "Project 2048/Assets/Scripts/Prototype/StatusEffectTooltipTarget.cs",
+    "class_name": "StatusEffectTooltipTarget",
+    "risk_flags": [
+      "high-coupling",
+      "ui-runtime-mixed",
+      "state-owner"
+    ],
+    "risk_reasons": [
+      "참조 타입 또는 관계 수가 많음",
+      "UI와 런타임 책임이 한 파일에 섞였을 가능성",
+      "상태 중심 또는 관리 중심 클래스일 가능성"
+    ],
+    "risk_score": 36
+  },
+  {
     "file_id": "Project 2048/Assets/Tests/EditMode/PlayerCombatControllerTests.cs",
     "class_name": "PlayerCombatControllerTests",
     "risk_flags": [
@@ -1121,8 +1242,8 @@
     "risk_score": 34
   },
   {
-    "file_id": "Project 2048/Assets/Tests/EditMode/CostConverterTests.cs",
-    "class_name": "CostConverterTests",
+    "file_id": "Project 2048/Assets/Scripts/Skills/SkillEffectKind.cs",
+    "class_name": "SkillEffectKind",
     "risk_flags": [
       "high-coupling",
       "magic-number-heavy",
@@ -1136,8 +1257,8 @@
     "risk_score": 34
   },
   {
-    "file_id": "Project 2048/Assets/Tests/EditMode/EnemyAiBrainTests.cs",
-    "class_name": "EnemyAiBrainTests",
+    "file_id": "Project 2048/Assets/Tests/EditMode/CostConverterTests.cs",
+    "class_name": "CostConverterTests",
     "risk_flags": [
       "high-coupling",
       "magic-number-heavy",
@@ -1164,6 +1285,21 @@
       "상태 중심 또는 관리 중심 클래스일 가능성"
     ],
     "risk_score": 34
+  },
+  {
+    "file_id": "Project 2048/Assets/Scripts/Enemy/EnemyIntent.cs",
+    "class_name": "EnemyIntent",
+    "risk_flags": [
+      "public-field-heavy",
+      "large-class",
+      "state-owner"
+    ],
+    "risk_reasons": [
+      "public 필드 노출 수가 많음",
+      "파일/메서드/필드 수가 많아 책임이 커질 가능성",
+      "상태 중심 또는 관리 중심 클래스일 가능성"
+    ],
+    "risk_score": 33
   },
   {
     "file_id": "Project 2048/Assets/Scripts/Flow/Binder/StoryFlowBinder.cs",
@@ -1194,8 +1330,8 @@
     "risk_score": 26
   },
   {
-    "file_id": "Project 2048/Assets/Scripts/Enemy/EnemyController.cs",
-    "class_name": "EnemyController",
+    "file_id": "Project 2048/Assets/Scripts/Combat/DamageCalculator.cs",
+    "class_name": "DamageCalculator",
     "risk_flags": [
       "high-coupling",
       "state-owner"
@@ -1209,6 +1345,19 @@
   {
     "file_id": "Project 2048/Assets/Scripts/Presentation/BoardTileEffectProfileSO.cs",
     "class_name": "BoardTileEffectProfileSO",
+    "risk_flags": [
+      "high-coupling",
+      "state-owner"
+    ],
+    "risk_reasons": [
+      "참조 타입 또는 관계 수가 많음",
+      "상태 중심 또는 관리 중심 클래스일 가능성"
+    ],
+    "risk_score": 26
+  },
+  {
+    "file_id": "Project 2048/Assets/Scripts/Rewards/RewardTableSO.cs",
+    "class_name": "RewardTableSO",
     "risk_flags": [
       "high-coupling",
       "state-owner"
@@ -1246,6 +1395,19 @@
     "risk_score": 26
   },
   {
+    "file_id": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
+    "class_name": "SkillSOTests",
+    "risk_flags": [
+      "high-coupling",
+      "state-owner"
+    ],
+    "risk_reasons": [
+      "참조 타입 또는 관계 수가 많음",
+      "상태 중심 또는 관리 중심 클래스일 가능성"
+    ],
+    "risk_score": 26
+  },
+  {
     "file_id": "Project 2048/Assets/Scripts/UI/SettingPopup.cs",
     "class_name": "SettingPopup",
     "risk_flags": [
@@ -1272,21 +1434,8 @@
     "risk_score": 18
   },
   {
-    "file_id": "Project 2048/Assets/Scripts/Prototype/StatusEffectTooltipTarget.cs",
-    "class_name": "StatusEffectTooltipTarget",
-    "risk_flags": [
-      "ui-runtime-mixed",
-      "state-owner"
-    ],
-    "risk_reasons": [
-      "UI와 런타임 책임이 한 파일에 섞였을 가능성",
-      "상태 중심 또는 관리 중심 클래스일 가능성"
-    ],
-    "risk_score": 18
-  },
-  {
-    "file_id": "Project 2048/Assets/Scripts/Rewards/BattleRewardSO.cs",
-    "class_name": "BattleRewardSO",
+    "file_id": "Project 2048/Assets/Scripts/Flow/StageResult.cs",
+    "class_name": "StageResult",
     "risk_flags": [
       "public-field-heavy",
       "state-owner"
@@ -1311,65 +1460,6 @@
     "risk_score": 18
   },
   {
-    "file_id": "Project 2048/Assets/Scripts/Score/ScoreRuleSO.cs",
-    "class_name": "ScoreRuleSO",
-    "risk_flags": [
-      "public-field-heavy",
-      "state-owner"
-    ],
-    "risk_reasons": [
-      "public 필드 노출 수가 많음",
-      "상태 중심 또는 관리 중심 클래스일 가능성"
-    ],
-    "risk_score": 18
-  },
-  {
-    "file_id": "Project 2048/Assets/Scripts/Skills/SkillSO.cs",
-    "class_name": "SkillSO",
-    "risk_flags": [
-      "public-field-heavy",
-      "state-owner"
-    ],
-    "risk_reasons": [
-      "public 필드 노출 수가 많음",
-      "상태 중심 또는 관리 중심 클래스일 가능성"
-    ],
-    "risk_score": 18
-  },
-  {
-    "file_id": "Project 2048/Assets/Scripts/Combat/CombatResult.cs",
-    "class_name": "CombatResult",
-    "risk_flags": [
-      "public-field-heavy"
-    ],
-    "risk_reasons": [
-      "public 필드 노출 수가 많음"
-    ],
-    "risk_score": 10
-  },
-  {
-    "file_id": "Project 2048/Assets/Scripts/Enemy/EnemyIntent.cs",
-    "class_name": "EnemyIntent",
-    "risk_flags": [
-      "public-field-heavy"
-    ],
-    "risk_reasons": [
-      "public 필드 노출 수가 많음"
-    ],
-    "risk_score": 10
-  },
-  {
-    "file_id": "Project 2048/Assets/Scripts/Flow/StageResult.cs",
-    "class_name": "StageResult",
-    "risk_flags": [
-      "public-field-heavy"
-    ],
-    "risk_reasons": [
-      "public 필드 노출 수가 많음"
-    ],
-    "risk_score": 10
-  },
-  {
     "file_id": "Project 2048/Assets/Scripts/Presentation/CombatActionIds.cs",
     "class_name": "CombatActionIds",
     "risk_flags": [
@@ -1384,10 +1474,10 @@
     "file_id": "Project 2048/Assets/Scripts/Board2048/CostConverter.cs",
     "class_name": "CostConverter",
     "risk_flags": [
-      "magic-number-heavy"
+      "state-owner"
     ],
     "risk_reasons": [
-      "숫자 리터럴이 많아 의미 파악이 어려울 수 있음"
+      "상태 중심 또는 관리 중심 클래스일 가능성"
     ],
     "risk_score": 8
   },
@@ -1447,8 +1537,8 @@
     "risk_score": 8
   },
   {
-    "file_id": "Project 2048/Assets/Scripts/Rewards/RewardTableSO.cs",
-    "class_name": "RewardTableSO",
+    "file_id": "Project 2048/Assets/Scripts/Rewards/RewardChoiceKind.cs",
+    "class_name": "RewardChoiceKind",
     "risk_flags": [
       "state-owner"
     ],
@@ -1458,8 +1548,8 @@
     "risk_score": 8
   },
   {
-    "file_id": "Project 2048/Assets/Scripts/Skills/SkillExecutor.cs",
-    "class_name": "SkillExecutor",
+    "file_id": "Project 2048/Assets/Scripts/Skills/SkillVfxFamily.cs",
+    "class_name": "SkillVfxFamily",
     "risk_flags": [
       "state-owner"
     ],
@@ -1501,8 +1591,8 @@
     "risk_score": 0
   },
   {
-    "file_id": "Project 2048/Assets/Scripts/Combat/DamageCalculator.cs",
-    "class_name": "DamageCalculator",
+    "file_id": "Project 2048/Assets/Scripts/Combat/CombatResult.cs",
+    "class_name": "CombatResult",
     "risk_flags": [],
     "risk_reasons": [],
     "risk_score": 0
@@ -1524,6 +1614,13 @@
   {
     "file_id": "Project 2048/Assets/Scripts/Enemy/EnemyAiActionBias.cs",
     "class_name": "EnemyAiActionBias",
+    "risk_flags": [],
+    "risk_reasons": [],
+    "risk_score": 0
+  },
+  {
+    "file_id": "Project 2048/Assets/Scripts/Enemy/EnemyAiComplexity.cs",
+    "class_name": "EnemyAiComplexity",
     "risk_flags": [],
     "risk_reasons": [],
     "risk_score": 0
@@ -1557,8 +1654,8 @@
     "risk_score": 0
   },
   {
-    "file_id": "Project 2048/Assets/Scripts/Rewards/RewardChoiceKind.cs",
-    "class_name": "RewardChoiceKind",
+    "file_id": "Project 2048/Assets/Scripts/Skills/DamageStatSource.cs",
+    "class_name": "DamageStatSource",
     "risk_flags": [],
     "risk_reasons": [],
     "risk_score": 0

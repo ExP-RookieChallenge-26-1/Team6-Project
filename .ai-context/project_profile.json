@@ -2,39 +2,45 @@
   "project_name": "unknown",
   "language": "C#",
   "engine_guess": "Unity",
-  "total_cs_files": 105,
+  "total_cs_files": 108,
   "mono_behaviour_files": 32,
-  "scriptable_object_files": 11,
-  "files_with_update": 3,
+  "scriptable_object_files": 10,
+  "files_with_update": 4,
   "files_with_fixed_update": 0,
   "files_with_late_update": 2,
   "singleton_candidates": 3,
-  "manager_like_classes": 31,
-  "ui_related_classes": 39,
-  "save_load_related_classes": 38,
+  "manager_like_classes": 28,
+  "ui_related_classes": 45,
+  "save_load_related_classes": 36,
   "role_counts": {
-    "ui": 39,
-    "combat": 72,
-    "data": 40,
-    "save-load": 38,
-    "player": 52,
+    "ui": 45,
+    "combat": 76,
+    "data": 39,
+    "inventory": 12,
+    "save-load": 36,
     "runtime": 43,
-    "manager": 30,
+    "manager": 27,
     "scene": 9,
-    "inventory": 1,
-    "network": 2
+    "player": 57,
+    "network": 1
   },
   "high_coupling_classes": [
     {
       "class_name": "CombatUiBuilder",
       "file_id": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
-      "relation_count": 224,
+      "relation_count": 226,
       "referenced_type_count": 200
     },
     {
       "class_name": "CombatWorldSpriteView",
       "file_id": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
-      "relation_count": 221,
+      "relation_count": 223,
+      "referenced_type_count": 200
+    },
+    {
+      "class_name": "CombatPresentationEffectTests",
+      "file_id": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+      "relation_count": 219,
       "referenced_type_count": 200
     },
     {
@@ -50,15 +56,15 @@
       "referenced_type_count": 200
     },
     {
-      "class_name": "CombatPresentationEffectTests",
-      "file_id": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+      "class_name": "CombatUiViewTests",
+      "file_id": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
       "relation_count": 215,
       "referenced_type_count": 200
     },
     {
-      "class_name": "CombatUiViewTests",
-      "file_id": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
-      "relation_count": 211,
+      "class_name": "RewardGrowthTests",
+      "file_id": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+      "relation_count": 215,
       "referenced_type_count": 200
     },
     {
@@ -68,22 +74,16 @@
       "referenced_type_count": 200
     },
     {
-      "class_name": "RewardGrowthTests",
-      "file_id": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
-      "relation_count": 195,
-      "referenced_type_count": 182
+      "class_name": "CombatManagerTests",
+      "file_id": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
+      "relation_count": 163,
+      "referenced_type_count": 158
     },
     {
-      "class_name": "CombatUiContractTests",
-      "file_id": "Project 2048/Assets/Tests/EditMode/CombatUiContractTests.cs",
-      "relation_count": 122,
-      "referenced_type_count": 120
-    },
-    {
-      "class_name": "AudioMixerStructureTests",
-      "file_id": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
-      "relation_count": 112,
-      "referenced_type_count": 107
+      "class_name": "EnemyAiBrainTests",
+      "file_id": "Project 2048/Assets/Tests/EditMode/EnemyAiBrainTests.cs",
+      "relation_count": 141,
+      "referenced_type_count": 139
     }
   ],
   "high_risk_classes": [
@@ -142,11 +142,11 @@
       "risk_score": 95
     },
     {
-      "file_id": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
-      "class_name": "CombatPresentationEffectTests",
+      "file_id": "Project 2048/Assets/Scripts/Presentation/CombatClawSlash2DEffect.cs",
+      "class_name": "CombatClawSlash2DEffect",
       "risk_flags": [
+        "update-heavy",
         "high-coupling",
-        "getcomponent-heavy",
         "find-heavy",
         "magic-number-heavy",
         "large-class",
@@ -155,8 +155,8 @@
         "state-owner"
       ],
       "risk_reasons": [
+        "Unity 업데이트 루프 사용",
         "참조 타입 또는 관계 수가 많음",
-        "GetComponent/TryGetComponent 호출이 많음",
         "Find 계열 탐색 사용",
         "숫자 리터럴이 많아 의미 파악이 어려울 수 있음",
         "파일/메서드/필드 수가 많아 책임이 커질 가능성",
@@ -164,7 +164,7 @@
         "UI와 런타임 책임이 한 파일에 섞였을 가능성",
         "상태 중심 또는 관리 중심 클래스일 가능성"
       ],
-      "risk_score": 95
+      "risk_score": 93
     },
     {
       "file_id": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
@@ -217,6 +217,29 @@
       "risk_score": 88
     },
     {
+      "file_id": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+      "class_name": "CombatPresentationEffectTests",
+      "risk_flags": [
+        "high-coupling",
+        "getcomponent-heavy",
+        "find-heavy",
+        "magic-number-heavy",
+        "large-class",
+        "ui-runtime-mixed",
+        "state-owner"
+      ],
+      "risk_reasons": [
+        "참조 타입 또는 관계 수가 많음",
+        "GetComponent/TryGetComponent 호출이 많음",
+        "Find 계열 탐색 사용",
+        "숫자 리터럴이 많아 의미 파악이 어려울 수 있음",
+        "파일/메서드/필드 수가 많아 책임이 커질 가능성",
+        "UI와 런타임 책임이 한 파일에 섞였을 가능성",
+        "상태 중심 또는 관리 중심 클래스일 가능성"
+      ],
+      "risk_score": 83
+    },
+    {
       "file_id": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
       "class_name": "CombatUiViewTests",
       "risk_flags": [
@@ -263,6 +286,29 @@
       "risk_score": 83
     },
     {
+      "file_id": "Project 2048/Assets/Scripts/Enemy/EnemySO.cs",
+      "class_name": "EnemySO",
+      "risk_flags": [
+        "high-coupling",
+        "public-field-heavy",
+        "find-heavy",
+        "magic-number-heavy",
+        "large-class",
+        "ui-runtime-mixed",
+        "state-owner"
+      ],
+      "risk_reasons": [
+        "참조 타입 또는 관계 수가 많음",
+        "public 필드 노출 수가 많음",
+        "Find 계열 탐색 사용",
+        "숫자 리터럴이 많아 의미 파악이 어려울 수 있음",
+        "파일/메서드/필드 수가 많아 책임이 커질 가능성",
+        "UI와 런타임 책임이 한 파일에 섞였을 가능성",
+        "상태 중심 또는 관리 중심 클래스일 가능성"
+      ],
+      "risk_score": 81
+    },
+    {
       "file_id": "Project 2048/Assets/Scripts/UI/Loading/LoadingUI.cs",
       "class_name": "LoadingUI",
       "risk_flags": [
@@ -284,48 +330,6 @@
         "상태 중심 또는 관리 중심 클래스일 가능성"
       ],
       "risk_score": 76
-    },
-    {
-      "file_id": "Project 2048/Assets/Scripts/Audio/Project2048AudioBootstrap.cs",
-      "class_name": "Project2048AudioBootstrap",
-      "risk_flags": [
-        "singleton-candidate",
-        "high-coupling",
-        "find-heavy",
-        "save-load-sensitive",
-        "ui-runtime-mixed",
-        "state-owner"
-      ],
-      "risk_reasons": [
-        "Instance 또는 DontDestroyOnLoad 패턴 감지",
-        "참조 타입 또는 관계 수가 많음",
-        "Find 계열 탐색 사용",
-        "저장/불러오기 관련 로직 포함",
-        "UI와 런타임 책임이 한 파일에 섞였을 가능성",
-        "상태 중심 또는 관리 중심 클래스일 가능성"
-      ],
-      "risk_score": 75
-    },
-    {
-      "file_id": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatBootstrap.cs",
-      "class_name": "PrototypeCombatBootstrap",
-      "risk_flags": [
-        "high-coupling",
-        "find-heavy",
-        "large-class",
-        "init-order-sensitive",
-        "save-load-sensitive",
-        "state-owner"
-      ],
-      "risk_reasons": [
-        "참조 타입 또는 관계 수가 많음",
-        "Find 계열 탐색 사용",
-        "파일/메서드/필드 수가 많아 책임이 커질 가능성",
-        "초기화 순서에 민감할 가능성",
-        "저장/불러오기 관련 로직 포함",
-        "상태 중심 또는 관리 중심 클래스일 가능성"
-      ],
-      "risk_score": 75
     }
   ],
   "common_patterns": [

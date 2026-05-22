@@ -480,14 +480,14 @@ namespace Project2048.PrototypeEditor
                 new Vector2(0.74f, 0.70f),
                 new Vector2(CombatUiView.IntentBubbleSquareSize, CombatUiView.IntentBubbleSquareSize),
                 Vector2.zero);
-            refs.IntentBubbleText = CreateLabel(refs.IntentBubble.transform, "IntentBubbleText", "공격", 22, TextAlignmentOptions.Center, font);
+            refs.IntentBubbleText = CreateLabel(refs.IntentBubble.transform, "IntentBubbleText", "공격", 14, TextAlignmentOptions.Center, font);
             refs.IntentBubbleText.enableAutoSizing = true;
-            refs.IntentBubbleText.fontSizeMin = 12f;
-            refs.IntentBubbleText.fontSizeMax = 22f;
+            refs.IntentBubbleText.fontSizeMin = 8f;
+            refs.IntentBubbleText.fontSizeMax = 14f;
             refs.IntentBubbleText.textWrappingMode = TextWrappingModes.Normal;
             refs.IntentBubbleText.overflowMode = TextOverflowModes.Ellipsis;
             refs.IntentBubbleText.raycastTarget = false;
-            SetStretch(refs.IntentBubbleText.rectTransform, Vector2.zero, Vector2.one, new Vector2(6f, 6f), new Vector2(-6f, -6f));
+            SetStretch(refs.IntentBubbleText.rectTransform, Vector2.zero, Vector2.one, new Vector2(3f, 3f), new Vector2(-3f, -3f));
 
             CreateStatusBar(parent, "PlayerBattleHp", new Vector2(0.22f, 0.06f), new Vector2(300, 20), CombatUiView.ThemeHpBarBackgroundColor, CombatUiView.ThemeHpFillColor, font, out refs.PlayerBattleHpFill, out refs.PlayerBattleHpText);
             refs.PlayerBattleStatusEffectsRoot = EnsureStatusEffectAuthoringRoot(

@@ -406,9 +406,9 @@ namespace Project2048.Tests
             Assert.That(intentBubble.sizeDelta.x, Is.EqualTo(CombatUiView.IntentBubbleSquareSize).Within(0.001f));
             Assert.That(intentBubble.sizeDelta.y, Is.EqualTo(CombatUiView.IntentBubbleSquareSize).Within(0.001f));
             Assert.That(intentBubbleText.enableAutoSizing, Is.True);
-            Assert.That(intentBubbleText.fontSizeMax, Is.EqualTo(22f).Within(0.001f));
+            Assert.That(intentBubbleText.fontSizeMax, Is.EqualTo(14f).Within(0.001f));
             Assert.That(intentBubbleText.raycastTarget, Is.False);
-            Assert.That(intentBubbleText.rectTransform.sizeDelta, Is.EqualTo(new Vector2(-12f, -12f)));
+            Assert.That(intentBubbleText.rectTransform.sizeDelta, Is.EqualTo(new Vector2(-6f, -6f)));
 
             var serializedView = new SerializedObject(view);
             var rewardOverlay = serializedView.FindProperty("rewardOverlay").objectReferenceValue as GameObject;

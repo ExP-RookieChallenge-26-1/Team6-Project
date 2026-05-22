@@ -53,6 +53,7 @@ namespace Project2048.Combat
         public event Action OnCombatDefeat;
         public event Action<int> OnCostChanged;
         public event Action<SkillSO, EnemyController> OnPlayerSkillUsed;
+        public event Action<string, int, EnemyController> OnPlayerChargedAttackReleased;
         public event Action<CombatSnapshot> OnCombatStateChanged;
 
         private void Awake()
@@ -324,6 +325,7 @@ namespace Project2048.Combat
             }
 
             lastActionDescription = $"{skillName} 발동";
+            OnPlayerChargedAttackReleased?.Invoke(skillName, chargedPower, target);
             skillExecutor.ExecuteChargedAttack(player, target, chargedPower, statSource, damageCalculator);
             NotifyStateChanged();
             return CheckVictory();

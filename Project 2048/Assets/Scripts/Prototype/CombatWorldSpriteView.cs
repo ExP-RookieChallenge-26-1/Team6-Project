@@ -23,6 +23,7 @@ namespace Project2048.Prototype
         public const float DebuffCastParticleLifetimeSeconds = 0.9f;
         public const float DebuffTargetParticleDelaySeconds = DebuffCastParticleLifetimeSeconds;
         public const float DamageNumberPopupDurationSeconds = 0.55f;
+        public const float ChargedLightBeamDurationSeconds = 0.65f;
 
         private const float EnemyAppearIntroRightOffset = 2.25f;
         private const float EnemyAppearIntroJumpHeight = 0.7f;
@@ -45,6 +46,7 @@ namespace Project2048.Prototype
         private const int DamageNumberPopupSortingOrderOffset = 32;
         private const int ShieldImpactParticleCount = 22;
         private const int DebuffCastParticleCount = 28;
+        private const float ReusableSkillParticleMaxStartSize = 0.24f;
         private const string DefaultWorldVfxProfileResourceName = "PrototypeCombatWorldVfxProfile";
         private static readonly Color DamageNumberPopupTextColor = new(1f, 0.82f, 0.02f, 1f);
         private static readonly Color DamageNumberPopupOutlineColor = Color.white;
@@ -92,6 +94,7 @@ namespace Project2048.Prototype
         private Material runtimeShieldImpactParticleMaterial;
         private Material runtimeFearDebuffParticleMaterial;
         private Material runtimeDarknessDebuffParticleMaterial;
+        private Material runtimeChargedLightBeamMaterial;
         private readonly System.Collections.Generic.Dictionary<string, Material> runtimeSkillParticleMaterials = new();
         private RectTransform damageNumberPopupLayer;
         private readonly System.Collections.Generic.List<GameObject> damageNumberPopups = new();
@@ -117,6 +120,8 @@ namespace Project2048.Prototype
             combatManager.OnCombatStateChanged += HandleCombatStateChanged;
             combatManager.OnPlayerSkillUsed -= HandlePlayerSkillUsed;
             combatManager.OnPlayerSkillUsed += HandlePlayerSkillUsed;
+            combatManager.OnPlayerChargedAttackReleased -= HandlePlayerChargedAttackReleased;
+            combatManager.OnPlayerChargedAttackReleased += HandlePlayerChargedAttackReleased;
 
             snapshot = combatManager.GetSnapshot();
             lastEnemyWasDead = snapshot?.Enemies?.FirstOrDefault()?.IsDead ?? false;
@@ -146,6 +151,7 @@ namespace Project2048.Prototype
 
             combatManager.OnCombatStateChanged -= HandleCombatStateChanged;
             combatManager.OnPlayerSkillUsed -= HandlePlayerSkillUsed;
+            combatManager.OnPlayerChargedAttackReleased -= HandlePlayerChargedAttackReleased;
         }
 
         private void HandleCombatStateChanged(CombatSnapshot nextSnapshot)
@@ -276,6 +282,12 @@ namespace Project2048.Prototype
             delayEnemyDeathFadeUntilRealtime = Mathf.Max(
                 delayEnemyDeathFadeUntilRealtime,
                 Time.realtimeSinceStartup + durationSeconds);
+        }
+
+        private void HandlePlayerChargedAttackReleased(string skillName, int chargedPower, EnemyController target)
+        {
+            PlayChargedLightBeamEffect(target);
+            DelayEnemyDeathFade(ChargedLightBeamDurationSeconds);
         }
 
         private void Render(CombatSnapshot currentSnapshot)
@@ -554,6 +566,7 @@ namespace Project2048.Prototype
             var scale = Mathf.Max(0.01f, skill.vfxScale);
             var intensity = Mathf.Max(0.1f, skill.vfxIntensity);
             var repeatCount = Mathf.Max(1, skill.vfxRepeatCount);
+            var scaledStartSize = Mathf.Min(startSize * scale, ReusableSkillParticleMaxStartSize);
             if (skill.vfxFamily == SkillVfxFamily.SupportFire)
             {
                 PlaySupportFireSkillParticleEffect(
@@ -562,7 +575,7 @@ namespace Project2048.Prototype
                     lifetimeSeconds,
                     burstCount,
                     startSpeed,
-                    startSize,
+                    scaledStartSize,
                     scale,
                     intensity,
                     repeatCount);
@@ -578,7 +591,7 @@ namespace Project2048.Prototype
                 lifetimeSeconds,
                 Mathf.RoundToInt(burstCount * intensity * repeatCount),
                 startSpeed * Mathf.Sqrt(scale),
-                startSize * scale,
+                scaledStartSize,
                 swirl);
         }
 
@@ -616,9 +629,87 @@ namespace Project2048.Prototype
                     lifetimeSeconds,
                     perShotBurstCount,
                     startSpeed * Mathf.Sqrt(scale),
-                    startSize * scale,
+                    startSize,
                     false,
                     offsets[i]);
+            }
+        }
+
+        private void PlayChargedLightBeamEffect(EnemyController target)
+        {
+            var sourceTransform = playerRenderer != null ? playerRenderer.transform : transform;
+            var targetTransform = target != null && enemyRenderer != null ? enemyRenderer.transform : transform;
+            var sourcePosition = sourceTransform.position + new Vector3(0f, 0.38f, 0f);
+            var targetPosition = targetTransform.position + new Vector3(0f, 0.18f, 0f);
+
+            var beamObject = new GameObject("ChargedLightBeam", typeof(LineRenderer));
+            beamObject.transform.SetParent(transform, false);
+
+            var line = beamObject.GetComponent<LineRenderer>();
+            line.useWorldSpace = true;
+            line.positionCount = 2;
+            line.SetPosition(0, sourcePosition);
+            line.SetPosition(1, targetPosition);
+            line.startWidth = 0.08f;
+            line.endWidth = 0.16f;
+            line.numCapVertices = 8;
+            line.numCornerVertices = 4;
+            line.material = ResolveChargedLightBeamMaterial();
+            line.startColor = new Color(1f, 0.96f, 0.58f, 0.95f);
+            line.endColor = new Color(1f, 1f, 0.88f, 0.75f);
+
+            var targetRenderer = targetTransform.GetComponent<SpriteRenderer>();
+            if (targetRenderer != null)
+            {
+                line.sortingLayerID = targetRenderer.sortingLayerID;
+                line.sortingOrder = targetRenderer.sortingOrder + 8;
+            }
+
+            SpawnParticleBurst(
+                null,
+                targetTransform,
+                "ChargedLightBeamImpactParticles",
+                new Color(1f, 0.92f, 0.45f, 0.86f),
+                null,
+                0.45f,
+                18,
+                0.3f,
+                0.14f,
+                swirl: true);
+
+            if (Application.isPlaying && isActiveAndEnabled)
+            {
+                StartCoroutine(FadeChargedLightBeamRoutine(line, beamObject, ChargedLightBeamDurationSeconds));
+            }
+        }
+
+        private static IEnumerator FadeChargedLightBeamRoutine(LineRenderer line, GameObject beamObject, float durationSeconds)
+        {
+            var duration = Mathf.Max(0.05f, durationSeconds);
+            var startColor = line != null ? line.startColor : Color.white;
+            var endColor = line != null ? line.endColor : Color.white;
+            var elapsed = 0f;
+            while (elapsed < duration)
+            {
+                if (line == null)
+                {
+                    yield break;
+                }
+
+                elapsed += Time.unscaledDeltaTime;
+                var alpha = 1f - Mathf.Clamp01(elapsed / duration);
+                var nextStart = startColor;
+                var nextEnd = endColor;
+                nextStart.a *= alpha;
+                nextEnd.a *= alpha;
+                line.startColor = nextStart;
+                line.endColor = nextEnd;
+                yield return null;
+            }
+
+            if (beamObject != null)
+            {
+                Destroy(beamObject);
             }
         }
 
@@ -636,77 +727,77 @@ namespace Project2048.Prototype
                     lifetimeSeconds = 0.55f;
                     burstCount = 22;
                     startSpeed = 0.8f;
-                    startSize = 0.32f;
+                    startSize = 0.16f;
                     swirl = false;
                     break;
                 case SkillVfxFamily.LightProjectile:
                     lifetimeSeconds = 0.75f;
                     burstCount = 28;
                     startSpeed = 0.75f;
-                    startSize = 0.42f;
+                    startSize = 0.16f;
                     swirl = false;
                     break;
                 case SkillVfxFamily.ShieldDome:
                     lifetimeSeconds = 0.8f;
                     burstCount = 32;
                     startSpeed = 0.35f;
-                    startSize = 0.46f;
+                    startSize = 0.18f;
                     swirl = true;
                     break;
                 case SkillVfxFamily.ImpactBurst:
                     lifetimeSeconds = 0.55f;
                     burstCount = 34;
                     startSpeed = 1f;
-                    startSize = 0.54f;
+                    startSize = 0.2f;
                     swirl = false;
                     break;
                 case SkillVfxFamily.BuffAura:
                     lifetimeSeconds = 0.85f;
                     burstCount = 28;
                     startSpeed = 0.3f;
-                    startSize = 0.38f;
+                    startSize = 0.16f;
                     swirl = true;
                     break;
                 case SkillVfxFamily.DebuffWave:
                     lifetimeSeconds = 0.7f;
                     burstCount = 26;
                     startSpeed = 0.55f;
-                    startSize = 0.36f;
+                    startSize = 0.16f;
                     swirl = true;
                     break;
                 case SkillVfxFamily.DrainTether:
                     lifetimeSeconds = 0.8f;
                     burstCount = 30;
                     startSpeed = 0.45f;
-                    startSize = 0.4f;
+                    startSize = 0.17f;
                     swirl = true;
                     break;
                 case SkillVfxFamily.CounterReady:
                     lifetimeSeconds = 0.75f;
                     burstCount = 28;
                     startSpeed = 0.35f;
-                    startSize = 0.38f;
+                    startSize = 0.16f;
                     swirl = true;
                     break;
                 case SkillVfxFamily.BoardDisturb:
                     lifetimeSeconds = 0.85f;
                     burstCount = 34;
                     startSpeed = 0.42f;
-                    startSize = 0.44f;
+                    startSize = 0.18f;
                     swirl = true;
                     break;
                 case SkillVfxFamily.SupportFire:
                     lifetimeSeconds = 0.55f;
                     burstCount = 36;
                     startSpeed = 1.05f;
-                    startSize = 0.34f;
+                    startSize = 0.14f;
                     swirl = false;
                     break;
                 default:
                     lifetimeSeconds = 0.65f;
                     burstCount = 24;
                     startSpeed = 0.6f;
-                    startSize = 0.34f;
+                    startSize = 0.16f;
                     swirl = false;
                     break;
             }
@@ -1893,6 +1984,13 @@ namespace Project2048.Prototype
             return material;
         }
 
+        private Material ResolveChargedLightBeamMaterial()
+        {
+            return runtimeChargedLightBeamMaterial ??= CreateParticleMaterial(
+                "ChargedLightBeamMaterial",
+                new Color(1f, 0.94f, 0.42f, 0.92f));
+        }
+
         private static Material CreateParticleMaterial(string materialName, Color color)
         {
             var shader = Shader.Find("Universal Render Pipeline/Particles/Unlit")
@@ -1964,6 +2062,7 @@ namespace Project2048.Prototype
             DestroyRuntimeMaterial(ref runtimeShieldImpactParticleMaterial);
             DestroyRuntimeMaterial(ref runtimeFearDebuffParticleMaterial);
             DestroyRuntimeMaterial(ref runtimeDarknessDebuffParticleMaterial);
+            DestroyRuntimeMaterial(ref runtimeChargedLightBeamMaterial);
             foreach (var material in runtimeSkillParticleMaterials.Values)
             {
                 DestroyRuntimeMaterialInstance(material);

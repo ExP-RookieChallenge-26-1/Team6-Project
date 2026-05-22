@@ -1095,6 +1095,55 @@ namespace Project2048.Tests
             var renderer = particles.GetComponent<ParticleSystemRenderer>();
             Assert.That(renderer.sharedMaterial, Is.Not.Null);
             AssertColorApproximately(ResolveMaterialColor(renderer.sharedMaterial), expectedColor);
+            Assert.That(particles.main.startSize.constant, Is.LessThanOrEqualTo(0.22f));
+        }
+
+        [Test]
+        public void CombatWorldSpriteView_ChargedAttackRelease_SpawnsLightBeam()
+        {
+            var viewObject = CreateOwnedGameObject("WorldSpriteView");
+            var view = viewObject.AddComponent<CombatWorldSpriteView>();
+            var playerRenderer = CreateOwnedGameObject("PlayerSprite").AddComponent<SpriteRenderer>();
+            var enemyRenderer = CreateOwnedGameObject("EnemySprite").AddComponent<SpriteRenderer>();
+            var manager = CreateOwnedGameObject("CombatManager").AddComponent<CombatManager>();
+            var player = CreateOwnedGameObject("Player").AddComponent<PlayerCombatController>();
+            var enemy = CreateOwnedGameObject("Enemy").AddComponent<EnemyController>();
+            var bootstrap = CreateOwnedGameObject("Bootstrap").AddComponent<PrototypeCombatBootstrap>();
+            var playerData = CreatePlayerData(maxHp: 20, attackPower: 2);
+            var enemyData = CreateEnemyData(maxHp: 50, attackValue: 0);
+            var charge = CreateSkill("gather-light", SkillType.Attack, cost: 0, power: 0);
+            charge.effectKind = SkillEffectKind.ChargeAttack;
+            charge.chargedPower = 120;
+            playerData.startingSkills = new List<SkillSO> { charge };
+            playerRenderer.transform.localPosition = new Vector3(-1f, 0f, 0f);
+            enemyRenderer.transform.localPosition = new Vector3(1f, 0f, 0f);
+            enemyRenderer.sortingOrder = 5;
+
+            SetPrivateField(view, "playerRenderer", playerRenderer);
+            SetPrivateField(view, "enemyRenderer", enemyRenderer);
+            SetPrivateField(bootstrap, "combatManager", manager);
+
+            manager.SetCombatants(player, new[] { enemy });
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new List<EnemySO> { enemyData },
+                boardMoveCount = 1,
+            });
+            manager.ResolveBoardPhase();
+            view.Initialize(bootstrap);
+
+            Assert.That(manager.RequestUseSkillById("gather-light"), Is.True);
+            manager.RequestEndPlayerTurn();
+
+            var beam = viewObject.transform.Find("ChargedLightBeam")?.GetComponent<LineRenderer>();
+            Assert.That(beam, Is.Not.Null);
+            Assert.That(beam.positionCount, Is.EqualTo(2));
+            Assert.That(beam.sharedMaterial, Is.Not.Null);
+            Assert.That(beam.startWidth, Is.EqualTo(0.08f).Within(0.001f));
+            Assert.That(beam.endWidth, Is.EqualTo(0.16f).Within(0.001f));
+            Assert.That(beam.sortingOrder, Is.GreaterThan(enemyRenderer.sortingOrder));
+            Assert.That(enemyRenderer.transform.Find("ChargedLightBeamImpactParticles"), Is.Not.Null);
         }
 
         [UnityTest]

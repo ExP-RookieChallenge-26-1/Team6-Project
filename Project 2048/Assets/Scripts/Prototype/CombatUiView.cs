@@ -51,13 +51,13 @@ namespace Project2048.Prototype
         public const float HpTextMinFontSize = 22f;
         public const float HpTextOutlineWidth = 0.26f;
         public const float HpTextOutlineDistance = 1.65f;
-        public const float IntentBubbleSquareSize = 104f;
+        public const float IntentBubbleSquareSize = 60f;
         private const float HpDamageFlashDurationSeconds = 0.12f;
         private const float HpHitShakeMagnitude = 12f;
         private const float HpBarBorderThickness = 2.75f;
-        private const float IntentBubbleTextPadding = 6f;
-        private const float IntentBubbleTextMinFontSize = 12f;
-        private const float IntentBubbleTextMaxFontSize = 22f;
+        private const float IntentBubbleTextPadding = 3f;
+        private const float IntentBubbleTextMinFontSize = 8f;
+        private const float IntentBubbleTextMaxFontSize = 14f;
         private const string HpBarInteriorName = "HpBarInterior";
         private const string HpBarOutlineName = "HpBarOutline";
         private const string StatusEffectTemplateName = "StatusEffectIconSample";

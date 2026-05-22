@@ -133,7 +133,7 @@ namespace Project2048.Tests
 
             var attack = CreateSkill("attack", "빛 발사", SkillType.Attack, cost: 0, power: 4);
             var defense = CreateSkill("guard", "가시 방어", SkillType.Defense, cost: 0, power: 5);
-            var flash = CreateSkill("flash", "섬광", SkillType.Attack, cost: 0, power: 2);
+            var flash = CreateSkill("flash", "섬광", SkillType.Debuff, cost: 0, power: 2);
             var counter = CreateSkill("counter", "카운터", SkillType.Defense, cost: 0, power: 3);
             var playerData = CreatePlayerData(20, 0, attack, defense, flash, counter);
             var enemyData = CreateEnemyData("Enemy", 10, 0);
@@ -163,6 +163,9 @@ namespace Project2048.Tests
 
             Assert.That(skillLabels[0].text, Does.Contain("빛 발사"));
             Assert.That(skillLabels[1].text, Does.Contain("가시 방어"));
+            Assert.That(skillButtons[0].GetComponent<Image>().color, Is.EqualTo(CombatUiView.ThemeSkillAttackColor));
+            Assert.That(skillButtons[1].GetComponent<Image>().color, Is.EqualTo(CombatUiView.ThemeSkillDefenseColor));
+            Assert.That(skillButtons[2].GetComponent<Image>().color, Is.EqualTo(CombatUiView.ThemeSkillChangeColor));
         }
 
         [Test]
@@ -349,6 +352,8 @@ namespace Project2048.Tests
         [Test]
         public void HpBarTheme_UsesOriginalTealPalette()
         {
+            Assert.That(CombatUiView.ThemePrimaryColor, Is.EqualTo(new Color(73f / 255f, 175f / 255f, 181f / 255f, 1f)));
+            Assert.That(CombatUiView.ThemeHpFillColor, Is.EqualTo(CombatUiView.ThemePrimaryColor));
             Assert.That(CombatUiView.ThemeHpFillColor.g, Is.GreaterThan(CombatUiView.ThemeHpFillColor.r));
             Assert.That(CombatUiView.ThemeHpFillColor.b, Is.GreaterThan(CombatUiView.ThemeHpFillColor.r));
             Assert.That(CombatUiView.ThemeHpBarBackgroundColor.maxColorComponent, Is.LessThan(0.06f));

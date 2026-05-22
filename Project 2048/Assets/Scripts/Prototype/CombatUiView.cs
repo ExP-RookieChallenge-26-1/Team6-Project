@@ -34,12 +34,17 @@ namespace Project2048.Prototype
         public const float HpDamageTrailDelaySeconds = 0.25f;
         public const float HpDamageTrailDurationSeconds = 0.55f;
         public const float HpHitShakeDurationSeconds = 0.12f;
-        public static readonly Color ThemeHpFillColor = new(73f / 255f, 175f / 255f, 181f / 255f, 1f);
+        public static readonly Color ThemePrimaryColor = new(73f / 255f, 175f / 255f, 181f / 255f, 1f);
+        public static readonly Color ThemeHpFillColor = ThemePrimaryColor;
         public static readonly Color ThemeHpDarkColor = new(12f / 255f, 13f / 255f, 14f / 255f, 1f);
         public static readonly Color ThemeHpBarBackgroundColor = ThemeHpDarkColor;
         public static readonly Color ThemeHpDamageTrailColor = new(20f / 255f, 79f / 255f, 84f / 255f, 0.90f);
         public static readonly Color ThemeHpTextOutlineColor = new(42f / 255f, 127f / 255f, 133f / 255f, 1f);
         public static readonly Color ThemeHpBorderColor = new(0f, 0f, 0f, 1f);
+        public static readonly Color ThemeSkillAttackColor = new(237f / 255f, 92f / 255f, 75f / 255f, 1f);
+        public static readonly Color ThemeSkillDefenseColor = ThemePrimaryColor;
+        public static readonly Color ThemeSkillChangeColor = new(146f / 255f, 110f / 255f, 211f / 255f, 1f);
+        private static readonly Color ThemeSkillEmptyColor = new(22f / 255f, 25f / 255f, 28f / 255f, 1f);
         public const float HpStatusEffectXOffset = 18f;
         public const float HpTextMinFontSize = 22f;
         public const float HpTextOutlineWidth = 0.26f;
@@ -943,6 +948,7 @@ namespace Project2048.Prototype
                 {
                     button.gameObject.SetActive(isSlot);
                     button.interactable = canAfford;
+                    ApplySkillSlotTheme(button, hasSkill ? visibleSkills[i] : null, canAfford);
                     var slotIndex = i;
                     BindButton(button, () => OnSkillSlotClicked(slotIndex));
                 }
@@ -966,6 +972,69 @@ namespace Project2048.Prototype
                     }
                 }
             }
+        }
+
+        private static void ApplySkillSlotTheme(Button button, SkillSnapshot skill, bool canAfford)
+        {
+            if (button == null)
+            {
+                return;
+            }
+
+            var image = button.targetGraphic as Image ?? button.GetComponent<Image>();
+            if (image == null)
+            {
+                return;
+            }
+
+            var baseColor = skill != null ? ResolveSkillTypeColor(skill.SkillType) : ThemeSkillEmptyColor;
+            var normalColor = skill != null && !canAfford ? DimSkillSlotColor(baseColor) : baseColor;
+            var highlightedColor = Color.Lerp(normalColor, Color.white, 0.14f);
+            var pressedColor = Color.Lerp(normalColor, Color.black, 0.18f);
+            normalColor.a = 1f;
+            highlightedColor.a = 1f;
+            pressedColor.a = 1f;
+
+            image.color = normalColor;
+            image.raycastTarget = true;
+            button.targetGraphic = image;
+
+            var colors = button.colors;
+            colors.normalColor = normalColor;
+            colors.highlightedColor = highlightedColor;
+            colors.selectedColor = highlightedColor;
+            colors.pressedColor = pressedColor;
+            colors.disabledColor = skill != null ? DimSkillSlotColor(baseColor) : ThemeSkillEmptyColor;
+            colors.colorMultiplier = 1f;
+            colors.fadeDuration = 0.08f;
+            button.colors = colors;
+
+            var outline = button.GetComponent<Outline>();
+            if (outline != null)
+            {
+                outline.effectColor = Color.Lerp(baseColor, Color.white, 0.28f);
+                outline.effectDistance = new Vector2(3f, -3f);
+                outline.useGraphicAlpha = true;
+            }
+        }
+
+        private static Color ResolveSkillTypeColor(SkillType skillType)
+        {
+            return skillType switch
+            {
+                SkillType.Attack => ThemeSkillAttackColor,
+                SkillType.Defense => ThemeSkillDefenseColor,
+                SkillType.Debuff => ThemeSkillChangeColor,
+                SkillType.Heal => ThemeSkillChangeColor,
+                _ => ThemeSkillChangeColor,
+            };
+        }
+
+        private static Color DimSkillSlotColor(Color color)
+        {
+            var dimmed = Color.Lerp(ThemeHpDarkColor, color, 0.45f);
+            dimmed.a = 1f;
+            return dimmed;
         }
 
         private void RenderEnemyTurnPanel()

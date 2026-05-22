@@ -231,7 +231,7 @@ namespace Project2048.PrototypeEditor
             var boardCostIcon = EnsureCostFormulaHelpIcon(
                 boardPanel.transform,
                 "BoardCostFormulaHelpIcon",
-                new Vector2(0.94f, 0.91f),
+                new Vector2(0.06f, 0.91f),
                 font);
 
             SetRef(so, "skillsView", skillsView);
@@ -528,7 +528,7 @@ namespace Project2048.PrototypeEditor
             CreateCostFormulaHelpIcon(
                 boardRect,
                 "BoardCostFormulaHelpIcon",
-                new Vector2(0.94f, 0.91f),
+                new Vector2(0.06f, 0.91f),
                 font,
                 out refs.BoardCostFormulaHelpIcon,
                 out refs.BoardCostFormulaHelpLabel);
@@ -786,11 +786,12 @@ namespace Project2048.PrototypeEditor
             SetAnchor(icon.rectTransform, anchor, new Vector2(46f, 46f), Vector2.zero);
 
             var outline = icon.gameObject.AddComponent<Outline>();
-            outline.effectColor = new Color(0.34f, 0.74f, 0.48f, 1f);
+            outline.effectColor = CombatUiView.ThemePrimaryColor;
             outline.effectDistance = new Vector2(2f, -2f);
             outline.useGraphicAlpha = true;
 
             label = CreateLabel(icon.transform, "Label", "?", 28f, TextAlignmentOptions.Center, font);
+            label.color = CombatUiView.ThemePrimaryColor;
             label.fontStyle = FontStyles.Bold;
             label.raycastTarget = false;
             SetStretch(label.rectTransform, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
@@ -819,13 +820,14 @@ namespace Project2048.PrototypeEditor
             image.raycastTarget = true;
 
             var outline = icon.GetComponent<Outline>() ?? icon.AddComponent<Outline>();
-            outline.effectColor = new Color(0.34f, 0.74f, 0.48f, 1f);
+            outline.effectColor = CombatUiView.ThemePrimaryColor;
             outline.effectDistance = new Vector2(2f, -2f);
             outline.useGraphicAlpha = true;
 
             label = icon.transform.Find("Label")?.GetComponent<TMP_Text>()
                 ?? CreateLabel(icon.transform, "Label", "?", 28f, TextAlignmentOptions.Center, font);
             label.text = "?";
+            label.color = CombatUiView.ThemePrimaryColor;
             label.fontStyle = FontStyles.Bold;
             label.raycastTarget = false;
             SetStretch(label.rectTransform, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
@@ -844,17 +846,14 @@ namespace Project2048.PrototypeEditor
             SetAnchor(rect, new Vector2(0.5f, 0.5f), new Vector2(360f, 118f), anchoredPosition);
 
             var image = button.GetComponent<Image>() ?? button.gameObject.AddComponent<Image>();
-            image.color = index == 2
-                ? new Color(0.22f, 0.22f, 0.24f, 1f)
-                : new Color(0.10f, 0.36f, 0.18f, 1f);
+            var skillColor = ResolveDesignTimeSkillSlotColor(index);
+            image.color = skillColor;
             image.sprite = EnsureHpBarSpriteAsset();
             image.type = Image.Type.Simple;
             image.raycastTarget = true;
 
             var outline = button.GetComponent<Outline>() ?? button.gameObject.AddComponent<Outline>();
-            outline.effectColor = index == 2
-                ? new Color(0.82f, 0.82f, 0.82f, 1f)
-                : new Color(0.30f, 0.72f, 0.36f, 1f);
+            outline.effectColor = Color.Lerp(skillColor, Color.white, 0.28f);
             outline.effectDistance = new Vector2(3f, -3f);
             outline.useGraphicAlpha = true;
 
@@ -866,6 +865,29 @@ namespace Project2048.PrototypeEditor
             {
                 ConfigureSkillSlotLabel(label, font);
             }
+        }
+
+        private static Color ResolveDesignTimeSkillSlotColor(int index)
+        {
+            return ResolveSkillTypeColor(index switch
+            {
+                0 => SkillType.Attack,
+                1 => SkillType.Defense,
+                2 => SkillType.Debuff,
+                _ => SkillType.Defense,
+            });
+        }
+
+        private static Color ResolveSkillTypeColor(SkillType skillType)
+        {
+            return skillType switch
+            {
+                SkillType.Attack => CombatUiView.ThemeSkillAttackColor,
+                SkillType.Defense => CombatUiView.ThemeSkillDefenseColor,
+                SkillType.Debuff => CombatUiView.ThemeSkillChangeColor,
+                SkillType.Heal => CombatUiView.ThemeSkillChangeColor,
+                _ => CombatUiView.ThemeSkillChangeColor,
+            };
         }
 
         private static void ConfigureSkillSlotLabel(TMP_Text label, TMP_FontAsset font)

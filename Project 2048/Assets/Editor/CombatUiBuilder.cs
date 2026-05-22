@@ -28,7 +28,7 @@ namespace Project2048.PrototypeEditor
         private const string SkillFolder = DataFolder + "/Skills";
         private const string BattleScenePath = "Assets/Scenes/BattleScene.unity";
         private const string PlayerSpritePath = "Assets/Art/Prototype/PrototypePlayerCutout.png";
-        private const float SkillSlotSize = 150f;
+        private static readonly Vector2 SkillSlotSize = new(340f, 170f);
         private const string EnemySpritePath = "Assets/Art/Prototype/PrototypeEnemyCutout.png";
         private const string HpBarSpritePath = "Assets/Art/UI/WideHexHpBar.png";
         private const string HpBarOutlineSpritePath = "Assets/Art/UI/WideHexHpBarOutline.png";
@@ -198,10 +198,10 @@ namespace Project2048.PrototypeEditor
             var existingLabels = so.FindProperty("skillTierLabels");
             var positions = new[]
             {
-                new Vector2(-88f, 84f),
-                new Vector2(88f, 84f),
-                new Vector2(-88f, -84f),
-                new Vector2(88f, -84f),
+                new Vector2(-178f, 94f),
+                new Vector2(178f, 94f),
+                new Vector2(-178f, -94f),
+                new Vector2(178f, -94f),
             };
 
             for (var index = 0; index < PlayerCombatController.MaxEquippedSkillSlots; index++)
@@ -844,7 +844,7 @@ namespace Project2048.PrototypeEditor
 
             button.name = $"SkillSlotButton_{index + 1}";
             var rect = button.GetComponent<RectTransform>();
-            SetAnchor(rect, new Vector2(0.5f, 0.5f), new Vector2(SkillSlotSize, SkillSlotSize), anchoredPosition);
+            SetAnchor(rect, new Vector2(0.5f, 0.5f), SkillSlotSize, anchoredPosition);
 
             var image = button.GetComponent<Image>() ?? button.gameObject.AddComponent<Image>();
             var skillColor = ResolveDesignTimeSkillSlotColor(index);
@@ -898,7 +898,7 @@ namespace Project2048.PrototypeEditor
                 return;
             }
 
-            label.fontSize = 20f;
+            label.fontSize = 23f;
             label.fontStyle = FontStyles.Bold;
             label.alignment = TextAlignmentOptions.Center;
             label.color = Color.white;

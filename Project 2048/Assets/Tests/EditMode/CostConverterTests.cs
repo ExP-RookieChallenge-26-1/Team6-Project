@@ -5,17 +5,18 @@ namespace Project2048.Tests
 {
     public class CostConverterTests
     {
-        [TestCase(2, 1)]
-        [TestCase(4, 2)]
-        [TestCase(8, 3)]
-        [TestCase(16, 5)]
-        [TestCase(32, 8)]
-        [TestCase(64, 13)]
+        [TestCase(2, 3)]
+        [TestCase(4, 6)]
+        [TestCase(8, 9)]
+        [TestCase(16, 12)]
+        [TestCase(32, 15)]
+        [TestCase(64, 18)]
         [TestCase(128, 21)]
-        [TestCase(256, 34)]
-        [TestCase(512, 55)]
-        [TestCase(1024, 89)]
-        [TestCase(2048, 144)]
+        [TestCase(256, 24)]
+        [TestCase(512, 27)]
+        [TestCase(1024, 30)]
+        [TestCase(2048, 33)]
+        [TestCase(4096, 36)]
         public void ConvertTileToCost_CountsEveryPlayableTileValue(int tileValue, int expectedCost)
         {
             var converter = new CostConverter();
@@ -24,7 +25,7 @@ namespace Project2048.Tests
         }
 
         [Test]
-        public void ConvertBoardToCost_SumsAllPlayableTilesOnTheField()
+        public void ConvertBoardToCost_CombinesTotalValueLargestTileAndFragmentation()
         {
             var converter = new CostConverter();
             var board = new[,]
@@ -35,10 +36,43 @@ namespace Project2048.Tests
                 { Board2048Manager.ObstacleValue, 3, 6, 999 },
             };
 
-            Assert.That(converter.ConvertBoardToCost(board), Is.EqualTo(375));
+            Assert.That(converter.ConvertBoardToCost(board), Is.EqualTo(28));
+        }
+
+        [TestCase(2, 4)]
+        [TestCase(4, 8)]
+        [TestCase(8, 16)]
+        [TestCase(16, 32)]
+        [TestCase(32, 64)]
+        [TestCase(64, 128)]
+        [TestCase(128, 256)]
+        [TestCase(256, 512)]
+        [TestCase(512, 1024)]
+        [TestCase(1024, 2048)]
+        [TestCase(2048, 4096)]
+        public void ConvertBoardToCost_RewardsMergingIntoLargerTiles(int sourceTile, int mergedTile)
+        {
+            var converter = new CostConverter();
+            var splitBoard = new[,]
+            {
+                { sourceTile, sourceTile, 0, 0 },
+                { 0, 0, 0, 0 },
+                { 0, 0, 0, 0 },
+                { 0, 0, 0, 0 },
+            };
+            var mergedBoard = new[,]
+            {
+                { mergedTile, 0, 0, 0 },
+                { 0, 0, 0, 0 },
+                { 0, 0, 0, 0 },
+                { 0, 0, 0, 0 },
+            };
+
+            Assert.That(converter.ConvertBoardToCost(mergedBoard), Is.GreaterThan(converter.ConvertBoardToCost(splitBoard)));
         }
 
         [TestCase(0)]
+        [TestCase(1)]
         [TestCase(Board2048Manager.ObstacleValue)]
         [TestCase(3)]
         [TestCase(6)]

@@ -13,11 +13,16 @@ MonoBehaviour:
   m_Name: LightEcho
   m_EditorClassIdentifier: Game.Core::Project2048.Skills.SkillSO
   skillId: light-echo
-  skillName: "\uBE5B\uC758 \uBA54\uC544\uB9AC"
+  skillName: "빛의 메아리"
   skillType: 1
-  effectKind: 13
-  cost: 10
+  effectKind: 19
+  damageStatSource: 0
+  cost: 5
   power: 0
+  targetAttackStageModifier: 0
+  targetDefenseStageModifier: 0
+  selfDefenseStageModifier: 0
+  selfCriticalStageModifier: 0
   targetAttackModifier: 0
   targetDefenseModifier: 0
   selfDefenseBonus: 0
@@ -25,14 +30,20 @@ MonoBehaviour:
   selfThornRetaliationDamage: 0
   selfCounterPercent: 0
   selfEndureTurns: 0
-  selfEchoDamageBonus: 2
+  selfEchoDamageBonus: 0
   selfExtraAttackHits: 0
   selfCriticalChanceBonus: 0
   lifeStealPercent: 0
   hpCost: 0
+  hpCostPercent: 0
   hpCostLeavesOne: 1
   nextBoardMoveCountModifier: 0
   chargedPower: 0
+  consumesAllShield: 0
+  nextAttackPowerMultiplier: 1.3
+  nextAttackHitCount: 0
+  nextAttackHitPowerMultiplier: 1
+  healPercentOfMaxHp: 0
   canAppearAsReward: 1
   isEnemySkill: 0
   icon: {fileID: 0}
@@ -57,5 +68,4 @@ MonoBehaviour:
     sfxDelaySeconds: 0
     localOffset: {x: 0, y: 0, z: 0}
     autoDestroySeconds: 1.25
-  description: "\uC774\uBC88 \uC804\uD22C \uB3D9\uC548 \uBAA8\uB4E0 \uACF5\uACA9
-    \uD53C\uD574 \uACC4\uC0B0\uC5D0 +2."
+  description: "다음 공격의 기술 위력이 1.3배가 된다."

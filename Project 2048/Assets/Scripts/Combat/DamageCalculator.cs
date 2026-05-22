@@ -7,6 +7,7 @@ namespace Project2048.Combat
     public class DamageCalculator
     {
         private const int MinimumDefenseStat = 1;
+        private const float MovePowerScale = 10f;
         private const float MinimumDamageVariance = 0.85f;
         private const float MaximumDamageVariance = 1f;
 
@@ -29,10 +30,19 @@ namespace Project2048.Combat
                 return 0;
             }
 
-            return CalculatePlayerSkillDamage(player, skill.power, target);
+            return CalculatePlayerSkillDamage(player, skill.power, target, skill.damageStatSource);
         }
 
         public int CalculatePlayerSkillDamage(PlayerCombatController player, int skillPower, EnemyController target)
+        {
+            return CalculatePlayerSkillDamage(player, skillPower, target, DamageStatSource.AttackPower);
+        }
+
+        public int CalculatePlayerSkillDamage(
+            PlayerCombatController player,
+            int skillPower,
+            EnemyController target,
+            DamageStatSource statSource)
         {
             if (player == null)
             {
@@ -40,11 +50,26 @@ namespace Project2048.Combat
             }
 
             return CalculateMoveDamage(
-                player.EffectiveAttackPower,
-                skillPower + player.EchoDamageBonus,
+                ResolvePlayerDamageStat(player, statSource),
+                skillPower,
                 target?.EffectiveDefensePower ?? 0,
                 player.CriticalChance,
                 player.CriticalDamageMultiplier);
+        }
+
+        public int CalculatePlayerSkillDamageFromStat(
+            int attackStat,
+            int skillPower,
+            EnemyController target,
+            float criticalChance,
+            float criticalDamageMultiplier)
+        {
+            return CalculateMoveDamage(
+                attackStat,
+                skillPower,
+                target?.EffectiveDefensePower ?? 0,
+                criticalChance,
+                criticalDamageMultiplier);
         }
 
         public int CalculateEnemyDamage(EnemyIntent intent)
@@ -61,7 +86,7 @@ namespace Project2048.Combat
 
             return CalculateMoveDamage(
                 enemy?.EffectiveAttackPower ?? 0,
-                intent.movePower > 0 ? intent.movePower : intent.value,
+                intent.movePower > 0 ? intent.movePower : Mathf.Max(0, intent.value) * (int)MovePowerScale,
                 target?.EffectiveDefensePower ?? 0,
                 enemy?.CriticalChance ?? 0f,
                 enemy?.CriticalDamageMultiplier ?? 1f);
@@ -82,7 +107,7 @@ namespace Project2048.Combat
             }
 
             var attackDefenseRatio = attackPower / (float)Mathf.Max(MinimumDefenseStat, defensePower);
-            var baseDamage = movePower * attackDefenseRatio;
+            var baseDamage = (movePower / MovePowerScale) * attackDefenseRatio;
             var varied = baseDamage * RollDamageVariance();
             if (RollCritical(criticalChance))
             {
@@ -100,7 +125,7 @@ namespace Project2048.Combat
         {
             return CalculateMoveDamage(
                 attackValue,
-                movePower: 1,
+                movePower: (int)MovePowerScale,
                 defensePower,
                 criticalChance,
                 criticalDamageMultiplier);
@@ -109,6 +134,21 @@ namespace Project2048.Combat
         private float RollDamageVariance()
         {
             return Mathf.Lerp(MinimumDamageVariance, MaximumDamageVariance, (float)random.NextDouble());
+        }
+
+        private static int ResolvePlayerDamageStat(PlayerCombatController player, DamageStatSource statSource)
+        {
+            if (player == null)
+            {
+                return 0;
+            }
+
+            return statSource switch
+            {
+                DamageStatSource.DefensePower => player.EffectiveDefensePower,
+                DamageStatSource.ShieldHp => player.ShieldHp,
+                _ => player.EffectiveAttackPower,
+            };
         }
 
         private bool RollCritical(float criticalChance)

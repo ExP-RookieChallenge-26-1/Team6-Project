@@ -87,8 +87,9 @@ namespace Project2048.Enemy
                 case EnemyIntentType.Attack:
                     enemy.SpendHp(intent.hpCost, intent.hpCostLeavesOne);
                     var damage = damageCalculator.CalculateEnemyDamage(enemy, intent, player);
-                    var shouldRetaliate = player.ShieldHp > 0 && player.ThornRetaliationDamage > 0;
-                    var retaliationDamage = player.ThornRetaliationDamage;
+                    var shieldBeforeHit = player.ShieldHp;
+                    var shouldRetaliate = shieldBeforeHit > 0 && player.ThornRetaliationDamage > 0;
+                    var retaliationPower = player.ThornRetaliationDamage;
                     var hpDamage = player.TakeDamage(damage);
                     if (intent.lifeStealPercent > 0f && hpDamage > 0)
                     {
@@ -100,8 +101,14 @@ namespace Project2048.Enemy
                         player.ApplyNextTurnBoardMoveCountModifier(intent.nextBoardMoveCountModifier);
                     }
 
-                    if (shouldRetaliate && retaliationDamage > 0)
+                    if (shouldRetaliate && retaliationPower > 0)
                     {
+                        var retaliationDamage = damageCalculator.CalculatePlayerSkillDamageFromStat(
+                            shieldBeforeHit,
+                            retaliationPower,
+                            enemy,
+                            player.CriticalChance,
+                            player.CriticalDamageMultiplier);
                         enemy.TakeDamage(retaliationDamage);
                     }
 
@@ -146,7 +153,7 @@ namespace Project2048.Enemy
 
         private static void ApplyDebuff(EnemyIntent intent, PlayerCombatController player, Board2048Manager boardManager)
         {
-            if (intent.skillEffectKind == SkillEffectKind.AttackDown)
+            if (intent.skillEffectKind == SkillEffectKind.AttackStageDown)
             {
                 player.ApplyAttackPowerModifier(intent.targetAttackModifier != 0
                     ? intent.targetAttackModifier
@@ -154,7 +161,7 @@ namespace Project2048.Enemy
                 return;
             }
 
-            if (intent.skillEffectKind == SkillEffectKind.DefenseDown)
+            if (intent.skillEffectKind == SkillEffectKind.DefenseStageDown)
             {
                 player.ApplyDefensePowerModifier(intent.targetDefenseModifier != 0
                     ? intent.targetDefenseModifier

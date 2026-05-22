@@ -159,7 +159,7 @@ namespace Project2048.Prototype
 
             return cue.DebuffType switch
             {
-                DebuffType.Fear => $"공포: 방어력 -{cue.Value}",
+                DebuffType.Fear => $"공포: 공격 랭크 -{cue.Value}",
                 DebuffType.Darkness => $"섬광: 방해 블록 +{cue.Value}",
                 _ => $"약화 {cue.Value}",
             };

@@ -12,10 +12,10 @@ namespace Project2048.Enemy
         public int MaxHp { get; private set; }
         public int CurrentHp { get; private set; }
         public int AttackPower { get; private set; }
-        public int EffectiveAttackPower => Mathf.Max(0, AttackPower + AttackModifier);
+        public int EffectiveAttackPower => Project2048.Combat.PlayerCombatController.ResolveStageModifiedStat(AttackPower, AttackModifier);
         public int BaseDefensePower { get; private set; }
         public int DefenseModifier { get; private set; }
-        public int EffectiveDefensePower => Mathf.Max(0, BaseDefensePower + DefenseModifier);
+        public int EffectiveDefensePower => Project2048.Combat.PlayerCombatController.ResolveStageModifiedStat(BaseDefensePower, DefenseModifier);
         public int Block { get; private set; }
         public int ShieldHp => Block;
         public int ThornRetaliationDamage { get; private set; }
@@ -202,7 +202,7 @@ namespace Project2048.Enemy
                 return;
             }
 
-            AttackModifier += amount;
+            AttackModifier = Mathf.Clamp(AttackModifier + amount, -6, 6);
             RefreshIntentPreview();
         }
 
@@ -213,7 +213,7 @@ namespace Project2048.Enemy
                 return;
             }
 
-            DefenseModifier += amount;
+            DefenseModifier = Mathf.Clamp(DefenseModifier + amount, -6, 6);
             RefreshIntentPreview();
         }
 

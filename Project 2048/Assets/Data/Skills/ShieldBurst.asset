@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e39edfbbdac2c064e877e5f3f784bab9, type: 3}
-  m_Name: Endure
+  m_Name: ShieldBurst
   m_EditorClassIdentifier: Game.Core::Project2048.Skills.SkillSO
-  skillId: endure
-  skillName: "이악물기"
-  skillType: 1
-  effectKind: 9
-  damageStatSource: 0
-  cost: 6
-  power: 0
+  skillId: shield-burst
+  skillName: "방패 폭발"
+  skillType: 0
+  effectKind: 14
+  damageStatSource: 2
+  cost: 7
+  power: 100
   targetAttackStageModifier: 0
   targetDefenseStageModifier: 0
   selfDefenseStageModifier: 0
@@ -29,7 +29,7 @@ MonoBehaviour:
   selfDefensePowerModifier: 0
   selfThornRetaliationDamage: 0
   selfCounterPercent: 0
-  selfEndureTurns: 1
+  selfEndureTurns: 0
   selfEchoDamageBonus: 0
   selfExtraAttackHits: 0
   selfCriticalChanceBonus: 0
@@ -39,7 +39,7 @@ MonoBehaviour:
   hpCostLeavesOne: 1
   nextBoardMoveCountModifier: 0
   chargedPower: 0
-  consumesAllShield: 0
+  consumesAllShield: 1
   nextAttackPowerMultiplier: 1
   nextAttackHitCount: 0
   nextAttackHitPowerMultiplier: 1
@@ -68,4 +68,4 @@ MonoBehaviour:
     sfxDelaySeconds: 0
     localOffset: {x: 0, y: 0, z: 0}
     autoDestroySeconds: 1.25
-  description: "다음 적 턴 동안 체력이 1 아래로 내려가지 않는다."
+  description: "현재 보호막 수치로 계산하여 적에게 위력 100 피해를 준다. 사용 후 보호막을 모두 잃는다."

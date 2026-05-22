@@ -258,30 +258,59 @@ namespace Project2048.Rewards
                 return;
             }
 
-            var lightShot = CreateRuntimeSkill("light-shot", "빛 발사", SkillType.Attack, power: 4);
-            var ironWall = CreateRuntimeSkill("iron-wall", "철벽", SkillType.Defense, power: 5, selfDefenseBonus: 1);
+            var lightShot = CreateRuntimeSkill("light-shot", "빛 발사", SkillType.Attack, SkillEffectKind.BasicAttack, cost: 6, power: 60);
+            var shieldBash = CreateRuntimeSkill(
+                "shield-bash",
+                "방패 밀치기",
+                SkillType.Attack,
+                SkillEffectKind.ShieldScalingAttack,
+                cost: 5,
+                power: 60,
+                damageStatSource: DamageStatSource.ShieldHp);
+            var ironWall = CreateRuntimeSkill(
+                "iron-wall",
+                "철벽",
+                SkillType.Defense,
+                SkillEffectKind.DefenseStageUp,
+                cost: 6,
+                power: 0,
+                selfDefenseStageModifier: 2);
 
             runtimeDefaultRewards.Add(CreateRuntimeReward("heal-2", "회복 2", RewardChoiceKind.HealTwo, healAmount: 2));
-            runtimeDefaultRewards.Add(CreateRuntimeReward("next-attack", "다음 전투 공격력", RewardChoiceKind.TemporaryAttackPower, temporaryAttack: 3));
+            runtimeDefaultRewards.Add(CreateRuntimeReward("next-attack", "다음 전투 공격", RewardChoiceKind.TemporaryAttackPower, temporaryAttack: 3));
             runtimeDefaultRewards.Add(CreateRuntimeReward("perm-attack", "공격력 영구 증가", RewardChoiceKind.PermanentAttackPower, permanentAttack: 1));
-            runtimeDefaultRewards.Add(CreateRuntimeReward("learn-light-shot", "기술 습득", RewardChoiceKind.LearnSkill, skillToLearn: UnityEngine.Random.value < 0.1f ? ironWall : lightShot));
+            runtimeDefaultRewards.Add(CreateRuntimeReward(
+                "learn-core-skill",
+                "기술 습득",
+                RewardChoiceKind.LearnSkill,
+                skillToLearn: UnityEngine.Random.value switch
+                {
+                    < 0.33f => ironWall,
+                    < 0.66f => shieldBash,
+                    _ => lightShot,
+                }));
         }
 
         private SkillSO CreateRuntimeSkill(
             string skillId,
             string skillName,
             SkillType skillType,
+            SkillEffectKind effectKind,
+            int cost,
             int power,
-            int selfDefenseBonus = 0)
+            int selfDefenseStageModifier = 0,
+            DamageStatSource damageStatSource = DamageStatSource.AttackPower)
         {
             var skill = ScriptableObject.CreateInstance<SkillSO>();
             skill.hideFlags = HideFlags.DontSave;
             skill.skillId = skillId;
             skill.skillName = skillName;
             skill.skillType = skillType;
-            skill.cost = SkillSO.DefaultCost;
+            skill.effectKind = effectKind;
+            skill.damageStatSource = damageStatSource;
+            skill.cost = Mathf.Max(0, cost);
             skill.power = Mathf.Max(0, power);
-            skill.selfDefenseBonus = Mathf.Max(0, selfDefenseBonus);
+            skill.selfDefenseStageModifier = Mathf.Clamp(selfDefenseStageModifier, -6, 6);
             runtimeRewardSkills.Add(skill);
             return skill;
         }

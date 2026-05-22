@@ -73,7 +73,7 @@ namespace Project2048.Enemy
                 var limit = Mathf.Min(skills.Count, MaxEquippedSkillSlots);
                 for (var index = 0; index < limit; index++)
                 {
-                    if (skills[index] != null)
+                    if (skills[index] != null && skills[index].isEnemySkill)
                     {
                         count++;
                     }

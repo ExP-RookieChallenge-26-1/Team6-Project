@@ -176,6 +176,11 @@ namespace Project2048.Combat
                 return false;
             }
 
+            if (!skillExecutor.CanExecute(skill, player))
+            {
+                return false;
+            }
+
             if (!CostWallet.CanSpend(skill.cost))
             {
                 return false;
@@ -201,7 +206,7 @@ namespace Project2048.Combat
                 return false;
             }
 
-            // 외부 UI는 ScriptableObject 참조를 몰라도 된다. 버튼은 skillId와 targetIndex만 넘기면 된다.
+            // 외부 UI는 ScriptableObject 참조를 몰라도 된다. 단일 적 전투라 targetIndex는 호환용으로만 받는다.
             var skill = player.Skills.FirstOrDefault(candidate => candidate != null && candidate.skillId == skillId);
             if (skill == null)
             {
@@ -222,11 +227,6 @@ namespace Project2048.Combat
             if (skill == null || !skill.RequiresEnemyTarget)
             {
                 return null;
-            }
-
-            if (targetIndex >= 0 && targetIndex < enemies.Count && enemies[targetIndex] != null && !enemies[targetIndex].IsDead)
-            {
-                return enemies[targetIndex];
             }
 
             return enemies.FirstOrDefault(enemy => enemy != null && !enemy.IsDead);
@@ -309,7 +309,7 @@ namespace Project2048.Combat
 
         private bool ResolvePendingChargedAttack()
         {
-            if (player == null || !player.TryConsumePendingChargedAttack(out var skillName, out var chargedPower))
+            if (player == null || !player.TryConsumePendingChargedAttack(out var skillName, out var chargedPower, out var statSource))
             {
                 return false;
             }
@@ -321,7 +321,7 @@ namespace Project2048.Combat
             }
 
             lastActionDescription = $"{skillName} 발동";
-            skillExecutor.ExecuteChargedAttack(player, target, chargedPower, damageCalculator);
+            skillExecutor.ExecuteChargedAttack(player, target, chargedPower, statSource, damageCalculator);
             NotifyStateChanged();
             return CheckVictory();
         }
@@ -797,7 +797,7 @@ namespace Project2048.Combat
                 {
                     Id = "defense-up",
                     DisplayName = "방어 강화",
-                    Description = $"방어도 획득량이 {player.DefenseBonus} 증가합니다.",
+                    Description = $"보호막 획득량이 {player.DefenseBonus} 증가합니다.",
                     Value = player.DefenseBonus,
                     IsBuff = true,
                     IconText = "방+",
@@ -809,7 +809,7 @@ namespace Project2048.Combat
                 {
                     Id = "fear",
                     DisplayName = "공포",
-                    Description = $"방어도 획득량이 {player.FearStacks} 감소합니다.",
+                    Description = $"공격 랭크가 {player.FearStacks} 감소합니다.",
                     Value = player.FearStacks,
                     IsBuff = false,
                     IconText = "공",
@@ -837,8 +837,8 @@ namespace Project2048.Combat
             AddStatusEffect(effects, "thorn-guard", player.ThornRetaliationDamage, "가시 방어", "반사 피해", "가", true);
             AddStatusEffect(effects, "counter", player.CounterPercent, "카운터", "받은 체력 피해 반사율", "반", true);
             AddStatusEffect(effects, "endure", player.EndureTurns, "이악물기", "이번 적 턴에 체력 1로 버팁니다.", "버", true);
-            AddStatusEffect(effects, "echo-damage", player.EchoDamageBonus, "빛의 메아리", "공격 추가 피해", "메", true);
-            AddStatusEffect(effects, "split-attack", player.ExtraAttackHits, "빛의 분산", "추가 공격 횟수", "분", true);
+            AddStatusEffect(effects, "echo-damage", player.EchoDamageBonus, "빛의 메아리", "다음 공격 위력 배율", "메", true);
+            AddStatusEffect(effects, "split-attack", player.ExtraAttackHits, "빛의 분산", "다음 공격 추가 타격", "분", true);
             AddStatusEffect(effects, "next-board-moves", Mathf.Abs(player.NextTurnBoardMoveCountModifier), "다음 보드 이동", "다음 보드 이동 횟수 변화", "이", player.NextTurnBoardMoveCountModifier > 0);
             if (player.HasPendingChargedAttack)
             {

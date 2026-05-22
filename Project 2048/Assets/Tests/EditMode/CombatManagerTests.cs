@@ -32,7 +32,7 @@ namespace Project2048.Tests
             var manager = CreateGameObject<CombatManager>("CombatManager");
             var player = CreateGameObject<PlayerCombatController>("Player");
             var enemy = CreateGameObject<EnemyController>("Enemy");
-            var attackSkill = CreateSkill("basic-attack", SkillType.Attack, 5, 3);
+            var attackSkill = CreateSkill("basic-attack", SkillType.Attack, 5, 30);
             var playerData = CreatePlayerData(maxHp: 20, attackPower: 2);
             var enemyData = CreateEnemyData(maxHp: 4, attackValue: 4);
 
@@ -107,7 +107,7 @@ namespace Project2048.Tests
             var enemyObject = CreateGameObject<EnemyController>("Enemy");
             var playerData = CreatePlayerData(maxHp: 20, attackPower: 10);
             var enemyData = CreateEnemyData(maxHp: 20, attackValue: 0);
-            var skill = CreateSkill("strike", SkillType.Attack, cost: 0, power: 10);
+            var skill = CreateSkill("strike", SkillType.Attack, cost: 0, power: 100);
 
             playerData.criticalChance = 1f;
             playerData.criticalDamageMultiplier = 1.5f;
@@ -121,7 +121,7 @@ namespace Project2048.Tests
             var strongerMoveDamage = new DamageCalculator(new System.Random(1))
                 .CalculateMoveDamage(
                     attackPower: 10,
-                    movePower: 20,
+                    movePower: 200,
                     defensePower: 10,
                     criticalChance: 1f,
                     criticalDamageMultiplier: 1.5f);
@@ -137,11 +137,11 @@ namespace Project2048.Tests
             var enemyObject = CreateGameObject<EnemyController>("Enemy");
             var playerData = CreatePlayerData(maxHp: 20, attackPower: 2);
             var enemyData = CreateEnemyData(maxHp: 20, attackValue: 0);
-            var skill = CreateSkill("strike", SkillType.Attack, cost: 0, power: 2);
+            var skill = CreateSkill("strike", SkillType.Attack, cost: 0, power: 20);
 
             playerObject.Init(playerData);
             enemyObject.Init(enemyData);
-            enemyObject.ApplyThornGuard(shieldHp: 1, retaliationDamage: 3);
+            enemyObject.ApplyThornGuard(shieldHp: 1, retaliationDamage: 30);
 
             new SkillExecutor().Execute(skill, playerObject, enemyObject, new DamageCalculator(new System.Random(1)));
 
@@ -154,13 +154,13 @@ namespace Project2048.Tests
         }
 
         [Test]
-        public void DefenseSkill_WithSelfDefenseBonus_AccumulatesAndAppliesToFutureBlock()
+        public void DefenseSkill_GainsFixedShieldWithoutDefensePowerBonus()
         {
             var manager = CreateGameObject<CombatManager>("CombatManager");
             var player = CreateGameObject<PlayerCombatController>("Player");
             var enemy = CreateGameObject<EnemyController>("Enemy");
-            var defenseTier1 = CreateSkill("def-1", SkillType.Defense, cost: 5, power: 3);
-            var defenseTier2 = CreateSkill("def-2", SkillType.Defense, cost: 5, power: 4);
+            var defenseTier1 = CreateSkill("def-1", SkillType.Defense, cost: 5, power: 30);
+            var defenseTier2 = CreateSkill("def-2", SkillType.Defense, cost: 5, power: 40);
             defenseTier2.selfDefenseBonus = 2;
             var playerData = CreatePlayerData(maxHp: 30, attackPower: 2);
             playerData.startingSkills = new List<SkillSO> { defenseTier1, defenseTier2 };
@@ -187,12 +187,12 @@ namespace Project2048.Tests
             manager.ResolveBoardPhase();
 
             Assert.That(manager.RequestUseSkill(defenseTier2, null), Is.True);
-            Assert.That(player.Block, Is.EqualTo(4));
-            Assert.That(player.DefenseBonus, Is.EqualTo(2));
+            Assert.That(player.Block, Is.EqualTo(40));
+            Assert.That(player.DefenseBonus, Is.EqualTo(0));
 
             Assert.That(manager.RequestUseSkill(defenseTier1, null), Is.True);
-            Assert.That(player.Block, Is.EqualTo(4 + (3 + 2)));
-            Assert.That(player.DefenseBonus, Is.EqualTo(2));
+            Assert.That(player.Block, Is.EqualTo(70));
+            Assert.That(player.DefenseBonus, Is.EqualTo(0));
         }
 
         [Test]
@@ -413,8 +413,8 @@ namespace Project2048.Tests
             var player = CreateGameObject<PlayerCombatController>("Player");
             var enemy = CreateGameObject<EnemyController>("Enemy");
             var fear = CreateSkill("fear", SkillType.Debuff, cost: 0, power: 0);
-            fear.effectKind = SkillEffectKind.DefenseDown;
-            fear.targetDefenseModifier = -4;
+            fear.effectKind = SkillEffectKind.DefenseStageDown;
+            fear.targetDefenseStageModifier = -1;
             var playerData = CreatePlayerData(maxHp: 20, attackPower: 2);
             playerData.startingSkills = new List<SkillSO> { fear };
             var enemyData = CreateEnemyData(maxHp: 30, attackValue: 0);
@@ -430,9 +430,9 @@ namespace Project2048.Tests
             manager.ResolveBoardPhase();
 
             Assert.That(manager.RequestUseSkillById("fear"), Is.True);
-            Assert.That(enemy.DefenseModifier, Is.EqualTo(-4));
-            Assert.That(enemy.EffectiveDefensePower, Is.EqualTo(6));
-            Assert.That(manager.GetSnapshot().Enemies[0].DefensePower, Is.EqualTo(6));
+            Assert.That(enemy.DefenseModifier, Is.EqualTo(-1));
+            Assert.That(enemy.EffectiveDefensePower, Is.EqualTo(7));
+            Assert.That(manager.GetSnapshot().Enemies[0].DefensePower, Is.EqualTo(7));
         }
 
         [Test]
@@ -442,16 +442,16 @@ namespace Project2048.Tests
             var enemy = CreateGameObject<EnemyController>("Enemy");
             var playerData = CreatePlayerData(maxHp: 20, attackPower: 2);
             var enemyData = CreateEnemyData(maxHp: 30, attackValue: 0);
-            var flashStrike = CreateSkill("flash-strike", SkillType.Debuff, cost: 0, power: 5);
-            flashStrike.effectKind = SkillEffectKind.AttackDown;
-            flashStrike.targetAttackModifier = -3;
+            var flashStrike = CreateSkill("flash-strike", SkillType.Debuff, cost: 0, power: 50);
+            flashStrike.effectKind = SkillEffectKind.AttackStageDown;
+            flashStrike.targetAttackStageModifier = -1;
             player.Init(playerData);
             enemy.Init(enemyData);
 
             new SkillExecutor().Execute(flashStrike, player, enemy, new DamageCalculator(new System.Random(1)));
 
             Assert.That(enemy.CurrentHp, Is.LessThan(30));
-            Assert.That(enemy.AttackModifier, Is.EqualTo(-3));
+            Assert.That(enemy.AttackModifier, Is.EqualTo(-1));
         }
 
         [Test]
@@ -461,8 +461,8 @@ namespace Project2048.Tests
             var enemy = CreateGameObject<EnemyController>("Enemy");
             var playerData = CreatePlayerData(maxHp: 20, attackPower: 2);
             var enemyData = CreateEnemyData(maxHp: 30, attackValue: 0);
-            var drain = CreateSkill("life-drain", SkillType.Attack, cost: 0, power: 6);
-            drain.effectKind = SkillEffectKind.LifeSteal;
+            var drain = CreateSkill("life-drain", SkillType.Attack, cost: 0, power: 60);
+            drain.effectKind = SkillEffectKind.LifeStealAttack;
             drain.lifeStealPercent = 0.5f;
             player.Init(playerData);
             enemy.Init(enemyData);
@@ -476,6 +476,75 @@ namespace Project2048.Tests
         }
 
         [Test]
+        public void ShieldScalingAttack_UsesCurrentShieldAsAttackStatWithoutConsumingIt()
+        {
+            var player = CreateGameObject<PlayerCombatController>("Player");
+            var enemy = CreateGameObject<EnemyController>("Enemy");
+            var playerData = CreatePlayerData(maxHp: 20, attackPower: 1);
+            var enemyData = CreateEnemyData(maxHp: 100, attackValue: 0);
+            enemyData.baseDefensePower = 10;
+            var shieldBash = CreateSkill("shield-bash", SkillType.Attack, cost: 0, power: 60);
+            shieldBash.effectKind = SkillEffectKind.ShieldScalingAttack;
+            shieldBash.damageStatSource = DamageStatSource.ShieldHp;
+            player.Init(playerData);
+            enemy.Init(enemyData);
+            player.AddBlock(60);
+
+            new SkillExecutor().Execute(shieldBash, player, enemy, new DamageCalculator(new System.Random(1)));
+
+            Assert.That(enemy.CurrentHp, Is.LessThanOrEqualTo(69));
+            Assert.That(player.ShieldHp, Is.EqualTo(60));
+        }
+
+        [Test]
+        public void ShieldBurstAttack_UsesShieldAsAttackStatThenConsumesAllShield()
+        {
+            var player = CreateGameObject<PlayerCombatController>("Player");
+            var enemy = CreateGameObject<EnemyController>("Enemy");
+            var playerData = CreatePlayerData(maxHp: 20, attackPower: 1);
+            var enemyData = CreateEnemyData(maxHp: 1000, attackValue: 0);
+            enemyData.baseDefensePower = 10;
+            var shieldBurst = CreateSkill("shield-burst", SkillType.Attack, cost: 0, power: 100);
+            shieldBurst.effectKind = SkillEffectKind.ShieldBurstAttack;
+            shieldBurst.damageStatSource = DamageStatSource.ShieldHp;
+            player.Init(playerData);
+            enemy.Init(enemyData);
+            player.AddBlock(50);
+
+            new SkillExecutor().Execute(shieldBurst, player, enemy, new DamageCalculator(new System.Random(1)));
+
+            Assert.That(enemy.CurrentHp, Is.LessThan(1000));
+            Assert.That(player.ShieldHp, Is.EqualTo(0));
+        }
+
+        [Test]
+        public void DefenseScalingAttack_UsesStageModifiedDefenseAsAttackStat()
+        {
+            var player = CreateGameObject<PlayerCombatController>("Player");
+            var enemy = CreateGameObject<EnemyController>("Enemy");
+            var playerData = CreatePlayerData(maxHp: 20, attackPower: 1);
+            playerData.baseDefensePower = 10;
+            var enemyData = CreateEnemyData(maxHp: 100, attackValue: 0);
+            enemyData.baseDefensePower = 10;
+            var ironWall = CreateSkill("iron-wall", SkillType.Defense, cost: 0, power: 0);
+            ironWall.effectKind = SkillEffectKind.DefenseStageUp;
+            ironWall.selfDefenseStageModifier = 2;
+            var bodyPress = CreateSkill("body-press", SkillType.Attack, cost: 0, power: 80);
+            bodyPress.effectKind = SkillEffectKind.DefenseScalingAttack;
+            bodyPress.damageStatSource = DamageStatSource.DefensePower;
+            player.Init(playerData);
+            enemy.Init(enemyData);
+            var executor = new SkillExecutor();
+
+            executor.Execute(ironWall, player, null, new DamageCalculator(new System.Random(1)));
+            executor.Execute(bodyPress, player, enemy, new DamageCalculator(new System.Random(1)));
+
+            Assert.That(player.DefenseStage, Is.EqualTo(2));
+            Assert.That(player.EffectiveDefensePower, Is.EqualTo(20));
+            Assert.That(enemy.CurrentHp, Is.LessThanOrEqualTo(86));
+        }
+
+        [Test]
         public void CounterAndEndure_RetaliateAndKeepPlayerAtOneHp()
         {
             var player = CreateGameObject<PlayerCombatController>("Player");
@@ -485,7 +554,7 @@ namespace Project2048.Tests
             player.Init(playerData);
             enemy.Init(enemyData);
             player.ApplyEndure(1);
-            player.ApplyCounter(50);
+            player.ApplyCounter(200);
 
             new EnemyIntentSystem(new System.Random(1)).ExecuteIntent(
                 enemy,
@@ -498,7 +567,7 @@ namespace Project2048.Tests
                 new DamageCalculator(new System.Random(1)));
 
             Assert.That(player.CurrentHp, Is.EqualTo(1));
-            Assert.That(enemy.CurrentHp, Is.EqualTo(18));
+            Assert.That(enemy.CurrentHp, Is.EqualTo(12));
         }
 
         [Test]
@@ -507,7 +576,7 @@ namespace Project2048.Tests
             var manager = CreateGameObject<CombatManager>("CombatManager");
             var player = CreateGameObject<PlayerCombatController>("Player");
             var enemy = CreateGameObject<EnemyController>("Enemy");
-            var tentacle = CreateSkill("tentacle-strike", SkillType.Attack, cost: 0, power: 1);
+            var tentacle = CreateSkill("tentacle-strike", SkillType.Attack, cost: 0, power: 10);
             tentacle.effectKind = SkillEffectKind.BoardMovePenaltyAttack;
             tentacle.nextBoardMoveCountModifier = -1;
             var playerData = CreatePlayerData(maxHp: 20, attackPower: 1);
@@ -538,7 +607,7 @@ namespace Project2048.Tests
             var enemy = CreateGameObject<EnemyController>("Enemy");
             var charge = CreateSkill("gather-light", SkillType.Attack, cost: 0, power: 0);
             charge.effectKind = SkillEffectKind.ChargeAttack;
-            charge.chargedPower = 16;
+            charge.chargedPower = 160;
             var playerData = CreatePlayerData(maxHp: 20, attackPower: 2);
             playerData.startingSkills = new List<SkillSO> { charge };
             var enemyData = CreateEnemyData(maxHp: 50, attackValue: 0);
@@ -630,12 +699,14 @@ namespace Project2048.Tests
             var enemyData = CreateEnemyData(maxHp: 20, attackValue: 0);
             var flash = CreateSkill("enemy-flash", SkillType.Debuff, cost: 0, power: 0);
             flash.skillName = "섬광";
-            flash.effectKind = SkillEffectKind.AttackDown;
-            flash.targetAttackModifier = -3;
+            flash.effectKind = SkillEffectKind.AttackStageDown;
+            flash.targetAttackStageModifier = -1;
+            flash.isEnemySkill = true;
             enemyData.aiActionBias = EnemyAiActionBias.Balanced;
             enemyData.aiDebuffInterval = 1;
             var guard = CreateSkill("enemy-guard", SkillType.Defense, cost: 0, power: 2);
-            guard.effectKind = SkillEffectKind.LightGuard;
+            guard.effectKind = SkillEffectKind.BasicDefense;
+            guard.isEnemySkill = true;
             enemyData.skills = new List<SkillSO> { flash, guard };
             enemyData.intentPattern.Clear();
 
@@ -653,7 +724,7 @@ namespace Project2048.Tests
             manager.ResolveBoardPhase();
             manager.RequestEndPlayerTurn();
 
-            Assert.That(player.AttackPowerModifier, Is.EqualTo(-3));
+            Assert.That(player.AttackPowerModifier, Is.EqualTo(-1));
             Assert.That(manager.GetSnapshot().Player.AttackPower, Is.EqualTo(5));
         }
 
@@ -665,12 +736,13 @@ namespace Project2048.Tests
             var playerData = CreatePlayerData(maxHp: 20, attackPower: 1);
             var enemyData = CreateEnemyData(maxHp: 100, attackValue: 0);
             var split = CreateSkill("split", SkillType.Defense, cost: 0, power: 0);
-            split.effectKind = SkillEffectKind.SplitAttack;
-            split.selfExtraAttackHits = 1;
+            split.effectKind = SkillEffectKind.NextAttackSplit;
+            split.nextAttackHitCount = 2;
+            split.nextAttackHitPowerMultiplier = 0.6f;
             var echo = CreateSkill("echo", SkillType.Defense, cost: 0, power: 0);
-            echo.effectKind = SkillEffectKind.EchoDamage;
-            echo.selfEchoDamageBonus = 2;
-            var attack = CreateSkill("attack", SkillType.Attack, cost: 0, power: 4);
+            echo.effectKind = SkillEffectKind.NextAttackPowerMultiplier;
+            echo.nextAttackPowerMultiplier = 1.3f;
+            var attack = CreateSkill("attack", SkillType.Attack, cost: 0, power: 40);
             attack.effectKind = SkillEffectKind.BasicAttack;
             player.Init(playerData);
             enemy.Init(enemyData);
@@ -678,11 +750,15 @@ namespace Project2048.Tests
 
             executor.Execute(split, player, null, new DamageCalculator(new System.Random(1)));
             executor.Execute(echo, player, null, new DamageCalculator(new System.Random(1)));
-            executor.Execute(attack, player, enemy, new DamageCalculator(new System.Random(1)));
 
             Assert.That(player.ExtraAttackHits, Is.EqualTo(1));
-            Assert.That(player.EchoDamageBonus, Is.EqualTo(2));
-            Assert.That(enemy.CurrentHp, Is.LessThanOrEqualTo(88));
+            Assert.That(player.EchoDamageBonus, Is.EqualTo(30));
+
+            executor.Execute(attack, player, enemy, new DamageCalculator(new System.Random(1)));
+
+            Assert.That(player.ExtraAttackHits, Is.EqualTo(0));
+            Assert.That(player.EchoDamageBonus, Is.EqualTo(0));
+            Assert.That(enemy.CurrentHp, Is.LessThan(100));
         }
 
         [Test]
@@ -692,7 +768,7 @@ namespace Project2048.Tests
             var enemy = CreateGameObject<EnemyController>("Enemy");
             var playerData = CreatePlayerData(maxHp: 10, attackPower: 2);
             var enemyData = CreateEnemyData(maxHp: 20, attackValue: 0);
-            var sacrifice = CreateSkill("bio", SkillType.Attack, cost: 0, power: 14);
+            var sacrifice = CreateSkill("bio", SkillType.Attack, cost: 0, power: 140);
             sacrifice.effectKind = SkillEffectKind.SacrificeAttack;
             sacrifice.hpCost = 5;
             sacrifice.hpCostLeavesOne = true;

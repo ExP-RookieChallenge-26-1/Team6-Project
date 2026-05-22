@@ -13,11 +13,16 @@ MonoBehaviour:
   m_Name: SharpSenses
   m_EditorClassIdentifier: Game.Core::Project2048.Skills.SkillSO
   skillId: sharp-senses
-  skillName: "\uC608\uB9AC\uD55C \uAC10\uAC01"
+  skillName: "예리한 감각"
   skillType: 1
-  effectKind: 11
-  cost: 8
+  effectKind: 6
+  damageStatSource: 0
+  cost: 6
   power: 0
+  targetAttackStageModifier: 0
+  targetDefenseStageModifier: 0
+  selfDefenseStageModifier: 0
+  selfCriticalStageModifier: 2
   targetAttackModifier: 0
   targetDefenseModifier: 0
   selfDefenseBonus: 0
@@ -27,12 +32,18 @@ MonoBehaviour:
   selfEndureTurns: 0
   selfEchoDamageBonus: 0
   selfExtraAttackHits: 0
-  selfCriticalChanceBonus: 0.2
+  selfCriticalChanceBonus: 0
   lifeStealPercent: 0
   hpCost: 0
+  hpCostPercent: 0
   hpCostLeavesOne: 1
   nextBoardMoveCountModifier: 0
   chargedPower: 0
+  consumesAllShield: 0
+  nextAttackPowerMultiplier: 1
+  nextAttackHitCount: 0
+  nextAttackHitPowerMultiplier: 1
+  healPercentOfMaxHp: 0
   canAppearAsReward: 1
   isEnemySkill: 0
   icon: {fileID: 0}
@@ -57,5 +68,4 @@ MonoBehaviour:
     sfxDelaySeconds: 0
     localOffset: {x: 0, y: 0, z: 0}
     autoDestroySeconds: 1.25
-  description: "\uC774\uBC88 \uC804\uD22C \uB3D9\uC548 \uCE58\uBA85\uD0C0 \uD655\uB960
-    +20%."
+  description: "치명타 랭크를 2 올린다."

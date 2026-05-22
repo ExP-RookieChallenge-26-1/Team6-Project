@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e39edfbbdac2c064e877e5f3f784bab9, type: 3}
-  m_Name: Endure
+  m_Name: BloodFang
   m_EditorClassIdentifier: Game.Core::Project2048.Skills.SkillSO
-  skillId: endure
-  skillName: "이악물기"
-  skillType: 1
-  effectKind: 9
+  skillId: blood-fang
+  skillName: "피의 이빨"
+  skillType: 0
+  effectKind: 11
   damageStatSource: 0
-  cost: 6
-  power: 0
+  cost: 7
+  power: 80
   targetAttackStageModifier: 0
   targetDefenseStageModifier: 0
   selfDefenseStageModifier: 0
@@ -29,13 +29,13 @@ MonoBehaviour:
   selfDefensePowerModifier: 0
   selfThornRetaliationDamage: 0
   selfCounterPercent: 0
-  selfEndureTurns: 1
+  selfEndureTurns: 0
   selfEchoDamageBonus: 0
   selfExtraAttackHits: 0
   selfCriticalChanceBonus: 0
-  lifeStealPercent: 0
+  lifeStealPercent: 0.25
   hpCost: 0
-  hpCostPercent: 0
+  hpCostPercent: 0.1
   hpCostLeavesOne: 1
   nextBoardMoveCountModifier: 0
   chargedPower: 0
@@ -68,4 +68,4 @@ MonoBehaviour:
     sfxDelaySeconds: 0
     localOffset: {x: 0, y: 0, z: 0}
     autoDestroySeconds: 1.25
-  description: "다음 적 턴 동안 체력이 1 아래로 내려가지 않는다."
+  description: "최대 체력의 10%를 지불하고 적에게 위력 80 피해를 준다. 실제 체력 피해의 25%만큼 체력을 회복한다."

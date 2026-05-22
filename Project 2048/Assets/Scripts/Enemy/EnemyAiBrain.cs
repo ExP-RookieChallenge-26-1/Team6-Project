@@ -5,6 +5,8 @@ namespace Project2048.Enemy
 {
     public class EnemyAiBrain
     {
+        private const int MovePowerScale = 10;
+
         private readonly System.Random random;
 
         public EnemyAiBrain(System.Random random = null)
@@ -55,7 +57,7 @@ namespace Project2048.Enemy
             for (var index = 0; index < data.skills.Count && index < EnemySO.MaxEquippedSkillSlots; index++)
             {
                 var skill = data.skills[index];
-                if (skill == null || ResolveIntentType(skill) != requestedType)
+                if (skill == null || !skill.isEnemySkill || ResolveIntentType(skill) != requestedType)
                 {
                     continue;
                 }
@@ -110,15 +112,15 @@ namespace Project2048.Enemy
 
             switch (effectKind)
             {
-                case SkillEffectKind.AttackDown:
+                case SkillEffectKind.AttackStageDown:
                     intent.intentType = EnemyIntentType.Debuff;
-                    intent.value = Mathf.Abs(skill.targetAttackModifier != 0 ? skill.targetAttackModifier : skill.power);
-                    intent.targetAttackModifier = skill.targetAttackModifier != 0 ? skill.targetAttackModifier : -skill.power;
+                    intent.targetAttackModifier = ResolveStageModifier(skill.targetAttackStageModifier, skill.targetAttackModifier, -1);
+                    intent.value = Mathf.Abs(intent.targetAttackModifier);
                     return intent;
-                case SkillEffectKind.DefenseDown:
+                case SkillEffectKind.DefenseStageDown:
                     intent.intentType = EnemyIntentType.Debuff;
-                    intent.value = Mathf.Abs(skill.targetDefenseModifier != 0 ? skill.targetDefenseModifier : skill.power);
-                    intent.targetDefenseModifier = skill.targetDefenseModifier != 0 ? skill.targetDefenseModifier : -skill.power;
+                    intent.targetDefenseModifier = ResolveStageModifier(skill.targetDefenseStageModifier, skill.targetDefenseModifier, -1);
+                    intent.value = Mathf.Abs(intent.targetDefenseModifier);
                     return intent;
                 case SkillEffectKind.ThornGuard:
                     intent.intentType = EnemyIntentType.Defense;
@@ -126,27 +128,24 @@ namespace Project2048.Enemy
                     intent.isThornGuard = true;
                     intent.retaliationDamage = ScaleByStrength(skill.selfThornRetaliationDamage, data.aiStrength);
                     return intent;
-                case SkillEffectKind.LightGuard:
                 case SkillEffectKind.BasicDefense:
                     intent.intentType = EnemyIntentType.Defense;
                     intent.value = ScaleByStrength(skill.power, data.aiStrength);
                     return intent;
-                case SkillEffectKind.IronWall:
+                case SkillEffectKind.DefenseStageUp:
                     intent.intentType = EnemyIntentType.Defense;
                     intent.value = 0;
-                    intent.selfDefensePowerModifier = skill.selfDefensePowerModifier != 0
-                        ? skill.selfDefensePowerModifier
-                        : skill.power;
+                    intent.selfDefensePowerModifier = ResolveStageModifier(skill.selfDefenseStageModifier, skill.selfDefensePowerModifier, 1);
                     return intent;
                 case SkillEffectKind.ChargeAttack:
                     intent.intentType = EnemyIntentType.Attack;
                     intent.movePower = ScaleByStrength(Mathf.Max(skill.chargedPower, skill.power), data.aiStrength);
-                    intent.value = ScaleByStrength(data.attackPower + Mathf.Max(skill.chargedPower, skill.power), data.aiStrength);
+                    intent.value = intent.movePower;
                     return intent;
                 default:
                     intent.intentType = EnemyIntentType.Attack;
                     intent.movePower = ScaleByStrength(skill.power, data.aiStrength);
-                    intent.value = ScaleByStrength(data.attackPower + skill.power, data.aiStrength);
+                    intent.value = intent.movePower;
                     return intent;
             }
         }
@@ -160,17 +159,17 @@ namespace Project2048.Enemy
 
             return skill.ResolveEffectKind() switch
             {
-                SkillEffectKind.AttackDown => EnemyIntentType.Debuff,
-                SkillEffectKind.DefenseDown => EnemyIntentType.Debuff,
+                SkillEffectKind.AttackStageDown => EnemyIntentType.Debuff,
+                SkillEffectKind.DefenseStageDown => EnemyIntentType.Debuff,
                 SkillEffectKind.BasicDefense => EnemyIntentType.Defense,
                 SkillEffectKind.ThornGuard => EnemyIntentType.Defense,
-                SkillEffectKind.LightGuard => EnemyIntentType.Defense,
                 SkillEffectKind.Counter => EnemyIntentType.Defense,
                 SkillEffectKind.Endure => EnemyIntentType.Defense,
-                SkillEffectKind.CriticalFocus => EnemyIntentType.Defense,
-                SkillEffectKind.SplitAttack => EnemyIntentType.Defense,
-                SkillEffectKind.EchoDamage => EnemyIntentType.Defense,
-                SkillEffectKind.IronWall => EnemyIntentType.Defense,
+                SkillEffectKind.CriticalStageUp => EnemyIntentType.Defense,
+                SkillEffectKind.DefenseStageUp => EnemyIntentType.Defense,
+                SkillEffectKind.Heal => EnemyIntentType.Defense,
+                SkillEffectKind.NextAttackPowerMultiplier => EnemyIntentType.Defense,
+                SkillEffectKind.NextAttackSplit => EnemyIntentType.Defense,
                 _ => EnemyIntentType.Attack,
             };
         }
@@ -190,7 +189,7 @@ namespace Project2048.Enemy
             return new EnemyIntent
             {
                 intentType = EnemyIntentType.Attack,
-                movePower = ScaleByStrength(data.attackPower, data.aiStrength),
+                movePower = ScaleByStrength(data.attackPower * MovePowerScale, data.aiStrength),
                 value = ScaleByStrength(data.attackPower, data.aiStrength),
             };
         }
@@ -223,7 +222,7 @@ namespace Project2048.Enemy
             {
                 displayName = "황소 돌진",
                 intentType = EnemyIntentType.Attack,
-                movePower = ScaleByStrength(data.bullRushBonusDamage, data.aiStrength),
+                movePower = ScaleByStrength(data.bullRushBonusDamage * MovePowerScale, data.aiStrength),
                 value = ScaleByStrength(data.attackPower + data.bullRushBonusDamage, data.aiStrength),
             };
         }
@@ -254,6 +253,21 @@ namespace Project2048.Enemy
             return strength == EnemyAiStrength.Enhanced
                 ? Mathf.CeilToInt(baseValue * 1.5f)
                 : baseValue;
+        }
+
+        private static int ResolveStageModifier(int stageModifier, int legacyModifier, int fallback)
+        {
+            if (stageModifier != 0)
+            {
+                return stageModifier;
+            }
+
+            if (legacyModifier != 0)
+            {
+                return legacyModifier;
+            }
+
+            return fallback;
         }
 
         private static bool CanUseSpecialActions(EnemySO data)

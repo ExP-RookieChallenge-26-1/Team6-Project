@@ -7,8 +7,12 @@ namespace Project2048.Combat
 {
     public class PlayerCombatController : MonoBehaviour
     {
-        public const int FearDefenseGainPenalty = 6;
+        public const int FearDefenseGainPenalty = 1;
         public const int MaxEquippedSkillSlots = 4;
+        private const int MinStatStage = -6;
+        private const int MaxStatStage = 6;
+        private const int MaxCriticalStage = 4;
+        private const float CriticalChancePerStage = 0.2f;
 
         [SerializeField] private List<SkillSO> skills = new();
 
@@ -16,11 +20,13 @@ namespace Project2048.Combat
         public int MaxHp { get; private set; }
         public int CurrentHp { get; private set; }
         public int AttackPower { get; private set; }
-        public int AttackPowerModifier { get; private set; }
-        public int EffectiveAttackPower => Mathf.Max(0, AttackPower + AttackPowerModifier);
+        public int AttackStage { get; private set; }
+        public int AttackPowerModifier => AttackStage;
+        public int EffectiveAttackPower => ResolveStageModifiedStat(AttackPower, AttackStage);
         public int BaseDefensePower { get; private set; }
-        public int DefensePowerModifier { get; private set; }
-        public int EffectiveDefensePower => Mathf.Max(0, BaseDefensePower + DefensePowerModifier);
+        public int DefenseStage { get; private set; }
+        public int DefensePowerModifier => DefenseStage;
+        public int EffectiveDefensePower => ResolveStageModifiedStat(BaseDefensePower, DefenseStage);
         public int Block { get; private set; }
         public int ShieldHp => Block;
         public int ThornRetaliationDamage { get; private set; }
@@ -28,18 +34,24 @@ namespace Project2048.Combat
         public int FearStacks { get; private set; }
         public int BoardMoveCountBonus { get; private set; }
         public int NextTurnBoardMoveCountModifier { get; private set; }
-        public float CriticalChance { get; private set; }
+        public int CriticalStage { get; private set; }
+        public float CriticalChance => Mathf.Clamp01(baseCriticalChance + CriticalStage * CriticalChancePerStage);
         public float CriticalDamageMultiplier { get; private set; } = 1.5f;
         public int CounterPercent { get; private set; }
         public int EndureTurns { get; private set; }
-        public int EchoDamageBonus { get; private set; }
-        public int ExtraAttackHits { get; private set; }
+        public float NextAttackPowerMultiplier { get; private set; } = 1f;
+        public int NextAttackHitCount { get; private set; }
+        public float NextAttackHitPowerMultiplier { get; private set; } = 1f;
+        public int EchoDamageBonus => NextAttackPowerMultiplier > 1f ? Mathf.RoundToInt((NextAttackPowerMultiplier - 1f) * 100f) : 0;
+        public int ExtraAttackHits => Mathf.Max(0, NextAttackHitCount - 1);
         public bool HasPendingChargedAttack => pendingChargedAttackPower > 0;
         public bool IsDead => CurrentHp <= 0;
         public IReadOnlyList<SkillSO> Skills => skills;
 
         private string pendingChargedAttackName;
         private int pendingChargedAttackPower;
+        private DamageStatSource pendingChargedAttackStatSource;
+        private float baseCriticalChance;
 
         public event Action<int, int> OnHpChanged;
         public event Action<int> OnBlockChanged;
@@ -65,23 +77,26 @@ namespace Project2048.Combat
             MaxHp = data.ResolveMaxHp();
             CurrentHp = MaxHp;
             AttackPower = Mathf.Max(0, data.attackPower);
-            AttackPowerModifier = 0;
+            AttackStage = 0;
             BaseDefensePower = Mathf.Max(0, data.baseDefensePower);
             BoardMoveCountBonus = Mathf.Max(0, data.boardMoveCountBonus);
-            CriticalChance = Mathf.Clamp01(data.criticalChance);
+            baseCriticalChance = Mathf.Clamp01(data.criticalChance);
             CriticalDamageMultiplier = Mathf.Max(1f, data.criticalDamageMultiplier);
             Block = 0;
             ThornRetaliationDamage = 0;
             DefenseBonus = 0;
-            DefensePowerModifier = 0;
+            DefenseStage = 0;
             FearStacks = 0;
             NextTurnBoardMoveCountModifier = 0;
             CounterPercent = 0;
             EndureTurns = 0;
-            EchoDamageBonus = 0;
-            ExtraAttackHits = 0;
+            CriticalStage = 0;
+            NextAttackPowerMultiplier = 1f;
+            NextAttackHitCount = 0;
+            NextAttackHitPowerMultiplier = 1f;
             pendingChargedAttackName = null;
             pendingChargedAttackPower = 0;
+            pendingChargedAttackStatSource = DamageStatSource.AttackPower;
 
             SetSkills(data.startingSkills);
             OnHpChanged?.Invoke(CurrentHp, MaxHp);
@@ -102,7 +117,7 @@ namespace Project2048.Combat
             AttackPower = Mathf.Max(0, Data.attackPower);
             BaseDefensePower = Mathf.Max(0, Data.baseDefensePower);
             BoardMoveCountBonus = Mathf.Max(0, Data.boardMoveCountBonus);
-            CriticalChance = Mathf.Clamp01(Data.criticalChance);
+            baseCriticalChance = Mathf.Clamp01(Data.criticalChance);
             CriticalDamageMultiplier = Mathf.Max(1f, Data.criticalDamageMultiplier);
             SetSkills(Data.startingSkills);
 
@@ -192,7 +207,7 @@ namespace Project2048.Combat
             CurrentHp = Mathf.Clamp(CurrentHp + hpBonus, 0, MaxHp);
             AttackPower = Mathf.Max(0, AttackPower + attackPowerBonus);
             BaseDefensePower = Mathf.Max(0, BaseDefensePower + defensePowerBonus);
-            CriticalChance = Mathf.Clamp01(CriticalChance + criticalChanceBonus);
+            baseCriticalChance = Mathf.Clamp01(baseCriticalChance + criticalChanceBonus);
             CriticalDamageMultiplier = Mathf.Max(1f, CriticalDamageMultiplier + criticalDamageMultiplierBonus);
 
             OnHpChanged?.Invoke(CurrentHp, MaxHp);
@@ -275,7 +290,7 @@ namespace Project2048.Combat
 
         public int GainBlockWithBonus(int baseAmount)
         {
-            var total = Mathf.Max(0, baseAmount + DefenseBonus - FearStacks);
+            var total = Mathf.Max(0, baseAmount + DefenseBonus);
             if (total > 0)
             {
                 Block += total;
@@ -303,7 +318,7 @@ namespace Project2048.Combat
                 return;
             }
 
-            DefensePowerModifier += amount;
+            DefenseStage = Mathf.Clamp(DefenseStage + amount, MinStatStage, MaxStatStage);
             OnStatusEffectsChanged?.Invoke();
         }
 
@@ -314,13 +329,24 @@ namespace Project2048.Combat
                 return;
             }
 
-            AttackPowerModifier += amount;
+            AttackStage = Mathf.Clamp(AttackStage + amount, MinStatStage, MaxStatStage);
+            OnStatusEffectsChanged?.Invoke();
+        }
+
+        public void ApplyCriticalStageModifier(int amount)
+        {
+            if (amount == 0)
+            {
+                return;
+            }
+
+            CriticalStage = Mathf.Clamp(CriticalStage + amount, 0, MaxCriticalStage);
             OnStatusEffectsChanged?.Invoke();
         }
 
         public void ApplyCounter(int percent)
         {
-            percent = Mathf.Clamp(percent, 0, 100);
+            percent = Mathf.Clamp(percent, 0, 400);
             if (percent <= 0)
             {
                 return;
@@ -355,7 +381,7 @@ namespace Project2048.Combat
                 return;
             }
 
-            EchoDamageBonus += amount;
+            ApplyNextAttackPowerMultiplier(1f + amount / 100f);
             OnStatusEffectsChanged?.Invoke();
         }
 
@@ -366,7 +392,7 @@ namespace Project2048.Combat
                 return;
             }
 
-            ExtraAttackHits += amount;
+            ApplyNextAttackSplit(amount + 1, 1f);
             OnStatusEffectsChanged?.Invoke();
         }
 
@@ -377,8 +403,55 @@ namespace Project2048.Combat
                 return;
             }
 
-            CriticalChance = Mathf.Clamp01(CriticalChance + amount);
+            ApplyCriticalStageModifier(Mathf.Max(1, Mathf.RoundToInt(amount / CriticalChancePerStage)));
             OnStatusEffectsChanged?.Invoke();
+        }
+
+        public void ApplyNextAttackPowerMultiplier(float multiplier)
+        {
+            multiplier = Mathf.Max(0f, multiplier);
+            if (multiplier <= 0f)
+            {
+                return;
+            }
+
+            NextAttackPowerMultiplier = Mathf.Max(NextAttackPowerMultiplier, multiplier);
+            OnStatusEffectsChanged?.Invoke();
+        }
+
+        public void ApplyNextAttackSplit(int hitCount, float hitPowerMultiplier)
+        {
+            hitCount = Mathf.Max(1, hitCount);
+            hitPowerMultiplier = Mathf.Max(0f, hitPowerMultiplier);
+            if (hitCount <= 1 || hitPowerMultiplier <= 0f)
+            {
+                return;
+            }
+
+            NextAttackHitCount = Mathf.Max(NextAttackHitCount, hitCount);
+            NextAttackHitPowerMultiplier = hitPowerMultiplier;
+            OnStatusEffectsChanged?.Invoke();
+        }
+
+        public bool TryConsumeNextAttackModifiers(
+            out float powerMultiplier,
+            out int hitCount,
+            out float hitPowerMultiplier)
+        {
+            powerMultiplier = Mathf.Max(0f, NextAttackPowerMultiplier);
+            hitCount = Mathf.Max(1, NextAttackHitCount);
+            hitPowerMultiplier = Mathf.Max(0f, NextAttackHitPowerMultiplier);
+
+            var hadModifier = !Mathf.Approximately(powerMultiplier, 1f) || hitCount > 1;
+            NextAttackPowerMultiplier = 1f;
+            NextAttackHitCount = 0;
+            NextAttackHitPowerMultiplier = 1f;
+            if (hadModifier)
+            {
+                OnStatusEffectsChanged?.Invoke();
+            }
+
+            return hadModifier;
         }
 
         public void ApplyNextTurnBoardMoveCountModifier(int amount)
@@ -425,6 +498,11 @@ namespace Project2048.Combat
 
         public void QueueChargedAttack(string displayName, int attackPower)
         {
+            QueueChargedAttack(displayName, attackPower, DamageStatSource.AttackPower);
+        }
+
+        public void QueueChargedAttack(string displayName, int attackPower, DamageStatSource statSource)
+        {
             attackPower = Mathf.Max(0, attackPower);
             if (attackPower <= 0)
             {
@@ -433,15 +511,26 @@ namespace Project2048.Combat
 
             pendingChargedAttackName = displayName;
             pendingChargedAttackPower = attackPower;
+            pendingChargedAttackStatSource = statSource;
             OnStatusEffectsChanged?.Invoke();
         }
 
         public bool TryConsumePendingChargedAttack(out string displayName, out int attackPower)
         {
+            return TryConsumePendingChargedAttack(out displayName, out attackPower, out _);
+        }
+
+        public bool TryConsumePendingChargedAttack(
+            out string displayName,
+            out int attackPower,
+            out DamageStatSource statSource)
+        {
             displayName = pendingChargedAttackName;
             attackPower = pendingChargedAttackPower;
+            statSource = pendingChargedAttackStatSource;
             pendingChargedAttackName = null;
             pendingChargedAttackPower = 0;
+            pendingChargedAttackStatSource = DamageStatSource.AttackPower;
 
             if (attackPower > 0)
             {
@@ -450,6 +539,21 @@ namespace Project2048.Combat
             }
 
             return false;
+        }
+
+        public int ConsumeAllShield()
+        {
+            if (Block <= 0)
+            {
+                return 0;
+            }
+
+            var consumed = Block;
+            Block = 0;
+            ThornRetaliationDamage = 0;
+            OnBlockChanged?.Invoke(Block);
+            OnStatusEffectsChanged?.Invoke();
+            return consumed;
         }
 
         public void ClearTurnLimitedSkillEffects()
@@ -470,13 +574,19 @@ namespace Project2048.Combat
                 return;
             }
 
-            if (FearStacks == FearDefenseGainPenalty)
+            var stagePenalty = Mathf.Max(1, amount);
+            if (FearStacks == stagePenalty)
             {
                 return;
             }
 
-            FearStacks = FearDefenseGainPenalty;
-            OnStatusEffectsChanged?.Invoke();
+            if (FearStacks > 0)
+            {
+                ApplyAttackPowerModifier(FearStacks);
+            }
+
+            FearStacks = stagePenalty;
+            ApplyAttackPowerModifier(-FearStacks);
         }
 
         public void ClearFear()
@@ -486,6 +596,7 @@ namespace Project2048.Combat
                 return;
             }
 
+            ApplyAttackPowerModifier(FearStacks);
             FearStacks = 0;
             OnStatusEffectsChanged?.Invoke();
         }
@@ -501,6 +612,21 @@ namespace Project2048.Combat
             ThornRetaliationDamage = 0;
             OnBlockChanged?.Invoke(Block);
             OnStatusEffectsChanged?.Invoke();
+        }
+
+        public static int ResolveStageModifiedStat(int baseStat, int stage)
+        {
+            baseStat = Mathf.Max(0, baseStat);
+            if (baseStat == 0)
+            {
+                return 0;
+            }
+
+            stage = Mathf.Clamp(stage, MinStatStage, MaxStatStage);
+            var multiplier = stage >= 0
+                ? (2f + stage) / 2f
+                : 2f / (2f - stage);
+            return Mathf.Max(1, Mathf.RoundToInt(baseStat * multiplier));
         }
 
         private void BindDataValidation()

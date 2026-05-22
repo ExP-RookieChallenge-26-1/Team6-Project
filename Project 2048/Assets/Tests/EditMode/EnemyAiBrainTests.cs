@@ -252,13 +252,13 @@ namespace Project2048.Tests
             var data = CreateEnemyData();
             data.skills = new List<Project2048.Skills.SkillSO>
             {
-                CreateSkill("enemy-light-shot", "빛 발사", Project2048.Skills.SkillType.Attack, Project2048.Skills.SkillEffectKind.BasicAttack, power: 5),
+                CreateSkill("enemy-light-shot", "빛 발사", Project2048.Skills.SkillType.Attack, Project2048.Skills.SkillEffectKind.BasicAttack, power: 50),
             };
 
             Assert.That(data.AssignedSkillCount, Is.EqualTo(1));
             Assert.That(data.HasMinimumSkillSlots, Is.False);
 
-            data.skills.Add(CreateSkill("enemy-light-guard", "빛 방어", Project2048.Skills.SkillType.Defense, Project2048.Skills.SkillEffectKind.LightGuard, power: 4));
+            data.skills.Add(CreateSkill("enemy-light-guard", "빛 방어", Project2048.Skills.SkillType.Defense, Project2048.Skills.SkillEffectKind.BasicDefense, power: 4));
 
             Assert.That(data.AssignedSkillCount, Is.EqualTo(EnemySO.MinEquippedSkillSlots));
             Assert.That(data.HasMinimumSkillSlots, Is.True);
@@ -299,8 +299,8 @@ namespace Project2048.Tests
             data.intentPattern.Clear();
             data.skills = new List<Project2048.Skills.SkillSO>
             {
-                CreateSkill("enemy-light-shot", "빛 발사", Project2048.Skills.SkillType.Attack, Project2048.Skills.SkillEffectKind.BasicAttack, power: 5),
-                CreateSkill("enemy-light-guard", "빛 방어", Project2048.Skills.SkillType.Defense, Project2048.Skills.SkillEffectKind.LightGuard, power: 4),
+                CreateSkill("enemy-light-shot", "빛 발사", Project2048.Skills.SkillType.Attack, Project2048.Skills.SkillEffectKind.BasicAttack, power: 50),
+                CreateSkill("enemy-light-guard", "빛 방어", Project2048.Skills.SkillType.Defense, Project2048.Skills.SkillEffectKind.BasicDefense, power: 4),
             };
             enemy.Init(data);
 
@@ -309,8 +309,35 @@ namespace Project2048.Tests
             Assert.That(enemy.CurrentIntent.skillId, Is.EqualTo("enemy-light-shot"));
             Assert.That(enemy.CurrentIntent.displayName, Is.EqualTo("빛 발사"));
             Assert.That(enemy.CurrentIntent.intentType, Is.EqualTo(EnemyIntentType.Attack));
-            Assert.That(enemy.CurrentIntent.value, Is.EqualTo(data.attackPower + 5));
-            Assert.That(enemy.CurrentIntent.movePower, Is.EqualTo(5));
+            Assert.That(enemy.CurrentIntent.value, Is.EqualTo(50));
+            Assert.That(enemy.CurrentIntent.movePower, Is.EqualTo(50));
+        }
+
+        [Test]
+        public void SetNextIntent_IgnoresPlayerOnlySkillsOnEnemyData()
+        {
+            var enemy = CreateEnemy("MisconfiguredEnemy");
+            var data = CreateEnemyData();
+            data.aiActionBias = EnemyAiActionBias.AttackHeavy;
+            data.aiDebuffInterval = 0;
+            data.intentPattern.Clear();
+            var playerLifeDrain = CreateSkill(
+                "life-drain",
+                "생명 흡수",
+                Project2048.Skills.SkillType.Attack,
+                Project2048.Skills.SkillEffectKind.LifeStealAttack,
+                power: 60);
+            playerLifeDrain.isEnemySkill = false;
+            playerLifeDrain.lifeStealPercent = 0.5f;
+            data.skills = new List<Project2048.Skills.SkillSO> { playerLifeDrain };
+            enemy.Init(data);
+
+            new EnemyIntentSystem(new System.Random(1)).SetNextIntent(enemy);
+
+            Assert.That(enemy.CurrentIntent.skillId, Is.Null.Or.Empty);
+            Assert.That(enemy.CurrentIntent.intentType, Is.EqualTo(EnemyIntentType.Attack));
+            Assert.That(enemy.CurrentIntent.movePower, Is.EqualTo(data.attackPower * 10));
+            Assert.That(enemy.CurrentIntent.lifeStealPercent, Is.EqualTo(0f));
         }
 
         private EnemyController CreateEnemy(string name)
@@ -382,6 +409,7 @@ namespace Project2048.Tests
             skill.skillType = skillType;
             skill.effectKind = effectKind;
             skill.power = power;
+            skill.isEnemySkill = true;
             ownedObjects.Add(skill);
             return skill;
         }

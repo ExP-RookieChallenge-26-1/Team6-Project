@@ -37,7 +37,7 @@ combatManager.GetSnapshot();
 combatManager.OnCombatStateChanged += RenderFromSnapshot;
 
 combatManager.RequestBoardMove(direction);
-combatManager.RequestUseSkillById(skillId, targetIndex);
+combatManager.RequestUseSkillById(skillId);
 combatManager.RequestEndPlayerTurn();
 ```
 
@@ -154,7 +154,7 @@ StartCombat(CombatSetup setup)
 GetSnapshot()
 RequestBoardMove(Direction direction)
 RequestUseSkill(SkillSO skill, EnemyController target)
-RequestUseSkillById(string skillId, int targetIndex)
+RequestUseSkillById(string skillId)
 RequestEndPlayerTurn()
 ```
 
@@ -272,19 +272,22 @@ fragmentationPenalty = floor((숫자 타일 개수 - 1) / 2)
 
 공격 스킬:
 
-- 플레이어 공격력 + 스킬 위력만큼 적에게 피해를 준다.
-- `targetAttackModifier`가 있으면 적 공격력을 낮추거나 올린다.
+- `power`는 40 / 60 / 80 / 100 / 120 같은 10 단위 기술 위력이다.
+- 피해 공식은 `기술 위력 / 10 * 공격 측 능력치 / 방어 측 능력치`에 난수 보정과 치명타를 적용한다.
+- `DamageStatSource`로 공격 측 능력치를 고른다. 일반 공격은 공격력, `DefenseScalingAttack`은 방어력, `ShieldScalingAttack`과 `ShieldBurstAttack`은 현재 보호막 수치를 쓴다.
+- 공격/방어/치명타 변화는 고정 수치가 아니라 랭크 변화다. 예를 들어 `targetDefenseStageModifier = -1`은 적 방어 랭크 -1이다.
 
 방어 스킬:
 
-- 스킬 위력 + 현재 방어 보너스만큼 플레이어 방어도를 얻는다.
-- `selfDefenseBonus`가 있으면 이후 방어 스킬의 획득량이 바뀐다.
+- 방어 스킬의 `power`는 보호막 획득량이다. 방어력과 보호막은 별도 수치라서 방어 랭크가 보호막 획득량을 올리지 않는다.
+- `ThornGuard`는 보호막을 얻고, 보호막이 남아 있을 때 직접 공격을 받으면 현재 보호막 수치를 공격 측 능력치로 써서 반격한다.
+- `DefenseStageUp`은 보호막이 아니라 방어 랭크를 올린다. 이 랭크는 `DefenseScalingAttack` 피해 계산에 쓰인다.
 
 스킬 사용 순서는 다음과 같다.
 
 ```text
 UI 버튼
--> RequestUseSkillById(skillId, targetIndex)
+-> RequestUseSkillById(skillId)
 -> 스킬 찾기
 -> 코스트 확인
 -> 코스트 소비
@@ -304,17 +307,17 @@ UI 버튼
 | 타입 | 의미 |
 |---|---|
 | Attack | 플레이어에게 피해 |
-| Defense | 적이 방어도 획득 |
+| Defense | 적이 보호막 획득 |
 | Debuff | 플레이어 또는 보드에 방해 효과 |
 
 현재 디버프는 두 가지다.
 
 | 디버프 | 효과 |
 |---|---|
-| Fear | 플레이어가 이번 턴에 얻는 방어도 획득량 6 감소 |
+| Fear | 플레이어 공격 랭크 1 감소 |
 | Darkness | 다음 보드에 이동 불가능한 방해 블록 설치 |
 
-공포는 `PlayerCombatController.FearStacks`에 고정 페널티 `6`을 저장한다. 그래서 이번 플레이어 턴 동안 방어 스킬을 쓸 때 최종 방어 획득량은 `스킬 방어량 + DefenseBonus - 6`으로 계산된다. 최종 획득 방어도는 0 아래로 내려가지 않고, 플레이어가 턴을 넘기면 공포는 해제된다.
+공포는 `PlayerCombatController.FearStacks`에 임시 공격 랭크 페널티를 저장한다. 보호막 획득량과 방어력은 건드리지 않고, 플레이어가 턴을 넘기면 공포는 해제되면서 공격 랭크가 복구된다.
 
 암흑은 `Board2048Manager.QueueObstacles`로 방해 블록을 예약한다. 적 턴이 끝나고 다음 플레이어 보드가 시작될 때 `-1` 값의 방해 블록이 보드 안에 배치된다. 이 블록은 숫자 타일처럼 움직이거나 합쳐지지 않고, 2048 이동에서 벽처럼 동작한다.
 
@@ -324,7 +327,7 @@ UI 버튼
 
 | 디버프 | 임시 VFX |
 |---|---|
-| Fear | 붉은 화면 오버레이, "공포: 방어도 획득 -6" 문구, 플레이어 초상화 짧은 펄스 |
+| Fear | 붉은 화면 오버레이, "공포: 공격 랭크 -1" 문구, 플레이어 초상화 짧은 펄스 |
 | Darkness | 보라색 화면 오버레이, "암흑: 방해 블록 +N" 문구, 방해 블록 셀 펄스 |
 
 적 데이터에 `intentPattern`이 있으면 그 순서대로 반복한다. 이 방식은 보스처럼 정확한 순서를 가져야 하는 적에게 쓴다.

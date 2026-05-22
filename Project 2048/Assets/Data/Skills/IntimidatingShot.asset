@@ -10,16 +10,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e39edfbbdac2c064e877e5f3f784bab9, type: 3}
-  m_Name: Fear
+  m_Name: IntimidatingShot
   m_EditorClassIdentifier: Game.Core::Project2048.Skills.SkillSO
-  skillId: fear
-  skillName: "\uACF5\uD3EC"
-  skillType: 2
-  effectKind: 6
-  cost: 9
-  power: 0
+  skillId: intimidating-shot
+  skillName: "위협 사격"
+  skillType: 0
+  effectKind: 3
+  damageStatSource: 0
+  cost: 7
+  power: 50
+  targetAttackStageModifier: -1
+  targetDefenseStageModifier: 0
+  selfDefenseStageModifier: 0
+  selfCriticalStageModifier: 0
   targetAttackModifier: 0
-  targetDefenseModifier: -4
+  targetDefenseModifier: 0
   selfDefenseBonus: 0
   selfDefensePowerModifier: 0
   selfThornRetaliationDamage: 0
@@ -30,9 +35,15 @@ MonoBehaviour:
   selfCriticalChanceBonus: 0
   lifeStealPercent: 0
   hpCost: 0
+  hpCostPercent: 0
   hpCostLeavesOne: 1
   nextBoardMoveCountModifier: 0
   chargedPower: 0
+  consumesAllShield: 0
+  nextAttackPowerMultiplier: 1
+  nextAttackHitCount: 0
+  nextAttackHitPowerMultiplier: 1
+  healPercentOfMaxHp: 0
   canAppearAsReward: 1
   isEnemySkill: 0
   icon: {fileID: 0}
@@ -57,4 +68,4 @@ MonoBehaviour:
     sfxDelaySeconds: 0
     localOffset: {x: 0, y: 0, z: 0}
     autoDestroySeconds: 1.25
-  description: "\uC801 \uBC29\uC5B4\uB825 -4."
+  description: "적에게 위력 50 피해를 주고, 적의 공격 랭크를 1 낮춘다."

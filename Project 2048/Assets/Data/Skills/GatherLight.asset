@@ -13,11 +13,16 @@ MonoBehaviour:
   m_Name: GatherLight
   m_EditorClassIdentifier: Game.Core::Project2048.Skills.SkillSO
   skillId: gather-light
-  skillName: "\uBE5B \uBAA8\uC73C\uAE30"
+  skillName: "빛 모으기"
   skillType: 0
   effectKind: 7
+  damageStatSource: 0
   cost: 6
   power: 0
+  targetAttackStageModifier: 0
+  targetDefenseStageModifier: 0
+  selfDefenseStageModifier: 0
+  selfCriticalStageModifier: 0
   targetAttackModifier: 0
   targetDefenseModifier: 0
   selfDefenseBonus: 0
@@ -30,9 +35,15 @@ MonoBehaviour:
   selfCriticalChanceBonus: 0
   lifeStealPercent: 0
   hpCost: 0
+  hpCostPercent: 0
   hpCostLeavesOne: 1
   nextBoardMoveCountModifier: 0
-  chargedPower: 16
+  chargedPower: 120
+  consumesAllShield: 0
+  nextAttackPowerMultiplier: 1
+  nextAttackHitCount: 0
+  nextAttackHitPowerMultiplier: 1
+  healPercentOfMaxHp: 0
   canAppearAsReward: 1
   isEnemySkill: 0
   icon: {fileID: 0}
@@ -57,5 +68,4 @@ MonoBehaviour:
     sfxDelaySeconds: 0
     localOffset: {x: 0, y: 0, z: 0}
     autoDestroySeconds: 1.25
-  description: "\uC774\uBC88 \uD134\uC5D0\uB294 \uD53C\uD574 \uC5C6\uC74C. \uB2E4\uC74C
-    \uD50C\uB808\uC774\uC5B4 \uD134 \uC2DC\uC791\uC5D0 \uACF5\uACA9\uB825+16 \uD53C\uD574."
+  description: "이번 턴에는 빛을 모은다. 다음 플레이어 턴 시작 시 적에게 위력 120의 빛 공격을 자동으로 사용한다."

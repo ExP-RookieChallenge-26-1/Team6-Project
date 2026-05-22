@@ -432,7 +432,7 @@ OnCombatVictory
 OnCombatDefeat
 OnPlayerSkillUsed
 RequestBoardMove(Direction direction)
-RequestUseSkillById(string skillId, int targetIndex)
+RequestUseSkillById(string skillId)
 RequestEndPlayerTurn()
 ```
 
@@ -539,8 +539,8 @@ RequestEndPlayerTurn()
 
 피해량 계산만 담당하는 작은 파일이다.
 
-- 플레이어 스킬 피해는 `플레이어 공격력 + 스킬 위력`이다.
-- 적 피해는 현재 인텐트의 `value`다.
+- 플레이어 스킬 피해는 `스킬 위력 / 10 * 공격력 / 방어력`에 랜덤 편차와 치명타를 적용한다.
+- 적 피해도 공격 인텐트의 `movePower`를 같은 위력 스케일로 계산한다. `movePower`가 없는 오래된 인텐트 값은 10배 위력으로 환산된다.
 
 연결:
 
@@ -559,7 +559,7 @@ RequestEndPlayerTurn()
 - 시작 스킬 목록을 가진다.
 - 피해를 받을 때 방어도를 먼저 깎고 남은 피해를 HP에 적용한다.
 - 방어 스킬 사용 시 방어 보너스를 반영한다.
-- 공포가 걸려 있으면 이번 턴 방어도 획득량을 고정으로 6 줄인다.
+- Fear is a temporary attack-stage penalty. It does not change shield gain.
 
 연결:
 
@@ -789,7 +789,7 @@ AI가 디버프 턴에 공포와 암흑을 어떤 순서로 낼지 나타낸다.
 - `SetNextIntents`는 `EnemySO.ActionsPerTurn`에 맞춰 최대 2개 인텐트를 미리 만든다.
 - 패턴이 없으면 `EnemyAiBrain`으로 다음 행동을 만든다.
 - `ExecuteIntent`는 공격, 방어, 디버프를 실행한다.
-- `Fear`는 플레이어 방어 보너스를 낮춘다.
+- `Fear`는 플레이어 공격 랭크를 낮춘다.
 - `Darkness`는 다음 보드에 방해 블록을 예약한다.
 
 연결:
@@ -1649,7 +1649,7 @@ UI가 전투 내부 객체를 직접 잡지 않고 snapshot/command만으로 전
 
 보호하는 규칙:
 
-- `Fear`는 플레이어 방어 획득량을 낮춘다.
+- `Fear`는 플레이어 공격 랭크를 낮춘다.
 - `Darkness`는 보드에 방해 블록을 예약한다.
 
 ### `Assets/Tests/EditMode/EnemyAiBrainTests.cs`

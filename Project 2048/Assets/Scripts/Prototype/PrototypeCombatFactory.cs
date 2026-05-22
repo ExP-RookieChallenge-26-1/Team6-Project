@@ -30,86 +30,76 @@ namespace Project2048.Prototype
 
         public static PrototypeCombatLoadout CreateDefaultLoadout()
         {
-            var attack1 = CreateSkill(
-                "attack_1",
-                "1단계 공격",
-                SkillType.Attack,
-                cost: SkillSO.DefaultCost,
-                power: 3,
-                targetAttackModifier: 0,
-                selfDefenseBonus: 0,
-                "기본 공격.");
-            var attack2 = CreateSkill(
-                "attack_2",
-                "2단계 공격",
-                SkillType.Attack,
-                cost: SkillSO.DefaultCost,
-                power: 4,
-                targetAttackModifier: -2,
-                selfDefenseBonus: 0,
-                "공격하고 적 공격력을 낮춘다.");
-            var attack3 = CreateSkill(
-                "attack_3",
-                "3단계 공격",
-                SkillType.Attack,
-                cost: SkillSO.DefaultCost,
-                power: 8,
-                targetAttackModifier: 0,
-                selfDefenseBonus: 0,
-                "강한 공격.");
-            var defense1 = CreateSkill(
-                "defense_1",
-                "1단계 방어",
-                SkillType.Defense,
-                cost: SkillSO.DefaultCost,
-                power: 3,
-                targetAttackModifier: 0,
-                selfDefenseBonus: 0,
-                "방어도 3을 얻는다.");
-            var defense2 = CreateSkill(
-                "defense_2",
-                "2단계 방어",
-                SkillType.Defense,
-                cost: SkillSO.DefaultCost,
-                power: 4,
-                targetAttackModifier: 0,
-                selfDefenseBonus: 2,
-                "방어도를 얻고 이후 획득 방어도를 증가시킨다.");
-            var defense3 = CreateSkill(
-                "defense_3",
-                "3단계 방어",
-                SkillType.Defense,
-                cost: SkillSO.DefaultCost,
-                power: 10,
-                targetAttackModifier: 0,
-                selfDefenseBonus: 0,
-                "강한 방어.");
+            var quickStab = CreateSkill("quick-stab", "Quick Stab", SkillType.Attack, cost: 4, power: 40, targetAttackModifier: 0, selfDefenseBonus: 0, "Deal power 40 damage.");
+            quickStab.effectKind = SkillEffectKind.BasicAttack;
+
+            var lightShot = CreateSkill("light-shot", "Light Shot", SkillType.Attack, cost: 6, power: 60, targetAttackModifier: 0, selfDefenseBonus: 0, "Deal power 60 light damage.");
+            lightShot.effectKind = SkillEffectKind.BasicAttack;
+
+            var heavyStrike = CreateSkill("heavy-strike", "Heavy Strike", SkillType.Attack, cost: 8, power: 80, targetAttackModifier: 0, selfDefenseBonus: 0, "Deal power 80 damage.");
+            heavyStrike.effectKind = SkillEffectKind.BasicAttack;
+
+            var gatherLight = CreateSkill("gather-light", "Gather Light", SkillType.Attack, cost: 6, power: 0, targetAttackModifier: 0, selfDefenseBonus: 0, "Charge this turn. At the next player turn start, automatically use a power 120 light attack.");
+            gatherLight.effectKind = SkillEffectKind.ChargeAttack;
+            gatherLight.chargedPower = 120;
+
+            var lowStance = CreateSkill("low-stance", "Low Stance", SkillType.Defense, cost: 4, power: 30, targetAttackModifier: 0, selfDefenseBonus: 0, "Gain 30 shield.");
+            lowStance.effectKind = SkillEffectKind.BasicDefense;
+
+            var lightGuard = CreateSkill("light-guard", "Light Guard", SkillType.Defense, cost: 6, power: 60, targetAttackModifier: 0, selfDefenseBonus: 0, "Gain 60 shield.");
+            lightGuard.effectKind = SkillEffectKind.BasicDefense;
+
+            var shieldBash = CreateSkill("shield-bash", "Shield Bash", SkillType.Attack, cost: 5, power: 60, targetAttackModifier: 0, selfDefenseBonus: 0, "Use current shield as the attacking stat to deal power 60 damage. Shield is not consumed.");
+            shieldBash.effectKind = SkillEffectKind.ShieldScalingAttack;
+            shieldBash.damageStatSource = DamageStatSource.ShieldHp;
+
+            var shieldBurst = CreateSkill("shield-burst", "Shield Burst", SkillType.Attack, cost: 7, power: 100, targetAttackModifier: 0, selfDefenseBonus: 0, "Use current shield as the attacking stat to deal power 100 damage, then lose all shield.");
+            shieldBurst.effectKind = SkillEffectKind.ShieldBurstAttack;
+            shieldBurst.damageStatSource = DamageStatSource.ShieldHp;
+            shieldBurst.consumesAllShield = true;
+
+            var ironWall = CreateSkill("iron-wall", "Iron Wall", SkillType.Defense, cost: 6, power: 0, targetAttackModifier: 0, selfDefenseBonus: 0, "Raise defense stage by 2.");
+            ironWall.effectKind = SkillEffectKind.DefenseStageUp;
+            ironWall.selfDefenseStageModifier = 2;
+
+            var bodyPress = CreateSkill("body-press", "Body Press", SkillType.Attack, cost: 7, power: 80, targetAttackModifier: 0, selfDefenseBonus: 0, "Use defense instead of attack to deal power 80 damage.");
+            bodyPress.effectKind = SkillEffectKind.DefenseScalingAttack;
+            bodyPress.damageStatSource = DamageStatSource.DefensePower;
+
+            var flash = CreateSkill("flash", "Flash", SkillType.Debuff, cost: 5, power: 0, targetAttackModifier: 0, selfDefenseBonus: 0, "Lower enemy attack stage by 1.");
+            flash.effectKind = SkillEffectKind.AttackStageDown;
+            flash.targetAttackStageModifier = -1;
 
             var skills = new List<SkillSO>
             {
-                attack1,
-                attack2,
-                attack3,
-                defense1,
-                defense2,
-                defense3,
+                quickStab,
+                lightShot,
+                heavyStrike,
+                gatherLight,
+                lowStance,
+                lightGuard,
+                shieldBash,
+                shieldBurst,
+                ironWall,
+                bodyPress,
+                flash,
             };
 
             var player = ScriptableObject.CreateInstance<PlayerSO>();
             player.name = "PrototypePlayer";
             player.maxHp = 100;
             player.attackPower = 2;
-            player.baseDefensePower = 0;
+            player.baseDefensePower = 2;
             player.criticalChance = 0.1f;
             player.criticalDamageMultiplier = 1.5f;
             player.initialBoardMoveCount = 4;
             player.boardMoveCountBonus = 0;
             player.startingSkills = new List<SkillSO>
             {
-                attack1,
-                attack2,
-                defense1,
-                defense2,
+                gatherLight,
+                lightGuard,
+                flash,
+                quickStab,
             };
 
             var enemy = CreateRandomPrototypeEnemy();
@@ -192,7 +182,7 @@ namespace Project2048.Prototype
                 "빛 발사",
                 SkillType.Attack,
                 cost: 0,
-                power: seed.Strength == EnemyAiStrength.Enhanced ? 6 : 4,
+                power: seed.Strength == EnemyAiStrength.Enhanced ? 80 : 60,
                 targetAttackModifier: 0,
                 selfDefenseBonus: 0,
                 "적 기본 공격.");
@@ -203,11 +193,11 @@ namespace Project2048.Prototype
                 "빛 방어",
                 SkillType.Defense,
                 cost: 0,
-                power: seed.Strength == EnemyAiStrength.Enhanced ? 8 : 5,
+                power: seed.Strength == EnemyAiStrength.Enhanced ? 60 : 40,
                 targetAttackModifier: 0,
                 selfDefenseBonus: 0,
                 "적 기본 보호.");
-            guard.effectKind = SkillEffectKind.LightGuard;
+            guard.effectKind = SkillEffectKind.BasicDefense;
 
             var debuff = CreateSkill(
                 seed.DebuffPattern == EnemyDebuffPattern.DarknessThenFear ? "enemy-howl" : "enemy-fear",
@@ -218,8 +208,8 @@ namespace Project2048.Prototype
                 targetAttackModifier: 0,
                 selfDefenseBonus: 0,
                 "플레이어 방어력을 낮춘다.");
-            debuff.effectKind = SkillEffectKind.DefenseDown;
-            debuff.targetDefenseModifier = seed.Strength == EnemyAiStrength.Enhanced ? -4 : -2;
+            debuff.effectKind = SkillEffectKind.DefenseStageDown;
+            debuff.targetDefenseStageModifier = seed.Strength == EnemyAiStrength.Enhanced ? -2 : -1;
 
             if (seed.ActionBias == EnemyAiActionBias.AttackHeavy)
             {
@@ -228,7 +218,7 @@ namespace Project2048.Prototype
                     "촉수 치기",
                     SkillType.Attack,
                     cost: 0,
-                    power: seed.Strength == EnemyAiStrength.Enhanced ? 8 : 5,
+                    power: seed.Strength == EnemyAiStrength.Enhanced ? 110 : 90,
                     targetAttackModifier: 0,
                     selfDefenseBonus: 0,
                     "강하게 공격하고 다음 보드 이동을 줄인다.");
@@ -244,12 +234,12 @@ namespace Project2048.Prototype
                     "가시 방어",
                     SkillType.Defense,
                     cost: 0,
-                    power: seed.Strength == EnemyAiStrength.Enhanced ? 8 : 5,
+                    power: seed.Strength == EnemyAiStrength.Enhanced ? 60 : 40,
                     targetAttackModifier: 0,
                     selfDefenseBonus: 0,
                     "보호막과 반사 피해.");
                 thorn.effectKind = SkillEffectKind.ThornGuard;
-                thorn.selfThornRetaliationDamage = seed.Strength == EnemyAiStrength.Enhanced ? 3 : 2;
+                thorn.selfThornRetaliationDamage = 40;
                 return new List<SkillSO> { attack, thorn, guard, debuff };
             }
 
@@ -271,6 +261,7 @@ namespace Project2048.Prototype
             skill.skillId = skillId;
             skill.skillName = skillName;
             skill.skillType = skillType;
+            skill.isEnemySkill = skillId.StartsWith("enemy-", System.StringComparison.Ordinal);
             skill.cost = cost;
             skill.power = power;
             skill.targetAttackModifier = targetAttackModifier;

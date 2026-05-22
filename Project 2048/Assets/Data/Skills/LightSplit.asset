@@ -13,11 +13,16 @@ MonoBehaviour:
   m_Name: LightSplit
   m_EditorClassIdentifier: Game.Core::Project2048.Skills.SkillSO
   skillId: light-split
-  skillName: "\uBE5B\uC758 \uBD84\uC0B0"
+  skillName: "빛의 분산"
   skillType: 1
-  effectKind: 12
-  cost: 10
+  effectKind: 20
+  damageStatSource: 0
+  cost: 6
   power: 0
+  targetAttackStageModifier: 0
+  targetDefenseStageModifier: 0
+  selfDefenseStageModifier: 0
+  selfCriticalStageModifier: 0
   targetAttackModifier: 0
   targetDefenseModifier: 0
   selfDefenseBonus: 0
@@ -26,13 +31,19 @@ MonoBehaviour:
   selfCounterPercent: 0
   selfEndureTurns: 0
   selfEchoDamageBonus: 0
-  selfExtraAttackHits: 1
+  selfExtraAttackHits: 0
   selfCriticalChanceBonus: 0
   lifeStealPercent: 0
   hpCost: 0
+  hpCostPercent: 0
   hpCostLeavesOne: 1
   nextBoardMoveCountModifier: 0
   chargedPower: 0
+  consumesAllShield: 0
+  nextAttackPowerMultiplier: 1
+  nextAttackHitCount: 2
+  nextAttackHitPowerMultiplier: 0.6
+  healPercentOfMaxHp: 0
   canAppearAsReward: 1
   isEnemySkill: 0
   icon: {fileID: 0}
@@ -57,5 +68,4 @@ MonoBehaviour:
     sfxDelaySeconds: 0
     localOffset: {x: 0, y: 0, z: 0}
     autoDestroySeconds: 1.25
-  description: "\uC774\uBC88 \uC804\uD22C \uB3D9\uC548 \uBAA8\uB4E0 \uACF5\uACA9\uC774
-    1\uD68C \uCD94\uAC00\uB85C \uB098\uB268."
+  description: "다음 공격이 2회 공격으로 바뀐다. 각 공격은 원래 기술 위력의 60%로 계산된다."

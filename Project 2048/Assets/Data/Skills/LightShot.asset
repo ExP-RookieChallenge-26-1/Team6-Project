@@ -13,11 +13,16 @@ MonoBehaviour:
   m_Name: LightShot
   m_EditorClassIdentifier: Game.Core::Project2048.Skills.SkillSO
   skillId: light-shot
-  skillName: "\uBE5B \uBC1C\uC0AC"
+  skillName: "빛 발사"
   skillType: 0
   effectKind: 1
-  cost: 9
-  power: 5
+  damageStatSource: 0
+  cost: 6
+  power: 60
+  targetAttackStageModifier: 0
+  targetDefenseStageModifier: 0
+  selfDefenseStageModifier: 0
+  selfCriticalStageModifier: 0
   targetAttackModifier: 0
   targetDefenseModifier: 0
   selfDefenseBonus: 0
@@ -30,9 +35,15 @@ MonoBehaviour:
   selfCriticalChanceBonus: 0
   lifeStealPercent: 0
   hpCost: 0
+  hpCostPercent: 0
   hpCostLeavesOne: 1
   nextBoardMoveCountModifier: 0
   chargedPower: 0
+  consumesAllShield: 0
+  nextAttackPowerMultiplier: 1
+  nextAttackHitCount: 0
+  nextAttackHitPowerMultiplier: 1
+  healPercentOfMaxHp: 0
   canAppearAsReward: 1
   isEnemySkill: 0
   icon: {fileID: 0}
@@ -57,4 +68,4 @@ MonoBehaviour:
     sfxDelaySeconds: 0
     localOffset: {x: 0, y: 0, z: 0}
     autoDestroySeconds: 1.25
-  description: "\uAE30\uBCF8 \uBE5B \uACF5\uACA9. \uACF5\uACA9\uB825+5 \uD53C\uD574."
+  description: "적에게 위력 60의 빛 피해를 준다."

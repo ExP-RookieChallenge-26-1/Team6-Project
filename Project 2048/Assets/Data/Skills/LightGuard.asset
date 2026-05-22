@@ -13,11 +13,16 @@ MonoBehaviour:
   m_Name: LightGuard
   m_EditorClassIdentifier: Game.Core::Project2048.Skills.SkillSO
   skillId: light-guard
-  skillName: "\uBE5B \uBC29\uC5B4"
+  skillName: "빛 방어"
   skillType: 1
-  effectKind: 4
-  cost: 8
-  power: 10
+  effectKind: 2
+  damageStatSource: 0
+  cost: 6
+  power: 60
+  targetAttackStageModifier: 0
+  targetDefenseStageModifier: 0
+  selfDefenseStageModifier: 0
+  selfCriticalStageModifier: 0
   targetAttackModifier: 0
   targetDefenseModifier: 0
   selfDefenseBonus: 0
@@ -30,9 +35,15 @@ MonoBehaviour:
   selfCriticalChanceBonus: 0
   lifeStealPercent: 0
   hpCost: 0
+  hpCostPercent: 0
   hpCostLeavesOne: 1
   nextBoardMoveCountModifier: 0
   chargedPower: 0
+  consumesAllShield: 0
+  nextAttackPowerMultiplier: 1
+  nextAttackHitCount: 0
+  nextAttackHitPowerMultiplier: 1
+  healPercentOfMaxHp: 0
   canAppearAsReward: 1
   isEnemySkill: 0
   icon: {fileID: 0}
@@ -57,4 +68,4 @@ MonoBehaviour:
     sfxDelaySeconds: 0
     localOffset: {x: 0, y: 0, z: 0}
     autoDestroySeconds: 1.25
-  description: "\uBCF4\uD638\uB9C9 \uCCB4\uB825 10."
+  description: "보호막 60을 얻는다."

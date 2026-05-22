@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e39edfbbdac2c064e877e5f3f784bab9, type: 3}
-  m_Name: Endure
+  m_Name: QuickStab
   m_EditorClassIdentifier: Game.Core::Project2048.Skills.SkillSO
-  skillId: endure
-  skillName: "이악물기"
-  skillType: 1
-  effectKind: 9
+  skillId: quick-stab
+  skillName: "빠른 찌르기"
+  skillType: 0
+  effectKind: 1
   damageStatSource: 0
-  cost: 6
-  power: 0
+  cost: 4
+  power: 40
   targetAttackStageModifier: 0
   targetDefenseStageModifier: 0
   selfDefenseStageModifier: 0
@@ -29,7 +29,7 @@ MonoBehaviour:
   selfDefensePowerModifier: 0
   selfThornRetaliationDamage: 0
   selfCounterPercent: 0
-  selfEndureTurns: 1
+  selfEndureTurns: 0
   selfEchoDamageBonus: 0
   selfExtraAttackHits: 0
   selfCriticalChanceBonus: 0
@@ -68,4 +68,4 @@ MonoBehaviour:
     sfxDelaySeconds: 0
     localOffset: {x: 0, y: 0, z: 0}
     autoDestroySeconds: 1.25
-  description: "다음 적 턴 동안 체력이 1 아래로 내려가지 않는다."
+  description: "적에게 위력 40 피해를 준다."

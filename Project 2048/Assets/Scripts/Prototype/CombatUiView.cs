@@ -365,8 +365,7 @@ namespace Project2048.Prototype
                 return;
             }
 
-            var targetIndex = skill.RequiresEnemyTarget ? 0 : -1;
-            combatManager.RequestUseSkillById(skill.SkillId, targetIndex);
+            combatManager.RequestUseSkillById(skill.SkillId);
         }
 
         private void HandleCombatStateChanged(CombatSnapshot nextSnapshot)

@@ -13,11 +13,16 @@ MonoBehaviour:
   m_Name: TentacleStrike
   m_EditorClassIdentifier: Game.Core::Project2048.Skills.SkillSO
   skillId: tentacle-strike
-  skillName: "\uCD09\uC218 \uCE58\uAE30"
+  skillName: "촉수 치기"
   skillType: 0
-  effectKind: 16
-  cost: 7
-  power: 8
+  effectKind: 17
+  damageStatSource: 0
+  cost: 6
+  power: 90
+  targetAttackStageModifier: 0
+  targetDefenseStageModifier: 0
+  selfDefenseStageModifier: 0
+  selfCriticalStageModifier: 0
   targetAttackModifier: 0
   targetDefenseModifier: 0
   selfDefenseBonus: 0
@@ -30,9 +35,15 @@ MonoBehaviour:
   selfCriticalChanceBonus: 0
   lifeStealPercent: 0
   hpCost: 0
+  hpCostPercent: 0
   hpCostLeavesOne: 1
   nextBoardMoveCountModifier: -1
   chargedPower: 0
+  consumesAllShield: 0
+  nextAttackPowerMultiplier: 1
+  nextAttackHitCount: 0
+  nextAttackHitPowerMultiplier: 1
+  healPercentOfMaxHp: 0
   canAppearAsReward: 1
   isEnemySkill: 0
   icon: {fileID: 0}
@@ -57,5 +68,4 @@ MonoBehaviour:
     sfxDelaySeconds: 0
     localOffset: {x: 0, y: 0, z: 0}
     autoDestroySeconds: 1.25
-  description: "\uAC15\uD558\uAC8C \uACF5\uACA9\uD558\uACE0 \uB2E4\uC74C \uD50C\uB808\uC774\uC5B4
-    \uBCF4\uB4DC \uC774\uB3D9 \uD69F\uC218 -1."
+  description: "적에게 위력 90 피해를 준다. 다음 플레이어 턴의 보드 이동 횟수가 1 감소한다."

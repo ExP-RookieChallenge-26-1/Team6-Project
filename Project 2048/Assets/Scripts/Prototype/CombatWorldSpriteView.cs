@@ -503,6 +503,21 @@ namespace Project2048.Prototype
             var scale = Mathf.Max(0.01f, skill.vfxScale);
             var intensity = Mathf.Max(0.1f, skill.vfxIntensity);
             var repeatCount = Mathf.Max(1, skill.vfxRepeatCount);
+            if (skill.vfxFamily == SkillVfxFamily.SupportFire)
+            {
+                PlaySupportFireSkillParticleEffect(
+                    skill,
+                    anchor,
+                    lifetimeSeconds,
+                    burstCount,
+                    startSpeed,
+                    startSize,
+                    scale,
+                    intensity,
+                    repeatCount);
+                return;
+            }
+
             SpawnParticleBurst(
                 null,
                 anchor,
@@ -514,6 +529,46 @@ namespace Project2048.Prototype
                 startSpeed * Mathf.Sqrt(scale),
                 startSize * scale,
                 swirl);
+        }
+
+        private void PlaySupportFireSkillParticleEffect(
+            SkillSO skill,
+            Transform anchor,
+            float lifetimeSeconds,
+            int burstCount,
+            float startSpeed,
+            float startSize,
+            float scale,
+            float intensity,
+            int repeatCount)
+        {
+            var primary = ResolveReusableSkillParticleColor(skill);
+            var secondary = ResolveReusableSkillSecondaryParticleColor(skill);
+            var shotCount = Mathf.Clamp(repeatCount, 2, 4);
+            var perShotBurstCount = Mathf.Max(6, Mathf.RoundToInt(burstCount * intensity / shotCount));
+            var offsets = new[]
+            {
+                new Vector3(-0.42f, 0.44f, 0f),
+                new Vector3(0.42f, 0.32f, 0f),
+                new Vector3(0f, 0.72f, 0f),
+                new Vector3(0.18f, 0.54f, 0f),
+            };
+
+            for (var i = 0; i < shotCount; i++)
+            {
+                SpawnParticleBurst(
+                    null,
+                    anchor,
+                    "LightEchoSupportFireParticles",
+                    i % 2 == 0 ? primary : secondary,
+                    null,
+                    lifetimeSeconds,
+                    perShotBurstCount,
+                    startSpeed * Mathf.Sqrt(scale),
+                    startSize * scale,
+                    false,
+                    offsets[i]);
+            }
         }
 
         private static void ResolveReusableSkillParticleDefaults(
@@ -589,6 +644,13 @@ namespace Project2048.Prototype
                     startSize = 0.44f;
                     swirl = true;
                     break;
+                case SkillVfxFamily.SupportFire:
+                    lifetimeSeconds = 0.55f;
+                    burstCount = 36;
+                    startSpeed = 1.05f;
+                    startSize = 0.34f;
+                    swirl = false;
+                    break;
                 default:
                     lifetimeSeconds = 0.65f;
                     burstCount = 24;
@@ -608,6 +670,17 @@ namespace Project2048.Prototype
             }
 
             return primary;
+        }
+
+        private static Color ResolveReusableSkillSecondaryParticleColor(SkillSO skill)
+        {
+            var secondary = skill.vfxSecondaryColor;
+            if (secondary.a <= 0f)
+            {
+                secondary.a = 1f;
+            }
+
+            return secondary;
         }
 
         private void PlayCombatantActionAudioEffect(CombatEffectBinding effect, float extraDelaySeconds = 0f)
@@ -1519,7 +1592,8 @@ namespace Project2048.Prototype
             int burstCount,
             float startSpeed,
             float startSize,
-            bool swirl)
+            bool swirl,
+            Vector3 localOffset = default)
         {
             var parent = anchor != null ? anchor : transform;
             var particles = prefab != null
@@ -1531,7 +1605,7 @@ namespace Project2048.Prototype
             }
 
             particles.gameObject.name = objectName;
-            particles.transform.localPosition = Vector3.zero;
+            particles.transform.localPosition = localOffset;
             ConfigureParticleBurst(particles, color, material, lifetimeSeconds, burstCount, startSpeed, startSize, parent, swirl);
             particles.Play(true);
             if (swirl && Application.isPlaying && isActiveAndEnabled)

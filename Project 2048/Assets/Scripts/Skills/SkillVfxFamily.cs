@@ -12,5 +12,6 @@ namespace Project2048.Skills
         DrainTether,
         CounterReady,
         BoardDisturb,
+        SupportFire,
     }
 }

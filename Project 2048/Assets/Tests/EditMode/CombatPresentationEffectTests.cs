@@ -1417,6 +1417,11 @@ namespace Project2048.Tests
                     Assert.That(skill.activationEffect.EffectiveAutoDestroySeconds, Is.EqualTo(1.55f).Within(0.0001f), path);
                     Assert.That(skill.activationEffect.EffectiveSfxDelaySeconds, Is.EqualTo(0.3f).Within(0.0001f), path);
                 }
+                else if (path.EndsWith("LightEcho.asset", System.StringComparison.Ordinal))
+                {
+                    Assert.That(skill.vfxFamily, Is.EqualTo(SkillVfxFamily.SupportFire), path);
+                    Assert.That(skill.vfxRepeatCount, Is.GreaterThanOrEqualTo(3), path);
+                }
             }
         }
 

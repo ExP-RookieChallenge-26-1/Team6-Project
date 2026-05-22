@@ -67,10 +67,10 @@ MonoBehaviour:
     sfxDelaySeconds: 0
     localOffset: {x: 0, y: 0, z: 0}
     autoDestroySeconds: 1.25
-  vfxFamily: 5
+  vfxFamily: 10
   vfxPrimaryColor: {r: 1, g: 0.76, b: 0.18, a: 1}
   vfxSecondaryColor: {r: 1, g: 0.95, b: 0.58, a: 1}
-  vfxScale: 1.1
+  vfxScale: 1
   vfxIntensity: 1.2
-  vfxRepeatCount: 1
+  vfxRepeatCount: 3
   description: "다음 공격의 기술 위력이 1.3배가 된다."

@@ -322,7 +322,7 @@ namespace Project2048.Prototype
                     ConfigureReusableVfx(skill, SkillVfxFamily.BuffAura, new Color(1f, 0.84f, 0.25f), new Color(1f, 1f, 0.88f), intensity: 1.1f);
                     break;
                 case "light-echo":
-                    ConfigureReusableVfx(skill, SkillVfxFamily.BuffAura, new Color(1f, 0.76f, 0.18f), new Color(1f, 0.95f, 0.58f), 1.1f, 1.2f);
+                    ConfigureReusableVfx(skill, SkillVfxFamily.SupportFire, new Color(1f, 0.76f, 0.18f), new Color(1f, 0.95f, 0.58f), 1f, 1.2f, 3);
                     break;
                 case "light-split":
                     ConfigureReusableVfx(skill, SkillVfxFamily.BuffAura, new Color(1f, 0.8f, 0.22f), Color.white, repeatCount: 2);

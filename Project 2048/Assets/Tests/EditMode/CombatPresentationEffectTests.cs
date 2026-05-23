@@ -1487,7 +1487,7 @@ namespace Project2048.Tests
         {
             var skillGuids = AssetDatabase.FindAssets("t:SkillSO", new[] { "Assets/Data/Skills" });
 
-            Assert.That(skillGuids.Length, Is.EqualTo(32));
+            Assert.That(skillGuids.Length, Is.EqualTo(31));
             foreach (var guid in skillGuids)
             {
                 var path = AssetDatabase.GUIDToAssetPath(guid);

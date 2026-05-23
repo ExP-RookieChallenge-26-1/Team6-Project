@@ -10,7 +10,7 @@ namespace Project2048.Tests
     public class PrototypeCombatFactoryTests
     {
         [Test]
-        public void CreateDefaultLoadout_EquipsFourPrototypeSkills()
+        public void CreateDefaultLoadout_EquipsRequestedStartingSkills()
         {
             var loadout = PrototypeCombatFactory.CreateDefaultLoadout();
 
@@ -35,8 +35,13 @@ namespace Project2048.Tests
                     "body-press",
                     "flash",
                 }));
-                Assert.That(loadout.PlayerData.startingSkills.Count, Is.EqualTo(4));
-                Assert.That(loadout.PlayerData.startingSkills.Select(skill => skill.cost), Is.EqualTo(new[] { 6, 6, 5, 4 }));
+                Assert.That(loadout.PlayerData.startingSkills.Select(skill => skill.skillId), Is.EqualTo(new[]
+                {
+                    "light-shot",
+                    "low-stance",
+                    "flash",
+                }));
+                Assert.That(loadout.PlayerData.startingSkills.Select(skill => skill.cost), Is.EqualTo(new[] { 6, 4, 5 }));
             }
             finally
             {

@@ -107,10 +107,9 @@ namespace Project2048.Prototype
             player.boardMoveCountBonus = 0;
             player.startingSkills = new List<SkillSO>
             {
-                gatherLight,
-                lightGuard,
+                lightShot,
+                lowStance,
                 flash,
-                quickStab,
             };
 
             var enemy = CreateRandomPrototypeEnemy();

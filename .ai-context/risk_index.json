@@ -864,6 +864,23 @@
     "risk_score": 48
   },
   {
+    "file_id": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
+    "class_name": "SkillSOTests",
+    "risk_flags": [
+      "high-coupling",
+      "save-load-sensitive",
+      "ui-runtime-mixed",
+      "state-owner"
+    ],
+    "risk_reasons": [
+      "참조 타입 또는 관계 수가 많음",
+      "저장/불러오기 관련 로직 포함",
+      "UI와 런타임 책임이 한 파일에 섞였을 가능성",
+      "상태 중심 또는 관리 중심 클래스일 가능성"
+    ],
+    "risk_score": 48
+  },
+  {
     "file_id": "Project 2048/Assets/Scripts/Core/GameManager.cs",
     "class_name": "GameManager",
     "risk_flags": [
@@ -1384,19 +1401,6 @@
   {
     "file_id": "Project 2048/Assets/Tests/EditMode/Board2048TransitionTests.cs",
     "class_name": "Board2048TransitionTests",
-    "risk_flags": [
-      "high-coupling",
-      "state-owner"
-    ],
-    "risk_reasons": [
-      "참조 타입 또는 관계 수가 많음",
-      "상태 중심 또는 관리 중심 클래스일 가능성"
-    ],
-    "risk_score": 26
-  },
-  {
-    "file_id": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
-    "class_name": "SkillSOTests",
     "risk_flags": [
       "high-coupling",
       "state-owner"

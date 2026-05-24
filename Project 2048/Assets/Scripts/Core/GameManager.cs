@@ -1,5 +1,6 @@
 using UnityEngine;
 using Project2048.Flow;
+using Project2048.Save;
 
 namespace Project2048.Core
 {
@@ -10,8 +11,10 @@ namespace Project2048.Core
         private GameContext gameContext;
 
         [SerializeField] private FlowController flowController;
+        [SerializeField] private SaveLoadManager saveLoadManager;
 
         public FlowController FlowController => flowController;
+        public SaveLoadManager SaveLoadManager => saveLoadManager;
 
         private void Awake()
         {
@@ -27,13 +30,20 @@ namespace Project2048.Core
             gameContext = new GameContext();
 
             flowController ??= GetComponent<FlowController>();
+            saveLoadManager ??= GetComponent<SaveLoadManager>();
+            saveLoadManager ??= gameObject.AddComponent<SaveLoadManager>();
             if (flowController == null)
             {
                 Debug.LogError("FlowController is not assigned.");
                 return;
             }
 
-            flowController.Initialized(gameContext);
+            if (saveLoadManager != null)
+            {
+                saveLoadManager.Initialize(gameContext);
+            }
+
+            flowController.Initialized(gameContext, saveLoadManager);
         }
 
         public void StartNewGame()
@@ -49,7 +59,13 @@ namespace Project2048.Core
 
         public void StartSaveGame()
         {
+            if (flowController == null)
+            {
+                Debug.LogError("FlowController is not assigned.");
+                return;
+            }
 
+            flowController.ContinueGame();
         }
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using Project2048.Core;
+using Project2048.Save;
 using UnityEngine;
 
 namespace Project2048.Flow
@@ -10,6 +11,7 @@ namespace Project2048.Flow
         private const int FirstStageIndex = 1;
 
         private GameContext gameContext;
+        private SaveLoadManager saveLoadManager;
         private StageFlowController stageFlowController;
         private Coroutine restartStageCoroutine;
 
@@ -19,9 +21,10 @@ namespace Project2048.Flow
         public event Action OnBattleSceneLoadRequested;
         public event Action OnGameStarted;
 
-        public void Initialized(GameContext context)
+        public void Initialized(GameContext context, SaveLoadManager saveManager = null)
         {
             gameContext = context;
+            saveLoadManager = saveManager;
         }
 
         public void SetNewGame()
@@ -34,6 +37,7 @@ namespace Project2048.Flow
 
             OnLoadingStarted?.Invoke();
 
+            saveLoadManager?.DeleteSave();
             gameContext.SetGameState(GameContext.GameState.Loading);
             gameContext.SetStageIndex(FirstStageIndex);
             gameContext.SetRunActive(true);
@@ -57,8 +61,19 @@ namespace Project2048.Flow
 
             gameContext.SetGameState(GameContext.GameState.Loading);
 
-            // TODO: SaveLoadManager.Load();
-            // TODO: Restore GameContext from save data.
+            if (saveLoadManager == null || !saveLoadManager.TryLoadGameContext())
+            {
+                Debug.LogWarning("No save data found.");
+                gameContext.SetGameState(GameContext.GameState.MainMenu);
+                return;
+            }
+
+            if (!gameContext.IsRunActive)
+            {
+                Debug.LogWarning("Save data does not contain an active run.");
+                gameContext.SetGameState(GameContext.GameState.MainMenu);
+                return;
+            }
 
             OnBattleSceneLoadRequested?.Invoke();
         }
@@ -113,6 +128,16 @@ namespace Project2048.Flow
                 Debug.LogError("StageFlowController is not present in the battle scene.");
                 return;
             }
+
+            if (saveLoadManager != null && saveLoadManager.TryApplyLoadedRunProgress(stageFlowController.RunProgress))
+            {
+                stageFlowController.InitializeRunProgress();
+            }
+            else if (gameContext.CurrentStageIndex == FirstStageIndex)
+            {
+                stageFlowController.ResetRunProgress();
+            }
+
             stageFlowController.StartStage(gameContext.CurrentStageIndex);
         }
 
@@ -179,10 +204,12 @@ namespace Project2048.Flow
             {
                 gameContext.SetRunActive(false);
                 gameContext.SetGameState(GameContext.GameState.Result);
+                SaveCurrentRun();
                 return;
             }
 
             gameContext.AdvanceStage();
+            SaveCurrentRun();
 
             if (restartStageCoroutine != null)
             {
@@ -214,6 +241,17 @@ namespace Project2048.Flow
 
             gameContext.SetRunActive(false);
             gameContext.SetGameState(GameContext.GameState.Result);
+            saveLoadManager?.DeleteSave();
+        }
+
+        private void SaveCurrentRun()
+        {
+            if (saveLoadManager == null || stageFlowController == null)
+            {
+                return;
+            }
+
+            saveLoadManager.SaveRun(stageFlowController.RunProgress);
         }
     }
 }

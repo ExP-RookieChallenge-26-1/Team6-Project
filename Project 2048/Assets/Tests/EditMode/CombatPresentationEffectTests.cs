@@ -1187,34 +1187,54 @@ namespace Project2048.Tests
 
             Assert.That(manager.RequestUseSkill(thornGuard), Is.True);
 
-            var ring = playerRenderer.transform.Find("ThornGuardSpikedCircleRing")?.GetComponent<LineRenderer>();
+            var shieldRoot = viewObject.transform.Find("ThornGuardShieldVfx");
+            Assert.That(shieldRoot, Is.Not.Null);
+            Assert.That(shieldRoot.parent, Is.EqualTo(viewObject.transform));
+            Assert.That(playerRenderer.transform.Find("ThornGuardSpikedCircleRing"), Is.Null);
+
+            var ring = shieldRoot.Find("ThornGuardSpikedCircleRing")?.GetComponent<LineRenderer>();
             Assert.That(ring, Is.Not.Null);
             Assert.That(ring.startColor.r, Is.LessThan(0.12f));
             Assert.That(ring.startColor.g, Is.LessThan(0.18f));
             Assert.That(ResolveLineRadiusSpread(ring), Is.GreaterThan(0.18f));
 
-            var spikes = playerRenderer.transform.Find("ThornGuardSpikeParticles")?.GetComponent<ParticleSystem>();
+            var spikes = shieldRoot.Find("ThornGuardSpikeParticles")?.GetComponent<ParticleSystem>();
             Assert.That(spikes, Is.Not.Null);
             Assert.That(spikes.shape.shapeType, Is.EqualTo(ParticleSystemShapeType.Circle));
             Assert.That(spikes.main.startSpeed.constant, Is.GreaterThanOrEqualTo(0.46f));
-            Assert.That(playerRenderer.transform.Find("ThornGuardDarkInnerCircle"), Is.Not.Null);
+            Assert.That(shieldRoot.Find("ThornGuardDarkInnerCircle"), Is.Not.Null);
 
-            var triangleRoot = playerRenderer.transform.Find("ThornGuardTriangleSpikes");
+            var triangleRoot = shieldRoot.Find("ThornGuardTriangleSpikes");
             Assert.That(triangleRoot, Is.Not.Null);
             var triangleSpikes = triangleRoot.Cast<Transform>()
                 .Where(child => child.name.StartsWith("ThornGuardTriangleSpike", System.StringComparison.Ordinal) &&
                     !child.name.EndsWith("Edge", System.StringComparison.Ordinal))
                 .ToArray();
-            Assert.That(triangleSpikes.Length, Is.GreaterThanOrEqualTo(9));
+            Assert.That(triangleSpikes.Length, Is.GreaterThanOrEqualTo(12));
+            Assert.That(triangleSpikes.Min(child => child.localPosition.y), Is.LessThan(-0.3f));
+            Assert.That(triangleSpikes.Max(child => child.localPosition.y), Is.GreaterThan(0.3f));
             var middleSpike = triangleSpikes[triangleSpikes.Length / 2];
             var mesh = middleSpike.GetComponent<MeshFilter>()?.sharedMesh;
             Assert.That(mesh, Is.Not.Null);
             Assert.That(mesh.vertexCount, Is.EqualTo(3));
-            Assert.That(mesh.vertices.Max(vertex => vertex.y), Is.GreaterThan(0.5f));
-            Assert.That(middleSpike.GetComponent<MeshRenderer>()?.sharedMaterial, Is.Not.Null);
+            var spikeHeights = triangleSpikes
+                .Select(child => child.GetComponent<MeshFilter>()?.sharedMesh?.vertices.Max(vertex => vertex.y) ?? 0f)
+                .ToArray();
+            Assert.That(spikeHeights.Min(), Is.GreaterThan(0.12f));
+            Assert.That(spikeHeights.Max(), Is.LessThan(0.42f));
+            Assert.That(spikeHeights.Max() / spikeHeights.Min(), Is.LessThan(2.1f));
+            var spikeMaterial = middleSpike.GetComponent<MeshRenderer>()?.sharedMaterial;
+            Assert.That(spikeMaterial, Is.Not.Null);
+            Assert.That(spikeMaterial.color.g, Is.GreaterThan(spikeMaterial.color.r));
+            Assert.That(spikeMaterial.color.b, Is.LessThan(0.45f));
+            var spikeSortingOrders = triangleSpikes
+                .Select(child => child.GetComponent<MeshRenderer>()?.sortingOrder ?? 0)
+                .ToArray();
+            Assert.That(spikeSortingOrders.Min(), Is.LessThan(playerRenderer.sortingOrder));
+            Assert.That(spikeSortingOrders.Max(), Is.GreaterThan(playerRenderer.sortingOrder));
             Assert.That(middleSpike.Find($"{middleSpike.name}Edge")?.GetComponent<LineRenderer>(), Is.Not.Null);
 
-            var graph = playerRenderer.transform.Find("ThornGuardSpikedCircleVfxGraph")?.GetComponent<VisualEffect>();
+            var graph = shieldRoot.Find("ThornGuardSpikedCircleVfxGraph")?.GetComponent<VisualEffect>();
             Assert.That(graph, Is.Not.Null);
         }
 
@@ -1451,7 +1471,12 @@ namespace Project2048.Tests
             Assert.That(chain.positionCount, Is.GreaterThan(8));
             Assert.That(chain.GetPosition(0).x, Is.GreaterThan(playerRenderer.transform.position.x));
             Assert.That(chain.GetPosition(chain.positionCount - 1).y, Is.GreaterThan(enemyRenderer.transform.position.y));
-            Assert.That(chainRoot.Cast<Transform>().Count(child => child.name.StartsWith("DarkShackleChainLink")), Is.GreaterThanOrEqualTo(6));
+            var head = chainRoot.Find("DarkShackleChainHead")?.GetComponent<LineRenderer>();
+            Assert.That(head, Is.Not.Null);
+            Assert.That(head.positionCount, Is.EqualTo(7));
+            Assert.That(head.GetPosition(0).x, Is.GreaterThan(enemyRenderer.transform.position.x - 0.05f));
+            Assert.That(head.GetPosition(0).y, Is.GreaterThan(enemyRenderer.transform.position.y));
+            Assert.That(chainRoot.Cast<Transform>().Count(child => child.name.StartsWith("DarkShackleChainLink")), Is.GreaterThanOrEqualTo(8));
             Assert.That(enemyRenderer.transform.Find("DarkShackleImpactExplosion")?.GetComponent<ParticleSystem>(), Is.Not.Null);
             Assert.That(enemyRenderer.transform.Find("DarkShackleImpactRing")?.GetComponent<LineRenderer>(), Is.Not.Null);
         }

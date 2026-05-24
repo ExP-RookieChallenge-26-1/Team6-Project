@@ -1199,6 +1199,21 @@ namespace Project2048.Tests
             Assert.That(spikes.main.startSpeed.constant, Is.GreaterThanOrEqualTo(0.46f));
             Assert.That(playerRenderer.transform.Find("ThornGuardDarkInnerCircle"), Is.Not.Null);
 
+            var triangleRoot = playerRenderer.transform.Find("ThornGuardTriangleSpikes");
+            Assert.That(triangleRoot, Is.Not.Null);
+            var triangleSpikes = triangleRoot.Cast<Transform>()
+                .Where(child => child.name.StartsWith("ThornGuardTriangleSpike", System.StringComparison.Ordinal) &&
+                    !child.name.EndsWith("Edge", System.StringComparison.Ordinal))
+                .ToArray();
+            Assert.That(triangleSpikes.Length, Is.GreaterThanOrEqualTo(9));
+            var middleSpike = triangleSpikes[triangleSpikes.Length / 2];
+            var mesh = middleSpike.GetComponent<MeshFilter>()?.sharedMesh;
+            Assert.That(mesh, Is.Not.Null);
+            Assert.That(mesh.vertexCount, Is.EqualTo(3));
+            Assert.That(mesh.vertices.Max(vertex => vertex.y), Is.GreaterThan(0.5f));
+            Assert.That(middleSpike.GetComponent<MeshRenderer>()?.sharedMaterial, Is.Not.Null);
+            Assert.That(middleSpike.Find($"{middleSpike.name}Edge")?.GetComponent<LineRenderer>(), Is.Not.Null);
+
             var graph = playerRenderer.transform.Find("ThornGuardSpikedCircleVfxGraph")?.GetComponent<VisualEffect>();
             Assert.That(graph, Is.Not.Null);
         }
@@ -1260,6 +1275,8 @@ namespace Project2048.Tests
             Assert.That(beam.sharedMaterial, Is.Not.Null);
             Assert.That(beam.startWidth, Is.EqualTo(0.08f).Within(0.001f));
             Assert.That(beam.endWidth, Is.EqualTo(0.16f).Within(0.001f));
+            Assert.That(beam.GetPosition(0).x, Is.GreaterThan(playerRenderer.transform.position.x));
+            Assert.That(beam.GetPosition(0).y, Is.GreaterThan(playerRenderer.transform.position.y + 0.3f));
             Assert.That(beam.sortingOrder, Is.GreaterThan(enemyRenderer.sortingOrder));
             Assert.That(viewObject.transform.Find("ChargedLightBeamGlow")?.GetComponent<LineRenderer>(), Is.Not.Null);
             Assert.That(enemyRenderer.transform.Find("ChargedLightBeamImpactParticles"), Is.Not.Null);
@@ -1292,6 +1309,8 @@ namespace Project2048.Tests
 
             var beam = viewObject.transform.Find("ChargedLightBeam")?.GetComponent<LineRenderer>();
             Assert.That(beam, Is.Not.Null);
+            Assert.That(beam.GetPosition(0).x, Is.GreaterThan(playerRenderer.transform.position.x));
+            Assert.That(beam.GetPosition(0).y, Is.GreaterThan(playerRenderer.transform.position.y + 0.3f));
             Assert.That(viewObject.transform.Find("ChargedLightBeamGlow")?.GetComponent<LineRenderer>(), Is.Not.Null);
             Assert.That(viewObject.transform.Find("GatherLightProjectilePrefab(Clone)"), Is.Null);
         }
@@ -1323,6 +1342,15 @@ namespace Project2048.Tests
             Assert.That(whip.sortingOrder, Is.GreaterThan(enemyRenderer.sortingOrder));
             Assert.That(whip.transform.Find("TentacleStrikeHighlight")?.GetComponent<LineRenderer>(), Is.Not.Null);
             Assert.That(whip.transform.Cast<Transform>().Count(child => child.name.StartsWith("TentacleSuctionCup")), Is.GreaterThanOrEqualTo(3));
+            var finalPoint = whip.GetPosition(whip.positionCount - 1);
+            var previousPoint = whip.GetPosition(whip.positionCount - 2);
+            var highestPoint = Enumerable.Range(0, whip.positionCount)
+                .Select(whip.GetPosition)
+                .OrderByDescending(point => point.y)
+                .First();
+            Assert.That(whip.GetPosition(0).x, Is.GreaterThan(playerRenderer.transform.position.x));
+            Assert.That(highestPoint.y, Is.GreaterThan(finalPoint.y + 0.65f));
+            Assert.That(previousPoint.y, Is.GreaterThan(finalPoint.y));
         }
 
         [Test]
@@ -1386,8 +1414,46 @@ namespace Project2048.Tests
             Assert.That(slash.positionCount, Is.GreaterThan(8));
             Assert.That(slash.startWidth, Is.GreaterThan(slash.endWidth));
             Assert.That(slashRoot.Find("BleedingCutSlashEdge")?.GetComponent<LineRenderer>(), Is.Not.Null);
-            Assert.That(enemyRenderer.transform.Find("BleedingCutBloodFountain")?.GetComponent<ParticleSystem>(), Is.Not.Null);
+            var fountain = enemyRenderer.transform.Find("BleedingCutBloodFountain")?.GetComponent<ParticleSystem>();
+            Assert.That(fountain, Is.Not.Null);
+            Assert.That(fountain.main.startSize.constantMax, Is.LessThan(0.1f));
+            Assert.That(fountain.main.maxParticles, Is.GreaterThanOrEqualTo(90));
+            Assert.That(fountain.shape.radius, Is.LessThan(0.08f));
             Assert.That(enemyRenderer.transform.Find("BleedingCutBloodMist")?.GetComponent<ParticleSystem>(), Is.Not.Null);
+        }
+
+        [Test]
+        public void CombatWorldSpriteView_DarkShacklePreview_LaunchesChainFromLanternAndExplodesOnTarget()
+        {
+            var viewObject = CreateOwnedGameObject("WorldSpriteView");
+            var view = viewObject.AddComponent<CombatWorldSpriteView>();
+            var playerRenderer = CreateOwnedGameObject("PlayerSprite").AddComponent<SpriteRenderer>();
+            var enemyRenderer = CreateOwnedGameObject("EnemySprite").AddComponent<SpriteRenderer>();
+            var darkShackle = CreateSkill("dark-shackle", SkillType.Attack, cost: 0, power: 40);
+            playerRenderer.transform.localPosition = new Vector3(-1f, 0f, 0f);
+            enemyRenderer.transform.localPosition = new Vector3(1f, 0f, 0f);
+            enemyRenderer.sortingOrder = 4;
+            darkShackle.vfxFamily = SkillVfxFamily.DarkChainBurst;
+            darkShackle.vfxPrimaryColor = new Color(0.02f, 0.02f, 0.04f, 1f);
+            darkShackle.vfxSecondaryColor = new Color(0.5f, 0.04f, 0.18f, 1f);
+            darkShackle.vfxScale = 1.2f;
+            darkShackle.vfxIntensity = 1.2f;
+
+            SetPrivateField(view, "playerRenderer", playerRenderer);
+            SetPrivateField(view, "enemyRenderer", enemyRenderer);
+
+            view.PreviewSkillEffect(darkShackle);
+
+            var chainRoot = viewObject.transform.Find("DarkShackleChainLaunch");
+            Assert.That(chainRoot, Is.Not.Null);
+            var chain = chainRoot.Find("DarkShackleChainLine")?.GetComponent<LineRenderer>();
+            Assert.That(chain, Is.Not.Null);
+            Assert.That(chain.positionCount, Is.GreaterThan(8));
+            Assert.That(chain.GetPosition(0).x, Is.GreaterThan(playerRenderer.transform.position.x));
+            Assert.That(chain.GetPosition(chain.positionCount - 1).y, Is.GreaterThan(enemyRenderer.transform.position.y));
+            Assert.That(chainRoot.Cast<Transform>().Count(child => child.name.StartsWith("DarkShackleChainLink")), Is.GreaterThanOrEqualTo(6));
+            Assert.That(enemyRenderer.transform.Find("DarkShackleImpactExplosion")?.GetComponent<ParticleSystem>(), Is.Not.Null);
+            Assert.That(enemyRenderer.transform.Find("DarkShackleImpactRing")?.GetComponent<LineRenderer>(), Is.Not.Null);
         }
 
         [Test]
@@ -1629,6 +1695,37 @@ namespace Project2048.Tests
         }
 
         [Test]
+        public void AttackEffectShowcaseScene_IncludesEveryAuthoredSkillVfxSlot()
+        {
+            EditorSceneManager.OpenScene("Assets/Scenes/AttackEffectShowcase.unity");
+
+            var expectedSkillIds = AssetDatabase
+                .FindAssets("t:SkillSO", new[] { "Assets/Data/Skills" })
+                .Select(AssetDatabase.GUIDToAssetPath)
+                .Select(AssetDatabase.LoadAssetAtPath<SkillSO>)
+                .Where(skill => skill != null && skill.vfxFamily != SkillVfxFamily.None)
+                .Select(skill => skill.skillId)
+                .OrderBy(skillId => skillId)
+                .ToArray();
+            var slots = Object.FindObjectsByType<AttackEffectShowcaseSlot>(
+                FindObjectsInactive.Include);
+            var slotSkillIds = slots
+                .Select(slot => slot.Skill != null ? slot.Skill.skillId : null)
+                .Where(skillId => !string.IsNullOrEmpty(skillId))
+                .OrderBy(skillId => skillId)
+                .ToArray();
+            var groups = Object.FindObjectsByType<Transform>(
+                    FindObjectsInactive.Include)
+                .Count(item => item.name.StartsWith("Group_", System.StringComparison.Ordinal));
+
+            Assert.That(slots.Length, Is.EqualTo(expectedSkillIds.Length));
+            Assert.That(slotSkillIds, Is.EquivalentTo(expectedSkillIds));
+            Assert.That(groups, Is.EqualTo(12));
+            Assert.That(slotSkillIds, Does.Contain("light-guard"));
+            Assert.That(slotSkillIds, Does.Contain("dark-shackle"));
+        }
+
+        [Test]
         public void PrototypeCombatEventAudioProfile_ContainsResultAndRewardClips()
         {
             var profile = AssetDatabase.LoadAssetAtPath<PrototypeCombatEventAudioProfileSO>(
@@ -1770,7 +1867,7 @@ namespace Project2048.Tests
         {
             var skillGuids = AssetDatabase.FindAssets("t:SkillSO", new[] { "Assets/Data/Skills" });
 
-            Assert.That(skillGuids.Length, Is.EqualTo(43));
+            Assert.That(skillGuids.Length, Is.EqualTo(41));
             foreach (var guid in skillGuids)
             {
                 var path = AssetDatabase.GUIDToAssetPath(guid);
@@ -1818,6 +1915,10 @@ namespace Project2048.Tests
                 {
                     Assert.That(skill.vfxFamily, Is.EqualTo(SkillVfxFamily.SupportFire), path);
                     Assert.That(skill.vfxRepeatCount, Is.GreaterThanOrEqualTo(3), path);
+                }
+                else if (path.EndsWith("DarkShackle.asset", System.StringComparison.Ordinal))
+                {
+                    Assert.That(skill.vfxFamily, Is.EqualTo(SkillVfxFamily.DarkChainBurst), path);
                 }
             }
         }

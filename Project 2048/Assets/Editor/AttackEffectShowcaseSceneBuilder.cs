@@ -1,4 +1,5 @@
 #if UNITY_EDITOR
+using System.Collections.Generic;
 using System.Linq;
 using Project2048.Prototype;
 using Project2048.Skills;
@@ -16,25 +17,31 @@ namespace Project2048.EditorTools
         private const string PlayerSpritePath = "Assets/Art/Prototype/PrototypePlayerCutout.png";
         private const string EnemySpritePath = "Assets/Art/Prototype/PrototypeEnemyCutout.png";
         private const string KoreanFontAssetPath = "Assets/Fonts/MaruBuri-Regular SDF.asset";
-        private const int ColumnCount = 3;
-        private const float SlotWidth = 7.2f;
-        private const float SlotHeight = 4.1f;
-        private static readonly Vector3 PlayerOffset = new(-1.5f, -0.49f, 0f);
-        private static readonly Vector3 EnemyOffset = new(1.35f, -0.21f, 0f);
-        private const float ActorScale = 0.4f;
+        private const int ColumnCount = 4;
+        private const float SlotWidth = 5.85f;
+        private const float SlotHeight = 3.25f;
+        private const float HeaderHeight = 0.78f;
+        private const float GroupGap = 0.52f;
+        private static readonly Vector3 PlayerOffset = new(-1.2f, -0.48f, 0f);
+        private static readonly Vector3 EnemyOffset = new(1.12f, -0.22f, 0f);
+        private const float ActorScale = 0.34f;
 
-        [MenuItem("Project2048/Generate Attack Effect Showcase")]
+        [MenuItem("Project2048/Generate Skill VFX Showcase")]
         public static void Generate()
         {
-            var skills = AssetDatabase
+            var groups = AssetDatabase
                 .FindAssets("t:SkillSO", new[] { SkillFolder })
                 .Select(AssetDatabase.GUIDToAssetPath)
                 .Select(AssetDatabase.LoadAssetAtPath<SkillSO>)
-                .Where(skill => skill != null && skill.skillType == SkillType.Attack)
-                .Where(skill => !string.Equals(skill.skillId, "guard-break", System.StringComparison.OrdinalIgnoreCase))
-                .Where(skill => !string.Equals(skill.skillId, "feint-strike", System.StringComparison.OrdinalIgnoreCase))
-                .OrderBy(skill => skill.skillId)
+                .Where(skill => skill != null && skill.vfxFamily != SkillVfxFamily.None)
+                .Select(skill => new ShowcaseSkillEntry(skill, ResolveShowcaseGroup(skill)))
+                .OrderBy(entry => entry.Group.SortOrder)
+                .ThenBy(entry => entry.Skill.vfxFamily)
+                .ThenBy(entry => entry.Skill.skillId)
+                .GroupBy(entry => entry.Group.Id)
+                .Select(group => new ShowcaseSkillGroupLayout(group.First().Group, group.Select(entry => entry.Skill).ToArray()))
                 .ToArray();
+            var skillCount = groups.Sum(group => group.Skills.Length);
 
             var scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
             var root = new GameObject("AttackEffectShowcaseRoot");
@@ -42,49 +49,129 @@ namespace Project2048.EditorTools
             var playerSprite = AssetDatabase.LoadAssetAtPath<Sprite>(PlayerSpritePath);
             var enemySprite = AssetDatabase.LoadAssetAtPath<Sprite>(EnemySpritePath);
             var font = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(KoreanFontAssetPath);
-            var rows = Mathf.Max(1, Mathf.CeilToInt(skills.Length / (float)ColumnCount));
+            var totalHeight = CalculateTotalHeight(groups);
+            var topY = totalHeight * 0.5f - 0.75f;
             var totalWidth = ColumnCount * SlotWidth;
-            var totalHeight = rows * SlotHeight;
-            var origin = new Vector3(-(totalWidth - SlotWidth) * 0.5f, (totalHeight - SlotHeight) * 0.5f, 0f);
+            var leftX = -(totalWidth - SlotWidth) * 0.5f;
+            var currentY = topY;
 
-            CreateCamera(origin.y - 1.2f);
+            CreateCamera(topY - 2.9f, Mathf.Max(9f, totalHeight * 0.5f + 1.8f));
             CreateLabel(
                 root.transform,
                 "Title",
-                "Attack Effect Showcase",
-                new Vector3(0f, origin.y + 1.9f, 0f),
-                new Vector2(12f, 0.7f),
-                3.4f,
+                $"Skill VFX Showcase - {skillCount} skills / {groups.Length} groups",
+                new Vector3(0f, topY + 1.4f, 0f),
+                new Vector2(18f, 0.72f),
+                3.1f,
                 font,
                 new Color(0.96f, 0.98f, 1f, 1f),
                 TextAlignmentOptions.Center);
 
-            for (var index = 0; index < skills.Length; index++)
+            var slotIndex = 0;
+            foreach (var group in groups)
             {
-                var column = index % ColumnCount;
-                var row = index / ColumnCount;
-                var position = origin + new Vector3(column * SlotWidth, -row * SlotHeight, 0f);
-                CreateSlot(root.transform, skills[index], playerSprite, enemySprite, font, position, index);
+                CreateGroupHeader(root.transform, group.Group, group.Skills.Length, font, currentY, totalWidth);
+                currentY -= HeaderHeight;
+
+                for (var index = 0; index < group.Skills.Length; index++)
+                {
+                    var column = index % ColumnCount;
+                    var row = index / ColumnCount;
+                    var position = new Vector3(leftX + column * SlotWidth, currentY - row * SlotHeight, 0f);
+                    CreateSlot(root.transform, group.Skills[index], playerSprite, enemySprite, font, position, slotIndex);
+                    slotIndex++;
+                }
+
+                currentY -= Mathf.CeilToInt(group.Skills.Length / (float)ColumnCount) * SlotHeight + GroupGap;
             }
 
             EditorSceneManager.MarkSceneDirty(scene);
             EditorSceneManager.SaveScene(scene, ScenePath);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
-            Debug.Log($"Generated {ScenePath} with {skills.Length} attack skill effect slots.");
+            Debug.Log($"Generated {ScenePath} with {skillCount} skill VFX slots across {groups.Length} groups.");
         }
 
-        private static void CreateCamera(float startY)
+        [MenuItem("Project2048/Generate Attack Effect Showcase")]
+        public static void GenerateLegacyAttackShowcaseAlias()
+        {
+            Generate();
+        }
+
+        private static float CalculateTotalHeight(IEnumerable<ShowcaseSkillGroupLayout> groups)
+        {
+            var totalHeight = 2.8f;
+            foreach (var group in groups)
+            {
+                totalHeight += HeaderHeight;
+                totalHeight += Mathf.CeilToInt(group.Skills.Length / (float)ColumnCount) * SlotHeight;
+                totalHeight += GroupGap;
+            }
+
+            return totalHeight;
+        }
+
+        private static void CreateCamera(float startY, float maxOrthographicSize)
         {
             var cameraObject = new GameObject("Main Camera", typeof(Camera), typeof(AudioListener));
             var camera = cameraObject.GetComponent<Camera>();
             camera.orthographic = true;
-            camera.orthographicSize = 5.4f;
+            camera.orthographicSize = 5.8f;
             camera.clearFlags = CameraClearFlags.SolidColor;
             camera.backgroundColor = new Color(0.055f, 0.065f, 0.075f, 1f);
             camera.transform.position = new Vector3(0f, startY, -10f);
-            cameraObject.AddComponent<ShowcaseCameraController>();
+            var controller = cameraObject.AddComponent<ShowcaseCameraController>();
+            var serialized = new SerializedObject(controller);
+            var maxSize = serialized.FindProperty("maxOrthographicSize");
+            if (maxSize != null)
+            {
+                maxSize.floatValue = maxOrthographicSize;
+                serialized.ApplyModifiedPropertiesWithoutUndo();
+            }
+
             cameraObject.tag = "MainCamera";
+        }
+
+        private static void CreateGroupHeader(
+            Transform parent,
+            ShowcaseGroup group,
+            int skillCount,
+            TMP_FontAsset font,
+            float y,
+            float totalWidth)
+        {
+            var root = new GameObject($"Group_{group.SortOrder:00}_{group.Id}");
+            root.transform.SetParent(parent, false);
+            root.transform.localPosition = new Vector3(0f, y, 0f);
+
+            CreateLabel(
+                root.transform,
+                "GroupTitle",
+                $"{group.DisplayName} ({skillCount})",
+                new Vector3(-(totalWidth * 0.5f) + 0.2f, 0f, 0f),
+                new Vector2(7.6f, 0.46f),
+                1.75f,
+                font,
+                group.Color,
+                TextAlignmentOptions.Left);
+
+            CreateLabel(
+                root.transform,
+                "GroupDetail",
+                group.Detail,
+                new Vector3(1.7f, -0.02f, 0f),
+                new Vector2(12.2f, 0.36f),
+                1.15f,
+                font,
+                new Color(0.68f, 0.76f, 0.82f, 1f),
+                TextAlignmentOptions.Left);
+
+            CreateSeparatorLine(
+                root.transform,
+                "GroupSeparator",
+                new Vector3(0f, -0.34f, 0f),
+                totalWidth - 0.4f,
+                group.Color);
         }
 
         private static void CreateSlot(
@@ -109,9 +196,9 @@ namespace Project2048.EditorTools
                 slot.transform,
                 "SkillName",
                 skill.skillName,
-                new Vector3(0f, 0.88f, 0f),
-                new Vector2(4.65f, 0.45f),
-                2.2f,
+                new Vector3(0f, 0.76f, 0f),
+                new Vector2(4.25f, 0.42f),
+                1.82f,
                 font,
                 Color.white,
                 TextAlignmentOptions.Center);
@@ -119,9 +206,9 @@ namespace Project2048.EditorTools
                 slot.transform,
                 "SkillDetail",
                 $"{skill.skillId} / {skill.vfxFamily}",
-                new Vector3(0f, 0.48f, 0f),
-                new Vector2(4.65f, 0.34f),
-                1.45f,
+                new Vector3(0f, 0.42f, 0f),
+                new Vector2(4.25f, 0.3f),
+                1.12f,
                 font,
                 new Color(0.68f, 0.76f, 0.82f, 1f),
                 TextAlignmentOptions.Center);
@@ -133,6 +220,31 @@ namespace Project2048.EditorTools
             EditorUtility.SetDirty(title);
             EditorUtility.SetDirty(detail);
             EditorUtility.SetDirty(showcaseSlot);
+        }
+
+        private static void CreateSeparatorLine(
+            Transform parent,
+            string objectName,
+            Vector3 localPosition,
+            float width,
+            Color color)
+        {
+            var child = new GameObject(objectName, typeof(LineRenderer));
+            child.transform.SetParent(parent, false);
+            child.transform.localPosition = localPosition;
+
+            color.a = 0.52f;
+            var line = child.GetComponent<LineRenderer>();
+            line.useWorldSpace = false;
+            line.positionCount = 2;
+            line.SetPosition(0, new Vector3(-width * 0.5f, 0f, 0f));
+            line.SetPosition(1, new Vector3(width * 0.5f, 0f, 0f));
+            line.startWidth = 0.035f;
+            line.endWidth = 0.035f;
+            line.startColor = color;
+            line.endColor = color;
+            line.sharedMaterial = CreateLineMaterial(color);
+            line.sortingOrder = 35;
         }
 
         private static SpriteRenderer CreateSprite(
@@ -184,6 +296,56 @@ namespace Project2048.EditorTools
             return label;
         }
 
+        private static Material CreateLineMaterial(Color color)
+        {
+            var shader = Shader.Find("Sprites/Default")
+                ?? Shader.Find("Universal Render Pipeline/Unlit");
+            if (shader == null)
+            {
+                return null;
+            }
+
+            var material = new Material(shader)
+            {
+                name = "ShowcaseSeparatorLineMaterial",
+            };
+            if (material.HasProperty("_Color"))
+            {
+                material.SetColor("_Color", color);
+            }
+
+            if (material.HasProperty("_BaseColor"))
+            {
+                material.SetColor("_BaseColor", color);
+            }
+
+            return material;
+        }
+
+        private static ShowcaseGroup ResolveShowcaseGroup(SkillSO skill)
+        {
+            return skill.vfxFamily switch
+            {
+                SkillVfxFamily.SlashArc => ShowcaseGroup.Slash,
+                SkillVfxFamily.BloodFountainSlash => ShowcaseGroup.Blood,
+                SkillVfxFamily.LightProjectile => ShowcaseGroup.Light,
+                SkillVfxFamily.LightBeam => ShowcaseGroup.Light,
+                SkillVfxFamily.SupportFire => ShowcaseGroup.Light,
+                SkillVfxFamily.ShieldDome => ShowcaseGroup.Shield,
+                SkillVfxFamily.ImpactBurst => ShowcaseGroup.Impact,
+                SkillVfxFamily.SpikedBurst => ShowcaseGroup.Impact,
+                SkillVfxFamily.BuffAura => ShowcaseGroup.Buff,
+                SkillVfxFamily.CounterReady => ShowcaseGroup.Buff,
+                SkillVfxFamily.DebuffWave => ShowcaseGroup.Debuff,
+                SkillVfxFamily.DrainTether => ShowcaseGroup.Drain,
+                SkillVfxFamily.BoardDisturb => ShowcaseGroup.Darkness,
+                SkillVfxFamily.TentacleWhip => ShowcaseGroup.Tentacle,
+                SkillVfxFamily.FlameBurst => ShowcaseGroup.Flame,
+                SkillVfxFamily.DarkChainBurst => ShowcaseGroup.Chain,
+                _ => ShowcaseGroup.Other,
+            };
+        }
+
         private static void BindWorldView(CombatWorldSpriteView view, SpriteRenderer player, SpriteRenderer enemy)
         {
             var serialized = new SerializedObject(view);
@@ -200,6 +362,133 @@ namespace Project2048.EditorTools
             {
                 property.objectReferenceValue = value;
             }
+        }
+
+        private sealed class ShowcaseSkillEntry
+        {
+            public ShowcaseSkillEntry(SkillSO skill, ShowcaseGroup group)
+            {
+                Skill = skill;
+                Group = group;
+            }
+
+            public SkillSO Skill { get; }
+
+            public ShowcaseGroup Group { get; }
+        }
+
+        private sealed class ShowcaseSkillGroupLayout
+        {
+            public ShowcaseSkillGroupLayout(ShowcaseGroup group, SkillSO[] skills)
+            {
+                Group = group;
+                Skills = skills;
+            }
+
+            public ShowcaseGroup Group { get; }
+
+            public SkillSO[] Skills { get; }
+        }
+
+        private sealed class ShowcaseGroup
+        {
+            public static readonly ShowcaseGroup Slash = new(
+                "slash",
+                10,
+                "참격/베기",
+                "SlashArc",
+                new Color(0.76f, 0.88f, 1f, 1f));
+            public static readonly ShowcaseGroup Blood = new(
+                "blood",
+                20,
+                "출혈 참격",
+                "BloodFountainSlash",
+                new Color(1f, 0.22f, 0.24f, 1f));
+            public static readonly ShowcaseGroup Light = new(
+                "light",
+                30,
+                "빛 발사/지원",
+                "LightProjectile / LightBeam / SupportFire",
+                new Color(1f, 0.84f, 0.28f, 1f));
+            public static readonly ShowcaseGroup Shield = new(
+                "shield",
+                40,
+                "방어막/실드",
+                "ShieldDome",
+                new Color(0.45f, 0.86f, 1f, 1f));
+            public static readonly ShowcaseGroup Impact = new(
+                "impact",
+                50,
+                "충격/폭발",
+                "ImpactBurst / SpikedBurst",
+                new Color(1f, 0.58f, 0.22f, 1f));
+            public static readonly ShowcaseGroup Buff = new(
+                "buff",
+                60,
+                "버프/회복/준비",
+                "BuffAura / CounterReady",
+                new Color(0.66f, 1f, 0.62f, 1f));
+            public static readonly ShowcaseGroup Debuff = new(
+                "debuff",
+                70,
+                "디버프 파동",
+                "DebuffWave",
+                new Color(0.72f, 0.55f, 1f, 1f));
+            public static readonly ShowcaseGroup Drain = new(
+                "drain",
+                80,
+                "흡수/생체/독",
+                "DrainTether",
+                new Color(0.34f, 0.9f, 0.46f, 1f));
+            public static readonly ShowcaseGroup Darkness = new(
+                "darkness",
+                90,
+                "어둠/보드 방해",
+                "BoardDisturb",
+                new Color(0.56f, 0.38f, 0.9f, 1f));
+            public static readonly ShowcaseGroup Tentacle = new(
+                "tentacle",
+                100,
+                "촉수 타격",
+                "TentacleWhip",
+                new Color(0.78f, 0.32f, 0.95f, 1f));
+            public static readonly ShowcaseGroup Flame = new(
+                "flame",
+                110,
+                "화염/연소 폭발",
+                "FlameBurst",
+                new Color(1f, 0.38f, 0.14f, 1f));
+            public static readonly ShowcaseGroup Chain = new(
+                "chain",
+                120,
+                "어둠 사슬/족쇄",
+                "DarkChainBurst",
+                new Color(0.86f, 0.18f, 0.38f, 1f));
+            public static readonly ShowcaseGroup Other = new(
+                "other",
+                900,
+                "기타",
+                "Unclassified",
+                new Color(0.78f, 0.82f, 0.88f, 1f));
+
+            private ShowcaseGroup(string id, int sortOrder, string displayName, string detail, Color color)
+            {
+                Id = id;
+                SortOrder = sortOrder;
+                DisplayName = displayName;
+                Detail = detail;
+                Color = color;
+            }
+
+            public string Id { get; }
+
+            public int SortOrder { get; }
+
+            public string DisplayName { get; }
+
+            public string Detail { get; }
+
+            public Color Color { get; }
         }
     }
 }

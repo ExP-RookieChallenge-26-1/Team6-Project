@@ -76,7 +76,7 @@ namespace Project2048.Prototype
         {
             if (titleText != null)
             {
-                titleText.text = skill != null ? skill.skillName : "Attack Skill";
+                titleText.text = skill != null ? skill.skillName : "Skill VFX";
             }
 
             if (detailText != null)

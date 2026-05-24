@@ -496,7 +496,7 @@ namespace Project2048.Prototype
                     ConfigureReusableVfx(skill, SkillVfxFamily.BoardDisturb, new Color(0f, 0f, 0.02f), new Color(0.22f, 0.02f, 0.38f), 1.4f, 1.4f);
                     break;
                 case "dark-shackle":
-                    ConfigureReusableVfx(skill, SkillVfxFamily.BoardDisturb, new Color(0.02f, 0.02f, 0.04f), new Color(0.5f, 0.04f, 0.18f), 1.2f, 1.2f);
+                    ConfigureReusableVfx(skill, SkillVfxFamily.DarkChainBurst, new Color(0.02f, 0.02f, 0.04f), new Color(0.5f, 0.04f, 0.18f), 1.2f, 1.2f);
                     break;
                 case "black-pressure":
                     ConfigureReusableVfx(skill, SkillVfxFamily.BoardDisturb, new Color(0.01f, 0.01f, 0.03f), new Color(0.04f, 0.12f, 0.32f), 1.1f, 1.15f);

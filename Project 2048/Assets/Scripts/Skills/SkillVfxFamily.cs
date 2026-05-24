@@ -18,5 +18,6 @@ namespace Project2048.Skills
         SpikedBurst,
         BloodFountainSlash,
         FlameBurst,
+        DarkChainBurst,
     }
 }

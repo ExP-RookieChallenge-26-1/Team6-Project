@@ -29,6 +29,7 @@ namespace Project2048.Prototype
         public const float HeavyStrikeSpikedBurstDurationSeconds = 0.62f;
         public const float BloodFountainSlashDurationSeconds = 0.72f;
         public const float FlameBurstDurationSeconds = 0.82f;
+        public const float DarkShackleChainDurationSeconds = 0.64f;
 
         private const float EnemyAppearIntroRightOffset = 2.25f;
         private const float EnemyAppearIntroJumpHeight = 0.7f;
@@ -55,14 +56,21 @@ namespace Project2048.Prototype
         private const int ShieldCircleRingSegmentCount = 72;
         private const float ShieldCircleBaseRadius = 0.78f;
         private const float ShieldCircleBaseYOffset = 0.08f;
+        private const int ThornGuardTriangleSpikeCount = 11;
+        private const float ThornGuardTriangleRiseSeconds = 0.24f;
         private const int TentacleStrikeSegmentCount = 18;
         private const int TentacleStrikeCupCount = 5;
         private const int TentacleStrikeCupSegmentCount = 12;
         private const int HeavyStrikeStarSegmentCount = 28;
         private const int HeavyStrikeSpikeRayCount = 12;
         private const int BloodSlashSegmentCount = 18;
+        private const int DarkShackleChainSegmentCount = 16;
+        private const int DarkShackleChainLinkCount = 8;
+        private const int DarkShackleRingSegmentCount = 18;
         private const int FlameBurstTongueCount = 5;
         private const int FlameBurstTongueSegmentCount = 12;
+        private const float LanternMuzzleLocalX = 0.34f;
+        private const float LanternMuzzleLocalY = 0.36f;
         private const string DefaultWorldVfxProfileResourceName = "PrototypeCombatWorldVfxProfile";
         private const string ShieldLightCircleVfxResourceName = "VFX/ShieldLightCircle";
         private const string ThornGuardSpikedCircleVfxResourceName = "VFX/ThornGuardSpikedCircle";
@@ -241,6 +249,11 @@ namespace Project2048.Prototype
                 return;
             }
 
+            if (isAttack)
+            {
+                PlayLanternSkillLaunchCue(skill, sourceAnchor, targetAnchor);
+            }
+
             var anchor = isAttack && target != null && enemyRenderer != null
                 ? targetAnchor
                 : sourceAnchor;
@@ -287,6 +300,11 @@ namespace Project2048.Prototype
             if (isAttack && TryPlayProjectileSkillEffect(effect, sourceAnchor, targetAnchor, animator, out _))
             {
                 return;
+            }
+
+            if (isAttack)
+            {
+                PlayLanternSkillLaunchCue(skill, sourceAnchor, targetAnchor);
             }
 
             if (effect?.HasAnyAsset == true)
@@ -340,6 +358,11 @@ namespace Project2048.Prototype
                     PlayBloodFountainSlashSkillEffect(skill, sourceAnchor, targetAnchor);
                     lifetimeSeconds = BloodFountainSlashDurationSeconds;
                     return true;
+                case SkillVfxFamily.DarkChainBurst:
+                    PlayCombatantActionAudioEffect(effect);
+                    PlayDarkShackleSkillEffect(skill, sourceAnchor, targetAnchor);
+                    lifetimeSeconds = DarkShackleChainDurationSeconds;
+                    return true;
                 default:
                     return false;
             }
@@ -373,9 +396,10 @@ namespace Project2048.Prototype
 
             PlayCombatantActionAudioEffect(effect);
 
-            var instance = Instantiate(effect.vfxPrefab, sourceTransform.position, Quaternion.identity, transform);
+            var sourcePosition = ResolveLanternSkillSourcePosition(sourceTransform, targetTransform);
+            var instance = Instantiate(effect.vfxPrefab, sourcePosition, Quaternion.identity, transform);
             var projectile = instance.GetComponentInChildren<CombatProjectileEffect>(true);
-            projectile?.Launch(sourceTransform, targetTransform, effect.localOffset);
+            projectile?.LaunchFromWorldPosition(sourcePosition, targetTransform, effect.localOffset);
 
             if (effect.animationClip != null && animator != null && animator.runtimeAnimatorController != null)
             {
@@ -744,6 +768,15 @@ namespace Project2048.Prototype
                 return;
             }
 
+            if (skill.vfxFamily == SkillVfxFamily.DarkChainBurst)
+            {
+                PlayDarkShackleSkillEffect(
+                    skill,
+                    playerRenderer != null ? playerRenderer.transform : transform,
+                    anchor);
+                return;
+            }
+
             if (skill.vfxFamily == SkillVfxFamily.SupportFire)
             {
                 PlaySupportFireSkillParticleEffect(
@@ -911,6 +944,8 @@ namespace Project2048.Prototype
                 true,
                 sortingOffset: 7);
 
+            SpawnThornGuardTriangleSpikes(anchor, radius, scale, lifetime);
+
             SpawnShieldCircleLine(
                 anchor,
                 "ThornGuardSpikedCircleRing",
@@ -960,6 +995,163 @@ namespace Project2048.Prototype
                 false,
                 localOffset,
                 particles => ConfigureThornGuardSpikeParticles(particles, radius, lifetime));
+        }
+
+        private void SpawnThornGuardTriangleSpikes(
+            Transform anchor,
+            float radius,
+            float scale,
+            float lifetimeSeconds)
+        {
+            var parent = anchor != null ? anchor : transform;
+            var root = new GameObject("ThornGuardTriangleSpikes");
+            root.transform.SetParent(parent, false);
+            root.transform.localPosition = new Vector3(0f, ShieldCircleBaseYOffset - 0.03f, 0f);
+
+            var outerColor = new Color(0.28f, 0.96f, 1f, 0.55f);
+            var innerColor = new Color(0.48f, 0.42f, 1f, 0.44f);
+            var edgeColor = new Color(0.66f, 1f, 0.94f, 0.82f);
+            var spikes = new Transform[ThornGuardTriangleSpikeCount];
+            var baseRadius = radius * 0.78f;
+            for (var i = 0; i < ThornGuardTriangleSpikeCount; i++)
+            {
+                var t = ThornGuardTriangleSpikeCount <= 1 ? 0.5f : i / (float)(ThornGuardTriangleSpikeCount - 1);
+                var angleDegrees = Mathf.Lerp(18f, 162f, t);
+                var angleRadians = angleDegrees * Mathf.Deg2Rad;
+                var direction = new Vector3(Mathf.Cos(angleRadians), Mathf.Sin(angleRadians), 0f);
+                var heightNoise = Mathf.Sin((i * 1.73f + 0.35f) * Mathf.PI) * 0.08f;
+                var widthNoise = Mathf.Cos((i * 0.91f + 0.2f) * Mathf.PI) * 0.025f;
+                var height = Mathf.Clamp((0.46f + heightNoise) * scale, 0.34f, 0.72f);
+                var width = Mathf.Clamp((0.11f + widthNoise) * scale, 0.065f, 0.16f);
+                if (i == ThornGuardTriangleSpikeCount / 2)
+                {
+                    height *= 1.34f;
+                    width *= 1.08f;
+                }
+                else if (i % 3 == 0)
+                {
+                    height *= 1.12f;
+                }
+
+                var color = Color.Lerp(innerColor, outerColor, i % 2 == 0 ? 0.78f : 0.42f);
+                var spikeObject = new GameObject($"ThornGuardTriangleSpike{i + 1:00}", typeof(MeshFilter), typeof(MeshRenderer));
+                spikeObject.transform.SetParent(root.transform, false);
+                spikeObject.transform.localPosition = direction * baseRadius;
+                spikeObject.transform.localRotation = Quaternion.Euler(0f, 0f, angleDegrees - 90f);
+                spikeObject.transform.localScale = Vector3.one;
+                spikes[i] = spikeObject.transform;
+
+                var mesh = new Mesh
+                {
+                    name = $"{spikeObject.name}Mesh",
+                    vertices = new[]
+                    {
+                        new Vector3(-width, 0f, 0f),
+                        new Vector3(width, 0f, 0f),
+                        new Vector3(0f, height, 0f),
+                    },
+                    triangles = new[] { 0, 1, 2 },
+                    colors = new[]
+                    {
+                        color,
+                        color,
+                        Color.Lerp(Color.white, color, 0.42f),
+                    },
+                };
+                mesh.RecalculateBounds();
+                spikeObject.GetComponent<MeshFilter>().sharedMesh = mesh;
+
+                var renderer = spikeObject.GetComponent<MeshRenderer>();
+                renderer.sharedMaterial = ResolveRuntimeSkillParticleMaterial(spikeObject.name, color);
+                ApplyAnchorSorting(renderer, parent, 3);
+
+                var edge = new GameObject($"{spikeObject.name}Edge", typeof(LineRenderer));
+                edge.transform.SetParent(spikeObject.transform, false);
+                var line = edge.GetComponent<LineRenderer>();
+                line.useWorldSpace = false;
+                line.positionCount = 4;
+                line.SetPosition(0, new Vector3(-width, 0f, 0f));
+                line.SetPosition(1, new Vector3(0f, height, 0f));
+                line.SetPosition(2, new Vector3(width, 0f, 0f));
+                line.SetPosition(3, new Vector3(-width, 0f, 0f));
+                line.startWidth = Mathf.Clamp(0.018f * scale, 0.01f, 0.03f);
+                line.endWidth = line.startWidth;
+                line.numCapVertices = 3;
+                line.numCornerVertices = 3;
+                line.startColor = edgeColor;
+                line.endColor = edgeColor;
+                line.sharedMaterial = ResolveRuntimeSkillParticleMaterial(edge.name, edgeColor);
+                ApplyAnchorSorting(line, parent, 4);
+            }
+
+            if (!Application.isPlaying)
+            {
+                return;
+            }
+
+            if (isActiveAndEnabled)
+            {
+                StartCoroutine(AnimateThornGuardTriangleSpikesRoutine(root, spikes, lifetimeSeconds));
+            }
+
+            Destroy(root, Mathf.Max(0.1f, lifetimeSeconds) + 0.2f);
+        }
+
+        private static IEnumerator AnimateThornGuardTriangleSpikesRoutine(
+            GameObject root,
+            Transform[] spikes,
+            float lifetimeSeconds)
+        {
+            var elapsed = 0f;
+            var riseDuration = Mathf.Max(0.05f, ThornGuardTriangleRiseSeconds);
+            spikes ??= System.Array.Empty<Transform>();
+            foreach (var spike in spikes)
+            {
+                if (spike != null)
+                {
+                    spike.localScale = new Vector3(1f, 0f, 1f);
+                }
+            }
+
+            while (elapsed < riseDuration)
+            {
+                if (root == null)
+                {
+                    yield break;
+                }
+
+                elapsed += Time.unscaledDeltaTime;
+                var progress = Mathf.Clamp01(elapsed / riseDuration);
+                var rise = 1f - Mathf.Pow(1f - progress, 3f);
+                for (var i = 0; i < spikes.Length; i++)
+                {
+                    var spike = spikes[i];
+                    if (spike == null)
+                    {
+                        continue;
+                    }
+
+                    var stagger = Mathf.Clamp01((progress * 1.18f) - i * 0.018f);
+                    var localRise = Mathf.Max(rise, 1f - Mathf.Pow(1f - stagger, 3f));
+                    spike.localScale = new Vector3(1f, localRise, 1f);
+                }
+
+                yield return null;
+            }
+
+            foreach (var spike in spikes)
+            {
+                if (spike != null)
+                {
+                    spike.localScale = Vector3.one;
+                }
+            }
+
+            var holdSeconds = Mathf.Max(0f, lifetimeSeconds - riseDuration);
+            if (holdSeconds > 0f)
+            {
+                yield return new WaitForSecondsRealtime(holdSeconds);
+            }
         }
 
         private void PlayFlameBurstSkillParticleEffect(
@@ -1248,9 +1440,9 @@ namespace Project2048.Prototype
                 primary,
                 null,
                 BloodFountainSlashDurationSeconds,
-                Mathf.RoundToInt(42 * intensity),
-                0.12f,
-                Mathf.Clamp(0.13f * scale, 0.08f, 0.22f),
+                Mathf.RoundToInt(58 * intensity),
+                0.28f,
+                Mathf.Clamp(0.066f * scale, 0.04f, 0.095f),
                 false,
                 new Vector3(0.04f * facingSign, 0.18f, 0f),
                 particles => ConfigureBloodFountainParticles(particles, scale, BloodFountainSlashDurationSeconds));
@@ -1275,6 +1467,355 @@ namespace Project2048.Prototype
                     root,
                     BloodFountainSlashDurationSeconds,
                     root.GetComponentsInChildren<LineRenderer>()));
+            }
+        }
+
+        private void PlayDarkShackleSkillEffect(SkillSO skill, Transform sourceAnchor, Transform targetAnchor)
+        {
+            var parent = targetAnchor != null ? targetAnchor : transform;
+            var scale = Mathf.Clamp(Mathf.Max(0.01f, skill != null ? skill.vfxScale : 1f), 0.78f, 1.7f);
+            var intensity = Mathf.Max(0.1f, skill != null ? skill.vfxIntensity : 1f);
+            var source = ResolveLanternSkillSourcePosition(sourceAnchor != null ? sourceAnchor : transform, targetAnchor);
+            var impact = targetAnchor != null ? ResolveSkillImpactWorldPosition(targetAnchor) : source + Vector3.right;
+            if ((impact - source).sqrMagnitude <= 0.0001f)
+            {
+                impact = source + Vector3.right;
+            }
+
+            var primary = ResolveSkillTintedColor(
+                skill != null ? ResolveReusableSkillParticleColor(skill) : Color.clear,
+                new Color(0.015f, 0.012f, 0.025f, 0.96f),
+                0.42f,
+                0.9f);
+            var secondary = ResolveSkillTintedColor(
+                skill != null ? ResolveReusableSkillSecondaryParticleColor(skill) : Color.clear,
+                new Color(0.54f, 0.035f, 0.18f, 0.88f),
+                0.28f,
+                0.78f);
+
+            var root = new GameObject("DarkShackleChainLaunch");
+            root.transform.SetParent(transform, false);
+            var chain = CreateWorldSkillLine(
+                root.transform,
+                "DarkShackleChainLine",
+                primary,
+                Mathf.Clamp(0.05f * scale, 0.032f, 0.09f),
+                Mathf.Clamp(0.075f * scale, 0.046f, 0.12f),
+                DarkShackleChainSegmentCount + 1,
+                parent,
+                12);
+            SetDarkShackleChainGeometry(chain, source, impact, scale, 1f, 0f);
+
+            var links = new LineRenderer[DarkShackleChainLinkCount];
+            for (var i = 0; i < links.Length; i++)
+            {
+                var linkObject = new GameObject($"DarkShackleChainLink{i + 1}", typeof(LineRenderer));
+                linkObject.transform.SetParent(root.transform, false);
+                links[i] = linkObject.GetComponent<LineRenderer>();
+                ConfigureDarkShackleLinkLine(links[i], secondary, Mathf.Clamp(0.009f * scale, 0.006f, 0.016f), parent, 13);
+            }
+
+            SetDarkShackleLinkGeometry(links, source, impact, scale, 1f, 0f);
+
+            SpawnParticleBurst(
+                null,
+                sourceAnchor != null ? sourceAnchor : transform,
+                "DarkShackleMuzzleParticles",
+                secondary,
+                null,
+                0.34f,
+                Mathf.RoundToInt(16 * intensity),
+                0.38f,
+                Mathf.Clamp(0.07f * scale, 0.045f, 0.11f),
+                swirl: true,
+                sourceAnchor != null ? ResolveLanternSkillLocalOffset(sourceAnchor, targetAnchor) : Vector3.zero);
+
+            if (Application.isPlaying && isActiveAndEnabled)
+            {
+                StartCoroutine(AnimateDarkShackleChainRoutine(root, chain, links, source, impact, scale, primary, secondary));
+                StartCoroutine(SpawnDarkShackleImpactEffectsAfterDelay(parent, impact, primary, secondary, scale, intensity, 0.22f));
+                return;
+            }
+
+            SpawnDarkShackleImpactEffects(parent, impact, primary, secondary, scale, intensity);
+        }
+
+        private LineRenderer CreateWorldSkillLine(
+            Transform parent,
+            string objectName,
+            Color color,
+            float startWidth,
+            float endWidth,
+            int positionCount,
+            Transform sortingAnchor,
+            int sortingOffset)
+        {
+            var lineObject = new GameObject(objectName, typeof(LineRenderer));
+            lineObject.transform.SetParent(parent != null ? parent : transform, false);
+
+            var line = lineObject.GetComponent<LineRenderer>();
+            line.useWorldSpace = true;
+            line.positionCount = Mathf.Max(2, positionCount);
+            line.numCapVertices = 6;
+            line.numCornerVertices = 5;
+            line.startWidth = Mathf.Max(0.004f, startWidth);
+            line.endWidth = Mathf.Max(0.004f, endWidth);
+            line.sharedMaterial = ResolveRuntimeSkillParticleMaterial(objectName, color);
+            line.startColor = color;
+            line.endColor = color;
+            ApplyAnchorSorting(line, sortingAnchor != null ? sortingAnchor : parent, sortingOffset);
+            return line;
+        }
+
+        private void ConfigureDarkShackleLinkLine(
+            LineRenderer line,
+            Color color,
+            float width,
+            Transform sortingAnchor,
+            int sortingOffset)
+        {
+            if (line == null)
+            {
+                return;
+            }
+
+            line.useWorldSpace = true;
+            line.positionCount = DarkShackleRingSegmentCount + 1;
+            line.numCapVertices = 3;
+            line.numCornerVertices = 3;
+            line.startWidth = Mathf.Max(0.004f, width);
+            line.endWidth = Mathf.Max(0.004f, width);
+            line.sharedMaterial = ResolveRuntimeSkillParticleMaterial(line.gameObject.name, color);
+            line.startColor = color;
+            line.endColor = color;
+            ApplyAnchorSorting(line, sortingAnchor, sortingOffset);
+        }
+
+        private IEnumerator SpawnDarkShackleImpactEffectsAfterDelay(
+            Transform targetAnchor,
+            Vector3 impact,
+            Color primary,
+            Color secondary,
+            float scale,
+            float intensity,
+            float delaySeconds)
+        {
+            yield return new WaitForSecondsRealtime(Mathf.Max(0.01f, delaySeconds));
+            SpawnDarkShackleImpactEffects(targetAnchor != null ? targetAnchor : transform, impact, primary, secondary, scale, intensity);
+        }
+
+        private void SpawnDarkShackleImpactEffects(
+            Transform targetAnchor,
+            Vector3 impact,
+            Color primary,
+            Color secondary,
+            float scale,
+            float intensity)
+        {
+            var parent = targetAnchor != null ? targetAnchor : transform;
+            var localImpact = parent.InverseTransformPoint(impact);
+            var ring = CreateLocalSkillLine(
+                parent,
+                "DarkShackleImpactRing",
+                secondary,
+                Mathf.Clamp(0.038f * scale, 0.024f, 0.07f),
+                Mathf.Clamp(0.018f * scale, 0.012f, 0.04f),
+                DarkShackleRingSegmentCount + 1,
+                parent,
+                14);
+            ring.transform.localPosition = localImpact;
+            SetDarkShackleImpactRingGeometry(ring, 0.22f * scale);
+
+            SpawnParticleBurst(
+                null,
+                parent,
+                "DarkShackleImpactExplosion",
+                secondary,
+                null,
+                0.46f,
+                Mathf.RoundToInt(34 * intensity),
+                0.92f,
+                Mathf.Clamp(0.11f * scale, 0.07f, 0.17f),
+                swirl: false,
+                localImpact,
+                particles => ConfigureDarkShackleExplosionParticles(particles, scale, 0.46f));
+
+            SpawnParticleBurst(
+                null,
+                parent,
+                "DarkShackleImpactSparks",
+                primary,
+                null,
+                0.34f,
+                Mathf.RoundToInt(18 * intensity),
+                1.1f,
+                Mathf.Clamp(0.055f * scale, 0.035f, 0.09f),
+                swirl: false,
+                localImpact,
+                particles => ConfigureDarkShackleSparkParticles(particles, scale));
+
+            if (Application.isPlaying && isActiveAndEnabled)
+            {
+                StartCoroutine(FadeLineRendererRoutine(ring, 0.34f));
+                Destroy(ring.gameObject, 0.5f);
+            }
+        }
+
+        private static IEnumerator AnimateDarkShackleChainRoutine(
+            GameObject root,
+            LineRenderer chain,
+            LineRenderer[] links,
+            Vector3 source,
+            Vector3 impact,
+            float scale,
+            Color primary,
+            Color secondary)
+        {
+            var elapsed = 0f;
+            while (elapsed < DarkShackleChainDurationSeconds)
+            {
+                if (root == null || chain == null)
+                {
+                    yield break;
+                }
+
+                elapsed += Time.unscaledDeltaTime;
+                var progress = Mathf.Clamp01(elapsed / DarkShackleChainDurationSeconds);
+                var reveal = 1f - Mathf.Pow(1f - Mathf.Clamp01(progress / 0.38f), 3f);
+                var fade = 1f - Mathf.Clamp01((progress - 0.56f) / 0.44f);
+                SetDarkShackleChainGeometry(chain, source, impact, scale, reveal, progress);
+                SetDarkShackleLinkGeometry(links, source, impact, scale, reveal, progress);
+                SetLineAlpha(chain, primary, fade);
+                if (links != null)
+                {
+                    foreach (var link in links)
+                    {
+                        SetLineAlpha(link, secondary, fade * 0.9f);
+                    }
+                }
+
+                yield return null;
+            }
+
+            if (root != null)
+            {
+                Destroy(root);
+            }
+        }
+
+        private static void SetDarkShackleChainGeometry(
+            LineRenderer chain,
+            Vector3 source,
+            Vector3 impact,
+            float scale,
+            float revealProgress,
+            float motionProgress)
+        {
+            if (chain == null)
+            {
+                return;
+            }
+
+            var revealedImpact = Vector3.Lerp(source, impact, Mathf.Clamp01(revealProgress));
+            var direction = revealedImpact - source;
+            direction.z = 0f;
+            if (direction.sqrMagnitude <= 0.0001f)
+            {
+                direction = Vector3.right;
+            }
+
+            var normal = new Vector3(-direction.y, direction.x, 0f).normalized;
+            for (var i = 0; i <= DarkShackleChainSegmentCount; i++)
+            {
+                var t = i / (float)DarkShackleChainSegmentCount;
+                var ripple = Mathf.Sin((t * 4.2f + motionProgress * 2.8f) * Mathf.PI) *
+                    0.055f * scale * (1f - t * 0.35f);
+                chain.SetPosition(i, Vector3.Lerp(source, revealedImpact, t) + normal * ripple);
+            }
+        }
+
+        private static void SetDarkShackleLinkGeometry(
+            LineRenderer[] links,
+            Vector3 source,
+            Vector3 impact,
+            float scale,
+            float revealProgress,
+            float motionProgress)
+        {
+            if (links == null)
+            {
+                return;
+            }
+
+            var direction = impact - source;
+            direction.z = 0f;
+            if (direction.sqrMagnitude <= 0.0001f)
+            {
+                direction = Vector3.right;
+            }
+
+            var axis = direction.normalized;
+            var normal = new Vector3(-axis.y, axis.x, 0f);
+            for (var i = 0; i < links.Length; i++)
+            {
+                var t = Mathf.Lerp(0.14f, 0.88f, links.Length == 1 ? 0f : i / (float)(links.Length - 1));
+                if (t > Mathf.Clamp01(revealProgress) + 0.04f)
+                {
+                    SetDarkShackleLinkRing(links[i], Vector3.zero, axis, normal, 0f, 0f, 0f);
+                    continue;
+                }
+
+                var center = Vector3.Lerp(source, impact, t);
+                var phase = (i % 2 == 0 ? 1f : -1f) * 0.5f + motionProgress;
+                var wobble = Mathf.Sin((t * 3.5f + phase) * Mathf.PI) * 0.035f * scale;
+                center += normal * wobble;
+                SetDarkShackleLinkRing(
+                    links[i],
+                    center,
+                    axis,
+                    normal,
+                    0.062f * scale,
+                    0.028f * scale,
+                    i % 2 == 0 ? 0f : Mathf.PI * 0.5f);
+            }
+        }
+
+        private static void SetDarkShackleLinkRing(
+            LineRenderer link,
+            Vector3 center,
+            Vector3 axis,
+            Vector3 normal,
+            float halfLength,
+            float halfWidth,
+            float rotationOffset)
+        {
+            if (link == null)
+            {
+                return;
+            }
+
+            for (var i = 0; i <= DarkShackleRingSegmentCount; i++)
+            {
+                var angle = rotationOffset + Mathf.PI * 2f * i / DarkShackleRingSegmentCount;
+                var point = center +
+                    axis * (Mathf.Cos(angle) * halfLength) +
+                    normal * (Mathf.Sin(angle) * halfWidth);
+                link.SetPosition(i, point);
+            }
+        }
+
+        private static void SetDarkShackleImpactRingGeometry(LineRenderer ring, float radius)
+        {
+            if (ring == null)
+            {
+                return;
+            }
+
+            for (var i = 0; i <= DarkShackleRingSegmentCount; i++)
+            {
+                var angle = Mathf.PI * 2f * i / DarkShackleRingSegmentCount;
+                var spike = i % 3 == 0 ? 1.28f : 0.86f;
+                ring.SetPosition(i, new Vector3(Mathf.Cos(angle) * radius * spike, Mathf.Sin(angle) * radius * spike, 0f));
             }
         }
 
@@ -1372,6 +1913,133 @@ namespace Project2048.Prototype
             return sourceAnchor.position.x <= targetAnchor.position.x ? 1f : -1f;
         }
 
+        private static Vector3 ResolveLanternSkillSourcePosition(Transform sourceAnchor, Transform targetAnchor)
+        {
+            if (sourceAnchor == null)
+            {
+                return Vector3.zero;
+            }
+
+            var facingSign = ResolveAttackFacingSign(sourceAnchor, targetAnchor);
+            return sourceAnchor.position + new Vector3(LanternMuzzleLocalX * facingSign, LanternMuzzleLocalY, 0f);
+        }
+
+        private static Vector3 ResolveLanternSkillLocalOffset(Transform sourceAnchor, Transform targetAnchor)
+        {
+            if (sourceAnchor == null)
+            {
+                return Vector3.zero;
+            }
+
+            return sourceAnchor.InverseTransformPoint(ResolveLanternSkillSourcePosition(sourceAnchor, targetAnchor));
+        }
+
+        private static Vector3 ResolveSkillImpactWorldPosition(Transform targetAnchor)
+        {
+            return targetAnchor != null
+                ? targetAnchor.position + new Vector3(0f, 0.18f, 0f)
+                : Vector3.zero;
+        }
+
+        private void PlayLanternSkillLaunchCue(SkillSO skill, Transform sourceAnchor, Transform targetAnchor)
+        {
+            if (skill == null || sourceAnchor == null || targetAnchor == null)
+            {
+                return;
+            }
+
+            var sourcePosition = ResolveLanternSkillSourcePosition(sourceAnchor, targetAnchor);
+            var targetPosition = ResolveSkillImpactWorldPosition(targetAnchor);
+            if ((targetPosition - sourcePosition).sqrMagnitude <= 0.0001f)
+            {
+                return;
+            }
+
+            var primary = ResolveSkillTintedColor(
+                ResolveReusableSkillParticleColor(skill),
+                new Color(1f, 0.78f, 0.22f, 0.86f),
+                0.28f,
+                0.78f);
+            var secondary = ResolveSkillTintedColor(
+                ResolveReusableSkillSecondaryParticleColor(skill),
+                new Color(1f, 1f, 0.72f, 0.72f),
+                0.18f,
+                0.58f);
+
+            var trailObject = new GameObject($"{skill.vfxFamily}LanternLaunchTrail", typeof(LineRenderer));
+            trailObject.transform.SetParent(transform, false);
+            var line = trailObject.GetComponent<LineRenderer>();
+            line.useWorldSpace = true;
+            line.positionCount = 2;
+            line.SetPosition(0, sourcePosition);
+            line.SetPosition(1, targetPosition);
+            line.startWidth = Mathf.Clamp(0.038f * Mathf.Max(0.7f, skill.vfxScale), 0.026f, 0.07f);
+            line.endWidth = Mathf.Clamp(0.082f * Mathf.Max(0.7f, skill.vfxScale), 0.05f, 0.13f);
+            line.numCapVertices = 8;
+            line.numCornerVertices = 3;
+            line.sharedMaterial = ResolveRuntimeSkillParticleMaterial(trailObject.name, primary);
+            line.startColor = primary;
+            line.endColor = secondary;
+            ApplyAnchorSorting(line, targetAnchor, 8);
+
+            SpawnParticleBurst(
+                null,
+                sourceAnchor,
+                "LanternSkillMuzzleParticles",
+                primary,
+                null,
+                0.28f,
+                Mathf.RoundToInt(12 * Mathf.Max(0.8f, skill.vfxIntensity)),
+                0.22f,
+                Mathf.Clamp(0.07f * Mathf.Max(0.8f, skill.vfxScale), 0.045f, 0.1f),
+                swirl: true,
+                ResolveLanternSkillLocalOffset(sourceAnchor, targetAnchor));
+
+            if (Application.isPlaying && isActiveAndEnabled)
+            {
+                StartCoroutine(AnimateLanternLaunchCueRoutine(
+                    trailObject,
+                    line,
+                    sourcePosition,
+                    targetPosition,
+                    0.32f));
+            }
+        }
+
+        private static IEnumerator AnimateLanternLaunchCueRoutine(
+            GameObject root,
+            LineRenderer line,
+            Vector3 sourcePosition,
+            Vector3 targetPosition,
+            float durationSeconds)
+        {
+            var duration = Mathf.Max(0.05f, durationSeconds);
+            var elapsed = 0f;
+            var startColor = line != null ? line.startColor : Color.clear;
+            var endColor = line != null ? line.endColor : Color.clear;
+            while (elapsed < duration)
+            {
+                if (root == null || line == null)
+                {
+                    yield break;
+                }
+
+                elapsed += Time.unscaledDeltaTime;
+                var progress = Mathf.Clamp01(elapsed / duration);
+                var reveal = 1f - Mathf.Pow(1f - Mathf.Clamp01(progress / 0.42f), 3f);
+                var alpha = 1f - Mathf.Clamp01((progress - 0.32f) / 0.68f);
+                line.SetPosition(0, sourcePosition);
+                line.SetPosition(1, Vector3.Lerp(sourcePosition, targetPosition, reveal));
+                SetLineAlpha(line, startColor, endColor, alpha);
+                yield return null;
+            }
+
+            if (root != null)
+            {
+                Destroy(root);
+            }
+        }
+
         private void PlayChargedLightBeamEffect(EnemyController target)
         {
             var targetTransform = target != null && enemyRenderer != null ? enemyRenderer.transform : transform;
@@ -1381,8 +2049,8 @@ namespace Project2048.Prototype
         private void PlayChargedLightBeamEffect(Transform targetTransform)
         {
             var sourceTransform = playerRenderer != null ? playerRenderer.transform : transform;
-            var sourcePosition = sourceTransform.position + new Vector3(0f, 0.38f, 0f);
-            var targetPosition = targetTransform.position + new Vector3(0f, 0.18f, 0f);
+            var sourcePosition = ResolveLanternSkillSourcePosition(sourceTransform, targetTransform);
+            var targetPosition = ResolveSkillImpactWorldPosition(targetTransform);
 
             var glowLine = SpawnChargedLightBeamLine(
                 "ChargedLightBeamGlow",
@@ -1416,7 +2084,7 @@ namespace Project2048.Prototype
                 0.18f,
                 0.11f,
                 swirl: true,
-                new Vector3(0f, 0.38f, 0f));
+                ResolveLanternSkillLocalOffset(sourceTransform, targetTransform));
 
             SpawnParticleBurst(
                 null,
@@ -1537,8 +2205,8 @@ namespace Project2048.Prototype
 
         private void PlayTentacleStrikeSkillEffect(SkillSO skill, Transform sourceAnchor, Transform targetAnchor)
         {
-            var source = sourceAnchor != null ? sourceAnchor.position + new Vector3(0.22f, 0.26f, 0f) : transform.position;
-            var target = targetAnchor != null ? targetAnchor.position + new Vector3(-0.12f, 0.1f, 0f) : source + Vector3.right;
+            var source = ResolveLanternSkillSourcePosition(sourceAnchor != null ? sourceAnchor : transform, targetAnchor);
+            var target = targetAnchor != null ? ResolveSkillImpactWorldPosition(targetAnchor) : source + Vector3.right;
             if ((target - source).sqrMagnitude <= 0.0001f)
             {
                 target = source + Vector3.right;
@@ -1743,11 +2411,30 @@ namespace Project2048.Prototype
                 direction = Vector3.right;
             }
 
-            var normal = new Vector3(-direction.y, direction.x, 0f).normalized;
-            var arch = Mathf.Sin(t * Mathf.PI) * 0.26f * scale;
-            var flex = Mathf.Sin((t * 2.8f + motionProgress * 2.2f) * Mathf.PI) * 0.1f * scale * (1f - t * 0.35f);
-            var recoil = Mathf.Sin(Mathf.Clamp01(motionProgress) * Mathf.PI) * (1f - t) * 0.08f * scale;
-            return Vector3.Lerp(source, target, t) + normal * (arch + flex + recoil);
+            var facingSign = direction.x >= 0f ? 1f : -1f;
+            var strikeStart = target + new Vector3(-0.08f * facingSign * scale, 1.08f * scale, 0f);
+            if (t < 0.58f)
+            {
+                var travel = Mathf.Clamp01(t / 0.58f);
+                var control = Vector3.Lerp(source, strikeStart, 0.48f) +
+                    new Vector3(0.22f * facingSign * scale, 0.42f * scale, 0f);
+                var flex = Mathf.Sin((travel * 2.4f + motionProgress * 1.8f) * Mathf.PI) *
+                    0.08f * scale * (1f - travel * 0.25f);
+                return QuadraticBezier(source, control, strikeStart, travel) + new Vector3(flex, 0f, 0f);
+            }
+
+            var slam = Mathf.Clamp01((t - 0.58f) / 0.42f);
+            var easedSlam = slam * slam * (3f - 2f * slam);
+            var verticalBase = Vector3.Lerp(strikeStart, target, easedSlam);
+            var whip = Mathf.Sin((slam + motionProgress * 2.2f) * Mathf.PI) * 0.045f * scale * (1f - slam);
+            return verticalBase + new Vector3(whip * facingSign, 0f, 0f);
+        }
+
+        private static Vector3 QuadraticBezier(Vector3 a, Vector3 b, Vector3 c, float t)
+        {
+            var inverse = 1f - Mathf.Clamp01(t);
+            var clamped = Mathf.Clamp01(t);
+            return inverse * inverse * a + 2f * inverse * clamped * b + clamped * clamped * c;
         }
 
         private static void SetTentacleCupRadius(LineRenderer cup, Vector3 center, float radius)
@@ -1774,6 +2461,19 @@ namespace Project2048.Prototype
             color.a *= Mathf.Clamp01(alpha);
             line.startColor = color;
             line.endColor = color;
+        }
+
+        private static void SetLineAlpha(LineRenderer line, Color startColor, Color endColor, float alpha)
+        {
+            if (line == null)
+            {
+                return;
+            }
+
+            startColor.a *= Mathf.Clamp01(alpha);
+            endColor.a *= Mathf.Clamp01(alpha);
+            line.startColor = startColor;
+            line.endColor = endColor;
         }
 
         private static Color ResolveTentacleColor(Color color, Color tint, float tintWeight)
@@ -1912,6 +2612,13 @@ namespace Project2048.Prototype
                     lifetimeSeconds = FlameBurstDurationSeconds;
                     burstCount = 38;
                     startSpeed = 0.5f;
+                    startSize = 0.13f;
+                    swirl = false;
+                    break;
+                case SkillVfxFamily.DarkChainBurst:
+                    lifetimeSeconds = DarkShackleChainDurationSeconds;
+                    burstCount = 34;
+                    startSpeed = 0.78f;
                     startSize = 0.13f;
                     swirl = false;
                     break;
@@ -3208,37 +3915,38 @@ namespace Project2048.Prototype
             }
 
             var main = particles.main;
-            main.startLifetime = new ParticleSystem.MinMaxCurve(lifetimeSeconds * 0.58f, lifetimeSeconds);
-            main.startSpeed = new ParticleSystem.MinMaxCurve(0.02f, 0.08f);
-            main.startSize = new ParticleSystem.MinMaxCurve(0.07f * scale, 0.16f * scale);
-            main.gravityModifier = new ParticleSystem.MinMaxCurve(1.42f);
+            main.startLifetime = new ParticleSystem.MinMaxCurve(lifetimeSeconds * 0.36f, lifetimeSeconds * 0.82f);
+            main.startSpeed = new ParticleSystem.MinMaxCurve(0.18f * scale, 0.72f * scale);
+            main.startSize = new ParticleSystem.MinMaxCurve(0.025f * scale, 0.076f * scale);
+            main.gravityModifier = new ParticleSystem.MinMaxCurve(1.08f, 1.55f);
             main.simulationSpace = ParticleSystemSimulationSpace.Local;
+            main.maxParticles = 96;
 
             var shape = particles.shape;
             shape.enabled = true;
             shape.shapeType = ParticleSystemShapeType.Circle;
-            shape.radius = 0.12f * scale;
-            shape.radiusThickness = 0.5f;
+            shape.radius = 0.055f * scale;
+            shape.radiusThickness = 0.85f;
             shape.arc = 360f;
 
             var velocity = particles.velocityOverLifetime;
             velocity.enabled = true;
             velocity.space = ParticleSystemSimulationSpace.Local;
-            velocity.x = new ParticleSystem.MinMaxCurve(-0.34f * scale, 0.34f * scale);
-            velocity.y = new ParticleSystem.MinMaxCurve(1.42f * scale, 2.35f * scale);
+            velocity.x = new ParticleSystem.MinMaxCurve(-0.72f * scale, 0.72f * scale);
+            velocity.y = new ParticleSystem.MinMaxCurve(0.9f * scale, 2.55f * scale);
             velocity.z = new ParticleSystem.MinMaxCurve(0f);
 
             var rotation = particles.rotationOverLifetime;
             rotation.enabled = true;
             rotation.separateAxes = true;
-            rotation.z = new ParticleSystem.MinMaxCurve(-Mathf.PI * 2.2f, Mathf.PI * 2.2f);
+            rotation.z = new ParticleSystem.MinMaxCurve(-Mathf.PI * 3.5f, Mathf.PI * 3.5f);
 
             var size = particles.sizeOverLifetime;
             size.enabled = true;
             size.size = new ParticleSystem.MinMaxCurve(1f, new AnimationCurve(
-                new Keyframe(0f, 0.72f),
-                new Keyframe(0.2f, 1.18f),
-                new Keyframe(0.72f, 0.9f),
+                new Keyframe(0f, 0.82f),
+                new Keyframe(0.16f, 1.08f),
+                new Keyframe(0.58f, 0.86f),
                 new Keyframe(1f, 0f)));
         }
 
@@ -3276,6 +3984,68 @@ namespace Project2048.Prototype
             size.size = new ParticleSystem.MinMaxCurve(1f, new AnimationCurve(
                 new Keyframe(0f, 0.38f),
                 new Keyframe(0.24f, 1f),
+                new Keyframe(1f, 0f)));
+        }
+
+        private static void ConfigureDarkShackleExplosionParticles(ParticleSystem particles, float scale, float lifetimeSeconds)
+        {
+            if (particles == null)
+            {
+                return;
+            }
+
+            var main = particles.main;
+            main.startLifetime = new ParticleSystem.MinMaxCurve(lifetimeSeconds * 0.32f, lifetimeSeconds);
+            main.startSpeed = new ParticleSystem.MinMaxCurve(0.5f * scale, 1.45f * scale);
+            main.startSize = new ParticleSystem.MinMaxCurve(0.055f * scale, 0.16f * scale);
+            main.gravityModifier = 0f;
+
+            var shape = particles.shape;
+            shape.enabled = true;
+            shape.shapeType = ParticleSystemShapeType.Circle;
+            shape.radius = 0.08f * scale;
+            shape.radiusThickness = 0.2f;
+            shape.arc = 360f;
+
+            var velocity = particles.velocityOverLifetime;
+            velocity.enabled = true;
+            velocity.space = ParticleSystemSimulationSpace.Local;
+            velocity.x = new ParticleSystem.MinMaxCurve(-0.7f * scale, 0.7f * scale);
+            velocity.y = new ParticleSystem.MinMaxCurve(-0.35f * scale, 0.75f * scale);
+            velocity.z = new ParticleSystem.MinMaxCurve(0f);
+
+            var size = particles.sizeOverLifetime;
+            size.enabled = true;
+            size.size = new ParticleSystem.MinMaxCurve(1f, new AnimationCurve(
+                new Keyframe(0f, 0.25f),
+                new Keyframe(0.18f, 1.35f),
+                new Keyframe(0.62f, 0.7f),
+                new Keyframe(1f, 0f)));
+        }
+
+        private static void ConfigureDarkShackleSparkParticles(ParticleSystem particles, float scale)
+        {
+            if (particles == null)
+            {
+                return;
+            }
+
+            var main = particles.main;
+            main.startLifetime = new ParticleSystem.MinMaxCurve(0.12f, 0.34f);
+            main.startSpeed = new ParticleSystem.MinMaxCurve(0.8f * scale, 1.8f * scale);
+            main.startSize = new ParticleSystem.MinMaxCurve(0.025f * scale, 0.075f * scale);
+            main.gravityModifier = 0f;
+
+            var shape = particles.shape;
+            shape.enabled = true;
+            shape.shapeType = ParticleSystemShapeType.Circle;
+            shape.radius = 0.04f * scale;
+            shape.radiusThickness = 0.3f;
+
+            var size = particles.sizeOverLifetime;
+            size.enabled = true;
+            size.size = new ParticleSystem.MinMaxCurve(1f, new AnimationCurve(
+                new Keyframe(0f, 1f),
                 new Keyframe(1f, 0f)));
         }
 

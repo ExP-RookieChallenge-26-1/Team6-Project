@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using Project2048.Combat;
+using Project2048.Skills;
 using UnityEngine;
 
 namespace Project2048.Rewards
@@ -7,16 +9,19 @@ namespace Project2048.Rewards
     [Serializable]
     public readonly struct NextCombatBuff
     {
-        public NextCombatBuff(int attackPowerBonus, int defensePowerBonus, int boardMoveCountBonus)
+        public NextCombatBuff(int attackStageBonus, int defenseStageBonus, int boardMoveCountBonus)
         {
-            AttackPowerBonus = attackPowerBonus;
-            DefensePowerBonus = defensePowerBonus;
+            AttackStageBonus = attackStageBonus;
+            DefenseStageBonus = defenseStageBonus;
             BoardMoveCountBonus = boardMoveCountBonus;
         }
 
-        public int AttackPowerBonus { get; }
-        public int DefensePowerBonus { get; }
+        public int AttackStageBonus { get; }
+        public int DefenseStageBonus { get; }
         public int BoardMoveCountBonus { get; }
+
+        public int AttackPowerBonus => AttackStageBonus;
+        public int DefensePowerBonus => DefenseStageBonus;
     }
 
     [Serializable]
@@ -33,6 +38,7 @@ namespace Project2048.Rewards
         [SerializeField] private int nextCombatAttackPowerBonus;
         [SerializeField] private int nextCombatDefensePowerBonus;
         [SerializeField] private int nextCombatBoardMoveCountBonus;
+        [SerializeField] private List<SkillSO> equippedSkills = new();
 
         public bool HasCurrentHp => hasCurrentHp;
         public int CurrentHp => currentHp;
@@ -42,9 +48,13 @@ namespace Project2048.Rewards
         public int PermanentDefensePowerBonus => permanentDefensePowerBonus;
         public float PermanentCriticalChanceBonus => permanentCriticalChanceBonus;
         public float PermanentCriticalDamageMultiplierBonus => permanentCriticalDamageMultiplierBonus;
+        public int NextCombatAttackStageBonus => nextCombatAttackPowerBonus;
+        public int NextCombatDefenseStageBonus => nextCombatDefensePowerBonus;
         public int NextCombatAttackPowerBonus => nextCombatAttackPowerBonus;
         public int NextCombatDefensePowerBonus => nextCombatDefensePowerBonus;
         public int NextCombatBoardMoveCountBonus => nextCombatBoardMoveCountBonus;
+        public IReadOnlyList<SkillSO> EquippedSkills => equippedSkills ??= new List<SkillSO>();
+        public bool HasEquippedSkills => EquippedSkills.Count > 0;
 
         public void Reset()
         {
@@ -59,6 +69,7 @@ namespace Project2048.Rewards
             nextCombatAttackPowerBonus = 0;
             nextCombatDefensePowerBonus = 0;
             nextCombatBoardMoveCountBonus = 0;
+            equippedSkills?.Clear();
         }
 
         public void CapturePlayer(PlayerCombatController player)
@@ -70,6 +81,31 @@ namespace Project2048.Rewards
 
             hasCurrentHp = true;
             currentHp = Mathf.Clamp(player.CurrentHp, 0, player.MaxHp);
+            CapturePlayerSkills(player.Skills);
+        }
+
+        public void CapturePlayerSkills(IEnumerable<SkillSO> skills)
+        {
+            equippedSkills ??= new List<SkillSO>();
+            equippedSkills.Clear();
+            if (skills == null)
+            {
+                return;
+            }
+
+            foreach (var skill in skills)
+            {
+                if (skill == null)
+                {
+                    continue;
+                }
+
+                equippedSkills.Add(skill);
+                if (equippedSkills.Count >= PlayerCombatController.MaxEquippedSkillSlots)
+                {
+                    break;
+                }
+            }
         }
 
         public int ResolveStartingHp(int maxHp)
@@ -122,8 +158,13 @@ namespace Project2048.Rewards
 
         public void AddNextCombatBuff(int attackPowerBonus, int defensePowerBonus, int boardMoveCountBonus)
         {
-            nextCombatAttackPowerBonus += Mathf.Max(0, attackPowerBonus);
-            nextCombatDefensePowerBonus += Mathf.Max(0, defensePowerBonus);
+            AddNextCombatRankBuff(attackPowerBonus, defensePowerBonus, boardMoveCountBonus);
+        }
+
+        public void AddNextCombatRankBuff(int attackStageBonus, int defenseStageBonus, int boardMoveCountBonus)
+        {
+            nextCombatAttackPowerBonus += Mathf.Max(0, attackStageBonus);
+            nextCombatDefensePowerBonus += Mathf.Max(0, defenseStageBonus);
             nextCombatBoardMoveCountBonus += Mathf.Max(0, boardMoveCountBonus);
         }
 

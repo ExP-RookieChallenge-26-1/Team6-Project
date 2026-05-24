@@ -166,6 +166,12 @@ namespace Project2048.Tests
                 reward.temporaryBoardMoveCountBonus = 2;
 
                 Assert.That(PrototypeCombatText.FormatRewardChoice(reward), Is.EqualTo("다음 전투 이동 횟수 +2"));
+                reward.rewardKind = RewardChoiceKind.TemporaryAttackPower;
+                reward.temporaryAttackPowerBonus = 1;
+                Assert.That(PrototypeCombatText.FormatRewardChoice(reward), Is.EqualTo("다음 전투 공격 랭크 +1"));
+                reward.rewardKind = RewardChoiceKind.TemporaryDefensePower;
+                reward.temporaryDefensePowerBonus = 2;
+                Assert.That(PrototypeCombatText.FormatRewardChoice(reward), Is.EqualTo("다음 전투 방어 랭크 +2"));
                 reward.rewardKind = RewardChoiceKind.HealOne;
                 Assert.That(PrototypeCombatText.FormatRewardChoice(reward), Is.EqualTo("회복 1단계"));
                 reward.rewardKind = RewardChoiceKind.HealTwo;

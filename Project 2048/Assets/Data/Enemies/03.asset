@@ -24,7 +24,7 @@ MonoBehaviour:
   aiComplexity: 0
   actionsPerTurn: 1
   skills:
-  - {fileID: 11400000, guid: 002a7e7b62e948f09848929ca26569f5, type: 2}
+  - {fileID: 11400000, guid: 5a17abc336c34de48889a4d5fd25487f, type: 2}
   - {fileID: 11400000, guid: c1744bc96e754468b74f2e389042e23f, type: 2}
   - {fileID: 11400000, guid: ced275c3ac4587d4f9f513c34c461400, type: 2}
   - {fileID: 11400000, guid: 00966bf157b01874e90775ed704b2b9b, type: 2}
@@ -36,7 +36,7 @@ MonoBehaviour:
       vfxPrefab: {fileID: 0}
       animationClip: {fileID: 0}
       particleEffect:
-        objectName: 
+        objectName:
         particlePrefab: {fileID: 0}
         particleMaterial: {fileID: 0}
         useParticleColor: 0
@@ -58,7 +58,7 @@ MonoBehaviour:
       vfxPrefab: {fileID: 0}
       animationClip: {fileID: 0}
       particleEffect:
-        objectName: 
+        objectName:
         particlePrefab: {fileID: 0}
         particleMaterial: {fileID: 0}
         useParticleColor: 0
@@ -80,7 +80,7 @@ MonoBehaviour:
       vfxPrefab: {fileID: 0}
       animationClip: {fileID: 0}
       particleEffect:
-        objectName: 
+        objectName:
         particlePrefab: {fileID: 0}
         particleMaterial: {fileID: 0}
         useParticleColor: 0
@@ -102,7 +102,7 @@ MonoBehaviour:
       vfxPrefab: {fileID: 0}
       animationClip: {fileID: 0}
       particleEffect:
-        objectName: 
+        objectName:
         particlePrefab: {fileID: 0}
         particleMaterial: {fileID: 0}
         useParticleColor: 0

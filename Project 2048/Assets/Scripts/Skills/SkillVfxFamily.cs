@@ -13,5 +13,10 @@ namespace Project2048.Skills
         CounterReady,
         BoardDisturb,
         SupportFire,
+        LightBeam,
+        TentacleWhip,
+        SpikedBurst,
+        BloodFountainSlash,
+        FlameBurst,
     }
 }

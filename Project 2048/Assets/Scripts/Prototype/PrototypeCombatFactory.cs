@@ -81,6 +81,13 @@ namespace Project2048.Prototype
             flash.targetAttackStageModifier = -1;
             flash.availability = SkillAvailability.Shared;
 
+            var bleedingCut = CreateBleedingCut(cost: 6);
+            var poisonCoat = CreatePoisonCoat(cost: 5);
+            var openWound = CreateOpenWound(cost: 7);
+            var execute = CreateExecute(cost: 6);
+            var sealSkill = CreateSealSkill(cost: 6);
+            var crackBrand = CreateCrackBrand(cost: 5);
+
             var skills = new List<SkillSO>
             {
                 quickStab,
@@ -94,6 +101,12 @@ namespace Project2048.Prototype
                 ironWall,
                 bodyPress,
                 flash,
+                bleedingCut,
+                poisonCoat,
+                openWound,
+                execute,
+                sealSkill,
+                crackBrand,
             };
 
             var player = ScriptableObject.CreateInstance<PlayerSO>();
@@ -226,6 +239,14 @@ namespace Project2048.Prototype
             debuff.availability = SkillAvailability.Shared;
             debuff.skillName = "Howl";
 
+            var bleedingCut = CreateBleedingCut(cost: 0);
+            var poisonCoat = CreatePoisonCoat(cost: 0);
+            var openWound = CreateOpenWound(cost: 0);
+            var execute = CreateExecute(cost: 0);
+            var sealSkill = CreateSealSkill(cost: 0);
+            var crackBrand = CreateCrackBrand(cost: 0);
+            var blackCorrosion = CreateBlackCorrosion();
+
             if (seed.ActionBias == EnemyAiActionBias.AttackHeavy)
             {
                 var rush = CreateSkill(
@@ -241,7 +262,9 @@ namespace Project2048.Prototype
                 rush.nextBoardMoveCountModifier = -1;
                 rush.availability = SkillAvailability.EnemyOnly;
                 rush.skillName = "Dark Shackle";
-                return new List<SkillSO> { attack, rush, guard, debuff };
+                return seed.Strength == EnemyAiStrength.Enhanced
+                    ? new List<SkillSO> { execute, rush, bleedingCut, guard }
+                    : new List<SkillSO> { attack, rush, bleedingCut, guard };
             }
 
             if (seed.ActionBias == EnemyAiActionBias.DefenseHeavy)
@@ -259,10 +282,81 @@ namespace Project2048.Prototype
                 thorn.selfThornRetaliationDamage = 40;
                 thorn.availability = SkillAvailability.Shared;
                 thorn.skillName = "Thorn Guard";
-                return new List<SkillSO> { attack, thorn, guard, debuff };
+                return seed.Strength == EnemyAiStrength.Enhanced
+                    ? new List<SkillSO> { thorn, sealSkill, blackCorrosion, attack }
+                    : new List<SkillSO> { thorn, crackBrand, guard, attack };
             }
 
-            return new List<SkillSO> { attack, guard, debuff };
+            return seed.Strength == EnemyAiStrength.Enhanced
+                ? new List<SkillSO> { poisonCoat, openWound, execute, guard }
+                : new List<SkillSO> { poisonCoat, openWound, attack, guard };
+        }
+
+        private static SkillSO CreateBleedingCut(int cost)
+        {
+            var skill = CreateSkill("bleeding-cut", "Bleeding Cut", SkillType.Attack, cost, 50, 0, 0, "Deal power 50 damage and inflict bleed.");
+            skill.effectKind = SkillEffectKind.BleedAttack;
+            skill.statusDuration = 2;
+            skill.statusDamage = 20;
+            skill.availability = SkillAvailability.Shared;
+            return skill;
+        }
+
+        private static SkillSO CreatePoisonCoat(int cost)
+        {
+            var skill = CreateSkill("poison-coat", "Poison Coat", SkillType.Attack, cost, 30, 0, 0, "Deal power 30 damage and inflict poison.");
+            skill.effectKind = SkillEffectKind.PoisonAttack;
+            skill.statusDuration = 3;
+            skill.statusMaxHpDamagePercent = 0.05f;
+            skill.availability = SkillAvailability.Shared;
+            return skill;
+        }
+
+        private static SkillSO CreateOpenWound(int cost)
+        {
+            var skill = CreateSkill("open-wound", "Open Wound", SkillType.Attack, cost, 70, 0, 0, "Deal power 70 damage, stronger against poison or bleed.");
+            skill.effectKind = SkillEffectKind.OpenWoundAttack;
+            skill.conditionalPowerBonus = 50;
+            skill.statusDuration = 1;
+            skill.availability = SkillAvailability.Shared;
+            return skill;
+        }
+
+        private static SkillSO CreateExecute(int cost)
+        {
+            var skill = CreateSkill("execute", "Execute", SkillType.Attack, cost, 40, 0, 0, "Deal power 40 damage, doubled against low health targets.");
+            skill.effectKind = SkillEffectKind.ExecuteAttack;
+            skill.conditionalHpThreshold = 0.3f;
+            skill.conditionalPowerBonus = 40;
+            skill.availability = SkillAvailability.Shared;
+            return skill;
+        }
+
+        private static SkillSO CreateSealSkill(int cost)
+        {
+            var skill = CreateSkill("seal-skill", "Seal", SkillType.Debuff, cost, 0, 0, 0, "Seal the target's last non-basic skill next turn.");
+            skill.effectKind = SkillEffectKind.SealSkill;
+            skill.statusDuration = 1;
+            skill.availability = SkillAvailability.Shared;
+            return skill;
+        }
+
+        private static SkillSO CreateCrackBrand(int cost)
+        {
+            var skill = CreateSkill("crack-brand", "Crack Brand", SkillType.Debuff, cost, 0, 0, 0, "Mark the target so the next hit deals bonus damage.");
+            skill.effectKind = SkillEffectKind.CrackBrand;
+            skill.statusDamage = 40;
+            skill.availability = SkillAvailability.Shared;
+            return skill;
+        }
+
+        private static SkillSO CreateBlackCorrosion()
+        {
+            var skill = CreateSkill("black-corrosion", "Black Corrosion", SkillType.Debuff, 0, 0, 0, 0, "Reduce the player's next cost gain by 3.");
+            skill.effectKind = SkillEffectKind.CostGainDown;
+            skill.nextCostGainModifier = -3;
+            skill.availability = SkillAvailability.EnemyOnly;
+            return skill;
         }
 
         private static SkillSO CreateSkill(
@@ -297,22 +391,22 @@ namespace Project2048.Prototype
                     ConfigureReusableVfx(skill, SkillVfxFamily.SlashArc, new Color(1f, 1f, 1f), new Color(0.75f, 0.82f, 0.9f), 0.7f, 0.8f);
                     break;
                 case "heavy-strike":
-                    ConfigureReusableVfx(skill, SkillVfxFamily.SlashArc, new Color(1f, 0.55f, 0.16f), new Color(0.55f, 0.08f, 0.04f), 1.2f, 1.2f);
+                    ConfigureReusableVfx(skill, SkillVfxFamily.SpikedBurst, new Color(1f, 0.72f, 0.08f), new Color(0.72f, 0.04f, 0.02f), 1.3f, 1.35f);
                     break;
                 case "flow-strike":
                     ConfigureReusableVfx(skill, SkillVfxFamily.SlashArc, new Color(0.25f, 0.68f, 1f), new Color(0.78f, 0.95f, 1f));
                     break;
                 case "tentacle-strike":
-                    ConfigureReusableVfx(skill, SkillVfxFamily.BoardDisturb, new Color(0.2f, 0.04f, 0.28f), new Color(0.55f, 0.18f, 0.72f), 1.1f, 1.1f);
+                    ConfigureReusableVfx(skill, SkillVfxFamily.TentacleWhip, new Color(0.2f, 0.04f, 0.28f), new Color(0.55f, 0.18f, 0.72f), 1.1f, 1.1f);
                     break;
                 case "reckless-blow":
-                    ConfigureReusableVfx(skill, SkillVfxFamily.SlashArc, new Color(1f, 0.12f, 0.06f), new Color(0.45f, 0.02f, 0.02f), 1.5f, 1.4f);
+                    ConfigureReusableVfx(skill, SkillVfxFamily.FlameBurst, new Color(1f, 0.28f, 0.04f), new Color(0.52f, 0.035f, 0.015f), 0.95f, 1.1f);
                     break;
                 case "light-shot":
                     ConfigureReusableVfx(skill, SkillVfxFamily.LightProjectile, new Color(1f, 0.96f, 0.62f), Color.white, intensity: 1.1f);
                     break;
                 case "gather-light":
-                    ConfigureReusableVfx(skill, SkillVfxFamily.LightProjectile, new Color(1f, 0.78f, 0.18f), new Color(1f, 1f, 0.82f), 1.8f, 1.4f);
+                    ConfigureReusableVfx(skill, SkillVfxFamily.LightBeam, new Color(1f, 0.78f, 0.18f), new Color(1f, 1f, 0.82f), 1.8f, 1.4f);
                     break;
                 case "light-guard":
                     ConfigureReusableVfx(skill, SkillVfxFamily.ShieldDome, new Color(1f, 0.86f, 0.28f), new Color(0.45f, 0.86f, 1f), 1.2f, 1.15f);
@@ -330,7 +424,7 @@ namespace Project2048.Prototype
                     ConfigureReusableVfx(skill, SkillVfxFamily.ShieldDome, new Color(0.58f, 0.68f, 0.82f), new Color(0.82f, 0.9f, 1f), 0.9f, 0.85f);
                     break;
                 case "thorn-guard":
-                    ConfigureReusableVfx(skill, SkillVfxFamily.ShieldDome, new Color(0.1f, 0.72f, 0.48f), new Color(0.42f, 1f, 0.62f), 1.1f, 1.15f);
+                    ConfigureReusableVfx(skill, SkillVfxFamily.ShieldDome, new Color(0.05f, 0.22f, 0.16f), new Color(0.46f, 0.1f, 0.08f), 1.1f, 1.15f);
                     break;
                 case "shield-bash":
                     ConfigureReusableVfx(skill, SkillVfxFamily.ShieldDome, new Color(0.28f, 0.58f, 1f), new Color(0.78f, 0.86f, 0.95f), intensity: 1.05f);
@@ -349,9 +443,6 @@ namespace Project2048.Prototype
                     break;
                 case "howl":
                     ConfigureReusableVfx(skill, SkillVfxFamily.DebuffWave, new Color(0.55f, 0.28f, 0.82f), new Color(0.5f, 0.5f, 0.58f), 1.1f);
-                    break;
-                case "guard-break":
-                    ConfigureReusableVfx(skill, SkillVfxFamily.SlashArc, new Color(0.68f, 0.7f, 0.72f), new Color(0.25f, 0.25f, 0.28f), 1.1f, 1.1f);
                     break;
                 case "intimidating-shot":
                     ConfigureReusableVfx(skill, SkillVfxFamily.DebuffWave, new Color(0.58f, 0.04f, 0.04f), new Color(0.12f, 0.02f, 0.02f), intensity: 1.1f);
@@ -377,6 +468,27 @@ namespace Project2048.Prototype
                 case "sharp-senses":
                     ConfigureReusableVfx(skill, SkillVfxFamily.BuffAura, new Color(0.62f, 0.24f, 1f), new Color(0.45f, 0.86f, 1f), intensity: 1.15f);
                     break;
+                case "bleeding-cut":
+                    ConfigureReusableVfx(skill, SkillVfxFamily.BloodFountainSlash, new Color(0.95f, 0.02f, 0.04f), new Color(0.34f, 0f, 0.015f), 1.1f, 1.3f);
+                    break;
+                case "poison-coat":
+                    ConfigureReusableVfx(skill, SkillVfxFamily.SlashArc, new Color(0.22f, 0.82f, 0.22f), new Color(0.08f, 0.24f, 0.06f), 0.95f, 1.05f);
+                    break;
+                case "open-wound":
+                    ConfigureReusableVfx(skill, SkillVfxFamily.ImpactBurst, new Color(0.95f, 0.18f, 0.1f), new Color(0.38f, 0.02f, 0.02f), 1.2f, 1.15f);
+                    break;
+                case "overburn":
+                    ConfigureReusableVfx(skill, SkillVfxFamily.FlameBurst, new Color(1f, 0.42f, 0.08f), new Color(0.45f, 0.04f, 0.02f), 1.2f, 1.45f);
+                    break;
+                case "execute":
+                    ConfigureReusableVfx(skill, SkillVfxFamily.SlashArc, new Color(0.95f, 0.95f, 0.95f), new Color(0.18f, 0.02f, 0.02f), 1.25f, 1.2f);
+                    break;
+                case "seal-skill":
+                    ConfigureReusableVfx(skill, SkillVfxFamily.DebuffWave, new Color(0.65f, 0.58f, 0.95f), new Color(0.16f, 0.08f, 0.32f), 1f, 1.05f);
+                    break;
+                case "crack-brand":
+                    ConfigureReusableVfx(skill, SkillVfxFamily.DebuffWave, new Color(0.9f, 0.42f, 0.14f), new Color(0.26f, 0.06f, 0.02f), 1.05f, 1.15f);
+                    break;
                 case "darkness":
                     ConfigureReusableVfx(skill, SkillVfxFamily.BoardDisturb, new Color(0.02f, 0.02f, 0.04f), new Color(0.28f, 0.08f, 0.45f), intensity: 1.1f);
                     break;
@@ -388,6 +500,9 @@ namespace Project2048.Prototype
                     break;
                 case "black-pressure":
                     ConfigureReusableVfx(skill, SkillVfxFamily.BoardDisturb, new Color(0.01f, 0.01f, 0.03f), new Color(0.04f, 0.12f, 0.32f), 1.1f, 1.15f);
+                    break;
+                case "black-corrosion":
+                    ConfigureReusableVfx(skill, SkillVfxFamily.BoardDisturb, new Color(0.01f, 0.04f, 0.03f), new Color(0.05f, 0.2f, 0.12f), 1.1f, 1.15f);
                     break;
             }
         }

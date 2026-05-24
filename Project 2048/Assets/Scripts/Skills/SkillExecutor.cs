@@ -1,16 +1,25 @@
 using Project2048.Combat;
+using Project2048.Board2048;
+using Project2048.Cost;
 using Project2048.Enemy;
 using UnityEngine;
 
 namespace Project2048.Skills
 {
+    public sealed class SkillExecutionContext
+    {
+        public ActionCostWallet CostWallet { get; set; }
+        public Board2048Manager BoardManager { get; set; }
+    }
+
     public class SkillExecutor
     {
         public void Execute(
             SkillSO skill,
             PlayerCombatController player,
             EnemyController target,
-            DamageCalculator damageCalculator)
+            DamageCalculator damageCalculator,
+            SkillExecutionContext context = null)
         {
             if (skill == null || player == null)
             {
@@ -22,32 +31,80 @@ namespace Project2048.Skills
             switch (skill.ResolveEffectKind())
             {
                 case SkillEffectKind.BasicAttack:
-                    ExecuteAttack(skill.power, skill.selfExtraAttackHits, skill.lifeStealPercent, skill.damageStatSource, false, player, target, damageCalculator);
+                    SkillAttackExecutor.ExecuteSkillAttack(skill, player, target, damageCalculator);
                     ApplyTargetModifiers(skill, target);
                     break;
                 case SkillEffectKind.BoardMoveBonusAttack:
                 case SkillEffectKind.BoardMovePenaltyAttack:
-                    ExecuteAttack(skill.power, skill.selfExtraAttackHits, skill.lifeStealPercent, skill.damageStatSource, false, player, target, damageCalculator);
+                    SkillAttackExecutor.ExecuteSkillAttack(skill, player, target, damageCalculator);
                     player.ApplyNextTurnBoardMoveCountModifier(skill.nextBoardMoveCountModifier);
                     ApplyTargetModifiers(skill, target);
                     break;
                 case SkillEffectKind.LifeStealAttack:
-                    ExecuteAttack(skill.power, skill.selfExtraAttackHits, ResolveLifeStealPercent(skill), skill.damageStatSource, false, player, target, damageCalculator);
+                    SkillAttackExecutor.ExecuteSkillAttack(
+                        skill,
+                        player,
+                        target,
+                        damageCalculator,
+                        lifeStealPercentOverride: SkillAttackExecutor.ResolveLifeStealPercent(skill));
                     ApplyTargetModifiers(skill, target);
                     break;
                 case SkillEffectKind.SacrificeAttack:
                     SpendSkillHpCost(skill, player);
-                    ExecuteAttack(skill.power, skill.selfExtraAttackHits, skill.lifeStealPercent, skill.damageStatSource, false, player, target, damageCalculator);
+                    SkillAttackExecutor.ExecuteSkillAttack(skill, player, target, damageCalculator);
                     ApplyTargetModifiers(skill, target);
                     break;
+                case SkillEffectKind.BleedAttack:
+                    SkillAttackExecutor.ExecuteSkillAttack(skill, player, target, damageCalculator);
+                    target?.ApplyBleed(ResolveStatusDuration(skill, 2), ResolveStatusDamage(skill, 20));
+                    break;
+                case SkillEffectKind.PoisonAttack:
+                    SkillAttackExecutor.ExecuteSkillAttack(skill, player, target, damageCalculator);
+                    target?.ApplyPoison(ResolveStatusDuration(skill, 3), ResolveStatusPercent(skill, 0.05f));
+                    break;
+                case SkillEffectKind.OpenWoundAttack:
+                    SkillAttackExecutor.ExecuteOpenWoundAttack(skill, player, target, damageCalculator);
+                    break;
+                case SkillEffectKind.ExecuteAttack:
+                    SkillAttackExecutor.ExecuteSkillAttack(
+                        skill,
+                        player,
+                        target,
+                        damageCalculator,
+                        powerOverride: SkillAttackExecutor.ResolveExecutePower(skill, target));
+                    break;
+                case SkillEffectKind.OverburnAttack:
+                    SkillAttackExecutor.ExecuteSkillAttack(
+                        skill,
+                        player,
+                        target,
+                        damageCalculator,
+                        powerOverride: SkillAttackExecutor.ResolveOverburnPower(skill, context));
+                    break;
                 case SkillEffectKind.ShieldScalingAttack:
-                    ExecuteAttack(skill.power, skill.selfExtraAttackHits, skill.lifeStealPercent, DamageStatSource.ShieldHp, false, player, target, damageCalculator);
+                    SkillAttackExecutor.ExecuteSkillAttack(
+                        skill,
+                        player,
+                        target,
+                        damageCalculator,
+                        statSourceOverride: DamageStatSource.ShieldHp);
                     break;
                 case SkillEffectKind.ShieldBurstAttack:
-                    ExecuteAttack(skill.power, skill.selfExtraAttackHits, skill.lifeStealPercent, DamageStatSource.ShieldHp, true, player, target, damageCalculator);
+                    SkillAttackExecutor.ExecuteSkillAttack(
+                        skill,
+                        player,
+                        target,
+                        damageCalculator,
+                        statSourceOverride: DamageStatSource.ShieldHp,
+                        consumeAllShieldAfterAttack: true);
                     break;
                 case SkillEffectKind.DefenseScalingAttack:
-                    ExecuteAttack(skill.power, skill.selfExtraAttackHits, skill.lifeStealPercent, DamageStatSource.DefensePower, false, player, target, damageCalculator);
+                    SkillAttackExecutor.ExecuteSkillAttack(
+                        skill,
+                        player,
+                        target,
+                        damageCalculator,
+                        statSourceOverride: DamageStatSource.DefensePower);
                     break;
                 case SkillEffectKind.BasicDefense:
                     player.AddBlock(skill.power);
@@ -56,14 +113,14 @@ namespace Project2048.Skills
                     player.ApplyThornGuard(ResolveDefenseGain(skill, player), skill.selfThornRetaliationDamage);
                     break;
                 case SkillEffectKind.AttackStageDown:
-                    ExecuteHybridDamage(skill, player, target, damageCalculator);
+                    SkillAttackExecutor.ExecuteHybridDamage(skill, player, target, damageCalculator);
                     if (target != null)
                     {
                         target.ApplyAttackModifier(ResolveStageModifier(skill.targetAttackStageModifier, skill.targetAttackModifier, -1));
                     }
                     break;
                 case SkillEffectKind.DefenseStageDown:
-                    ExecuteHybridDamage(skill, player, target, damageCalculator);
+                    SkillAttackExecutor.ExecuteHybridDamage(skill, player, target, damageCalculator);
                     if (target != null)
                     {
                         target.ApplyDefenseModifier(ResolveStageModifier(skill.targetDefenseStageModifier, skill.targetDefenseModifier, -1));
@@ -97,10 +154,33 @@ namespace Project2048.Skills
                         skill.nextAttackHitCount > 0 ? skill.nextAttackHitCount : 2,
                         skill.nextAttackHitPowerMultiplier > 0f ? skill.nextAttackHitPowerMultiplier : 0.6f);
                     break;
+                case SkillEffectKind.SealSkill:
+                    target?.ApplySealFromLastUsedSkill(ResolveStatusDuration(skill, 1));
+                    break;
+                case SkillEffectKind.Taunt:
+                    if (target != null)
+                    {
+                        target.ApplyTaunt(ResolveStatusDuration(skill, 1));
+                        target.ApplyAttackModifier(ResolveStageModifier(skill.targetAttackStageModifier, skill.targetAttackModifier, 2));
+                    }
+                    break;
+                case SkillEffectKind.CrackBrand:
+                    target?.ApplyBrand(ResolveStatusDamage(skill, 40));
+                    break;
+                case SkillEffectKind.CostCarry:
+                    player.ApplyCostCarry(skill.maxCostCarry > 0 ? skill.maxCostCarry : 4);
+                    break;
+                case SkillEffectKind.DarknessCleanse:
+                    if (context?.BoardManager != null &&
+                        context.BoardManager.RemoveOneObstacle())
+                    {
+                        context.CostWallet?.AddCost(skill.costRefund > 0 ? skill.costRefund : 2);
+                    }
+                    break;
                 default:
                     if (skill.skillType == SkillType.Attack)
                     {
-                        ExecuteAttack(skill.power, skill.selfExtraAttackHits, skill.lifeStealPercent, skill.damageStatSource, false, player, target, damageCalculator);
+                        SkillAttackExecutor.ExecuteSkillAttack(skill, player, target, damageCalculator);
                     }
 
                     ApplyTargetModifiers(skill, target);
@@ -120,7 +200,7 @@ namespace Project2048.Skills
             }
 
             damageCalculator ??= new DamageCalculator();
-            return ExecuteAttack(skillPower, 0, 0f, DamageStatSource.AttackPower, false, player, target, damageCalculator);
+            return SkillAttackExecutor.ExecuteAttack(skillPower, 0, 0f, DamageStatSource.AttackPower, false, player, target, damageCalculator);
         }
 
         public int ExecuteChargedAttack(
@@ -136,7 +216,7 @@ namespace Project2048.Skills
             }
 
             damageCalculator ??= new DamageCalculator();
-            return ExecuteAttack(skillPower, 0, 0f, statSource, false, player, target, damageCalculator);
+            return SkillAttackExecutor.ExecuteAttack(skillPower, 0, 0f, statSource, false, player, target, damageCalculator);
         }
 
         public bool CanExecute(SkillSO skill, PlayerCombatController player)
@@ -152,87 +232,6 @@ namespace Project2048.Skills
                 SkillEffectKind.ShieldBurstAttack => player.ShieldHp > 0,
                 _ => true,
             };
-        }
-
-        private static int ExecuteAttack(
-            int skillPower,
-            int skillExtraHits,
-            float lifeStealPercent,
-            DamageStatSource statSource,
-            bool consumeAllShieldAfterAttack,
-            PlayerCombatController player,
-            EnemyController target,
-            DamageCalculator damageCalculator)
-        {
-            if (player == null || target == null)
-            {
-                return 0;
-            }
-
-            var attackStat = ResolveDamageStat(player, statSource);
-            player.TryConsumeNextAttackModifiers(out var powerMultiplier, out var nextAttackHitCount, out var nextAttackHitPowerMultiplier);
-            var hitCount = Mathf.Max(1, 1 + Mathf.Max(0, skillExtraHits));
-            if (nextAttackHitCount > 1)
-            {
-                hitCount = Mathf.Max(hitCount, nextAttackHitCount);
-            }
-
-            var hitPowerMultiplier = hitCount > 1 ? nextAttackHitPowerMultiplier : 1f;
-            var effectivePower = Mathf.Max(0, Mathf.RoundToInt(skillPower * powerMultiplier * hitPowerMultiplier));
-            var totalHpDamage = 0;
-            for (var hitIndex = 0; hitIndex < hitCount; hitIndex++)
-            {
-                var targetShieldBeforeHit = target.ShieldHp;
-                var shouldRetaliate = targetShieldBeforeHit > 0 && target.ThornRetaliationDamage > 0;
-                var retaliationDamage = target.ThornRetaliationDamage;
-                var damage = damageCalculator.CalculatePlayerSkillDamageFromStat(
-                    attackStat,
-                    effectivePower,
-                    target,
-                    player.CriticalChance,
-                    player.CriticalDamageMultiplier);
-                totalHpDamage += target.TakeDamage(damage);
-                if (shouldRetaliate && retaliationDamage > 0)
-                {
-                    player.TakeDamage(damageCalculator.CalculateMoveDamage(
-                        targetShieldBeforeHit,
-                        retaliationDamage,
-                        player.EffectiveDefensePower,
-                        target.CriticalChance,
-                        target.CriticalDamageMultiplier));
-                }
-
-                if (target.IsDead)
-                {
-                    break;
-                }
-            }
-
-            if (consumeAllShieldAfterAttack)
-            {
-                player.ConsumeAllShield();
-            }
-
-            if (lifeStealPercent > 0f && totalHpDamage > 0)
-            {
-                player.RestoreHp(Mathf.CeilToInt(totalHpDamage * Mathf.Clamp01(lifeStealPercent)));
-            }
-
-            return totalHpDamage;
-        }
-
-        private static int ExecuteHybridDamage(
-            SkillSO skill,
-            PlayerCombatController player,
-            EnemyController target,
-            DamageCalculator damageCalculator)
-        {
-            if (skill == null || skill.power <= 0)
-            {
-                return 0;
-            }
-
-            return ExecuteAttack(skill.power, skill.selfExtraAttackHits, skill.lifeStealPercent, skill.damageStatSource, false, player, target, damageCalculator);
         }
 
         private static void ApplyTargetModifiers(SkillSO skill, EnemyController target)
@@ -256,21 +255,6 @@ namespace Project2048.Skills
         private static int ResolveDefenseGain(SkillSO skill, PlayerCombatController player)
         {
             return Mathf.Max(0, skill.power);
-        }
-
-        private static int ResolveDamageStat(PlayerCombatController player, DamageStatSource statSource)
-        {
-            if (player == null)
-            {
-                return 0;
-            }
-
-            return statSource switch
-            {
-                DamageStatSource.DefensePower => player.EffectiveDefensePower,
-                DamageStatSource.ShieldHp => player.ShieldHp,
-                _ => player.EffectiveAttackPower,
-            };
         }
 
         private static int ResolveStageModifier(int stageModifier, int legacyModifier, int fallback)
@@ -301,9 +285,19 @@ namespace Project2048.Skills
             player.SpendHp(Mathf.Max(skill.hpCost, percentCost), skill.hpCostLeavesOne);
         }
 
-        private static float ResolveLifeStealPercent(SkillSO skill)
+        private static int ResolveStatusDuration(SkillSO skill, int fallback)
         {
-            return skill.lifeStealPercent > 0f ? skill.lifeStealPercent : 0.5f;
+            return skill != null && skill.statusDuration > 0 ? skill.statusDuration : fallback;
+        }
+
+        private static int ResolveStatusDamage(SkillSO skill, int fallback)
+        {
+            return skill != null && skill.statusDamage > 0 ? skill.statusDamage : fallback;
+        }
+
+        private static float ResolveStatusPercent(SkillSO skill, float fallback)
+        {
+            return skill != null && skill.statusMaxHpDamagePercent > 0f ? skill.statusMaxHpDamagePercent : fallback;
         }
 
         private static string GetSkillDisplayName(SkillSO skill)

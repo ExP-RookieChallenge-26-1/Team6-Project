@@ -58,6 +58,13 @@ namespace Project2048.Prototype
         private const float IntentBubbleTextPadding = 3f;
         private const float IntentBubbleTextMinFontSize = 8f;
         private const float IntentBubbleTextMaxFontSize = 14f;
+        private const float TooltipFontSize = 18f;
+        private const float TooltipSingleLineWidth = 640f;
+        private const float TooltipMultiLineWidth = 960f;
+        private const float TooltipBaseHeight = 72f;
+        private const float TooltipLineHeight = 44f;
+        private const float TooltipMinHeight = 128f;
+        private const float TooltipMaxHeight = 440f;
         private const string HpBarInteriorName = "HpBarInterior";
         private const string HpBarOutlineName = "HpBarOutline";
         private const string StatusEffectTemplateName = "StatusEffectIconSample";
@@ -2154,7 +2161,7 @@ namespace Project2048.Prototype
             }
 
             statusTooltipText.alignment = TextAlignmentOptions.Left;
-            statusTooltipText.fontSize = 15f;
+            statusTooltipText.fontSize = TooltipFontSize;
             statusTooltipText.color = Color.white;
             statusTooltipText.textWrappingMode = TextWrappingModes.Normal;
             if (actionDescriptionText != null && actionDescriptionText.font != null)
@@ -2178,7 +2185,15 @@ namespace Project2048.Prototype
             if (tooltipRect != null)
             {
                 var lineCount = string.IsNullOrEmpty(description) ? 1 : description.Count(character => character == '\n') + 1;
-                tooltipRect.sizeDelta = new Vector2(lineCount > 1 ? 540f : 320f, Mathf.Clamp(36f + lineCount * 28f, 64f, 220f));
+                var targetWidth = lineCount > 1 ? TooltipMultiLineWidth : TooltipSingleLineWidth;
+                if (ownerRect != null)
+                {
+                    targetWidth = Mathf.Min(targetWidth, Mathf.Max(0f, ownerRect.rect.width - 16f));
+                }
+
+                tooltipRect.sizeDelta = new Vector2(
+                    targetWidth,
+                    Mathf.Clamp(TooltipBaseHeight + lineCount * TooltipLineHeight, TooltipMinHeight, TooltipMaxHeight));
             }
 
             if (source != null && ownerRect != null && tooltipRect != null)

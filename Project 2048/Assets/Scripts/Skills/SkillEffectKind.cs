@@ -34,5 +34,16 @@ namespace Project2048.Skills
 
         CostGainDown = 21,
         BoardObstacleDebuff = 22,
+
+        BleedAttack = 23,
+        PoisonAttack = 24,
+        OpenWoundAttack = 25,
+        ExecuteAttack = 26,
+        OverburnAttack = 28,
+        SealSkill = 29,
+        Taunt = 30,
+        CrackBrand = 31,
+        CostCarry = 32,
+        DarknessCleanse = 33,
     }
 }

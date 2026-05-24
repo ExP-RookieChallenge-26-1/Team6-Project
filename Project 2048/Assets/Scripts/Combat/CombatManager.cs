@@ -161,6 +161,8 @@ namespace Project2048.Combat
             var cost = player != null
                 ? player.ApplyAndConsumeNextTurnCostGainModifiers(rawCost)
                 : rawCost;
+            var carriedCost = player != null ? player.ConsumeCarriedCost() : 0;
+            cost += carriedCost;
             lastActionDescription = $"코스트 획득: {cost}";
             CostWallet.SetCost(cost);
             ChangePhase(CombatPhase.ActionPhase);
@@ -185,6 +187,11 @@ namespace Project2048.Combat
                 return false;
             }
 
+            if (player != null && player.IsSkillSealed(skill))
+            {
+                return false;
+            }
+
             if (!CostWallet.CanSpend(skill.cost))
             {
                 return false;
@@ -193,9 +200,24 @@ namespace Project2048.Combat
             lastActionDescription = $"플레이어: {GetSkillDisplayName(skill)}";
             CostWallet.Spend(skill.cost);
             OnPlayerSkillUsed?.Invoke(skill, target);
-            skillExecutor.Execute(skill, player, target, damageCalculator);
+            skillExecutor.Execute(
+                skill,
+                player,
+                target,
+                damageCalculator,
+                new SkillExecutionContext
+                {
+                    CostWallet = CostWallet,
+                    BoardManager = BoardManager,
+                });
+            player.RecordUsedSkill(skill);
             if (!CheckVictory())
             {
+                if (skill.ResolveEffectKind() == SkillEffectKind.Taunt)
+                {
+                    PrepareEnemyIntents();
+                }
+
                 NotifyStateChanged();
             }
 
@@ -274,6 +296,14 @@ namespace Project2048.Combat
 
             // 플레이 화면에서는 적 턴 패널을 잠깐 보여주고, EditMode 테스트처럼 비활성 상태에서는 즉시 해결한다.
             player.ClearFear();
+            player.ResolveEndOfTurnStatuses();
+            if (CheckDefeat())
+            {
+                return;
+            }
+
+            player.CaptureCostCarry(CostWallet.CurrentCost);
+            player.ClearSkillSeal();
 
             if (enemyTurnDelaySeconds > 0f && isActiveAndEnabled)
             {
@@ -377,6 +407,7 @@ namespace Project2048.Combat
             var wasSuppressing = suppressStateNotifications;
             suppressStateNotifications = true;
             enemyIntentSystem.ExecuteIntent(enemy, intent, player, damageCalculator, BoardManager);
+            enemy?.RecordUsedIntent(intent);
             suppressStateNotifications = wasSuppressing;
 
             if (intent != null &&
@@ -447,6 +478,16 @@ namespace Project2048.Combat
                 }
             }
 
+            if (!enemy.IsDead)
+            {
+                enemy.ResolveEndOfTurnStatuses();
+                if (CheckVictory())
+                {
+                    return true;
+                }
+            }
+
+            enemy.ConsumeTurnRestrictions();
             return false;
         }
 
@@ -516,6 +557,11 @@ namespace Project2048.Combat
                 currentSetup.runProgress.CapturePlayer(player);
             }
 
+            if (currentSetup.runProgress.HasEquippedSkills)
+            {
+                player.SetSkills(currentSetup.runProgress.EquippedSkills);
+            }
+
             player.ApplyPermanentStatBonuses(
                 currentSetup.runProgress.PermanentMaxHpBonus,
                 currentSetup.runProgress.PermanentAttackPowerBonus,
@@ -525,9 +571,9 @@ namespace Project2048.Combat
 
             var nextCombatBuff = currentSetup.runProgress.ConsumeNextCombatBuffs();
             activeNextCombatBoardMoveCountBonus = nextCombatBuff.BoardMoveCountBonus;
-            player.ApplyTemporaryCombatBuffs(
-                nextCombatBuff.AttackPowerBonus,
-                nextCombatBuff.DefensePowerBonus);
+            player.ApplyTemporaryCombatRankBuffs(
+                nextCombatBuff.AttackStageBonus,
+                nextCombatBuff.DefenseStageBonus);
         }
 
         private CombatResult BuildCombatResult()
@@ -830,10 +876,8 @@ namespace Project2048.Combat
                 });
             }
 
-            AddStatusEffect(effects, "defense-power-up", player.DefensePowerModifier, "방어력 강화", "방어력", "DEF", true);
-            AddStatusEffect(effects, "defense-power-down", -player.DefensePowerModifier, "방어력 약화", "방어력", "DEF", false);
-            AddStatusEffect(effects, "attack-power-up", player.AttackPowerModifier, "공격력 강화", "공격력", "ATK", true);
-            AddStatusEffect(effects, "attack-power-down", -player.AttackPowerModifier, "공격력 약화", "공격력", "ATK", false);
+            AddRankStatusEffect(effects, "defense-rank-up", "defense-rank-down", player.DefensePowerModifier, "방어", "DEF+", "DEF-");
+            AddRankStatusEffect(effects, "attack-rank-up", "attack-rank-down", player.AttackPowerModifier, "공격", "ATK+", "ATK-");
             AddStatusEffect(effects, "thorn-guard", player.ThornRetaliationDamage, "가시 방어", "반사 피해", "가", true);
             AddStatusEffect(effects, "counter", player.CounterPercent, "카운터", "받은 체력 피해 반사율", "반", true);
             AddStatusEffect(effects, "endure", player.EndureTurns, "이악물기", "이번 적 턴에 체력 1로 버팁니다.", "버", true);
@@ -854,6 +898,12 @@ namespace Project2048.Combat
                 AddStatusEffect(effects, "charged-attack", 1, "빛 모으기", "다음 플레이어 턴 시작에 공격이 발동합니다.", "충", true);
             }
 
+            AddStatusEffect(effects, "poison", player.PoisonTurns, "독", $"턴 종료 시 최대 체력의 {Mathf.RoundToInt(player.PoisonMaxHpDamagePercent * 100f)}% 피해를 받습니다. 남은 턴: {{0}}", "독", false);
+            AddStatusEffect(effects, "bleed", player.BleedTurns, "출혈", $"공격을 받을 때마다 추가 피해 {player.BleedDamage}를 받습니다. 남은 턴: {{0}}", "출", false);
+            AddStatusEffect(effects, "brand", player.BrandDamage, "낙인", "다음 공격을 받을 때 추가 피해 {0}을 받고 해제됩니다.", "낙", false);
+            AddStatusEffect(effects, "seal", player.SealTurns, "봉인", $"{player.SealedSkillId} 사용 불가. 남은 턴: {{0}}", "봉", false);
+            AddStatusEffect(effects, "cost-carry-ready", player.PendingCostCarryLimit, "잔광 저장", "이번 턴 종료 시 남은 코스트를 최대 {0}까지 이월합니다.", "저", true);
+            AddStatusEffect(effects, "cost-carried", player.CarriedCost, "이월 코스트", "다음 코스트 획득에 +{0}", "코+", true);
             return effects;
         }
 
@@ -884,6 +934,33 @@ namespace Project2048.Combat
             });
         }
 
+        private static void AddRankStatusEffect(
+            List<CombatStatusEffectSnapshot> effects,
+            string buffId,
+            string debuffId,
+            int stage,
+            string statName,
+            string buffIconText,
+            string debuffIconText)
+        {
+            if (effects == null || stage == 0)
+            {
+                return;
+            }
+
+            var isBuff = stage > 0;
+            var value = Mathf.Abs(stage);
+            effects.Add(new CombatStatusEffectSnapshot
+            {
+                Id = isBuff ? buffId : debuffId,
+                DisplayName = $"{statName} 랭크 {(isBuff ? "강화" : "약화")}",
+                Description = $"{statName} 랭크 {FormatSignedStage(stage)} ({FormatRankMultiplier(stage)}). 전투 종료까지 유지됩니다.",
+                Value = value,
+                IsBuff = isBuff,
+                IconText = isBuff ? buffIconText : debuffIconText,
+            });
+        }
+
         private static List<CombatStatusEffectSnapshot> BuildEnemyStatusEffects(EnemyController enemy)
         {
             var effects = new List<CombatStatusEffectSnapshot>();
@@ -892,27 +969,17 @@ namespace Project2048.Combat
                 return effects;
             }
 
-            if (enemy.AttackModifier == 0)
+            if (enemy.AttackModifier != 0)
             {
-                AddEnemyDefenseStatusEffect(effects, enemy);
-                return effects;
+                AddRankStatusEffect(effects, "attack-rank-up", "attack-rank-down", enemy.AttackModifier, "공격", "공+", "공-");
             }
 
-            var isBuff = enemy.AttackModifier > 0;
-            var value = Mathf.Abs(enemy.AttackModifier);
-            effects.Add(new CombatStatusEffectSnapshot
-            {
-                Id = isBuff ? "attack-up" : "attack-down",
-                DisplayName = isBuff ? "공격 강화" : "공격 약화",
-                Description = isBuff
-                    ? $"공격 의도 피해가 {value} 증가합니다."
-                    : $"공격 의도 피해가 {value} 감소합니다.",
-                Value = value,
-                IsBuff = isBuff,
-                IconText = isBuff ? "공+" : "공-",
-            });
-
             AddEnemyDefenseStatusEffect(effects, enemy);
+            AddStatusEffect(effects, "poison", enemy.PoisonTurns, "독", $"턴 종료 시 최대 체력의 {Mathf.RoundToInt(enemy.PoisonMaxHpDamagePercent * 100f)}% 피해를 받습니다. 남은 턴: {{0}}", "독", false);
+            AddStatusEffect(effects, "bleed", enemy.BleedTurns, "출혈", $"공격을 받을 때마다 추가 피해 {enemy.BleedDamage}를 받습니다. 남은 턴: {{0}}", "출", false);
+            AddStatusEffect(effects, "brand", enemy.BrandDamage, "낙인", "다음 공격을 받을 때 추가 피해 {0}을 받고 해제됩니다.", "낙", false);
+            AddStatusEffect(effects, "seal", enemy.SealTurns, "봉인", $"{enemy.SealedSkillId} 사용 불가. 남은 턴: {{0}}", "봉", false);
+            AddStatusEffect(effects, "taunt", enemy.TauntTurns, "도발", "다음 행동에서 비공격 스킬을 사용할 수 없습니다. 남은 턴: {0}", "도", false);
             return effects;
         }
 
@@ -923,19 +990,21 @@ namespace Project2048.Combat
                 return;
             }
 
-            var isBuff = enemy.DefenseModifier > 0;
-            var value = Mathf.Abs(enemy.DefenseModifier);
-            effects.Add(new CombatStatusEffectSnapshot
-            {
-                Id = isBuff ? "defense-up" : "defense-down",
-                DisplayName = isBuff ? "방어력 강화" : "방어력 약화",
-                Description = isBuff
-                    ? $"방어력이 {value} 증가합니다."
-                    : $"방어력이 {value} 감소합니다.",
-                Value = value,
-                IsBuff = isBuff,
-                IconText = isBuff ? "방" : "약",
-            });
+            AddRankStatusEffect(effects, "defense-rank-up", "defense-rank-down", enemy.DefenseModifier, "방어", "방+", "방-");
+        }
+
+        private static string FormatSignedStage(int stage)
+        {
+            return stage > 0 ? $"+{stage}" : stage.ToString();
+        }
+
+        private static string FormatRankMultiplier(int stage)
+        {
+            stage = Mathf.Clamp(stage, -6, 6);
+            var multiplier = stage >= 0
+                ? (2f + stage) / 2f
+                : 2f / (2f - stage);
+            return $"x{multiplier:0.##}";
         }
 
         private int CountDarknessStacks()

@@ -12,8 +12,8 @@ namespace Project2048.Rewards
         [Range(0f, 1f)] public float healPercentOfMaxHp = 0.3f;
         public int healAmount = 2;
         public int extraBoardMoveCount = 1;
-        public int temporaryAttackPowerBonus = 3;
-        public int temporaryDefensePowerBonus = 3;
+        [InspectorName("Temporary Attack Rank Bonus")] public int temporaryAttackPowerBonus = 1;
+        [InspectorName("Temporary Defense Rank Bonus")] public int temporaryDefensePowerBonus = 1;
         public int temporaryBoardMoveCountBonus = 2;
         public int permanentMaxHpBonus;
         public int permanentAttackPowerBonus;
@@ -31,8 +31,8 @@ namespace Project2048.Rewards
             healPercentOfMaxHp = Mathf.Clamp01(healPercentOfMaxHp);
             healAmount = Mathf.Max(0, healAmount);
             extraBoardMoveCount = Mathf.Max(0, extraBoardMoveCount);
-            temporaryAttackPowerBonus = Mathf.Max(0, temporaryAttackPowerBonus);
-            temporaryDefensePowerBonus = Mathf.Max(0, temporaryDefensePowerBonus);
+            temporaryAttackPowerBonus = Mathf.Clamp(temporaryAttackPowerBonus, 0, 6);
+            temporaryDefensePowerBonus = Mathf.Clamp(temporaryDefensePowerBonus, 0, 6);
             temporaryBoardMoveCountBonus = Mathf.Max(0, temporaryBoardMoveCountBonus);
             permanentMaxHpBonus = Mathf.Max(0, permanentMaxHpBonus);
             permanentAttackPowerBonus = Mathf.Max(0, permanentAttackPowerBonus);

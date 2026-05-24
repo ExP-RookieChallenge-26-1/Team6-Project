@@ -10,6 +10,7 @@ using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.EventSystems;
 using UnityEngine.Rendering;
+using UnityEngine.VFX;
 
 namespace Project2048.Prototype
 {
@@ -24,6 +25,10 @@ namespace Project2048.Prototype
         public const float DebuffTargetParticleDelaySeconds = DebuffCastParticleLifetimeSeconds;
         public const float DamageNumberPopupDurationSeconds = 0.55f;
         public const float ChargedLightBeamDurationSeconds = 0.65f;
+        public const float TentacleStrikeDurationSeconds = 0.58f;
+        public const float HeavyStrikeSpikedBurstDurationSeconds = 0.62f;
+        public const float BloodFountainSlashDurationSeconds = 0.72f;
+        public const float FlameBurstDurationSeconds = 0.82f;
 
         private const float EnemyAppearIntroRightOffset = 2.25f;
         private const float EnemyAppearIntroJumpHeight = 0.7f;
@@ -47,10 +52,26 @@ namespace Project2048.Prototype
         private const int ShieldImpactParticleCount = 22;
         private const int DebuffCastParticleCount = 28;
         private const float ReusableSkillParticleMaxStartSize = 0.24f;
+        private const int ShieldCircleRingSegmentCount = 72;
+        private const float ShieldCircleBaseRadius = 0.78f;
+        private const float ShieldCircleBaseYOffset = 0.08f;
+        private const int TentacleStrikeSegmentCount = 18;
+        private const int TentacleStrikeCupCount = 5;
+        private const int TentacleStrikeCupSegmentCount = 12;
+        private const int HeavyStrikeStarSegmentCount = 28;
+        private const int HeavyStrikeSpikeRayCount = 12;
+        private const int BloodSlashSegmentCount = 18;
+        private const int FlameBurstTongueCount = 5;
+        private const int FlameBurstTongueSegmentCount = 12;
         private const string DefaultWorldVfxProfileResourceName = "PrototypeCombatWorldVfxProfile";
+        private const string ShieldLightCircleVfxResourceName = "VFX/ShieldLightCircle";
+        private const string ThornGuardSpikedCircleVfxResourceName = "VFX/ThornGuardSpikedCircle";
         private static readonly Color DamageNumberPopupTextColor = new(1f, 0.82f, 0.02f, 1f);
         private static readonly Color DamageNumberPopupOutlineColor = Color.white;
         private static readonly Color DamageNumberPopupGlowColor = new(1f, 0.72f, 0f, 0.82f);
+        private static readonly Color ShieldCircleLightTint = new(1f, 0.96f, 0.72f, 0.94f);
+        private static readonly Color ThornGuardShadowTint = new(0.025f, 0.035f, 0.03f, 0.96f);
+        private static readonly Color ThornGuardBloodTint = new(0.44f, 0.07f, 0.08f, 0.9f);
 
         [SerializeField] private PrototypeCombatBootstrap bootstrap;
         [SerializeField] private SpriteRenderer backgroundRenderer;
@@ -65,6 +86,8 @@ namespace Project2048.Prototype
         [SerializeField] private ParticleSystem shieldImpactParticlePrefab;
         [SerializeField] private ParticleSystem debuffCastParticlePrefab;
         [SerializeField] private CombatWorldVfxProfileSO worldVfxProfile;
+        [SerializeField] private VisualEffectAsset shieldLightCircleVfxGraph;
+        [SerializeField] private VisualEffectAsset thornGuardSpikedCircleVfxGraph;
         [SerializeField] private WorldShake worldShake;
         [SerializeField] private Transform foregroundShakeRoot;
         [SerializeField] private Color shieldImpactParticleColor = new(0.62f, 0.92f, 1f, 0.96f);
@@ -95,6 +118,10 @@ namespace Project2048.Prototype
         private Material runtimeFearDebuffParticleMaterial;
         private Material runtimeDarknessDebuffParticleMaterial;
         private Material runtimeChargedLightBeamMaterial;
+        private VisualEffectAsset resolvedShieldLightCircleVfxGraph;
+        private VisualEffectAsset resolvedThornGuardSpikedCircleVfxGraph;
+        private bool attemptedResolveShieldLightCircleVfxGraph;
+        private bool attemptedResolveThornGuardSpikedCircleVfxGraph;
         private readonly System.Collections.Generic.Dictionary<string, Material> runtimeSkillParticleMaterials = new();
         private RectTransform damageNumberPopupLayer;
         private readonly System.Collections.Generic.List<GameObject> damageNumberPopups = new();
@@ -198,6 +225,16 @@ namespace Project2048.Prototype
             }
 
             var isAttack = skill.skillType == SkillType.Attack;
+            var sourceAnchor = playerRenderer != null ? playerRenderer.transform : transform;
+            var targetAnchor = isAttack && enemyRenderer != null
+                ? enemyRenderer.transform
+                : sourceAnchor;
+            if (isAttack && TryPlayDirectedSkillEffect(skill, effect, sourceAnchor, targetAnchor, out var directedLifetimeSeconds))
+            {
+                DelayEnemyDeathFade(directedLifetimeSeconds);
+                return;
+            }
+
             if (isAttack && TryPlayProjectileSkillEffect(effect, target, out var projectileLifetimeSeconds))
             {
                 DelayEnemyDeathFade(projectileLifetimeSeconds);
@@ -205,10 +242,8 @@ namespace Project2048.Prototype
             }
 
             var anchor = isAttack && target != null && enemyRenderer != null
-                ? enemyRenderer.transform
-                : playerRenderer != null
-                    ? playerRenderer.transform
-                    : transform;
+                ? targetAnchor
+                : sourceAnchor;
             var animator = isAttack ? enemyAnimator : playerAnimator;
             if (effect?.HasAnyAsset == true)
             {
@@ -223,10 +258,109 @@ namespace Project2048.Prototype
             DelayEnemyDeathFadeForSkillEffect(skill, effect);
         }
 
-        private bool TryPlayProjectileSkillEffect(CombatEffectBinding effect, EnemyController target, out float lifetimeSeconds)
+        public void PreviewSkillEffect(SkillSO skill)
+        {
+            if (skill == null)
+            {
+                return;
+            }
+
+            ResolveMissingReferences();
+            ResolveWorldVfxProfile();
+
+            var effect = skill.activationEffect;
+            if ((effect == null || !effect.HasAnyAsset) && skill.vfxFamily == SkillVfxFamily.None)
+            {
+                return;
+            }
+
+            var isAttack = skill.skillType == SkillType.Attack;
+            var sourceAnchor = playerRenderer != null ? playerRenderer.transform : transform;
+            var targetAnchor = isAttack && enemyRenderer != null ? enemyRenderer.transform : sourceAnchor;
+            var animator = isAttack ? enemyAnimator : playerAnimator;
+
+            if (isAttack && TryPlayDirectedSkillEffect(skill, effect, sourceAnchor, targetAnchor, out _))
+            {
+                return;
+            }
+
+            if (isAttack && TryPlayProjectileSkillEffect(effect, sourceAnchor, targetAnchor, animator, out _))
+            {
+                return;
+            }
+
+            if (effect?.HasAnyAsset == true)
+            {
+                PlayCombatantActionEffect(effect, targetAnchor, animator);
+            }
+
+            if (effect?.HasAuthoredVisual != true)
+            {
+                PlayReusableSkillParticleEffect(skill, targetAnchor);
+            }
+
+            if (isAttack && skill.ResolveEffectKind() == SkillEffectKind.ChargeAttack)
+            {
+                PlayChargedLightBeamEffect(targetAnchor);
+            }
+        }
+
+        private bool TryPlayDirectedSkillEffect(
+            SkillSO skill,
+            CombatEffectBinding effect,
+            Transform sourceAnchor,
+            Transform targetAnchor,
+            out float lifetimeSeconds)
         {
             lifetimeSeconds = 0f;
-            if (effect?.vfxPrefab == null || target == null)
+            if (skill == null)
+            {
+                return false;
+            }
+
+            switch (skill.vfxFamily)
+            {
+                case SkillVfxFamily.LightBeam:
+                    PlayCombatantActionAudioEffect(effect);
+                    PlayChargedLightBeamEffect(targetAnchor);
+                    lifetimeSeconds = ChargedLightBeamDurationSeconds;
+                    return true;
+                case SkillVfxFamily.TentacleWhip:
+                    PlayCombatantActionAudioEffect(effect);
+                    PlayTentacleStrikeSkillEffect(skill, sourceAnchor, targetAnchor);
+                    lifetimeSeconds = TentacleStrikeDurationSeconds;
+                    return true;
+                case SkillVfxFamily.SpikedBurst:
+                    PlayCombatantActionAudioEffect(effect);
+                    PlaySpikedBurstSkillEffect(skill, targetAnchor);
+                    lifetimeSeconds = HeavyStrikeSpikedBurstDurationSeconds;
+                    return true;
+                case SkillVfxFamily.BloodFountainSlash:
+                    PlayCombatantActionAudioEffect(effect);
+                    PlayBloodFountainSlashSkillEffect(skill, sourceAnchor, targetAnchor);
+                    lifetimeSeconds = BloodFountainSlashDurationSeconds;
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        private bool TryPlayProjectileSkillEffect(CombatEffectBinding effect, EnemyController target, out float lifetimeSeconds)
+        {
+            var sourceTransform = playerRenderer != null ? playerRenderer.transform : transform;
+            var targetTransform = target != null && enemyRenderer != null ? enemyRenderer.transform : transform;
+            return TryPlayProjectileSkillEffect(effect, sourceTransform, targetTransform, enemyAnimator, out lifetimeSeconds);
+        }
+
+        private bool TryPlayProjectileSkillEffect(
+            CombatEffectBinding effect,
+            Transform sourceTransform,
+            Transform targetTransform,
+            Animator animator,
+            out float lifetimeSeconds)
+        {
+            lifetimeSeconds = 0f;
+            if (effect?.vfxPrefab == null || sourceTransform == null || targetTransform == null)
             {
                 return false;
             }
@@ -237,17 +371,15 @@ namespace Project2048.Prototype
                 return false;
             }
 
-            var sourceTransform = playerRenderer != null ? playerRenderer.transform : transform;
-            var targetTransform = enemyRenderer != null ? enemyRenderer.transform : transform;
             PlayCombatantActionAudioEffect(effect);
 
             var instance = Instantiate(effect.vfxPrefab, sourceTransform.position, Quaternion.identity, transform);
             var projectile = instance.GetComponentInChildren<CombatProjectileEffect>(true);
             projectile?.Launch(sourceTransform, targetTransform, effect.localOffset);
 
-            if (effect.animationClip != null && enemyAnimator != null && enemyAnimator.runtimeAnimatorController != null)
+            if (effect.animationClip != null && animator != null && animator.runtimeAnimatorController != null)
             {
-                enemyAnimator.Play(effect.animationClip.name, 0, 0f);
+                animator.Play(effect.animationClip.name, 0, 0f);
             }
 
             var lifetime = projectile != null
@@ -567,9 +699,69 @@ namespace Project2048.Prototype
             var intensity = Mathf.Max(0.1f, skill.vfxIntensity);
             var repeatCount = Mathf.Max(1, skill.vfxRepeatCount);
             var scaledStartSize = Mathf.Min(startSize * scale, ReusableSkillParticleMaxStartSize);
+            if (skill.vfxFamily == SkillVfxFamily.LightBeam)
+            {
+                PlayChargedLightBeamEffect(anchor);
+                return;
+            }
+
+            if (skill.vfxFamily == SkillVfxFamily.TentacleWhip)
+            {
+                PlayTentacleStrikeSkillEffect(
+                    skill,
+                    playerRenderer != null ? playerRenderer.transform : transform,
+                    anchor);
+                return;
+            }
+
+            if (skill.vfxFamily == SkillVfxFamily.SpikedBurst)
+            {
+                PlaySpikedBurstSkillEffect(skill, anchor);
+                return;
+            }
+
+            if (skill.vfxFamily == SkillVfxFamily.BloodFountainSlash)
+            {
+                PlayBloodFountainSlashSkillEffect(
+                    skill,
+                    playerRenderer != null ? playerRenderer.transform : transform,
+                    anchor);
+                return;
+            }
+
+            if (skill.vfxFamily == SkillVfxFamily.FlameBurst)
+            {
+                PlayFlameBurstSkillParticleEffect(
+                    skill,
+                    anchor,
+                    lifetimeSeconds,
+                    burstCount,
+                    startSpeed,
+                    scaledStartSize,
+                    scale,
+                    intensity,
+                    repeatCount);
+                return;
+            }
+
             if (skill.vfxFamily == SkillVfxFamily.SupportFire)
             {
                 PlaySupportFireSkillParticleEffect(
+                    skill,
+                    anchor,
+                    lifetimeSeconds,
+                    burstCount,
+                    startSpeed,
+                    scaledStartSize,
+                    scale,
+                    intensity,
+                    repeatCount);
+                return;
+            }
+
+            if (skill.vfxFamily == SkillVfxFamily.ShieldDome && IsShieldGeneratingSkill(skill))
+            {
+                PlayShieldCircleSkillParticleEffect(
                     skill,
                     anchor,
                     lifetimeSeconds,
@@ -593,6 +785,278 @@ namespace Project2048.Prototype
                 startSpeed * Mathf.Sqrt(scale),
                 scaledStartSize,
                 swirl);
+        }
+
+        private void PlayShieldCircleSkillParticleEffect(
+            SkillSO skill,
+            Transform anchor,
+            float lifetimeSeconds,
+            int burstCount,
+            float startSpeed,
+            float startSize,
+            float scale,
+            float intensity,
+            int repeatCount)
+        {
+            if (IsThornGuardSkill(skill))
+            {
+                PlayThornGuardCircleSkillParticleEffect(
+                    skill,
+                    anchor,
+                    lifetimeSeconds,
+                    burstCount,
+                    startSpeed,
+                    startSize,
+                    scale,
+                    intensity,
+                    repeatCount);
+                return;
+            }
+
+            var primary = ResolveShieldCircleLightColor(ResolveReusableSkillParticleColor(skill));
+            var secondary = ResolveShieldCircleLightColor(ResolveReusableSkillSecondaryParticleColor(skill));
+            var radius = ShieldCircleBaseRadius * Mathf.Clamp(Mathf.Sqrt(scale), 0.72f, 1.35f);
+            var lifetime = Mathf.Max(0.45f, lifetimeSeconds);
+            var particleCount = Mathf.RoundToInt(burstCount * intensity * repeatCount);
+            var localOffset = new Vector3(0f, ShieldCircleBaseYOffset, 0f);
+
+            SpawnShieldVfxGraphLayer(
+                anchor,
+                "ShieldLightCircleVfxGraph",
+                ResolveShieldVfxGraphAsset(false),
+                primary,
+                secondary,
+                radius,
+                lifetime,
+                false,
+                sortingOffset: 6);
+
+            SpawnShieldCircleLine(
+                anchor,
+                "ShieldLightCircleRing",
+                primary,
+                radius,
+                Mathf.Clamp(0.052f * scale, 0.032f, 0.078f),
+                lifetime,
+                localOffset,
+                spiked: false,
+                sortingOffset: 4);
+
+            SpawnShieldCircleLine(
+                anchor,
+                "ShieldLightCircleHalo",
+                secondary,
+                radius * 1.16f,
+                Mathf.Clamp(0.028f * scale, 0.018f, 0.052f),
+                lifetime,
+                localOffset,
+                spiked: false,
+                sortingOffset: 3);
+
+            SpawnParticleBurst(
+                null,
+                anchor,
+                "ShieldLightCircleParticles",
+                primary,
+                null,
+                lifetime,
+                Mathf.Max(20, particleCount),
+                Mathf.Max(0.04f, startSpeed * 0.32f),
+                Mathf.Min(startSize * 0.72f, ReusableSkillParticleMaxStartSize),
+                false,
+                localOffset,
+                particles => ConfigureShieldCircleParticles(particles, radius, 0.08f, lifetime));
+
+            SpawnParticleBurst(
+                null,
+                anchor,
+                "ShieldLightDomeParticles",
+                secondary,
+                null,
+                lifetime,
+                Mathf.Max(16, Mathf.RoundToInt(particleCount * 0.62f)),
+                Mathf.Max(0.02f, startSpeed * 0.18f),
+                Mathf.Min(startSize * 0.58f, ReusableSkillParticleMaxStartSize),
+                true,
+                new Vector3(0f, ShieldCircleBaseYOffset + 0.16f, 0f),
+                particles => ConfigureShieldCircleParticles(particles, radius * 0.86f, 0.24f, lifetime));
+        }
+
+        private void PlayThornGuardCircleSkillParticleEffect(
+            SkillSO skill,
+            Transform anchor,
+            float lifetimeSeconds,
+            int burstCount,
+            float startSpeed,
+            float startSize,
+            float scale,
+            float intensity,
+            int repeatCount)
+        {
+            var primary = ResolveThornGuardDarkColor(ResolveReusableSkillParticleColor(skill), ThornGuardShadowTint, 0.68f);
+            var secondary = ResolveThornGuardDarkColor(ResolveReusableSkillSecondaryParticleColor(skill), ThornGuardBloodTint, 0.74f);
+            var radius = ShieldCircleBaseRadius * Mathf.Clamp(Mathf.Sqrt(scale), 0.78f, 1.42f);
+            var lifetime = Mathf.Max(0.5f, lifetimeSeconds * 1.08f);
+            var particleCount = Mathf.RoundToInt(burstCount * intensity * repeatCount);
+            var localOffset = new Vector3(0f, ShieldCircleBaseYOffset, 0f);
+
+            SpawnShieldVfxGraphLayer(
+                anchor,
+                "ThornGuardSpikedCircleVfxGraph",
+                ResolveShieldVfxGraphAsset(true),
+                primary,
+                secondary,
+                radius,
+                lifetime,
+                true,
+                sortingOffset: 7);
+
+            SpawnShieldCircleLine(
+                anchor,
+                "ThornGuardSpikedCircleRing",
+                primary,
+                radius,
+                Mathf.Clamp(0.06f * scale, 0.036f, 0.088f),
+                lifetime,
+                localOffset,
+                spiked: true,
+                sortingOffset: 5);
+
+            SpawnShieldCircleLine(
+                anchor,
+                "ThornGuardDarkInnerCircle",
+                secondary,
+                radius * 0.78f,
+                Mathf.Clamp(0.032f * scale, 0.022f, 0.06f),
+                lifetime,
+                localOffset,
+                spiked: true,
+                sortingOffset: 4);
+
+            SpawnParticleBurst(
+                null,
+                anchor,
+                "ThornGuardSpikedCircleParticles",
+                primary,
+                null,
+                lifetime,
+                Mathf.Max(24, particleCount),
+                Mathf.Max(0.22f, startSpeed * 0.8f),
+                Mathf.Min(startSize * 0.78f, ReusableSkillParticleMaxStartSize),
+                false,
+                localOffset,
+                particles => ConfigureShieldCircleParticles(particles, radius, 0.06f, lifetime));
+
+            SpawnParticleBurst(
+                null,
+                anchor,
+                "ThornGuardSpikeParticles",
+                secondary,
+                null,
+                lifetime,
+                Mathf.Max(18, Mathf.RoundToInt(particleCount * 0.7f)),
+                Mathf.Max(0.46f, startSpeed * 1.25f),
+                Mathf.Min(startSize * 0.88f, ReusableSkillParticleMaxStartSize),
+                false,
+                localOffset,
+                particles => ConfigureThornGuardSpikeParticles(particles, radius, lifetime));
+        }
+
+        private void PlayFlameBurstSkillParticleEffect(
+            SkillSO skill,
+            Transform anchor,
+            float lifetimeSeconds,
+            int burstCount,
+            float startSpeed,
+            float startSize,
+            float scale,
+            float intensity,
+            int repeatCount)
+        {
+            var parent = anchor != null ? anchor : transform;
+            var lifetime = Mathf.Max(FlameBurstDurationSeconds, lifetimeSeconds);
+            var resolvedScale = Mathf.Clamp(scale, 0.72f, 1.65f);
+            var primary = ResolveSkillTintedColor(
+                ResolveReusableSkillParticleColor(skill),
+                new Color(1f, 0.42f, 0.06f, 0.96f),
+                0.26f,
+                0.9f);
+            var secondary = ResolveSkillTintedColor(
+                ResolveReusableSkillSecondaryParticleColor(skill),
+                new Color(0.58f, 0.035f, 0.012f, 0.86f),
+                0.38f,
+                0.82f);
+            var smoke = Color.Lerp(secondary, new Color(0.06f, 0.045f, 0.04f, 0.54f), 0.68f);
+            smoke.a = 0.48f;
+
+            var root = new GameObject("FlameBurstFlameTongues");
+            root.transform.SetParent(parent, false);
+            root.transform.localPosition = new Vector3(0f, 0.04f, 0f);
+
+            for (var i = 0; i < FlameBurstTongueCount; i++)
+            {
+                var line = CreateLocalSkillLine(
+                    root.transform,
+                    $"FlameBurstFlameTongue{i + 1}",
+                    i % 2 == 0 ? primary : secondary,
+                    Mathf.Clamp(0.062f * resolvedScale, 0.028f, 0.078f),
+                    Mathf.Clamp(0.01f * resolvedScale, 0.005f, 0.02f),
+                    FlameBurstTongueSegmentCount + 1,
+                    parent,
+                    11 + i);
+                var xOffset = Mathf.Lerp(-0.32f, 0.32f, FlameBurstTongueCount == 1 ? 0.5f : i / (float)(FlameBurstTongueCount - 1));
+                var height = Mathf.Lerp(0.58f, 0.96f, i % 3 / 2f) * resolvedScale;
+                var sway = (i % 2 == 0 ? 1f : -1f) * Mathf.Lerp(0.08f, 0.16f, i / (float)FlameBurstTongueCount);
+                SetFlameTongueGeometry(line, xOffset * resolvedScale, height, sway * resolvedScale);
+            }
+
+            var particleCount = Mathf.RoundToInt(burstCount * intensity * repeatCount);
+            SpawnParticleBurst(
+                null,
+                parent,
+                "FlameBurstFlameParticles",
+                primary,
+                null,
+                lifetime,
+                Mathf.Max(34, particleCount),
+                Mathf.Max(0.08f, startSpeed * 0.28f),
+                Mathf.Min(startSize * 0.68f, ReusableSkillParticleMaxStartSize * 0.64f),
+                false,
+                new Vector3(0f, 0.1f, 0f),
+                particles => ConfigureFlameBurstParticles(particles, resolvedScale, lifetime));
+
+            SpawnParticleBurst(
+                null,
+                parent,
+                "FlameBurstEmbers",
+                secondary,
+                null,
+                lifetime * 0.86f,
+                Mathf.Max(16, Mathf.RoundToInt(particleCount * 0.55f)),
+                Mathf.Max(0.16f, startSpeed * 0.48f),
+                Mathf.Min(startSize * 0.42f, ReusableSkillParticleMaxStartSize * 0.36f),
+                false,
+                new Vector3(0f, 0.2f, 0f),
+                particles => ConfigureFlameEmberParticles(particles, resolvedScale, lifetime * 0.86f));
+
+            SpawnParticleBurst(
+                null,
+                parent,
+                "FlameBurstSmoke",
+                smoke,
+                null,
+                lifetime * 1.12f,
+                Mathf.Max(10, Mathf.RoundToInt(particleCount * 0.28f)),
+                0.08f,
+                Mathf.Min(startSize * 0.86f, ReusableSkillParticleMaxStartSize * 0.72f),
+                false,
+                new Vector3(0f, 0.38f, 0f),
+                particles => ConfigureFlameSmokeParticles(particles, resolvedScale, lifetime * 1.12f));
+
+            if (Application.isPlaying && isActiveAndEnabled)
+            {
+                StartCoroutine(FadeSkillLineRootRoutine(root, lifetime, root.GetComponentsInChildren<LineRenderer>()));
+            }
         }
 
         private void PlaySupportFireSkillParticleEffect(
@@ -635,35 +1099,324 @@ namespace Project2048.Prototype
             }
         }
 
+        private void PlaySpikedBurstSkillEffect(SkillSO skill, Transform targetAnchor)
+        {
+            var parent = targetAnchor != null ? targetAnchor : transform;
+            var scale = Mathf.Clamp(Mathf.Max(0.01f, skill != null ? skill.vfxScale : 1f), 0.78f, 1.85f);
+            var intensity = Mathf.Max(0.1f, skill != null ? skill.vfxIntensity : 1f);
+            var primary = ResolveSkillTintedColor(
+                skill != null ? ResolveReusableSkillParticleColor(skill) : Color.clear,
+                new Color(1f, 0.72f, 0.08f, 0.96f),
+                0.28f,
+                0.92f);
+            var secondary = ResolveSkillTintedColor(
+                skill != null ? ResolveReusableSkillSecondaryParticleColor(skill) : Color.clear,
+                new Color(0.74f, 0.035f, 0.015f, 0.9f),
+                0.34f,
+                0.84f);
+
+            var root = new GameObject("HeavyStrikeSpikedBurst");
+            root.transform.SetParent(parent, false);
+            root.transform.localPosition = new Vector3(0f, 0.18f, 0f);
+
+            var star = CreateLocalSkillLine(
+                root.transform,
+                "HeavyStrikeSpikedBurstStar",
+                primary,
+                Mathf.Clamp(0.064f * scale, 0.04f, 0.12f),
+                Mathf.Clamp(0.036f * scale, 0.022f, 0.078f),
+                HeavyStrikeStarSegmentCount + 1,
+                parent,
+                11);
+            SetSpikedBurstStarGeometry(star, 0.22f * scale, 0.62f * scale, 0.08f);
+
+            var shock = CreateLocalSkillLine(
+                root.transform,
+                "HeavyStrikeSpikedShockRing",
+                secondary,
+                Mathf.Clamp(0.034f * scale, 0.022f, 0.07f),
+                Mathf.Clamp(0.02f * scale, 0.012f, 0.05f),
+                HeavyStrikeStarSegmentCount + 1,
+                parent,
+                10);
+            SetSpikedBurstStarGeometry(shock, 0.36f * scale, 0.78f * scale, 0.17f);
+
+            for (var i = 0; i < HeavyStrikeSpikeRayCount; i++)
+            {
+                var color = i % 2 == 0 ? primary : secondary;
+                var ray = CreateLocalSkillLine(
+                    root.transform,
+                    $"HeavyStrikeSpikeRay{i + 1}",
+                    color,
+                    Mathf.Clamp(0.055f * scale, 0.032f, 0.095f),
+                    Mathf.Clamp(0.012f * scale, 0.008f, 0.032f),
+                    2,
+                    parent,
+                    12);
+                var angle = Mathf.PI * 2f * i / HeavyStrikeSpikeRayCount + (i % 3) * 0.07f;
+                var direction = new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0f);
+                ray.SetPosition(0, direction * (0.12f * scale));
+                ray.SetPosition(1, direction * Mathf.Lerp(0.72f, 0.98f, i % 4 / 3f) * scale);
+            }
+
+            SpawnParticleBurst(
+                null,
+                parent,
+                "HeavyStrikeSpikedExplosionParticles",
+                primary,
+                null,
+                HeavyStrikeSpikedBurstDurationSeconds,
+                Mathf.RoundToInt(40 * intensity),
+                1.25f * Mathf.Sqrt(scale),
+                Mathf.Clamp(0.16f * scale, 0.11f, 0.24f),
+                false,
+                new Vector3(0f, 0.18f, 0f),
+                particles => ConfigureSpikedBurstParticles(particles, scale, HeavyStrikeSpikedBurstDurationSeconds));
+
+            SpawnParticleBurst(
+                null,
+                parent,
+                "HeavyStrikeSpikeShards",
+                secondary,
+                null,
+                0.44f,
+                Mathf.RoundToInt(24 * intensity),
+                1.7f * Mathf.Sqrt(scale),
+                Mathf.Clamp(0.09f * scale, 0.06f, 0.15f),
+                false,
+                new Vector3(0f, 0.18f, 0f),
+                particles => ConfigureSpikedBurstParticles(particles, scale * 0.82f, 0.44f));
+
+            if (Application.isPlaying && isActiveAndEnabled)
+            {
+                StartCoroutine(FadeSkillLineRootRoutine(
+                    root,
+                    HeavyStrikeSpikedBurstDurationSeconds,
+                    root.GetComponentsInChildren<LineRenderer>()));
+            }
+        }
+
+        private void PlayBloodFountainSlashSkillEffect(SkillSO skill, Transform sourceAnchor, Transform targetAnchor)
+        {
+            var parent = targetAnchor != null ? targetAnchor : transform;
+            var scale = Mathf.Clamp(Mathf.Max(0.01f, skill != null ? skill.vfxScale : 1f), 0.78f, 1.75f);
+            var intensity = Mathf.Max(0.1f, skill != null ? skill.vfxIntensity : 1f);
+            var facingSign = ResolveAttackFacingSign(sourceAnchor, parent);
+            var primary = ResolveSkillTintedColor(
+                skill != null ? ResolveReusableSkillParticleColor(skill) : Color.clear,
+                new Color(0.94f, 0.015f, 0.035f, 0.96f),
+                0.22f,
+                0.92f);
+            var secondary = ResolveSkillTintedColor(
+                skill != null ? ResolveReusableSkillSecondaryParticleColor(skill) : Color.clear,
+                new Color(0.28f, 0f, 0.012f, 0.92f),
+                0.34f,
+                0.84f);
+
+            var root = new GameObject("BleedingCutSlashArc");
+            root.transform.SetParent(parent, false);
+            root.transform.localPosition = new Vector3(0f, 0.18f, 0f);
+
+            var slash = CreateLocalSkillLine(
+                root.transform,
+                "BleedingCutSlashLine",
+                primary,
+                Mathf.Clamp(0.092f * scale, 0.056f, 0.15f),
+                Mathf.Clamp(0.026f * scale, 0.016f, 0.06f),
+                BloodSlashSegmentCount + 1,
+                parent,
+                12);
+            SetBloodSlashGeometry(slash, scale, facingSign, 0f);
+
+            var edgeColor = Color.Lerp(Color.white, primary, 0.32f);
+            edgeColor.a = 0.88f;
+            var edge = CreateLocalSkillLine(
+                root.transform,
+                "BleedingCutSlashEdge",
+                edgeColor,
+                Mathf.Clamp(0.034f * scale, 0.022f, 0.072f),
+                Mathf.Clamp(0.012f * scale, 0.008f, 0.032f),
+                BloodSlashSegmentCount + 1,
+                parent,
+                13);
+            SetBloodSlashGeometry(edge, scale * 0.9f, facingSign, 0.055f);
+
+            SpawnParticleBurst(
+                null,
+                parent,
+                "BleedingCutBloodFountain",
+                primary,
+                null,
+                BloodFountainSlashDurationSeconds,
+                Mathf.RoundToInt(42 * intensity),
+                0.12f,
+                Mathf.Clamp(0.13f * scale, 0.08f, 0.22f),
+                false,
+                new Vector3(0.04f * facingSign, 0.18f, 0f),
+                particles => ConfigureBloodFountainParticles(particles, scale, BloodFountainSlashDurationSeconds));
+
+            SpawnParticleBurst(
+                null,
+                parent,
+                "BleedingCutBloodMist",
+                secondary,
+                null,
+                0.48f,
+                Mathf.RoundToInt(22 * intensity),
+                0.42f,
+                Mathf.Clamp(0.09f * scale, 0.055f, 0.16f),
+                false,
+                new Vector3(0.08f * facingSign, 0.26f, 0f),
+                particles => ConfigureBloodMistParticles(particles, scale, facingSign));
+
+            if (Application.isPlaying && isActiveAndEnabled)
+            {
+                StartCoroutine(FadeSkillLineRootRoutine(
+                    root,
+                    BloodFountainSlashDurationSeconds,
+                    root.GetComponentsInChildren<LineRenderer>()));
+            }
+        }
+
+        private LineRenderer CreateLocalSkillLine(
+            Transform parent,
+            string objectName,
+            Color color,
+            float startWidth,
+            float endWidth,
+            int positionCount,
+            Transform sortingAnchor,
+            int sortingOffset)
+        {
+            var lineObject = new GameObject(objectName, typeof(LineRenderer));
+            lineObject.transform.SetParent(parent != null ? parent : transform, false);
+            lineObject.transform.localPosition = Vector3.zero;
+
+            var line = lineObject.GetComponent<LineRenderer>();
+            line.useWorldSpace = false;
+            line.positionCount = Mathf.Max(2, positionCount);
+            line.numCapVertices = 8;
+            line.numCornerVertices = 6;
+            line.startWidth = Mathf.Max(0.004f, startWidth);
+            line.endWidth = Mathf.Max(0.004f, endWidth);
+            line.sharedMaterial = ResolveRuntimeSkillParticleMaterial(objectName, color);
+            line.startColor = color;
+            line.endColor = color;
+            ApplyAnchorSorting(line, sortingAnchor != null ? sortingAnchor : parent, sortingOffset);
+            return line;
+        }
+
+        private static void SetSpikedBurstStarGeometry(LineRenderer line, float innerRadius, float outerRadius, float rotationRadians)
+        {
+            if (line == null)
+            {
+                return;
+            }
+
+            for (var i = 0; i <= HeavyStrikeStarSegmentCount; i++)
+            {
+                var pointIndex = i % HeavyStrikeStarSegmentCount;
+                var angle = rotationRadians + Mathf.PI * 2f * pointIndex / HeavyStrikeStarSegmentCount;
+                var radius = pointIndex % 2 == 0 ? outerRadius : innerRadius;
+                if (pointIndex % 7 == 0)
+                {
+                    radius = outerRadius * 1.18f;
+                }
+
+                line.SetPosition(i, new Vector3(Mathf.Cos(angle) * radius, Mathf.Sin(angle) * radius, 0f));
+            }
+        }
+
+        private static void SetBloodSlashGeometry(LineRenderer line, float scale, float facingSign, float verticalOffset)
+        {
+            if (line == null)
+            {
+                return;
+            }
+
+            for (var i = 0; i <= BloodSlashSegmentCount; i++)
+            {
+                var t = i / (float)BloodSlashSegmentCount;
+                var x = Mathf.Lerp(-0.52f, 0.52f, t) * Mathf.Sign(facingSign == 0f ? 1f : facingSign) * scale;
+                var y = (Mathf.Lerp(-0.22f, 0.34f, t) + Mathf.Sin(t * Mathf.PI) * 0.22f + verticalOffset) * scale;
+                line.SetPosition(i, new Vector3(x, y, 0f));
+            }
+        }
+
+        private static void SetFlameTongueGeometry(LineRenderer line, float xOffset, float height, float sway)
+        {
+            if (line == null)
+            {
+                return;
+            }
+
+            for (var i = 0; i <= FlameBurstTongueSegmentCount; i++)
+            {
+                var t = i / (float)FlameBurstTongueSegmentCount;
+                var taper = 1f - t;
+                var curl = Mathf.Sin(t * Mathf.PI * 1.35f) * sway * taper;
+                var lick = Mathf.Sin((t * 2.6f + xOffset) * Mathf.PI) * 0.035f * taper;
+                var x = xOffset * taper + curl + lick;
+                var y = t * height + Mathf.Sin(t * Mathf.PI) * 0.08f;
+                line.SetPosition(i, new Vector3(x, y, 0f));
+            }
+        }
+
+        private static float ResolveAttackFacingSign(Transform sourceAnchor, Transform targetAnchor)
+        {
+            if (sourceAnchor == null || targetAnchor == null)
+            {
+                return 1f;
+            }
+
+            return sourceAnchor.position.x <= targetAnchor.position.x ? 1f : -1f;
+        }
+
         private void PlayChargedLightBeamEffect(EnemyController target)
         {
-            var sourceTransform = playerRenderer != null ? playerRenderer.transform : transform;
             var targetTransform = target != null && enemyRenderer != null ? enemyRenderer.transform : transform;
+            PlayChargedLightBeamEffect(targetTransform);
+        }
+
+        private void PlayChargedLightBeamEffect(Transform targetTransform)
+        {
+            var sourceTransform = playerRenderer != null ? playerRenderer.transform : transform;
             var sourcePosition = sourceTransform.position + new Vector3(0f, 0.38f, 0f);
             var targetPosition = targetTransform.position + new Vector3(0f, 0.18f, 0f);
 
-            var beamObject = new GameObject("ChargedLightBeam", typeof(LineRenderer));
-            beamObject.transform.SetParent(transform, false);
+            var glowLine = SpawnChargedLightBeamLine(
+                "ChargedLightBeamGlow",
+                sourcePosition,
+                targetPosition,
+                targetTransform,
+                new Color(1f, 0.82f, 0.18f, 0.34f),
+                new Color(1f, 1f, 0.78f, 0.22f),
+                0.28f,
+                0.42f,
+                7);
+            var line = SpawnChargedLightBeamLine(
+                "ChargedLightBeam",
+                sourcePosition,
+                targetPosition,
+                targetTransform,
+                new Color(1f, 0.96f, 0.58f, 0.95f),
+                new Color(1f, 1f, 0.88f, 0.75f),
+                0.08f,
+                0.16f,
+                9);
 
-            var line = beamObject.GetComponent<LineRenderer>();
-            line.useWorldSpace = true;
-            line.positionCount = 2;
-            line.SetPosition(0, sourcePosition);
-            line.SetPosition(1, targetPosition);
-            line.startWidth = 0.08f;
-            line.endWidth = 0.16f;
-            line.numCapVertices = 8;
-            line.numCornerVertices = 4;
-            line.material = ResolveChargedLightBeamMaterial();
-            line.startColor = new Color(1f, 0.96f, 0.58f, 0.95f);
-            line.endColor = new Color(1f, 1f, 0.88f, 0.75f);
-
-            var targetRenderer = targetTransform.GetComponent<SpriteRenderer>();
-            if (targetRenderer != null)
-            {
-                line.sortingLayerID = targetRenderer.sortingLayerID;
-                line.sortingOrder = targetRenderer.sortingOrder + 8;
-            }
+            SpawnParticleBurst(
+                null,
+                sourceTransform,
+                "ChargedLightBeamMuzzleParticles",
+                new Color(1f, 0.86f, 0.22f, 0.8f),
+                null,
+                0.36f,
+                14,
+                0.18f,
+                0.11f,
+                swirl: true,
+                new Vector3(0f, 0.38f, 0f));
 
             SpawnParticleBurst(
                 null,
@@ -679,15 +1432,58 @@ namespace Project2048.Prototype
 
             if (Application.isPlaying && isActiveAndEnabled)
             {
-                StartCoroutine(FadeChargedLightBeamRoutine(line, beamObject, ChargedLightBeamDurationSeconds));
+                StartCoroutine(AnimateChargedLightBeamRoutine(
+                    line,
+                    glowLine,
+                    sourcePosition,
+                    targetPosition,
+                    ChargedLightBeamDurationSeconds));
             }
         }
 
-        private static IEnumerator FadeChargedLightBeamRoutine(LineRenderer line, GameObject beamObject, float durationSeconds)
+        private LineRenderer SpawnChargedLightBeamLine(
+            string objectName,
+            Vector3 sourcePosition,
+            Vector3 targetPosition,
+            Transform targetTransform,
+            Color startColor,
+            Color endColor,
+            float startWidth,
+            float endWidth,
+            int sortingOffset)
+        {
+            var beamObject = new GameObject(objectName, typeof(LineRenderer));
+            beamObject.transform.SetParent(transform, false);
+
+            var line = beamObject.GetComponent<LineRenderer>();
+            line.useWorldSpace = true;
+            line.positionCount = 2;
+            line.SetPosition(0, sourcePosition);
+            line.SetPosition(1, targetPosition);
+            line.startWidth = Mathf.Max(0.01f, startWidth);
+            line.endWidth = Mathf.Max(0.01f, endWidth);
+            line.numCapVertices = 10;
+            line.numCornerVertices = 4;
+            line.sharedMaterial = ResolveChargedLightBeamMaterial();
+            line.startColor = startColor;
+            line.endColor = endColor;
+
+            ApplyAnchorSorting(line, targetTransform, sortingOffset);
+            return line;
+        }
+
+        private static IEnumerator AnimateChargedLightBeamRoutine(
+            LineRenderer line,
+            LineRenderer glowLine,
+            Vector3 sourcePosition,
+            Vector3 targetPosition,
+            float durationSeconds)
         {
             var duration = Mathf.Max(0.05f, durationSeconds);
             var startColor = line != null ? line.startColor : Color.white;
             var endColor = line != null ? line.endColor : Color.white;
+            var glowStartColor = glowLine != null ? glowLine.startColor : Color.clear;
+            var glowEndColor = glowLine != null ? glowLine.endColor : Color.clear;
             var elapsed = 0f;
             while (elapsed < duration)
             {
@@ -697,20 +1493,311 @@ namespace Project2048.Prototype
                 }
 
                 elapsed += Time.unscaledDeltaTime;
-                var alpha = 1f - Mathf.Clamp01(elapsed / duration);
+                var progress = Mathf.Clamp01(elapsed / duration);
+                var travelProgress = 1f - Mathf.Pow(1f - Mathf.Clamp01(progress / 0.34f), 3f);
+                var currentEnd = Vector3.Lerp(sourcePosition, targetPosition, travelProgress);
+                line.SetPosition(0, sourcePosition);
+                line.SetPosition(1, currentEnd);
+                if (glowLine != null)
+                {
+                    glowLine.SetPosition(0, sourcePosition);
+                    glowLine.SetPosition(1, currentEnd);
+                }
+
+                var alpha = 1f - Mathf.Clamp01((progress - 0.22f) / 0.78f);
                 var nextStart = startColor;
                 var nextEnd = endColor;
                 nextStart.a *= alpha;
                 nextEnd.a *= alpha;
                 line.startColor = nextStart;
                 line.endColor = nextEnd;
+                if (glowLine != null)
+                {
+                    var nextGlowStart = glowStartColor;
+                    var nextGlowEnd = glowEndColor;
+                    nextGlowStart.a *= alpha;
+                    nextGlowEnd.a *= alpha;
+                    glowLine.startColor = nextGlowStart;
+                    glowLine.endColor = nextGlowEnd;
+                }
+
                 yield return null;
             }
 
-            if (beamObject != null)
+            if (line != null)
             {
-                Destroy(beamObject);
+                Destroy(line.gameObject);
             }
+
+            if (glowLine != null)
+            {
+                Destroy(glowLine.gameObject);
+            }
+        }
+
+        private void PlayTentacleStrikeSkillEffect(SkillSO skill, Transform sourceAnchor, Transform targetAnchor)
+        {
+            var source = sourceAnchor != null ? sourceAnchor.position + new Vector3(0.22f, 0.26f, 0f) : transform.position;
+            var target = targetAnchor != null ? targetAnchor.position + new Vector3(-0.12f, 0.1f, 0f) : source + Vector3.right;
+            if ((target - source).sqrMagnitude <= 0.0001f)
+            {
+                target = source + Vector3.right;
+            }
+
+            var primary = ResolveTentacleColor(ResolveReusableSkillParticleColor(skill), new Color(0.18f, 0.035f, 0.24f, 0.96f), 0.48f);
+            var secondary = ResolveTentacleColor(ResolveReusableSkillSecondaryParticleColor(skill), new Color(0.72f, 0.24f, 0.92f, 0.86f), 0.36f);
+            var scale = Mathf.Clamp(Mathf.Max(0.01f, skill != null ? skill.vfxScale : 1f), 0.72f, 1.8f);
+
+            var root = new GameObject("TentacleStrikeWhip", typeof(LineRenderer));
+            root.transform.SetParent(transform, false);
+            var bodyLine = root.GetComponent<LineRenderer>();
+            ConfigureTentacleLine(
+                bodyLine,
+                primary,
+                Mathf.Clamp(0.18f * scale, 0.11f, 0.3f),
+                Mathf.Clamp(0.055f * scale, 0.032f, 0.12f),
+                targetAnchor,
+                10);
+
+            var highlightObject = new GameObject("TentacleStrikeHighlight", typeof(LineRenderer));
+            highlightObject.transform.SetParent(root.transform, false);
+            var highlightLine = highlightObject.GetComponent<LineRenderer>();
+            ConfigureTentacleLine(
+                highlightLine,
+                secondary,
+                Mathf.Clamp(0.058f * scale, 0.035f, 0.11f),
+                Mathf.Clamp(0.018f * scale, 0.012f, 0.05f),
+                targetAnchor,
+                11);
+
+            var cups = new LineRenderer[TentacleStrikeCupCount];
+            for (var i = 0; i < cups.Length; i++)
+            {
+                var cupObject = new GameObject($"TentacleSuctionCup{i + 1}", typeof(LineRenderer));
+                cupObject.transform.SetParent(root.transform, false);
+                cups[i] = cupObject.GetComponent<LineRenderer>();
+                ConfigureTentacleCupLine(cups[i], secondary, Mathf.Clamp(0.012f * scale, 0.008f, 0.02f), targetAnchor, 12);
+            }
+
+            UpdateTentacleStrikeGeometry(bodyLine, highlightLine, cups, source, target, scale, 1f, 0f);
+            SpawnParticleBurst(
+                null,
+                targetAnchor,
+                "TentacleStrikeImpactParticles",
+                secondary,
+                null,
+                0.38f,
+                16,
+                0.42f,
+                Mathf.Clamp(0.11f * scale, 0.08f, 0.18f),
+                swirl: true,
+                new Vector3(-0.08f, 0.08f, 0f));
+
+            if (Application.isPlaying && isActiveAndEnabled)
+            {
+                StartCoroutine(AnimateTentacleStrikeRoutine(root, bodyLine, highlightLine, cups, source, target, scale, primary, secondary));
+            }
+        }
+
+        private void ConfigureTentacleLine(
+            LineRenderer line,
+            Color color,
+            float startWidth,
+            float endWidth,
+            Transform sortingAnchor,
+            int sortingOffset)
+        {
+            if (line == null)
+            {
+                return;
+            }
+
+            line.useWorldSpace = true;
+            line.positionCount = TentacleStrikeSegmentCount + 1;
+            line.numCapVertices = 8;
+            line.numCornerVertices = 8;
+            line.startWidth = Mathf.Max(0.01f, startWidth);
+            line.endWidth = Mathf.Max(0.01f, endWidth);
+            line.widthCurve = new AnimationCurve(
+                new Keyframe(0f, 1f),
+                new Keyframe(0.68f, 0.78f),
+                new Keyframe(1f, 0.32f));
+            line.sharedMaterial = ResolveRuntimeSkillParticleMaterial(line.gameObject.name, color);
+            line.startColor = color;
+            line.endColor = color;
+            ApplyAnchorSorting(line, sortingAnchor, sortingOffset);
+        }
+
+        private void ConfigureTentacleCupLine(
+            LineRenderer line,
+            Color color,
+            float width,
+            Transform sortingAnchor,
+            int sortingOffset)
+        {
+            if (line == null)
+            {
+                return;
+            }
+
+            line.useWorldSpace = true;
+            line.positionCount = TentacleStrikeCupSegmentCount + 1;
+            line.numCapVertices = 3;
+            line.numCornerVertices = 3;
+            line.startWidth = Mathf.Max(0.004f, width);
+            line.endWidth = Mathf.Max(0.004f, width);
+            line.sharedMaterial = ResolveRuntimeSkillParticleMaterial(line.gameObject.name, color);
+            line.startColor = color;
+            line.endColor = color;
+            ApplyAnchorSorting(line, sortingAnchor, sortingOffset);
+        }
+
+        private static IEnumerator AnimateTentacleStrikeRoutine(
+            GameObject root,
+            LineRenderer bodyLine,
+            LineRenderer highlightLine,
+            LineRenderer[] cups,
+            Vector3 source,
+            Vector3 target,
+            float scale,
+            Color bodyColor,
+            Color highlightColor)
+        {
+            var elapsed = 0f;
+            while (elapsed < TentacleStrikeDurationSeconds)
+            {
+                if (root == null || bodyLine == null)
+                {
+                    yield break;
+                }
+
+                elapsed += Time.unscaledDeltaTime;
+                var progress = Mathf.Clamp01(elapsed / TentacleStrikeDurationSeconds);
+                var revealProgress = Mathf.Clamp01(progress / 0.38f);
+                var fade = 1f - Mathf.Clamp01((progress - 0.58f) / 0.42f);
+                UpdateTentacleStrikeGeometry(bodyLine, highlightLine, cups, source, target, scale, revealProgress, progress);
+                SetLineAlpha(bodyLine, bodyColor, fade);
+                SetLineAlpha(highlightLine, highlightColor, fade);
+                if (cups != null)
+                {
+                    foreach (var cup in cups)
+                    {
+                        SetLineAlpha(cup, highlightColor, fade * 0.86f);
+                    }
+                }
+
+                yield return null;
+            }
+
+            if (root != null)
+            {
+                Destroy(root);
+            }
+        }
+
+        private static void UpdateTentacleStrikeGeometry(
+            LineRenderer bodyLine,
+            LineRenderer highlightLine,
+            LineRenderer[] cups,
+            Vector3 source,
+            Vector3 target,
+            float scale,
+            float revealProgress,
+            float motionProgress)
+        {
+            var revealedTarget = Vector3.Lerp(source, target, 1f - Mathf.Pow(1f - Mathf.Clamp01(revealProgress), 3f));
+            for (var i = 0; i <= TentacleStrikeSegmentCount; i++)
+            {
+                var t = i / (float)TentacleStrikeSegmentCount;
+                var point = ResolveTentaclePoint(source, revealedTarget, t, scale, motionProgress);
+                bodyLine?.SetPosition(i, point);
+                highlightLine?.SetPosition(i, point + new Vector3(0f, 0.035f * scale, 0f));
+            }
+
+            if (cups == null)
+            {
+                return;
+            }
+
+            for (var i = 0; i < cups.Length; i++)
+            {
+                var t = Mathf.Lerp(0.22f, 0.78f, cups.Length == 1 ? 0f : i / (float)(cups.Length - 1));
+                if (t > Mathf.Clamp01(revealProgress) + 0.08f)
+                {
+                    SetTentacleCupRadius(cups[i], Vector3.zero, 0f);
+                    continue;
+                }
+
+                var center = ResolveTentaclePoint(source, revealedTarget, t, scale, motionProgress) - new Vector3(0f, 0.06f * scale, 0f);
+                var radius = Mathf.Lerp(0.035f, 0.022f, t) * scale;
+                SetTentacleCupRadius(cups[i], center, radius);
+            }
+        }
+
+        private static Vector3 ResolveTentaclePoint(Vector3 source, Vector3 target, float t, float scale, float motionProgress)
+        {
+            var direction = target - source;
+            direction.z = 0f;
+            if (direction.sqrMagnitude <= 0.0001f)
+            {
+                direction = Vector3.right;
+            }
+
+            var normal = new Vector3(-direction.y, direction.x, 0f).normalized;
+            var arch = Mathf.Sin(t * Mathf.PI) * 0.26f * scale;
+            var flex = Mathf.Sin((t * 2.8f + motionProgress * 2.2f) * Mathf.PI) * 0.1f * scale * (1f - t * 0.35f);
+            var recoil = Mathf.Sin(Mathf.Clamp01(motionProgress) * Mathf.PI) * (1f - t) * 0.08f * scale;
+            return Vector3.Lerp(source, target, t) + normal * (arch + flex + recoil);
+        }
+
+        private static void SetTentacleCupRadius(LineRenderer cup, Vector3 center, float radius)
+        {
+            if (cup == null)
+            {
+                return;
+            }
+
+            for (var i = 0; i <= TentacleStrikeCupSegmentCount; i++)
+            {
+                var angle = Mathf.PI * 2f * i / TentacleStrikeCupSegmentCount;
+                cup.SetPosition(i, center + new Vector3(Mathf.Cos(angle) * radius, Mathf.Sin(angle) * radius, 0f));
+            }
+        }
+
+        private static void SetLineAlpha(LineRenderer line, Color color, float alpha)
+        {
+            if (line == null)
+            {
+                return;
+            }
+
+            color.a *= Mathf.Clamp01(alpha);
+            line.startColor = color;
+            line.endColor = color;
+        }
+
+        private static Color ResolveTentacleColor(Color color, Color tint, float tintWeight)
+        {
+            if (color.a <= 0f)
+            {
+                color = tint;
+            }
+
+            var resolved = Color.Lerp(color, tint, Mathf.Clamp01(tintWeight));
+            resolved.a = Mathf.Max(0.82f, Mathf.Min(0.98f, color.a));
+            return resolved;
+        }
+
+        private static Color ResolveSkillTintedColor(Color color, Color tint, float tintWeight, float minimumAlpha)
+        {
+            if (color.a <= 0f)
+            {
+                color = tint;
+            }
+
+            var resolved = Color.Lerp(color, tint, Mathf.Clamp01(tintWeight));
+            resolved.a = Mathf.Max(Mathf.Clamp01(minimumAlpha), Mathf.Min(1f, color.a));
+            return resolved;
         }
 
         private static void ResolveReusableSkillParticleDefaults(
@@ -791,6 +1878,41 @@ namespace Project2048.Prototype
                     burstCount = 36;
                     startSpeed = 1.05f;
                     startSize = 0.14f;
+                    swirl = false;
+                    break;
+                case SkillVfxFamily.LightBeam:
+                    lifetimeSeconds = ChargedLightBeamDurationSeconds;
+                    burstCount = 30;
+                    startSpeed = 0.35f;
+                    startSize = 0.14f;
+                    swirl = true;
+                    break;
+                case SkillVfxFamily.TentacleWhip:
+                    lifetimeSeconds = TentacleStrikeDurationSeconds;
+                    burstCount = 24;
+                    startSpeed = 0.42f;
+                    startSize = 0.15f;
+                    swirl = true;
+                    break;
+                case SkillVfxFamily.SpikedBurst:
+                    lifetimeSeconds = HeavyStrikeSpikedBurstDurationSeconds;
+                    burstCount = 40;
+                    startSpeed = 1.25f;
+                    startSize = 0.16f;
+                    swirl = false;
+                    break;
+                case SkillVfxFamily.BloodFountainSlash:
+                    lifetimeSeconds = BloodFountainSlashDurationSeconds;
+                    burstCount = 42;
+                    startSpeed = 0.12f;
+                    startSize = 0.13f;
+                    swirl = false;
+                    break;
+                case SkillVfxFamily.FlameBurst:
+                    lifetimeSeconds = FlameBurstDurationSeconds;
+                    burstCount = 38;
+                    startSpeed = 0.5f;
+                    startSize = 0.13f;
                     swirl = false;
                     break;
                 default:
@@ -1712,7 +2834,7 @@ namespace Project2048.Prototype
                 swirl: true);
         }
 
-        private void SpawnParticleBurst(
+        private ParticleSystem SpawnParticleBurst(
             CombatParticleEffectBinding effect,
             Transform anchor,
             string fallbackObjectName,
@@ -1736,7 +2858,7 @@ namespace Project2048.Prototype
             var startSize = effect != null ? effect.EffectiveStartSize : fallbackStartSize;
             var shouldSwirl = effect != null ? effect.swirl : swirl;
 
-            SpawnParticleBurst(
+            return SpawnParticleBurst(
                 prefab,
                 anchor,
                 objectName,
@@ -1749,7 +2871,7 @@ namespace Project2048.Prototype
                 shouldSwirl);
         }
 
-        private void SpawnParticleBurst(
+        private ParticleSystem SpawnParticleBurst(
             ParticleSystem prefab,
             Transform anchor,
             string objectName,
@@ -1760,7 +2882,8 @@ namespace Project2048.Prototype
             float startSpeed,
             float startSize,
             bool swirl,
-            Vector3 localOffset = default)
+            Vector3 localOffset = default,
+            System.Action<ParticleSystem> configureOverride = null)
         {
             var parent = anchor != null ? anchor : transform;
             var particles = prefab != null
@@ -1768,13 +2891,14 @@ namespace Project2048.Prototype
                 : CreateFallbackParticleSystem(parent, objectName);
             if (particles == null)
             {
-                return;
+                return null;
             }
 
             particles.gameObject.name = objectName;
             particles.transform.localPosition = localOffset;
             var resolvedMaterial = material ?? ResolveRuntimeSkillParticleMaterial(objectName, color);
             ConfigureParticleBurst(particles, color, resolvedMaterial, lifetimeSeconds, burstCount, startSpeed, startSize, parent, swirl);
+            configureOverride?.Invoke(particles);
             particles.Play(true);
             if (swirl && Application.isPlaying && isActiveAndEnabled)
             {
@@ -1785,6 +2909,8 @@ namespace Project2048.Prototype
             {
                 Destroy(particles.gameObject, lifetimeSeconds + 0.2f);
             }
+
+            return particles;
         }
 
         private ParticleSystem CreateFallbackParticleSystem(Transform parent, string objectName)
@@ -1913,6 +3039,554 @@ namespace Project2048.Prototype
             size.enabled = false;
         }
 
+        private VisualEffect SpawnShieldVfxGraphLayer(
+            Transform anchor,
+            string objectName,
+            VisualEffectAsset asset,
+            Color primaryColor,
+            Color secondaryColor,
+            float radius,
+            float lifetimeSeconds,
+            bool spiked,
+            int sortingOffset)
+        {
+            var parent = anchor != null ? anchor : transform;
+            var graphObject = new GameObject(objectName, typeof(VisualEffect));
+            graphObject.transform.SetParent(parent, false);
+            graphObject.transform.localPosition = new Vector3(0f, ShieldCircleBaseYOffset, 0f);
+            graphObject.transform.localScale = new Vector3(
+                Mathf.Max(0.01f, radius),
+                Mathf.Max(0.01f, radius),
+                Mathf.Max(0.01f, radius));
+
+            var visualEffect = graphObject.GetComponent<VisualEffect>();
+            if (asset != null)
+            {
+                visualEffect.visualEffectAsset = asset;
+            }
+
+            visualEffect.startSeed = (uint)Mathf.Abs(objectName.GetHashCode());
+            TrySetVisualEffectVector4(visualEffect, "PrimaryColor", primaryColor);
+            TrySetVisualEffectVector4(visualEffect, "SecondaryColor", secondaryColor);
+            TrySetVisualEffectFloat(visualEffect, "Radius", radius);
+            TrySetVisualEffectFloat(visualEffect, "Lifetime", lifetimeSeconds);
+            TrySetVisualEffectFloat(visualEffect, "Spikes", spiked ? 1f : 0f);
+            visualEffect.SendEvent("OnPlay");
+
+            ApplyAnchorSorting(graphObject.GetComponent<Renderer>(), parent, sortingOffset);
+            if (lifetimeSeconds > 0f && Application.isPlaying)
+            {
+                Destroy(graphObject, lifetimeSeconds + 0.2f);
+            }
+
+            return visualEffect;
+        }
+
+        private static void TrySetVisualEffectVector4(VisualEffect visualEffect, string propertyName, Color color)
+        {
+            if (visualEffect == null || string.IsNullOrEmpty(propertyName))
+            {
+                return;
+            }
+
+            if (visualEffect.visualEffectAsset == null || visualEffect.HasVector4(propertyName))
+            {
+                visualEffect.SetVector4(propertyName, color);
+            }
+        }
+
+        private static void TrySetVisualEffectFloat(VisualEffect visualEffect, string propertyName, float value)
+        {
+            if (visualEffect == null || string.IsNullOrEmpty(propertyName))
+            {
+                return;
+            }
+
+            if (visualEffect.visualEffectAsset == null || visualEffect.HasFloat(propertyName))
+            {
+                visualEffect.SetFloat(propertyName, value);
+            }
+        }
+
+        private LineRenderer SpawnShieldCircleLine(
+            Transform anchor,
+            string objectName,
+            Color color,
+            float radius,
+            float width,
+            float lifetimeSeconds,
+            Vector3 localOffset,
+            bool spiked,
+            int sortingOffset)
+        {
+            var parent = anchor != null ? anchor : transform;
+            var lineObject = new GameObject(objectName, typeof(LineRenderer));
+            lineObject.transform.SetParent(parent, false);
+            lineObject.transform.localPosition = localOffset;
+
+            var line = lineObject.GetComponent<LineRenderer>();
+            line.useWorldSpace = false;
+            line.positionCount = ShieldCircleRingSegmentCount + 1;
+            line.startWidth = Mathf.Max(0.01f, width);
+            line.endWidth = Mathf.Max(0.01f, width);
+            line.numCapVertices = 4;
+            line.numCornerVertices = 4;
+            line.sharedMaterial = ResolveRuntimeSkillParticleMaterial(objectName, color);
+            line.startColor = color;
+            line.endColor = color;
+
+            for (var i = 0; i <= ShieldCircleRingSegmentCount; i++)
+            {
+                var angle = Mathf.PI * 2f * i / ShieldCircleRingSegmentCount;
+                var spikeMultiplier = 1f;
+                if (spiked)
+                {
+                    spikeMultiplier = i % 2 == 0 ? 1.16f : 0.94f;
+                    if (i % 6 == 0)
+                    {
+                        spikeMultiplier = 1.26f;
+                    }
+                }
+
+                var resolvedRadius = Mathf.Max(0.01f, radius * spikeMultiplier);
+                line.SetPosition(i, new Vector3(Mathf.Cos(angle) * resolvedRadius, Mathf.Sin(angle) * resolvedRadius, 0f));
+            }
+
+            ApplyAnchorSorting(line, parent, sortingOffset);
+            if (lifetimeSeconds > 0f && Application.isPlaying)
+            {
+                if (isActiveAndEnabled)
+                {
+                    StartCoroutine(FadeLineRendererRoutine(line, lifetimeSeconds));
+                }
+
+                Destroy(lineObject, lifetimeSeconds + 0.2f);
+            }
+
+            return line;
+        }
+
+        private static void ConfigureSpikedBurstParticles(ParticleSystem particles, float scale, float lifetimeSeconds)
+        {
+            if (particles == null)
+            {
+                return;
+            }
+
+            var main = particles.main;
+            main.startLifetime = new ParticleSystem.MinMaxCurve(lifetimeSeconds * 0.45f, lifetimeSeconds);
+            main.startSpeed = new ParticleSystem.MinMaxCurve(0.72f * scale, 1.78f * scale);
+            main.startSize = new ParticleSystem.MinMaxCurve(0.06f * scale, 0.18f * scale);
+            main.gravityModifier = 0f;
+
+            var shape = particles.shape;
+            shape.enabled = true;
+            shape.shapeType = ParticleSystemShapeType.Circle;
+            shape.radius = 0.08f * scale;
+            shape.radiusThickness = 0.18f;
+            shape.arc = 360f;
+
+            var rotation = particles.rotationOverLifetime;
+            rotation.enabled = true;
+            rotation.separateAxes = true;
+            rotation.z = new ParticleSystem.MinMaxCurve(-Mathf.PI * 3f, Mathf.PI * 3f);
+
+            var size = particles.sizeOverLifetime;
+            size.enabled = true;
+            size.size = new ParticleSystem.MinMaxCurve(1f, new AnimationCurve(
+                new Keyframe(0f, 0.35f),
+                new Keyframe(0.16f, 1.38f),
+                new Keyframe(0.58f, 0.82f),
+                new Keyframe(1f, 0f)));
+        }
+
+        private static void ConfigureBloodFountainParticles(ParticleSystem particles, float scale, float lifetimeSeconds)
+        {
+            if (particles == null)
+            {
+                return;
+            }
+
+            var main = particles.main;
+            main.startLifetime = new ParticleSystem.MinMaxCurve(lifetimeSeconds * 0.58f, lifetimeSeconds);
+            main.startSpeed = new ParticleSystem.MinMaxCurve(0.02f, 0.08f);
+            main.startSize = new ParticleSystem.MinMaxCurve(0.07f * scale, 0.16f * scale);
+            main.gravityModifier = new ParticleSystem.MinMaxCurve(1.42f);
+            main.simulationSpace = ParticleSystemSimulationSpace.Local;
+
+            var shape = particles.shape;
+            shape.enabled = true;
+            shape.shapeType = ParticleSystemShapeType.Circle;
+            shape.radius = 0.12f * scale;
+            shape.radiusThickness = 0.5f;
+            shape.arc = 360f;
+
+            var velocity = particles.velocityOverLifetime;
+            velocity.enabled = true;
+            velocity.space = ParticleSystemSimulationSpace.Local;
+            velocity.x = new ParticleSystem.MinMaxCurve(-0.34f * scale, 0.34f * scale);
+            velocity.y = new ParticleSystem.MinMaxCurve(1.42f * scale, 2.35f * scale);
+            velocity.z = new ParticleSystem.MinMaxCurve(0f);
+
+            var rotation = particles.rotationOverLifetime;
+            rotation.enabled = true;
+            rotation.separateAxes = true;
+            rotation.z = new ParticleSystem.MinMaxCurve(-Mathf.PI * 2.2f, Mathf.PI * 2.2f);
+
+            var size = particles.sizeOverLifetime;
+            size.enabled = true;
+            size.size = new ParticleSystem.MinMaxCurve(1f, new AnimationCurve(
+                new Keyframe(0f, 0.72f),
+                new Keyframe(0.2f, 1.18f),
+                new Keyframe(0.72f, 0.9f),
+                new Keyframe(1f, 0f)));
+        }
+
+        private static void ConfigureBloodMistParticles(ParticleSystem particles, float scale, float facingSign)
+        {
+            if (particles == null)
+            {
+                return;
+            }
+
+            var main = particles.main;
+            main.startLifetime = new ParticleSystem.MinMaxCurve(0.26f, 0.48f);
+            main.startSpeed = new ParticleSystem.MinMaxCurve(0.1f, 0.42f);
+            main.startSize = new ParticleSystem.MinMaxCurve(0.04f * scale, 0.12f * scale);
+            main.gravityModifier = new ParticleSystem.MinMaxCurve(0.5f);
+
+            var shape = particles.shape;
+            shape.enabled = true;
+            shape.shapeType = ParticleSystemShapeType.Circle;
+            shape.radius = 0.22f * scale;
+            shape.radiusThickness = 0.7f;
+
+            var direction = Mathf.Sign(facingSign == 0f ? 1f : facingSign);
+            var horizontalMin = direction > 0f ? 0.08f * scale : -0.56f * scale;
+            var horizontalMax = direction > 0f ? 0.56f * scale : -0.08f * scale;
+            var velocity = particles.velocityOverLifetime;
+            velocity.enabled = true;
+            velocity.space = ParticleSystemSimulationSpace.Local;
+            velocity.x = new ParticleSystem.MinMaxCurve(horizontalMin, horizontalMax);
+            velocity.y = new ParticleSystem.MinMaxCurve(0.28f * scale, 0.86f * scale);
+            velocity.z = new ParticleSystem.MinMaxCurve(0f);
+
+            var size = particles.sizeOverLifetime;
+            size.enabled = true;
+            size.size = new ParticleSystem.MinMaxCurve(1f, new AnimationCurve(
+                new Keyframe(0f, 0.38f),
+                new Keyframe(0.24f, 1f),
+                new Keyframe(1f, 0f)));
+        }
+
+        private static void ConfigureFlameBurstParticles(ParticleSystem particles, float scale, float lifetimeSeconds)
+        {
+            if (particles == null)
+            {
+                return;
+            }
+
+            var main = particles.main;
+            main.duration = Mathf.Max(0.2f, lifetimeSeconds);
+            main.startLifetime = new ParticleSystem.MinMaxCurve(lifetimeSeconds * 0.28f, lifetimeSeconds * 0.72f);
+            main.startSpeed = new ParticleSystem.MinMaxCurve(0.03f, 0.16f * scale);
+            main.startSize = new ParticleSystem.MinMaxCurve(0.045f * scale, 0.105f * scale);
+            main.gravityModifier = new ParticleSystem.MinMaxCurve(-0.08f);
+            main.simulationSpace = ParticleSystemSimulationSpace.Local;
+
+            var emission = particles.emission;
+            emission.rateOverTime = new ParticleSystem.MinMaxCurve(34f * scale);
+            emission.SetBursts(new[]
+            {
+                new ParticleSystem.Burst(0f, (short)Mathf.Clamp(Mathf.RoundToInt(14 * scale), 1, short.MaxValue)),
+                new ParticleSystem.Burst(0.18f, (short)Mathf.Clamp(Mathf.RoundToInt(10 * scale), 1, short.MaxValue)),
+            });
+
+            var shape = particles.shape;
+            shape.enabled = true;
+            shape.shapeType = ParticleSystemShapeType.Cone;
+            shape.angle = 18f;
+            shape.radius = 0.28f * scale;
+            shape.radiusThickness = 0.82f;
+
+            var velocity = particles.velocityOverLifetime;
+            velocity.enabled = true;
+            velocity.space = ParticleSystemSimulationSpace.Local;
+            velocity.x = new ParticleSystem.MinMaxCurve(-0.22f * scale, 0.22f * scale);
+            velocity.y = new ParticleSystem.MinMaxCurve(0.92f * scale, 1.55f * scale);
+            velocity.z = new ParticleSystem.MinMaxCurve(0f);
+
+            var rotation = particles.rotationOverLifetime;
+            rotation.enabled = true;
+            rotation.separateAxes = true;
+            rotation.z = new ParticleSystem.MinMaxCurve(-Mathf.PI * 2.6f, Mathf.PI * 2.6f);
+
+            var size = particles.sizeOverLifetime;
+            size.enabled = true;
+            size.size = new ParticleSystem.MinMaxCurve(1f, new AnimationCurve(
+                new Keyframe(0f, 0.28f),
+                new Keyframe(0.2f, 1.16f),
+                new Keyframe(0.58f, 0.82f),
+                new Keyframe(1f, 0f)));
+        }
+
+        private static void ConfigureFlameEmberParticles(ParticleSystem particles, float scale, float lifetimeSeconds)
+        {
+            if (particles == null)
+            {
+                return;
+            }
+
+            var main = particles.main;
+            main.duration = Mathf.Max(0.2f, lifetimeSeconds);
+            main.startLifetime = new ParticleSystem.MinMaxCurve(lifetimeSeconds * 0.42f, lifetimeSeconds);
+            main.startSpeed = new ParticleSystem.MinMaxCurve(0.26f * scale, 0.86f * scale);
+            main.startSize = new ParticleSystem.MinMaxCurve(0.026f * scale, 0.058f * scale);
+            main.gravityModifier = new ParticleSystem.MinMaxCurve(0.16f);
+            main.simulationSpace = ParticleSystemSimulationSpace.Local;
+
+            var emission = particles.emission;
+            emission.rateOverTime = new ParticleSystem.MinMaxCurve(14f * scale);
+
+            var shape = particles.shape;
+            shape.enabled = true;
+            shape.shapeType = ParticleSystemShapeType.Cone;
+            shape.angle = 32f;
+            shape.radius = 0.22f * scale;
+            shape.radiusThickness = 0.5f;
+
+            var velocity = particles.velocityOverLifetime;
+            velocity.enabled = true;
+            velocity.space = ParticleSystemSimulationSpace.Local;
+            velocity.x = new ParticleSystem.MinMaxCurve(-0.34f * scale, 0.34f * scale);
+            velocity.y = new ParticleSystem.MinMaxCurve(0.58f * scale, 1.18f * scale);
+            velocity.z = new ParticleSystem.MinMaxCurve(0f);
+
+            var size = particles.sizeOverLifetime;
+            size.enabled = true;
+            size.size = new ParticleSystem.MinMaxCurve(1f, new AnimationCurve(
+                new Keyframe(0f, 0.55f),
+                new Keyframe(0.18f, 1f),
+                new Keyframe(1f, 0f)));
+        }
+
+        private static void ConfigureFlameSmokeParticles(ParticleSystem particles, float scale, float lifetimeSeconds)
+        {
+            if (particles == null)
+            {
+                return;
+            }
+
+            var main = particles.main;
+            main.duration = Mathf.Max(0.2f, lifetimeSeconds);
+            main.startLifetime = new ParticleSystem.MinMaxCurve(lifetimeSeconds * 0.52f, lifetimeSeconds);
+            main.startSpeed = new ParticleSystem.MinMaxCurve(0.04f, 0.18f * scale);
+            main.startSize = new ParticleSystem.MinMaxCurve(0.08f * scale, 0.18f * scale);
+            main.gravityModifier = new ParticleSystem.MinMaxCurve(-0.04f);
+            main.simulationSpace = ParticleSystemSimulationSpace.Local;
+
+            var emission = particles.emission;
+            emission.rateOverTime = new ParticleSystem.MinMaxCurve(8f * scale);
+
+            var shape = particles.shape;
+            shape.enabled = true;
+            shape.shapeType = ParticleSystemShapeType.Circle;
+            shape.radius = 0.24f * scale;
+            shape.radiusThickness = 0.75f;
+
+            var velocity = particles.velocityOverLifetime;
+            velocity.enabled = true;
+            velocity.space = ParticleSystemSimulationSpace.Local;
+            velocity.x = new ParticleSystem.MinMaxCurve(-0.12f * scale, 0.12f * scale);
+            velocity.y = new ParticleSystem.MinMaxCurve(0.34f * scale, 0.74f * scale);
+            velocity.z = new ParticleSystem.MinMaxCurve(0f);
+
+            var size = particles.sizeOverLifetime;
+            size.enabled = true;
+            size.size = new ParticleSystem.MinMaxCurve(1f, new AnimationCurve(
+                new Keyframe(0f, 0.42f),
+                new Keyframe(0.4f, 1f),
+                new Keyframe(1f, 0f)));
+        }
+
+        private static void ConfigureShieldCircleParticles(
+            ParticleSystem particles,
+            float radius,
+            float radiusThickness,
+            float lifetimeSeconds)
+        {
+            if (particles == null)
+            {
+                return;
+            }
+
+            var shape = particles.shape;
+            shape.enabled = true;
+            shape.shapeType = ParticleSystemShapeType.Circle;
+            shape.radius = Mathf.Max(0.05f, radius);
+            shape.radiusThickness = Mathf.Clamp01(radiusThickness);
+            shape.arc = 360f;
+
+            var size = particles.sizeOverLifetime;
+            size.enabled = true;
+            size.size = new ParticleSystem.MinMaxCurve(1f, new AnimationCurve(
+                new Keyframe(0f, 0.35f),
+                new Keyframe(Mathf.Clamp01(0.2f / Mathf.Max(0.05f, lifetimeSeconds)), 1.1f),
+                new Keyframe(1f, 0f)));
+        }
+
+        private static void ConfigureThornGuardSpikeParticles(
+            ParticleSystem particles,
+            float radius,
+            float lifetimeSeconds)
+        {
+            ConfigureShieldCircleParticles(particles, radius, 0.02f, lifetimeSeconds);
+
+            var rotation = particles.rotationOverLifetime;
+            rotation.enabled = true;
+            rotation.separateAxes = true;
+            rotation.z = new ParticleSystem.MinMaxCurve(-Mathf.PI * 2f, Mathf.PI * 2f);
+
+            var size = particles.sizeOverLifetime;
+            size.enabled = true;
+            size.size = new ParticleSystem.MinMaxCurve(1f, new AnimationCurve(
+                new Keyframe(0f, 0.2f),
+                new Keyframe(0.24f, 1.35f),
+                new Keyframe(1f, 0f)));
+        }
+
+        private IEnumerator FadeLineRendererRoutine(LineRenderer line, float lifetimeSeconds)
+        {
+            var duration = Mathf.Max(0.05f, lifetimeSeconds);
+            var elapsed = 0f;
+            var startColor = line != null ? line.startColor : Color.clear;
+            var endColor = line != null ? line.endColor : Color.clear;
+            while (elapsed < duration)
+            {
+                if (line == null)
+                {
+                    yield break;
+                }
+
+                elapsed += Time.deltaTime;
+                var alpha = 1f - Mathf.Clamp01(elapsed / duration);
+                var nextStart = startColor;
+                var nextEnd = endColor;
+                nextStart.a *= alpha;
+                nextEnd.a *= alpha;
+                line.startColor = nextStart;
+                line.endColor = nextEnd;
+                yield return null;
+            }
+        }
+
+        private static IEnumerator FadeSkillLineRootRoutine(GameObject root, float lifetimeSeconds, LineRenderer[] lines)
+        {
+            var duration = Mathf.Max(0.05f, lifetimeSeconds);
+            var elapsed = 0f;
+            lines ??= System.Array.Empty<LineRenderer>();
+            var startColors = new Color[lines.Length];
+            var endColors = new Color[lines.Length];
+            for (var i = 0; i < lines.Length; i++)
+            {
+                startColors[i] = lines[i] != null ? lines[i].startColor : Color.clear;
+                endColors[i] = lines[i] != null ? lines[i].endColor : Color.clear;
+            }
+
+            while (elapsed < duration)
+            {
+                if (root == null)
+                {
+                    yield break;
+                }
+
+                elapsed += Time.deltaTime;
+                var alpha = 1f - Mathf.Clamp01(elapsed / duration);
+                for (var i = 0; i < lines.Length; i++)
+                {
+                    var line = lines[i];
+                    if (line == null)
+                    {
+                        continue;
+                    }
+
+                    var nextStart = startColors[i];
+                    var nextEnd = endColors[i];
+                    nextStart.a *= alpha;
+                    nextEnd.a *= alpha;
+                    line.startColor = nextStart;
+                    line.endColor = nextEnd;
+                }
+
+                yield return null;
+            }
+
+            if (root != null)
+            {
+                Destroy(root);
+            }
+        }
+
+        private static void ApplyAnchorSorting(Renderer renderer, Transform anchor, int sortingOffset)
+        {
+            if (renderer == null || anchor == null)
+            {
+                return;
+            }
+
+            var anchorRenderer = anchor.GetComponent<SpriteRenderer>();
+            if (anchorRenderer == null)
+            {
+                return;
+            }
+
+            renderer.sortingLayerID = anchorRenderer.sortingLayerID;
+            renderer.sortingOrder = anchorRenderer.sortingOrder + sortingOffset;
+        }
+
+        private static bool IsShieldGeneratingSkill(SkillSO skill)
+        {
+            if (skill == null)
+            {
+                return false;
+            }
+
+            var effectKind = skill.ResolveEffectKind();
+            return effectKind == SkillEffectKind.ThornGuard ||
+                (effectKind == SkillEffectKind.BasicDefense && skill.power > 0);
+        }
+
+        private static bool IsThornGuardSkill(SkillSO skill)
+        {
+            return skill != null &&
+                (skill.ResolveEffectKind() == SkillEffectKind.ThornGuard ||
+                    string.Equals(skill.skillId, "thorn-guard", System.StringComparison.OrdinalIgnoreCase));
+        }
+
+        private static Color ResolveShieldCircleLightColor(Color color)
+        {
+            if (color.a <= 0f)
+            {
+                color = ShieldCircleLightTint;
+            }
+
+            var resolved = Color.Lerp(color, ShieldCircleLightTint, 0.42f);
+            resolved.a = Mathf.Max(0.88f, Mathf.Min(0.96f, color.a));
+            return resolved;
+        }
+
+        private static Color ResolveThornGuardDarkColor(Color color, Color tint, float tintWeight)
+        {
+            if (color.a <= 0f)
+            {
+                color = tint;
+            }
+
+            var resolved = Color.Lerp(color, tint, Mathf.Clamp01(tintWeight));
+            resolved.a = Mathf.Max(0.86f, Mathf.Min(0.96f, color.a));
+            return resolved;
+        }
+
         private Color ResolveDebuffParticleColor(DebuffType debuffType)
         {
             return debuffType switch
@@ -1982,6 +3656,40 @@ namespace Project2048.Prototype
             }
 
             return material;
+        }
+
+        private VisualEffectAsset ResolveShieldVfxGraphAsset(bool thornGuard)
+        {
+            if (thornGuard)
+            {
+                if (thornGuardSpikedCircleVfxGraph != null)
+                {
+                    return thornGuardSpikedCircleVfxGraph;
+                }
+
+                if (!attemptedResolveThornGuardSpikedCircleVfxGraph)
+                {
+                    attemptedResolveThornGuardSpikedCircleVfxGraph = true;
+                    resolvedThornGuardSpikedCircleVfxGraph =
+                        Resources.Load<VisualEffectAsset>(ThornGuardSpikedCircleVfxResourceName);
+                }
+
+                return resolvedThornGuardSpikedCircleVfxGraph;
+            }
+
+            if (shieldLightCircleVfxGraph != null)
+            {
+                return shieldLightCircleVfxGraph;
+            }
+
+            if (!attemptedResolveShieldLightCircleVfxGraph)
+            {
+                attemptedResolveShieldLightCircleVfxGraph = true;
+                resolvedShieldLightCircleVfxGraph =
+                    Resources.Load<VisualEffectAsset>(ShieldLightCircleVfxResourceName);
+            }
+
+            return resolvedShieldLightCircleVfxGraph;
         }
 
         private Material ResolveChargedLightBeamMaterial()

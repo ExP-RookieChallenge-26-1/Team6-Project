@@ -1,0 +1,89 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e39edfbbdac2c064e877e5f3f784bab9, type: 3}
+  m_Name: CrackBrand
+  m_EditorClassIdentifier: Game.Core::Project2048.Skills.SkillSO
+  skillId: crack-brand
+  skillName: "균열 낙인"
+  skillType: 2
+  effectKind: 31
+  damageStatSource: 0
+  cost: 5
+  power: 0
+  targetAttackStageModifier: 0
+  targetDefenseStageModifier: 0
+  selfDefenseStageModifier: 0
+  selfCriticalStageModifier: 0
+  targetAttackModifier: 0
+  targetDefenseModifier: 0
+  debuffType: 0
+  debuffValue: 0
+  selfDefenseBonus: 0
+  selfDefensePowerModifier: 0
+  selfThornRetaliationDamage: 0
+  selfCounterPercent: 0
+  selfEndureTurns: 0
+  selfEchoDamageBonus: 0
+  selfExtraAttackHits: 0
+  selfCriticalChanceBonus: 0
+  lifeStealPercent: 0
+  hpCost: 0
+  hpCostPercent: 0
+  hpCostLeavesOne: 1
+  nextBoardMoveCountModifier: 0
+  nextCostGainModifier: 0
+  nextCostGainMultiplier: 1
+  conditionalPowerBonus: 0
+  conditionalHpThreshold: 0
+  statusDuration: 0
+  statusDamage: 40
+  statusMaxHpDamagePercent: 0
+  shieldPiercePercent: 0
+  extraPowerPerConsumedCost: 0
+  maxCostCarry: 0
+  costRefund: 0
+  chargedPower: 0
+  consumesAllShield: 0
+  nextAttackPowerMultiplier: 1
+  nextAttackHitCount: 0
+  nextAttackHitPowerMultiplier: 1
+  healPercentOfMaxHp: 0
+  availability: 0
+  icon: {fileID: 0}
+  activationEffect:
+    sfxClip: {fileID: 0}
+    vfxPrefab: {fileID: 0}
+    animationClip: {fileID: 0}
+    particleEffect:
+      objectName:
+      particlePrefab: {fileID: 0}
+      particleMaterial: {fileID: 0}
+      useParticleColor: 0
+      particleColor: {r: 1, g: 1, b: 1, a: 1}
+      lifetimeSeconds: 0.8
+      burstCount: 16
+      startSpeed: 0.6
+      startSize: 0.12
+      swirl: 0
+    volumeScale: 1
+    minPitch: 1
+    maxPitch: 1
+    sfxDelaySeconds: 0
+    localOffset: {x: 0, y: 0, z: 0}
+    autoDestroySeconds: 1.25
+  vfxFamily: 6
+  vfxPrimaryColor: {r: 0.72, g: 0.45, b: 1, a: 1}
+  vfxSecondaryColor: {r: 0.08, g: 0.03, b: 0.18, a: 1}
+  vfxScale: 0.85
+  vfxIntensity: 1
+  vfxRepeatCount: 1
+  description: "대상에게 낙인을 부여한다. 낙인이 있는 대상이 다음 공격을 받으면 추가 피해 40을 받고 낙인이 해제된다."

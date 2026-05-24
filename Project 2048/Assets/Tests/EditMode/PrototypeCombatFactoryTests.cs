@@ -20,7 +20,7 @@ namespace Project2048.Tests
                 Assert.That(loadout.EnemyData, Is.Not.Null);
                 Assert.That(loadout.PlayerData.maxHp, Is.EqualTo(240));
                 Assert.That(loadout.PlayerData.attackPower, Is.EqualTo(10));
-                Assert.That(loadout.Skills.Count, Is.EqualTo(11));
+                Assert.That(loadout.Skills.Count, Is.EqualTo(17));
                 Assert.That(loadout.Skills.Select(skill => skill.skillId), Is.EqualTo(new[]
                 {
                     "quick-stab",
@@ -34,6 +34,12 @@ namespace Project2048.Tests
                     "iron-wall",
                     "body-press",
                     "flash",
+                    "bleeding-cut",
+                    "poison-coat",
+                    "open-wound",
+                    "execute",
+                    "seal-skill",
+                    "crack-brand",
                 }));
                 Assert.That(loadout.PlayerData.startingSkills.Select(skill => skill.skillId), Is.EqualTo(new[]
                 {
@@ -69,6 +75,12 @@ namespace Project2048.Tests
                     "Iron Wall",
                     "Body Press",
                     "Flash",
+                    "Bleeding Cut",
+                    "Poison Coat",
+                    "Open Wound",
+                    "Execute",
+                    "Seal",
+                    "Crack Brand",
                 }));
             }
             finally
@@ -88,14 +100,20 @@ namespace Project2048.Tests
                 {
                     SkillVfxFamily.SlashArc,
                     SkillVfxFamily.LightProjectile,
-                    SkillVfxFamily.SlashArc,
-                    SkillVfxFamily.LightProjectile,
+                    SkillVfxFamily.SpikedBurst,
+                    SkillVfxFamily.LightBeam,
                     SkillVfxFamily.ShieldDome,
                     SkillVfxFamily.ShieldDome,
                     SkillVfxFamily.ShieldDome,
                     SkillVfxFamily.ShieldDome,
                     SkillVfxFamily.BuffAura,
                     SkillVfxFamily.ImpactBurst,
+                    SkillVfxFamily.DebuffWave,
+                    SkillVfxFamily.BloodFountainSlash,
+                    SkillVfxFamily.SlashArc,
+                    SkillVfxFamily.ImpactBurst,
+                    SkillVfxFamily.SlashArc,
+                    SkillVfxFamily.DebuffWave,
                     SkillVfxFamily.DebuffWave,
                 }));
                 Assert.That(loadout.Skills.All(skill => skill.vfxScale > 0f), Is.True);
@@ -134,6 +152,16 @@ namespace Project2048.Tests
                 Assert.That(roster.Where(enemy => enemy.aiStrength == EnemyAiStrength.Normal).Select(enemy => enemy.maxHp), Is.All.EqualTo(160));
                 Assert.That(roster.Where(enemy => enemy.aiStrength == EnemyAiStrength.Enhanced).Select(enemy => enemy.maxHp), Is.All.EqualTo(210));
                 Assert.That(roster.SelectMany(enemy => enemy.skills).All(skill => skill.vfxFamily != SkillVfxFamily.None), Is.True);
+                Assert.That(roster.SelectMany(enemy => enemy.skills).Select(skill => skill.skillId), Is.SupersetOf(new[]
+                {
+                    "bleeding-cut",
+                    "poison-coat",
+                    "open-wound",
+                    "execute",
+                    "seal-skill",
+                    "crack-brand",
+                    "black-corrosion",
+                }));
             }
             finally
             {

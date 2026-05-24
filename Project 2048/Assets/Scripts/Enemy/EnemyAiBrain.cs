@@ -58,7 +58,7 @@ namespace Project2048.Enemy
             for (var slotIndex = 0; slotIndex < intentCount; slotIndex++)
             {
                 var actionIndex = turnIndex + slotIndex;
-                var candidates = BuildCandidates(data, actionIndex);
+                var candidates = BuildCandidates(data, enemy, actionIndex);
                 if (candidates.Count == 0)
                 {
                     candidates.Add(BuildAttackIntent(data));
@@ -94,7 +94,7 @@ namespace Project2048.Enemy
             return plan;
         }
 
-        private List<EnemyIntent> BuildCandidates(EnemySO data, int actionIndex)
+        private List<EnemyIntent> BuildCandidates(EnemySO data, EnemyController enemy, int actionIndex)
         {
             var candidates = new List<EnemyIntent>();
 
@@ -106,19 +106,34 @@ namespace Project2048.Enemy
                 candidates.Add(BuildBullRushIntent(data));
             }
 
-            AddSkillCandidates(data, candidates);
-            candidates.Add(BuildAttackIntent(data));
-            candidates.Add(BuildDefenseIntent(data));
+            AddSkillCandidates(data, enemy, candidates);
+            AddFallbackCandidates(data, candidates);
 
             if (IsDebuffDue(data, actionIndex) || HasNoDebuffSkillCandidate(candidates))
             {
                 candidates.Add(BuildDebuffIntent(data, ResolveDebuffIndex(data, actionIndex)));
             }
 
+            if (enemy != null && enemy.IsTaunted)
+            {
+                var attackCandidates = new List<EnemyIntent>();
+                foreach (var candidate in candidates)
+                {
+                    if (candidate != null && candidate.intentType == EnemyIntentType.Attack)
+                    {
+                        attackCandidates.Add(candidate);
+                    }
+                }
+
+                return attackCandidates.Count > 0
+                    ? attackCandidates
+                    : new List<EnemyIntent> { BuildAttackIntent(data) };
+            }
+
             return candidates;
         }
 
-        private static void AddSkillCandidates(EnemySO data, List<EnemyIntent> candidates)
+        private static void AddSkillCandidates(EnemySO data, EnemyController enemy, List<EnemyIntent> candidates)
         {
             if (data.skills == null || data.skills.Count == 0)
             {
@@ -133,8 +148,39 @@ namespace Project2048.Enemy
                     continue;
                 }
 
+                if (enemy != null && enemy.IsSkillSealed(skill))
+                {
+                    continue;
+                }
+
                 candidates.Add(BuildSkillIntent(data, skill));
             }
+        }
+
+        private static void AddFallbackCandidates(EnemySO data, List<EnemyIntent> candidates)
+        {
+            if (!HasIntentType(candidates, EnemyIntentType.Attack))
+            {
+                candidates.Add(BuildAttackIntent(data));
+            }
+
+            if (!HasIntentType(candidates, EnemyIntentType.Defense))
+            {
+                candidates.Add(BuildDefenseIntent(data));
+            }
+        }
+
+        private static bool HasIntentType(List<EnemyIntent> candidates, EnemyIntentType intentType)
+        {
+            foreach (var candidate in candidates)
+            {
+                if (candidate != null && candidate.intentType == intentType)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private EnemyIntent SelectBestCandidate(
@@ -378,6 +424,7 @@ namespace Project2048.Enemy
             {
                 skillId = skill.skillId,
                 displayName = string.IsNullOrWhiteSpace(skill.skillName) ? skill.skillId : skill.skillName,
+                skillType = skill.skillType,
                 skillEffectKind = effectKind,
                 damageStatSource = ResolveEnemyDamageStatSource(skill),
                 hpCost = skill.hpCost,
@@ -389,6 +436,12 @@ namespace Project2048.Enemy
                 targetAttackModifier = skill.targetAttackModifier,
                 targetDefenseModifier = skill.targetDefenseModifier,
                 selfDefensePowerModifier = skill.selfDefensePowerModifier,
+                conditionalPowerBonus = skill.conditionalPowerBonus,
+                conditionalHpThreshold = skill.conditionalHpThreshold,
+                statusDuration = skill.statusDuration,
+                statusDamage = skill.statusDamage,
+                statusMaxHpDamagePercent = skill.statusMaxHpDamagePercent,
+                shieldPiercePercent = skill.shieldPiercePercent,
             };
 
             switch (effectKind)
@@ -412,6 +465,11 @@ namespace Project2048.Enemy
                     intent.debuffType = skill.debuffType == DebuffType.None ? DebuffType.Darkness : skill.debuffType;
                     intent.value = ScaleByStrength(Mathf.Max(1, skill.debuffValue), data.aiStrength);
                     return intent;
+                case SkillEffectKind.SealSkill:
+                case SkillEffectKind.CrackBrand:
+                    intent.intentType = EnemyIntentType.Debuff;
+                    intent.value = Mathf.Max(1, skill.statusDamage);
+                    return intent;
                 case SkillEffectKind.ThornGuard:
                     intent.intentType = EnemyIntentType.Defense;
                     intent.value = ScaleByStrength(skill.power, data.aiStrength);
@@ -432,6 +490,15 @@ namespace Project2048.Enemy
                     intent.movePower = ScaleByStrength(Mathf.Max(skill.chargedPower, skill.power), data.aiStrength);
                     intent.value = intent.movePower;
                     return intent;
+                case SkillEffectKind.BleedAttack:
+                case SkillEffectKind.PoisonAttack:
+                case SkillEffectKind.OpenWoundAttack:
+                case SkillEffectKind.ExecuteAttack:
+                case SkillEffectKind.OverburnAttack:
+                    intent.intentType = EnemyIntentType.Attack;
+                    intent.movePower = ScaleByStrength(skill.power, data.aiStrength);
+                    intent.value = intent.movePower;
+                    return intent;
                 default:
                     intent.intentType = EnemyIntentType.Attack;
                     intent.movePower = ScaleByStrength(skill.power, data.aiStrength);
@@ -444,6 +511,7 @@ namespace Project2048.Enemy
         {
             return new EnemyIntent
             {
+                skillType = SkillType.Attack,
                 intentType = EnemyIntentType.Attack,
                 damageStatSource = DamageStatSource.AttackPower,
                 movePower = ScaleByStrength(data.attackPower * MovePowerScale, data.aiStrength),
@@ -458,6 +526,7 @@ namespace Project2048.Enemy
                 return new EnemyIntent
                 {
                     displayName = "가시 방어",
+                    skillType = SkillType.Defense,
                     skillEffectKind = SkillEffectKind.ThornGuard,
                     intentType = EnemyIntentType.Defense,
                     value = ScaleByStrength(data.thornGuardShieldHp, data.aiStrength),
@@ -468,6 +537,7 @@ namespace Project2048.Enemy
 
             return new EnemyIntent
             {
+                skillType = SkillType.Defense,
                 intentType = EnemyIntentType.Defense,
                 value = ScaleByStrength(data.defensePower, data.aiStrength),
             };
@@ -478,6 +548,7 @@ namespace Project2048.Enemy
             return new EnemyIntent
             {
                 displayName = "황소 돌진",
+                skillType = SkillType.Attack,
                 intentType = EnemyIntentType.Attack,
                 damageStatSource = DamageStatSource.AttackPower,
                 movePower = ScaleByStrength(data.bullRushBonusDamage * MovePowerScale, data.aiStrength),
@@ -489,6 +560,7 @@ namespace Project2048.Enemy
         {
             return new EnemyIntent
             {
+                skillType = SkillType.Debuff,
                 intentType = EnemyIntentType.Debuff,
                 debuffType = ResolveDebuffType(data.aiDebuffPattern, debuffIndex),
                 value = ScaleByStrength(data.debuffPower, data.aiStrength),

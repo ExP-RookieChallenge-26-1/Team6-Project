@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d0a78af296a09024caf241aa0587e358, type: 3}
-  m_Name: Learn_GuardBreak
+  m_Name: Learn_Taunt
   m_EditorClassIdentifier: Game.Core::Project2048.Rewards.BattleRewardSO
-  rewardId: learn-guard-break
-  mothDisplayName: "\uAE30\uC220 \uC2B5\uB4DD"
+  rewardId: learn-taunt
+  mothDisplayName: "기술 습득"
   rewardKind: 14
   healPercentOfMaxHp: 0.3
   healAmount: 2
@@ -26,6 +26,6 @@ MonoBehaviour:
   permanentDefensePowerBonus: 0
   permanentCriticalChanceBonus: 0
   permanentCriticalDamageMultiplierBonus: 0
-  skillToLearn: {fileID: 11400000, guid: 08c7e51f0519cf5468b34cb3448f917c, type: 2}
+  skillToLearn: {fileID: 11400000, guid: f76b5e6c27794156890348de21c5aa86, type: 2}
   enemySkillOfferChance: 0.1
-  encounterText: "\uBC29\uD328 \uAE68\uAE30 \uAE30\uC220\uC744 \uBC30\uC6C1\uB2C8\uB2E4."
+  encounterText: "도발 기술을 배웁니다."

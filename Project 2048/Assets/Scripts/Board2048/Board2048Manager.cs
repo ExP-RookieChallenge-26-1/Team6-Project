@@ -55,6 +55,26 @@ namespace Project2048.Board2048
             pendingObstacleCount += count;
         }
 
+        public bool RemoveOneObstacle()
+        {
+            for (var row = 0; row < BoardSize; row++)
+            {
+                for (var col = 0; col < BoardSize; col++)
+                {
+                    if (board[row, col] != ObstacleValue)
+                    {
+                        continue;
+                    }
+
+                    board[row, col] = 0;
+                    PublishBoardChanged();
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         public static bool IsObstacle(int value)
         {
             return value == ObstacleValue;

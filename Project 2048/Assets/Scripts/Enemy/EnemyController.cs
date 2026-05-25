@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Project2048.Skills;
 using UnityEngine;
 
 namespace Project2048.Enemy
@@ -22,6 +23,20 @@ namespace Project2048.Enemy
         public int AttackModifier { get; private set; }
         public float CriticalChance { get; private set; }
         public float CriticalDamageMultiplier { get; private set; } = 1.5f;
+        public int PoisonTurns { get; private set; }
+        public float PoisonMaxHpDamagePercent { get; private set; }
+        public int BleedTurns { get; private set; }
+        public int BleedDamage { get; private set; }
+        public int BrandDamage { get; private set; }
+        public string SealedSkillId { get; private set; }
+        public int SealTurns { get; private set; }
+        public int TauntTurns { get; private set; }
+        public string LastUsedSkillId { get; private set; }
+        public SkillType LastUsedSkillType { get; private set; }
+        public SkillEffectKind LastUsedSkillEffectKind { get; private set; }
+        public bool LastUsedSkillWasBasic { get; private set; }
+        public bool HasPoisonOrBleed => PoisonTurns > 0 || BleedTurns > 0;
+        public bool IsTaunted => TauntTurns > 0;
         public bool IsDead => CurrentHp <= 0;
         public EnemyIntent CurrentIntent { get; private set; }
         public IReadOnlyList<EnemyIntent> CurrentIntents { get; private set; } = Array.Empty<EnemyIntent>();
@@ -51,6 +66,18 @@ namespace Project2048.Enemy
             AttackModifier = 0;
             CriticalChance = Mathf.Clamp01(data.criticalChance);
             CriticalDamageMultiplier = Mathf.Max(1f, data.criticalDamageMultiplier);
+            PoisonTurns = 0;
+            PoisonMaxHpDamagePercent = 0f;
+            BleedTurns = 0;
+            BleedDamage = 0;
+            BrandDamage = 0;
+            SealedSkillId = null;
+            SealTurns = 0;
+            TauntTurns = 0;
+            LastUsedSkillId = null;
+            LastUsedSkillType = SkillType.Attack;
+            LastUsedSkillEffectKind = SkillEffectKind.Default;
+            LastUsedSkillWasBasic = false;
             baseIntents.Clear();
             CurrentIntent = null;
             CurrentIntents = Array.Empty<EnemyIntent>();
@@ -78,12 +105,14 @@ namespace Project2048.Enemy
             RefreshIntentPreview();
         }
 
-        public int TakeDamage(int damage)
+        public int TakeDamage(int damage, float shieldPiercePercent = 0f)
         {
             damage = Mathf.Max(0, damage);
 
-            var remainingDamage = Mathf.Max(0, damage - Block);
-            Block = Mathf.Max(0, Block - damage);
+            var piercingDamage = Mathf.CeilToInt(damage * Mathf.Clamp01(shieldPiercePercent));
+            var blockableDamage = Mathf.Max(0, damage - piercingDamage);
+            var remainingDamage = piercingDamage + Mathf.Max(0, blockableDamage - Block);
+            Block = Mathf.Max(0, Block - blockableDamage);
             if (Block == 0)
             {
                 ThornRetaliationDamage = 0;
@@ -94,6 +123,25 @@ namespace Project2048.Enemy
             OnHpChanged?.Invoke(CurrentHp, MaxHp);
             OnBlockChanged?.Invoke(Block);
 
+            if (CurrentHp <= 0)
+            {
+                OnDead?.Invoke(this);
+            }
+
+            return hpBefore - CurrentHp;
+        }
+
+        public int TakeStatusDamage(int damage)
+        {
+            damage = Mathf.Max(0, damage);
+            if (damage == 0 || CurrentHp <= 0)
+            {
+                return 0;
+            }
+
+            var hpBefore = CurrentHp;
+            CurrentHp = Mathf.Max(0, CurrentHp - damage);
+            OnHpChanged?.Invoke(CurrentHp, MaxHp);
             if (CurrentHp <= 0)
             {
                 OnDead?.Invoke(this);
@@ -217,6 +265,187 @@ namespace Project2048.Enemy
             RefreshIntentPreview();
         }
 
+        public void ApplyPoison(int turns, float maxHpDamagePercent)
+        {
+            turns = Mathf.Max(1, turns);
+            maxHpDamagePercent = Mathf.Clamp01(maxHpDamagePercent);
+            if (maxHpDamagePercent <= 0f)
+            {
+                return;
+            }
+
+            PoisonTurns = Mathf.Max(PoisonTurns, turns);
+            PoisonMaxHpDamagePercent = Mathf.Max(PoisonMaxHpDamagePercent, maxHpDamagePercent);
+            RefreshIntentPreview();
+        }
+
+        public void ApplyBleed(int turns, int damage)
+        {
+            turns = Mathf.Max(1, turns);
+            damage = Mathf.Max(1, damage);
+            BleedTurns = Mathf.Max(BleedTurns, turns);
+            BleedDamage = Mathf.Max(BleedDamage, damage);
+            RefreshIntentPreview();
+        }
+
+        public void ApplyBrand(int damage)
+        {
+            damage = Mathf.Max(1, damage);
+            BrandDamage = Mathf.Max(BrandDamage, damage);
+            RefreshIntentPreview();
+        }
+
+        public void ExtendPoisonAndBleed(int turns)
+        {
+            turns = Mathf.Max(0, turns);
+            if (turns == 0)
+            {
+                return;
+            }
+
+            var changed = false;
+            if (PoisonTurns > 0)
+            {
+                PoisonTurns += turns;
+                changed = true;
+            }
+
+            if (BleedTurns > 0)
+            {
+                BleedTurns += turns;
+                changed = true;
+            }
+
+            if (changed)
+            {
+                RefreshIntentPreview();
+            }
+        }
+
+        public int TriggerOnAttackedStatusDamage()
+        {
+            var total = 0;
+            if (BrandDamage > 0)
+            {
+                var damage = BrandDamage;
+                BrandDamage = 0;
+                total += TakeStatusDamage(damage);
+                RefreshIntentPreview();
+            }
+
+            if (BleedTurns > 0 && BleedDamage > 0)
+            {
+                total += TakeStatusDamage(BleedDamage);
+            }
+
+            return total;
+        }
+
+        public int ResolveEndOfTurnStatuses()
+        {
+            var total = 0;
+            var changed = false;
+            if (PoisonTurns > 0)
+            {
+                var poisonDamage = Mathf.Max(1, Mathf.CeilToInt(MaxHp * Mathf.Max(0f, PoisonMaxHpDamagePercent)));
+                total += TakeStatusDamage(poisonDamage);
+                PoisonTurns--;
+                changed = true;
+                if (PoisonTurns == 0)
+                {
+                    PoisonMaxHpDamagePercent = 0f;
+                }
+            }
+
+            if (BleedTurns > 0)
+            {
+                BleedTurns--;
+                changed = true;
+                if (BleedTurns == 0)
+                {
+                    BleedDamage = 0;
+                }
+            }
+
+            if (changed)
+            {
+                RefreshIntentPreview();
+            }
+
+            return total;
+        }
+
+        public void RecordUsedIntent(EnemyIntent intent)
+        {
+            if (intent == null)
+            {
+                return;
+            }
+
+            LastUsedSkillId = intent.skillId;
+            LastUsedSkillType = intent.skillType;
+            LastUsedSkillEffectKind = intent.skillEffectKind;
+            LastUsedSkillWasBasic = IsBasicIntent(intent);
+        }
+
+        public bool ApplySealFromLastUsedSkill(int turns)
+        {
+            if (string.IsNullOrWhiteSpace(LastUsedSkillId) || LastUsedSkillWasBasic)
+            {
+                return false;
+            }
+
+            SealedSkillId = LastUsedSkillId;
+            SealTurns = Mathf.Max(1, turns);
+            RefreshIntentPreview();
+            return true;
+        }
+
+        public bool IsSkillSealed(SkillSO skill)
+        {
+            return skill != null && IsSkillIdSealed(skill.skillId);
+        }
+
+        public bool IsSkillIdSealed(string skillId)
+        {
+            return SealTurns > 0 &&
+                   !string.IsNullOrWhiteSpace(SealedSkillId) &&
+                   !string.IsNullOrWhiteSpace(skillId) &&
+                   skillId == SealedSkillId;
+        }
+
+        public void ApplyTaunt(int turns)
+        {
+            TauntTurns = Mathf.Max(TauntTurns, Mathf.Max(1, turns));
+            RefreshIntentPreview();
+        }
+
+        public void ConsumeTurnRestrictions()
+        {
+            var changed = false;
+            if (SealTurns > 0)
+            {
+                SealTurns--;
+                if (SealTurns == 0)
+                {
+                    SealedSkillId = null;
+                }
+
+                changed = true;
+            }
+
+            if (TauntTurns > 0)
+            {
+                TauntTurns--;
+                changed = true;
+            }
+
+            if (changed)
+            {
+                RefreshIntentPreview();
+            }
+        }
+
         private void RefreshIntentPreview()
         {
             var currentIntents = new List<EnemyIntent>(baseIntents.Count);
@@ -255,6 +484,18 @@ namespace Project2048.Enemy
         private void HandleDataValidated(EnemySO _)
         {
             RefreshFromData();
+        }
+
+        private static bool IsBasicIntent(EnemyIntent intent)
+        {
+            if (intent == null)
+            {
+                return true;
+            }
+
+            return intent.intentType == EnemyIntentType.Attack &&
+                   (string.IsNullOrWhiteSpace(intent.skillId) ||
+                    intent.skillEffectKind == SkillEffectKind.BasicAttack);
         }
     }
 }

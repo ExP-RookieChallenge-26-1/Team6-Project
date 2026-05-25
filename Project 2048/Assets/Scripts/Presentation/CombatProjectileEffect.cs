@@ -29,11 +29,24 @@ namespace Project2048.Presentation
             target = targetTransform;
             activeTargetOffset = targetOffsetOverride == Vector3.zero ? targetLocalOffset : targetOffsetOverride;
             startPosition = ResolveSourcePosition();
+            BeginLaunch();
+        }
+
+        public void LaunchFromWorldPosition(Vector3 sourceWorldPosition, Transform targetTransform, Vector3 targetOffsetOverride)
+        {
+            source = null;
+            target = targetTransform;
+            activeTargetOffset = targetOffsetOverride == Vector3.zero ? targetLocalOffset : targetOffsetOverride;
+            startPosition = sourceWorldPosition;
+            BeginLaunch();
+        }
+
+        private void BeginLaunch()
+        {
             endPosition = ResolveTargetPosition();
             elapsedSeconds = 0f;
             launched = true;
             impacted = false;
-
             transform.SetParent(null, true);
             transform.position = startPosition;
             PlayParticles(travelParticles);

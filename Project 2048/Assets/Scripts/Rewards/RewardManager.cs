@@ -13,6 +13,16 @@ namespace Project2048.Rewards
         public const float HealTierOneMaxHpPercent = 0.25f;
         public const float HealTierTwoMaxHpPercent = 0.5f;
         public const float HealTierThreeMaxHpPercent = 0.75f;
+        private const int MinimumOfferedChoiceCategories = 2;
+
+        private enum RewardOfferCategory
+        {
+            Other,
+            NextCombatBuff,
+            Heal,
+            Skill,
+            PermanentStat,
+        }
 
         [SerializeField] private RewardTableSO rewardTable;
         [SerializeField] private RunProgress runProgress = new();
@@ -52,7 +62,7 @@ namespace Project2048.Rewards
         {
             RunProgress.CapturePlayer(player);
             pendingChoices.Clear();
-            pendingChoices.AddRange(ResolveRewardChoices(combatResult));
+            pendingChoices.AddRange(ResolveRewardChoices(combatResult, player));
             pendingReward = pendingChoices.FirstOrDefault();
             rewardClaimed = pendingChoices.Count == 0;
             LastChoiceResult = default;
@@ -149,11 +159,11 @@ namespace Project2048.Rewards
                     break;
                 case RewardChoiceKind.TemporaryAttackPower:
                     appliedAmount = reward.temporaryAttackPowerBonus;
-                    RunProgress.AddNextCombatBuff(appliedAmount, 0, 0);
+                    RunProgress.AddNextCombatRankBuff(appliedAmount, 0, 0);
                     break;
                 case RewardChoiceKind.TemporaryDefensePower:
                     appliedAmount = reward.temporaryDefensePowerBonus;
-                    RunProgress.AddNextCombatBuff(0, appliedAmount, 0);
+                    RunProgress.AddNextCombatRankBuff(0, appliedAmount, 0);
                     break;
                 case RewardChoiceKind.TemporaryBoardMoveCount:
                     appliedAmount = reward.temporaryBoardMoveCountBonus;
@@ -190,6 +200,7 @@ namespace Project2048.Rewards
                     {
                         return default;
                     }
+                    RunProgress.CapturePlayer(player);
                     appliedAmount = 1;
                     break;
                 case RewardChoiceKind.Rest:
@@ -228,33 +239,46 @@ namespace Project2048.Rewards
             return LastChoiceResult;
         }
 
-        private List<BattleRewardSO> ResolveRewardChoices(CombatResult combatResult)
+        private List<BattleRewardSO> ResolveRewardChoices(CombatResult combatResult, PlayerCombatController player)
         {
-            var choices = rewardTable != null
-                ? rewardTable.SelectRewards(combatResult, OfferedChoiceCount)
+            var tableRewardCount = rewardTable?.rewards != null ? rewardTable.rewards.Count : 0;
+            var pool = rewardTable != null
+                ? rewardTable.SelectRewards(
+                    combatResult,
+                    tableRewardCount,
+                    reward => CanOfferRewardToPlayer(reward, player))
                 : new List<BattleRewardSO>();
 
+            if (pool.Count < OfferedChoiceCount ||
+                CountPrimaryCategories(pool) < MinimumOfferedChoiceCategories)
+            {
+                AddUniqueRewards(pool, BuildRuntimeDefaultChoices(OfferedChoiceCount, player, pool));
+            }
+
+            var choices = SelectDiverseChoices(pool, OfferedChoiceCount);
             if (choices.Count < OfferedChoiceCount)
             {
-                choices.AddRange(BuildRuntimeDefaultChoices(OfferedChoiceCount - choices.Count));
+                AddUniqueRewards(
+                    choices,
+                    BuildRuntimeDefaultChoices(OfferedChoiceCount - choices.Count, player, choices));
             }
 
             return choices.Take(OfferedChoiceCount).ToList();
         }
 
-        private List<BattleRewardSO> BuildRuntimeDefaultChoices(int count)
+        private List<BattleRewardSO> BuildRuntimeDefaultChoices(
+            int count,
+            PlayerCombatController player,
+            IEnumerable<BattleRewardSO> excludedRewards = null)
         {
             EnsureRuntimeDefaultRewards();
-            var pool = new List<BattleRewardSO>(runtimeDefaultRewards);
-            var choices = new List<BattleRewardSO>(count);
-            while (pool.Count > 0 && choices.Count < count)
-            {
-                var index = UnityEngine.Random.Range(0, pool.Count);
-                choices.Add(pool[index]);
-                pool.RemoveAt(index);
-            }
+            var pool = runtimeDefaultRewards
+                .Where(reward => CanOfferRewardToPlayer(reward, player))
+                .Where(reward => !ContainsEquivalentReward(excludedRewards, reward))
+                .ToList();
 
-            return choices;
+            ShuffleRewards(pool);
+            return SelectDiverseChoices(pool, count);
         }
 
         private void EnsureRuntimeDefaultRewards()
@@ -284,18 +308,248 @@ namespace Project2048.Rewards
                 selfDefenseStageModifier: 2);
 
             runtimeDefaultRewards.Add(CreateRuntimeReward("heal-2", "회복 2단계", RewardChoiceKind.HealTwo));
-            runtimeDefaultRewards.Add(CreateRuntimeReward("next-attack", "다음 전투 공격", RewardChoiceKind.TemporaryAttackPower, temporaryAttack: 3));
+            runtimeDefaultRewards.Add(CreateRuntimeReward("next-attack", "다음 전투 공격 랭크", RewardChoiceKind.TemporaryAttackPower, temporaryAttack: 1));
             runtimeDefaultRewards.Add(CreateRuntimeReward("perm-attack", "공격력 영구 증가", RewardChoiceKind.PermanentAttackPower, permanentAttack: 1));
             runtimeDefaultRewards.Add(CreateRuntimeReward(
-                "learn-core-skill",
+                "learn-iron-wall",
                 "기술 습득",
                 RewardChoiceKind.LearnSkill,
-                skillToLearn: UnityEngine.Random.value switch
+                skillToLearn: ironWall));
+            runtimeDefaultRewards.Add(CreateRuntimeReward(
+                "learn-shield-bash",
+                "湲곗닠 ?듬뱷",
+                RewardChoiceKind.LearnSkill,
+                skillToLearn: shieldBash));
+            runtimeDefaultRewards.Add(CreateRuntimeReward(
+                "learn-light-shot",
+                "湲곗닠 ?듬뱷",
+                RewardChoiceKind.LearnSkill,
+                skillToLearn: lightShot));
+        }
+
+        private bool CanOfferRewardToPlayer(BattleRewardSO reward, PlayerCombatController player)
+        {
+            if (reward == null)
+            {
+                return false;
+            }
+
+            if (!reward.IsSkillReward)
+            {
+                return true;
+            }
+
+            return reward.skillToLearn != null &&
+                   reward.skillToLearn.CanAppearAsReward &&
+                   !HasLearnedSkill(reward.skillToLearn, player);
+        }
+
+        private bool HasLearnedSkill(SkillSO skill, PlayerCombatController player)
+        {
+            return ContainsSkill(player?.Skills, skill) ||
+                   ContainsSkill(RunProgress.EquippedSkills, skill);
+        }
+
+        private static bool ContainsSkill(IEnumerable<SkillSO> skills, SkillSO target)
+        {
+            if (skills == null || target == null)
+            {
+                return false;
+            }
+
+            foreach (var skill in skills)
+            {
+                if (IsSameSkill(skill, target))
                 {
-                    < 0.33f => ironWall,
-                    < 0.66f => shieldBash,
-                    _ => lightShot,
-                }));
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static bool IsSameSkill(SkillSO left, SkillSO right)
+        {
+            if (left == null || right == null)
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(left, right))
+            {
+                return true;
+            }
+
+            return !string.IsNullOrWhiteSpace(left.skillId) &&
+                   left.skillId == right.skillId;
+        }
+
+        private static List<BattleRewardSO> SelectDiverseChoices(IEnumerable<BattleRewardSO> source, int count)
+        {
+            count = Mathf.Max(0, count);
+            var remaining = source?.Where(reward => reward != null).ToList() ?? new List<BattleRewardSO>();
+            var choices = new List<BattleRewardSO>(count);
+            if (count == 0)
+            {
+                return choices;
+            }
+
+            var categories = remaining
+                .Select(ResolveOfferCategory)
+                .Where(IsPrimaryOfferCategory)
+                .Distinct()
+                .ToList();
+
+            if (count >= MinimumOfferedChoiceCategories &&
+                categories.Count >= MinimumOfferedChoiceCategories)
+            {
+                var firstCategory = ResolveOfferCategory(remaining[0]);
+                if (!IsPrimaryOfferCategory(firstCategory))
+                {
+                    firstCategory = categories[0];
+                }
+
+                MoveFirstCategoryReward(remaining, choices, firstCategory);
+                MoveFirstCategoryReward(
+                    remaining,
+                    choices,
+                    categories.First(category => category != firstCategory));
+            }
+
+            while (remaining.Count > 0 && choices.Count < count)
+            {
+                choices.Add(remaining[0]);
+                remaining.RemoveAt(0);
+            }
+
+            return choices;
+        }
+
+        private static void MoveFirstCategoryReward(
+            List<BattleRewardSO> remaining,
+            List<BattleRewardSO> choices,
+            RewardOfferCategory category)
+        {
+            var index = remaining.FindIndex(reward => ResolveOfferCategory(reward) == category);
+            if (index < 0)
+            {
+                return;
+            }
+
+            choices.Add(remaining[index]);
+            remaining.RemoveAt(index);
+        }
+
+        private static int CountPrimaryCategories(IEnumerable<BattleRewardSO> rewards)
+        {
+            return rewards?
+                .Select(ResolveOfferCategory)
+                .Where(IsPrimaryOfferCategory)
+                .Distinct()
+                .Count() ?? 0;
+        }
+
+        private static bool IsPrimaryOfferCategory(RewardOfferCategory category)
+        {
+            return category != RewardOfferCategory.Other;
+        }
+
+        private static RewardOfferCategory ResolveOfferCategory(BattleRewardSO reward)
+        {
+            if (reward == null)
+            {
+                return RewardOfferCategory.Other;
+            }
+
+            return reward.rewardKind switch
+            {
+                RewardChoiceKind.TemporaryAttackPower => RewardOfferCategory.NextCombatBuff,
+                RewardChoiceKind.TemporaryDefensePower => RewardOfferCategory.NextCombatBuff,
+                RewardChoiceKind.TemporaryBoardMoveCount => RewardOfferCategory.NextCombatBuff,
+                RewardChoiceKind.Enhance => RewardOfferCategory.NextCombatBuff,
+                RewardChoiceKind.HealOne => RewardOfferCategory.Heal,
+                RewardChoiceKind.HealTwo => RewardOfferCategory.Heal,
+                RewardChoiceKind.HealThree => RewardOfferCategory.Heal,
+                RewardChoiceKind.Rest => RewardOfferCategory.Heal,
+                RewardChoiceKind.LearnSkill => RewardOfferCategory.Skill,
+                RewardChoiceKind.PermanentMaxHp => RewardOfferCategory.PermanentStat,
+                RewardChoiceKind.PermanentAttackPower => RewardOfferCategory.PermanentStat,
+                RewardChoiceKind.PermanentDefensePower => RewardOfferCategory.PermanentStat,
+                RewardChoiceKind.PermanentCriticalChance => RewardOfferCategory.PermanentStat,
+                RewardChoiceKind.PermanentCriticalDamageMultiplier => RewardOfferCategory.PermanentStat,
+                _ => RewardOfferCategory.Other,
+            };
+        }
+
+        private static void AddUniqueRewards(List<BattleRewardSO> target, IEnumerable<BattleRewardSO> rewards)
+        {
+            if (target == null || rewards == null)
+            {
+                return;
+            }
+
+            foreach (var reward in rewards)
+            {
+                if (reward != null && !ContainsEquivalentReward(target, reward))
+                {
+                    target.Add(reward);
+                }
+            }
+        }
+
+        private static bool ContainsEquivalentReward(IEnumerable<BattleRewardSO> rewards, BattleRewardSO target)
+        {
+            if (rewards == null || target == null)
+            {
+                return false;
+            }
+
+            foreach (var reward in rewards)
+            {
+                if (IsEquivalentReward(reward, target))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static bool IsEquivalentReward(BattleRewardSO left, BattleRewardSO right)
+        {
+            if (left == null || right == null)
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(left, right))
+            {
+                return true;
+            }
+
+            if (!string.IsNullOrWhiteSpace(left.rewardId) &&
+                left.rewardId == right.rewardId)
+            {
+                return true;
+            }
+
+            return left.IsSkillReward &&
+                   right.IsSkillReward &&
+                   IsSameSkill(left.skillToLearn, right.skillToLearn);
+        }
+
+        private static void ShuffleRewards(List<BattleRewardSO> rewards)
+        {
+            if (rewards == null)
+            {
+                return;
+            }
+
+            for (var index = rewards.Count - 1; index > 0; index--)
+            {
+                var swapIndex = UnityEngine.Random.Range(0, index + 1);
+                (rewards[index], rewards[swapIndex]) = (rewards[swapIndex], rewards[index]);
+            }
         }
 
         private SkillSO CreateRuntimeSkill(

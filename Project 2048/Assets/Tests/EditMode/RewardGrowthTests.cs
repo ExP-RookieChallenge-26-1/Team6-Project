@@ -2,6 +2,7 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Project2048.Combat;
 using Project2048.Enemy;
@@ -152,7 +153,54 @@ namespace Project2048.Tests
         }
 
         [Test]
-        public void TemporaryRewardBuff_AppliesToNextCombatOnce()
+        public void RewardManager_OfferReward_AllowsTwoSkillsButRequiresSecondCategory()
+        {
+            var player = CreateGameObject<PlayerCombatController>("Player");
+            var playerData = CreatePlayerData(maxHp: 20, attackPower: 2);
+            var knownSkill = CreateSkill("known", SkillType.Attack, cost: 1, power: 10);
+            var newSkillA = CreateSkill("new-a", SkillType.Attack, cost: 1, power: 10);
+            var newSkillB = CreateSkill("new-b", SkillType.Defense, cost: 1, power: 10);
+            var table = CreateRewardTable(
+                CreateRewardChoice("learn-known", RewardChoiceKind.LearnSkill, knownSkill),
+                CreateRewardChoice("learn-new-a", RewardChoiceKind.LearnSkill, newSkillA),
+                CreateRewardChoice("learn-new-b", RewardChoiceKind.LearnSkill, newSkillB),
+                CreateRewardChoice("heal", RewardChoiceKind.HealTwo));
+            var rewardManager = CreateGameObject<RewardManager>("RewardManager");
+
+            playerData.startingSkills = new List<SkillSO> { knownSkill };
+            player.Init(playerData);
+            rewardManager.Initialize(new RunProgress(), table);
+            rewardManager.OfferReward(new CombatResult(), player);
+
+            Assert.That(rewardManager.PendingChoices.Count, Is.EqualTo(3));
+            Assert.That(rewardManager.PendingChoices.Count(reward => reward.rewardKind == RewardChoiceKind.LearnSkill), Is.EqualTo(2));
+            Assert.That(rewardManager.PendingChoices.Any(reward => reward.rewardKind == RewardChoiceKind.HealTwo), Is.True);
+            Assert.That(
+                rewardManager.PendingChoices.Any(reward => reward.skillToLearn != null && reward.skillToLearn.skillId == "known"),
+                Is.False);
+        }
+
+        [Test]
+        public void RewardManager_OfferReward_AddsSecondCategoryWhenTableRollsOneCategory()
+        {
+            var player = CreateGameObject<PlayerCombatController>("Player");
+            var playerData = CreatePlayerData(maxHp: 20, attackPower: 2);
+            var table = CreateRewardTable(
+                CreateRewardChoice("heal-a", RewardChoiceKind.HealOne),
+                CreateRewardChoice("heal-b", RewardChoiceKind.HealTwo),
+                CreateRewardChoice("heal-c", RewardChoiceKind.HealThree));
+            var rewardManager = CreateGameObject<RewardManager>("RewardManager");
+
+            player.Init(playerData);
+            rewardManager.Initialize(new RunProgress(), table);
+            rewardManager.OfferReward(new CombatResult(), player);
+
+            Assert.That(rewardManager.PendingChoices.Count, Is.EqualTo(3));
+            Assert.That(CountRewardCategories(rewardManager.PendingChoices), Is.GreaterThanOrEqualTo(2));
+        }
+
+        [Test]
+        public void TemporaryRewardBuff_AppliesRankBonusToNextCombatOnce()
         {
             var manager = CreateGameObject<CombatManager>("CombatManager");
             var player = CreateGameObject<PlayerCombatController>("Player");
@@ -161,7 +209,7 @@ namespace Project2048.Tests
             var enemyData = CreateEnemyData(maxHp: 10, attackValue: 0);
             var runProgress = new RunProgress();
 
-            runProgress.AddNextCombatBuff(attackPowerBonus: 3, defensePowerBonus: 4, boardMoveCountBonus: 2);
+            runProgress.AddNextCombatRankBuff(attackStageBonus: 2, defenseStageBonus: 1, boardMoveCountBonus: 2);
 
             manager.SetCombatants(player, new[] { enemy });
             manager.StartCombat(new CombatSetup
@@ -172,12 +220,66 @@ namespace Project2048.Tests
                 runProgress = runProgress,
             });
 
-            Assert.That(player.AttackPower, Is.EqualTo(5));
-            Assert.That(player.BaseDefensePower, Is.EqualTo(4));
+            Assert.That(player.AttackPower, Is.EqualTo(2));
+            Assert.That(player.BaseDefensePower, Is.EqualTo(2));
+            Assert.That(player.AttackStage, Is.EqualTo(2));
+            Assert.That(player.DefenseStage, Is.EqualTo(1));
+            Assert.That(player.EffectiveAttackPower, Is.EqualTo(4));
+            Assert.That(player.EffectiveDefensePower, Is.EqualTo(3));
             Assert.That(manager.BoardManager.MoveCount, Is.EqualTo(6));
+            Assert.That(runProgress.NextCombatAttackStageBonus, Is.EqualTo(0));
+            Assert.That(runProgress.NextCombatDefenseStageBonus, Is.EqualTo(0));
             Assert.That(runProgress.NextCombatAttackPowerBonus, Is.EqualTo(0));
             Assert.That(runProgress.NextCombatDefensePowerBonus, Is.EqualTo(0));
             Assert.That(runProgress.NextCombatBoardMoveCountBonus, Is.EqualTo(0));
+        }
+
+        [Test]
+        public void RewardManager_LearnSkill_PersistsEquippedSkillsIntoNextCombat()
+        {
+            var manager = CreateGameObject<CombatManager>("CombatManager");
+            var rewardManager = CreateGameObject<RewardManager>("RewardManager");
+            var player = CreateGameObject<PlayerCombatController>("Player");
+            var enemy = CreateGameObject<EnemyController>("Enemy");
+            var playerData = CreatePlayerData(maxHp: 20, attackPower: 2);
+            var enemyData = CreateEnemyData(maxHp: 10, attackValue: 0);
+            var lightShot = CreateSkill("light-shot", SkillType.Attack, cost: 6, power: 60);
+            var lowStance = CreateSkill("low-stance", SkillType.Defense, cost: 4, power: 30);
+            var flash = CreateSkill("flash", SkillType.Debuff, cost: 5, power: 0);
+            var learnedSkill = CreateSkill("bleeding-cut", SkillType.Attack, cost: 6, power: 50);
+            var reward = CreateReward(healPercentOfMaxHp: 0.3f, extraBoardMoveCount: 1);
+            var table = CreateRewardTable(reward);
+            var runProgress = new RunProgress();
+
+            playerData.startingSkills = new List<SkillSO> { lightShot, lowStance, flash };
+            reward.rewardKind = RewardChoiceKind.LearnSkill;
+            reward.skillToLearn = learnedSkill;
+            player.Init(playerData);
+            runProgress.CapturePlayer(player);
+
+            rewardManager.Initialize(runProgress, table);
+            rewardManager.OfferReward(new CombatResult(), player);
+            var result = rewardManager.ChooseReward(0, player);
+
+            Assert.That(result.Kind, Is.EqualTo(RewardChoiceKind.LearnSkill));
+            Assert.That(player.Skills.Count, Is.EqualTo(4));
+            Assert.That(player.Skills[3].skillId, Is.EqualTo("bleeding-cut"));
+            Assert.That(runProgress.EquippedSkills.Count, Is.EqualTo(4));
+
+            manager.SetCombatants(player, new[] { enemy });
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new List<EnemySO> { enemyData },
+                boardMoveCount = 4,
+                runProgress = runProgress,
+            });
+
+            Assert.That(player.Skills.Count, Is.EqualTo(4));
+            Assert.That(player.Skills[0].skillId, Is.EqualTo("light-shot"));
+            Assert.That(player.Skills[1].skillId, Is.EqualTo("low-stance"));
+            Assert.That(player.Skills[2].skillId, Is.EqualTo("flash"));
+            Assert.That(player.Skills[3].skillId, Is.EqualTo("bleeding-cut"));
         }
 
         [Test]
@@ -662,6 +764,57 @@ namespace Project2048.Tests
             table.rewards = new List<BattleRewardSO> { reward };
             ownedObjects.Add(table);
             return table;
+        }
+
+        private RewardTableSO CreateRewardTable(params BattleRewardSO[] rewards)
+        {
+            var table = ScriptableObject.CreateInstance<RewardTableSO>();
+            table.rewards = rewards?.ToList() ?? new List<BattleRewardSO>();
+            ownedObjects.Add(table);
+            return table;
+        }
+
+        private BattleRewardSO CreateRewardChoice(
+            string rewardId,
+            RewardChoiceKind rewardKind,
+            SkillSO skillToLearn = null)
+        {
+            var reward = ScriptableObject.CreateInstance<BattleRewardSO>();
+            reward.rewardId = rewardId;
+            reward.rewardKind = rewardKind;
+            reward.skillToLearn = skillToLearn;
+            ownedObjects.Add(reward);
+            return reward;
+        }
+
+        private static int CountRewardCategories(IEnumerable<BattleRewardSO> rewards)
+        {
+            return rewards
+                .Select(ResolveRewardCategory)
+                .Distinct()
+                .Count(category => category != 0);
+        }
+
+        private static int ResolveRewardCategory(BattleRewardSO reward)
+        {
+            return reward.rewardKind switch
+            {
+                RewardChoiceKind.TemporaryAttackPower => 1,
+                RewardChoiceKind.TemporaryDefensePower => 1,
+                RewardChoiceKind.TemporaryBoardMoveCount => 1,
+                RewardChoiceKind.Enhance => 1,
+                RewardChoiceKind.HealOne => 2,
+                RewardChoiceKind.HealTwo => 2,
+                RewardChoiceKind.HealThree => 2,
+                RewardChoiceKind.Rest => 2,
+                RewardChoiceKind.LearnSkill => 3,
+                RewardChoiceKind.PermanentMaxHp => 4,
+                RewardChoiceKind.PermanentAttackPower => 4,
+                RewardChoiceKind.PermanentDefensePower => 4,
+                RewardChoiceKind.PermanentCriticalChance => 4,
+                RewardChoiceKind.PermanentCriticalDamageMultiplier => 4,
+                _ => 0,
+            };
         }
 
         private SkillSO CreateSkill(string skillId, SkillType skillType, int cost, int power)

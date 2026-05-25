@@ -47,6 +47,15 @@ namespace Project2048.Skills
         public int nextBoardMoveCountModifier;
         public int nextCostGainModifier;
         [Min(0f)] public float nextCostGainMultiplier = 1f;
+        public int conditionalPowerBonus;
+        [Range(0f, 1f)] public float conditionalHpThreshold;
+        public int statusDuration;
+        public int statusDamage;
+        [Range(0f, 1f)] public float statusMaxHpDamagePercent;
+        public int shieldPiercePercent;
+        public int extraPowerPerConsumedCost;
+        public int maxCostCarry;
+        public int costRefund;
         public int chargedPower;
         public bool consumesAllShield;
         [Min(0f)] public float nextAttackPowerMultiplier = 1f;
@@ -85,6 +94,14 @@ namespace Project2048.Skills
             SkillEffectKind.DefenseScalingAttack => true,
             SkillEffectKind.BoardMoveBonusAttack => true,
             SkillEffectKind.BoardMovePenaltyAttack => true,
+            SkillEffectKind.BleedAttack => true,
+            SkillEffectKind.PoisonAttack => true,
+            SkillEffectKind.OpenWoundAttack => true,
+            SkillEffectKind.ExecuteAttack => true,
+            SkillEffectKind.OverburnAttack => true,
+            SkillEffectKind.SealSkill => true,
+            SkillEffectKind.Taunt => true,
+            SkillEffectKind.CrackBrand => true,
             _ => false,
         };
 
@@ -120,6 +137,15 @@ namespace Project2048.Skills
             lifeStealPercent = Mathf.Clamp01(lifeStealPercent);
             hpCost = Mathf.Max(0, hpCost);
             hpCostPercent = Mathf.Clamp01(hpCostPercent);
+            conditionalPowerBonus = Mathf.Max(0, conditionalPowerBonus);
+            conditionalHpThreshold = Mathf.Clamp01(conditionalHpThreshold);
+            statusDuration = Mathf.Max(0, statusDuration);
+            statusDamage = Mathf.Max(0, statusDamage);
+            statusMaxHpDamagePercent = Mathf.Clamp01(statusMaxHpDamagePercent);
+            shieldPiercePercent = Mathf.Clamp(shieldPiercePercent, 0, 100);
+            extraPowerPerConsumedCost = Mathf.Max(0, extraPowerPerConsumedCost);
+            maxCostCarry = Mathf.Max(0, maxCostCarry);
+            costRefund = Mathf.Max(0, costRefund);
             chargedPower = Mathf.Max(0, chargedPower);
             nextCostGainMultiplier = Mathf.Max(0f, nextCostGainMultiplier);
             nextAttackPowerMultiplier = Mathf.Max(0f, nextAttackPowerMultiplier);

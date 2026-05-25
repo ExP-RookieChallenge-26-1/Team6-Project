@@ -19,6 +19,10 @@ namespace Project2048.Tests
     public class CombatUiViewTests
     {
         private const string HpBarSpritePath = "Assets/Art/UI/WideHexHpBar.png";
+        private const string TopCombatBackgroundSpriteGuid = "ac20f033bdceb3149b44f3a942308b67";
+        private const string BottomCombatBackgroundSpriteGuid = "d2ec658346ab0de45bd74ab3b7c48aa6";
+        private const string BottomCombatBackgroundLitSpriteGuid = "acc36fe0eb392f643919d7937f0b0301";
+        private static readonly Vector2 ExpectedSkillLanternSlotSize = new(156f, 156f);
         private readonly System.Collections.Generic.List<Object> ownedObjects = new();
 
         [TearDown]
@@ -51,6 +55,12 @@ namespace Project2048.Tests
         public void HpDamageTrailDuration_IsLongEnoughToRead()
         {
             Assert.That(CombatUiView.HpDamageTrailDurationSeconds, Is.GreaterThanOrEqualTo(0.5f));
+        }
+
+        [Test]
+        public void BottomPanelMergeFlashDuration_StaysBrief()
+        {
+            Assert.That(CombatUiView.BottomPanelMergeFlashSeconds, Is.InRange(0.1f, 0.3f));
         }
 
         [Test]
@@ -112,6 +122,8 @@ namespace Project2048.Tests
             for (var index = 0; index < PlayerCombatController.MaxEquippedSkillSlots; index++)
             {
                 var button = CreateButtonChild(skillsView.transform, $"SkillButton{index + 1}");
+                var authoredSize = new Vector2(123f + index, 111f + index);
+                ((RectTransform)button.transform).sizeDelta = authoredSize;
                 var label = CreateTextChild(button.transform, "Label");
                 skillButtons.Add(button);
                 skillLabels.Add(label);
@@ -128,6 +140,12 @@ namespace Project2048.Tests
             var tooltipRoot = CreateStatusTooltipForTest(viewObject.transform);
             SetPrivateField(view, "statusTooltip", tooltipRoot.gameObject);
             SetPrivateField(view, "statusTooltipText", tooltipRoot.GetComponentInChildren<TMPro.TMP_Text>(true));
+            var bottomArtwork = CreateImageChild(viewObject.transform, "BottomPanelArtwork");
+            var bottomDefaultSprite = CreateOwnedSprite("BottomPanelDefault");
+            var bottomLitSprite = CreateOwnedSprite("BottomPanelLit");
+            SetPrivateField(view, "bottomPanelBackground", bottomArtwork);
+            SetPrivateField(view, "bottomPanelDefaultSprite", bottomDefaultSprite);
+            SetPrivateField(view, "bottomPanelMergeLitSprite", bottomLitSprite);
 
             var manager = CreateOwnedGameObject("CombatManager").AddComponent<CombatManager>();
             var player = CreateOwnedGameObject("Player").AddComponent<PlayerCombatController>();
@@ -169,6 +187,8 @@ namespace Project2048.Tests
             for (var index = 0; index < PlayerCombatController.MaxEquippedSkillSlots; index++)
             {
                 Assert.That(renderedButtons[index].gameObject.activeSelf, Is.True);
+                var authoredSize = new Vector2(123f + index, 111f + index);
+                Assert.That(((RectTransform)renderedButtons[index].transform).sizeDelta, Is.EqualTo(authoredSize));
             }
 
             Assert.That(skillLabels[0].text, Does.Contain("빛 발사"));
@@ -193,6 +213,9 @@ namespace Project2048.Tests
             var hpBeforeClick = enemy.CurrentHp;
             skillButtons[0].onClick.Invoke();
             Assert.That(enemy.CurrentHp, Is.LessThan(hpBeforeClick));
+            Assert.That(bottomArtwork.sprite, Is.SameAs(bottomLitSprite));
+            yield return new WaitForSeconds(CombatUiView.BottomPanelMergeFlashSeconds + 0.05f);
+            Assert.That(bottomArtwork.sprite, Is.SameAs(bottomDefaultSprite));
         }
 
         [UnityTest]
@@ -1089,6 +1112,55 @@ namespace Project2048.Tests
         }
 
         [Test]
+        public void BattleScene_UsesAuthoredCombatBackgroundSprites()
+        {
+            EditorSceneManager.OpenScene("Assets/Scenes/BattleScene.unity");
+            var view = Object.FindAnyObjectByType<CombatUiView>(FindObjectsInactive.Include);
+            var worldView = Object.FindAnyObjectByType<CombatWorldSpriteView>(FindObjectsInactive.Include);
+
+            Assert.That(view, Is.Not.Null);
+            Assert.That(worldView, Is.Not.Null);
+
+            var serializedView = new SerializedObject(view);
+            var bottomBackground = serializedView.FindProperty("bottomPanelBackground").objectReferenceValue as Image;
+            var bottomDefault = serializedView.FindProperty("bottomPanelDefaultSprite").objectReferenceValue as Sprite;
+            var bottomLit = serializedView.FindProperty("bottomPanelMergeLitSprite").objectReferenceValue as Sprite;
+
+            Assert.That(bottomBackground, Is.Not.Null);
+            Assert.That(bottomBackground.name, Is.EqualTo("BottomPanelArtwork"));
+            Assert.That(bottomBackground.transform.parent != null ? bottomBackground.transform.parent.name : null, Is.EqualTo("BottomPanel"));
+            Assert.That(bottomBackground.sprite, Is.SameAs(bottomDefault));
+            Assert.That(bottomBackground.color, Is.EqualTo(Color.white));
+            Assert.That(bottomBackground.preserveAspect, Is.True);
+            Assert.That(bottomBackground.raycastTarget, Is.False);
+            Assert.That(AssetGuid(bottomDefault), Is.EqualTo(BottomCombatBackgroundSpriteGuid));
+            Assert.That(AssetGuid(bottomLit), Is.EqualTo(BottomCombatBackgroundLitSpriteGuid));
+
+            var bottomPanelImage = bottomBackground.transform.parent.GetComponent<Image>();
+            Assert.That(bottomPanelImage, Is.Not.Null);
+            Assert.That(bottomPanelImage.sprite, Is.Null);
+            Assert.That(bottomPanelImage.color, Is.EqualTo(CombatUiView.ThemeBottomPanelSideFillColor));
+            Assert.That(bottomPanelImage.raycastTarget, Is.False);
+
+            AssertTransparentPanel(serializedView.FindProperty("boardPanel").objectReferenceValue as GameObject);
+            AssertTransparentPanel(serializedView.FindProperty("actionPanel").objectReferenceValue as GameObject);
+            AssertTransparentPanel(serializedView.FindProperty("enemyTurnPanel").objectReferenceValue as GameObject);
+            Assert.That(serializedView.FindProperty("actionDescriptionText").objectReferenceValue, Is.Not.Null);
+            AssertSceneSkillSlotsUseLanternSize(serializedView);
+
+            var serializedWorldView = new SerializedObject(worldView);
+            var topBackground = serializedWorldView.FindProperty("defaultBackgroundSprite").objectReferenceValue as Sprite;
+            var backgroundRenderer = serializedWorldView.FindProperty("backgroundRenderer").objectReferenceValue as SpriteRenderer;
+
+            Assert.That(AssetGuid(topBackground), Is.EqualTo(TopCombatBackgroundSpriteGuid));
+            Assert.That(backgroundRenderer, Is.Not.Null);
+            Assert.That(backgroundRenderer.sprite, Is.SameAs(topBackground));
+            Assert.That(backgroundRenderer.transform.localPosition.y, Is.EqualTo(2.75f).Within(0.001f));
+            Assert.That(backgroundRenderer.transform.localScale.x, Is.EqualTo(0.5208333f).Within(0.0001f));
+            Assert.That(backgroundRenderer.transform.localScale.y, Is.EqualTo(0.5208333f).Within(0.0001f));
+        }
+
+        [Test]
         public void BattleScene_CombatUiView_HasSceneAuthoredStatusAndBlockObjectsOnBottomHpBars()
         {
             EditorSceneManager.OpenScene("Assets/Scenes/BattleScene.unity");
@@ -1184,6 +1256,19 @@ namespace Project2048.Tests
             }
 
             return image;
+        }
+
+        private Sprite CreateOwnedSprite(string name)
+        {
+            var texture = new Texture2D(1, 1);
+            texture.SetPixel(0, 0, Color.white);
+            texture.Apply();
+            ownedObjects.Add(texture);
+
+            var sprite = Sprite.Create(texture, new Rect(0f, 0f, 1f, 1f), new Vector2(0.5f, 0.5f));
+            sprite.name = name;
+            ownedObjects.Add(sprite);
+            return sprite;
         }
 
         private Button CreateButtonChild(Transform parent, string name)
@@ -1442,6 +1527,48 @@ namespace Project2048.Tests
                 .GetMethod(methodName, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
             Assert.That(method, Is.Not.Null);
             return method.Invoke(target, args);
+        }
+
+        private static string AssetGuid(Object asset)
+        {
+            Assert.That(asset, Is.Not.Null);
+            return AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(asset));
+        }
+
+        private static void AssertTransparentPanel(GameObject panel)
+        {
+            Assert.That(panel, Is.Not.Null);
+            var image = panel.GetComponent<Image>();
+            Assert.That(image, Is.Not.Null);
+            Assert.That(image.sprite, Is.Null);
+            Assert.That(image.color, Is.EqualTo(Color.clear));
+            Assert.That(image.raycastTarget, Is.False);
+        }
+
+        private static void AssertSceneSkillSlotsUseLanternSize(SerializedObject serializedView)
+        {
+            var buttons = serializedView.FindProperty("skillTierButtons");
+            Assert.That(buttons, Is.Not.Null);
+            Assert.That(buttons.arraySize, Is.GreaterThanOrEqualTo(PlayerCombatController.MaxEquippedSkillSlots));
+
+            var positions = new[]
+            {
+                new Vector2(-88f, 88f),
+                new Vector2(88f, 88f),
+                new Vector2(-88f, -88f),
+                new Vector2(88f, -88f),
+            };
+
+            for (var index = 0; index < PlayerCombatController.MaxEquippedSkillSlots; index++)
+            {
+                var button = buttons.GetArrayElementAtIndex(index).objectReferenceValue as Button;
+                Assert.That(button, Is.Not.Null);
+                var rect = button.GetComponent<RectTransform>();
+                Assert.That(rect.sizeDelta.x, Is.EqualTo(ExpectedSkillLanternSlotSize.x).Within(0.001f));
+                Assert.That(rect.sizeDelta.y, Is.EqualTo(ExpectedSkillLanternSlotSize.y).Within(0.001f));
+                Assert.That(rect.anchoredPosition.x, Is.EqualTo(positions[index].x).Within(0.001f));
+                Assert.That(rect.anchoredPosition.y, Is.EqualTo(positions[index].y).Within(0.001f));
+            }
         }
 
         private static void AssertHpFillIsRenderable(Image fill)

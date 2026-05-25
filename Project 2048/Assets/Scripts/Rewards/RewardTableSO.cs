@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System;
 using System.Linq;
 using Project2048.Combat;
 using UnityEngine;
@@ -18,17 +19,28 @@ namespace Project2048.Rewards
 
         public List<BattleRewardSO> SelectRewards(CombatResult combatResult, int count)
         {
+            return SelectRewards(combatResult, count, null);
+        }
+
+        public List<BattleRewardSO> SelectRewards(
+            CombatResult combatResult,
+            int count,
+            Func<BattleRewardSO, bool> additionalFilter)
+        {
             count = Mathf.Max(0, count);
             if (count == 0 || rewards == null)
             {
                 return new List<BattleRewardSO>();
             }
 
-            var validRewards = rewards.Where(CanOfferReward).ToList();
+            var validRewards = rewards
+                .Where(CanOfferReward)
+                .Where(reward => additionalFilter == null || additionalFilter(reward))
+                .ToList();
             var selectedRewards = new List<BattleRewardSO>(count);
             while (validRewards.Count > 0 && selectedRewards.Count < count)
             {
-                var index = Random.Range(0, validRewards.Count);
+                var index = UnityEngine.Random.Range(0, validRewards.Count);
                 selectedRewards.Add(validRewards[index]);
                 validRewards.RemoveAt(index);
             }

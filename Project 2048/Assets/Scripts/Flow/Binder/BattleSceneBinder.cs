@@ -23,7 +23,7 @@ namespace Project2048.Flow
 
             if (flowController == null)
             {
-                Debug.LogError("FlowController is not assigned.");
+                // BattleScene can be opened directly in the editor as a standalone prototype scene.
                 yield break;
             }
 

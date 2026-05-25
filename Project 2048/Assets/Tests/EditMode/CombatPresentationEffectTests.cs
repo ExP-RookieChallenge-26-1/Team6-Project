@@ -1020,6 +1020,17 @@ namespace Project2048.Tests
             Assert.That(gameStarted, Is.True);
         }
 
+        [UnityTest]
+        public IEnumerator BattleSceneBinder_AllowsStandalonePrototypeSceneWithoutFlow()
+        {
+            CreateOwnedGameObject("BattleSceneBinder").AddComponent<BattleSceneBinder>();
+
+            yield return null;
+            yield return null;
+
+            LogAssert.NoUnexpectedReceived();
+        }
+
         [Test]
         public void CombatWorldSpriteView_PlayerSkill_PlaysActivationEffectFromSkillSo()
         {

@@ -33,6 +33,7 @@ namespace Project2048.Prototype
         public const float HpDamageTrailDelaySeconds = 0.25f;
         public const float HpDamageTrailDurationSeconds = 0.55f;
         public const float HpHitShakeDurationSeconds = 0.12f;
+        public const float BottomPanelMergeFlashSeconds = 0.18f;
         public static readonly Color ThemePrimaryColor = new(73f / 255f, 175f / 255f, 181f / 255f, 1f);
         public static readonly Color ThemeHpFillColor = ThemePrimaryColor;
         public static readonly Color ThemeHpDarkColor = new(12f / 255f, 13f / 255f, 14f / 255f, 1f);
@@ -46,6 +47,7 @@ namespace Project2048.Prototype
         public static readonly Color ThemeBoardCellColor = new(0.20f, 0.20f, 0.22f, 1f);
         public static readonly Color ThemeBoardHelpIconColor = new(0.42f, 0.46f, 0.50f, 0.95f);
         public static readonly Color ThemeBoardHelpOutlineColor = ThemeBoardCellColor;
+        public static readonly Color ThemeBottomPanelSideFillColor = new(15f / 255f, 14f / 255f, 13f / 255f, 1f);
         private static readonly Color ThemeSkillEmptyColor = new(22f / 255f, 25f / 255f, 28f / 255f, 1f);
         public const float HpStatusEffectXOffset = 18f;
         public const float HpTextMinFontSize = 22f;
@@ -94,6 +96,10 @@ namespace Project2048.Prototype
         [SerializeField] private TMP_Text actionDescriptionText;
 
         [Header("Bottom panels")]
+        [SerializeField] private Image bottomPanelBackground;
+        [SerializeField] private Sprite bottomPanelDefaultSprite;
+        [SerializeField] private Sprite bottomPanelMergeLitSprite;
+        [SerializeField, Min(0f)] private float bottomPanelMergeFlashSeconds = BottomPanelMergeFlashSeconds;
         [SerializeField] private GameObject boardPanel;
         [SerializeField] private GameObject actionPanel;
         [SerializeField] private GameObject enemyTurnPanel;
@@ -182,6 +188,7 @@ namespace Project2048.Prototype
         private Coroutine combatVfxCoroutine;
         private Coroutine enemyDeathFadeCoroutine;
         private Coroutine enemyHpHideCoroutine;
+        private Coroutine bottomPanelMergeFlashCoroutine;
         private bool boardTransitionAnimating;
         private bool lastEnemyWasDead;
         private int lastPlayedCombatVfxSequence;
@@ -251,6 +258,7 @@ namespace Project2048.Prototype
             ClearCombatVfx();
             ClearEnemyDeathFade();
             ClearEnemyHpHide();
+            ClearBottomPanelMergeFlash();
             ClearHpDamageTrailAnimations();
         }
 
@@ -374,7 +382,10 @@ namespace Project2048.Prototype
                 return;
             }
 
-            combatManager.RequestUseSkillById(skill.SkillId);
+            if (combatManager.RequestUseSkillById(skill.SkillId))
+            {
+                PlayBottomPanelMergeFlash();
+            }
         }
 
         private void HandleCombatStateChanged(CombatSnapshot nextSnapshot)
@@ -2325,7 +2336,17 @@ namespace Project2048.Prototype
 
         private void PlayBoardTileEffectCues(IReadOnlyList<BoardTileEffectCue> cues)
         {
-            if (cues == null || cues.Count == 0 || boardTileEffectProfile == null)
+            if (cues == null || cues.Count == 0)
+            {
+                return;
+            }
+
+            if (cues.Any(cue => cue.CueType == BoardTileEffectCueType.Merge))
+            {
+                PlayBottomPanelMergeFlash();
+            }
+
+            if (boardTileEffectProfile == null)
             {
                 return;
             }
@@ -2340,6 +2361,66 @@ namespace Project2048.Prototype
 
                 PlayEffectAudio(effect, cue.CueType == BoardTileEffectCueType.Merge);
                 SpawnBoardEffectPrefab(effect, cue.Position);
+            }
+        }
+
+        private void PlayBottomPanelMergeFlash()
+        {
+            if (bottomPanelBackground == null || bottomPanelMergeLitSprite == null)
+            {
+                return;
+            }
+
+            if (bottomPanelDefaultSprite == null)
+            {
+                bottomPanelDefaultSprite = bottomPanelBackground.sprite;
+            }
+
+            if (bottomPanelDefaultSprite == null)
+            {
+                return;
+            }
+
+            if (bottomPanelMergeFlashCoroutine != null)
+            {
+                StopCoroutine(bottomPanelMergeFlashCoroutine);
+                bottomPanelMergeFlashCoroutine = null;
+            }
+
+            bottomPanelBackground.sprite = bottomPanelMergeLitSprite;
+            bottomPanelBackground.enabled = true;
+
+            if (!Application.isPlaying || !isActiveAndEnabled || bottomPanelMergeFlashSeconds <= 0f)
+            {
+                bottomPanelBackground.sprite = bottomPanelDefaultSprite;
+                return;
+            }
+
+            bottomPanelMergeFlashCoroutine = StartCoroutine(BottomPanelMergeFlashRoutine());
+        }
+
+        private IEnumerator BottomPanelMergeFlashRoutine()
+        {
+            yield return new WaitForSecondsRealtime(bottomPanelMergeFlashSeconds);
+            if (bottomPanelBackground != null && bottomPanelDefaultSprite != null)
+            {
+                bottomPanelBackground.sprite = bottomPanelDefaultSprite;
+            }
+
+            bottomPanelMergeFlashCoroutine = null;
+        }
+
+        private void ClearBottomPanelMergeFlash()
+        {
+            if (bottomPanelMergeFlashCoroutine != null)
+            {
+                StopCoroutine(bottomPanelMergeFlashCoroutine);
+                bottomPanelMergeFlashCoroutine = null;
+            }
+
+            if (bottomPanelBackground != null && bottomPanelDefaultSprite != null)
+            {
+                bottomPanelBackground.sprite = bottomPanelDefaultSprite;
             }
         }
 

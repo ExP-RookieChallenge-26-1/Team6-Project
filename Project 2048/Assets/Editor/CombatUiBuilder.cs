@@ -28,10 +28,20 @@ namespace Project2048.PrototypeEditor
         private const string SkillFolder = DataFolder + "/Skills";
         private const string BattleScenePath = "Assets/Scenes/BattleScene.unity";
         private const string PlayerSpritePath = "Assets/Art/Prototype/PrototypePlayerCutout.png";
-        private static readonly Vector2 SkillSlotSize = new(340f, 170f);
+        private static readonly Vector2 SkillSlotSize = new(156f, 156f);
+        private static readonly Vector2[] SkillSlotPositions =
+        {
+            new(-88f, 88f),
+            new(88f, 88f),
+            new(-88f, -88f),
+            new(88f, -88f),
+        };
         private const string EnemySpritePath = "Assets/Art/Prototype/PrototypeEnemyCutout.png";
         private const string HpBarSpritePath = "Assets/Art/UI/WideHexHpBar.png";
         private const string HpBarOutlineSpritePath = "Assets/Art/UI/WideHexHpBarOutline.png";
+        private const string TopCombatBackgroundSpriteGuid = "ac20f033bdceb3149b44f3a942308b67";
+        private const string BottomCombatBackgroundSpriteGuid = "d2ec658346ab0de45bd74ab3b7c48aa6";
+        private const string BottomCombatBackgroundLitSpriteGuid = "acc36fe0eb392f643919d7937f0b0301";
         private const int HpBarSpriteWidth = 1024;
         private const int HpBarSpriteHeight = 256;
         private const int HpBarSpriteSamplesPerAxis = 4;
@@ -196,14 +206,6 @@ namespace Project2048.PrototypeEditor
             var labels = new List<TMP_Text>();
             var existingButtons = so.FindProperty("skillTierButtons");
             var existingLabels = so.FindProperty("skillTierLabels");
-            var positions = new[]
-            {
-                new Vector2(-178f, 94f),
-                new Vector2(178f, 94f),
-                new Vector2(-178f, -94f),
-                new Vector2(178f, -94f),
-            };
-
             for (var index = 0; index < PlayerCombatController.MaxEquippedSkillSlots; index++)
             {
                 var button = existingButtons != null && index < existingButtons.arraySize
@@ -212,7 +214,7 @@ namespace Project2048.PrototypeEditor
                 button ??= skillsView.transform.Find($"SkillSlotButton_{index + 1}")?.GetComponent<Button>();
                 button ??= CreateImage(skillsView.transform, $"SkillSlotButton_{index + 1}", new Color(0.10f, 0.36f, 0.18f, 1f)).gameObject.AddComponent<Button>();
 
-                ConfigureSkillSlotButton(button, index, positions[index], font);
+                ConfigureSkillSlotButton(button, index, SkillSlotPositions[index], font);
                 buttons.Add(button);
 
                 var label = existingLabels != null && index < existingLabels.arraySize
@@ -377,6 +379,31 @@ namespace Project2048.PrototypeEditor
             return AssetDatabase.LoadAssetAtPath<Sprite>(assetPath);
         }
 
+        private static Sprite LoadSpriteByGuid(string guid)
+        {
+            var path = AssetDatabase.GUIDToAssetPath(guid);
+            if (string.IsNullOrEmpty(path))
+            {
+                return null;
+            }
+
+            var sprite = AssetDatabase.LoadAssetAtPath<Sprite>(path);
+            if (sprite != null)
+            {
+                return sprite;
+            }
+
+            foreach (var asset in AssetDatabase.LoadAllAssetRepresentationsAtPath(path))
+            {
+                if (asset is Sprite childSprite)
+                {
+                    return childSprite;
+                }
+            }
+
+            return null;
+        }
+
         private static void ConfigureSkill(
             SkillSO skill,
             string id,
@@ -427,11 +454,16 @@ namespace Project2048.PrototypeEditor
             SetStretch(phone.rectTransform, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
 
             var battle = CreatePanel(phone.transform, "BattleScene", new Color(0.18f, 0.18f, 0.20f, 1f));
+            ApplyPanelSprite(battle, LoadSpriteByGuid(TopCombatBackgroundSpriteGuid));
             SetStretch(battle.rectTransform, new Vector2(0, 0.55f), Vector2.one, Vector2.zero, Vector2.zero);
             BuildBattleScene(battle.transform, refs, font);
 
-            var bottom = CreatePanel(phone.transform, "BottomPanel", new Color(0.04f, 0.04f, 0.05f, 1f));
+            var bottom = CreatePanel(phone.transform, "BottomPanel", CombatUiView.ThemeBottomPanelSideFillColor);
+            ConfigureBottomPanelSideFill(bottom);
             SetStretch(bottom.rectTransform, Vector2.zero, new Vector2(1, 0.55f), Vector2.zero, Vector2.zero);
+            refs.BottomPanelBackground = CreateImage(bottom.transform, "BottomPanelArtwork", Color.white);
+            ApplyPanelSprite(refs.BottomPanelBackground, LoadSpriteByGuid(BottomCombatBackgroundSpriteGuid));
+            SetStretch(refs.BottomPanelBackground.rectTransform, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
             BuildBoardPanel(bottom.transform, refs, font);
             BuildActionPanel(bottom.transform, refs, font);
             BuildEnemyTurnPanel(bottom.transform, refs, font);
@@ -518,7 +550,9 @@ namespace Project2048.PrototypeEditor
 
         private static void BuildBoardPanel(Transform bottom, ViewRefs refs, TMP_FontAsset font)
         {
-            refs.BoardPanel = CreatePanel(bottom, "BoardPanel", new Color(0.04f, 0.04f, 0.05f, 1f)).gameObject;
+            var boardPanelImage = CreatePanel(bottom, "BoardPanel", Color.clear);
+            ConfigureTransparentPanelImage(boardPanelImage);
+            refs.BoardPanel = boardPanelImage.gameObject;
             var boardRect = refs.BoardPanel.GetComponent<RectTransform>();
             SetStretch(boardRect, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
 
@@ -601,7 +635,9 @@ namespace Project2048.PrototypeEditor
 
         private static void BuildActionPanel(Transform bottom, ViewRefs refs, TMP_FontAsset font)
         {
-            refs.ActionPanel = CreatePanel(bottom, "ActionPanel", new Color(0.04f, 0.04f, 0.05f, 1f)).gameObject;
+            var actionPanelImage = CreatePanel(bottom, "ActionPanel", Color.clear);
+            ConfigureTransparentPanelImage(actionPanelImage);
+            refs.ActionPanel = actionPanelImage.gameObject;
             SetStretch(refs.ActionPanel.GetComponent<RectTransform>(), Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
             refs.ActionPanel.SetActive(false);
 
@@ -632,11 +668,14 @@ namespace Project2048.PrototypeEditor
             refs.Tier4 = CreateLabeledButton(refs.SkillsView.transform, "SkillSlotButton_4", "4단계", font, out refs.Tier4Label);
             refs.SkillsBack = CreateLabeledButton(refs.SkillsView.transform, "BackButton", "뒤로", font);
             refs.SkillsEndTurn = CreateLabeledButton(refs.SkillsView.transform, "EndTurnButton", "턴 종료", font);
+            ConfigureAuthoredSkillSlots(refs, font);
         }
 
         private static void BuildEnemyTurnPanel(Transform bottom, ViewRefs refs, TMP_FontAsset font)
         {
-            refs.EnemyTurnPanel = CreatePanel(bottom, "EnemyTurnPanel", new Color(0.04f, 0.04f, 0.05f, 1f)).gameObject;
+            var enemyTurnPanelImage = CreatePanel(bottom, "EnemyTurnPanel", Color.clear);
+            ConfigureTransparentPanelImage(enemyTurnPanelImage);
+            refs.EnemyTurnPanel = enemyTurnPanelImage.gameObject;
             SetStretch(refs.EnemyTurnPanel.GetComponent<RectTransform>(), Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
             refs.EnemyTurnPanel.SetActive(false);
 
@@ -735,6 +774,32 @@ namespace Project2048.PrototypeEditor
             var image = go.GetComponent<Image>();
             image.color = color;
             return image;
+        }
+
+        private static void ConfigureBottomPanelSideFill(Image image)
+        {
+            if (image == null)
+            {
+                return;
+            }
+
+            image.sprite = null;
+            image.color = CombatUiView.ThemeBottomPanelSideFillColor;
+            image.preserveAspect = false;
+            image.raycastTarget = false;
+        }
+
+        private static void ConfigureTransparentPanelImage(Image image)
+        {
+            if (image == null)
+            {
+                return;
+            }
+
+            image.sprite = null;
+            image.color = Color.clear;
+            image.preserveAspect = false;
+            image.raycastTarget = false;
         }
 
         private static TMP_Text CreateLabel(
@@ -880,11 +945,58 @@ namespace Project2048.PrototypeEditor
 
             var layout = button.GetComponent<LayoutElement>() ?? button.gameObject.AddComponent<LayoutElement>();
             layout.ignoreLayout = true;
+            layout.minWidth = SkillSlotSize.x;
+            layout.minHeight = SkillSlotSize.y;
+            layout.preferredWidth = SkillSlotSize.x;
+            layout.preferredHeight = SkillSlotSize.y;
 
             var label = button.transform.Find("Label")?.GetComponent<TMP_Text>();
             if (label != null)
             {
                 ConfigureSkillSlotLabel(label, font);
+            }
+        }
+
+        private static void ConfigureAuthoredSkillSlots(ViewRefs refs, TMP_FontAsset font)
+        {
+            if (refs?.SkillsView == null)
+            {
+                return;
+            }
+
+            var skillsRect = refs.SkillsView.GetComponent<RectTransform>();
+            SetAnchor(skillsRect, new Vector2(0.5f, 0.48f), new Vector2(820f, 560f), Vector2.zero);
+
+            var layout = refs.SkillsView.GetComponent<VerticalLayoutGroup>();
+            if (layout != null)
+            {
+                Object.DestroyImmediate(layout);
+            }
+
+            if (refs.SkillsHeaderText != null)
+            {
+                SetAnchor(refs.SkillsHeaderText.rectTransform, new Vector2(0.5f, 0.92f), new Vector2(520f, 48f), Vector2.zero);
+            }
+
+            var buttons = new[] { refs.Tier1, refs.Tier2, refs.Tier3, refs.Tier4 };
+            var labels = new[] { refs.Tier1Label, refs.Tier2Label, refs.Tier3Label, refs.Tier4Label };
+            for (var index = 0; index < buttons.Length; index++)
+            {
+                ConfigureSkillSlotButton(buttons[index], index, SkillSlotPositions[index], font);
+                if (labels[index] != null)
+                {
+                    ConfigureSkillSlotLabel(labels[index], font);
+                }
+            }
+
+            if (refs.SkillsBack != null)
+            {
+                refs.SkillsBack.gameObject.SetActive(false);
+            }
+
+            if (refs.SkillsEndTurn != null)
+            {
+                SetAnchor(refs.SkillsEndTurn.GetComponent<RectTransform>(), new Vector2(0.5f, 0.08f), new Vector2(300f, 76f), Vector2.zero);
             }
         }
 
@@ -1363,6 +1475,9 @@ namespace Project2048.PrototypeEditor
             SetRef(so, "playerBattleStatusEffectsRoot", refs.PlayerBattleStatusEffectsRoot);
             SetRef(so, "enemyStatusEffectsRoot", refs.EnemyStatusEffectsRoot);
             SetRef(so, "actionDescriptionText", refs.ActionDescriptionText);
+            SetRef(so, "bottomPanelBackground", refs.BottomPanelBackground);
+            SetRef(so, "bottomPanelDefaultSprite", LoadSpriteByGuid(BottomCombatBackgroundSpriteGuid));
+            SetRef(so, "bottomPanelMergeLitSprite", LoadSpriteByGuid(BottomCombatBackgroundLitSpriteGuid));
             SetRef(so, "boardPanel", refs.BoardPanel);
             SetRef(so, "actionPanel", refs.ActionPanel);
             SetRef(so, "enemyTurnPanel", refs.EnemyTurnPanel);
@@ -1419,6 +1534,19 @@ namespace Project2048.PrototypeEditor
             {
                 prop.GetArrayElementAtIndex(i).objectReferenceValue = values[i];
             }
+        }
+
+        private static void ApplyPanelSprite(Image image, Sprite sprite)
+        {
+            if (image == null || sprite == null)
+            {
+                return;
+            }
+
+            image.sprite = sprite;
+            image.color = Color.white;
+            image.preserveAspect = true;
+            image.raycastTarget = false;
         }
 
         private static RectTransform EnsureStatusEffectAuthoringRoot(
@@ -1567,7 +1695,7 @@ namespace Project2048.PrototypeEditor
             public TMP_Text Tier1Label, Tier2Label, Tier3Label, Tier4Label;
             public TMP_Text TurnCounterText, IntentHeaderText, EnemyNameText, IntentBubbleText;
             public TMP_Text HpText, TurnLimitText, PlayerBattleHpText, EnemyHpText, ActionDescriptionText;
-            public Image PlayerPortrait, EnemyPortrait, IntentBubble, HpBarFill, PlayerBattleHpFill, EnemyHpFill;
+            public Image PlayerPortrait, EnemyPortrait, IntentBubble, HpBarFill, PlayerBattleHpFill, EnemyHpFill, BottomPanelBackground;
             public RectTransform BoardAnimationOverlay, PlayerBattleStatusEffectsRoot, PlayerBoardStatusEffectsRoot, EnemyStatusEffectsRoot;
         }
     }

@@ -37109,7 +37109,7 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/PrototypeCombatFactoryTests.cs",
     "from_class": "PrototypeCombatFactoryTests",
-    "to_type": "CreateDefaultLoadout_EquipsFourPrototypeSkills",
+    "to_type": "CreateDefaultLoadout_EquipsRequestedStartingSkills",
     "relation_type": "uses",
     "strength": 1
   },
@@ -39958,7 +39958,28 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
     "from_class": "SkillSOTests",
+    "to_type": "Add",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
+    "from_class": "SkillSOTests",
     "to_type": "Assert",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
+    "from_class": "SkillSOTests",
+    "to_type": "AssetDatabase",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
+    "from_class": "SkillSOTests",
+    "to_type": "Assets",
     "relation_type": "uses",
     "strength": 1
   },
@@ -39972,7 +39993,56 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
     "from_class": "SkillSOTests",
+    "to_type": "CanAppearAsReward",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
+    "from_class": "SkillSOTests",
+    "to_type": "Collections",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
+    "from_class": "SkillSOTests",
+    "to_type": "Combat",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
+    "from_class": "SkillSOTests",
+    "to_type": "Contain",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
+    "from_class": "SkillSOTests",
+    "to_type": "ContainsKey",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
+    "from_class": "SkillSOTests",
+    "to_type": "ConvertAll",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
+    "from_class": "SkillSOTests",
     "to_type": "CreateInstance",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
+    "from_class": "SkillSOTests",
+    "to_type": "Data",
     "relation_type": "uses",
     "strength": 1
   },
@@ -39986,7 +40056,28 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
     "from_class": "SkillSOTests",
+    "to_type": "Does",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
+    "from_class": "SkillSOTests",
     "to_type": "EqualTo",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
+    "from_class": "SkillSOTests",
+    "to_type": "False",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
+    "from_class": "SkillSOTests",
+    "to_type": "FindAssets",
     "relation_type": "uses",
     "strength": 1
   },
@@ -40000,7 +40091,21 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
     "from_class": "SkillSOTests",
+    "to_type": "Generic",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
+    "from_class": "SkillSOTests",
     "to_type": "GetMethod",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
+    "from_class": "SkillSOTests",
+    "to_type": "GUIDToAssetPath",
     "relation_type": "uses",
     "strength": 1
   },
@@ -40028,7 +40133,35 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
     "from_class": "SkillSOTests",
+    "to_type": "LoadAssetAtPath",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
+    "from_class": "SkillSOTests",
+    "to_type": "LoadPrototypeSkills",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
+    "from_class": "SkillSOTests",
     "to_type": "NonPublic",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
+    "from_class": "SkillSOTests",
+    "to_type": "Not",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
+    "from_class": "SkillSOTests",
+    "to_type": "Null",
     "relation_type": "uses",
     "strength": 1
   },
@@ -40063,6 +40196,13 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
     "from_class": "SkillSOTests",
+    "to_type": "PlayerSO",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
+    "from_class": "SkillSOTests",
     "to_type": "Project2048",
     "relation_type": "uses",
     "strength": 1
@@ -40070,7 +40210,70 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
     "from_class": "SkillSOTests",
+    "to_type": "PrototypePlayer",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
+    "from_class": "SkillSOTests",
+    "to_type": "PrototypePlayerAsset_UsesRequestedStartingSkills",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
+    "from_class": "SkillSOTests",
+    "to_type": "PrototypeRewardTable",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
+    "from_class": "SkillSOTests",
+    "to_type": "PrototypeSkillAssets_MatchCurrentBalancePool",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
+    "from_class": "SkillSOTests",
     "to_type": "Reflection",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
+    "from_class": "SkillSOTests",
+    "to_type": "ResolveEffectKind",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
+    "from_class": "SkillSOTests",
+    "to_type": "Rewards",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
+    "from_class": "SkillSOTests",
+    "to_type": "RewardTableSO",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
+    "from_class": "SkillSOTests",
+    "to_type": "SacrificeAttack",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
+    "from_class": "SkillSOTests",
+    "to_type": "SkillEffectKind",
     "relation_type": "uses",
     "strength": 1
   },
@@ -40119,6 +40322,13 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
     "from_class": "SkillSOTests",
+    "to_type": "UnityEditor",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
+    "from_class": "SkillSOTests",
     "to_type": "UnityEngine",
     "relation_type": "uses",
     "strength": 1
@@ -40127,6 +40337,13 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
     "from_class": "SkillSOTests",
     "to_type": "Within",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
+    "from_class": "SkillSOTests",
+    "to_type": "Zero",
     "relation_type": "uses",
     "strength": 1
   }

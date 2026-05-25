@@ -13767,9 +13767,9 @@
     "file_id": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatFactory.cs",
     "path": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatFactory.cs",
     "file_name": "PrototypeCombatFactory.cs",
-    "content_hash": "a398ae5ca37198fd80f682853ddad26708dbc1e6",
-    "size": 22225,
-    "line_count": 414,
+    "content_hash": "b930b3a2a8ff7dd7d9553735098fd708c5c5bca3",
+    "size": 22195,
+    "line_count": 413,
     "namespace": "Project2048.Prototype",
     "using_list": [
       "System.Collections.Generic",
@@ -18334,7 +18334,7 @@
     "file_id": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
     "path": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
     "file_name": "CombatPresentationEffectTests.cs",
-    "content_hash": "677bbc38e5b2b86e1a511d140bbf62f7e5483935",
+    "content_hash": "a78142b7b1f511147c8d1222a274a068c6ad8aa8",
     "size": 78764,
     "line_count": 1597,
     "namespace": "Project2048.Tests",
@@ -20441,9 +20441,9 @@
     "file_id": "Project 2048/Assets/Tests/EditMode/PrototypeCombatFactoryTests.cs",
     "path": "Project 2048/Assets/Tests/EditMode/PrototypeCombatFactoryTests.cs",
     "file_name": "PrototypeCombatFactoryTests.cs",
-    "content_hash": "18643835dc70ef8397c179ef8f7964809386107d",
-    "size": 5542,
-    "line_count": 143,
+    "content_hash": "137c6ab1d358fa27fcb48559199bbb2483ef3aba",
+    "size": 5705,
+    "line_count": 148,
     "namespace": "Project2048.Tests",
     "using_list": [
       "System.Linq",
@@ -20468,7 +20468,7 @@
     "main_class_name": "PrototypeCombatFactoryTests",
     "unity_type": "None",
     "methods": [
-      "CreateDefaultLoadout_EquipsFourPrototypeSkills",
+      "CreateDefaultLoadout_EquipsRequestedStartingSkills",
       "CreateDefaultLoadout_UsesCurrentPrototypeSkillNames",
       "CreateDefaultLoadout_AssignsReusableVfxFamilies",
       "CreatePrototypeEnemyRoster_BuildsTwelveTemporaryAiProfiles"
@@ -20504,7 +20504,7 @@
       "UnityEngine",
       "Tests",
       "Test",
-      "CreateDefaultLoadout_EquipsFourPrototypeSkills",
+      "CreateDefaultLoadout_EquipsRequestedStartingSkills",
       "PrototypeCombatFactory",
       "CreateDefaultLoadout",
       "Assert",
@@ -20598,8 +20598,8 @@
       240,
       10,
       11,
-      4,
       6,
+      4,
       5,
       0,
       12,
@@ -21346,14 +21346,17 @@
     "file_id": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
     "path": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
     "file_name": "SkillSOTests.cs",
-    "content_hash": "e2ae87106a8fa1e4097e316e3d652dd89e65a2a7",
-    "size": 1002,
-    "line_count": 35,
+    "content_hash": "9ec62e2ca58ab196c6c46cc0a88d1e611ff33686",
+    "size": 3438,
+    "line_count": 94,
     "namespace": "Project2048.Tests",
     "using_list": [
       "System.Reflection",
       "NUnit.Framework",
+      "Project2048.Combat",
+      "Project2048.Rewards",
       "Project2048.Skills",
+      "UnityEditor",
       "UnityEngine"
     ],
     "classes": [
@@ -21371,9 +21374,20 @@
     "main_class_name": "SkillSOTests",
     "unity_type": "None",
     "methods": [
-      "OnValidate_ClampsReusableVfxParameters"
+      "OnValidate_ClampsReusableVfxParameters",
+      "PrototypeSkillAssets_MatchCurrentBalancePool",
+      "PrototypePlayerAsset_UsesRequestedStartingSkills",
+      "LoadPrototypeSkills"
     ],
-    "fields": [],
+    "fields": [
+      {
+        "name": "bloodFang",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      }
+    ],
     "properties": [],
     "events": [],
     "unity_messages": [],
@@ -21388,7 +21402,7 @@
     "public_field_count": 0,
     "get_component_count": 0,
     "find_call_count": 0,
-    "new_keyword_count": 0,
+    "new_keyword_count": 2,
     "coroutine_count": 0,
     "singleton_candidate": false,
     "dont_destroy_on_load": false,
@@ -21398,7 +21412,10 @@
       "NUnit",
       "Framework",
       "Project2048",
+      "Combat",
+      "Rewards",
       "Skills",
+      "UnityEditor",
       "UnityEngine",
       "Tests",
       "Test",
@@ -21417,7 +21434,35 @@
       "EqualTo",
       "Within",
       "Object",
-      "DestroyImmediate"
+      "DestroyImmediate",
+      "PrototypeSkillAssets_MatchCurrentBalancePool",
+      "LoadPrototypeSkills",
+      "ContainsKey",
+      "False",
+      "ResolveEffectKind",
+      "SkillEffectKind",
+      "SacrificeAttack",
+      "Zero",
+      "Does",
+      "Not",
+      "Contain",
+      "AssetDatabase",
+      "LoadAssetAtPath",
+      "RewardTableSO",
+      "Assets",
+      "Data",
+      "PrototypeRewardTable",
+      "Null",
+      "Collections",
+      "Generic",
+      "Add",
+      "CanAppearAsReward",
+      "PrototypePlayerAsset_UsesRequestedStartingSkills",
+      "PlayerSO",
+      "PrototypePlayer",
+      "ConvertAll",
+      "FindAssets",
+      "GUIDToAssetPath"
     ],
     "component_access_types": [],
     "created_types": [],
@@ -21425,18 +21470,36 @@
       "BindingFlags"
     ],
     "string_literals": [
-      "OnValidate"
+      "OnValidate",
+      "counter",
+      "blood-fang",
+      "회복",
+      "Assets/Data/Rewards/PrototypeRewardTable.asset",
+      "Assets/Data/PrototypePlayer.asset",
+      "light-shot",
+      "low-stance",
+      "flash",
+      "t:SkillSO",
+      "Assets/Data/Skills"
     ],
     "numeric_literals": [
       0,
       1,
       0.01,
-      0.0001
+      0.0001,
+      100
     ],
     "guessed_roles": [
       "data",
-      "manager"
+      "combat",
+      "ui",
+      "player",
+      "save-load"
     ],
-    "summary_signals": []
+    "summary_signals": [
+      "UI 관련 로직 포함",
+      "전투 계열 로직 포함",
+      "저장/불러오기 관련 로직 포함"
+    ]
   }
 ]

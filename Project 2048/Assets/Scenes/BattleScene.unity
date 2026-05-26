@@ -1896,8 +1896,8 @@ MonoBehaviour:
   statusTooltipText: {fileID: 546764857}
   actionDescriptionText: {fileID: 128613511}
   bottomPanelBackground: {fileID: 2135000004}
-  bottomPanelDefaultSprite: {fileID: -7165815447221975555, guid: d2ec658346ab0de45bd74ab3b7c48aa6, type: 3}
-  bottomPanelMergeLitSprite: {fileID: -5806291572361629382, guid: acc36fe0eb392f643919d7937f0b0301, type: 3}
+  bottomPanelDefaultSprite: {fileID: -2166993456197125128, guid: cc30ddc0c7eae2049b751203e84d9c4b, type: 3}
+  bottomPanelMergeLitSprite: {fileID: -6398581174998778968, guid: 515518d798eb1764c965c9a1c6f4c472, type: 3}
   bottomPanelMergeFlashSeconds: 0.18
   boardPanel: {fileID: 56444474}
   actionPanel: {fileID: 546507507}
@@ -16761,7 +16761,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -7165815447221975555, guid: d2ec658346ab0de45bd74ab3b7c48aa6, type: 3}
+  m_Sprite: {fileID: -2166993456197125128, guid: cc30ddc0c7eae2049b751203e84d9c4b, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1

@@ -20,8 +20,8 @@ namespace Project2048.Tests
     {
         private const string HpBarSpritePath = "Assets/Art/UI/WideHexHpBar.png";
         private const string TopCombatBackgroundSpriteGuid = "ac20f033bdceb3149b44f3a942308b67";
-        private const string BottomCombatBackgroundSpriteGuid = "d2ec658346ab0de45bd74ab3b7c48aa6";
-        private const string BottomCombatBackgroundLitSpriteGuid = "acc36fe0eb392f643919d7937f0b0301";
+        private const string BottomCombatBackgroundSpriteGuid = "cc30ddc0c7eae2049b751203e84d9c4b";
+        private const string BottomCombatBackgroundLitSpriteGuid = "515518d798eb1764c965c9a1c6f4c472";
         private static readonly Vector2 ExpectedSkillLanternSlotSize = new(156f, 156f);
         private readonly System.Collections.Generic.List<Object> ownedObjects = new();
 

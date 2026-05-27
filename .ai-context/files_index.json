@@ -537,9 +537,9 @@
     "file_id": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
     "path": "Project 2048/Assets/Editor/CombatUiBuilder.cs",
     "file_name": "CombatUiBuilder.cs",
-    "content_hash": "48ce678674b2cb45cbb009ff7afcba6c6b19d723",
-    "size": 79405,
-    "line_count": 1704,
+    "content_hash": "c1a02e4de12b35b4f45e4a724ad774d7a754cadc",
+    "size": 80236,
+    "line_count": 1714,
     "namespace": "Project2048.PrototypeEditor",
     "using_list": [
       "System.Collections.Generic",
@@ -714,6 +714,27 @@
       },
       {
         "name": "HpBarOutlineSpritePath",
+        "type": "string",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "AttackIntentIconPath",
+        "type": "string",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "DefenseIntentIconPath",
+        "type": "string",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "FearIntentIconPath",
         "type": "string",
         "access": "private",
         "serialized": false,
@@ -945,6 +966,13 @@
       "WideHexHpBar",
       "HpBarOutlineSpritePath",
       "WideHexHpBarOutline",
+      "AttackIntentIconPath",
+      "IntentIcons",
+      "Ui_Attack",
+      "DefenseIntentIconPath",
+      "Ui_Defense",
+      "FearIntentIconPath",
+      "Ui_Fear",
       "TopCombatBackgroundSpriteGuid",
       "BottomCombatBackgroundSpriteGuid",
       "BottomCombatBackgroundLitSpriteGuid",
@@ -1085,14 +1113,7 @@
       "CreateOrLoadAsset",
       "PlayerSO",
       "PrototypePlayer",
-      "LoadSprite",
-      "EnemySO",
-      "EnemyIntent",
-      "EnemyAiActionBias",
-      "Balanced",
-      "EnemyDebuffPattern",
-      "FearThenDarkness",
-      "EnemyAiStrength"
+      "LoadSprite"
     ],
     "component_access_types": [
       "CombatUiView",
@@ -1135,6 +1156,9 @@
       "Assets/Art/Prototype/PrototypeEnemyCutout.png",
       "Assets/Art/UI/WideHexHpBar.png",
       "Assets/Art/UI/WideHexHpBarOutline.png",
+      "Assets/Art/UI/IntentIcons/Ui_Attack.png",
+      "Assets/Art/UI/IntentIcons/Ui_Defense.png",
+      "Assets/Art/UI/IntentIcons/Ui_Fear.png",
       "ac20f033bdceb3149b44f3a942308b67",
       "cc30ddc0c7eae2049b751203e84d9c4b",
       "515518d798eb1764c965c9a1c6f4c472",
@@ -1142,10 +1166,7 @@
       "PhoneRoot",
       "ResultOverlay",
       "Combat UI scene, prototype combat data, and bindings generated.",
-      "Project2048/Ensure Combat Status Effect Roots",
-      "CombatUiView was not found in BattleScene.",
-      "playerBattleHpBarFill",
-      "PlayerBattleHp"
+      "Project2048/Ensure Combat Status Effect Roots"
     ],
     "numeric_literals": [
       156,
@@ -1189,9 +1210,9 @@
     "file_id": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
     "path": "Project 2048/Assets/Editor/HolyFireballAttack3VfxBuilder.cs",
     "file_name": "HolyFireballAttack3VfxBuilder.cs",
-    "content_hash": "d604651a63e6a33c603615f7b42a95c2f16874a7",
-    "size": 33856,
-    "line_count": 774,
+    "content_hash": "250984ce15fb721a2adf81e96cddd8a3b64e8f8a",
+    "size": 34633,
+    "line_count": 785,
     "namespace": "Project2048.EditorTools",
     "using_list": [
       "System.IO",
@@ -1265,6 +1286,48 @@
       "CombatEffectBinding"
     ],
     "fields": [
+      {
+        "name": "SkillVfxRootPath",
+        "type": "string",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "HolyFireballRootPath",
+        "type": "string",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "HolyFireballTexturePath",
+        "type": "string",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "MaterialPath",
+        "type": "string",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "PrefabFolderPath",
+        "type": "string",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "ShaderFolderPath",
+        "type": "string",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
       {
         "name": "ShaderGraphPath",
         "type": "string",
@@ -1586,6 +1649,13 @@
         "access": "internal",
         "serialized": false,
         "is_static": false
+      },
+      {
+        "name": "isGatherLight",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
       }
     ],
     "properties": [],
@@ -1602,7 +1672,7 @@
     "public_field_count": 0,
     "get_component_count": 2,
     "find_call_count": 0,
-    "new_keyword_count": 140,
+    "new_keyword_count": 141,
     "coroutine_count": 0,
     "singleton_candidate": false,
     "dont_destroy_on_load": false,
@@ -1625,13 +1695,24 @@
       "Cross",
       "Pipeline",
       "Unlit",
-      "ShaderGraphPath",
+      "SkillVfxRootPath",
       "Assets",
-      "Shaders",
+      "Art",
       "Effects",
+      "SkillVFX",
+      "HolyFireballRootPath",
+      "HolyFireball",
+      "HolyFireballTexturePath",
+      "Textures",
+      "MaterialPath",
+      "Materials",
+      "PrefabFolderPath",
+      "Prefabs",
+      "ShaderFolderPath",
+      "Shaders",
+      "ShaderGraphPath",
       "HolyFireParticle",
       "PrefabPath",
-      "Prefabs",
       "HolyFireball_Attack3",
       "VisualScale",
       "LightProjectileSkillPaths",
@@ -1646,9 +1727,6 @@
       "Fireball",
       "Attack",
       "EnsureFolder",
-      "Art",
-      "HolyFireball",
-      "Materials",
       "EnsureShaderGraph",
       "CreateTexture",
       "HolyFire_Orb",
@@ -1798,15 +1876,7 @@
       "HolyWhiteGradient",
       "ApplyNoise",
       "InnerFlameWisps",
-      "ApplyVelocityOverLifeY",
-      "RadiantHalo",
-      "PI",
-      "FadeOutGradient",
-      "TrailingSacredFlame",
-      "World",
-      "ParticleSystemInheritVelocityMode",
-      "Current",
-      "GoldCyanSparks"
+      "ApplyVelocityOverLifeY"
     ],
     "component_access_types": [
       "ParticleSystem",
@@ -1829,26 +1899,26 @@
     ],
     "singleton_access_types": [],
     "string_literals": [
-      "Assets/Shaders/Effects/HolyFireParticle.shadergraph",
-      "Assets/Prefabs/Effects/HolyFireball_Attack3.prefab",
+      "Assets/Art/Effects/SkillVFX",
+      "/HolyFireball",
+      "/Textures",
+      "/Materials",
+      "/Prefabs",
+      "/Shaders",
+      "/HolyFireParticle.shadergraph",
+      "/HolyFireball_Attack3.prefab",
       "Assets/Data/Skills/LightShot.asset",
       "Assets/Data/Skills/GatherLight.asset",
       "Tools/Project2048/VFX/Rebuild Holy Fireball Attack 3",
-      "Assets/Shaders/Effects",
-      "Assets/Art/Effects/HolyFireball",
-      "Assets/Materials/Effects",
-      "Assets/Prefabs/Effects",
-      "Assets/Art/Effects/HolyFireball/HolyFire_Orb.png",
-      "Assets/Art/Effects/HolyFireball/HolyFire_Wisp.png",
-      "Assets/Art/Effects/HolyFireball/HolyFire_Halo.png",
-      "Assets/Art/Effects/HolyFireball/HolyFire_Spark.png",
-      "Assets/Materials/Effects/HolyFireball_Core.mat",
-      "Assets/Materials/Effects/HolyFireball_Wisp.mat",
-      "Assets/Materials/Effects/HolyFireball_Halo.mat",
-      "Assets/Materials/Effects/HolyFireball_Spark.mat",
-      "{current}/{parts[i]}",
-      "Universal Render Pipeline/Particles/Unlit",
-      "Particles/Standard Unlit"
+      "{HolyFireballTexturePath}/HolyFire_Orb.png",
+      "{HolyFireballTexturePath}/HolyFire_Wisp.png",
+      "{HolyFireballTexturePath}/HolyFire_Halo.png",
+      "{HolyFireballTexturePath}/HolyFire_Spark.png",
+      "{MaterialPath}/HolyFireball_Core.mat",
+      "{MaterialPath}/HolyFireball_Wisp.mat",
+      "{MaterialPath}/HolyFireball_Halo.mat",
+      "{MaterialPath}/HolyFireball_Spark.mat",
+      "{current}/{parts[i]}"
     ],
     "numeric_literals": [
       3,
@@ -11541,9 +11611,9 @@
     "file_id": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "path": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "file_name": "CombatUiView.cs",
-    "content_hash": "7c38a64aa92c1722b84d8d235d11a2007454efb7",
-    "size": 108689,
-    "line_count": 2984,
+    "content_hash": "3014bac5af0fe33d60e5df459cf0d27c4cc5185b",
+    "size": 109746,
+    "line_count": 3009,
     "namespace": "Project2048.Prototype",
     "using_list": [
       "System.Collections",
@@ -11626,6 +11696,7 @@
       "DimSkillSlotColor",
       "RenderEnemyTurnPanel",
       "GetIntentBubbleColor",
+      "ResolveIntentIcon",
       "GetStatusEffectColor",
       "GetDebuffColor",
       "WithAlpha",
@@ -12103,6 +12174,13 @@
       },
       {
         "name": "hasIntent",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "primaryIntent",
         "type": "var",
         "access": "internal",
         "serialized": false,
@@ -12916,9 +12994,9 @@
     "file_id": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "path": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "file_name": "CombatWorldSpriteView.cs",
-    "content_hash": "5c4a9c888653062b525868569480fac24475b962",
-    "size": 203865,
-    "line_count": 5295,
+    "content_hash": "dd25255bbc8658d12629fe9b373c6fd6f21ff4f7",
+    "size": 237098,
+    "line_count": 6173,
     "namespace": "Project2048.Prototype",
     "using_list": [
       "System.Collections",
@@ -12987,16 +13065,28 @@
       "PlayShieldImpactEffectIfNeeded",
       "ResolveCurrentEnemyData",
       "PlayCombatantActionEffect",
+      "PlayCombatantActionParticleEffect",
+      "PlayChargeAttackStartEffect",
+      "Color",
+      "Vector3",
+      "ShouldPlayReusableFamilyEffectFromSkillSo",
       "ResolveAuthoredVisualDurationSeconds",
       "ResolveSkillEffectVisualDurationSeconds",
       "PlayReusableSkillParticleEffect",
+      "ResolveReusableSkillParticleColor",
       "PlayShieldCircleSkillParticleEffect",
-      "Vector3",
       "PlayThornGuardCircleSkillParticleEffect",
-      "CreateThornGuardShieldVfxRoot",
+      "PlayShieldAttackSkillEffect",
+      "PlayShieldBashSkillEffect",
+      "PlayShieldBurstSkillEffect",
+      "PlayShieldAttackImpactAfterDelayRoutine",
+      "WaitForSeconds",
+      "SpawnShieldAttackImpact",
+      "PlayShieldImpactArtPulse",
+      "CreatePlayerShieldArtVfxRoot",
       "GameObject",
+      "CreateThornGuardShieldVfxRoot",
       "SpawnThornGuardTriangleSpikes",
-      "Color",
       "AnimateThornGuardTriangleSpikesRoutine",
       "WaitForSecondsRealtime",
       "PlayFlameBurstSkillParticleEffect",
@@ -13027,6 +13117,7 @@
       "PlayLanternSkillLaunchCue",
       "AnimateLanternLaunchCueRoutine",
       "PlayChargedLightBeamEffect",
+      "SpawnChargedLightAttackArt",
       "SpawnChargedLightBeamLine",
       "AnimateChargedLightBeamRoutine",
       "PlayTentacleStrikeSkillEffect",
@@ -13043,11 +13134,9 @@
       "ResolveTentacleColor",
       "ResolveSkillTintedColor",
       "ResolveReusableSkillParticleDefaults",
-      "ResolveReusableSkillParticleColor",
       "ResolveReusableSkillSecondaryParticleColor",
       "PlayCombatantActionAudioEffect",
       "PlayCombatantActionAudioEffectAfterDelay",
-      "WaitForSeconds",
       "PlayCombatantActionAudioEffectNow",
       "PlayDamageNumberPopupIfNeeded",
       "PlayDamageNumberUiPopup",
@@ -13103,6 +13192,19 @@
       "TrySetVisualEffectVector4",
       "TrySetVisualEffectFloat",
       "SpawnShieldCircleLine",
+      "PlayAttackArtForReusableSkill",
+      "SpawnAttackArtSpriteLayer",
+      "ResolveAttackEffectSprite",
+      "SpawnShieldArtSpriteLayer",
+      "ResolveShieldEffectSprite",
+      "ResolveEffectArtScale",
+      "ResolveAnchorWorldPosition",
+      "ResolveShieldArtColor",
+      "AnimateShieldArtPulseRoutine",
+      "AnimateAttackArtPulseRoutine",
+      "AnimatePersistentShieldArtRoutine",
+      "AnimateShieldBashArtRoutine",
+      "AnimateShieldBurstArtRoutine",
       "ConfigureSpikedBurstParticles",
       "ConfigureBloodFountainParticles",
       "ConfigureBloodMistParticles",
@@ -13112,11 +13214,15 @@
       "ConfigureFlameEmberParticles",
       "ConfigureFlameSmokeParticles",
       "ConfigureShieldCircleParticles",
+      "ConfigureShieldShardBurstParticles",
       "ConfigureThornGuardSpikeParticles",
       "FadeLineRendererRoutine",
       "FadeSkillLineRootRoutine",
       "ApplyAnchorSorting",
       "IsShieldGeneratingSkill",
+      "IsChargeAttackSkill",
+      "IsShieldAttackSkill",
+      "IsShieldBurstSkill",
       "IsThornGuardSkill",
       "ResolveShieldCircleLightColor",
       "ResolveThornGuardDarkColor",
@@ -13135,35 +13241,7 @@
       "DestroyRuntimeMaterialInstance",
       "ResolveDebuffActionId",
       "CacheEnemyRendererRestTransform",
-      "RestoreEnemyRendererTransform",
-      "SetEnemyRendererAlpha",
-      "ResolveMissingReferences",
-      "ResolveWorldVfxProfile",
-      "EnsureAudioSource",
-      "ResolveAudioRouting",
-      "DuckBgmForImportantSfx",
-      "FindRendererByName",
-      "PlayerWasHit",
-      "UpdatePlayerThornGuardVfx",
-      "PlayPlayerThornGuardHitPulseIfNeeded",
-      "ClearActivePlayerThornGuardVfx",
-      "ResolvePlayerHpDamage",
-      "PlayerShieldWasHit",
-      "EnemyWasHit",
-      "ResolveEnemyHpDamage",
-      "EnemyShieldWasHit",
-      "EnemyUsedAttack",
-      "EnemyUsedDefense",
-      "EnemyHasAttackIntent",
-      "EnemyHasDefenseIntent",
-      "EnemyAppeared",
-      "Bind",
-      "RegisterSpikes",
-      "SetShieldValue",
-      "PlayHitPulse",
-      "StopAndDestroy",
-      "LateUpdate",
-      "ResolveNearestVisibleSpike"
+      "RestoreEnemyRendererTransform"
     ],
     "fields": [
       {
@@ -13196,6 +13274,20 @@
       },
       {
         "name": "ShieldImpactParticleLifetimeSeconds",
+        "type": "float",
+        "access": "public",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "ShieldBashDurationSeconds",
+        "type": "float",
+        "access": "public",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "ShieldBurstSkillDurationSeconds",
         "type": "float",
         "access": "public",
         "serialized": false,
@@ -13434,6 +13526,48 @@
       },
       {
         "name": "ShieldCircleBaseYOffset",
+        "type": "float",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "AttackArtBaseRadius",
+        "type": "float",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "AttackArtDiameterMultiplier",
+        "type": "float",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "AttackArtLifetimeSeconds",
+        "type": "float",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "PersistentShieldArtRadius",
+        "type": "float",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "ShieldArtDiameterMultiplier",
+        "type": "float",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "ShieldArtImpactLifetimeSeconds",
         "type": "float",
         "access": "private",
         "serialized": false,
@@ -13776,6 +13910,13 @@
         "is_static": false
       },
       {
+        "name": "activePlayerShieldArtVfx",
+        "type": "FollowingShieldVfx",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
         "name": "activePlayerThornGuardVfx",
         "type": "FollowingShieldVfx",
         "access": "private",
@@ -13896,6 +14037,27 @@
       },
       {
         "name": "duration",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "lifetime",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "lifetime",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "lifetime",
         "type": "var",
         "access": "internal",
         "serialized": false,
@@ -14218,6 +14380,13 @@
       },
       {
         "name": "sourceTransform",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "source",
         "type": "var",
         "access": "internal",
         "serialized": false,
@@ -14749,6 +14918,132 @@
         "is_static": false
       },
       {
+        "name": "source",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "parent",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "parent",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "spriteSize",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "elapsed",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "break",
+        "type": "yield",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "color",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "color",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "elapsed",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "break",
+        "type": "yield",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "color",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "color",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "elapsed",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "break",
+        "type": "yield",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "color",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "elapsed",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "break",
+        "type": "yield",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "color",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
         "name": "main",
         "type": "var",
         "access": "internal",
@@ -15029,225 +15324,22 @@
         "is_static": false
       },
       {
-        "name": "rotation",
+        "name": "main",
         "type": "var",
         "access": "internal",
         "serialized": false,
         "is_static": false
       },
       {
-        "name": "size",
+        "name": "shape",
         "type": "var",
         "access": "internal",
         "serialized": false,
         "is_static": false
       },
       {
-        "name": "elapsed",
+        "name": "velocity",
         "type": "var",
-        "access": "internal",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "startColor",
-        "type": "var",
-        "access": "internal",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "endColor",
-        "type": "var",
-        "access": "internal",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "break",
-        "type": "yield",
-        "access": "internal",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "nextStart",
-        "type": "var",
-        "access": "internal",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "nextEnd",
-        "type": "var",
-        "access": "internal",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "elapsed",
-        "type": "var",
-        "access": "internal",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "startColors",
-        "type": "var",
-        "access": "internal",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "endColors",
-        "type": "var",
-        "access": "internal",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "break",
-        "type": "yield",
-        "access": "internal",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "line",
-        "type": "var",
-        "access": "internal",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "nextStart",
-        "type": "var",
-        "access": "internal",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "nextEnd",
-        "type": "var",
-        "access": "internal",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "color",
-        "type": "var",
-        "access": "internal",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "shieldHp",
-        "type": "var",
-        "access": "internal",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "target",
-        "type": "Transform",
-        "access": "private",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "worldOffset",
-        "type": "Vector3",
-        "access": "private",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "followSharpness",
-        "type": "float",
-        "access": "private",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "maxShieldValue",
-        "type": "int",
-        "access": "private",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "isStopping",
-        "type": "bool",
-        "access": "private",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "spike",
-        "type": "var",
-        "access": "internal",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "desiredPosition",
-        "type": "var",
-        "access": "internal",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "hitDirection",
-        "type": "var",
-        "access": "internal",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "nearestSpike",
-        "type": "Transform",
-        "access": "internal",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "bestDot",
-        "type": "var",
-        "access": "internal",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "spikeDirection",
-        "type": "var",
-        "access": "internal",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "break",
-        "type": "yield",
-        "access": "internal",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "elapsed",
-        "type": "var",
-        "access": "internal",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "duration",
-        "type": "float",
-        "access": "internal",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "break",
-        "type": "yield",
         "access": "internal",
         "serialized": false,
         "is_static": false
@@ -15256,22 +15348,21 @@
     "properties": [],
     "events": [],
     "unity_messages": [
-      "OnDestroy",
-      "LateUpdate"
+      "OnDestroy"
     ],
     "has_update": false,
     "has_fixed_update": false,
-    "has_late_update": true,
+    "has_late_update": false,
     "has_awake": false,
     "has_start": false,
     "has_on_enable": false,
     "has_on_disable": false,
     "serialize_field_count": 0,
-    "public_field_count": 14,
-    "get_component_count": 30,
+    "public_field_count": 16,
+    "get_component_count": 32,
     "find_call_count": 4,
-    "new_keyword_count": 233,
-    "coroutine_count": 36,
+    "new_keyword_count": 261,
+    "coroutine_count": 48,
     "singleton_candidate": false,
     "dont_destroy_on_load": false,
     "referenced_types": [
@@ -15311,6 +15402,8 @@
       "EnemyAttackLungeDurationSeconds",
       "EnemyAppearWorldShakeDurationSeconds",
       "ShieldImpactParticleLifetimeSeconds",
+      "ShieldBashDurationSeconds",
+      "ShieldBurstSkillDurationSeconds",
       "DebuffCastParticleLifetimeSeconds",
       "DebuffTargetParticleDelaySeconds",
       "DamageNumberPopupDurationSeconds",
@@ -15345,6 +15438,12 @@
       "ShieldCircleRingSegmentCount",
       "ShieldCircleBaseRadius",
       "ShieldCircleBaseYOffset",
+      "AttackArtBaseRadius",
+      "AttackArtDiameterMultiplier",
+      "AttackArtLifetimeSeconds",
+      "PersistentShieldArtRadius",
+      "ShieldArtDiameterMultiplier",
+      "ShieldArtImpactLifetimeSeconds",
       "ThornGuardTriangleSpikeCount",
       "ThornGuardTriangleRiseSeconds",
       "ThornGuardShieldFollowSharpness",
@@ -15413,6 +15512,8 @@
       "FirstOrDefault",
       "IsDead",
       "Render",
+      "UpdatePlayerShieldArtVfx",
+      "Player",
       "SetEnemyRendererAlpha",
       "OnDestroy",
       "ClearEnemyDeathFade",
@@ -15420,6 +15521,7 @@
       "ClearEnemyAttackLunge",
       "ClearWorldShake",
       "ClearDamageNumberPopups",
+      "ClearActivePlayerShieldArtVfx",
       "DestroyRuntimeParticleMaterials",
       "ResolvePlayerHpDamage",
       "ResolveEnemyHpDamage",
@@ -15432,7 +15534,6 @@
       "EnemyAppeared",
       "PlayPlayerThornGuardHitPulseIfNeeded",
       "UpdatePlayerThornGuardVfx",
-      "Player",
       "PlayEnemyAppearEffectIfNeeded",
       "PlayEnemyAttackEffectIfNeeded",
       "PlayShieldImpactEffectIfNeeded",
@@ -15450,31 +15551,21 @@
       "None",
       "SkillType",
       "Attack",
+      "IsChargeAttackSkill",
+      "PlayChargeAttackStartEffect",
       "TryPlayDirectedSkillEffect",
       "DelayEnemyDeathFade",
       "TryPlayProjectileSkillEffect",
       "PlayLanternSkillLaunchCue",
+      "ShouldPlayReusableFamilyEffectFromSkillSo",
+      "PlayCombatantActionAudioEffect",
       "PlayCombatantActionEffect",
       "HasAuthoredVisual",
       "PlayReusableSkillParticleEffect",
       "DelayEnemyDeathFadeForSkillEffect",
       "PreviewSkillEffect",
-      "ResolveEffectKind",
-      "SkillEffectKind",
-      "ChargeAttack",
-      "PlayChargedLightBeamEffect",
       "CombatEffectBinding",
-      "LightBeam",
-      "PlayCombatantActionAudioEffect",
-      "TentacleWhip",
-      "PlayTentacleStrikeSkillEffect",
-      "SpikedBurst",
-      "PlaySpikedBurstSkillEffect",
-      "BloodFountainSlash",
-      "PlayBloodFountainSlashSkillEffect",
-      "DarkChainBurst",
-      "PlayDarkShackleSkillEffect",
-      "GetComponentInChildren"
+      "ShieldDome"
     ],
     "component_access_types": [
       "MeshFilter",
@@ -15495,13 +15586,13 @@
       "AudioSource"
     ],
     "created_types": [
-      "Vector3",
-      "GameObject",
       "Color",
+      "Vector3",
+      "WaitForSeconds",
+      "GameObject",
       "WaitForSecondsRealtime",
       "AnimationCurve",
       "Keyframe",
-      "WaitForSeconds",
       "Vector2",
       "Material"
     ],
@@ -15512,21 +15603,21 @@
       "VFX/ThornGuardSpikedCircle",
       "ShieldImpactParticles",
       "CombatActionParticles",
+      "{(skill != null && !string.IsNullOrWhiteSpace(skill.skillId) ? skill.skillId : ",
+      ")}ChargeParticles",
       "{skill.vfxFamily}SkillParticles",
+      "ShieldGuardArt",
       "ShieldLightCircleVfxGraph",
       "ShieldLightCircleRing",
       "ShieldLightCircleHalo",
       "ShieldLightCircleParticles",
       "ShieldLightDomeParticles",
+      "ThornGuardShieldArt",
       "ThornGuardSpikedCircleVfxGraph",
       "ThornGuardSpikedCircleRing",
       "ThornGuardDarkInnerCircle",
       "ThornGuardSpikedCircleParticles",
-      "ThornGuardSpikeParticles",
-      "ThornGuardShieldVfx",
-      "ThornGuardTriangleSpikes",
-      "ThornGuardTriangleSpike{i + 1:00}",
-      "{spikeObject.name}Mesh"
+      "ThornGuardSpikeParticles"
     ],
     "numeric_literals": [
       0.6,
@@ -15534,12 +15625,12 @@
       0.32,
       1.5,
       0.8,
+      0.58,
+      0.72,
       0.9,
       0.55,
       0.65,
-      0.58,
       0.62,
-      0.72,
       0.82,
       0.84,
       2.25,
@@ -15569,9 +15660,9 @@
     "file_id": "Project 2048/Assets/Scripts/Prototype/CombatWorldVfxProfileSO.cs",
     "path": "Project 2048/Assets/Scripts/Prototype/CombatWorldVfxProfileSO.cs",
     "file_name": "CombatWorldVfxProfileSO.cs",
-    "content_hash": "f4b4d35fe23c3d2677bc9e4daa63f8a03ddddb3c",
-    "size": 1652,
-    "line_count": 53,
+    "content_hash": "b0b774ac544c7dee68ca00d002857062301c04c2",
+    "size": 1737,
+    "line_count": 56,
     "namespace": "Project2048.Prototype",
     "using_list": [
       "Project2048.Enemy",
@@ -15598,7 +15689,22 @@
       "Color",
       "ResolveDebuffCastEffect"
     ],
-    "fields": [],
+    "fields": [
+      {
+        "name": "attackEffectSprite",
+        "type": "Sprite",
+        "access": "public",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "shieldEffectSprite",
+        "type": "Sprite",
+        "access": "public",
+        "serialized": false,
+        "is_static": false
+      }
+    ],
     "properties": [],
     "events": [],
     "unity_messages": [],
@@ -15610,7 +15716,7 @@
     "has_on_enable": false,
     "has_on_disable": false,
     "serialize_field_count": 0,
-    "public_field_count": 0,
+    "public_field_count": 2,
     "get_component_count": 0,
     "find_call_count": 0,
     "new_keyword_count": 3,
@@ -15618,6 +15724,7 @@
     "singleton_candidate": false,
     "dont_destroy_on_load": false,
     "referenced_types": [
+      "Sprite",
       "Project2048",
       "Enemy",
       "Presentation",
@@ -16314,9 +16421,9 @@
     "file_id": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatFactory.cs",
     "path": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatFactory.cs",
     "file_name": "PrototypeCombatFactory.cs",
-    "content_hash": "8d704fd11135a27905d020ffbc520d7455b1d9d6",
-    "size": 28129,
-    "line_count": 528,
+    "content_hash": "551fe110769afbf356c1a58a0bef75b51a01c5d4",
+    "size": 28145,
+    "line_count": 529,
     "namespace": "Project2048.Prototype",
     "using_list": [
       "System.Collections.Generic",
@@ -16405,7 +16512,7 @@
     "public_field_count": 0,
     "get_component_count": 0,
     "find_call_count": 0,
-    "new_keyword_count": 96,
+    "new_keyword_count": 95,
     "coroutine_count": 0,
     "singleton_candidate": false,
     "dont_destroy_on_load": false,
@@ -22056,9 +22163,9 @@
     "file_id": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
     "path": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
     "file_name": "CombatPresentationEffectTests.cs",
-    "content_hash": "1e9de3c8c4447300c58c35b22eee26c4ec51b238",
-    "size": 106104,
-    "line_count": 2060,
+    "content_hash": "1b7aad138c3d16e89c1feb1576b7b7faa33962ef",
+    "size": 117609,
+    "line_count": 2279,
     "namespace": "Project2048.Tests",
     "using_list": [
       "System.Collections",
@@ -22100,6 +22207,10 @@
       "CreateOwnedGameObject",
       "GameObject",
       "CreateOwnedRectTransformObject",
+      "CreateOwnedSprite",
+      "Texture2D",
+      "Rect",
+      "Vector2",
       "AssertPopupIsNearButNotCentered",
       "AssertDamageNumberPopupIsReadable",
       "EnemySo_ResolvesActionEffectByActionId",
@@ -22122,7 +22233,7 @@
       "CombatWorldSpriteView_EnemyAppear_ShakesForegroundButKeepsBackgroundStill",
       "CombatWorldSpriteView_EnemyAppear_DoesNotMovePhysicsRendererIntoWorldShakeRoot",
       "CombatWorldSpriteView_EnemyAttack_LungesTowardPlayerAndSpawnsPlayerShieldParticles",
-      "CombatWorldSpriteView_EnemyAttack_SpawnsThreeClawStripsAtPlayer",
+      "CombatWorldSpriteView_EnemyAttack_UsesAuthoredAttackEffectArtAtPlayer",
       "CombatWorldSpriteView_PlayerAttackAgainstEnemyBlock_SpawnsEnemyShieldParticles",
       "CombatWorldSpriteView_PlayerHpDamage_ShowsUnsignedDamageNumberAtPlayerBody",
       "CombatWorldSpriteView_PlayerSkillHpDamage_ShowsUnsignedDamageNumberAtEnemyBody",
@@ -22132,17 +22243,23 @@
       "CombatWorldSpriteView_EnemyDebuffIntent_WithAuthoredVfxStillSpawnsFearParticles",
       "PrototypeCombatWorldVfxProfile_AssignsShieldAndCcParticleMaterials",
       "Color",
+      "CombatUiView_IntentIconMapping_UsesFearIconForChangeIntent",
+      "ArtTeamAssets_AreImportedAsSpritesInEnglishNamedFolders",
+      "ArtAndSoundAssetPaths_UseAsciiEnglishNames",
       "PrototypeCombatBootstrap_AutoStart_WaitsForFlowGameStarted",
       "GameContext",
       "BattleSceneBinder_CompletesBattleLoadAfterLoadingUiHides",
       "BattleSceneBinder_AllowsStandalonePrototypeSceneWithoutFlow",
       "CombatWorldSpriteView_PlayerSkill_PlaysActivationEffectFromSkillSo",
       "CombatWorldSpriteView_PlayerReusableSkill_AssignsGeneratedParticleMaterial",
+      "CombatWorldSpriteView_PlayerReusableSkill_UsesSoBoundParticleMaterial",
+      "Material",
       "CombatWorldSpriteView_PlayerShieldSkill_SpawnsLightCircleAroundPlayer",
       "CombatWorldSpriteView_ThornGuardShieldSkill_SpawnsDarkSpikedCircle",
+      "CombatWorldSpriteView_ShieldBurstAttack_SpawnsBurstAndTargetImpact",
       "ShieldSkillVfxGraphAssets_AreAuthoredAsVisualEffectGraphs",
-      "CombatWorldSpriteView_ChargedAttackRelease_SpawnsLightBeam",
-      "CombatWorldSpriteView_GatherLightPreview_UsesLightBeamInsteadOfProjectile",
+      "CombatWorldSpriteView_ChargedAttackRelease_SpawnsCoolLightBeamWithAttackImpactArt",
+      "CombatWorldSpriteView_GatherLightPreview_UsesChargeParticlesInsteadOfProjectileOrAttackArt",
       "CombatWorldSpriteView_TentacleStrikePreview_SpawnsFlexibleWhipShape",
       "CombatWorldSpriteView_HeavyStrikePreview_SpawnsSpikedBurst",
       "CombatWorldSpriteView_BleedingCutPreview_SpawnsSlashAndBloodFountain",
@@ -22171,7 +22288,6 @@
       "SetPrivateField",
       "ResolveMaterialColor",
       "ResolveLineRadiusSpread",
-      "Vector2",
       "AssertColorApproximately"
     ],
     "fields": [
@@ -22232,13 +22348,6 @@
         "is_static": false
       },
       {
-        "name": "midBounds",
-        "type": "var",
-        "access": "internal",
-        "serialized": false,
-        "is_static": false
-      },
-      {
         "name": "gameStarted",
         "type": "var",
         "access": "internal",
@@ -22279,9 +22388,9 @@
     "has_on_disable": false,
     "serialize_field_count": 0,
     "public_field_count": 0,
-    "get_component_count": 47,
+    "get_component_count": 49,
     "find_call_count": 4,
-    "new_keyword_count": 147,
+    "new_keyword_count": 163,
     "coroutine_count": 11,
     "singleton_candidate": false,
     "dont_destroy_on_load": false,
@@ -22317,13 +22426,25 @@
       "Add",
       "CreateOwnedRectTransformObject",
       "RectTransform",
+      "Sprite",
+      "CreateOwnedSprite",
+      "Texture2D",
+      "Texture",
+      "Enumerable",
+      "Repeat",
+      "Color",
+      "ToArray",
+      "SetPixels",
+      "Apply",
+      "Create",
+      "Rect",
+      "Vector2",
       "AssertPopupIsNearButNotCentered",
       "Camera",
       "Vector3",
       "RectTransformUtility",
       "WorldToScreenPoint",
       "ScreenPointToLocalPointInRectangle",
-      "Vector2",
       "Distance",
       "Assert",
       "That",
@@ -22336,7 +22457,6 @@
       "TMP_Text",
       "EqualTo",
       "Color32",
-      "Color",
       "GreaterThanOrEqualTo",
       "IsKeywordEnabled",
       "ShaderUtilities",
@@ -22433,7 +22553,6 @@
       "EnemySprite",
       "SpriteRenderer",
       "AudioClip",
-      "Create",
       "EnemyAppear",
       "Appear",
       "Find",
@@ -22466,40 +22585,33 @@
       "AddBlock",
       "ShieldImpactParticles",
       "EnemyAttackLungeDurationSeconds",
-      "CombatWorldSpriteView_EnemyAttack_SpawnsThreeClawStripsAtPlayer",
-      "EnemyClawSlash2D",
+      "CombatWorldSpriteView_EnemyAttack_UsesAuthoredAttackEffectArtAtPlayer",
+      "AttackEffectSprite",
+      "EnemyAttackArt",
       "GetComponent",
-      "CombatClawSlash2DEffect",
       "DeltaAngle",
-      "GetComponentInChildren",
+      "EnemyClawSlash2D",
+      "CombatWorldSpriteView_PlayerAttackAgainstEnemyBlock_SpawnsEnemyShieldParticles",
       "ParticleSystem",
-      "LineRenderer",
-      "GetComponentsInChildren",
-      "MeshRenderer",
-      "Length",
-      "Where",
-      "StartsWith",
-      "Claw_Core",
-      "StringComparison",
-      "Ordinal",
-      "ToList",
-      "All",
-      "ShaderName",
-      "EndsWith"
+      "ParticleSystemShapeType",
+      "Sphere"
     ],
     "component_access_types": [
-      "CombatClawSlash2DEffect",
-      "MeshFilter",
+      "SpriteRenderer",
       "ParticleSystem",
       "ParticleSystemRenderer",
       "LineRenderer",
       "VisualEffect",
+      "MeshFilter",
       "MeshRenderer",
       "AudioSource",
       "CombatUiView"
     ],
     "created_types": [
       "GameObject",
+      "Texture2D",
+      "Rect",
+      "Vector2",
       "Vector3",
       "PrototypeCombatAudioRouter",
       "BoardTransition",
@@ -22509,13 +22621,14 @@
       "WaitForSecondsRealtime",
       "Color",
       "GameContext",
-      "SerializedObject",
-      "Vector2"
+      "Material",
+      "SerializedObject"
     ],
     "singleton_access_types": [
       "BindingFlags"
     ],
     "string_literals": [
+      "{name}Texture",
       " missing ",
       "Merge2048Vfx",
       "CombatManager",
@@ -22534,11 +22647,14 @@
       "CombatEffectAudio",
       "EnemyAppearWorldShakeMagnitude",
       "AssignedWorldShakeRoot",
-      "worldShake",
-      "BackgroundSprite"
+      "worldShake"
     ],
     "numeric_literals": [
       8,
+      64,
+      0,
+      8,
+      0.5,
       40,
       170,
       0.95,
@@ -22551,13 +22667,9 @@
       1.2,
       0.8,
       1.1,
-      0,
       0.001,
       2048,
-      128,
-      2,
-      4,
-      99
+      128
     ],
     "guessed_roles": [
       "combat",
@@ -22870,9 +22982,9 @@
     "file_id": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "path": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "file_name": "CombatUiViewTests.cs",
-    "content_hash": "5570db11f6bcd10c587b139e6dd3818e3d3a4a51",
-    "size": 84361,
-    "line_count": 1604,
+    "content_hash": "8962b2adb6c0357e0b74d63b24833a721c65f39f",
+    "size": 86124,
+    "line_count": 1633,
     "namespace": "Project2048.Tests",
     "using_list": [
       "System.Collections",
@@ -22943,6 +23055,7 @@
       "BattleScene_CombatUiView_HasBoardEffectProfileOnly",
       "SerializedObject",
       "BattleScene_UsesAuthoredCombatBackgroundSprites",
+      "BattleScene_UsesAuthoredIntentIconSprites",
       "BattleScene_CombatUiView_HasSceneAuthoredStatusAndBlockObjectsOnBottomHpBars",
       "CreateOwnedGameObject",
       "CreateOwnedRectTransformObject",
@@ -23004,6 +23117,27 @@
         "is_static": false
       },
       {
+        "name": "AttackIntentIconSpriteGuid",
+        "type": "string",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "DefenseIntentIconSpriteGuid",
+        "type": "string",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "FearIntentIconSpriteGuid",
+        "type": "string",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
         "name": "observed",
         "type": "Direction?",
         "access": "internal",
@@ -23058,9 +23192,9 @@
     "has_on_disable": false,
     "serialize_field_count": 0,
     "public_field_count": 0,
-    "get_component_count": 56,
-    "find_call_count": 5,
-    "new_keyword_count": 122,
+    "get_component_count": 57,
+    "find_call_count": 6,
+    "new_keyword_count": 123,
     "coroutine_count": 6,
     "singleton_candidate": false,
     "dont_destroy_on_load": false,
@@ -23093,6 +23227,9 @@
       "TopCombatBackgroundSpriteGuid",
       "BottomCombatBackgroundSpriteGuid",
       "BottomCombatBackgroundLitSpriteGuid",
+      "AttackIntentIconSpriteGuid",
+      "DefenseIntentIconSpriteGuid",
+      "FearIntentIconSpriteGuid",
       "Vector2",
       "ExpectedSkillLanternSlotSize",
       "Generic",
@@ -23261,10 +23398,7 @@
       "IsDead",
       "HpBarRender_ReappliesFixedThemeFillColor",
       "DamageTrailFill",
-      "SetHpBarValue",
-      "ThemeHpFillColor",
-      "ThemeHpDamageTrailColor",
-      "GetSiblingIndex"
+      "SetHpBarValue"
     ],
     "component_access_types": [
       "Image",
@@ -23295,6 +23429,9 @@
       "ac20f033bdceb3149b44f3a942308b67",
       "cc30ddc0c7eae2049b751203e84d9c4b",
       "515518d798eb1764c965c9a1c6f4c472",
+      "68f332d9bf83b46f4568e77fd4bcdc88",
+      "02048f9cb8476d1bc11e6380c2f185a9",
+      "58190a852f3a9df835c30baaa3209362",
       "Swipe Handler",
       "CombatView",
       "BoardPanel",
@@ -23307,10 +23444,7 @@
       "Label",
       "boardPanel",
       "actionPanel",
-      "skillsView",
-      "costText",
-      "skillsHeaderText",
-      "skillTierButtons"
+      "skillsView"
     ],
     "numeric_literals": [
       156,
@@ -24234,9 +24368,9 @@
     "file_id": "Project 2048/Assets/Tests/EditMode/PrototypeCombatFactoryTests.cs",
     "path": "Project 2048/Assets/Tests/EditMode/PrototypeCombatFactoryTests.cs",
     "file_name": "PrototypeCombatFactoryTests.cs",
-    "content_hash": "370df4ad315fadcacd8c37dd700e485b4c3751b0",
-    "size": 6797,
-    "line_count": 176,
+    "content_hash": "770332316d28f61dd06787b11f11605e8b1885de",
+    "size": 6836,
+    "line_count": 177,
     "namespace": "Project2048.Tests",
     "using_list": [
       "System.Linq",
@@ -25163,9 +25297,9 @@
     "file_id": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
     "path": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
     "file_name": "SkillSOTests.cs",
-    "content_hash": "41bfa66ebeab94425ea15524705c6c1ef11412a4",
-    "size": 5781,
-    "line_count": 151,
+    "content_hash": "ae50354d84da0b6f3e5df8dc9bde7e5d9b586cb5",
+    "size": 5813,
+    "line_count": 152,
     "namespace": "Project2048.Tests",
     "using_list": [
       "System.Reflection",

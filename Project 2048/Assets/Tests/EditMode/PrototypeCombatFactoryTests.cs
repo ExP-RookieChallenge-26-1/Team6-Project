@@ -46,8 +46,9 @@ namespace Project2048.Tests
                     "light-shot",
                     "low-stance",
                     "flash",
+                    "gather-light",
                 }));
-                Assert.That(loadout.PlayerData.startingSkills.Select(skill => skill.cost), Is.EqualTo(new[] { 6, 4, 5 }));
+                Assert.That(loadout.PlayerData.startingSkills.Select(skill => skill.cost), Is.EqualTo(new[] { 6, 4, 5, 6 }));
             }
             finally
             {

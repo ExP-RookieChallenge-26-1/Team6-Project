@@ -47,20 +47,20 @@ MonoBehaviour:
   availability: 0
   icon: {fileID: 0}
   activationEffect:
-    sfxClip: {fileID: 0}
+    sfxClip: {fileID: 8300000, guid: fe7bd23cc51c4ff28812cae34a6e846c, type: 3}
     vfxPrefab: {fileID: 0}
     animationClip: {fileID: 0}
     particleEffect:
-      objectName: 
+      objectName: FocusBreathSkillParticles
       particlePrefab: {fileID: 0}
-      particleMaterial: {fileID: 0}
-      useParticleColor: 0
+      particleMaterial: {fileID: 2100000, guid: 45ec00e6f551b1eeb762958e709a5042, type: 2}
+      useParticleColor: 1
       particleColor: {r: 1, g: 1, b: 1, a: 1}
-      lifetimeSeconds: 0.8
-      burstCount: 16
-      startSpeed: 0.6
-      startSize: 0.12
-      swirl: 0
+      lifetimeSeconds: 0.85
+      burstCount: 25
+      startSpeed: 0.268
+      startSize: 0.128
+      swirl: 1
     volumeScale: 1
     minPitch: 1
     maxPitch: 1

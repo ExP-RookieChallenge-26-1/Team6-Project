@@ -7,6 +7,9 @@ namespace Project2048.Prototype
     [CreateAssetMenu(menuName = "Game/Combat World VFX Profile")]
     public class CombatWorldVfxProfileSO : ScriptableObject
     {
+        public Sprite attackEffectSprite;
+        public Sprite shieldEffectSprite;
+
         public CombatParticleEffectBinding shieldImpactEffect = new()
         {
             objectName = "ShieldImpactParticles",

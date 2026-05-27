@@ -60,19 +60,19 @@ MonoBehaviour:
   availability: 0
   icon: {fileID: 0}
   activationEffect:
-    sfxClip: {fileID: 0}
+    sfxClip: {fileID: 8300000, guid: eea8202b4af9e2343b6c28a4bdd87ca2, type: 3}
     vfxPrefab: {fileID: 0}
     animationClip: {fileID: 0}
     particleEffect:
-      objectName:
+      objectName: OpenWoundSkillParticles
       particlePrefab: {fileID: 0}
-      particleMaterial: {fileID: 0}
-      useParticleColor: 0
-      particleColor: {r: 1, g: 1, b: 1, a: 1}
-      lifetimeSeconds: 0.8
-      burstCount: 16
-      startSpeed: 0.6
-      startSize: 0.12
+      particleMaterial: {fileID: 2100000, guid: fa4eba04624f2cd09c5b181876c24239, type: 2}
+      useParticleColor: 1
+      particleColor: {r: 0.95, g: 0.25, b: 0.12, a: 1}
+      lifetimeSeconds: 0.55
+      burstCount: 23
+      startSpeed: 0.759
+      startSize: 0.144
       swirl: 0
     volumeScale: 1
     minPitch: 1

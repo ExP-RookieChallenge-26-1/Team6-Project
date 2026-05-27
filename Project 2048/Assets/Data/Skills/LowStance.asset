@@ -47,20 +47,20 @@ MonoBehaviour:
   availability: 0
   icon: {fileID: 0}
   activationEffect:
-    sfxClip: {fileID: 0}
+    sfxClip: {fileID: 8300000, guid: f311d0e68a8f5364a86190032f2c8efd, type: 3}
     vfxPrefab: {fileID: 0}
     animationClip: {fileID: 0}
     particleEffect:
-      objectName: 
+      objectName: LowStanceSkillParticles
       particlePrefab: {fileID: 0}
-      particleMaterial: {fileID: 0}
-      useParticleColor: 0
-      particleColor: {r: 1, g: 1, b: 1, a: 1}
+      particleMaterial: {fileID: 2100000, guid: 65e092e01d9dbe741072906fbc723c04, type: 2}
+      useParticleColor: 1
+      particleColor: {r: 0.58, g: 0.68, b: 0.82, a: 1}
       lifetimeSeconds: 0.8
-      burstCount: 16
-      startSpeed: 0.6
-      startSize: 0.12
-      swirl: 0
+      burstCount: 27
+      startSpeed: 0.332
+      startSize: 0.162
+      swirl: 1
     volumeScale: 1
     minPitch: 1
     maxPitch: 1

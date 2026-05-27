@@ -47,19 +47,19 @@ MonoBehaviour:
   availability: 0
   icon: {fileID: 0}
   activationEffect:
-    sfxClip: {fileID: 0}
+    sfxClip: {fileID: 8300000, guid: 06f7a7d7eadbff146932fb42d28e1a78, type: 3}
     vfxPrefab: {fileID: 0}
     animationClip: {fileID: 0}
     particleEffect:
-      objectName:
+      objectName: HeavyStrikeSkillParticles
       particlePrefab: {fileID: 0}
-      particleMaterial: {fileID: 0}
-      useParticleColor: 0
-      particleColor: {r: 1, g: 1, b: 1, a: 1}
-      lifetimeSeconds: 0.8
-      burstCount: 16
-      startSpeed: 0.6
-      startSize: 0.12
+      particleMaterial: {fileID: 2100000, guid: c435249a0edb43a2ce52ca04aac28eb2, type: 2}
+      useParticleColor: 1
+      particleColor: {r: 1, g: 0.72, b: 0.08, a: 1}
+      lifetimeSeconds: 0.62
+      burstCount: 54
+      startSpeed: 1.425
+      startSize: 0.208
       swirl: 0
     volumeScale: 1
     minPitch: 1

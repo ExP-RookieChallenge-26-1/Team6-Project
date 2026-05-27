@@ -47,20 +47,20 @@ MonoBehaviour:
   availability: 0
   icon: {fileID: 0}
   activationEffect:
-    sfxClip: {fileID: 0}
+    sfxClip: {fileID: 8300000, guid: f14a9cc4988c4b30b9835d1967a70b92, type: 3}
     vfxPrefab: {fileID: 0}
     animationClip: {fileID: 0}
     particleEffect:
-      objectName:
+      objectName: TentacleStrikeSkillParticles
       particlePrefab: {fileID: 0}
-      particleMaterial: {fileID: 0}
-      useParticleColor: 0
-      particleColor: {r: 1, g: 1, b: 1, a: 1}
-      lifetimeSeconds: 0.8
-      burstCount: 16
-      startSpeed: 0.6
-      startSize: 0.12
-      swirl: 0
+      particleMaterial: {fileID: 2100000, guid: cdd4a6c863c168dad3585f126e4f2b2f, type: 2}
+      useParticleColor: 1
+      particleColor: {r: 0.2, g: 0.04, b: 0.28, a: 1}
+      lifetimeSeconds: 0.58
+      burstCount: 26
+      startSpeed: 0.44
+      startSize: 0.165
+      swirl: 1
     volumeScale: 1
     minPitch: 1
     maxPitch: 1

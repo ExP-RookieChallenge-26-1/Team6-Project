@@ -47,20 +47,20 @@ MonoBehaviour:
   availability: 1
   icon: {fileID: 0}
   activationEffect:
-    sfxClip: {fileID: 0}
+    sfxClip: {fileID: 8300000, guid: a99909d8a22d60e4a9985b5818d69822, type: 3}
     vfxPrefab: {fileID: 899824043960030591, guid: 5f8cf79947e4ddf47aee451b2b9de40a, type: 3}
     animationClip: {fileID: 0}
     particleEffect:
-      objectName:
+      objectName: GatherLightSkillParticles
       particlePrefab: {fileID: 0}
-      particleMaterial: {fileID: 0}
-      useParticleColor: 0
-      particleColor: {r: 1, g: 1, b: 1, a: 1}
-      lifetimeSeconds: 0.8
-      burstCount: 16
-      startSpeed: 0.6
-      startSize: 0.12
-      swirl: 0
+      particleMaterial: {fileID: 2100000, guid: a310f9c1e8727d82a8842f77f6cde2fd, type: 2}
+      useParticleColor: 1
+      particleColor: {r: 0.86, g: 0.96, b: 1, a: 1}
+      lifetimeSeconds: 0.65
+      burstCount: 42
+      startSpeed: 0.47
+      startSize: 0.24
+      swirl: 1
     volumeScale: 1
     minPitch: 1
     maxPitch: 1
@@ -68,8 +68,8 @@ MonoBehaviour:
     localOffset: {x: 0, y: 0, z: 0}
     autoDestroySeconds: 1.55
   vfxFamily: 11
-  vfxPrimaryColor: {r: 1, g: 0.78, b: 0.18, a: 1}
-  vfxSecondaryColor: {r: 1, g: 1, b: 0.82, a: 1}
+  vfxPrimaryColor: {r: 0.86, g: 0.96, b: 1, a: 1}
+  vfxSecondaryColor: {r: 1, g: 1, b: 1, a: 1}
   vfxScale: 1.8
   vfxIntensity: 1.4
   vfxRepeatCount: 1

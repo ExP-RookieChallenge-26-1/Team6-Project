@@ -39,6 +39,9 @@ namespace Project2048.PrototypeEditor
         private const string EnemySpritePath = "Assets/Art/Prototype/PrototypeEnemyCutout.png";
         private const string HpBarSpritePath = "Assets/Art/UI/WideHexHpBar.png";
         private const string HpBarOutlineSpritePath = "Assets/Art/UI/WideHexHpBarOutline.png";
+        private const string AttackIntentIconPath = "Assets/Art/UI/IntentIcons/Ui_Attack.png";
+        private const string DefenseIntentIconPath = "Assets/Art/UI/IntentIcons/Ui_Defense.png";
+        private const string FearIntentIconPath = "Assets/Art/UI/IntentIcons/Ui_Fear.png";
         private const string TopCombatBackgroundSpriteGuid = "ac20f033bdceb3149b44f3a942308b67";
         private const string BottomCombatBackgroundSpriteGuid = "cc30ddc0c7eae2049b751203e84d9c4b";
         private const string BottomCombatBackgroundLitSpriteGuid = "515518d798eb1764c965c9a1c6f4c472";
@@ -335,7 +338,7 @@ namespace Project2048.PrototypeEditor
             player.attackPower = 10;
             player.initialBoardMoveCount = 12;
             player.boardMoveCountBonus = 0;
-            player.startingSkills = new List<SkillSO> { gatherLight, lightGuard, flash, quickStab };
+            player.startingSkills = new List<SkillSO> { lightShot, lowStance, flash, gatherLight };
             player.portrait = LoadSprite(PlayerSpritePath) ?? player.portrait;
             EditorUtility.SetDirty(player);
 
@@ -475,6 +478,7 @@ namespace Project2048.PrototypeEditor
             // Assign scene Image sprites here so the cutout placeholders are visible before entering Play Mode.
             var playerSprite = LoadSprite(PlayerSpritePath);
             var enemySprite = LoadSprite(EnemySpritePath);
+            var attackIntentSprite = LoadSprite(AttackIntentIconPath);
 
             var topBar = CreateRect("TopBar", parent);
             SetStretch(topBar, new Vector2(0, 0.84f), Vector2.one, Vector2.zero, Vector2.zero);
@@ -507,6 +511,9 @@ namespace Project2048.PrototypeEditor
             SetAnchor(refs.EnemyNameText.rectTransform, new Vector2(0.74f, 0.58f), new Vector2(360, 60), Vector2.zero);
 
             refs.IntentBubble = CreateImage(parent, "IntentBubble", new Color(0.65f, 0.10f, 0.10f, 1f));
+            refs.IntentBubble.sprite = attackIntentSprite;
+            refs.IntentBubble.color = attackIntentSprite != null ? Color.white : refs.IntentBubble.color;
+            refs.IntentBubble.preserveAspect = attackIntentSprite != null;
             SetAnchor(
                 refs.IntentBubble.rectTransform,
                 new Vector2(0.74f, 0.70f),
@@ -1478,6 +1485,9 @@ namespace Project2048.PrototypeEditor
             SetRef(so, "bottomPanelBackground", refs.BottomPanelBackground);
             SetRef(so, "bottomPanelDefaultSprite", LoadSpriteByGuid(BottomCombatBackgroundSpriteGuid));
             SetRef(so, "bottomPanelMergeLitSprite", LoadSpriteByGuid(BottomCombatBackgroundLitSpriteGuid));
+            SetRef(so, "attackIntentSprite", LoadSprite(AttackIntentIconPath));
+            SetRef(so, "defenseIntentSprite", LoadSprite(DefenseIntentIconPath));
+            SetRef(so, "fearIntentSprite", LoadSprite(FearIntentIconPath));
             SetRef(so, "boardPanel", refs.BoardPanel);
             SetRef(so, "actionPanel", refs.ActionPanel);
             SetRef(so, "enemyTurnPanel", refs.EnemyTurnPanel);

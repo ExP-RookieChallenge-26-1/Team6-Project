@@ -47,19 +47,19 @@ MonoBehaviour:
   availability: 1
   icon: {fileID: 0}
   activationEffect:
-    sfxClip: {fileID: 0}
+    sfxClip: {fileID: 8300000, guid: a99909d8a22d60e4a9985b5818d69822, type: 3}
     vfxPrefab: {fileID: 899824043960030591, guid: 5f8cf79947e4ddf47aee451b2b9de40a, type: 3}
     animationClip: {fileID: 0}
     particleEffect:
-      objectName: 
+      objectName: LightShotSkillParticles
       particlePrefab: {fileID: 0}
-      particleMaterial: {fileID: 0}
-      useParticleColor: 0
-      particleColor: {r: 1, g: 1, b: 1, a: 1}
-      lifetimeSeconds: 0.8
-      burstCount: 16
-      startSpeed: 0.6
-      startSize: 0.12
+      particleMaterial: {fileID: 2100000, guid: 4ded844c6707bbe93400cb547fa2a08d, type: 2}
+      useParticleColor: 1
+      particleColor: {r: 1, g: 0.96, b: 0.62, a: 1}
+      lifetimeSeconds: 0.75
+      burstCount: 31
+      startSpeed: 0.75
+      startSize: 0.16
       swirl: 0
     volumeScale: 1
     minPitch: 1

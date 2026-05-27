@@ -47,20 +47,20 @@ MonoBehaviour:
   availability: 0
   icon: {fileID: 0}
   activationEffect:
-    sfxClip: {fileID: 0}
+    sfxClip: {fileID: 8300000, guid: 540d095afadc57c4a9c08e0d54cd9b60, type: 3}
     vfxPrefab: {fileID: 0}
     animationClip: {fileID: 0}
     particleEffect:
-      objectName: 
+      objectName: ShieldBashSkillParticles
       particlePrefab: {fileID: 0}
-      particleMaterial: {fileID: 0}
-      useParticleColor: 0
-      particleColor: {r: 1, g: 1, b: 1, a: 1}
+      particleMaterial: {fileID: 2100000, guid: 65e092e01d9dbe741072906fbc723c04, type: 2}
+      useParticleColor: 1
+      particleColor: {r: 0.28, g: 0.58, b: 1, a: 1}
       lifetimeSeconds: 0.8
-      burstCount: 16
-      startSpeed: 0.6
-      startSize: 0.12
-      swirl: 0
+      burstCount: 34
+      startSpeed: 0.35
+      startSize: 0.18
+      swirl: 1
     volumeScale: 1
     minPitch: 1
     maxPitch: 1

@@ -51,20 +51,20 @@ MonoBehaviour:
   availability: 2
   icon: {fileID: 0}
   activationEffect:
-    sfxClip: {fileID: 0}
+    sfxClip: {fileID: 8300000, guid: f93109c01305440881d46de8bec4fc5e, type: 3}
     vfxPrefab: {fileID: 0}
     animationClip: {fileID: 0}
     particleEffect:
-      objectName:
+      objectName: DeepDarknessSkillParticles
       particlePrefab: {fileID: 0}
-      particleMaterial: {fileID: 0}
-      useParticleColor: 0
-      particleColor: {r: 1, g: 1, b: 1, a: 1}
-      lifetimeSeconds: 0.8
-      burstCount: 16
-      startSpeed: 0.6
-      startSize: 0.12
-      swirl: 0
+      particleMaterial: {fileID: 2100000, guid: 1c6fa673ea3346c4eeaf0cfb17ed70cc, type: 2}
+      useParticleColor: 1
+      particleColor: {r: 0, g: 0, b: 0.02, a: 1}
+      lifetimeSeconds: 0.85
+      burstCount: 48
+      startSpeed: 0.497
+      startSize: 0.24
+      swirl: 1
     volumeScale: 1
     minPitch: 1
     maxPitch: 1

@@ -52,6 +52,22 @@ namespace Project2048.Tests
             return gameObject;
         }
 
+        private Sprite CreateOwnedSprite(string name)
+        {
+            var texture = new Texture2D(8, 8);
+            texture.name = $"{name}Texture";
+            ownedObjects.Add(texture);
+
+            var pixels = Enumerable.Repeat(Color.white, 64).ToArray();
+            texture.SetPixels(pixels);
+            texture.Apply();
+
+            var sprite = Sprite.Create(texture, new Rect(0f, 0f, 8f, 8f), new Vector2(0.5f, 0.5f), 8f);
+            sprite.name = name;
+            ownedObjects.Add(sprite);
+            return sprite;
+        }
+
         private static void AssertPopupIsNearButNotCentered(
             RectTransform popup,
             RectTransform popupLayer,
@@ -519,7 +535,7 @@ namespace Project2048.Tests
         }
 
         [Test]
-        public void CombatWorldSpriteView_EnemyAttack_SpawnsThreeClawStripsAtPlayer()
+        public void CombatWorldSpriteView_EnemyAttack_UsesAuthoredAttackEffectArtAtPlayer()
         {
             var viewObject = CreateOwnedGameObject("WorldSpriteView");
             var view = viewObject.AddComponent<CombatWorldSpriteView>();
@@ -531,12 +547,14 @@ namespace Project2048.Tests
             var bootstrap = CreateOwnedGameObject("Bootstrap").AddComponent<PrototypeCombatBootstrap>();
             var playerData = CreatePlayerData(maxHp: 20, attackPower: 2);
             var enemyData = CreateEnemyData(maxHp: 10, attackValue: 3);
+            var attackSprite = CreateOwnedSprite("AttackEffectSprite");
 
             playerRenderer.sortingOrder = 7;
             playerRenderer.transform.localPosition = new Vector3(-1f, 0f, 0f);
             enemyRenderer.transform.localPosition = new Vector3(1f, 0f, 0f);
             SetPrivateField(view, "playerRenderer", playerRenderer);
             SetPrivateField(view, "enemyRenderer", enemyRenderer);
+            SetPrivateField(view, "attackEffectSprite", attackSprite);
             SetPrivateField(bootstrap, "combatManager", manager);
 
             manager.SetCombatants(player, new[] { enemy });
@@ -551,33 +569,13 @@ namespace Project2048.Tests
 
             manager.RequestEndPlayerTurn();
 
-            var slash = playerRenderer.transform.Find("EnemyClawSlash2D")?.GetComponent<CombatClawSlash2DEffect>();
-            Assert.That(slash, Is.Not.Null);
-            Assert.That(slash.transform.localPosition.x, Is.GreaterThan(0.2f));
-            Assert.That(Mathf.DeltaAngle(slash.transform.localEulerAngles.z, 90f), Is.EqualTo(0f).Within(0.001f));
-            Assert.That(slash.GetComponentInChildren<ParticleSystem>(), Is.Null);
-            Assert.That(slash.GetComponentInChildren<LineRenderer>(), Is.Null);
-
-            var renderers = slash.GetComponentsInChildren<MeshRenderer>();
-            Assert.That(renderers.Length, Is.EqualTo(6));
-
-            var coreRenderers = renderers
-                .Where(renderer => renderer.gameObject.name.StartsWith("Claw_Core", System.StringComparison.Ordinal))
-                .ToList();
-            Assert.That(coreRenderers.Count, Is.EqualTo(3));
-            Assert.That(coreRenderers.All(renderer => renderer.sortingOrder > playerRenderer.sortingOrder), Is.True);
-            Assert.That(coreRenderers.All(renderer => renderer.sharedMaterial != null), Is.True);
-            Assert.That(coreRenderers.All(renderer => renderer.sharedMaterial.shader.name == CombatClawSlash2DEffect.ShaderName), Is.True);
-
-            var backBounds = coreRenderers.Single(renderer => renderer.gameObject.name.EndsWith("Back")).GetComponent<MeshFilter>().sharedMesh.bounds;
-            var midMesh = coreRenderers.Single(renderer => renderer.gameObject.name.EndsWith("Mid")).GetComponent<MeshFilter>().sharedMesh;
-            var midBounds = midMesh.bounds;
-            var frontBounds = coreRenderers.Single(renderer => renderer.gameObject.name.EndsWith("Front")).GetComponent<MeshFilter>().sharedMesh.bounds;
-
-            Assert.That(midMesh.vertexCount, Is.EqualTo(CombatClawSlash2DEffect.DefaultSegmentCount * 2));
-            Assert.That(midBounds.center.x, Is.GreaterThan(0f));
-            Assert.That(Vector3.Distance(backBounds.center, midBounds.center), Is.GreaterThan(0.1f));
-            Assert.That(Vector3.Distance(frontBounds.center, midBounds.center), Is.GreaterThan(0.1f));
+            var art = playerRenderer.transform.Find("EnemyAttackArt")?.GetComponent<SpriteRenderer>();
+            Assert.That(art, Is.Not.Null);
+            Assert.That(art.sprite, Is.EqualTo(attackSprite));
+            Assert.That(art.transform.localPosition.x, Is.GreaterThan(0.2f));
+            Assert.That(Mathf.DeltaAngle(art.transform.localEulerAngles.z, 90f), Is.EqualTo(0f).Within(0.001f));
+            Assert.That(art.sortingOrder, Is.GreaterThan(playerRenderer.sortingOrder));
+            Assert.That(playerRenderer.transform.Find("EnemyClawSlash2D"), Is.Null);
         }
 
         [Test]
@@ -946,6 +944,14 @@ namespace Project2048.Tests
             var profile = Resources.Load<CombatWorldVfxProfileSO>("PrototypeCombatWorldVfxProfile");
 
             Assert.That(profile, Is.Not.Null);
+            Assert.That(profile.attackEffectSprite, Is.Not.Null);
+            Assert.That(profile.shieldEffectSprite, Is.Not.Null);
+            Assert.That(
+                AssetDatabase.GetAssetPath(profile.attackEffectSprite),
+                Is.EqualTo("Assets/Art/Effects/SkillVFX/Attack/SkillVfx_AttackImpact.png"));
+            Assert.That(
+                AssetDatabase.GetAssetPath(profile.shieldEffectSprite),
+                Is.EqualTo("Assets/Art/Effects/SkillVFX/Shield/SkillVfx_ShieldBarrier.png"));
             Assert.That(profile.shieldImpactEffect.particleMaterial, Is.Not.Null);
             Assert.That(profile.fearDebuffCastEffect.particleMaterial, Is.Not.Null);
             Assert.That(profile.darknessDebuffCastEffect.particleMaterial, Is.Not.Null);
@@ -968,6 +974,65 @@ namespace Project2048.Tests
             AssertColorApproximately(
                 ResolveMaterialColor(profile.darknessDebuffCastEffect.particleMaterial),
                 new Color(0.24f, 0.10f, 0.48f, 0.95f));
+        }
+
+        [Test]
+        public void CombatUiView_IntentIconMapping_UsesFearIconForChangeIntent()
+        {
+            var view = CreateOwnedGameObject("CombatUiView").AddComponent<CombatUiView>();
+            var attackSprite = CreateOwnedSprite("AttackIntentSprite");
+            var defenseSprite = CreateOwnedSprite("DefenseIntentSprite");
+            var fearSprite = CreateOwnedSprite("FearIntentSprite");
+            SetPrivateField(view, "attackIntentSprite", attackSprite);
+            SetPrivateField(view, "defenseIntentSprite", defenseSprite);
+            SetPrivateField(view, "fearIntentSprite", fearSprite);
+
+            var resolveIntentIcon = typeof(CombatUiView).GetMethod(
+                "ResolveIntentIcon",
+                System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+
+            Assert.That(resolveIntentIcon, Is.Not.Null);
+            Assert.That(
+                resolveIntentIcon.Invoke(view, new object[] { new EnemyIntent { intentType = EnemyIntentType.Attack } }),
+                Is.EqualTo(attackSprite));
+            Assert.That(
+                resolveIntentIcon.Invoke(view, new object[] { new EnemyIntent { intentType = EnemyIntentType.Defense } }),
+                Is.EqualTo(defenseSprite));
+            Assert.That(
+                resolveIntentIcon.Invoke(view, new object[] { new EnemyIntent { intentType = EnemyIntentType.Debuff } }),
+                Is.EqualTo(fearSprite));
+        }
+
+        [Test]
+        public void ArtTeamAssets_AreImportedAsSpritesInEnglishNamedFolders()
+        {
+            var spritePaths = new[]
+            {
+                "Assets/Art/Effects/SkillVFX/Attack/SkillVfx_AttackImpact.png",
+                "Assets/Art/Effects/SkillVFX/Shield/SkillVfx_ShieldBarrier.png",
+                "Assets/Art/UI/IntentIcons/Ui_Attack.png",
+                "Assets/Art/UI/IntentIcons/Ui_Defense.png",
+                "Assets/Art/UI/IntentIcons/Ui_Fear.png",
+                "Assets/Art/UI/Controls/Ui_Pause.png",
+                "Assets/Art/UI/Controls/Ui_Settings.png",
+            };
+
+            foreach (var path in spritePaths)
+            {
+                Assert.That(AssetDatabase.LoadAssetAtPath<Sprite>(path), Is.Not.Null, path);
+            }
+        }
+
+        [Test]
+        public void ArtAndSoundAssetPaths_UseAsciiEnglishNames()
+        {
+            var paths = AssetDatabase.FindAssets(string.Empty, new[] { "Assets/Art", "Assets/Sounds" })
+                .Select(AssetDatabase.GUIDToAssetPath)
+                .Where(path => path.Any(character => character > 127))
+                .OrderBy(path => path)
+                .ToArray();
+
+            Assert.That(paths, Is.Empty, string.Join("\n", paths));
         }
 
         [UnityTest]
@@ -1111,6 +1176,61 @@ namespace Project2048.Tests
         }
 
         [Test]
+        public void CombatWorldSpriteView_PlayerReusableSkill_UsesSoBoundParticleMaterial()
+        {
+            var viewObject = CreateOwnedGameObject("WorldSpriteView");
+            var view = viewObject.AddComponent<CombatWorldSpriteView>();
+            var enemyRenderer = CreateOwnedGameObject("EnemySprite").AddComponent<SpriteRenderer>();
+            var manager = CreateOwnedGameObject("CombatManager").AddComponent<CombatManager>();
+            var player = CreateOwnedGameObject("Player").AddComponent<PlayerCombatController>();
+            var enemy = CreateOwnedGameObject("Enemy").AddComponent<EnemyController>();
+            var bootstrap = CreateOwnedGameObject("Bootstrap").AddComponent<PrototypeCombatBootstrap>();
+            var playerData = CreatePlayerData(maxHp: 20, attackPower: 2);
+            var enemyData = CreateEnemyData(maxHp: 10, attackValue: 0);
+            var attack = CreateSkill("attack", SkillType.Attack, cost: 0, power: 1);
+            var material = new Material(Shader.Find("Sprites/Default"))
+            {
+                name = "SkillSoBoundParticles",
+            };
+            ownedObjects.Add(material);
+            var expectedColor = new Color(0.4f, 0.8f, 1f, 0.9f);
+            attack.vfxFamily = SkillVfxFamily.BuffAura;
+            attack.vfxPrimaryColor = expectedColor;
+            attack.activationEffect.particleEffect = new CombatParticleEffectBinding
+            {
+                objectName = "SoBoundSkillParticles",
+                particleMaterial = material,
+                useParticleColor = true,
+                particleColor = expectedColor,
+                lifetimeSeconds = 0.65f,
+                burstCount = 11,
+                startSpeed = 0.44f,
+                startSize = 0.18f,
+            };
+
+            SetPrivateField(view, "enemyRenderer", enemyRenderer);
+            SetPrivateField(bootstrap, "combatManager", manager);
+
+            manager.SetCombatants(player, new[] { enemy });
+            view.Initialize(bootstrap);
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new List<EnemySO> { enemyData },
+                boardMoveCount = 1,
+            });
+            manager.ResolveBoardPhase();
+
+            Assert.That(manager.RequestUseSkill(attack, enemy), Is.True);
+
+            var particles = enemyRenderer.transform.Find("SoBoundSkillParticles")?.GetComponent<ParticleSystem>();
+            Assert.That(particles, Is.Not.Null);
+            var renderer = particles.GetComponent<ParticleSystemRenderer>();
+            Assert.That(renderer.sharedMaterial, Is.SameAs(material));
+            Assert.That(particles.main.startSize.constant, Is.EqualTo(0.18f).Within(0.001f));
+        }
+
+        [Test]
         public void CombatWorldSpriteView_PlayerShieldSkill_SpawnsLightCircleAroundPlayer()
         {
             var viewObject = CreateOwnedGameObject("WorldSpriteView");
@@ -1127,10 +1247,18 @@ namespace Project2048.Tests
             shield.vfxFamily = SkillVfxFamily.ShieldDome;
             shield.vfxPrimaryColor = new Color(0.58f, 0.68f, 0.82f, 1f);
             shield.vfxSecondaryColor = new Color(0.82f, 0.9f, 1f, 1f);
+            shield.activationEffect.particleEffect = new CombatParticleEffectBinding
+            {
+                objectName = "LowStanceSkillParticles",
+                useParticleColor = true,
+                particleColor = shield.vfxPrimaryColor,
+            };
+            var shieldSprite = CreateOwnedSprite("ShieldEffectSprite");
             playerRenderer.sortingOrder = 6;
 
             SetPrivateField(view, "playerRenderer", playerRenderer);
             SetPrivateField(view, "enemyRenderer", enemyRenderer);
+            SetPrivateField(view, "shieldEffectSprite", shieldSprite);
             SetPrivateField(bootstrap, "combatManager", manager);
 
             manager.SetCombatants(player, new[] { enemy });
@@ -1160,6 +1288,18 @@ namespace Project2048.Tests
 
             var graph = playerRenderer.transform.Find("ShieldLightCircleVfxGraph")?.GetComponent<VisualEffect>();
             Assert.That(graph, Is.Not.Null);
+
+            var shieldArt = playerRenderer.transform.Find("ShieldGuardArt")?.GetComponent<SpriteRenderer>();
+            Assert.That(shieldArt, Is.Not.Null);
+            Assert.That(shieldArt.sprite, Is.EqualTo(shieldSprite));
+            Assert.That(shieldArt.sortingOrder, Is.GreaterThan(playerRenderer.sortingOrder));
+
+            var persistentShieldRoot = viewObject.transform.Find("PlayerShieldArtVfx");
+            Assert.That(persistentShieldRoot, Is.Not.Null);
+            var persistentShieldArt = persistentShieldRoot.Find("PlayerPersistentShieldArt")?.GetComponent<SpriteRenderer>();
+            Assert.That(persistentShieldArt, Is.Not.Null);
+            Assert.That(persistentShieldArt.sprite, Is.EqualTo(shieldSprite));
+            Assert.That(persistentShieldArt.sortingOrder, Is.GreaterThan(playerRenderer.sortingOrder));
         }
 
         [Test]
@@ -1181,9 +1321,11 @@ namespace Project2048.Tests
             thornGuard.vfxFamily = SkillVfxFamily.ShieldDome;
             thornGuard.vfxPrimaryColor = new Color(0.05f, 0.22f, 0.16f, 1f);
             thornGuard.vfxSecondaryColor = new Color(0.46f, 0.1f, 0.08f, 1f);
+            var shieldSprite = CreateOwnedSprite("ThornGuardShieldSprite");
 
             SetPrivateField(view, "playerRenderer", playerRenderer);
             SetPrivateField(view, "enemyRenderer", enemyRenderer);
+            SetPrivateField(view, "shieldEffectSprite", shieldSprite);
             SetPrivateField(bootstrap, "combatManager", manager);
 
             manager.SetCombatants(player, new[] { enemy });
@@ -1208,6 +1350,9 @@ namespace Project2048.Tests
             Assert.That(ring.startColor.r, Is.LessThan(0.12f));
             Assert.That(ring.startColor.g, Is.LessThan(0.18f));
             Assert.That(ResolveLineRadiusSpread(ring), Is.GreaterThan(0.18f));
+            var shieldArt = shieldRoot.Find("ThornGuardShieldArt")?.GetComponent<SpriteRenderer>();
+            Assert.That(shieldArt, Is.Not.Null);
+            Assert.That(shieldArt.sprite, Is.EqualTo(shieldSprite));
 
             var spikes = shieldRoot.Find("ThornGuardSpikeParticles")?.GetComponent<ParticleSystem>();
             Assert.That(spikes, Is.Not.Null);
@@ -1250,6 +1395,56 @@ namespace Project2048.Tests
         }
 
         [Test]
+        public void CombatWorldSpriteView_ShieldBurstAttack_SpawnsBurstAndTargetImpact()
+        {
+            var viewObject = CreateOwnedGameObject("WorldSpriteView");
+            var view = viewObject.AddComponent<CombatWorldSpriteView>();
+            var playerRenderer = CreateOwnedGameObject("PlayerSprite").AddComponent<SpriteRenderer>();
+            var enemyRenderer = CreateOwnedGameObject("EnemySprite").AddComponent<SpriteRenderer>();
+            var manager = CreateOwnedGameObject("CombatManager").AddComponent<CombatManager>();
+            var player = CreateOwnedGameObject("Player").AddComponent<PlayerCombatController>();
+            var enemy = CreateOwnedGameObject("Enemy").AddComponent<EnemyController>();
+            var bootstrap = CreateOwnedGameObject("Bootstrap").AddComponent<PrototypeCombatBootstrap>();
+            var playerData = CreatePlayerData(maxHp: 20, attackPower: 2);
+            var enemyData = CreateEnemyData(maxHp: 120, attackValue: 0);
+            var shieldBurst = CreateSkill("shield-burst", SkillType.Attack, cost: 0, power: 100);
+            shieldBurst.effectKind = SkillEffectKind.ShieldBurstAttack;
+            shieldBurst.consumesAllShield = true;
+            shieldBurst.vfxFamily = SkillVfxFamily.ShieldDome;
+            shieldBurst.vfxPrimaryColor = new Color(0.72f, 0.9f, 1f, 1f);
+            shieldBurst.vfxSecondaryColor = new Color(0.2f, 0.46f, 1f, 1f);
+            shieldBurst.vfxScale = 1.4f;
+            shieldBurst.vfxIntensity = 1.3f;
+            var shieldSprite = CreateOwnedSprite("ShieldBurstSprite");
+
+            SetPrivateField(view, "playerRenderer", playerRenderer);
+            SetPrivateField(view, "enemyRenderer", enemyRenderer);
+            SetPrivateField(view, "shieldEffectSprite", shieldSprite);
+            SetPrivateField(bootstrap, "combatManager", manager);
+
+            manager.SetCombatants(player, new[] { enemy });
+            view.Initialize(bootstrap);
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new List<EnemySO> { enemyData },
+                boardMoveCount = 1,
+            });
+            manager.ResolveBoardPhase();
+            player.AddBlock(40);
+
+            Assert.That(manager.RequestUseSkill(shieldBurst, enemy), Is.True);
+
+            var burstArt = viewObject.transform.Find("ShieldBurstGuardArt")?.GetComponent<SpriteRenderer>();
+            Assert.That(burstArt, Is.Not.Null);
+            Assert.That(burstArt.sprite, Is.EqualTo(shieldSprite));
+            Assert.That(playerRenderer.transform.Find("ShieldBurstExpansionRing"), Is.Not.Null);
+            Assert.That(playerRenderer.transform.Find("ShieldBurstShardParticles"), Is.Not.Null);
+            Assert.That(enemyRenderer.transform.Find("ShieldBurstImpactParticles"), Is.Not.Null);
+            Assert.That(enemyRenderer.transform.Find("ShieldBurstImpactRing"), Is.Not.Null);
+        }
+
+        [Test]
         public void ShieldSkillVfxGraphAssets_AreAuthoredAsVisualEffectGraphs()
         {
             Assert.That(
@@ -1263,7 +1458,7 @@ namespace Project2048.Tests
         }
 
         [Test]
-        public void CombatWorldSpriteView_ChargedAttackRelease_SpawnsLightBeam()
+        public void CombatWorldSpriteView_ChargedAttackRelease_SpawnsCoolLightBeamWithAttackImpactArt()
         {
             var viewObject = CreateOwnedGameObject("WorldSpriteView");
             var view = viewObject.AddComponent<CombatWorldSpriteView>();
@@ -1276,6 +1471,7 @@ namespace Project2048.Tests
             var playerData = CreatePlayerData(maxHp: 20, attackPower: 2);
             var enemyData = CreateEnemyData(maxHp: 50, attackValue: 0);
             var charge = CreateSkill("gather-light", SkillType.Attack, cost: 0, power: 0);
+            var attackSprite = CreateOwnedSprite("SkillVfx_AttackImpact");
             charge.effectKind = SkillEffectKind.ChargeAttack;
             charge.chargedPower = 120;
             playerData.startingSkills = new List<SkillSO> { charge };
@@ -1285,6 +1481,7 @@ namespace Project2048.Tests
 
             SetPrivateField(view, "playerRenderer", playerRenderer);
             SetPrivateField(view, "enemyRenderer", enemyRenderer);
+            SetPrivateField(view, "attackEffectSprite", attackSprite);
             SetPrivateField(bootstrap, "combatManager", manager);
 
             manager.SetCombatants(player, new[] { enemy });
@@ -1298,12 +1495,19 @@ namespace Project2048.Tests
             view.Initialize(bootstrap);
 
             Assert.That(manager.RequestUseSkillById("gather-light"), Is.True);
+            Assert.That(viewObject.transform.Find("ChargedLightBeam"), Is.Null);
+            Assert.That(viewObject.transform.Find("ChargedLightBeamGlow"), Is.Null);
+            Assert.That(enemyRenderer.transform.Find("ChargedLightAttackArt"), Is.Null);
+            Assert.That(playerRenderer.transform.Find("gather-lightChargeParticles"), Is.Not.Null);
+
             manager.RequestEndPlayerTurn();
 
             var beam = viewObject.transform.Find("ChargedLightBeam")?.GetComponent<LineRenderer>();
             Assert.That(beam, Is.Not.Null);
             Assert.That(beam.positionCount, Is.EqualTo(2));
             Assert.That(beam.sharedMaterial, Is.Not.Null);
+            Assert.That(beam.startColor.b, Is.GreaterThanOrEqualTo(beam.startColor.g));
+            Assert.That(beam.startColor.g, Is.GreaterThan(0.9f));
             Assert.That(beam.startWidth, Is.EqualTo(0.08f).Within(0.001f));
             Assert.That(beam.endWidth, Is.EqualTo(0.16f).Within(0.001f));
             Assert.That(beam.GetPosition(0).x, Is.GreaterThan(playerRenderer.transform.position.x));
@@ -1311,10 +1515,14 @@ namespace Project2048.Tests
             Assert.That(beam.sortingOrder, Is.GreaterThan(enemyRenderer.sortingOrder));
             Assert.That(viewObject.transform.Find("ChargedLightBeamGlow")?.GetComponent<LineRenderer>(), Is.Not.Null);
             Assert.That(enemyRenderer.transform.Find("ChargedLightBeamImpactParticles"), Is.Not.Null);
+            var art = enemyRenderer.transform.Find("ChargedLightAttackArt")?.GetComponent<SpriteRenderer>();
+            Assert.That(art, Is.Not.Null);
+            Assert.That(art.sprite, Is.EqualTo(attackSprite));
+            Assert.That(art.sortingOrder, Is.GreaterThan(enemyRenderer.sortingOrder));
         }
 
         [Test]
-        public void CombatWorldSpriteView_GatherLightPreview_UsesLightBeamInsteadOfProjectile()
+        public void CombatWorldSpriteView_GatherLightPreview_UsesChargeParticlesInsteadOfProjectileOrAttackArt()
         {
             var viewObject = CreateOwnedGameObject("WorldSpriteView");
             var view = viewObject.AddComponent<CombatWorldSpriteView>();
@@ -1338,11 +1546,10 @@ namespace Project2048.Tests
 
             view.PreviewSkillEffect(gatherLight);
 
-            var beam = viewObject.transform.Find("ChargedLightBeam")?.GetComponent<LineRenderer>();
-            Assert.That(beam, Is.Not.Null);
-            Assert.That(beam.GetPosition(0).x, Is.GreaterThan(playerRenderer.transform.position.x));
-            Assert.That(beam.GetPosition(0).y, Is.GreaterThan(playerRenderer.transform.position.y + 0.3f));
-            Assert.That(viewObject.transform.Find("ChargedLightBeamGlow")?.GetComponent<LineRenderer>(), Is.Not.Null);
+            Assert.That(viewObject.transform.Find("ChargedLightBeam"), Is.Null);
+            Assert.That(viewObject.transform.Find("ChargedLightBeamGlow"), Is.Null);
+            Assert.That(enemyRenderer.transform.Find("ChargedLightAttackArt"), Is.Null);
+            Assert.That(playerRenderer.transform.Find("gather-lightChargeParticles"), Is.Not.Null);
             Assert.That(viewObject.transform.Find("GatherLightProjectilePrefab(Clone)"), Is.Null);
         }
 
@@ -1831,12 +2038,11 @@ namespace Project2048.Tests
                     AssetDatabase.GetAssetPath(attackEffect.sfxClip),
                     Does.StartWith("Assets/Sounds/MonsterAttackSfx/"),
                     path);
-                Assert.That(attackEffect.sfxClip.length, Is.LessThan(hitEffect.sfxClip.length), path);
                 Assert.That(attackEffect.EffectiveMinPitch, Is.EqualTo(appearEffect.EffectiveMinPitch).Within(0.0001f), path);
                 Assert.That(attackEffect.EffectiveMaxPitch, Is.EqualTo(appearEffect.EffectiveMaxPitch).Within(0.0001f), path);
                 Assert.That(
                     AssetDatabase.GetAssetPath(hitEffect.sfxClip),
-                    Does.StartWith("Assets/Sounds/MonsterHitSfx/"),
+                    Does.Match(@"^Assets/Sounds/GameplaySfx/enemy_hit_0[1-3]\.mp3$"),
                     path);
             }
         }
@@ -1914,6 +2120,19 @@ namespace Project2048.Tests
                 Assert.That(skill.vfxScale, Is.GreaterThan(0f), path);
                 Assert.That(skill.vfxIntensity, Is.GreaterThan(0f), path);
                 Assert.That(skill.vfxRepeatCount, Is.GreaterThanOrEqualTo(1), path);
+                Assert.That(skill.activationEffect, Is.Not.Null, path);
+                Assert.That(skill.activationEffect.sfxClip, Is.Not.Null, path);
+                Assert.That(
+                    AssetDatabase.GetAssetPath(skill.activationEffect.sfxClip),
+                    Does.Match(@"^Assets/Sounds/GameplaySfx/(player_attack_0[1-5]|player_defense_0[1-3]|skill_buff(_0[1-2])?|skill_heal)\.mp3$"),
+                    path);
+                Assert.That(skill.activationEffect.particleEffect, Is.Not.Null, path);
+                Assert.That(skill.activationEffect.particleEffect.particleMaterial, Is.Not.Null, path);
+                Assert.That(skill.activationEffect.particleEffect.useParticleColor, Is.True, path);
+                Assert.That(
+                    AssetDatabase.GetAssetPath(skill.activationEffect.particleEffect.particleMaterial),
+                    Does.StartWith("Assets/Art/Effects/SkillVFX/SkillSO/Materials/"),
+                    path);
                 if (path.EndsWith("LightShot.asset", System.StringComparison.Ordinal) ||
                     path.EndsWith("GatherLight.asset", System.StringComparison.Ordinal))
                 {

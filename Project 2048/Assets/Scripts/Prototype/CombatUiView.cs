@@ -165,6 +165,9 @@ namespace Project2048.Prototype
         [SerializeField] private Color defenseIntentColor = new(0.12f, 0.32f, 0.90f, 1f);
         [SerializeField] private Color darknessIntentColor = new(0.20f, 0.07f, 0.34f, 1f);
         [SerializeField] private Color fearIntentColor = new(0.45f, 0.03f, 0.06f, 1f);
+        [SerializeField] private Sprite attackIntentSprite;
+        [SerializeField] private Sprite defenseIntentSprite;
+        [SerializeField] private Sprite fearIntentSprite;
         [SerializeField] private Color playerHpFillColor = ThemeHpFillColor;
         [SerializeField] private Color enemyHpFillColor = ThemeHpFillColor;
         [SerializeField] private Color hpBarBackgroundColor = ThemeHpBarBackgroundColor;
@@ -533,14 +536,21 @@ namespace Project2048.Prototype
                 var visibleIntents = GetVisibleIntents(enemy);
                 var hasIntent = visibleIntents.Count > 0 && enemyIsAlive;
                 intentBubble.SetActive(hasIntent);
+                var primaryIntent = hasIntent ? visibleIntents[0] : null;
+                var intentIcon = ResolveIntentIcon(primaryIntent);
                 if (hasIntent && intentBubbleText != null)
                 {
-                    intentBubbleText.text = PrototypeCombatText.FormatIntents(visibleIntents);
+                    intentBubbleText.text = intentIcon != null
+                        ? string.Empty
+                        : PrototypeCombatText.FormatIntents(visibleIntents);
                 }
 
                 if (hasIntent && intentBubble.TryGetComponent<Image>(out var intentBubbleImage))
                 {
-                    intentBubbleImage.color = GetIntentBubbleColor(visibleIntents[0]);
+                    intentBubbleImage.sprite = intentIcon;
+                    intentBubbleImage.preserveAspect = intentIcon != null;
+                    intentBubbleImage.type = Image.Type.Simple;
+                    intentBubbleImage.color = intentIcon != null ? Color.white : GetIntentBubbleColor(primaryIntent);
                 }
             }
 
@@ -1082,6 +1092,21 @@ namespace Project2048.Prototype
                 EnemyIntentType.Defense => defenseIntentColor,
                 EnemyIntentType.Debuff => GetDebuffColor(intent.debuffType),
                 _ => attackIntentColor,
+            };
+        }
+
+        private Sprite ResolveIntentIcon(EnemyIntent intent)
+        {
+            if (intent == null)
+            {
+                return attackIntentSprite;
+            }
+
+            return intent.intentType switch
+            {
+                EnemyIntentType.Defense => defenseIntentSprite,
+                EnemyIntentType.Debuff => fearIntentSprite,
+                _ => attackIntentSprite,
             };
         }
 

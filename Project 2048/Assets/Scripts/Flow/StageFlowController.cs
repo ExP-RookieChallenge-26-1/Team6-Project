@@ -102,6 +102,21 @@ namespace Project2048.Flow
             });
         }
 
+        public void ResetRunProgress()
+        {
+            RunProgress.Reset();
+            InitializeRunProgress();
+        }
+
+        public void InitializeRunProgress()
+        {
+            ResolveSceneReferences();
+            if (rewardManager != null)
+            {
+                rewardManager.Initialize(RunProgress, rewardTable);
+            }
+        }
+
         private void ResolveSceneReferences()
         {
             if (combatManager == null)

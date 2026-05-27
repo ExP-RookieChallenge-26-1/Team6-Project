@@ -565,6 +565,25 @@
     "risk_score": 66
   },
   {
+    "file_id": "Project 2048/Assets/Scripts/Core/GameManager.cs",
+    "class_name": "GameManager",
+    "risk_flags": [
+      "singleton-candidate",
+      "high-coupling",
+      "init-order-sensitive",
+      "save-load-sensitive",
+      "state-owner"
+    ],
+    "risk_reasons": [
+      "Instance 또는 DontDestroyOnLoad 패턴 감지",
+      "참조 타입 또는 관계 수가 많음",
+      "초기화 순서에 민감할 가능성",
+      "저장/불러오기 관련 로직 포함",
+      "상태 중심 또는 관리 중심 클래스일 가능성"
+    ],
+    "risk_score": 63
+  },
+  {
     "file_id": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
     "class_name": "MainMenuControllerTests",
     "risk_flags": [
@@ -990,21 +1009,21 @@
     "risk_score": 48
   },
   {
-    "file_id": "Project 2048/Assets/Scripts/Core/GameManager.cs",
-    "class_name": "GameManager",
+    "file_id": "Project 2048/Assets/Scripts/SaveLoad/GameSaveData.cs",
+    "class_name": "GameSaveData",
     "risk_flags": [
-      "singleton-candidate",
-      "init-order-sensitive",
+      "high-coupling",
+      "public-field-heavy",
       "save-load-sensitive",
       "state-owner"
     ],
     "risk_reasons": [
-      "Instance 또는 DontDestroyOnLoad 패턴 감지",
-      "초기화 순서에 민감할 가능성",
+      "참조 타입 또는 관계 수가 많음",
+      "public 필드 노출 수가 많음",
       "저장/불러오기 관련 로직 포함",
       "상태 중심 또는 관리 중심 클래스일 가능성"
     ],
-    "risk_score": 45
+    "risk_score": 48
   },
   {
     "file_id": "Project 2048/Assets/Scripts/Presentation/CombatParticleEffectBinding.cs",
@@ -1190,6 +1209,36 @@
   {
     "file_id": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatLoadout.cs",
     "class_name": "PrototypeCombatLoadout",
+    "risk_flags": [
+      "high-coupling",
+      "save-load-sensitive",
+      "state-owner"
+    ],
+    "risk_reasons": [
+      "참조 타입 또는 관계 수가 많음",
+      "저장/불러오기 관련 로직 포함",
+      "상태 중심 또는 관리 중심 클래스일 가능성"
+    ],
+    "risk_score": 38
+  },
+  {
+    "file_id": "Project 2048/Assets/Scripts/SaveLoad/JsonFileSaveRepository.cs",
+    "class_name": "JsonFileSaveRepository",
+    "risk_flags": [
+      "high-coupling",
+      "save-load-sensitive",
+      "state-owner"
+    ],
+    "risk_reasons": [
+      "참조 타입 또는 관계 수가 많음",
+      "저장/불러오기 관련 로직 포함",
+      "상태 중심 또는 관리 중심 클래스일 가능성"
+    ],
+    "risk_score": 38
+  },
+  {
+    "file_id": "Project 2048/Assets/Scripts/SaveLoad/SaveLoadManager.cs",
+    "class_name": "SaveLoadManager",
     "risk_flags": [
       "high-coupling",
       "save-load-sensitive",
@@ -1547,6 +1596,19 @@
     "risk_score": 22
   },
   {
+    "file_id": "Project 2048/Assets/Scripts/SaveLoad/SavePaths.cs",
+    "class_name": "SavePaths",
+    "risk_flags": [
+      "save-load-sensitive",
+      "state-owner"
+    ],
+    "risk_reasons": [
+      "저장/불러오기 관련 로직 포함",
+      "상태 중심 또는 관리 중심 클래스일 가능성"
+    ],
+    "risk_score": 20
+  },
+  {
     "file_id": "Project 2048/Assets/Scripts/Combat/CombatSetup.cs",
     "class_name": "CombatSetup",
     "risk_flags": [
@@ -1584,6 +1646,17 @@
       "상태 중심 또는 관리 중심 클래스일 가능성"
     ],
     "risk_score": 18
+  },
+  {
+    "file_id": "Project 2048/Assets/Scripts/SaveLoad/ISaveRepository.cs",
+    "class_name": "ISaveRepository",
+    "risk_flags": [
+      "save-load-sensitive"
+    ],
+    "risk_reasons": [
+      "저장/불러오기 관련 로직 포함"
+    ],
+    "risk_score": 12
   },
   {
     "file_id": "Project 2048/Assets/Scripts/Presentation/CombatActionIds.cs",

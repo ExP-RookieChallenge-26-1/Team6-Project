@@ -11517,6 +11517,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Core/GameManager.cs",
     "from_class": "GameManager",
+    "to_type": "SaveLoadManager",
+    "relation_type": "component-access",
+    "strength": 3
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/GameManager.cs",
+    "from_class": "GameManager",
     "to_type": "GameContext",
     "relation_type": "creates",
     "strength": 2
@@ -11532,6 +11539,13 @@
     "from_file": "Project 2048/Assets/Scripts/Core/GameManager.cs",
     "from_class": "GameManager",
     "to_type": "Awake",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/GameManager.cs",
+    "from_class": "GameManager",
+    "to_type": "ContinueGame",
     "relation_type": "uses",
     "strength": 1
   },
@@ -11587,6 +11601,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Core/GameManager.cs",
     "from_class": "GameManager",
+    "to_type": "Initialize",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/GameManager.cs",
+    "from_class": "GameManager",
     "to_type": "Initialized",
     "relation_type": "uses",
     "strength": 1
@@ -11609,6 +11630,20 @@
     "from_file": "Project 2048/Assets/Scripts/Core/GameManager.cs",
     "from_class": "GameManager",
     "to_type": "Project2048",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/GameManager.cs",
+    "from_class": "GameManager",
+    "to_type": "Save",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/GameManager.cs",
+    "from_class": "GameManager",
+    "to_type": "SaveLoadManager",
     "relation_type": "uses",
     "strength": 1
   },
@@ -15493,6 +15528,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Flow/FlowController.cs",
     "from_class": "FlowController",
+    "to_type": "DeleteSave",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Flow/FlowController.cs",
+    "from_class": "FlowController",
     "to_type": "FindAnyObjectByType",
     "relation_type": "uses",
     "strength": 1
@@ -15584,6 +15626,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Flow/FlowController.cs",
     "from_class": "FlowController",
+    "to_type": "InitializeRunProgress",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Flow/FlowController.cs",
+    "from_class": "FlowController",
     "to_type": "int",
     "relation_type": "uses",
     "strength": 1
@@ -15605,13 +15654,6 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Flow/FlowController.cs",
     "from_class": "FlowController",
-    "to_type": "Load",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Flow/FlowController.cs",
-    "from_class": "FlowController",
     "to_type": "Loading",
     "relation_type": "uses",
     "strength": 1
@@ -15620,6 +15662,27 @@
     "from_file": "Project 2048/Assets/Scripts/Flow/FlowController.cs",
     "from_class": "FlowController",
     "to_type": "LogError",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Flow/FlowController.cs",
+    "from_class": "FlowController",
+    "to_type": "LogWarning",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Flow/FlowController.cs",
+    "from_class": "FlowController",
+    "to_type": "MainMenu",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Flow/FlowController.cs",
+    "from_class": "FlowController",
+    "to_type": "No",
     "relation_type": "uses",
     "strength": 1
   },
@@ -15717,6 +15780,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Flow/FlowController.cs",
     "from_class": "FlowController",
+    "to_type": "ResetRunProgress",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Flow/FlowController.cs",
+    "from_class": "FlowController",
     "to_type": "ResolveStageFlowController",
     "relation_type": "uses",
     "strength": 1
@@ -15725,13 +15795,6 @@
     "from_file": "Project 2048/Assets/Scripts/Flow/FlowController.cs",
     "from_class": "FlowController",
     "to_type": "RestartStageNextFrame",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Flow/FlowController.cs",
-    "from_class": "FlowController",
-    "to_type": "Restore",
     "relation_type": "uses",
     "strength": 1
   },
@@ -15752,6 +15815,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Flow/FlowController.cs",
     "from_class": "FlowController",
+    "to_type": "RunProgress",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Flow/FlowController.cs",
+    "from_class": "FlowController",
     "to_type": "Save",
     "relation_type": "uses",
     "strength": 1
@@ -15759,7 +15829,28 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Flow/FlowController.cs",
     "from_class": "FlowController",
+    "to_type": "SaveCurrentRun",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Flow/FlowController.cs",
+    "from_class": "FlowController",
+    "to_type": "SaveInitialRun",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Flow/FlowController.cs",
+    "from_class": "FlowController",
     "to_type": "SaveLoadManager",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Flow/FlowController.cs",
+    "from_class": "FlowController",
+    "to_type": "SaveRun",
     "relation_type": "uses",
     "strength": 1
   },
@@ -15851,6 +15942,20 @@
     "from_file": "Project 2048/Assets/Scripts/Flow/FlowController.cs",
     "from_class": "FlowController",
     "to_type": "TODO",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Flow/FlowController.cs",
+    "from_class": "FlowController",
+    "to_type": "TryApplyLoadedRunProgress",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Flow/FlowController.cs",
+    "from_class": "FlowController",
+    "to_type": "TryLoadGameContext",
     "relation_type": "uses",
     "strength": 1
   },
@@ -16508,6 +16613,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Flow/StageFlowController.cs",
     "from_class": "StageFlowController",
+    "to_type": "InitializeRunProgress",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Flow/StageFlowController.cs",
+    "from_class": "StageFlowController",
     "to_type": "Instantiate",
     "relation_type": "uses",
     "strength": 1
@@ -16684,6 +16796,20 @@
     "from_file": "Project 2048/Assets/Scripts/Flow/StageFlowController.cs",
     "from_class": "StageFlowController",
     "to_type": "Prototype",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Flow/StageFlowController.cs",
+    "from_class": "StageFlowController",
+    "to_type": "Reset",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Flow/StageFlowController.cs",
+    "from_class": "StageFlowController",
+    "to_type": "ResetRunProgress",
     "relation_type": "uses",
     "strength": 1
   },
@@ -28961,6 +29087,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Rewards/RunProgress.cs",
     "from_class": "RunProgress",
+    "to_type": "RestoreState",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RunProgress.cs",
+    "from_class": "RunProgress",
     "to_type": "Rewards",
     "relation_type": "uses",
     "strength": 1
@@ -28996,6 +29129,734 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Rewards/RunProgress.cs",
     "from_class": "RunProgress",
+    "to_type": "UnityEngine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/GameSaveData.cs",
+    "from_class": "GameSaveData",
+    "to_type": "RunProgress",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/GameSaveData.cs",
+    "from_class": "GameSaveData",
+    "to_type": "ApplyTo",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/GameSaveData.cs",
+    "from_class": "GameSaveData",
+    "to_type": "bool",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/GameSaveData.cs",
+    "from_class": "GameSaveData",
+    "to_type": "Core",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/GameSaveData.cs",
+    "from_class": "GameSaveData",
+    "to_type": "CurrentHp",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/GameSaveData.cs",
+    "from_class": "GameSaveData",
+    "to_type": "CurrentStageIndex",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/GameSaveData.cs",
+    "from_class": "GameSaveData",
+    "to_type": "ExtraBoardMoveCount",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/GameSaveData.cs",
+    "from_class": "GameSaveData",
+    "to_type": "float",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/GameSaveData.cs",
+    "from_class": "GameSaveData",
+    "to_type": "From",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/GameSaveData.cs",
+    "from_class": "GameSaveData",
+    "to_type": "GameContext",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/GameSaveData.cs",
+    "from_class": "GameSaveData",
+    "to_type": "HasCurrentHp",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/GameSaveData.cs",
+    "from_class": "GameSaveData",
+    "to_type": "int",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/GameSaveData.cs",
+    "from_class": "GameSaveData",
+    "to_type": "IsRunActive",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/GameSaveData.cs",
+    "from_class": "GameSaveData",
+    "to_type": "NextCombatAttackPowerBonus",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/GameSaveData.cs",
+    "from_class": "GameSaveData",
+    "to_type": "NextCombatBoardMoveCountBonus",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/GameSaveData.cs",
+    "from_class": "GameSaveData",
+    "to_type": "NextCombatDefensePowerBonus",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/GameSaveData.cs",
+    "from_class": "GameSaveData",
+    "to_type": "PermanentAttackPowerBonus",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/GameSaveData.cs",
+    "from_class": "GameSaveData",
+    "to_type": "PermanentCriticalChanceBonus",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/GameSaveData.cs",
+    "from_class": "GameSaveData",
+    "to_type": "PermanentCriticalDamageMultiplierBonus",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/GameSaveData.cs",
+    "from_class": "GameSaveData",
+    "to_type": "PermanentDefensePowerBonus",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/GameSaveData.cs",
+    "from_class": "GameSaveData",
+    "to_type": "PermanentMaxHpBonus",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/GameSaveData.cs",
+    "from_class": "GameSaveData",
+    "to_type": "Project2048",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/GameSaveData.cs",
+    "from_class": "GameSaveData",
+    "to_type": "RestoreState",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/GameSaveData.cs",
+    "from_class": "GameSaveData",
+    "to_type": "Rewards",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/GameSaveData.cs",
+    "from_class": "GameSaveData",
+    "to_type": "RunProgress",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/GameSaveData.cs",
+    "from_class": "GameSaveData",
+    "to_type": "Save",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/GameSaveData.cs",
+    "from_class": "GameSaveData",
+    "to_type": "Serializable",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/GameSaveData.cs",
+    "from_class": "GameSaveData",
+    "to_type": "SetRunActive",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/GameSaveData.cs",
+    "from_class": "GameSaveData",
+    "to_type": "SetStageIndex",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/GameSaveData.cs",
+    "from_class": "GameSaveData",
+    "to_type": "string",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/GameSaveData.cs",
+    "from_class": "GameSaveData",
+    "to_type": "System",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/GameSaveData.cs",
+    "from_class": "GameSaveData",
+    "to_type": "ToString",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/GameSaveData.cs",
+    "from_class": "GameSaveData",
+    "to_type": "UtcNow",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/ISaveRepository.cs",
+    "from_class": "ISaveRepository",
+    "to_type": "Delete",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/ISaveRepository.cs",
+    "from_class": "ISaveRepository",
+    "to_type": "Exists",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/ISaveRepository.cs",
+    "from_class": "ISaveRepository",
+    "to_type": "GameSaveData",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/ISaveRepository.cs",
+    "from_class": "ISaveRepository",
+    "to_type": "Load",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/ISaveRepository.cs",
+    "from_class": "ISaveRepository",
+    "to_type": "Project2048",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/ISaveRepository.cs",
+    "from_class": "ISaveRepository",
+    "to_type": "Save",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/JsonFileSaveRepository.cs",
+    "from_class": "JsonFileSaveRepository",
+    "to_type": "ISaveRepository",
+    "relation_type": "implements",
+    "strength": 4
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/JsonFileSaveRepository.cs",
+    "from_class": "JsonFileSaveRepository",
+    "to_type": "CreateDirectory",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/JsonFileSaveRepository.cs",
+    "from_class": "JsonFileSaveRepository",
+    "to_type": "Delete",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/JsonFileSaveRepository.cs",
+    "from_class": "JsonFileSaveRepository",
+    "to_type": "Directory",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/JsonFileSaveRepository.cs",
+    "from_class": "JsonFileSaveRepository",
+    "to_type": "Exists",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/JsonFileSaveRepository.cs",
+    "from_class": "JsonFileSaveRepository",
+    "to_type": "File",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/JsonFileSaveRepository.cs",
+    "from_class": "JsonFileSaveRepository",
+    "to_type": "FromJson",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/JsonFileSaveRepository.cs",
+    "from_class": "JsonFileSaveRepository",
+    "to_type": "GameSaveData",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/JsonFileSaveRepository.cs",
+    "from_class": "JsonFileSaveRepository",
+    "to_type": "GetDirectoryName",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/JsonFileSaveRepository.cs",
+    "from_class": "JsonFileSaveRepository",
+    "to_type": "IO",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/JsonFileSaveRepository.cs",
+    "from_class": "JsonFileSaveRepository",
+    "to_type": "ISaveRepository",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/JsonFileSaveRepository.cs",
+    "from_class": "JsonFileSaveRepository",
+    "to_type": "IsNullOrEmpty",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/JsonFileSaveRepository.cs",
+    "from_class": "JsonFileSaveRepository",
+    "to_type": "JsonUtility",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/JsonFileSaveRepository.cs",
+    "from_class": "JsonFileSaveRepository",
+    "to_type": "Load",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/JsonFileSaveRepository.cs",
+    "from_class": "JsonFileSaveRepository",
+    "to_type": "LogError",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/JsonFileSaveRepository.cs",
+    "from_class": "JsonFileSaveRepository",
+    "to_type": "Path",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/JsonFileSaveRepository.cs",
+    "from_class": "JsonFileSaveRepository",
+    "to_type": "Project2048",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/JsonFileSaveRepository.cs",
+    "from_class": "JsonFileSaveRepository",
+    "to_type": "ReadAllText",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/JsonFileSaveRepository.cs",
+    "from_class": "JsonFileSaveRepository",
+    "to_type": "Save",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/JsonFileSaveRepository.cs",
+    "from_class": "JsonFileSaveRepository",
+    "to_type": "string",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/JsonFileSaveRepository.cs",
+    "from_class": "JsonFileSaveRepository",
+    "to_type": "System",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/JsonFileSaveRepository.cs",
+    "from_class": "JsonFileSaveRepository",
+    "to_type": "ToJson",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/JsonFileSaveRepository.cs",
+    "from_class": "JsonFileSaveRepository",
+    "to_type": "UnityEngine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/JsonFileSaveRepository.cs",
+    "from_class": "JsonFileSaveRepository",
+    "to_type": "WriteAllText",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/SaveLoadManager.cs",
+    "from_class": "SaveLoadManager",
+    "to_type": "JsonFileSaveRepository",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/SaveLoadManager.cs",
+    "from_class": "SaveLoadManager",
+    "to_type": "RunProgress",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/SaveLoadManager.cs",
+    "from_class": "SaveLoadManager",
+    "to_type": "MonoBehaviour",
+    "relation_type": "inherits",
+    "strength": 4
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/SaveLoadManager.cs",
+    "from_class": "SaveLoadManager",
+    "to_type": "ApplyTo",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/SaveLoadManager.cs",
+    "from_class": "SaveLoadManager",
+    "to_type": "Core",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/SaveLoadManager.cs",
+    "from_class": "SaveLoadManager",
+    "to_type": "DefaultSaveFilePath",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/SaveLoadManager.cs",
+    "from_class": "SaveLoadManager",
+    "to_type": "Delete",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/SaveLoadManager.cs",
+    "from_class": "SaveLoadManager",
+    "to_type": "DeleteSave",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/SaveLoadManager.cs",
+    "from_class": "SaveLoadManager",
+    "to_type": "Exists",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/SaveLoadManager.cs",
+    "from_class": "SaveLoadManager",
+    "to_type": "From",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/SaveLoadManager.cs",
+    "from_class": "SaveLoadManager",
+    "to_type": "GameContext",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/SaveLoadManager.cs",
+    "from_class": "SaveLoadManager",
+    "to_type": "GameSaveData",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/SaveLoadManager.cs",
+    "from_class": "SaveLoadManager",
+    "to_type": "HasLoadedRunProgress",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/SaveLoadManager.cs",
+    "from_class": "SaveLoadManager",
+    "to_type": "HasSave",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/SaveLoadManager.cs",
+    "from_class": "SaveLoadManager",
+    "to_type": "Initialize",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/SaveLoadManager.cs",
+    "from_class": "SaveLoadManager",
+    "to_type": "ISaveRepository",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/SaveLoadManager.cs",
+    "from_class": "SaveLoadManager",
+    "to_type": "JsonFileSaveRepository",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/SaveLoadManager.cs",
+    "from_class": "SaveLoadManager",
+    "to_type": "Load",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/SaveLoadManager.cs",
+    "from_class": "SaveLoadManager",
+    "to_type": "LogError",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/SaveLoadManager.cs",
+    "from_class": "SaveLoadManager",
+    "to_type": "Project2048",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/SaveLoadManager.cs",
+    "from_class": "SaveLoadManager",
+    "to_type": "Rewards",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/SaveLoadManager.cs",
+    "from_class": "SaveLoadManager",
+    "to_type": "RunProgress",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/SaveLoadManager.cs",
+    "from_class": "SaveLoadManager",
+    "to_type": "Save",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/SaveLoadManager.cs",
+    "from_class": "SaveLoadManager",
+    "to_type": "SaveInitialRun",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/SaveLoadManager.cs",
+    "from_class": "SaveLoadManager",
+    "to_type": "SavePaths",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/SaveLoadManager.cs",
+    "from_class": "SaveLoadManager",
+    "to_type": "SaveRun",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/SaveLoadManager.cs",
+    "from_class": "SaveLoadManager",
+    "to_type": "TryApplyLoadedRunProgress",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/SaveLoadManager.cs",
+    "from_class": "SaveLoadManager",
+    "to_type": "TryLoadGameContext",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/SaveLoadManager.cs",
+    "from_class": "SaveLoadManager",
+    "to_type": "UnityEngine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/SavePaths.cs",
+    "from_class": "SavePaths",
+    "to_type": "Application",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/SavePaths.cs",
+    "from_class": "SavePaths",
+    "to_type": "Combine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/SavePaths.cs",
+    "from_class": "SavePaths",
+    "to_type": "DefaultSaveFileName",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/SavePaths.cs",
+    "from_class": "SavePaths",
+    "to_type": "DefaultSaveFilePath",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/SavePaths.cs",
+    "from_class": "SavePaths",
+    "to_type": "IO",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/SavePaths.cs",
+    "from_class": "SavePaths",
+    "to_type": "Path",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/SavePaths.cs",
+    "from_class": "SavePaths",
+    "to_type": "Project2048",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/SavePaths.cs",
+    "from_class": "SavePaths",
+    "to_type": "Save",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/SavePaths.cs",
+    "from_class": "SavePaths",
+    "to_type": "SaveDirectoryName",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/SavePaths.cs",
+    "from_class": "SavePaths",
+    "to_type": "string",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/SavePaths.cs",
+    "from_class": "SavePaths",
+    "to_type": "System",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/SavePaths.cs",
+    "from_class": "SavePaths",
     "to_type": "UnityEngine",
     "relation_type": "uses",
     "strength": 1
@@ -31649,6 +32510,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
     "from_class": "MainMenuController",
+    "to_type": "Buttons",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "from_class": "MainMenuController",
     "to_type": "ConfirmPopup",
     "relation_type": "uses",
     "strength": 1
@@ -31712,6 +32580,20 @@
   {
     "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
     "from_class": "MainMenuController",
+    "to_type": "Groups",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "from_class": "MainMenuController",
+    "to_type": "HasSave",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "from_class": "MainMenuController",
     "to_type": "Instance",
     "relation_type": "uses",
     "strength": 1
@@ -31726,7 +32608,35 @@
   {
     "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
     "from_class": "MainMenuController",
-    "to_type": "Log",
+    "to_type": "LogError",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "from_class": "MainMenuController",
+    "to_type": "Main",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "from_class": "MainMenuController",
+    "to_type": "OnBackClicked",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "from_class": "MainMenuController",
+    "to_type": "OnEnable",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "from_class": "MainMenuController",
+    "to_type": "OnGameStartClicked",
     "relation_type": "uses",
     "strength": 1
   },
@@ -31768,6 +32678,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
     "from_class": "MainMenuController",
+    "to_type": "Popups",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "from_class": "MainMenuController",
     "to_type": "Project2048",
     "relation_type": "uses",
     "strength": 1
@@ -31783,6 +32700,27 @@
     "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
     "from_class": "MainMenuController",
     "to_type": "QuitGame",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "from_class": "MainMenuController",
+    "to_type": "RefreshLoadGameButton",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "from_class": "MainMenuController",
+    "to_type": "SaveLoadManager",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "from_class": "MainMenuController",
+    "to_type": "SetActive",
     "relation_type": "uses",
     "strength": 1
   },
@@ -31810,7 +32748,35 @@
   {
     "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
     "from_class": "MainMenuController",
+    "to_type": "ShowMainButtons",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "from_class": "MainMenuController",
+    "to_type": "ShowStartButtons",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "from_class": "MainMenuController",
+    "to_type": "Start",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "from_class": "MainMenuController",
     "to_type": "StartNewGame",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "from_class": "MainMenuController",
+    "to_type": "StartSaveGame",
     "relation_type": "uses",
     "strength": 1
   },

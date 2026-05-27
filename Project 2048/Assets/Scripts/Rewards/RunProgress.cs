@@ -72,6 +72,32 @@ namespace Project2048.Rewards
             equippedSkills?.Clear();
         }
 
+        public void RestoreState(
+            bool restoredHasCurrentHp,
+            int restoredCurrentHp,
+            int restoredExtraBoardMoveCount,
+            int restoredPermanentMaxHpBonus,
+            int restoredPermanentAttackPowerBonus,
+            int restoredPermanentDefensePowerBonus,
+            float restoredPermanentCriticalChanceBonus,
+            float restoredPermanentCriticalDamageMultiplierBonus,
+            int restoredNextCombatAttackPowerBonus,
+            int restoredNextCombatDefensePowerBonus,
+            int restoredNextCombatBoardMoveCountBonus)
+        {
+            hasCurrentHp = restoredHasCurrentHp;
+            currentHp = Mathf.Max(0, restoredCurrentHp);
+            extraBoardMoveCount = Mathf.Max(0, restoredExtraBoardMoveCount);
+            permanentMaxHpBonus = Mathf.Max(0, restoredPermanentMaxHpBonus);
+            permanentAttackPowerBonus = Mathf.Max(0, restoredPermanentAttackPowerBonus);
+            permanentDefensePowerBonus = Mathf.Max(0, restoredPermanentDefensePowerBonus);
+            permanentCriticalChanceBonus = Mathf.Clamp01(restoredPermanentCriticalChanceBonus);
+            permanentCriticalDamageMultiplierBonus = Mathf.Max(0f, restoredPermanentCriticalDamageMultiplierBonus);
+            nextCombatAttackPowerBonus = Mathf.Max(0, restoredNextCombatAttackPowerBonus);
+            nextCombatDefensePowerBonus = Mathf.Max(0, restoredNextCombatDefensePowerBonus);
+            nextCombatBoardMoveCountBonus = Mathf.Max(0, restoredNextCombatBoardMoveCountBonus);
+        }
+
         public void CapturePlayer(PlayerCombatController player)
         {
             if (player == null)

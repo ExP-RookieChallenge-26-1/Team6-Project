@@ -98,7 +98,7 @@ MonoBehaviour:
       autoDestroySeconds: 1.25
   - actionId: hit
     effect:
-      sfxClip: {fileID: 8300000, guid: be03cfac9eef67d4ab7b58033860d4fe, type: 3}
+      sfxClip: {fileID: 8300000, guid: b26f16fa7a697634a87e3641cbe4d9f5, type: 3}
       vfxPrefab: {fileID: 0}
       animationClip: {fileID: 0}
       particleEffect:

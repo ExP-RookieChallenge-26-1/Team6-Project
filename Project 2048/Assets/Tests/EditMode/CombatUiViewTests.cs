@@ -20,8 +20,11 @@ namespace Project2048.Tests
     {
         private const string HpBarSpritePath = "Assets/Art/UI/WideHexHpBar.png";
         private const string TopCombatBackgroundSpriteGuid = "ac20f033bdceb3149b44f3a942308b67";
-        private const string BottomCombatBackgroundSpriteGuid = "d2ec658346ab0de45bd74ab3b7c48aa6";
-        private const string BottomCombatBackgroundLitSpriteGuid = "acc36fe0eb392f643919d7937f0b0301";
+        private const string BottomCombatBackgroundSpriteGuid = "cc30ddc0c7eae2049b751203e84d9c4b";
+        private const string BottomCombatBackgroundLitSpriteGuid = "515518d798eb1764c965c9a1c6f4c472";
+        private const string AttackIntentIconSpriteGuid = "68f332d9bf83b46f4568e77fd4bcdc88";
+        private const string DefenseIntentIconSpriteGuid = "02048f9cb8476d1bc11e6380c2f185a9";
+        private const string FearIntentIconSpriteGuid = "58190a852f3a9df835c30baaa3209362";
         private static readonly Vector2 ExpectedSkillLanternSlotSize = new(156f, 156f);
         private readonly System.Collections.Generic.List<Object> ownedObjects = new();
 
@@ -1158,6 +1161,32 @@ namespace Project2048.Tests
             Assert.That(backgroundRenderer.transform.localPosition.y, Is.EqualTo(2.75f).Within(0.001f));
             Assert.That(backgroundRenderer.transform.localScale.x, Is.EqualTo(0.5208333f).Within(0.0001f));
             Assert.That(backgroundRenderer.transform.localScale.y, Is.EqualTo(0.5208333f).Within(0.0001f));
+        }
+
+        [Test]
+        public void BattleScene_UsesAuthoredIntentIconSprites()
+        {
+            EditorSceneManager.OpenScene("Assets/Scenes/BattleScene.unity");
+            var view = Object.FindAnyObjectByType<CombatUiView>(FindObjectsInactive.Include);
+
+            Assert.That(view, Is.Not.Null);
+
+            var serializedView = new SerializedObject(view);
+            var attackIcon = serializedView.FindProperty("attackIntentSprite").objectReferenceValue as Sprite;
+            var defenseIcon = serializedView.FindProperty("defenseIntentSprite").objectReferenceValue as Sprite;
+            var fearIcon = serializedView.FindProperty("fearIntentSprite").objectReferenceValue as Sprite;
+            var intentBubble = serializedView.FindProperty("intentBubble").objectReferenceValue as GameObject;
+
+            Assert.That(AssetGuid(attackIcon), Is.EqualTo(AttackIntentIconSpriteGuid));
+            Assert.That(AssetGuid(defenseIcon), Is.EqualTo(DefenseIntentIconSpriteGuid));
+            Assert.That(AssetGuid(fearIcon), Is.EqualTo(FearIntentIconSpriteGuid));
+
+            Assert.That(intentBubble, Is.Not.Null);
+            var intentBubbleImage = intentBubble.GetComponent<Image>();
+            Assert.That(intentBubbleImage, Is.Not.Null);
+            Assert.That(intentBubbleImage.sprite, Is.SameAs(attackIcon));
+            Assert.That(intentBubbleImage.color, Is.EqualTo(Color.white));
+            Assert.That(intentBubbleImage.preserveAspect, Is.True);
         }
 
         [Test]

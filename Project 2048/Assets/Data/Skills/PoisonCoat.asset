@@ -60,7 +60,7 @@ MonoBehaviour:
   availability: 0
   icon: {fileID: 0}
   activationEffect:
-    sfxClip: {fileID: 0}
+    sfxClip: {fileID: 8300000, guid: f14a9cc4988c4b30b9835d1967a70b92, type: 3}
     vfxPrefab: {fileID: 0}
     animationClip: {fileID: 0}
     particleEffect:

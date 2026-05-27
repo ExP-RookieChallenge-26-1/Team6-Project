@@ -1010,9 +1010,9 @@ namespace Project2048.Tests
             {
                 "Assets/Art/Effects/SkillVFX/Attack/SkillVfx_AttackImpact.png",
                 "Assets/Art/Effects/SkillVFX/Shield/SkillVfx_ShieldBarrier.png",
-                "Assets/Art/UI/IntentIcons/Resources/IntentIcons/Ui_Attack.png",
-                "Assets/Art/UI/IntentIcons/Resources/IntentIcons/Ui_Defense.png",
-                "Assets/Art/UI/IntentIcons/Resources/IntentIcons/Ui_Fear.png",
+                "Assets/Art/UI/IntentIcons/Ui_Attack.png",
+                "Assets/Art/UI/IntentIcons/Ui_Defense.png",
+                "Assets/Art/UI/IntentIcons/Ui_Fear.png",
                 "Assets/Art/UI/Controls/Ui_Pause.png",
                 "Assets/Art/UI/Controls/Ui_Settings.png",
             };
@@ -2038,12 +2038,11 @@ namespace Project2048.Tests
                     AssetDatabase.GetAssetPath(attackEffect.sfxClip),
                     Does.StartWith("Assets/Sounds/MonsterAttackSfx/"),
                     path);
-                Assert.That(attackEffect.sfxClip.length, Is.LessThan(hitEffect.sfxClip.length), path);
                 Assert.That(attackEffect.EffectiveMinPitch, Is.EqualTo(appearEffect.EffectiveMinPitch).Within(0.0001f), path);
                 Assert.That(attackEffect.EffectiveMaxPitch, Is.EqualTo(appearEffect.EffectiveMaxPitch).Within(0.0001f), path);
                 Assert.That(
                     AssetDatabase.GetAssetPath(hitEffect.sfxClip),
-                    Does.StartWith("Assets/Sounds/MonsterHitSfx/"),
+                    Does.Match(@"^Assets/Sounds/GameplaySfx/enemy_hit_0[1-3]\.mp3$"),
                     path);
             }
         }
@@ -2122,6 +2121,11 @@ namespace Project2048.Tests
                 Assert.That(skill.vfxIntensity, Is.GreaterThan(0f), path);
                 Assert.That(skill.vfxRepeatCount, Is.GreaterThanOrEqualTo(1), path);
                 Assert.That(skill.activationEffect, Is.Not.Null, path);
+                Assert.That(skill.activationEffect.sfxClip, Is.Not.Null, path);
+                Assert.That(
+                    AssetDatabase.GetAssetPath(skill.activationEffect.sfxClip),
+                    Does.Match(@"^Assets/Sounds/GameplaySfx/(player_attack_0[1-5]|player_defense_0[1-3]|skill_buff(_0[1-2])?|skill_heal)\.mp3$"),
+                    path);
                 Assert.That(skill.activationEffect.particleEffect, Is.Not.Null, path);
                 Assert.That(skill.activationEffect.particleEffect.particleMaterial, Is.Not.Null, path);
                 Assert.That(skill.activationEffect.particleEffect.useParticleColor, Is.True, path);

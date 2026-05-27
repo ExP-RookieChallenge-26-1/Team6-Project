@@ -31,18 +31,19 @@ namespace Project2048.Core
 
             flowController ??= GetComponent<FlowController>();
             saveLoadManager ??= GetComponent<SaveLoadManager>();
-            saveLoadManager ??= gameObject.AddComponent<SaveLoadManager>();
             if (flowController == null)
             {
                 Debug.LogError("FlowController is not assigned.");
                 return;
             }
 
-            if (saveLoadManager != null)
+            if (saveLoadManager == null)
             {
-                saveLoadManager.Initialize(gameContext);
+                Debug.LogError("SaveLoadManager is not assigned.");
+                return;
             }
 
+            saveLoadManager.Initialize(gameContext);
             flowController.Initialized(gameContext, saveLoadManager);
         }
 

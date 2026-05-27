@@ -5,10 +5,21 @@ using UnityEngine.UI;
 
 public class MainMenuController : MonoBehaviour
 {
-    [SerializeField] private Button newGameButton;
-    [SerializeField] private Button loadGameButton;
+    [Header("Button Groups")]
+    [SerializeField] private GameObject mainButtonGroup;
+    [SerializeField] private GameObject startButtonGroup;
+
+    [Header("Main Buttons")]
+    [SerializeField] private Button gameStartButton;
     [SerializeField] private Button settingButton;
     [SerializeField] private Button quitButton;
+
+    [Header("Start Buttons")]
+    [SerializeField] private Button newGameButton;
+    [SerializeField] private Button loadGameButton;
+    [SerializeField] private Button backButton;
+
+    [Header("Popups")]
     [SerializeField] private ConfirmPopup confirmPopup;
     [SerializeField] private SettingPopup settingPopup;
     [SerializeField] private FadeController fadeController;
@@ -17,14 +28,37 @@ public class MainMenuController : MonoBehaviour
 
     private void Awake()
     {
-        newGameButton.onClick.AddListener(OnNewGameClicked);
+        if (gameStartButton != null)
+        {
+            gameStartButton.onClick.AddListener(OnGameStartClicked);
+        }
+
+        if (newGameButton != null)
+        {
+            newGameButton.onClick.AddListener(OnNewGameClicked);
+        }
+
         if (loadGameButton != null)
         {
             loadGameButton.onClick.AddListener(OnLoadGameClicked);
         }
 
-        settingButton.onClick.AddListener(OnSettingClicked);
-        quitButton.onClick.AddListener(OnQuitClicked);
+        if (backButton != null)
+        {
+            backButton.onClick.AddListener(OnBackClicked);
+        }
+
+        if (settingButton != null)
+        {
+            settingButton.onClick.AddListener(OnSettingClicked);
+        }
+
+        if (quitButton != null)
+        {
+            quitButton.onClick.AddListener(OnQuitClicked);
+        }
+
+        ShowMainButtons();
         RefreshLoadGameButton();
     }
 
@@ -33,9 +67,52 @@ public class MainMenuController : MonoBehaviour
         RefreshLoadGameButton();
     }
 
+    private void Start()
+    {
+        RefreshLoadGameButton();
+    }
+
+    private void OnGameStartClicked()
+    {
+        ShowStartButtons();
+    }
+
+    private void OnBackClicked()
+    {
+        ShowMainButtons();
+    }
+
+    private void ShowMainButtons()
+    {
+        if (mainButtonGroup != null)
+        {
+            mainButtonGroup.SetActive(true);
+        }
+
+        if (startButtonGroup != null)
+        {
+            startButtonGroup.SetActive(false);
+        }
+    }
+
+    private void ShowStartButtons()
+    {
+        if (mainButtonGroup != null)
+        {
+            mainButtonGroup.SetActive(false);
+        }
+
+        if (startButtonGroup != null)
+        {
+            startButtonGroup.SetActive(true);
+        }
+
+        RefreshLoadGameButton();
+    }
+
     private void OnNewGameClicked()
     {
-        confirmPopup.Show("새 게임을 시작하면 저장 데이터가 삭제됩니다.\n계속하시겠습니까?", StartNewGame, null);
+        confirmPopup.Show("새 게임을 시작하면 기존 저장 데이터가 삭제됩니다.\n계속하시겠습니까?", StartNewGame, null);
     }
 
     private void StartNewGame()

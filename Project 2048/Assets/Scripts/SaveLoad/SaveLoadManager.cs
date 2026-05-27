@@ -30,6 +30,11 @@ namespace Project2048.Save
             saveRepository?.Save(GameSaveData.From(gameContext, runProgress));
         }
 
+        public void SaveInitialRun()
+        {
+            SaveRun(new RunProgress());
+        }
+
         public bool TryLoadGameContext()
         {
             if (gameContext == null)

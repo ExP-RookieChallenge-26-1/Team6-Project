@@ -91,6 +91,7 @@ namespace Project2048.Flow
             gameContext.SetGameState(GameContext.GameState.Loading);
 
             // TODO: Save story checkpoint if needed.
+            saveLoadManager?.SaveInitialRun();
 
             OnBattleSceneLoadRequested?.Invoke();
         }

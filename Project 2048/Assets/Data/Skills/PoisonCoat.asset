@@ -64,16 +64,16 @@ MonoBehaviour:
     vfxPrefab: {fileID: 0}
     animationClip: {fileID: 0}
     particleEffect:
-      objectName:
+      objectName: PoisonCoatSkillParticles
       particlePrefab: {fileID: 0}
-      particleMaterial: {fileID: 0}
-      useParticleColor: 0
-      particleColor: {r: 1, g: 1, b: 1, a: 1}
+      particleMaterial: {fileID: 2100000, guid: 52db5297964ff1a019f11971b256efa6, type: 2}
+      useParticleColor: 1
+      particleColor: {r: 0.35, g: 0.9, b: 0.25, a: 1}
       lifetimeSeconds: 0.8
-      burstCount: 16
-      startSpeed: 0.6
-      startSize: 0.12
-      swirl: 0
+      burstCount: 28
+      startSpeed: 0.402
+      startSize: 0.136
+      swirl: 1
     volumeScale: 1
     minPitch: 1
     maxPitch: 1

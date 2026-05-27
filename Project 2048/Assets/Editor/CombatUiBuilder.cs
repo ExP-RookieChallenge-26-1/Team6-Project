@@ -335,7 +335,7 @@ namespace Project2048.PrototypeEditor
             player.attackPower = 10;
             player.initialBoardMoveCount = 12;
             player.boardMoveCountBonus = 0;
-            player.startingSkills = new List<SkillSO> { gatherLight, lightGuard, flash, quickStab };
+            player.startingSkills = new List<SkillSO> { lightShot, lowStance, flash, gatherLight };
             player.portrait = LoadSprite(PlayerSpritePath) ?? player.portrait;
             EditorUtility.SetDirty(player);
 

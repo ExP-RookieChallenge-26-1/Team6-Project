@@ -12,8 +12,14 @@ namespace Project2048.EditorTools
         private const string ShaderGraphTemplatePath =
             "Packages/com.unity.shadergraph/GraphTemplates/Cross Pipeline/0_Particle Unlit.shadergraph";
 
-        private const string ShaderGraphPath = "Assets/Shaders/Effects/HolyFireParticle.shadergraph";
-        private const string PrefabPath = "Assets/Prefabs/Effects/HolyFireball_Attack3.prefab";
+        private const string SkillVfxRootPath = "Assets/Art/Effects/SkillVFX";
+        private const string HolyFireballRootPath = SkillVfxRootPath + "/HolyFireball";
+        private const string HolyFireballTexturePath = HolyFireballRootPath + "/Textures";
+        private const string MaterialPath = HolyFireballRootPath + "/Materials";
+        private const string PrefabFolderPath = HolyFireballRootPath + "/Prefabs";
+        private const string ShaderFolderPath = HolyFireballRootPath + "/Shaders";
+        private const string ShaderGraphPath = ShaderFolderPath + "/HolyFireParticle.shadergraph";
+        private const string PrefabPath = PrefabFolderPath + "/HolyFireball_Attack3.prefab";
         private const float VisualScale = 3f;
 
         private static readonly string[] LightProjectileSkillPaths =
@@ -25,23 +31,25 @@ namespace Project2048.EditorTools
         [MenuItem("Tools/Project2048/VFX/Rebuild Holy Fireball Attack 3")]
         public static void Rebuild()
         {
-            EnsureFolder("Assets/Shaders/Effects");
-            EnsureFolder("Assets/Art/Effects/HolyFireball");
-            EnsureFolder("Assets/Materials/Effects");
-            EnsureFolder("Assets/Prefabs/Effects");
+            EnsureFolder(SkillVfxRootPath);
+            EnsureFolder(HolyFireballRootPath);
+            EnsureFolder(HolyFireballTexturePath);
+            EnsureFolder(MaterialPath);
+            EnsureFolder(PrefabFolderPath);
+            EnsureFolder(ShaderFolderPath);
 
             EnsureShaderGraph();
-            var orbTexture = CreateTexture("Assets/Art/Effects/HolyFireball/HolyFire_Orb.png", BuildSoftOrb);
-            var wispTexture = CreateTexture("Assets/Art/Effects/HolyFireball/HolyFire_Wisp.png", BuildWisp);
-            var haloTexture = CreateTexture("Assets/Art/Effects/HolyFireball/HolyFire_Halo.png", BuildHalo);
-            var sparkTexture = CreateTexture("Assets/Art/Effects/HolyFireball/HolyFire_Spark.png", BuildSpark);
+            var orbTexture = CreateTexture($"{HolyFireballTexturePath}/HolyFire_Orb.png", BuildSoftOrb);
+            var wispTexture = CreateTexture($"{HolyFireballTexturePath}/HolyFire_Wisp.png", BuildWisp);
+            var haloTexture = CreateTexture($"{HolyFireballTexturePath}/HolyFire_Halo.png", BuildHalo);
+            var sparkTexture = CreateTexture($"{HolyFireballTexturePath}/HolyFire_Spark.png", BuildSpark);
 
             AssetDatabase.ImportAsset(ShaderGraphPath, ImportAssetOptions.ForceUpdate);
             var shader = LoadHolyParticleShader();
-            var coreMaterial = CreateMaterial("Assets/Materials/Effects/HolyFireball_Core.mat", shader, orbTexture);
-            var wispMaterial = CreateMaterial("Assets/Materials/Effects/HolyFireball_Wisp.mat", shader, wispTexture);
-            var haloMaterial = CreateMaterial("Assets/Materials/Effects/HolyFireball_Halo.mat", shader, haloTexture);
-            var sparkMaterial = CreateMaterial("Assets/Materials/Effects/HolyFireball_Spark.mat", shader, sparkTexture);
+            var coreMaterial = CreateMaterial($"{MaterialPath}/HolyFireball_Core.mat", shader, orbTexture);
+            var wispMaterial = CreateMaterial($"{MaterialPath}/HolyFireball_Wisp.mat", shader, wispTexture);
+            var haloMaterial = CreateMaterial($"{MaterialPath}/HolyFireball_Halo.mat", shader, haloTexture);
+            var sparkMaterial = CreateMaterial($"{MaterialPath}/HolyFireball_Spark.mat", shader, sparkTexture);
 
             var prefab = BuildPrefab(coreMaterial, wispMaterial, haloMaterial, sparkMaterial);
             AssignLightProjectileSkills(prefab);
@@ -763,9 +771,12 @@ namespace Project2048.EditorTools
                 skill.activationEffect.minPitch = 0.96f;
                 skill.activationEffect.maxPitch = 1.04f;
                 skill.activationEffect.sfxDelaySeconds = 0.3f;
-                skill.vfxFamily = SkillVfxFamily.LightProjectile;
-                skill.vfxScale = skill.skillId == "gather-light" ? 1.8f : 1f;
-                skill.vfxIntensity = skill.skillId == "gather-light" ? 1.4f : 1.1f;
+                var isGatherLight = skill.skillId == "gather-light";
+                skill.vfxFamily = isGatherLight ? SkillVfxFamily.LightBeam : SkillVfxFamily.LightProjectile;
+                skill.vfxPrimaryColor = isGatherLight ? new Color(0.86f, 0.96f, 1f) : skill.vfxPrimaryColor;
+                skill.vfxSecondaryColor = isGatherLight ? Color.white : skill.vfxSecondaryColor;
+                skill.vfxScale = isGatherLight ? 1.8f : 1f;
+                skill.vfxIntensity = isGatherLight ? 1.4f : 1.1f;
                 EditorUtility.SetDirty(skill);
             }
         }

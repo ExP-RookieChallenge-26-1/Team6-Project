@@ -123,6 +123,7 @@ namespace Project2048.Prototype
                 lightShot,
                 lowStance,
                 flash,
+                gatherLight,
             };
 
             var enemy = CreateRandomPrototypeEnemy();
@@ -406,7 +407,7 @@ namespace Project2048.Prototype
                     ConfigureReusableVfx(skill, SkillVfxFamily.LightProjectile, new Color(1f, 0.96f, 0.62f), Color.white, intensity: 1.1f);
                     break;
                 case "gather-light":
-                    ConfigureReusableVfx(skill, SkillVfxFamily.LightBeam, new Color(1f, 0.78f, 0.18f), new Color(1f, 1f, 0.82f), 1.8f, 1.4f);
+                    ConfigureReusableVfx(skill, SkillVfxFamily.LightBeam, new Color(0.86f, 0.96f, 1f), Color.white, 1.8f, 1.4f);
                     break;
                 case "light-guard":
                     ConfigureReusableVfx(skill, SkillVfxFamily.ShieldDome, new Color(1f, 0.86f, 0.28f), new Color(0.45f, 0.86f, 1f), 1.2f, 1.15f);

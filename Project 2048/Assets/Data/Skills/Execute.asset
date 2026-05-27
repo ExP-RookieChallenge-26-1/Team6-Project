@@ -64,15 +64,15 @@ MonoBehaviour:
     vfxPrefab: {fileID: 0}
     animationClip: {fileID: 0}
     particleEffect:
-      objectName:
+      objectName: ExecuteSkillParticles
       particlePrefab: {fileID: 0}
-      particleMaterial: {fileID: 0}
-      useParticleColor: 0
-      particleColor: {r: 1, g: 1, b: 1, a: 1}
-      lifetimeSeconds: 0.8
-      burstCount: 16
-      startSpeed: 0.6
-      startSize: 0.12
+      particleMaterial: {fileID: 2100000, guid: 4e5f30199110694336ce651e0fe533ce, type: 2}
+      useParticleColor: 1
+      particleColor: {r: 0.95, g: 0.9, b: 0.75, a: 1}
+      lifetimeSeconds: 0.55
+      burstCount: 37
+      startSpeed: 0.975
+      startSize: 0.19
       swirl: 0
     volumeScale: 1
     minPitch: 1

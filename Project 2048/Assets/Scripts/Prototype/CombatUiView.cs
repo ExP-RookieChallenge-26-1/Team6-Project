@@ -70,6 +70,9 @@ namespace Project2048.Prototype
         private const string HpBarInteriorName = "HpBarInterior";
         private const string HpBarOutlineName = "HpBarOutline";
         private const string StatusEffectTemplateName = "StatusEffectIconSample";
+        private const string AttackIntentIconResourcePath = "IntentIcons/Ui_Attack";
+        private const string DefenseIntentIconResourcePath = "IntentIcons/Ui_Defense";
+        private const string FearIntentIconResourcePath = "IntentIcons/Ui_Fear";
         private const float UiSfxDistance = 10000f;
         private static readonly string CostFormulaTooltipDescription =
             $"2048 코스트 환산식\nlog2(전체 타일 합) + log2(가장 큰 타일) x {CostConverter.LargestTileBonusMultiplier} - (타일 개수 - 1) / {CostConverter.FragmentationPenaltyDivisor}\n빈 칸, 장애물, 2의 거듭제곱이 아닌 타일은 제외";
@@ -165,6 +168,9 @@ namespace Project2048.Prototype
         [SerializeField] private Color defenseIntentColor = new(0.12f, 0.32f, 0.90f, 1f);
         [SerializeField] private Color darknessIntentColor = new(0.20f, 0.07f, 0.34f, 1f);
         [SerializeField] private Color fearIntentColor = new(0.45f, 0.03f, 0.06f, 1f);
+        [SerializeField] private Sprite attackIntentSprite;
+        [SerializeField] private Sprite defenseIntentSprite;
+        [SerializeField] private Sprite fearIntentSprite;
         [SerializeField] private Color playerHpFillColor = ThemeHpFillColor;
         [SerializeField] private Color enemyHpFillColor = ThemeHpFillColor;
         [SerializeField] private Color hpBarBackgroundColor = ThemeHpBarBackgroundColor;
@@ -533,14 +539,21 @@ namespace Project2048.Prototype
                 var visibleIntents = GetVisibleIntents(enemy);
                 var hasIntent = visibleIntents.Count > 0 && enemyIsAlive;
                 intentBubble.SetActive(hasIntent);
+                var primaryIntent = hasIntent ? visibleIntents[0] : null;
+                var intentIcon = ResolveIntentIcon(primaryIntent);
                 if (hasIntent && intentBubbleText != null)
                 {
-                    intentBubbleText.text = PrototypeCombatText.FormatIntents(visibleIntents);
+                    intentBubbleText.text = intentIcon != null
+                        ? string.Empty
+                        : PrototypeCombatText.FormatIntents(visibleIntents);
                 }
 
                 if (hasIntent && intentBubble.TryGetComponent<Image>(out var intentBubbleImage))
                 {
-                    intentBubbleImage.color = GetIntentBubbleColor(visibleIntents[0]);
+                    intentBubbleImage.sprite = intentIcon;
+                    intentBubbleImage.preserveAspect = intentIcon != null;
+                    intentBubbleImage.type = Image.Type.Simple;
+                    intentBubbleImage.color = intentIcon != null ? Color.white : GetIntentBubbleColor(primaryIntent);
                 }
             }
 
@@ -1083,6 +1096,29 @@ namespace Project2048.Prototype
                 EnemyIntentType.Debuff => GetDebuffColor(intent.debuffType),
                 _ => attackIntentColor,
             };
+        }
+
+        private Sprite ResolveIntentIcon(EnemyIntent intent)
+        {
+            ResolveIntentIconSprites();
+            if (intent == null)
+            {
+                return attackIntentSprite;
+            }
+
+            return intent.intentType switch
+            {
+                EnemyIntentType.Defense => defenseIntentSprite,
+                EnemyIntentType.Debuff => fearIntentSprite,
+                _ => attackIntentSprite,
+            };
+        }
+
+        private void ResolveIntentIconSprites()
+        {
+            attackIntentSprite ??= Resources.Load<Sprite>(AttackIntentIconResourcePath);
+            defenseIntentSprite ??= Resources.Load<Sprite>(DefenseIntentIconResourcePath);
+            fearIntentSprite ??= Resources.Load<Sprite>(FearIntentIconResourcePath);
         }
 
         private Color GetStatusEffectColor(CombatStatusEffectSnapshot effect)

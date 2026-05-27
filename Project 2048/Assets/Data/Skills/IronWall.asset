@@ -51,16 +51,16 @@ MonoBehaviour:
     vfxPrefab: {fileID: 0}
     animationClip: {fileID: 0}
     particleEffect:
-      objectName: 
+      objectName: IronWallSkillParticles
       particlePrefab: {fileID: 0}
-      particleMaterial: {fileID: 0}
-      useParticleColor: 0
-      particleColor: {r: 1, g: 1, b: 1, a: 1}
-      lifetimeSeconds: 0.8
-      burstCount: 16
-      startSpeed: 0.6
-      startSize: 0.12
-      swirl: 0
+      particleMaterial: {fileID: 2100000, guid: 45ec00e6f551b1eeb762958e709a5042, type: 2}
+      useParticleColor: 1
+      particleColor: {r: 0.42, g: 0.55, b: 0.72, a: 1}
+      lifetimeSeconds: 0.85
+      burstCount: 28
+      startSpeed: 0.3
+      startSize: 0.16
+      swirl: 1
     volumeScale: 1
     minPitch: 1
     maxPitch: 1

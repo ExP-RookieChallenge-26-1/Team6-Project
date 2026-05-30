@@ -154,10 +154,10 @@ RectTransform:
   - {fileID: 1307885152}
   m_Father: {fileID: 1168271808}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 1080, y: 1920}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &46419552
 MonoBehaviour:
@@ -179,7 +179,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 0}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1738,11 +1738,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Game.Core::Project2048.UI.LoadingUI
   root: {fileID: 46419550}
+  backgroundGraphic: {fileID: 46419552}
+  loadingText: {fileID: 149052886}
   progressSlider: {fileID: 1270084707}
   progressText: {fileID: 1307885153}
   loadingCanvas: {fileID: 1168271812}
   sortingOrder: 10000
   progressFillSpeed: 1.5
+  fadeDuration: 0.6
+  minimumOpaqueSeconds: 0.6
 --- !u!1 &1260759474
 GameObject:
   m_ObjectHideFlags: 0
@@ -2316,7 +2320,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1396706843
 RectTransform:
   m_ObjectHideFlags: 0

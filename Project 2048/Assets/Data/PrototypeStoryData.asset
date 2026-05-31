@@ -13,6 +13,48 @@ MonoBehaviour:
   m_Name: PrototypeStoryData
   m_EditorClassIdentifier: Game.Core::Project2048.Story.StoryDataSO
   steps:
-  - text: "\uC8FC\uC778\uACF5 : \uBB58\uD558\uBA74 \uB418\uC8E0?"
-  - text: "\uC0C1\uAD00 : \uC801\uC744 \uC8FD\uC5EC"
-  - text: "\uC8FC\uC778\uACF5 : \uC54C\uACA0\uC2B5\uB2C8\uB2E4."
+  - speakerName: "\uCC3D\uC870\uC8FC"
+    text: "\uB098\uC758 \uC544\uC774\uC57C"
+    shouldChangeBackground: 0
+  - speakerName: "\uCC3D\uC870\uC8FC"
+    text: "\uB108\uB294 \uC120\uD0DD\uBC1B\uC740 \uC874\uC7AC\uB780\uB2E4"
+    shouldChangeBackground: 0
+  - speakerName: "\uCC3D\uC870\uC8FC"
+    text: "\uC800 \uC5B4\uB460 \uC18D\uC73C\uB85C \uAC78\uC5B4 \uB4E4\uC5B4\uAC08
+      \uC218 \uC788\uB294 \uC774\uB294\u2026"
+    shouldChangeBackground: 0
+  - speakerName: "\uCC3D\uC870\uC8FC"
+    text: "\uC624\uC9C1 \uB108\uBFD0\uC774\uC57C"
+    shouldChangeBackground: 0
+  - speakerName: "\uCC3D\uC870\uC8FC"
+    text: "\uB124\uAC00 \uD0DC\uC5B4\uB09C \uC774\uC720"
+    shouldChangeBackground: 0
+  - speakerName: "\uCC3D\uC870\uC8FC"
+    text: "\uB124\uAC00 \uAC78\uC5B4\uAC00\uC57C \uD560 \uC6B4\uBA85\uC774\uB780\uB2E4"
+    shouldChangeBackground: 0
+  - speakerName: "\uCC3D\uC870\uC8FC"
+    text: "\uC790, \uB4F1\uBD88\uC744 \uB4E4\uC5B4\uB77C"
+    shouldChangeBackground: 0
+  - speakerName: "\uCC3D\uC870\uC8FC"
+    text: "\uB124 \uB4F1\uBD88\uB85C \uBB38\uBA85\uC758 \uBE5B\uC744 \uC9C0\uD558
+      \uAE4A\uC740 \uACF3\uAE4C\uC9C0 \uC804\uD574\uC8FC\uB834"
+    shouldChangeBackground: 0
+  - speakerName: "\uCC3D\uC870\uC8FC"
+    text: "\uB098\uB294 \uC5B8\uC81C\uB098 \uB108\uB97C \uC9C0\uCF1C\uBCF4\uACE0
+      \uC788\uB2E8\uB2E4"
+    shouldChangeBackground: 0
+  - speakerName: "\uD50C\uB808\uC774\uC5B4"
+    text: "\uBB38\uBA85\uC758 \uBE5B\uC744 \uC9C0\uD558\uAE4C\uC9C0 \uC804\uD558\uACA0\uC2B5\uB2C8\uB2E4"
+    shouldChangeBackground: 0
+  - speakerName: "\uD50C\uB808\uC774\uC5B4"
+    text: "\uB4DC\uB514\uC5B4 \uB3C4\uCC29\uD588\uAD70"
+    shouldChangeBackground: 1
+  - speakerName: "\uD50C\uB808\uC774\uC5B4"
+    text: "\uC5EC\uAE30\uAC00.... "
+    shouldChangeBackground: 0
+  - speakerName: "\uD50C\uB808\uC774\uC5B4"
+    text: "\uC9C0\uD558"
+    shouldChangeBackground: 0
+  - speakerName: "\uD50C\uB808\uC774\uC5B4"
+    text: "\uB0B4\uAC00 \uBE5B\uC744 \uC804\uD574\uC57C\uD574"
+    shouldChangeBackground: 0

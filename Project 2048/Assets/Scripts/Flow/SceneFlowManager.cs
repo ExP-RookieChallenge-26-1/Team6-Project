@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Project2048.UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -12,6 +13,7 @@ namespace Project2048.Flow
         private const string BattleSceneName = "BattleScene";
 
         [SerializeField] private FlowController flowController;
+        [SerializeField] private LoadingUI loadingUI;
         [SerializeField] private float minimumLoadingSeconds = 2f;
 
         public event Action<float> OnLoadProgressChanged;
@@ -20,6 +22,7 @@ namespace Project2048.Flow
         private void Awake()
         {
             flowController ??= GetComponent<FlowController>();
+            loadingUI ??= GetComponentInChildren<LoadingUI>(true);
         }
 
         private void OnEnable()
@@ -74,6 +77,11 @@ namespace Project2048.Flow
 
         private IEnumerator LoadSceneAsync(string sceneName)
         {
+            if (loadingUI != null)
+            {
+                yield return loadingUI.WaitForSceneLoadStart();
+            }
+
             var startTime = Time.unscaledTime;
             var operation = SceneManager.LoadSceneAsync(sceneName);
             if (operation == null)
@@ -91,12 +99,17 @@ namespace Project2048.Flow
 
             var elapsedTime = Time.unscaledTime - startTime;
             var remainingTime = minimumLoadingSeconds - elapsedTime;
-            if (remainingTime > 0f)
+            if ((loadingUI == null || !loadingUI.IsFadeOnlyPresentation) && remainingTime > 0f)
             {
                 yield return new WaitForSecondsRealtime(remainingTime);
             }
 
             OnLoadProgressChanged?.Invoke(1f);
+            if (loadingUI != null)
+            {
+                yield return loadingUI.CompleteSceneLoadPresentation();
+            }
+
             OnSceneLoadCompleted?.Invoke();
         }
     }

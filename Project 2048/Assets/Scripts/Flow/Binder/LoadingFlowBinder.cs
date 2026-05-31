@@ -26,7 +26,6 @@ namespace Project2048.Flow
             if (sceneFlowManager != null && loadingUI != null)
             {
                 sceneFlowManager.OnLoadProgressChanged += loadingUI.SetProgress;
-                sceneFlowManager.OnSceneLoadCompleted += loadingUI.Hide;
             }
         }
 
@@ -40,7 +39,6 @@ namespace Project2048.Flow
             if (sceneFlowManager != null && loadingUI != null)
             {
                 sceneFlowManager.OnLoadProgressChanged -= loadingUI.SetProgress;
-                sceneFlowManager.OnSceneLoadCompleted -= loadingUI.Hide;
             }
         }
     }

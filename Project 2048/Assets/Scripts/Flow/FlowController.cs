@@ -15,7 +15,7 @@ namespace Project2048.Flow
         private StageFlowController stageFlowController;
         private Coroutine restartStageCoroutine;
 
-        public event Action OnLoadingStarted;
+        public event Action<LoadingPresentationMode> OnLoadingStarted;
         public event Action OnMainMenuSceneLoadRequested;
         public event Action OnStorySceneLoadRequested;
         public event Action OnBattleSceneLoadRequested;
@@ -35,7 +35,7 @@ namespace Project2048.Flow
                 return;
             }
 
-            OnLoadingStarted?.Invoke();
+            OnLoadingStarted?.Invoke(LoadingPresentationMode.Progress);
 
             saveLoadManager?.DeleteSave();
             gameContext.SetGameState(GameContext.GameState.Loading);
@@ -57,7 +57,7 @@ namespace Project2048.Flow
                 return;
             }
 
-            OnLoadingStarted?.Invoke();
+            OnLoadingStarted?.Invoke(LoadingPresentationMode.Progress);
 
             gameContext.SetGameState(GameContext.GameState.Loading);
 
@@ -86,7 +86,7 @@ namespace Project2048.Flow
                 return;
             }
 
-            OnLoadingStarted?.Invoke();
+            OnLoadingStarted?.Invoke(LoadingPresentationMode.FadeOnly);
 
             gameContext.SetGameState(GameContext.GameState.Loading);
 
@@ -117,7 +117,7 @@ namespace Project2048.Flow
                 return;
             }
 
-            OnLoadingStarted?.Invoke();
+            OnLoadingStarted?.Invoke(LoadingPresentationMode.Progress);
             gameContext.SetGameState(GameContext.GameState.Loading);
             OnMainMenuSceneLoadRequested?.Invoke();
         }

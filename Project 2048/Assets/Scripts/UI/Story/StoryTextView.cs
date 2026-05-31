@@ -6,12 +6,12 @@ namespace Project2048.Story
     public class StoryTextView : MonoBehaviour
     {
         [SerializeField] private StoryController storyController;
+        [SerializeField] private TMP_Text speakerNameText;
         [SerializeField] private TMP_Text storyText;
 
         private void Awake()
         {
             storyController ??= GetComponentInParent<StoryController>();
-            storyText ??= GetComponent<TMP_Text>();
         }
 
         private void OnEnable()
@@ -36,17 +36,27 @@ namespace Project2048.Story
 
         private void HandleStoryStepChanged(StoryStep step)
         {
-            SetText(step != null ? step.text : string.Empty);
+            SetDialogue(
+                step != null ? step.speakerName : string.Empty,
+                step != null ? step.text : string.Empty);
         }
 
-        public void SetText(string text)
+        public void SetDialogue(string speakerName, string text)
         {
-            if (storyText == null)
+            if (speakerNameText != null)
             {
-                return;
+                speakerNameText.text = speakerName;
             }
 
-            storyText.text = text;
+            if (storyText != null)
+            {
+                storyText.text = text;
+            }
+        }
+
+        public void Clear()
+        {
+            SetDialogue(string.Empty, string.Empty);
         }
     }
 }

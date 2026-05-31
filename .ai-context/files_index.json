@@ -8659,9 +8659,9 @@
     "file_id": "Project 2048/Assets/Scripts/Flow/Binder/LoadingFlowBinder.cs",
     "path": "Project 2048/Assets/Scripts/Flow/Binder/LoadingFlowBinder.cs",
     "file_name": "LoadingFlowBinder.cs",
-    "content_hash": "5d698cedc8530fc6dc2a63cf1f351760a8e906a1",
-    "size": 1480,
-    "line_count": 48,
+    "content_hash": "03588162e217dfd23ddd4dbe79940b6d3fee0ca3",
+    "size": 1334,
+    "line_count": 46,
     "namespace": "Project2048.Flow",
     "using_list": [
       "Project2048.UI",
@@ -8727,8 +8727,6 @@
       "Show",
       "OnLoadProgressChanged",
       "SetProgress",
-      "OnSceneLoadCompleted",
-      "Hide",
       "OnDisable"
     ],
     "component_access_types": [
@@ -8859,8 +8857,8 @@
     "file_id": "Project 2048/Assets/Scripts/Flow/FlowController.cs",
     "path": "Project 2048/Assets/Scripts/Flow/FlowController.cs",
     "file_name": "FlowController.cs",
-    "content_hash": "654b35c1f115d6d963a7e4770d9e77f9b0b7efeb",
-    "size": 7640,
+    "content_hash": "d56425f75d80716a4f979b9d973c61e37a81d581",
+    "size": 7793,
     "line_count": 259,
     "namespace": "Project2048.Flow",
     "using_list": [
@@ -8972,6 +8970,7 @@
       "UnityEngine",
       "Flow",
       "FirstStageIndex",
+      "LoadingPresentationMode",
       "OnLoadingStarted",
       "OnMainMenuSceneLoadRequested",
       "OnStorySceneLoadRequested",
@@ -8981,6 +8980,7 @@
       "SetNewGame",
       "LogError",
       "Invoke",
+      "Progress",
       "DeleteSave",
       "SetGameState",
       "GameState",
@@ -8999,6 +8999,7 @@
       "MainMenu",
       "IsRunActive",
       "CompleteOpeningStory",
+      "FadeOnly",
       "SaveInitialRun",
       "CompleteBattleSceneLoad",
       "Playing",
@@ -9059,16 +9060,68 @@
     ]
   },
   {
+    "file_id": "Project 2048/Assets/Scripts/Flow/LoadingPresentationMode.cs",
+    "path": "Project 2048/Assets/Scripts/Flow/LoadingPresentationMode.cs",
+    "file_name": "LoadingPresentationMode.cs",
+    "content_hash": "21143ae13a3da864467206ffb73e8499b9a186c0",
+    "size": 118,
+    "line_count": 9,
+    "namespace": "Project2048.Flow",
+    "using_list": [],
+    "classes": [],
+    "main_class_name": "LoadingPresentationMode",
+    "unity_type": "None",
+    "methods": [],
+    "fields": [],
+    "properties": [],
+    "events": [],
+    "unity_messages": [],
+    "has_update": false,
+    "has_fixed_update": false,
+    "has_late_update": false,
+    "has_awake": false,
+    "has_start": false,
+    "has_on_enable": false,
+    "has_on_disable": false,
+    "serialize_field_count": 0,
+    "public_field_count": 0,
+    "get_component_count": 0,
+    "find_call_count": 0,
+    "new_keyword_count": 0,
+    "coroutine_count": 0,
+    "singleton_candidate": false,
+    "dont_destroy_on_load": false,
+    "referenced_types": [
+      "Project2048",
+      "Flow",
+      "LoadingPresentationMode",
+      "Progress",
+      "FadeOnly"
+    ],
+    "component_access_types": [],
+    "created_types": [],
+    "singleton_access_types": [],
+    "string_literals": [],
+    "numeric_literals": [],
+    "guessed_roles": [
+      "save-load"
+    ],
+    "summary_signals": [
+      "저장/불러오기 관련 로직 포함"
+    ]
+  },
+  {
     "file_id": "Project 2048/Assets/Scripts/Flow/SceneFlowManager.cs",
     "path": "Project 2048/Assets/Scripts/Flow/SceneFlowManager.cs",
     "file_name": "SceneFlowManager.cs",
-    "content_hash": "4bb0c5ff840d7aca5eaad79725423edf145b58cc",
-    "size": 2954,
-    "line_count": 104,
+    "content_hash": "1cf2f5a2358727a512b4b1c89bf24c708e44595c",
+    "size": 3421,
+    "line_count": 117,
     "namespace": "Project2048.Flow",
     "using_list": [
       "System",
       "System.Collections",
+      "Project2048.UI",
       "UnityEngine",
       "UnityEngine.SceneManagement"
     ],
@@ -9176,9 +9229,10 @@
       "string",
       "System",
       "Collections",
+      "Project2048",
+      "UI",
       "UnityEngine",
       "SceneManagement",
-      "Project2048",
       "Flow",
       "MainMenuSceneName",
       "MainMenu",
@@ -9187,10 +9241,12 @@
       "BattleSceneName",
       "BattleScene",
       "FlowController",
+      "LoadingUI",
       "OnLoadProgressChanged",
       "OnSceneLoadCompleted",
       "Awake",
       "GetComponent",
+      "GetComponentInChildren",
       "OnEnable",
       "OnMainMenuSceneLoadRequested",
       "LoadMainMenu",
@@ -9205,10 +9261,13 @@
       "Scene",
       "StartCoroutine",
       "LoadSceneAsync",
+      "WaitForSceneLoadStart",
       "SceneManager",
       "Clamp01",
       "Invoke",
-      "WaitForSecondsRealtime"
+      "IsFadeOnlyPresentation",
+      "WaitForSecondsRealtime",
+      "CompleteSceneLoadPresentation"
     ],
     "component_access_types": [
       "FlowController"
@@ -9234,11 +9293,12 @@
       "scene",
       "runtime",
       "save-load",
-      "combat",
-      "manager"
+      "ui",
+      "combat"
     ],
     "summary_signals": [
       "런타임 컴포넌트",
+      "UI 관련 로직 포함",
       "전투 계열 로직 포함",
       "저장/불러오기 관련 로직 포함",
       "컴포넌트 조회 사용"
@@ -20334,13 +20394,15 @@
     "file_id": "Project 2048/Assets/Scripts/Story/StoryController.cs",
     "path": "Project 2048/Assets/Scripts/Story/StoryController.cs",
     "file_name": "StoryController.cs",
-    "content_hash": "4c231d7dd65a6aa7fe6a9c50d3c0b596afbef296",
-    "size": 2003,
-    "line_count": 84,
+    "content_hash": "28a42fef01156d8607d97c362c8c39b07d248340",
+    "size": 4354,
+    "line_count": 166,
     "namespace": "Project2048.Story",
     "using_list": [
       "System",
-      "UnityEngine"
+      "System.Collections",
+      "UnityEngine",
+      "UnityEngine.UI"
     ],
     "classes": [
       {
@@ -20359,12 +20421,17 @@
     "main_class_name": "StoryController",
     "unity_type": "MonoBehaviour",
     "methods": [
+      "Awake",
       "Start",
       "StartStory",
       "Next",
       "ShowCurrentStep",
       "Skip",
-      "FinishStory"
+      "PlayCurrentStep",
+      "ShowCurrentStepRoutine",
+      "FinishStory",
+      "FinishStoryRoutine",
+      "SetNextButtonVisible"
     ],
     "fields": [
       {
@@ -20373,17 +20440,53 @@
         "access": "private",
         "serialized": false,
         "is_static": false
+      },
+      {
+        "name": "currentIndex",
+        "type": "int",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "storyRoutine",
+        "type": "Coroutine",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "isSequencePlaying",
+        "type": "bool",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "break",
+        "type": "yield",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "step",
+        "type": "StoryStep",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
       }
     ],
     "properties": [],
     "events": [],
     "unity_messages": [
+      "Awake",
       "Start"
     ],
     "has_update": false,
     "has_fixed_update": false,
     "has_late_update": false,
-    "has_awake": false,
+    "has_awake": true,
     "has_start": true,
     "has_on_enable": false,
     "has_on_disable": false,
@@ -20392,27 +20495,47 @@
     "get_component_count": 0,
     "find_call_count": 0,
     "new_keyword_count": 0,
-    "coroutine_count": 0,
+    "coroutine_count": 4,
     "singleton_candidate": false,
     "dont_destroy_on_load": false,
     "referenced_types": [
       "StoryDataSO",
+      "int",
+      "Coroutine",
+      "bool",
+      "StoryStep",
       "System",
+      "Collections",
       "UnityEngine",
+      "UI",
       "Project2048",
       "Story",
-      "StoryStep",
+      "StoryTextView",
+      "StoryBackgroundView",
+      "StoryLayoutView",
+      "Button",
       "OnStoryStepChanged",
       "OnStoryFinished",
+      "Awake",
+      "GetComponentInChildren",
       "Start",
       "StartStory",
       "Count",
       "FinishStory",
-      "ShowCurrentStep",
+      "PlayCurrentStep",
       "Next",
-      "UI",
+      "ShowCurrentStep",
+      "Skip",
+      "StopCoroutine",
+      "StartCoroutine",
+      "ShowCurrentStepRoutine",
+      "SetNextButtonVisible",
+      "Clear",
+      "PlayTransition",
       "Invoke",
-      "Skip"
+      "FinishStoryRoutine",
+      "PlayEndingLayout",
+      "SetActive"
     ],
     "component_access_types": [],
     "created_types": [],
@@ -20509,9 +20632,9 @@
     "file_id": "Project 2048/Assets/Scripts/Story/StoryStep.cs",
     "path": "Project 2048/Assets/Scripts/Story/StoryStep.cs",
     "file_name": "StoryStep.cs",
-    "content_hash": "943696fa168f2c067fa9f1a437f006e7353b6ae6",
-    "size": 133,
-    "line_count": 11,
+    "content_hash": "815a0b308901492621eaadab952a4240848c4baa",
+    "size": 212,
+    "line_count": 13,
     "namespace": "Project2048.Story",
     "using_list": [
       "System"
@@ -20533,8 +20656,22 @@
     "methods": [],
     "fields": [
       {
+        "name": "speakerName",
+        "type": "string",
+        "access": "public",
+        "serialized": false,
+        "is_static": false
+      },
+      {
         "name": "text",
         "type": "string",
+        "access": "public",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "shouldChangeBackground",
+        "type": "bool",
         "access": "public",
         "serialized": false,
         "is_static": false
@@ -20551,7 +20688,7 @@
     "has_on_enable": false,
     "has_on_disable": false,
     "serialize_field_count": 0,
-    "public_field_count": 1,
+    "public_field_count": 3,
     "get_component_count": 0,
     "find_call_count": 0,
     "new_keyword_count": 0,
@@ -20560,6 +20697,7 @@
     "dont_destroy_on_load": false,
     "referenced_types": [
       "string",
+      "bool",
       "System",
       "Project2048",
       "Story",
@@ -20792,12 +20930,13 @@
     "file_id": "Project 2048/Assets/Scripts/UI/Loading/LoadingUI.cs",
     "path": "Project 2048/Assets/Scripts/UI/Loading/LoadingUI.cs",
     "file_name": "LoadingUI.cs",
-    "content_hash": "cfe3b8519366a60a38c53b53762eb2aad8eef760",
-    "size": 3591,
-    "line_count": 137,
+    "content_hash": "7fa417d99ef95d80929bd89198d56d8ad351fb24",
+    "size": 7670,
+    "line_count": 271,
     "namespace": "Project2048.UI",
     "using_list": [
       "System.Collections",
+      "Project2048.Flow",
       "UnityEngine",
       "TMPro",
       "UnityEngine.UI"
@@ -20823,9 +20962,15 @@
       "Update",
       "Show",
       "Hide",
+      "WaitForSceneLoadStart",
+      "CompleteSceneLoadPresentation",
+      "WaitForSecondsRealtime",
       "SetProgress",
       "ApplyProgress",
       "UpdateProgressText",
+      "SetProgressVisible",
+      "FadeBackgroundTo",
+      "SetBackgroundAlpha",
       "GetRoot",
       "HideWhenProgressCompletes"
     ],
@@ -20850,6 +20995,55 @@
         "access": "private",
         "serialized": false,
         "is_static": false
+      },
+      {
+        "name": "fadeRoutine",
+        "type": "Coroutine",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "presentationMode",
+        "type": "LoadingPresentationMode",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "break",
+        "type": "yield",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "break",
+        "type": "yield",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "startAlpha",
+        "type": "float",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "elapsedTime",
+        "type": "float",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "color",
+        "type": "Color",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
       }
     ],
     "properties": [],
@@ -20867,27 +21061,35 @@
     "has_on_disable": false,
     "serialize_field_count": 0,
     "public_field_count": 0,
-    "get_component_count": 0,
+    "get_component_count": 1,
     "find_call_count": 0,
-    "new_keyword_count": 0,
-    "coroutine_count": 2,
+    "new_keyword_count": 1,
+    "coroutine_count": 7,
     "singleton_candidate": false,
     "dont_destroy_on_load": false,
     "referenced_types": [
       "float",
       "Coroutine",
+      "LoadingPresentationMode",
+      "Color",
       "System",
       "Collections",
+      "Project2048",
+      "Flow",
       "UnityEngine",
       "TMPro",
       "UI",
-      "Project2048",
-      "Slider",
+      "Graphic",
       "TMP_Text",
+      "Slider",
       "Canvas",
+      "Progress",
       "IsVisible",
       "GetRoot",
+      "IsFadeOnlyPresentation",
+      "FadeOnly",
       "Awake",
+      "GetComponent",
       "GetComponentInParent",
       "Hide",
       "Update",
@@ -20895,16 +21097,29 @@
       "ApplyProgress",
       "Show",
       "StopCoroutine",
+      "SetProgressVisible",
       "SetActive",
+      "SetBackgroundAlpha",
       "StartCoroutine",
+      "FadeBackgroundTo",
       "HideWhenProgressCompletes",
+      "WaitForSceneLoadStart",
+      "CompleteSceneLoadPresentation",
+      "WaitForSecondsRealtime",
       "SetProgress",
       "Clamp01",
       "UpdateProgressText",
-      "RoundToInt"
+      "RoundToInt",
+      "Max",
+      "Lerp",
+      "SmoothStep"
     ],
-    "component_access_types": [],
-    "created_types": [],
+    "component_access_types": [
+      "Graphic"
+    ],
+    "created_types": [
+      "WaitForSecondsRealtime"
+    ],
     "singleton_access_types": [],
     "string_literals": [
       "{Mathf.RoundToInt(progress * 100f)}%"
@@ -20912,22 +21127,26 @@
     "numeric_literals": [
       10000,
       1.5,
+      0.6,
       0,
       1,
       100,
+      0.01,
       0.999
     ],
     "guessed_roles": [
       "ui",
       "runtime",
       "save-load",
-      "player"
+      "player",
+      "scene"
     ],
     "summary_signals": [
       "런타임 컴포넌트",
       "Update 기반 처리 존재",
       "UI 관련 로직 포함",
-      "저장/불러오기 관련 로직 포함"
+      "저장/불러오기 관련 로직 포함",
+      "컴포넌트 조회 사용"
     ]
   },
   {
@@ -21170,12 +21389,290 @@
     ]
   },
   {
+    "file_id": "Project 2048/Assets/Scripts/UI/Story/StoryBackgroundView.cs",
+    "path": "Project 2048/Assets/Scripts/UI/Story/StoryBackgroundView.cs",
+    "file_name": "StoryBackgroundView.cs",
+    "content_hash": "e75bb36965f196256117e634b0fe48b463301d68",
+    "size": 2227,
+    "line_count": 83,
+    "namespace": "Project2048.Story",
+    "using_list": [
+      "System.Collections",
+      "UnityEngine",
+      "UnityEngine.UI"
+    ],
+    "classes": [
+      {
+        "name": "StoryBackgroundView",
+        "kind": "class",
+        "access": "public",
+        "base_types": [
+          "MonoBehaviour"
+        ],
+        "interfaces": [],
+        "attributes": [],
+        "is_partial": false,
+        "is_generic": false
+      }
+    ],
+    "main_class_name": "StoryBackgroundView",
+    "unity_type": "MonoBehaviour",
+    "methods": [
+      "Awake",
+      "PlayTransition",
+      "SetCurrentFill",
+      "PrepareFilledImage",
+      "SetAlpha"
+    ],
+    "fields": [
+      {
+        "name": "hasChangedBackground",
+        "type": "bool",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "break",
+        "type": "yield",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "elapsedTime",
+        "type": "float",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "color",
+        "type": "Color",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      }
+    ],
+    "properties": [],
+    "events": [],
+    "unity_messages": [
+      "Awake"
+    ],
+    "has_update": false,
+    "has_fixed_update": false,
+    "has_late_update": false,
+    "has_awake": true,
+    "has_start": false,
+    "has_on_enable": false,
+    "has_on_disable": false,
+    "serialize_field_count": 0,
+    "public_field_count": 0,
+    "get_component_count": 0,
+    "find_call_count": 0,
+    "new_keyword_count": 0,
+    "coroutine_count": 1,
+    "singleton_candidate": false,
+    "dont_destroy_on_load": false,
+    "referenced_types": [
+      "bool",
+      "float",
+      "Color",
+      "System",
+      "Collections",
+      "UnityEngine",
+      "UI",
+      "Project2048",
+      "Story",
+      "Image",
+      "Awake",
+      "SetAlpha",
+      "PlayTransition",
+      "PrepareFilledImage",
+      "Max",
+      "Clamp01",
+      "SetCurrentFill",
+      "SmoothStep",
+      "Type",
+      "Filled",
+      "FillMethod",
+      "Horizontal",
+      "OriginHorizontal",
+      "Left",
+      "Graphic"
+    ],
+    "component_access_types": [],
+    "created_types": [],
+    "singleton_access_types": [],
+    "string_literals": [],
+    "numeric_literals": [
+      0.75,
+      1,
+      0.01,
+      0
+    ],
+    "guessed_roles": [
+      "ui",
+      "runtime",
+      "save-load"
+    ],
+    "summary_signals": [
+      "런타임 컴포넌트",
+      "UI 관련 로직 포함",
+      "저장/불러오기 관련 로직 포함"
+    ]
+  },
+  {
+    "file_id": "Project 2048/Assets/Scripts/UI/Story/StoryLayoutView.cs",
+    "path": "Project 2048/Assets/Scripts/UI/Story/StoryLayoutView.cs",
+    "file_name": "StoryLayoutView.cs",
+    "content_hash": "8f2d766d3ff0b358e78c665aea8cefc93543fdb2",
+    "size": 2840,
+    "line_count": 74,
+    "namespace": "Project2048.Story",
+    "using_list": [
+      "System.Collections",
+      "UnityEngine"
+    ],
+    "classes": [
+      {
+        "name": "StoryLayoutView",
+        "kind": "class",
+        "access": "public",
+        "base_types": [
+          "MonoBehaviour"
+        ],
+        "interfaces": [],
+        "attributes": [],
+        "is_partial": false,
+        "is_generic": false
+      }
+    ],
+    "main_class_name": "StoryLayoutView",
+    "unity_type": "MonoBehaviour",
+    "methods": [
+      "PlayEndingLayout",
+      "SetDialogueAnchors",
+      "Vector2",
+      "SetBackgroundAnchors"
+    ],
+    "fields": [
+      {
+        "name": "break",
+        "type": "yield",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "startDialogueMaxY",
+        "type": "float",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "startBackgroundMinY",
+        "type": "float",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "startBackgroundMaxY",
+        "type": "float",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "backgroundAnchorDelta",
+        "type": "float",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "targetBackgroundMaxY",
+        "type": "float",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "elapsedTime",
+        "type": "float",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      }
+    ],
+    "properties": [],
+    "events": [],
+    "unity_messages": [],
+    "has_update": false,
+    "has_fixed_update": false,
+    "has_late_update": false,
+    "has_awake": false,
+    "has_start": false,
+    "has_on_enable": false,
+    "has_on_disable": false,
+    "serialize_field_count": 0,
+    "public_field_count": 0,
+    "get_component_count": 0,
+    "find_call_count": 0,
+    "new_keyword_count": 4,
+    "coroutine_count": 1,
+    "singleton_candidate": false,
+    "dont_destroy_on_load": false,
+    "referenced_types": [
+      "float",
+      "System",
+      "Collections",
+      "UnityEngine",
+      "Project2048",
+      "Story",
+      "RectTransform",
+      "PlayEndingLayout",
+      "Max",
+      "Clamp01",
+      "SmoothStep",
+      "Lerp",
+      "SetDialogueAnchors",
+      "SetBackgroundAnchors",
+      "Vector2"
+    ],
+    "component_access_types": [],
+    "created_types": [
+      "Vector2"
+    ],
+    "singleton_access_types": [],
+    "string_literals": [],
+    "numeric_literals": [
+      0.55,
+      0.6,
+      1,
+      0.01,
+      0
+    ],
+    "guessed_roles": [
+      "runtime",
+      "ui",
+      "save-load"
+    ],
+    "summary_signals": [
+      "런타임 컴포넌트",
+      "UI 관련 로직 포함",
+      "저장/불러오기 관련 로직 포함"
+    ]
+  },
+  {
     "file_id": "Project 2048/Assets/Scripts/UI/Story/StoryTextView.cs",
     "path": "Project 2048/Assets/Scripts/UI/Story/StoryTextView.cs",
     "file_name": "StoryTextView.cs",
-    "content_hash": "cbe4a7a41d5c36b59149c4c664996127cc15f83b",
-    "size": 1189,
-    "line_count": 53,
+    "content_hash": "36c312ea1a6cfc3640cc98008c5f77d1fb722a2e",
+    "size": 1508,
+    "line_count": 63,
     "namespace": "Project2048.Story",
     "using_list": [
       "TMPro",
@@ -21202,7 +21699,8 @@
       "OnEnable",
       "OnDisable",
       "HandleStoryStepChanged",
-      "SetText"
+      "SetDialogue",
+      "Clear"
     ],
     "fields": [],
     "properties": [],
@@ -21221,7 +21719,7 @@
     "has_on_disable": true,
     "serialize_field_count": 0,
     "public_field_count": 0,
-    "get_component_count": 1,
+    "get_component_count": 0,
     "find_call_count": 0,
     "new_keyword_count": 0,
     "coroutine_count": 0,
@@ -21236,18 +21734,16 @@
       "TMP_Text",
       "Awake",
       "GetComponentInParent",
-      "GetComponent",
       "OnEnable",
       "OnStoryStepChanged",
       "HandleStoryStepChanged",
       "OnDisable",
       "StoryStep",
-      "SetText",
-      "Empty"
+      "SetDialogue",
+      "Empty",
+      "Clear"
     ],
-    "component_access_types": [
-      "TMP_Text"
-    ],
+    "component_access_types": [],
     "created_types": [],
     "singleton_access_types": [],
     "string_literals": [],
@@ -21260,8 +21756,7 @@
     "summary_signals": [
       "런타임 컴포넌트",
       "UI 관련 로직 포함",
-      "저장/불러오기 관련 로직 포함",
-      "컴포넌트 조회 사용"
+      "저장/불러오기 관련 로직 포함"
     ]
   },
   {

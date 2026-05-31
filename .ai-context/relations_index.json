@@ -15241,13 +15241,6 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Flow/Binder/LoadingFlowBinder.cs",
     "from_class": "LoadingFlowBinder",
-    "to_type": "Hide",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Flow/Binder/LoadingFlowBinder.cs",
-    "from_class": "LoadingFlowBinder",
     "to_type": "LoadingUI",
     "relation_type": "uses",
     "strength": 1
@@ -15277,13 +15270,6 @@
     "from_file": "Project 2048/Assets/Scripts/Flow/Binder/LoadingFlowBinder.cs",
     "from_class": "LoadingFlowBinder",
     "to_type": "OnLoadProgressChanged",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Flow/Binder/LoadingFlowBinder.cs",
-    "from_class": "LoadingFlowBinder",
-    "to_type": "OnSceneLoadCompleted",
     "relation_type": "uses",
     "strength": 1
   },
@@ -15535,6 +15521,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Flow/FlowController.cs",
     "from_class": "FlowController",
+    "to_type": "FadeOnly",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Flow/FlowController.cs",
+    "from_class": "FlowController",
     "to_type": "FindAnyObjectByType",
     "relation_type": "uses",
     "strength": 1
@@ -15661,6 +15654,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Flow/FlowController.cs",
     "from_class": "FlowController",
+    "to_type": "LoadingPresentationMode",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Flow/FlowController.cs",
+    "from_class": "FlowController",
     "to_type": "LogError",
     "relation_type": "uses",
     "strength": 1
@@ -15760,6 +15760,13 @@
     "from_file": "Project 2048/Assets/Scripts/Flow/FlowController.cs",
     "from_class": "FlowController",
     "to_type": "PrepareNewSaveSlot",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Flow/FlowController.cs",
+    "from_class": "FlowController",
+    "to_type": "Progress",
     "relation_type": "uses",
     "strength": 1
   },
@@ -15981,6 +15988,41 @@
     "strength": 1
   },
   {
+    "from_file": "Project 2048/Assets/Scripts/Flow/LoadingPresentationMode.cs",
+    "from_class": "LoadingPresentationMode",
+    "to_type": "FadeOnly",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Flow/LoadingPresentationMode.cs",
+    "from_class": "LoadingPresentationMode",
+    "to_type": "Flow",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Flow/LoadingPresentationMode.cs",
+    "from_class": "LoadingPresentationMode",
+    "to_type": "LoadingPresentationMode",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Flow/LoadingPresentationMode.cs",
+    "from_class": "LoadingPresentationMode",
+    "to_type": "Progress",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Flow/LoadingPresentationMode.cs",
+    "from_class": "LoadingPresentationMode",
+    "to_type": "Project2048",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
     "from_file": "Project 2048/Assets/Scripts/Flow/SceneFlowManager.cs",
     "from_class": "SceneFlowManager",
     "to_type": "FlowController",
@@ -16039,6 +16081,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Flow/SceneFlowManager.cs",
     "from_class": "SceneFlowManager",
+    "to_type": "CompleteSceneLoadPresentation",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Flow/SceneFlowManager.cs",
+    "from_class": "SceneFlowManager",
     "to_type": "Flow",
     "relation_type": "uses",
     "strength": 1
@@ -16060,7 +16109,21 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Flow/SceneFlowManager.cs",
     "from_class": "SceneFlowManager",
+    "to_type": "GetComponentInChildren",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Flow/SceneFlowManager.cs",
+    "from_class": "SceneFlowManager",
     "to_type": "Invoke",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Flow/SceneFlowManager.cs",
+    "from_class": "SceneFlowManager",
+    "to_type": "IsFadeOnlyPresentation",
     "relation_type": "uses",
     "strength": 1
   },
@@ -16075,6 +16138,13 @@
     "from_file": "Project 2048/Assets/Scripts/Flow/SceneFlowManager.cs",
     "from_class": "SceneFlowManager",
     "to_type": "LoadBattle",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Flow/SceneFlowManager.cs",
+    "from_class": "SceneFlowManager",
+    "to_type": "LoadingUI",
     "relation_type": "uses",
     "strength": 1
   },
@@ -16242,7 +16312,21 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Flow/SceneFlowManager.cs",
     "from_class": "SceneFlowManager",
+    "to_type": "UI",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Flow/SceneFlowManager.cs",
+    "from_class": "SceneFlowManager",
     "to_type": "UnityEngine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Flow/SceneFlowManager.cs",
+    "from_class": "SceneFlowManager",
+    "to_type": "WaitForSceneLoadStart",
     "relation_type": "uses",
     "strength": 1
   },
@@ -31817,6 +31901,48 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Story/StoryController.cs",
     "from_class": "StoryController",
+    "to_type": "Awake",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Story/StoryController.cs",
+    "from_class": "StoryController",
+    "to_type": "bool",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Story/StoryController.cs",
+    "from_class": "StoryController",
+    "to_type": "Button",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Story/StoryController.cs",
+    "from_class": "StoryController",
+    "to_type": "Clear",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Story/StoryController.cs",
+    "from_class": "StoryController",
+    "to_type": "Collections",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Story/StoryController.cs",
+    "from_class": "StoryController",
+    "to_type": "Coroutine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Story/StoryController.cs",
+    "from_class": "StoryController",
     "to_type": "Count",
     "relation_type": "uses",
     "strength": 1
@@ -31825,6 +31951,27 @@
     "from_file": "Project 2048/Assets/Scripts/Story/StoryController.cs",
     "from_class": "StoryController",
     "to_type": "FinishStory",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Story/StoryController.cs",
+    "from_class": "StoryController",
+    "to_type": "FinishStoryRoutine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Story/StoryController.cs",
+    "from_class": "StoryController",
+    "to_type": "GetComponentInChildren",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Story/StoryController.cs",
+    "from_class": "StoryController",
+    "to_type": "int",
     "relation_type": "uses",
     "strength": 1
   },
@@ -31859,6 +32006,27 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Story/StoryController.cs",
     "from_class": "StoryController",
+    "to_type": "PlayCurrentStep",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Story/StoryController.cs",
+    "from_class": "StoryController",
+    "to_type": "PlayEndingLayout",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Story/StoryController.cs",
+    "from_class": "StoryController",
+    "to_type": "PlayTransition",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Story/StoryController.cs",
+    "from_class": "StoryController",
     "to_type": "Project2048",
     "relation_type": "uses",
     "strength": 1
@@ -31866,7 +32034,28 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Story/StoryController.cs",
     "from_class": "StoryController",
+    "to_type": "SetActive",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Story/StoryController.cs",
+    "from_class": "StoryController",
+    "to_type": "SetNextButtonVisible",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Story/StoryController.cs",
+    "from_class": "StoryController",
     "to_type": "ShowCurrentStep",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Story/StoryController.cs",
+    "from_class": "StoryController",
+    "to_type": "ShowCurrentStepRoutine",
     "relation_type": "uses",
     "strength": 1
   },
@@ -31887,7 +32076,21 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Story/StoryController.cs",
     "from_class": "StoryController",
+    "to_type": "StartCoroutine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Story/StoryController.cs",
+    "from_class": "StoryController",
     "to_type": "StartStory",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Story/StoryController.cs",
+    "from_class": "StoryController",
+    "to_type": "StopCoroutine",
     "relation_type": "uses",
     "strength": 1
   },
@@ -31901,6 +32104,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Story/StoryController.cs",
     "from_class": "StoryController",
+    "to_type": "StoryBackgroundView",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Story/StoryController.cs",
+    "from_class": "StoryController",
     "to_type": "StoryDataSO",
     "relation_type": "uses",
     "strength": 1
@@ -31908,7 +32118,21 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Story/StoryController.cs",
     "from_class": "StoryController",
+    "to_type": "StoryLayoutView",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Story/StoryController.cs",
+    "from_class": "StoryController",
     "to_type": "StoryStep",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Story/StoryController.cs",
+    "from_class": "StoryController",
+    "to_type": "StoryTextView",
     "relation_type": "uses",
     "strength": 1
   },
@@ -32007,6 +32231,13 @@
     "from_file": "Project 2048/Assets/Scripts/Story/StoryDataSO.cs",
     "from_class": "StoryDataSO",
     "to_type": "UnityEngine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Story/StoryStep.cs",
+    "from_class": "StoryStep",
+    "to_type": "bool",
     "relation_type": "uses",
     "strength": 1
   },
@@ -32265,6 +32496,20 @@
   {
     "from_file": "Project 2048/Assets/Scripts/UI/Loading/LoadingUI.cs",
     "from_class": "LoadingUI",
+    "to_type": "Graphic",
+    "relation_type": "component-access",
+    "strength": 3
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/Loading/LoadingUI.cs",
+    "from_class": "LoadingUI",
+    "to_type": "WaitForSecondsRealtime",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/Loading/LoadingUI.cs",
+    "from_class": "LoadingUI",
     "to_type": "MonoBehaviour",
     "relation_type": "inherits",
     "strength": 4
@@ -32307,6 +32552,20 @@
   {
     "from_file": "Project 2048/Assets/Scripts/UI/Loading/LoadingUI.cs",
     "from_class": "LoadingUI",
+    "to_type": "Color",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/Loading/LoadingUI.cs",
+    "from_class": "LoadingUI",
+    "to_type": "CompleteSceneLoadPresentation",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/Loading/LoadingUI.cs",
+    "from_class": "LoadingUI",
     "to_type": "Coroutine",
     "relation_type": "uses",
     "strength": 1
@@ -32314,7 +32573,35 @@
   {
     "from_file": "Project 2048/Assets/Scripts/UI/Loading/LoadingUI.cs",
     "from_class": "LoadingUI",
+    "to_type": "FadeBackgroundTo",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/Loading/LoadingUI.cs",
+    "from_class": "LoadingUI",
+    "to_type": "FadeOnly",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/Loading/LoadingUI.cs",
+    "from_class": "LoadingUI",
     "to_type": "float",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/Loading/LoadingUI.cs",
+    "from_class": "LoadingUI",
+    "to_type": "Flow",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/Loading/LoadingUI.cs",
+    "from_class": "LoadingUI",
+    "to_type": "GetComponent",
     "relation_type": "uses",
     "strength": 1
   },
@@ -32335,6 +32622,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/UI/Loading/LoadingUI.cs",
     "from_class": "LoadingUI",
+    "to_type": "Graphic",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/Loading/LoadingUI.cs",
+    "from_class": "LoadingUI",
     "to_type": "Hide",
     "relation_type": "uses",
     "strength": 1
@@ -32349,6 +32643,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/UI/Loading/LoadingUI.cs",
     "from_class": "LoadingUI",
+    "to_type": "IsFadeOnlyPresentation",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/Loading/LoadingUI.cs",
+    "from_class": "LoadingUI",
     "to_type": "IsVisible",
     "relation_type": "uses",
     "strength": 1
@@ -32356,7 +32657,35 @@
   {
     "from_file": "Project 2048/Assets/Scripts/UI/Loading/LoadingUI.cs",
     "from_class": "LoadingUI",
+    "to_type": "Lerp",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/Loading/LoadingUI.cs",
+    "from_class": "LoadingUI",
+    "to_type": "LoadingPresentationMode",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/Loading/LoadingUI.cs",
+    "from_class": "LoadingUI",
+    "to_type": "Max",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/Loading/LoadingUI.cs",
+    "from_class": "LoadingUI",
     "to_type": "MoveTowards",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/Loading/LoadingUI.cs",
+    "from_class": "LoadingUI",
+    "to_type": "Progress",
     "relation_type": "uses",
     "strength": 1
   },
@@ -32384,7 +32713,21 @@
   {
     "from_file": "Project 2048/Assets/Scripts/UI/Loading/LoadingUI.cs",
     "from_class": "LoadingUI",
+    "to_type": "SetBackgroundAlpha",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/Loading/LoadingUI.cs",
+    "from_class": "LoadingUI",
     "to_type": "SetProgress",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/Loading/LoadingUI.cs",
+    "from_class": "LoadingUI",
+    "to_type": "SetProgressVisible",
     "relation_type": "uses",
     "strength": 1
   },
@@ -32399,6 +32742,13 @@
     "from_file": "Project 2048/Assets/Scripts/UI/Loading/LoadingUI.cs",
     "from_class": "LoadingUI",
     "to_type": "Slider",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/Loading/LoadingUI.cs",
+    "from_class": "LoadingUI",
+    "to_type": "SmoothStep",
     "relation_type": "uses",
     "strength": 1
   },
@@ -32462,6 +32812,20 @@
     "from_file": "Project 2048/Assets/Scripts/UI/Loading/LoadingUI.cs",
     "from_class": "LoadingUI",
     "to_type": "UpdateProgressText",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/Loading/LoadingUI.cs",
+    "from_class": "LoadingUI",
+    "to_type": "WaitForSceneLoadStart",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/Loading/LoadingUI.cs",
+    "from_class": "LoadingUI",
+    "to_type": "WaitForSecondsRealtime",
     "relation_type": "uses",
     "strength": 1
   },
@@ -32886,11 +33250,305 @@
     "strength": 1
   },
   {
-    "from_file": "Project 2048/Assets/Scripts/UI/Story/StoryTextView.cs",
-    "from_class": "StoryTextView",
-    "to_type": "TMP_Text",
-    "relation_type": "component-access",
-    "strength": 3
+    "from_file": "Project 2048/Assets/Scripts/UI/Story/StoryBackgroundView.cs",
+    "from_class": "StoryBackgroundView",
+    "to_type": "MonoBehaviour",
+    "relation_type": "inherits",
+    "strength": 4
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/Story/StoryBackgroundView.cs",
+    "from_class": "StoryBackgroundView",
+    "to_type": "Awake",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/Story/StoryBackgroundView.cs",
+    "from_class": "StoryBackgroundView",
+    "to_type": "bool",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/Story/StoryBackgroundView.cs",
+    "from_class": "StoryBackgroundView",
+    "to_type": "Clamp01",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/Story/StoryBackgroundView.cs",
+    "from_class": "StoryBackgroundView",
+    "to_type": "Collections",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/Story/StoryBackgroundView.cs",
+    "from_class": "StoryBackgroundView",
+    "to_type": "Color",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/Story/StoryBackgroundView.cs",
+    "from_class": "StoryBackgroundView",
+    "to_type": "Filled",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/Story/StoryBackgroundView.cs",
+    "from_class": "StoryBackgroundView",
+    "to_type": "FillMethod",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/Story/StoryBackgroundView.cs",
+    "from_class": "StoryBackgroundView",
+    "to_type": "float",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/Story/StoryBackgroundView.cs",
+    "from_class": "StoryBackgroundView",
+    "to_type": "Graphic",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/Story/StoryBackgroundView.cs",
+    "from_class": "StoryBackgroundView",
+    "to_type": "Horizontal",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/Story/StoryBackgroundView.cs",
+    "from_class": "StoryBackgroundView",
+    "to_type": "Image",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/Story/StoryBackgroundView.cs",
+    "from_class": "StoryBackgroundView",
+    "to_type": "Left",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/Story/StoryBackgroundView.cs",
+    "from_class": "StoryBackgroundView",
+    "to_type": "Max",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/Story/StoryBackgroundView.cs",
+    "from_class": "StoryBackgroundView",
+    "to_type": "OriginHorizontal",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/Story/StoryBackgroundView.cs",
+    "from_class": "StoryBackgroundView",
+    "to_type": "PlayTransition",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/Story/StoryBackgroundView.cs",
+    "from_class": "StoryBackgroundView",
+    "to_type": "PrepareFilledImage",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/Story/StoryBackgroundView.cs",
+    "from_class": "StoryBackgroundView",
+    "to_type": "Project2048",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/Story/StoryBackgroundView.cs",
+    "from_class": "StoryBackgroundView",
+    "to_type": "SetAlpha",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/Story/StoryBackgroundView.cs",
+    "from_class": "StoryBackgroundView",
+    "to_type": "SetCurrentFill",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/Story/StoryBackgroundView.cs",
+    "from_class": "StoryBackgroundView",
+    "to_type": "SmoothStep",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/Story/StoryBackgroundView.cs",
+    "from_class": "StoryBackgroundView",
+    "to_type": "Story",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/Story/StoryBackgroundView.cs",
+    "from_class": "StoryBackgroundView",
+    "to_type": "System",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/Story/StoryBackgroundView.cs",
+    "from_class": "StoryBackgroundView",
+    "to_type": "Type",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/Story/StoryBackgroundView.cs",
+    "from_class": "StoryBackgroundView",
+    "to_type": "UI",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/Story/StoryBackgroundView.cs",
+    "from_class": "StoryBackgroundView",
+    "to_type": "UnityEngine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/Story/StoryLayoutView.cs",
+    "from_class": "StoryLayoutView",
+    "to_type": "Vector2",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/Story/StoryLayoutView.cs",
+    "from_class": "StoryLayoutView",
+    "to_type": "MonoBehaviour",
+    "relation_type": "inherits",
+    "strength": 4
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/Story/StoryLayoutView.cs",
+    "from_class": "StoryLayoutView",
+    "to_type": "Clamp01",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/Story/StoryLayoutView.cs",
+    "from_class": "StoryLayoutView",
+    "to_type": "Collections",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/Story/StoryLayoutView.cs",
+    "from_class": "StoryLayoutView",
+    "to_type": "float",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/Story/StoryLayoutView.cs",
+    "from_class": "StoryLayoutView",
+    "to_type": "Lerp",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/Story/StoryLayoutView.cs",
+    "from_class": "StoryLayoutView",
+    "to_type": "Max",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/Story/StoryLayoutView.cs",
+    "from_class": "StoryLayoutView",
+    "to_type": "PlayEndingLayout",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/Story/StoryLayoutView.cs",
+    "from_class": "StoryLayoutView",
+    "to_type": "Project2048",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/Story/StoryLayoutView.cs",
+    "from_class": "StoryLayoutView",
+    "to_type": "RectTransform",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/Story/StoryLayoutView.cs",
+    "from_class": "StoryLayoutView",
+    "to_type": "SetBackgroundAnchors",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/Story/StoryLayoutView.cs",
+    "from_class": "StoryLayoutView",
+    "to_type": "SetDialogueAnchors",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/Story/StoryLayoutView.cs",
+    "from_class": "StoryLayoutView",
+    "to_type": "SmoothStep",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/Story/StoryLayoutView.cs",
+    "from_class": "StoryLayoutView",
+    "to_type": "Story",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/Story/StoryLayoutView.cs",
+    "from_class": "StoryLayoutView",
+    "to_type": "System",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/Story/StoryLayoutView.cs",
+    "from_class": "StoryLayoutView",
+    "to_type": "UnityEngine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/Story/StoryLayoutView.cs",
+    "from_class": "StoryLayoutView",
+    "to_type": "Vector2",
+    "relation_type": "uses",
+    "strength": 1
   },
   {
     "from_file": "Project 2048/Assets/Scripts/UI/Story/StoryTextView.cs",
@@ -32909,14 +33567,14 @@
   {
     "from_file": "Project 2048/Assets/Scripts/UI/Story/StoryTextView.cs",
     "from_class": "StoryTextView",
-    "to_type": "Empty",
+    "to_type": "Clear",
     "relation_type": "uses",
     "strength": 1
   },
   {
     "from_file": "Project 2048/Assets/Scripts/UI/Story/StoryTextView.cs",
     "from_class": "StoryTextView",
-    "to_type": "GetComponent",
+    "to_type": "Empty",
     "relation_type": "uses",
     "strength": 1
   },
@@ -32965,7 +33623,7 @@
   {
     "from_file": "Project 2048/Assets/Scripts/UI/Story/StoryTextView.cs",
     "from_class": "StoryTextView",
-    "to_type": "SetText",
+    "to_type": "SetDialogue",
     "relation_type": "uses",
     "strength": 1
   },

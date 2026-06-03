@@ -11786,9 +11786,9 @@
     "file_id": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "path": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "file_name": "CombatUiView.cs",
-    "content_hash": "3014bac5af0fe33d60e5df459cf0d27c4cc5185b",
-    "size": 109746,
-    "line_count": 3009,
+    "content_hash": "2d4bd467ef4d3b01ed871525da8f24229511ac07",
+    "size": 106650,
+    "line_count": 2970,
     "namespace": "Project2048.Prototype",
     "using_list": [
       "System.Collections",
@@ -11818,7 +11818,7 @@
         ],
         "interfaces": [],
         "attributes": [],
-        "is_partial": false,
+        "is_partial": true,
         "is_generic": false
       }
     ],
@@ -12015,181 +12015,6 @@
         "name": "BottomPanelMergeFlashSeconds",
         "type": "float",
         "access": "public",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "ThemeHpFillColor",
-        "type": "Color",
-        "access": "public",
-        "serialized": false,
-        "is_static": true
-      },
-      {
-        "name": "ThemeHpBarBackgroundColor",
-        "type": "Color",
-        "access": "public",
-        "serialized": false,
-        "is_static": true
-      },
-      {
-        "name": "ThemeBoardHelpOutlineColor",
-        "type": "Color",
-        "access": "public",
-        "serialized": false,
-        "is_static": true
-      },
-      {
-        "name": "HpStatusEffectXOffset",
-        "type": "float",
-        "access": "public",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "HpTextMinFontSize",
-        "type": "float",
-        "access": "public",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "HpTextOutlineWidth",
-        "type": "float",
-        "access": "public",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "HpTextOutlineDistance",
-        "type": "float",
-        "access": "public",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "IntentBubbleSquareSize",
-        "type": "float",
-        "access": "public",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "HpDamageFlashDurationSeconds",
-        "type": "float",
-        "access": "private",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "HpHitShakeMagnitude",
-        "type": "float",
-        "access": "private",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "HpBarBorderThickness",
-        "type": "float",
-        "access": "private",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "IntentBubbleTextPadding",
-        "type": "float",
-        "access": "private",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "IntentBubbleTextMinFontSize",
-        "type": "float",
-        "access": "private",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "IntentBubbleTextMaxFontSize",
-        "type": "float",
-        "access": "private",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "TooltipFontSize",
-        "type": "float",
-        "access": "private",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "TooltipSingleLineWidth",
-        "type": "float",
-        "access": "private",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "TooltipMultiLineWidth",
-        "type": "float",
-        "access": "private",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "TooltipBaseHeight",
-        "type": "float",
-        "access": "private",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "TooltipLineHeight",
-        "type": "float",
-        "access": "private",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "TooltipMinHeight",
-        "type": "float",
-        "access": "private",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "TooltipMaxHeight",
-        "type": "float",
-        "access": "private",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "HpBarInteriorName",
-        "type": "string",
-        "access": "private",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "HpBarOutlineName",
-        "type": "string",
-        "access": "private",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "StatusEffectTemplateName",
-        "type": "string",
-        "access": "private",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "UiSfxDistance",
-        "type": "float",
-        "access": "private",
         "serialized": false,
         "is_static": false
       },
@@ -12874,7 +12699,7 @@
     "has_on_enable": false,
     "has_on_disable": false,
     "serialize_field_count": 1,
-    "public_field_count": 16,
+    "public_field_count": 8,
     "get_component_count": 34,
     "find_call_count": 7,
     "new_keyword_count": 59,
@@ -12883,8 +12708,6 @@
     "dont_destroy_on_load": false,
     "referenced_types": [
       "float",
-      "Color",
-      "string",
       "int",
       "PrototypeCombatBootstrap",
       "CombatManager",
@@ -12923,50 +12746,6 @@
       "HpDamageTrailDurationSeconds",
       "HpHitShakeDurationSeconds",
       "BottomPanelMergeFlashSeconds",
-      "ThemePrimaryColor",
-      "ThemeHpFillColor",
-      "ThemeHpDarkColor",
-      "ThemeHpBarBackgroundColor",
-      "ThemeHpDamageTrailColor",
-      "ThemeHpTextOutlineColor",
-      "ThemeHpBorderColor",
-      "ThemeSkillAttackColor",
-      "ThemeSkillDefenseColor",
-      "ThemeSkillChangeColor",
-      "ThemeBoardCellColor",
-      "ThemeBoardHelpIconColor",
-      "ThemeBoardHelpOutlineColor",
-      "ThemeBottomPanelSideFillColor",
-      "ThemeSkillEmptyColor",
-      "HpStatusEffectXOffset",
-      "HpTextMinFontSize",
-      "HpTextOutlineWidth",
-      "HpTextOutlineDistance",
-      "IntentBubbleSquareSize",
-      "HpDamageFlashDurationSeconds",
-      "HpHitShakeMagnitude",
-      "HpBarBorderThickness",
-      "IntentBubbleTextPadding",
-      "IntentBubbleTextMinFontSize",
-      "IntentBubbleTextMaxFontSize",
-      "TooltipFontSize",
-      "TooltipSingleLineWidth",
-      "TooltipMultiLineWidth",
-      "TooltipBaseHeight",
-      "TooltipLineHeight",
-      "TooltipMinHeight",
-      "TooltipMaxHeight",
-      "HpBarInteriorName",
-      "HpBarInterior",
-      "HpBarOutlineName",
-      "HpBarOutline",
-      "StatusEffectTemplateName",
-      "StatusEffectIconSample",
-      "UiSfxDistance",
-      "CostFormulaTooltipDescription",
-      "CostConverter",
-      "LargestTileBonusMultiplier",
-      "FragmentationPenaltyDivisor",
       "Top",
       "TMP_Text",
       "Battle",
@@ -12986,6 +12765,12 @@
       "SimpleBgmDucker",
       "BoardTileEffectProfileSO",
       "Theme",
+      "Color",
+      "ThemeBoardCellColor",
+      "ThemeHpFillColor",
+      "ThemeHpBarBackgroundColor",
+      "ThemeHpDamageTrailColor",
+      "ThemeBoardHelpIconColor",
       "PrototypeCombatUiState",
       "PrototypeCombatAudioRouter",
       "SkillSnapshot",
@@ -13081,7 +12866,47 @@
       "TurnCount",
       "ToRoman",
       "Max",
-      "Player"
+      "Player",
+      "PrototypeCombatText",
+      "FormatEnemyHp",
+      "CurrentHp",
+      "MaxHp",
+      "Block",
+      "TextWrappingModes",
+      "Normal",
+      "FormatEnemyHeader",
+      "DisplayName",
+      "AiProfileLabel",
+      "GetVisibleIntents",
+      "SetActive",
+      "ResolveIntentIcon",
+      "Empty",
+      "FormatIntents",
+      "TryGetComponent",
+      "Type",
+      "Simple",
+      "GetIntentBubbleColor",
+      "SO",
+      "FindPlayerPortraitSprite",
+      "FindEnemyPortraitSprite",
+      "EnemyIndex",
+      "SetHpBarValue",
+      "FormatPlayerHp",
+      "SetBlockIndicator",
+      "RenderStatusEffects",
+      "StatusEffects",
+      "ShowEnemyHp",
+      "HideEnemyHpAfterDamageTrail",
+      "HideEnemyHpImmediately",
+      "FormatActionDescription",
+      "LastActionDescription",
+      "Data",
+      "IsRewardReplacementVisible",
+      "FormatRemainingMoves",
+      "RemainingBoardMoves",
+      "SetValue",
+      "GetObstacleCellColor",
+      "Movements"
     ],
     "component_access_types": [
       "ButtonClickAudioEmitter",
@@ -13105,9 +12930,6 @@
     ],
     "singleton_access_types": [],
     "string_literals": [
-      "HpBarInterior",
-      "HpBarOutline",
-      "StatusEffectIconSample",
       "Top bar",
       "Battle scene",
       "Bottom panels",
@@ -13124,7 +12946,10 @@
       "BoardAnimationOverlay",
       "attack-up",
       "attack-down",
-      "fear"
+      "fear",
+      "darkness",
+      "TurnCounterText",
+      "IntentHeaderText"
     ],
     "numeric_literals": [
       0.14,
@@ -13135,18 +12960,18 @@
       0.55,
       0.12,
       0.18,
-      73,
-      255,
-      175,
-      181,
+      0,
+      0.1,
       1,
-      12,
-      13,
-      14,
-      20,
-      79,
-      84,
-      0.9
+      0.92,
+      0.9,
+      0.85,
+      0.32,
+      0.2,
+      0.07,
+      0.34,
+      0.03,
+      0.06
     ],
     "guessed_roles": [
       "ui",
@@ -13166,12 +12991,454 @@
     ]
   },
   {
+    "file_id": "Project 2048/Assets/Scripts/Prototype/CombatUiView.Theme.cs",
+    "path": "Project 2048/Assets/Scripts/Prototype/CombatUiView.Theme.cs",
+    "file_name": "CombatUiView.Theme.cs",
+    "content_hash": "91a5d90198e19688020561bafeb055738f9b6780",
+    "size": 3242,
+    "line_count": 52,
+    "namespace": "Project2048.Prototype",
+    "using_list": [
+      "Project2048.Board2048",
+      "UnityEngine"
+    ],
+    "classes": [
+      {
+        "name": "CombatUiView",
+        "kind": "class",
+        "access": "public",
+        "base_types": [],
+        "interfaces": [],
+        "attributes": [],
+        "is_partial": true,
+        "is_generic": false
+      }
+    ],
+    "main_class_name": "CombatUiView",
+    "unity_type": "None",
+    "methods": [],
+    "fields": [
+      {
+        "name": "ThemeHpFillColor",
+        "type": "Color",
+        "access": "public",
+        "serialized": false,
+        "is_static": true
+      },
+      {
+        "name": "ThemeHpBarBackgroundColor",
+        "type": "Color",
+        "access": "public",
+        "serialized": false,
+        "is_static": true
+      },
+      {
+        "name": "ThemeBoardHelpOutlineColor",
+        "type": "Color",
+        "access": "public",
+        "serialized": false,
+        "is_static": true
+      },
+      {
+        "name": "HpStatusEffectXOffset",
+        "type": "float",
+        "access": "public",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "HpTextMinFontSize",
+        "type": "float",
+        "access": "public",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "HpTextOutlineWidth",
+        "type": "float",
+        "access": "public",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "HpTextOutlineDistance",
+        "type": "float",
+        "access": "public",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "IntentBubbleSquareSize",
+        "type": "float",
+        "access": "public",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "HpDamageFlashDurationSeconds",
+        "type": "float",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "HpHitShakeMagnitude",
+        "type": "float",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "HpBarBorderThickness",
+        "type": "float",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "IntentBubbleTextPadding",
+        "type": "float",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "IntentBubbleTextMinFontSize",
+        "type": "float",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "IntentBubbleTextMaxFontSize",
+        "type": "float",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "TooltipFontSize",
+        "type": "float",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "TooltipSingleLineWidth",
+        "type": "float",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "TooltipMultiLineWidth",
+        "type": "float",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "TooltipBaseHeight",
+        "type": "float",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "TooltipLineHeight",
+        "type": "float",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "TooltipMinHeight",
+        "type": "float",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "TooltipMaxHeight",
+        "type": "float",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "HpBarInteriorName",
+        "type": "string",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "HpBarOutlineName",
+        "type": "string",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "StatusEffectTemplateName",
+        "type": "string",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "UiSfxDistance",
+        "type": "float",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      }
+    ],
+    "properties": [],
+    "events": [],
+    "unity_messages": [],
+    "has_update": false,
+    "has_fixed_update": false,
+    "has_late_update": false,
+    "has_awake": false,
+    "has_start": false,
+    "has_on_enable": false,
+    "has_on_disable": false,
+    "serialize_field_count": 0,
+    "public_field_count": 8,
+    "get_component_count": 0,
+    "find_call_count": 0,
+    "new_keyword_count": 0,
+    "coroutine_count": 0,
+    "singleton_candidate": false,
+    "dont_destroy_on_load": false,
+    "referenced_types": [
+      "Color",
+      "float",
+      "string",
+      "Project2048",
+      "Board2048",
+      "UnityEngine",
+      "Prototype",
+      "ThemePrimaryColor",
+      "ThemeHpFillColor",
+      "ThemeHpDarkColor",
+      "ThemeHpBarBackgroundColor",
+      "ThemeHpDamageTrailColor",
+      "ThemeHpTextOutlineColor",
+      "ThemeHpBorderColor",
+      "ThemeSkillAttackColor",
+      "ThemeSkillDefenseColor",
+      "ThemeSkillChangeColor",
+      "ThemeBoardCellColor",
+      "ThemeBoardHelpIconColor",
+      "ThemeBoardHelpOutlineColor",
+      "ThemeBottomPanelSideFillColor",
+      "ThemeSkillEmptyColor",
+      "HpStatusEffectXOffset",
+      "HpTextMinFontSize",
+      "HpTextOutlineWidth",
+      "HpTextOutlineDistance",
+      "IntentBubbleSquareSize",
+      "HpDamageFlashDurationSeconds",
+      "HpHitShakeMagnitude",
+      "HpBarBorderThickness",
+      "IntentBubbleTextPadding",
+      "IntentBubbleTextMinFontSize",
+      "IntentBubbleTextMaxFontSize",
+      "TooltipFontSize",
+      "TooltipSingleLineWidth",
+      "TooltipMultiLineWidth",
+      "TooltipBaseHeight",
+      "TooltipLineHeight",
+      "TooltipMinHeight",
+      "TooltipMaxHeight",
+      "HpBarInteriorName",
+      "HpBarInterior",
+      "HpBarOutlineName",
+      "HpBarOutline",
+      "StatusEffectTemplateName",
+      "StatusEffectIconSample",
+      "UiSfxDistance",
+      "CostFormulaTooltipDescription",
+      "CostConverter",
+      "LargestTileBonusMultiplier",
+      "FragmentationPenaltyDivisor"
+    ],
+    "component_access_types": [],
+    "created_types": [],
+    "singleton_access_types": [],
+    "string_literals": [
+      "HpBarInterior",
+      "HpBarOutline",
+      "StatusEffectIconSample"
+    ],
+    "numeric_literals": [
+      73,
+      255,
+      175,
+      181,
+      1,
+      12,
+      13,
+      14,
+      20,
+      79,
+      84,
+      0.9,
+      42,
+      127,
+      133,
+      0,
+      106,
+      90,
+      45,
+      103
+    ],
+    "guessed_roles": [
+      "combat",
+      "ui"
+    ],
+    "summary_signals": [
+      "UI 관련 로직 포함",
+      "전투 계열 로직 포함"
+    ]
+  },
+  {
+    "file_id": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Audio.cs",
+    "path": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Audio.cs",
+    "file_name": "CombatWorldSpriteView.Audio.cs",
+    "content_hash": "1cc035235a8d9660d840d91a0ba10cbb3aafd83b",
+    "size": 2955,
+    "line_count": 97,
+    "namespace": "Project2048.Prototype",
+    "using_list": [
+      "System.Collections",
+      "Project2048.Audio",
+      "Project2048.Presentation",
+      "UnityEngine"
+    ],
+    "classes": [
+      {
+        "name": "CombatWorldSpriteView",
+        "kind": "class",
+        "access": "public",
+        "base_types": [],
+        "interfaces": [],
+        "attributes": [],
+        "is_partial": true,
+        "is_generic": false
+      }
+    ],
+    "main_class_name": "CombatWorldSpriteView",
+    "unity_type": "None",
+    "methods": [
+      "PlayCombatantActionAudioEffect",
+      "PlayCombatantActionAudioEffectAfterDelay",
+      "WaitForSeconds",
+      "PlayCombatantActionAudioEffectNow",
+      "EnsureAudioSource",
+      "ResolveAudioRouting",
+      "DuckBgmForImportantSfx"
+    ],
+    "fields": [
+      {
+        "name": "WorldSfxDistance",
+        "type": "float",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      }
+    ],
+    "properties": [],
+    "events": [],
+    "unity_messages": [],
+    "has_update": false,
+    "has_fixed_update": false,
+    "has_late_update": false,
+    "has_awake": false,
+    "has_start": false,
+    "has_on_enable": false,
+    "has_on_disable": false,
+    "serialize_field_count": 0,
+    "public_field_count": 0,
+    "get_component_count": 1,
+    "find_call_count": 1,
+    "new_keyword_count": 1,
+    "coroutine_count": 2,
+    "singleton_candidate": false,
+    "dont_destroy_on_load": false,
+    "referenced_types": [
+      "float",
+      "System",
+      "Collections",
+      "Project2048",
+      "Audio",
+      "Presentation",
+      "UnityEngine",
+      "Prototype",
+      "WorldSfxDistance",
+      "PlayCombatantActionAudioEffect",
+      "CombatEffectBinding",
+      "EffectiveSfxDelaySeconds",
+      "Max",
+      "StartCoroutine",
+      "PlayCombatantActionAudioEffectAfterDelay",
+      "PlayCombatantActionAudioEffectNow",
+      "WaitForSeconds",
+      "EnsureAudioSource",
+      "DuckBgmForImportantSfx",
+      "CombatEffectAudioPlayer",
+      "PlayOneShot",
+      "GetComponent",
+      "AudioSource",
+      "AddComponent",
+      "ResolveAudioRouting",
+      "AudioRolloffMode",
+      "Linear",
+      "Project2048AudioSettings",
+      "LoadDefault",
+      "SfxGroup",
+      "SimpleBgmDucker",
+      "Active",
+      "FindAnyObjectByType",
+      "FindObjectsInactive",
+      "Include",
+      "DuckBgm"
+    ],
+    "component_access_types": [
+      "AudioSource"
+    ],
+    "created_types": [
+      "WaitForSeconds"
+    ],
+    "singleton_access_types": [],
+    "string_literals": [],
+    "numeric_literals": [
+      10000,
+      0,
+      1
+    ],
+    "guessed_roles": [
+      "runtime",
+      "player",
+      "combat",
+      "save-load"
+    ],
+    "summary_signals": [
+      "전투 계열 로직 포함",
+      "저장/불러오기 관련 로직 포함",
+      "컴포넌트 조회 사용",
+      "Find 계열 탐색 사용"
+    ]
+  },
+  {
     "file_id": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "path": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "file_name": "CombatWorldSpriteView.cs",
-    "content_hash": "696aba74d2e0bfdcedc6cc62feb56a9773a730aa",
-    "size": 237449,
-    "line_count": 6180,
+    "content_hash": "bf50f2d25a25af28395d6f0441d706406c607f43",
+    "size": 196196,
+    "line_count": 5106,
     "namespace": "Project2048.Prototype",
     "using_list": [
       "System.Collections",
@@ -13235,8 +13502,6 @@
       "PlayEnemyAppearEffectIfNeeded",
       "PlayEnemyActionEffectIfNeeded",
       "PlayEnemyDefenseEffectIfNeeded",
-      "PlayEnemyDebuffCastEffectIfNeeded",
-      "ResolveDebuffParticleLifetimeSeconds",
       "PlayShieldImpactEffectIfNeeded",
       "ResolveCurrentEnemyData",
       "PlayCombatantActionEffect",
@@ -13310,53 +13575,8 @@
       "ResolveSkillTintedColor",
       "ResolveReusableSkillParticleDefaults",
       "ResolveReusableSkillSecondaryParticleColor",
-      "PlayCombatantActionAudioEffect",
-      "PlayCombatantActionAudioEffectAfterDelay",
-      "PlayCombatantActionAudioEffectNow",
-      "PlayDamageNumberPopupIfNeeded",
-      "PlayDamageNumberUiPopup",
-      "Vector2",
-      "PlayDamageNumberWorldPopup",
-      "ConfigureDamageNumberLabel",
-      "ConfigureDamageNumberGlow",
-      "Material",
-      "ResolveDamageNumberWorldPosition",
-      "ResolveDamageNumberWorldCenter",
-      "ResolveDamageNumberWorldOffsetRadius",
-      "ResolveDamageNumberCanvasPosition",
-      "ResolveDamageNumberPopupLayer",
-      "DamageNumberPopupRoutine",
-      "ClearDamageNumberPopups",
-      "DestroyDamageNumberPopup",
-      "PlayEnemyAppearIntro",
-      "PlayEnemyAttackLunge",
-      "PlayEnemyAttackImpactEffects",
-      "PlayEnemyClawSlashEffect",
-      "CreateRuntimeEnemyClawSlashEffect",
-      "ResolveEnemyAttackDirectionSign",
-      "EnemyAppearIntroRoutine",
-      "EnemyAttackLungeRoutine",
       "RenderBackground",
       "ResolveEnemySprite",
-      "PlayEnemyDeathFadeIfNeeded",
-      "PlayEnemyDeathFade",
-      "EnemyDeathFadeDelayRoutine",
-      "EnemyDeathFadeRoutine",
-      "ClearEnemyDeathFade",
-      "ClearEnemyAppearIntro",
-      "ClearEnemyAttackLunge",
-      "PlayEnemyAppearWorldShake",
-      "ResolveWorldShake",
-      "ResolveForegroundShakeRoot",
-      "ReparentRendererForWorldShake",
-      "ClearWorldShake",
-      "CanAutoReparentForWorldShake",
-      "IsUsableShakeTarget",
-      "DestroyGeneratedShakeRoot",
-      "ResolveEnemyAttackLungeTarget",
-      "PlayDebuffTargetEffectAfterCast",
-      "SpawnDebuffTargetParticlesAfterDelay",
-      "SpawnDebuffCastParticles",
       "SpawnParticleBurst",
       "CreateFallbackParticleSystem",
       "ConfigureParticleBurst",
@@ -13401,52 +13621,46 @@
       "IsThornGuardSkill",
       "ResolveShieldCircleLightColor",
       "ResolveThornGuardDarkColor",
-      "ResolveDebuffParticleColor",
       "ResolveShieldImpactParticleEffect",
-      "ResolveDebuffParticleEffect",
       "ResolveShieldImpactParticleMaterial",
-      "ResolveDebuffParticleMaterial",
       "ResolveRuntimeSkillParticleMaterial",
       "ResolveShieldVfxGraphAsset",
       "ResolveChargedLightBeamMaterial",
       "CreateParticleMaterial",
+      "Material",
       "ApplyParticleMaterialColor",
       "DestroyRuntimeParticleMaterials",
       "DestroyRuntimeMaterial",
       "DestroyRuntimeMaterialInstance",
-      "ResolveDebuffActionId",
-      "CacheEnemyRendererRestTransform",
-      "RestoreEnemyRendererTransform"
+      "ResolveMissingReferences",
+      "ResolveWorldVfxProfile",
+      "FindRendererByName",
+      "PlayerWasHit",
+      "UpdatePlayerShieldArtVfx",
+      "UpdatePlayerThornGuardVfx",
+      "PlayPlayerThornGuardHitPulseIfNeeded",
+      "ClearActivePlayerShieldArtVfx",
+      "ClearActivePlayerThornGuardVfx",
+      "ResolvePlayerHpDamage",
+      "PlayerShieldWasHit",
+      "EnemyWasHit",
+      "ResolveEnemyHpDamage",
+      "EnemyShieldWasHit",
+      "EnemyUsedAttack",
+      "EnemyUsedDefense",
+      "EnemyHasAttackIntent",
+      "EnemyHasDefenseIntent",
+      "EnemyAppeared",
+      "Bind",
+      "RegisterSpikes",
+      "SetShieldValue",
+      "PlayHitPulse",
+      "StopAndDestroy",
+      "LateUpdate",
+      "ResolveNearestVisibleSpike",
+      "PulseSpikeRoutine"
     ],
     "fields": [
-      {
-        "name": "EnemyDeathFadeDurationSeconds",
-        "type": "float",
-        "access": "public",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "EnemyAppearIntroDurationSeconds",
-        "type": "float",
-        "access": "public",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "EnemyAttackLungeDurationSeconds",
-        "type": "float",
-        "access": "public",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "EnemyAppearWorldShakeDurationSeconds",
-        "type": "float",
-        "access": "public",
-        "serialized": false,
-        "is_static": false
-      },
       {
         "name": "ShieldImpactParticleLifetimeSeconds",
         "type": "float",
@@ -13463,20 +13677,6 @@
       },
       {
         "name": "ShieldBurstSkillDurationSeconds",
-        "type": "float",
-        "access": "public",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "DebuffCastParticleLifetimeSeconds",
-        "type": "float",
-        "access": "public",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "DebuffTargetParticleDelaySeconds",
         "type": "float",
         "access": "public",
         "serialized": false,
@@ -13532,147 +13732,7 @@
         "is_static": false
       },
       {
-        "name": "EnemyAppearIntroRightOffset",
-        "type": "float",
-        "access": "private",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "EnemyAppearIntroJumpHeight",
-        "type": "float",
-        "access": "private",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "EnemyAppearIntroScalePop",
-        "type": "float",
-        "access": "private",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "EnemyAttackLungeDistance",
-        "type": "float",
-        "access": "private",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "EnemyAttackLungeImpactTime",
-        "type": "float",
-        "access": "private",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "EnemyAttackLungeScalePop",
-        "type": "float",
-        "access": "private",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "EnemyAppearWorldShakeMagnitude",
-        "type": "float",
-        "access": "private",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "DamageNumberPopupRiseDistance",
-        "type": "float",
-        "access": "private",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "DamageNumberPopupMinimumWorldOffset",
-        "type": "float",
-        "access": "private",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "DamageNumberPopupFallbackWorldRadius",
-        "type": "float",
-        "access": "private",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "DamageNumberPopupBoundsRadiusMultiplier",
-        "type": "float",
-        "access": "private",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "DamageNumberPopupWorldFontSize",
-        "type": "float",
-        "access": "private",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "DamageNumberPopupUiFontSize",
-        "type": "float",
-        "access": "private",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "DamageNumberPopupOutlineWidth",
-        "type": "float",
-        "access": "private",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "DamageNumberPopupGlowInner",
-        "type": "float",
-        "access": "private",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "DamageNumberPopupGlowOuter",
-        "type": "float",
-        "access": "private",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "DamageNumberPopupGlowPower",
-        "type": "float",
-        "access": "private",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "DamageNumberPopupGlowOffset",
-        "type": "float",
-        "access": "private",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "DamageNumberPopupSortingOrderOffset",
-        "type": "int",
-        "access": "private",
-        "serialized": false,
-        "is_static": false
-      },
-      {
         "name": "ShieldImpactParticleCount",
-        "type": "int",
-        "access": "private",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "DebuffCastParticleCount",
         "type": "int",
         "access": "private",
         "serialized": false,
@@ -13917,13 +13977,6 @@
         "is_static": false
       },
       {
-        "name": "WorldSfxDistance",
-        "type": "float",
-        "access": "private",
-        "serialized": false,
-        "is_static": false
-      },
-      {
         "name": "DefaultWorldVfxProfileResourceName",
         "type": "string",
         "access": "private",
@@ -13945,13 +13998,6 @@
         "is_static": false
       },
       {
-        "name": "DamageNumberPopupOutlineColor",
-        "type": "Color",
-        "access": "private",
-        "serialized": false,
-        "is_static": true
-      },
-      {
         "name": "combatManager",
         "type": "CombatManager",
         "access": "private",
@@ -13966,91 +14012,7 @@
         "is_static": false
       },
       {
-        "name": "enemyDeathFadeCoroutine",
-        "type": "Coroutine",
-        "access": "private",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "enemyDeathFadeDelayCoroutine",
-        "type": "Coroutine",
-        "access": "private",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "enemyAppearIntroCoroutine",
-        "type": "Coroutine",
-        "access": "private",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "enemyAttackLungeCoroutine",
-        "type": "Coroutine",
-        "access": "private",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "enemyRendererRestLocalPosition",
-        "type": "Vector3",
-        "access": "private",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "enemyRendererRestLocalScale",
-        "type": "Vector3",
-        "access": "private",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "hasEnemyRendererRestTransform",
-        "type": "bool",
-        "access": "private",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "lastEnemyWasDead",
-        "type": "bool",
-        "access": "private",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "delayEnemyDeathFadeUntilRealtime",
-        "type": "float",
-        "access": "private",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "lastPlayedEnemyDebuffVfxSequence",
-        "type": "int",
-        "access": "private",
-        "serialized": false,
-        "is_static": false
-      },
-      {
         "name": "runtimeShieldImpactParticleMaterial",
-        "type": "Material",
-        "access": "private",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "runtimeFearDebuffParticleMaterial",
-        "type": "Material",
-        "access": "private",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "runtimeDarknessDebuffParticleMaterial",
         "type": "Material",
         "access": "private",
         "serialized": false,
@@ -14101,13 +14063,6 @@
       {
         "name": "activePlayerThornGuardVfx",
         "type": "FollowingShieldVfx",
-        "access": "private",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "damageNumberPopupLayer",
-        "type": "RectTransform",
         "access": "private",
         "serialized": false,
         "is_static": false
@@ -14701,231 +14656,7 @@
         "is_static": false
       },
       {
-        "name": "sourceMaterial",
-        "type": "var",
-        "access": "internal",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "bounds",
-        "type": "var",
-        "access": "internal",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "worldCamera",
-        "type": "var",
-        "access": "internal",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "startPosition",
-        "type": "var",
-        "access": "internal",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "startTime",
-        "type": "var",
-        "access": "internal",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "break",
-        "type": "yield",
-        "access": "internal",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "elapsed",
-        "type": "var",
-        "access": "internal",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "color",
-        "type": "var",
-        "access": "internal",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "popupObject",
-        "type": "var",
-        "access": "internal",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "material",
-        "type": "var",
-        "access": "internal",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "sortingReference",
-        "type": "var",
-        "access": "internal",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "parent",
-        "type": "var",
-        "access": "internal",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "deltaX",
-        "type": "var",
-        "access": "internal",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "targetPosition",
-        "type": "var",
-        "access": "internal",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "baseScale",
-        "type": "var",
-        "access": "internal",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "startTime",
-        "type": "var",
-        "access": "internal",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "elapsed",
-        "type": "var",
-        "access": "internal",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "startPosition",
-        "type": "var",
-        "access": "internal",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "baseScale",
-        "type": "var",
-        "access": "internal",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "startTime",
-        "type": "var",
-        "access": "internal",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "playedImpactEffect",
-        "type": "var",
-        "access": "internal",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "elapsed",
-        "type": "var",
-        "access": "internal",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "position",
-        "type": "Vector3",
-        "access": "internal",
-        "serialized": false,
-        "is_static": false
-      },
-      {
         "name": "enemies",
-        "type": "var",
-        "access": "internal",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "startTime",
-        "type": "var",
-        "access": "internal",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "elapsed",
-        "type": "var",
-        "access": "internal",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "reparentedCount",
-        "type": "var",
-        "access": "internal",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "rendererTransform",
-        "type": "var",
-        "access": "internal",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "enemyTransform",
-        "type": "var",
-        "access": "internal",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "enemyWorldPosition",
-        "type": "var",
-        "access": "internal",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "direction",
-        "type": "var",
-        "access": "internal",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "lungeWorldPosition",
-        "type": "var",
-        "access": "internal",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "target",
         "type": "var",
         "access": "internal",
         "serialized": false,
@@ -15518,41 +15249,284 @@
         "access": "internal",
         "serialized": false,
         "is_static": false
+      },
+      {
+        "name": "velocity",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "rotation",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "size",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "rotation",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "size",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "elapsed",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "startColor",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "endColor",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "break",
+        "type": "yield",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "nextStart",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "nextEnd",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "elapsed",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "startColors",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "endColors",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "break",
+        "type": "yield",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "line",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "nextStart",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "nextEnd",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "shieldHp",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "shieldHp",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "target",
+        "type": "Transform",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "worldOffset",
+        "type": "Vector3",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "followSharpness",
+        "type": "float",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "maxShieldValue",
+        "type": "int",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "isStopping",
+        "type": "bool",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "spike",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "desiredPosition",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "hitDirection",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "nearestSpike",
+        "type": "Transform",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "bestDot",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "spikeDirection",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "break",
+        "type": "yield",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "elapsed",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "duration",
+        "type": "float",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "break",
+        "type": "yield",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
       }
     ],
     "properties": [],
     "events": [],
     "unity_messages": [
-      "OnDestroy"
+      "OnDestroy",
+      "LateUpdate"
     ],
     "has_update": false,
     "has_fixed_update": false,
-    "has_late_update": false,
+    "has_late_update": true,
     "has_awake": false,
     "has_start": false,
     "has_on_enable": false,
     "has_on_disable": false,
     "serialize_field_count": 0,
-    "public_field_count": 16,
-    "get_component_count": 32,
-    "find_call_count": 4,
-    "new_keyword_count": 261,
-    "coroutine_count": 48,
+    "public_field_count": 10,
+    "get_component_count": 23,
+    "find_call_count": 1,
+    "new_keyword_count": 246,
+    "coroutine_count": 33,
     "singleton_candidate": false,
     "dont_destroy_on_load": false,
     "referenced_types": [
       "float",
       "int",
       "string",
-      "Color",
       "CombatManager",
       "CombatSnapshot",
-      "Coroutine",
-      "Vector3",
-      "bool",
       "Material",
       "VisualEffectAsset",
-      "RectTransform",
+      "bool",
+      "Vector3",
       "System",
       "Collections",
       "Linq",
@@ -15572,15 +15546,9 @@
       "Flying",
       "Latched",
       "Ending",
-      "EnemyDeathFadeDurationSeconds",
-      "EnemyAppearIntroDurationSeconds",
-      "EnemyAttackLungeDurationSeconds",
-      "EnemyAppearWorldShakeDurationSeconds",
       "ShieldImpactParticleLifetimeSeconds",
       "ShieldBashDurationSeconds",
       "ShieldBurstSkillDurationSeconds",
-      "DebuffCastParticleLifetimeSeconds",
-      "DebuffTargetParticleDelaySeconds",
       "DamageNumberPopupDurationSeconds",
       "ChargedLightBeamDurationSeconds",
       "TentacleStrikeDurationSeconds",
@@ -15588,27 +15556,7 @@
       "BloodFountainSlashDurationSeconds",
       "FlameBurstDurationSeconds",
       "DarkShackleChainDurationSeconds",
-      "EnemyAppearIntroRightOffset",
-      "EnemyAppearIntroJumpHeight",
-      "EnemyAppearIntroScalePop",
-      "EnemyAttackLungeDistance",
-      "EnemyAttackLungeImpactTime",
-      "EnemyAttackLungeScalePop",
-      "EnemyAppearWorldShakeMagnitude",
-      "DamageNumberPopupRiseDistance",
-      "DamageNumberPopupMinimumWorldOffset",
-      "DamageNumberPopupFallbackWorldRadius",
-      "DamageNumberPopupBoundsRadiusMultiplier",
-      "DamageNumberPopupWorldFontSize",
-      "DamageNumberPopupUiFontSize",
-      "DamageNumberPopupOutlineWidth",
-      "DamageNumberPopupGlowInner",
-      "DamageNumberPopupGlowOuter",
-      "DamageNumberPopupGlowPower",
-      "DamageNumberPopupGlowOffset",
-      "DamageNumberPopupSortingOrderOffset",
       "ShieldImpactParticleCount",
-      "DebuffCastParticleCount",
       "ReusableSkillParticleMaxStartSize",
       "ShieldCircleRingSegmentCount",
       "ShieldCircleBaseRadius",
@@ -15643,16 +15591,13 @@
       "FlameBurstTongueSegmentCount",
       "LanternMuzzleLocalX",
       "LanternMuzzleLocalY",
-      "WorldSfxDistance",
       "DefaultWorldVfxProfileResourceName",
       "PrototypeCombatWorldVfxProfile",
       "ShieldLightCircleVfxResourceName",
       "ShieldLightCircle",
       "ThornGuardSpikedCircleVfxResourceName",
       "ThornGuardSpikedCircle",
-      "DamageNumberPopupTextColor",
-      "DamageNumberPopupOutlineColor",
-      "DamageNumberPopupGlowColor",
+      "Color",
       "ShieldCircleLightTint",
       "ThornGuardShadowTint",
       "ThornGuardBloodTint",
@@ -15740,25 +15685,50 @@
       "PlayReusableSkillParticleEffect",
       "DelayEnemyDeathFadeForSkillEffect",
       "PreviewSkillEffect",
-      "CombatEffectBinding"
+      "CombatEffectBinding",
+      "ShieldDome",
+      "IsShieldAttackSkill",
+      "PlayShieldAttackSkillEffect",
+      "PlayCombatantActionParticleEffect",
+      "IsShieldBurstSkill",
+      "LightBeam",
+      "PlayChargedLightBeamEffect",
+      "TentacleWhip",
+      "PlayTentacleStrikeSkillEffect",
+      "SpikedBurst",
+      "PlaySpikedBurstSkillEffect",
+      "BloodFountainSlash",
+      "PlayBloodFountainSlashSkillEffect",
+      "DarkChainBurst",
+      "PlayDarkShackleSkillEffect",
+      "GetComponentInChildren",
+      "CombatProjectileEffect",
+      "ResolveLanternSkillSourcePosition",
+      "Instantiate",
+      "Quaternion",
+      "LaunchFromWorldPosition",
+      "Play",
+      "Max",
+      "EffectiveAutoDestroySeconds",
+      "EstimatedLifetimeSeconds",
+      "Destroy",
+      "ResolveSkillEffectVisualDurationSeconds",
+      "Data",
+      "ResolveEnemySprite",
+      "FindActionEffect",
+      "CombatActionIds",
+      "Hit"
     ],
     "component_access_types": [
       "MeshFilter",
       "MeshRenderer",
       "LineRenderer",
-      "RectTransform",
-      "TextMeshProUGUI",
-      "TextMeshPro",
-      "Canvas",
-      "TMP_Text",
-      "WorldShake",
       "ParticleSystem",
       "ParticleSystemRenderer",
       "SpriteRenderer",
       "VisualEffect",
       "Renderer",
-      "Animator",
-      "AudioSource"
+      "Animator"
     ],
     "created_types": [
       "Color",
@@ -15768,7 +15738,6 @@
       "WaitForSecondsRealtime",
       "AnimationCurve",
       "Keyframe",
-      "Vector2",
       "Material"
     ],
     "singleton_access_types": [],
@@ -15795,40 +15764,1150 @@
       "ThornGuardSpikeParticles"
     ],
     "numeric_literals": [
-      0.6,
-      0.45,
-      0.32,
-      1.5,
       0.8,
       0.58,
       0.72,
-      0.9,
       0.55,
       0.65,
       0.62,
       0.82,
       0.84,
-      2.25,
-      0.7,
+      22,
+      0.24,
+      72,
+      0.78,
       0.08,
-      0.05,
-      0.13,
-      0.22,
-      2.9
+      2.45,
+      0.34,
+      0.86,
+      2.62,
+      0.28,
+      16,
+      30
     ],
     "guessed_roles": [
       "combat",
-      "ui",
       "runtime",
       "player",
-      "manager"
+      "manager",
+      "data"
     ],
     "summary_signals": [
       "런타임 컴포넌트",
+      "전투 계열 로직 포함",
+      "컴포넌트 조회 사용",
+      "Find 계열 탐색 사용"
+    ]
+  },
+  {
+    "file_id": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.DamageNumber.cs",
+    "path": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.DamageNumber.cs",
+    "file_name": "CombatWorldSpriteView.DamageNumber.cs",
+    "content_hash": "6f3eb4acf34eb8b25f33ce025eeac330ed1585df",
+    "size": 13479,
+    "line_count": 334,
+    "namespace": "Project2048.Prototype",
+    "using_list": [
+      "System.Collections",
+      "System.Collections.Generic",
+      "TMPro",
+      "UnityEngine"
+    ],
+    "classes": [
+      {
+        "name": "CombatWorldSpriteView",
+        "kind": "class",
+        "access": "public",
+        "base_types": [],
+        "interfaces": [],
+        "attributes": [],
+        "is_partial": true,
+        "is_generic": false
+      }
+    ],
+    "main_class_name": "CombatWorldSpriteView",
+    "unity_type": "None",
+    "methods": [
+      "PlayDamageNumberPopupIfNeeded",
+      "PlayDamageNumberUiPopup",
+      "GameObject",
+      "Vector2",
+      "PlayDamageNumberWorldPopup",
+      "ConfigureDamageNumberLabel",
+      "ConfigureDamageNumberGlow",
+      "Material",
+      "ResolveDamageNumberWorldPosition",
+      "Vector3",
+      "ResolveDamageNumberWorldCenter",
+      "ResolveDamageNumberWorldOffsetRadius",
+      "ResolveDamageNumberCanvasPosition",
+      "ResolveDamageNumberPopupLayer",
+      "DamageNumberPopupRoutine",
+      "ClearDamageNumberPopups",
+      "DestroyDamageNumberPopup"
+    ],
+    "fields": [
+      {
+        "name": "DamageNumberPopupRiseDistance",
+        "type": "float",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "DamageNumberPopupMinimumWorldOffset",
+        "type": "float",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "DamageNumberPopupFallbackWorldRadius",
+        "type": "float",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "DamageNumberPopupBoundsRadiusMultiplier",
+        "type": "float",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "DamageNumberPopupWorldFontSize",
+        "type": "float",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "DamageNumberPopupUiFontSize",
+        "type": "float",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "DamageNumberPopupOutlineWidth",
+        "type": "float",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "DamageNumberPopupGlowInner",
+        "type": "float",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "DamageNumberPopupGlowOuter",
+        "type": "float",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "DamageNumberPopupGlowPower",
+        "type": "float",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "DamageNumberPopupGlowOffset",
+        "type": "float",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "DamageNumberPopupSortingOrderOffset",
+        "type": "int",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "DamageNumberPopupOutlineColor",
+        "type": "Color",
+        "access": "private",
+        "serialized": false,
+        "is_static": true
+      },
+      {
+        "name": "damageNumberPopupLayer",
+        "type": "RectTransform",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "sourceMaterial",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "bounds",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "worldCamera",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "startPosition",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "startTime",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "break",
+        "type": "yield",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "elapsed",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "color",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "popupObject",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "material",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      }
+    ],
+    "properties": [],
+    "events": [],
+    "unity_messages": [],
+    "has_update": false,
+    "has_fixed_update": false,
+    "has_late_update": false,
+    "has_awake": false,
+    "has_start": false,
+    "has_on_enable": false,
+    "has_on_disable": false,
+    "serialize_field_count": 0,
+    "public_field_count": 0,
+    "get_component_count": 7,
+    "find_call_count": 2,
+    "new_keyword_count": 10,
+    "coroutine_count": 3,
+    "singleton_candidate": false,
+    "dont_destroy_on_load": false,
+    "referenced_types": [
+      "float",
+      "int",
+      "Color",
+      "RectTransform",
+      "System",
+      "Collections",
+      "Generic",
+      "TMPro",
+      "UnityEngine",
+      "Project2048",
+      "Prototype",
+      "DamageNumberPopupRiseDistance",
+      "DamageNumberPopupMinimumWorldOffset",
+      "DamageNumberPopupFallbackWorldRadius",
+      "DamageNumberPopupBoundsRadiusMultiplier",
+      "DamageNumberPopupWorldFontSize",
+      "DamageNumberPopupUiFontSize",
+      "DamageNumberPopupOutlineWidth",
+      "DamageNumberPopupGlowInner",
+      "DamageNumberPopupGlowOuter",
+      "DamageNumberPopupGlowPower",
+      "DamageNumberPopupGlowOffset",
+      "DamageNumberPopupSortingOrderOffset",
+      "DamageNumberPopupTextColor",
+      "DamageNumberPopupOutlineColor",
+      "DamageNumberPopupGlowColor",
+      "PlayDamageNumberPopupIfNeeded",
+      "SpriteRenderer",
+      "ResolveDamageNumberPopupLayer",
+      "PlayDamageNumberUiPopup",
+      "PlayDamageNumberWorldPopup",
+      "DamageNumberPopup",
+      "TextMeshProUGUI",
+      "SetParent",
+      "Add",
+      "GetComponent",
+      "Vector2",
+      "ResolveDamageNumberCanvasPosition",
+      "ConfigureDamageNumberLabel",
+      "Application",
+      "StartCoroutine",
+      "DamageNumberPopupRoutine",
+      "TextMeshPro",
+      "InverseTransformPoint",
+      "ResolveDamageNumberWorldPosition",
+      "Quaternion",
+      "Vector3",
+      "MeshRenderer",
+      "TMP_Text",
+      "ToString",
+      "TextAlignmentOptions",
+      "Center",
+      "FontStyles",
+      "Bold",
+      "TextWrappingModes",
+      "NoWrap",
+      "TextOverflowModes",
+      "Overflow",
+      "ConfigureDamageNumberGlow",
+      "Material",
+      "DamageNumberPopupMaterial",
+      "EnableKeyword",
+      "ShaderUtilities",
+      "Keyword_Outline",
+      "HasProperty",
+      "ID_FaceColor",
+      "SetColor",
+      "ID_OutlineColor",
+      "ID_OutlineWidth",
+      "SetFloat",
+      "ID_GlowColor",
+      "Keyword_Glow",
+      "ID_GlowInner",
+      "ID_GlowOuter",
+      "ID_GlowPower",
+      "ID_GlowOffset",
+      "UpdateMeshPadding",
+      "ResolveDamageNumberWorldCenter",
+      "ResolveDamageNumberWorldOffsetRadius",
+      "Min",
+      "PI",
+      "Cos",
+      "Sin",
+      "Max",
+      "Clamp",
+      "GetComponentInParent",
+      "Canvas",
+      "Camera",
+      "RectTransformUtility",
+      "WorldToScreenPoint",
+      "RenderMode",
+      "ScreenSpaceOverlay",
+      "ScreenPointToLocalPointInRectangle",
+      "SetAsLastSibling",
+      "Find",
+      "CombatCanvas",
+      "FindAnyObjectByType",
+      "FindObjectsInactive",
+      "Include",
+      "DamageNumberPopupLayer",
+      "Clamp01",
+      "DamageNumberPopupDurationSeconds",
+      "SmoothStep",
+      "Lerp",
+      "Remove",
+      "DestroyDamageNumberPopup",
+      "ClearDamageNumberPopups",
+      "Clear",
+      "StartsWith",
+      "Destroy",
+      "DestroyImmediate"
+    ],
+    "component_access_types": [
+      "RectTransform",
+      "TextMeshProUGUI",
+      "TextMeshPro",
+      "MeshRenderer",
+      "Canvas",
+      "TMP_Text"
+    ],
+    "created_types": [
+      "GameObject",
+      "Vector2",
+      "Material",
+      "Vector3"
+    ],
+    "singleton_access_types": [],
+    "string_literals": [
+      "DamageNumberPopup",
+      "DamageNumberPopupMaterial",
+      "CombatCanvas",
+      "DamageNumberPopupLayer"
+    ],
+    "numeric_literals": [
+      0.62,
+      0.22,
+      0.55,
+      0.65,
+      2.9,
+      40,
+      0.04,
+      0.36,
+      0.72,
+      0,
+      32,
+      1,
+      0.82,
+      0.02,
+      0.5,
+      196,
+      84,
+      0.75,
+      2,
+      100
+    ],
+    "guessed_roles": [
+      "ui",
+      "combat",
+      "player",
+      "runtime",
+      "data"
+    ],
+    "summary_signals": [
       "UI 관련 로직 포함",
       "전투 계열 로직 포함",
       "컴포넌트 조회 사용",
       "Find 계열 탐색 사용"
+    ]
+  },
+  {
+    "file_id": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Debuff.cs",
+    "path": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Debuff.cs",
+    "file_name": "CombatWorldSpriteView.Debuff.cs",
+    "content_hash": "dd89686f9e3b56753b0c07487cf17452b483a85e",
+    "size": 5602,
+    "line_count": 136,
+    "namespace": "Project2048.Prototype",
+    "using_list": [
+      "System.Collections",
+      "Project2048.Combat",
+      "Project2048.Enemy",
+      "Project2048.Presentation",
+      "UnityEngine"
+    ],
+    "classes": [
+      {
+        "name": "CombatWorldSpriteView",
+        "kind": "class",
+        "access": "public",
+        "base_types": [],
+        "interfaces": [],
+        "attributes": [],
+        "is_partial": true,
+        "is_generic": false
+      }
+    ],
+    "main_class_name": "CombatWorldSpriteView",
+    "unity_type": "None",
+    "methods": [
+      "PlayEnemyDebuffCastEffectIfNeeded",
+      "ResolveDebuffParticleLifetimeSeconds",
+      "PlayDebuffTargetEffectAfterCast",
+      "SpawnDebuffTargetParticlesAfterDelay",
+      "WaitForSecondsRealtime",
+      "SpawnDebuffCastParticles",
+      "ResolveDebuffParticleColor",
+      "ResolveDebuffParticleEffect",
+      "ResolveDebuffParticleMaterial",
+      "ResolveDebuffActionId"
+    ],
+    "fields": [
+      {
+        "name": "DebuffCastParticleLifetimeSeconds",
+        "type": "float",
+        "access": "public",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "DebuffTargetParticleDelaySeconds",
+        "type": "float",
+        "access": "public",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "DebuffCastParticleCount",
+        "type": "int",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "lastPlayedEnemyDebuffVfxSequence",
+        "type": "int",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "runtimeFearDebuffParticleMaterial",
+        "type": "Material",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "runtimeDarknessDebuffParticleMaterial",
+        "type": "Material",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "target",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      }
+    ],
+    "properties": [],
+    "events": [],
+    "unity_messages": [],
+    "has_update": false,
+    "has_fixed_update": false,
+    "has_late_update": false,
+    "has_awake": false,
+    "has_start": false,
+    "has_on_enable": false,
+    "has_on_disable": false,
+    "serialize_field_count": 0,
+    "public_field_count": 2,
+    "get_component_count": 0,
+    "find_call_count": 0,
+    "new_keyword_count": 1,
+    "coroutine_count": 2,
+    "singleton_candidate": false,
+    "dont_destroy_on_load": false,
+    "referenced_types": [
+      "float",
+      "int",
+      "Material",
+      "System",
+      "Collections",
+      "Project2048",
+      "Combat",
+      "Enemy",
+      "Presentation",
+      "UnityEngine",
+      "Prototype",
+      "DebuffCastParticleLifetimeSeconds",
+      "DebuffTargetParticleDelaySeconds",
+      "DebuffCastParticleCount",
+      "PlayEnemyDebuffCastEffectIfNeeded",
+      "CombatVfxCue",
+      "Sequence",
+      "DebuffType",
+      "None",
+      "ResolveCurrentEnemyData",
+      "FindActionEffect",
+      "ResolveDebuffActionId",
+      "PlayCombatantActionEffect",
+      "PlayCombatantActionAudioEffect",
+      "CombatActionIds",
+      "Attack",
+      "SpawnDebuffCastParticles",
+      "PlayDebuffTargetEffectAfterCast",
+      "ResolveDebuffParticleLifetimeSeconds",
+      "StartCoroutine",
+      "SpawnDebuffTargetParticlesAfterDelay",
+      "WaitForSecondsRealtime",
+      "Max",
+      "ResolveDebuffParticleEffect",
+      "ResolveDebuffParticleMaterial",
+      "Color",
+      "ResolveDebuffParticleColor",
+      "SpawnParticleBurst",
+      "DebuffCastParticles",
+      "EffectiveLifetimeSeconds",
+      "EffectiveBurstCount",
+      "EffectiveStartSpeed",
+      "EffectiveStartSize",
+      "Fear",
+      "Darkness",
+      "CombatParticleEffectBinding",
+      "ResolveWorldVfxProfile",
+      "ResolveDebuffCastEffect",
+      "CreateParticleMaterial",
+      "FearDebuffParticleMaterial",
+      "DarknessDebuffParticleMaterial",
+      "ResolveShieldImpactParticleMaterial",
+      "DebuffFear",
+      "DebuffDarkness"
+    ],
+    "component_access_types": [],
+    "created_types": [
+      "WaitForSecondsRealtime"
+    ],
+    "singleton_access_types": [],
+    "string_literals": [
+      "{debuffType}DebuffCastParticles",
+      "FearDebuffParticleMaterial",
+      "DarknessDebuffParticleMaterial"
+    ],
+    "numeric_literals": [
+      0.9,
+      28,
+      0.05,
+      0.62,
+      0.28
+    ],
+    "guessed_roles": [
+      "combat",
+      "data",
+      "runtime",
+      "player"
+    ],
+    "summary_signals": [
+      "전투 계열 로직 포함"
+    ]
+  },
+  {
+    "file_id": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
+    "path": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
+    "file_name": "CombatWorldSpriteView.Enemy.cs",
+    "content_hash": "358aacc46224b59a2d8cbe72a476b473cad897cc",
+    "size": 20024,
+    "line_count": 575,
+    "namespace": "Project2048.Prototype",
+    "using_list": [
+      "System.Collections",
+      "Project2048.Presentation",
+      "UnityEngine",
+      "UnityEngine.EventSystems"
+    ],
+    "classes": [
+      {
+        "name": "CombatWorldSpriteView",
+        "kind": "class",
+        "access": "public",
+        "base_types": [],
+        "interfaces": [],
+        "attributes": [],
+        "is_partial": true,
+        "is_generic": false
+      }
+    ],
+    "main_class_name": "CombatWorldSpriteView",
+    "unity_type": "None",
+    "methods": [
+      "PlayEnemyAppearIntro",
+      "PlayEnemyAttackLunge",
+      "PlayEnemyAttackImpactEffects",
+      "PlayEnemyClawSlashEffect",
+      "CreateRuntimeEnemyClawSlashEffect",
+      "GameObject",
+      "ResolveEnemyAttackDirectionSign",
+      "EnemyAppearIntroRoutine",
+      "EnemyAttackLungeRoutine",
+      "PlayEnemyDeathFadeIfNeeded",
+      "PlayEnemyDeathFade",
+      "EnemyDeathFadeDelayRoutine",
+      "WaitForSecondsRealtime",
+      "EnemyDeathFadeRoutine",
+      "ClearEnemyDeathFade",
+      "ClearEnemyAppearIntro",
+      "ClearEnemyAttackLunge",
+      "PlayEnemyAppearWorldShake",
+      "ResolveWorldShake",
+      "ResolveForegroundShakeRoot",
+      "ReparentRendererForWorldShake",
+      "ClearWorldShake",
+      "CanAutoReparentForWorldShake",
+      "IsUsableShakeTarget",
+      "DestroyGeneratedShakeRoot",
+      "ResolveEnemyAttackLungeTarget",
+      "CacheEnemyRendererRestTransform",
+      "RestoreEnemyRendererTransform",
+      "SetEnemyRendererAlpha"
+    ],
+    "fields": [
+      {
+        "name": "EnemyDeathFadeDurationSeconds",
+        "type": "float",
+        "access": "public",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "EnemyAppearIntroDurationSeconds",
+        "type": "float",
+        "access": "public",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "EnemyAttackLungeDurationSeconds",
+        "type": "float",
+        "access": "public",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "EnemyAppearWorldShakeDurationSeconds",
+        "type": "float",
+        "access": "public",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "EnemyAppearIntroRightOffset",
+        "type": "float",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "EnemyAppearIntroJumpHeight",
+        "type": "float",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "EnemyAppearIntroScalePop",
+        "type": "float",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "EnemyAttackLungeDistance",
+        "type": "float",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "EnemyAttackLungeImpactTime",
+        "type": "float",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "EnemyAttackLungeScalePop",
+        "type": "float",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "EnemyAppearWorldShakeMagnitude",
+        "type": "float",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "enemyDeathFadeCoroutine",
+        "type": "Coroutine",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "enemyDeathFadeDelayCoroutine",
+        "type": "Coroutine",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "enemyAppearIntroCoroutine",
+        "type": "Coroutine",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "enemyAttackLungeCoroutine",
+        "type": "Coroutine",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "enemyRendererRestLocalPosition",
+        "type": "Vector3",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "enemyRendererRestLocalScale",
+        "type": "Vector3",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "hasEnemyRendererRestTransform",
+        "type": "bool",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "lastEnemyWasDead",
+        "type": "bool",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "delayEnemyDeathFadeUntilRealtime",
+        "type": "float",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "sortingReference",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "parent",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "deltaX",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "targetPosition",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "baseScale",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "startTime",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "elapsed",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "startPosition",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "baseScale",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "startTime",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "playedImpactEffect",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "elapsed",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "position",
+        "type": "Vector3",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "startTime",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "elapsed",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "reparentedCount",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "rendererTransform",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "enemyTransform",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "enemyWorldPosition",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "direction",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "lungeWorldPosition",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "color",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      }
+    ],
+    "properties": [],
+    "events": [],
+    "unity_messages": [],
+    "has_update": false,
+    "has_fixed_update": false,
+    "has_late_update": false,
+    "has_awake": false,
+    "has_start": false,
+    "has_on_enable": false,
+    "has_on_disable": false,
+    "serialize_field_count": 0,
+    "public_field_count": 4,
+    "get_component_count": 1,
+    "find_call_count": 0,
+    "new_keyword_count": 3,
+    "coroutine_count": 8,
+    "singleton_candidate": false,
+    "dont_destroy_on_load": false,
+    "referenced_types": [
+      "float",
+      "Coroutine",
+      "Vector3",
+      "bool",
+      "System",
+      "Collections",
+      "Project2048",
+      "Presentation",
+      "UnityEngine",
+      "EventSystems",
+      "Prototype",
+      "EnemyDeathFadeDurationSeconds",
+      "EnemyAppearIntroDurationSeconds",
+      "EnemyAttackLungeDurationSeconds",
+      "EnemyAppearWorldShakeDurationSeconds",
+      "EnemyAppearIntroRightOffset",
+      "EnemyAppearIntroJumpHeight",
+      "EnemyAppearIntroScalePop",
+      "EnemyAttackLungeDistance",
+      "EnemyAttackLungeImpactTime",
+      "EnemyAttackLungeScalePop",
+      "EnemyAppearWorldShakeMagnitude",
+      "PlayEnemyAppearIntro",
+      "CombatEffectBinding",
+      "PlayCombatantActionEffect",
+      "PlayEnemyAppearWorldShake",
+      "CacheEnemyRendererRestTransform",
+      "ClearEnemyAttackLunge",
+      "ClearEnemyAppearIntro",
+      "Application",
+      "RestoreEnemyRendererTransform",
+      "StartCoroutine",
+      "EnemyAppearIntroRoutine",
+      "PlayEnemyAttackLunge",
+      "PlayEnemyAttackImpactEffects",
+      "EnemyAttackLungeRoutine",
+      "PlayEnemyClawSlashEffect",
+      "SpawnAttackArtSpriteLayer",
+      "EnemyAttackArt",
+      "Color",
+      "AttackArtBaseRadius",
+      "AttackArtLifetimeSeconds",
+      "Quaternion",
+      "Euler",
+      "Max",
+      "Instantiate",
+      "CreateRuntimeEnemyClawSlashEffect",
+      "EnemyClawSlash2D",
+      "Play",
+      "ResolveEnemyAttackDirectionSign",
+      "CombatClawSlash2DEffect",
+      "SetParent",
+      "AddComponent",
+      "SetEnemyRendererAlpha",
+      "Clamp01",
+      "Pow",
+      "Lerp",
+      "Sin",
+      "PI",
+      "ResolveEnemyAttackLungeTarget",
+      "SmoothStep",
+      "PlayEnemyDeathFadeIfNeeded",
+      "EnemyDeathFadeDelayRoutine",
+      "PlayEnemyDeathFade",
+      "ClearEnemyDeathFade",
+      "EnemyDeathFadeRoutine",
+      "WaitForSecondsRealtime",
+      "StopCoroutine",
+      "ResolveWorldShake",
+      "Shake",
+      "WorldShake",
+      "IsUsableShakeTarget",
+      "ResetRestPosition",
+      "ResolveForegroundShakeRoot",
+      "GetComponent",
+      "ForegroundShakeRoot",
+      "ReparentRendererForWorldShake",
+      "DestroyGeneratedShakeRoot",
+      "SpriteRenderer",
+      "IsChildOf",
+      "CanAutoReparentForWorldShake",
+      "ClearWorldShake",
+      "StopShake",
+      "GetComponentInChildren",
+      "Rigidbody2D",
+      "Collider2D",
+      "Camera",
+      "AudioListener",
+      "Canvas",
+      "EventSystem",
+      "Destroy",
+      "DestroyImmediate",
+      "InverseTransformPoint"
+    ],
+    "component_access_types": [
+      "WorldShake"
+    ],
+    "created_types": [
+      "GameObject",
+      "WaitForSecondsRealtime"
+    ],
+    "singleton_access_types": [],
+    "string_literals": [
+      "EnemyAttackArt",
+      "EnemyClawSlash2D",
+      "ForegroundShakeRoot"
+    ],
+    "numeric_literals": [
+      0.6,
+      0.45,
+      0.32,
+      1.5,
+      2.25,
+      0.7,
+      0.08,
+      0.72,
+      0.05,
+      0.13,
+      1.08,
+      12,
+      0.01,
+      1,
+      0,
+      3,
+      0.001,
+      0.0001
+    ],
+    "guessed_roles": [
+      "combat",
+      "player",
+      "ui",
+      "runtime"
+    ],
+    "summary_signals": [
+      "UI 관련 로직 포함",
+      "전투 계열 로직 포함",
+      "컴포넌트 조회 사용"
     ]
   },
   {

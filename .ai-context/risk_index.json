@@ -82,23 +82,23 @@
     "file_id": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "class_name": "CombatWorldSpriteView",
     "risk_flags": [
+      "update-heavy",
       "high-coupling",
       "public-field-heavy",
       "getcomponent-heavy",
       "find-heavy",
       "magic-number-heavy",
       "large-class",
-      "ui-runtime-mixed",
       "state-owner"
     ],
     "risk_reasons": [
+      "Unity 업데이트 루프 사용",
       "참조 타입 또는 관계 수가 많음",
       "public 필드 노출 수가 많음",
       "GetComponent/TryGetComponent 호출이 많음",
       "Find 계열 탐색 사용",
       "숫자 리터럴이 많아 의미 파악이 어려울 수 있음",
       "파일/메서드/필드 수가 많아 책임이 커질 가능성",
-      "UI와 런타임 책임이 한 파일에 섞였을 가능성",
       "상태 중심 또는 관리 중심 클래스일 가능성"
     ],
     "risk_score": 93
@@ -146,6 +146,29 @@
       "숫자 리터럴이 많아 의미 파악이 어려울 수 있음",
       "파일/메서드/필드 수가 많아 책임이 커질 가능성",
       "저장/불러오기 관련 로직 포함",
+      "UI와 런타임 책임이 한 파일에 섞였을 가능성",
+      "상태 중심 또는 관리 중심 클래스일 가능성"
+    ],
+    "risk_score": 83
+  },
+  {
+    "file_id": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.DamageNumber.cs",
+    "class_name": "CombatWorldSpriteView",
+    "risk_flags": [
+      "high-coupling",
+      "getcomponent-heavy",
+      "find-heavy",
+      "magic-number-heavy",
+      "large-class",
+      "ui-runtime-mixed",
+      "state-owner"
+    ],
+    "risk_reasons": [
+      "참조 타입 또는 관계 수가 많음",
+      "GetComponent/TryGetComponent 호출이 많음",
+      "Find 계열 탐색 사용",
+      "숫자 리터럴이 많아 의미 파악이 어려울 수 있음",
+      "파일/메서드/필드 수가 많아 책임이 커질 가능성",
       "UI와 런타임 책임이 한 파일에 섞였을 가능성",
       "상태 중심 또는 관리 중심 클래스일 가능성"
     ],
@@ -473,6 +496,48 @@
       "숫자 리터럴이 많아 의미 파악이 어려울 수 있음",
       "파일/메서드/필드 수가 많아 책임이 커질 가능성",
       "초기화 순서에 민감할 가능성",
+      "UI와 런타임 책임이 한 파일에 섞였을 가능성",
+      "상태 중심 또는 관리 중심 클래스일 가능성"
+    ],
+    "risk_score": 69
+  },
+  {
+    "file_id": "Project 2048/Assets/Scripts/Prototype/CombatUiView.Theme.cs",
+    "class_name": "CombatUiView",
+    "risk_flags": [
+      "high-coupling",
+      "public-field-heavy",
+      "magic-number-heavy",
+      "large-class",
+      "ui-runtime-mixed",
+      "state-owner"
+    ],
+    "risk_reasons": [
+      "참조 타입 또는 관계 수가 많음",
+      "public 필드 노출 수가 많음",
+      "숫자 리터럴이 많아 의미 파악이 어려울 수 있음",
+      "파일/메서드/필드 수가 많아 책임이 커질 가능성",
+      "UI와 런타임 책임이 한 파일에 섞였을 가능성",
+      "상태 중심 또는 관리 중심 클래스일 가능성"
+    ],
+    "risk_score": 69
+  },
+  {
+    "file_id": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
+    "class_name": "CombatWorldSpriteView",
+    "risk_flags": [
+      "high-coupling",
+      "public-field-heavy",
+      "magic-number-heavy",
+      "large-class",
+      "ui-runtime-mixed",
+      "state-owner"
+    ],
+    "risk_reasons": [
+      "참조 타입 또는 관계 수가 많음",
+      "public 필드 노출 수가 많음",
+      "숫자 리터럴이 많아 의미 파악이 어려울 수 있음",
+      "파일/메서드/필드 수가 많아 책임이 커질 가능성",
       "UI와 런타임 책임이 한 파일에 섞였을 가능성",
       "상태 중심 또는 관리 중심 클래스일 가능성"
     ],
@@ -958,6 +1023,23 @@
   {
     "file_id": "Project 2048/Assets/Scripts/Flow/FlowController.cs",
     "class_name": "FlowController",
+    "risk_flags": [
+      "high-coupling",
+      "find-heavy",
+      "save-load-sensitive",
+      "state-owner"
+    ],
+    "risk_reasons": [
+      "참조 타입 또는 관계 수가 많음",
+      "Find 계열 탐색 사용",
+      "저장/불러오기 관련 로직 포함",
+      "상태 중심 또는 관리 중심 클래스일 가능성"
+    ],
+    "risk_score": 50
+  },
+  {
+    "file_id": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Audio.cs",
+    "class_name": "CombatWorldSpriteView",
     "risk_flags": [
       "high-coupling",
       "find-heavy",
@@ -1627,6 +1709,19 @@
   {
     "file_id": "Project 2048/Assets/Scripts/Presentation/BoardTileEffectProfileSO.cs",
     "class_name": "BoardTileEffectProfileSO",
+    "risk_flags": [
+      "high-coupling",
+      "state-owner"
+    ],
+    "risk_reasons": [
+      "참조 타입 또는 관계 수가 많음",
+      "상태 중심 또는 관리 중심 클래스일 가능성"
+    ],
+    "risk_score": 26
+  },
+  {
+    "file_id": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Debuff.cs",
+    "class_name": "CombatWorldSpriteView",
     "risk_flags": [
       "high-coupling",
       "state-owner"

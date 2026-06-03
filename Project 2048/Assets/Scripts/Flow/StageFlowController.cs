@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Project2048.Combat;
 using Project2048.Enemy;
 using Project2048.Rewards;
-using Project2048.Stage;
 using UnityEngine;
 
 namespace Project2048.Flow
@@ -15,16 +14,25 @@ namespace Project2048.Flow
         [SerializeField] private List<EnemyController> enemyControllers = new();
         [SerializeField] private RewardManager rewardManager;
 
-        [Header("Stage Data")]
-        [SerializeField] private StageDatabaseSO stageDatabase;
+        [Header("Prototype Stage Data")]
         [SerializeField] private PlayerSO playerData;
+        [SerializeField] private EnemySO enemyData;
+        [SerializeField] private EnemySO finalBossData;
         [SerializeField] private RewardTableSO rewardTable;
+        [SerializeField] private List<EnemySO> enemyPool = new();
+        [SerializeField] private List<EnemySO> eliteEnemyPool = new();
+        [SerializeField] private List<EnemySO> bossEnemyPool = new();
+        [SerializeField] private bool randomizeEnemyOnStart = true;
         [SerializeField] private int boardMoveCount = 4;
+        [SerializeField] private int finalStageIndex = 20;
+        [SerializeField] private int eliteInterval = 5;
         [SerializeField] private float enemyTurnDelaySeconds = 1.2f;
         [SerializeField] private RunProgress runProgress = new();
 
         private int currentStageIndex = 1;
+        private StageEncounterType currentEncounterType = StageEncounterType.Normal;
         private CombatResult lastCombatResult;
+        private EnemySO runtimeEncounterEnemy;
 
         public StageFlowState CurrentState { get; private set; } = StageFlowState.None;
         public RunProgress RunProgress => runProgress ??= new RunProgress();
@@ -50,22 +58,34 @@ namespace Project2048.Flow
             UnbindEvents();
         }
 
+        private void OnDestroy()
+        {
+            DestroyRuntimeEncounterEnemy();
+        }
+
         public void StartStage(int stageIndex)
         {
             ResolveSceneReferences();
 
-            currentStageIndex = Mathf.Max(1, stageIndex);
-            if (!CanStartStage(out var stageEnemyData))
+            if (!CanStartStage())
             {
                 return;
             }
 
+            currentStageIndex = Mathf.Max(1, stageIndex);
+            currentEncounterType = ResolveEncounterType(currentStageIndex);
             lastCombatResult = null;
+            DestroyRuntimeEncounterEnemy();
 
             ChangeState(StageFlowState.Preparing);
             OnStageFlowStarted?.Invoke(currentStageIndex);
 
             rewardManager.Initialize(RunProgress, rewardTable);
+
+            var selectedEnemyData = PrepareEnemyForEncounter(
+                SelectEnemyData(enemyData, currentEncounterType),
+                currentEncounterType);
+            var combatEnemies = new List<EnemySO> { selectedEnemyData };
 
             combatManager.SetCombatants(playerController, enemyControllers);
             combatManager.EnemyTurnDelaySeconds = enemyTurnDelaySeconds;
@@ -76,7 +96,7 @@ namespace Project2048.Flow
             combatManager.StartCombat(new CombatSetup
             {
                 playerData = playerData,
-                enemyDataList = new List<EnemySO> { stageEnemyData },
+                enemyDataList = combatEnemies,
                 boardMoveCount = boardMoveCount,
                 runProgress = RunProgress,
             });
@@ -120,9 +140,8 @@ namespace Project2048.Flow
             }
         }
 
-        private bool CanStartStage(out EnemySO stageEnemyData)
+        private bool CanStartStage()
         {
-            stageEnemyData = null;
             if (combatManager == null)
             {
                 Debug.LogError("CombatManager is not assigned.");
@@ -153,21 +172,9 @@ namespace Project2048.Flow
                 return false;
             }
 
-            if (stageDatabase == null)
+            if (enemyData == null && (enemyPool == null || enemyPool.Count == 0))
             {
-                Debug.LogError("StageDatabaseSO is not assigned.");
-                return false;
-            }
-
-            if (!stageDatabase.TryGetStage(currentStageIndex, out var stage))
-            {
-                Debug.LogError($"Stage {currentStageIndex} is not configured.");
-                return false;
-            }
-
-            if (!stage.TrySelectEnemy(out stageEnemyData))
-            {
-                Debug.LogError($"Stage {currentStageIndex} has no valid EnemySO candidate.");
+                Debug.LogError("EnemySO or enemy pool is required.");
                 return false;
             }
 
@@ -234,8 +241,8 @@ namespace Project2048.Flow
 
             OnStageCompleted?.Invoke(new StageResult(
                 currentStageIndex,
-                StageEncounterType.Normal,
-                stageDatabase != null && stageDatabase.IsFinalStage(currentStageIndex),
+                currentEncounterType,
+                currentStageIndex >= Mathf.Max(1, finalStageIndex),
                 lastCombatResult,
                 rewardResult));
         }
@@ -245,6 +252,134 @@ namespace Project2048.Flow
             ChangeState(StageFlowState.Failed);
             rewardManager.ClearReward(combatManager.Player);
             OnStageFailed?.Invoke();
+        }
+
+        private EnemySO SelectEnemyData(EnemySO fallback, StageEncounterType encounterType)
+        {
+            if (encounterType == StageEncounterType.FinalBoss && finalBossData != null)
+            {
+                return finalBossData;
+            }
+
+            if (!randomizeEnemyOnStart)
+            {
+                return fallback;
+            }
+
+            var pooledEnemy = SelectPooledEnemy(encounterType);
+            return pooledEnemy != null ? pooledEnemy : fallback;
+        }
+
+        private EnemySO SelectPooledEnemy(StageEncounterType encounterType)
+        {
+            var pool = encounterType switch
+            {
+                StageEncounterType.FinalBoss => bossEnemyPool,
+                StageEncounterType.Boss => bossEnemyPool,
+                StageEncounterType.Elite => eliteEnemyPool,
+                _ => enemyPool,
+            };
+
+            if ((pool == null || pool.Count == 0) && encounterType != StageEncounterType.Normal)
+            {
+                pool = enemyPool;
+            }
+
+            if (pool == null || pool.Count == 0)
+            {
+                return null;
+            }
+
+            var validEnemies = new List<EnemySO>();
+            foreach (var enemy in pool)
+            {
+                if (enemy != null)
+                {
+                    validEnemies.Add(enemy);
+                }
+            }
+
+            return validEnemies.Count == 0
+                ? null
+                : validEnemies[UnityEngine.Random.Range(0, validEnemies.Count)];
+        }
+
+        private EnemySO PrepareEnemyForEncounter(EnemySO source, StageEncounterType encounterType)
+        {
+            if (source == null)
+            {
+                return null;
+            }
+
+            var desiredRank = ToEnemyRank(encounterType);
+            if (source.encounterRank == desiredRank)
+            {
+                return source;
+            }
+
+            runtimeEncounterEnemy = Instantiate(source);
+            runtimeEncounterEnemy.hideFlags = HideFlags.DontSave;
+            runtimeEncounterEnemy.encounterRank = desiredRank;
+            if (desiredRank != EnemyEncounterRank.Normal)
+            {
+                runtimeEncounterEnemy.aiStrength = EnemyAiStrength.Enhanced;
+                runtimeEncounterEnemy.aiComplexity = EnemyAiComplexity.Normal;
+                runtimeEncounterEnemy.actionsPerTurn = EnemySO.ResolveDefaultActionsPerTurn(runtimeEncounterEnemy.aiComplexity);
+            }
+
+            if (desiredRank == EnemyEncounterRank.FinalBoss)
+            {
+                runtimeEncounterEnemy.maxHp = Mathf.CeilToInt(runtimeEncounterEnemy.maxHp * 1.5f);
+                runtimeEncounterEnemy.attackPower = Mathf.CeilToInt(runtimeEncounterEnemy.attackPower * 1.25f);
+                runtimeEncounterEnemy.aiComplexity = EnemyAiComplexity.Complex;
+                runtimeEncounterEnemy.actionsPerTurn = EnemySO.ResolveDefaultActionsPerTurn(runtimeEncounterEnemy.aiComplexity);
+            }
+
+            return runtimeEncounterEnemy;
+        }
+
+        public StageEncounterType ResolveEncounterType(int stageIndex)
+        {
+            var finalStage = Mathf.Max(1, finalStageIndex);
+            if (stageIndex >= finalStage)
+            {
+                return StageEncounterType.FinalBoss;
+            }
+
+            var interval = Mathf.Max(1, eliteInterval);
+            return stageIndex % interval == 0
+                ? StageEncounterType.Elite
+                : StageEncounterType.Normal;
+        }
+
+        private static EnemyEncounterRank ToEnemyRank(StageEncounterType encounterType)
+        {
+            return encounterType switch
+            {
+                StageEncounterType.FinalBoss => EnemyEncounterRank.FinalBoss,
+                StageEncounterType.Boss => EnemyEncounterRank.Boss,
+                StageEncounterType.Elite => EnemyEncounterRank.Elite,
+                _ => EnemyEncounterRank.Normal,
+            };
+        }
+
+        private void DestroyRuntimeEncounterEnemy()
+        {
+            if (runtimeEncounterEnemy == null)
+            {
+                return;
+            }
+
+            if (Application.isPlaying)
+            {
+                Destroy(runtimeEncounterEnemy);
+            }
+            else
+            {
+                DestroyImmediate(runtimeEncounterEnemy);
+            }
+
+            runtimeEncounterEnemy = null;
         }
 
         private void ChangeState(StageFlowState nextState)

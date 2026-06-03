@@ -11925,10 +11925,29 @@ MonoBehaviour:
   enemyControllers:
   - {fileID: 1999228549}
   rewardManager: {fileID: 1327107009}
-  stageDatabase: {fileID: 11400000, guid: 7ff0a5e7d7cefc640b3a27c0596fda57, type: 2}
   playerData: {fileID: 11400000, guid: 032b4bdf9c2ffc847bd27ec8e3af0335, type: 2}
+  enemyData: {fileID: 11400000, guid: 06eaa3c71a8251b49b93faea191f399e, type: 2}
+  finalBossData: {fileID: 0}
   rewardTable: {fileID: 11400000, guid: e82aa82acecfe504ab3cc5e0b5d7248c, type: 2}
+  enemyPool:
+  - {fileID: 11400000, guid: 06eaa3c71a8251b49b93faea191f399e, type: 2}
+  - {fileID: 11400000, guid: 376a581031f59df40ac736276a0a8728, type: 2}
+  - {fileID: 11400000, guid: 831ac131a4390444ebe7ac3fd53792e4, type: 2}
+  - {fileID: 11400000, guid: aa9c8c7cdce3cbd4b9c2f022330851db, type: 2}
+  - {fileID: 11400000, guid: cdaaac025227dcf4d8318ff118f4d344, type: 2}
+  - {fileID: 11400000, guid: bc9047c32898cce46b25ea3f49d79a0c, type: 2}
+  - {fileID: 11400000, guid: 0080f1161f9b82d41916849717b89639, type: 2}
+  - {fileID: 11400000, guid: 96b6afafa2ae7e7469eb3250899c6578, type: 2}
+  - {fileID: 11400000, guid: a48d0adc9e651b7469557e689b98ba72, type: 2}
+  - {fileID: 11400000, guid: cec2f8495581cf34bbf1e19b4f0ec0aa, type: 2}
+  - {fileID: 11400000, guid: 89bd2abaeb2b1a74bbbcb196d5936544, type: 2}
+  - {fileID: 11400000, guid: e41a6edb3293a5c48908ac0e3de93328, type: 2}
+  eliteEnemyPool: []
+  bossEnemyPool: []
+  randomizeEnemyOnStart: 0
   boardMoveCount: 12
+  finalStageIndex: 20
+  eliteInterval: 5
   enemyTurnDelaySeconds: 1.2
   runProgress:
     hasCurrentHp: 0
@@ -12145,8 +12164,6 @@ MonoBehaviour:
   playerRenderer: {fileID: 713791490}
   enemyRenderer: {fileID: 1629219948}
   defaultBackgroundSprite: {fileID: 7288489148436055206, guid: ac20f033bdceb3149b44f3a942308b67, type: 3}
-  attackEffectSprite: {fileID: 0}
-  shieldEffectSprite: {fileID: 0}
   audioSource: {fileID: 0}
   sfxMixerGroup: {fileID: 0}
   bgmDucker: {fileID: 0}

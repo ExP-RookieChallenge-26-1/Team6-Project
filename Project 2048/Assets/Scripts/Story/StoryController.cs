@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using Project2048.Core;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,7 +8,6 @@ namespace Project2048.Story
     public class StoryController : MonoBehaviour
     {
         [SerializeField] private StoryDataSO openingStory;
-        [SerializeField] private StoryDataSO endingStory;
         [SerializeField] private StoryTextView storyTextView;
         [SerializeField] private StoryBackgroundView storyBackgroundView;
         [SerializeField] private StoryLayoutView storyLayoutView;
@@ -33,21 +31,7 @@ namespace Project2048.Story
 
         private void Start()
         {
-            StartStory(ResolveInitialStory());
-        }
-
-        private StoryDataSO ResolveInitialStory()
-        {
-            var flowController = GameManager.Instance != null
-                ? GameManager.Instance.FlowController
-                : null;
-            if (flowController != null &&
-                flowController.CurrentGameState == GameContext.GameState.Ending)
-            {
-                return endingStory;
-            }
-
-            return openingStory;
+            StartStory(openingStory);
         }
 
         public void StartStory(StoryDataSO storyData)

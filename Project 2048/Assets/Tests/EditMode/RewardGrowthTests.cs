@@ -283,6 +283,18 @@ namespace Project2048.Tests
         }
 
         [Test]
+        public void StageFlow_UsesEliteStagesEveryFiveAndFinalBossAtTwenty()
+        {
+            var stageFlow = CreateGameObject<StageFlowController>("StageFlow");
+
+            Assert.That(stageFlow.ResolveEncounterType(1), Is.EqualTo(StageEncounterType.Normal));
+            Assert.That(stageFlow.ResolveEncounterType(5), Is.EqualTo(StageEncounterType.Elite));
+            Assert.That(stageFlow.ResolveEncounterType(10), Is.EqualTo(StageEncounterType.Elite));
+            Assert.That(stageFlow.ResolveEncounterType(15), Is.EqualTo(StageEncounterType.Elite));
+            Assert.That(stageFlow.ResolveEncounterType(20), Is.EqualTo(StageEncounterType.FinalBoss));
+        }
+
+        [Test]
         public void CombatUiView_VictoryShowsRewardOverlayUntilRewardChoiceIsClaimed()
         {
             var viewObject = CreateOwnedGameObject("CombatView");

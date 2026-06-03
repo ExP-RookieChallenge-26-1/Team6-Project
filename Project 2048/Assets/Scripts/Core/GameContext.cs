@@ -12,8 +12,7 @@ namespace Project2048.Core
             Story,
             Playing,
             Paused,
-            Result,
-            Ending
+            Result
         }
 
         GameState currentGameState;

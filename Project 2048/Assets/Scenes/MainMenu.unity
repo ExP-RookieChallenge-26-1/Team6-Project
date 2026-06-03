@@ -3363,6 +3363,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Game.Core::Project2048.Flow.SceneFlowManager
   flowController: {fileID: 1982590315}
+  loadingUI: {fileID: 1168271813}
   minimumLoadingSeconds: 2
 --- !u!114 &1982590320
 MonoBehaviour:

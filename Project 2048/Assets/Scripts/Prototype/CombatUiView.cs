@@ -23,7 +23,7 @@ namespace Project2048.Prototype
     /// clips in the editor; this component only keeps those placeholders in
     /// sync with combat state.
     /// </summary>
-    public class CombatUiView : MonoBehaviour
+    public partial class CombatUiView : MonoBehaviour
     {
         // Tile slides should stay snappy; panel switching gets its own delay below.
         public const float BoardTransitionDurationSeconds = 0.14f;

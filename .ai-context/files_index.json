@@ -6217,9 +6217,9 @@
     "file_id": "Project 2048/Assets/Scripts/Core/GameContext.cs",
     "path": "Project 2048/Assets/Scripts/Core/GameContext.cs",
     "file_name": "GameContext.cs",
-    "content_hash": "d70fd49e2351a81af46482fec726ba60ba924403",
-    "size": 1340,
-    "line_count": 58,
+    "content_hash": "41ba13c47271126774e32a4ad1bfdb93020ba95d",
+    "size": 1320,
+    "line_count": 57,
     "namespace": "Project2048.Core",
     "using_list": [
       "System",
@@ -6300,7 +6300,6 @@
       "Playing",
       "Paused",
       "Result",
-      "Ending",
       "CurrentGameState",
       "CurrentStageIndex",
       "IsRunActive",
@@ -8756,9 +8755,9 @@
     "file_id": "Project 2048/Assets/Scripts/Flow/Binder/StoryFlowBinder.cs",
     "path": "Project 2048/Assets/Scripts/Flow/Binder/StoryFlowBinder.cs",
     "file_name": "StoryFlowBinder.cs",
-    "content_hash": "65ef1cb588d9bd9971b328f97fe747b062b1ea00",
-    "size": 1267,
-    "line_count": 54,
+    "content_hash": "30fa9c1fc3d9b5c3e45b6d2d4a6a112d6bdbdfd8",
+    "size": 1050,
+    "line_count": 44,
     "namespace": "Project2048.Story",
     "using_list": [
       "Project2048.Core",
@@ -8784,8 +8783,7 @@
     "methods": [
       "Awake",
       "OnEnable",
-      "OnDisable",
-      "HandleStoryFinished"
+      "OnDisable"
     ],
     "fields": [
       {
@@ -8832,13 +8830,8 @@
       "Instance",
       "OnEnable",
       "OnStoryFinished",
-      "HandleStoryFinished",
-      "OnDisable",
-      "CurrentGameState",
-      "GameContext",
-      "GameState",
-      "Ending",
-      "CompleteOpeningStory"
+      "CompleteOpeningStory",
+      "OnDisable"
     ],
     "component_access_types": [
       "StoryController"
@@ -8864,9 +8857,9 @@
     "file_id": "Project 2048/Assets/Scripts/Flow/FlowController.cs",
     "path": "Project 2048/Assets/Scripts/Flow/FlowController.cs",
     "file_name": "FlowController.cs",
-    "content_hash": "143574507533ab0a7935d9413b21e48f429dba28",
-    "size": 8134,
-    "line_count": 265,
+    "content_hash": "d56425f75d80716a4f979b9d973c61e37a81d581",
+    "size": 7793,
+    "line_count": 259,
     "namespace": "Project2048.Flow",
     "using_list": [
       "System",
@@ -8982,11 +8975,7 @@
       "OnMainMenuSceneLoadRequested",
       "OnStorySceneLoadRequested",
       "OnBattleSceneLoadRequested",
-      "OnEndingSceneLoadRequested",
       "OnGameStarted",
-      "GameState",
-      "CurrentGameState",
-      "MainMenu",
       "Initialized",
       "SetNewGame",
       "LogError",
@@ -8994,6 +8983,7 @@
       "Progress",
       "DeleteSave",
       "SetGameState",
+      "GameState",
       "Loading",
       "SetStageIndex",
       "SetRunActive",
@@ -9006,6 +8996,7 @@
       "TryLoadGameContext",
       "LogWarning",
       "No",
+      "MainMenu",
       "IsRunActive",
       "CompleteOpeningStory",
       "FadeOnly",
@@ -9036,13 +9027,12 @@
       "HandleStageFailed",
       "StageResult",
       "RunCompleted",
-      "Ending",
+      "Result",
       "SaveCurrentRun",
       "AdvanceStage",
       "StopCoroutine",
       "StartCoroutine",
       "RestartStageNextFrame",
-      "Result",
       "SaveRun"
     ],
     "component_access_types": [],
@@ -9124,9 +9114,9 @@
     "file_id": "Project 2048/Assets/Scripts/Flow/SceneFlowManager.cs",
     "path": "Project 2048/Assets/Scripts/Flow/SceneFlowManager.cs",
     "file_name": "SceneFlowManager.cs",
-    "content_hash": "25764be7e03856ae06abee901e79a7f534cf93e7",
-    "size": 3716,
-    "line_count": 125,
+    "content_hash": "1cf2f5a2358727a512b4b1c89bf24c708e44595c",
+    "size": 3421,
+    "line_count": 117,
     "namespace": "Project2048.Flow",
     "using_list": [
       "System",
@@ -9158,7 +9148,6 @@
       "LoadMainMenu",
       "LoadStory",
       "LoadBattle",
-      "LoadEnding",
       "LoadScene",
       "LoadSceneAsync",
       "WaitForSecondsRealtime"
@@ -9180,13 +9169,6 @@
       },
       {
         "name": "BattleSceneName",
-        "type": "string",
-        "access": "private",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "EndingSceneName",
         "type": "string",
         "access": "private",
         "serialized": false,
@@ -9258,7 +9240,6 @@
       "StoryScene",
       "BattleSceneName",
       "BattleScene",
-      "EndingSceneName",
       "FlowController",
       "LoadingUI",
       "OnLoadProgressChanged",
@@ -9273,8 +9254,6 @@
       "LoadStory",
       "OnBattleSceneLoadRequested",
       "LoadBattle",
-      "OnEndingSceneLoadRequested",
-      "LoadEnding",
       "OnDisable",
       "LoadScene",
       "IsNullOrWhiteSpace",
@@ -9329,9 +9308,9 @@
     "file_id": "Project 2048/Assets/Scripts/Flow/StageFlowController.cs",
     "path": "Project 2048/Assets/Scripts/Flow/StageFlowController.cs",
     "file_name": "StageFlowController.cs",
-    "content_hash": "79c4ea3dcea7624323796f4fa4a24398a297129b",
-    "size": 7838,
-    "line_count": 256,
+    "content_hash": "d8cfef0ca28e6bbe64a2d470485faa9ae1d3cfb2",
+    "size": 12698,
+    "line_count": 391,
     "namespace": "Project2048.Flow",
     "using_list": [
       "System",
@@ -9339,7 +9318,6 @@
       "Project2048.Combat",
       "Project2048.Enemy",
       "Project2048.Rewards",
-      "Project2048.Stage",
       "UnityEngine"
     ],
     "classes": [
@@ -9363,6 +9341,7 @@
       "Awake",
       "OnEnable",
       "OnDisable",
+      "OnDestroy",
       "StartStage",
       "ResetRunProgress",
       "InitializeRunProgress",
@@ -9377,6 +9356,12 @@
       "CompleteStage",
       "StageResult",
       "FailStage",
+      "SelectEnemyData",
+      "SelectPooledEnemy",
+      "PrepareEnemyForEncounter",
+      "ResolveEncounterType",
+      "ToEnemyRank",
+      "DestroyRuntimeEncounterEnemy",
       "ChangeState"
     ],
     "fields": [
@@ -9388,8 +9373,22 @@
         "is_static": false
       },
       {
+        "name": "currentEncounterType",
+        "type": "StageEncounterType",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
         "name": "lastCombatResult",
         "type": "CombatResult",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "runtimeEncounterEnemy",
+        "type": "EnemySO",
         "access": "private",
         "serialized": false,
         "is_static": false
@@ -9406,7 +9405,8 @@
     "unity_messages": [
       "Awake",
       "OnEnable",
-      "OnDisable"
+      "OnDisable",
+      "OnDestroy"
     ],
     "has_update": false,
     "has_fixed_update": false,
@@ -9419,13 +9419,15 @@
     "public_field_count": 0,
     "get_component_count": 0,
     "find_call_count": 0,
-    "new_keyword_count": 5,
+    "new_keyword_count": 6,
     "coroutine_count": 0,
     "singleton_candidate": false,
     "dont_destroy_on_load": false,
     "referenced_types": [
       "int",
+      "StageEncounterType",
       "CombatResult",
+      "EnemySO",
       "StageFlowState",
       "System",
       "Collections",
@@ -9434,18 +9436,19 @@
       "Combat",
       "Enemy",
       "Rewards",
-      "Stage",
       "UnityEngine",
       "Flow",
       "CombatManager",
       "PlayerCombatController",
       "EnemyController",
       "RewardManager",
+      "Prototype",
+      "Stage",
       "Data",
-      "StageDatabaseSO",
       "PlayerSO",
       "RewardTableSO",
       "RunProgress",
+      "Normal",
       "CurrentState",
       "None",
       "OnStageFlowStarted",
@@ -9460,18 +9463,22 @@
       "BindEvents",
       "OnDisable",
       "UnbindEvents",
+      "OnDestroy",
+      "DestroyRuntimeEncounterEnemy",
       "StartStage",
-      "Max",
       "CanStartStage",
+      "Max",
+      "ResolveEncounterType",
       "ChangeState",
       "Preparing",
       "Invoke",
       "Initialize",
+      "PrepareEnemyForEncounter",
+      "SelectEnemyData",
       "SetCombatants",
       "EnemyTurnDelaySeconds",
       "StartCombat",
       "CombatSetup",
-      "EnemySO",
       "ResetRunProgress",
       "Reset",
       "InitializeRunProgress",
@@ -9480,8 +9487,6 @@
       "GetComponentsInChildren",
       "LogError",
       "At",
-      "TryGetStage",
-      "TrySelectEnemy",
       "OnCombatVictory",
       "HandleCombatVictory",
       "OnCombatDefeat",
@@ -9496,11 +9501,27 @@
       "OfferReward",
       "Player",
       "Completed",
-      "StageEncounterType",
-      "Normal",
-      "IsFinalStage",
       "Failed",
-      "ClearReward"
+      "ClearReward",
+      "FinalBoss",
+      "SelectPooledEnemy",
+      "Boss",
+      "Elite",
+      "Add",
+      "ToEnemyRank",
+      "Instantiate",
+      "HideFlags",
+      "DontSave",
+      "EnemyEncounterRank",
+      "EnemyAiStrength",
+      "Enhanced",
+      "EnemyAiComplexity",
+      "ResolveDefaultActionsPerTurn",
+      "CeilToInt",
+      "Complex",
+      "Application",
+      "Destroy",
+      "DestroyImmediate"
     ],
     "component_access_types": [],
     "created_types": [
@@ -9510,30 +9531,33 @@
     ],
     "singleton_access_types": [],
     "string_literals": [
-      "Stage Data",
+      "Prototype Stage Data",
       "CombatManager is not assigned.",
       "PlayerCombatController is not assigned.",
       "At least one EnemyController is required.",
       "RewardManager is not assigned.",
       "PlayerSO is not assigned.",
-      "StageDatabaseSO is not assigned.",
-      "Stage {currentStageIndex} is not configured.",
-      "Stage {currentStageIndex} has no valid EnemySO candidate."
+      "EnemySO or enemy pool is required."
     ],
     "numeric_literals": [
       4,
-      1.2
+      20,
+      5,
+      1.2,
+      1.5,
+      1.25
     ],
     "guessed_roles": [
-      "data",
-      "runtime",
       "combat",
+      "runtime",
+      "data",
       "player",
-      "manager"
+      "save-load"
     ],
     "summary_signals": [
       "런타임 컴포넌트",
-      "전투 계열 로직 포함"
+      "전투 계열 로직 포함",
+      "저장/불러오기 관련 로직 포함"
     ]
   },
   {
@@ -20367,310 +20391,16 @@
     ]
   },
   {
-    "file_id": "Project 2048/Assets/Scripts/Stage/StageDatabaseSO.cs",
-    "path": "Project 2048/Assets/Scripts/Stage/StageDatabaseSO.cs",
-    "file_name": "StageDatabaseSO.cs",
-    "content_hash": "bd25d4324cc90059325c26c1c96ad5a4176895d0",
-    "size": 1778,
-    "line_count": 60,
-    "namespace": "Project2048.Stage",
-    "using_list": [
-      "System.Collections.Generic",
-      "UnityEngine"
-    ],
-    "classes": [
-      {
-        "name": "StageDatabaseSO",
-        "kind": "class",
-        "access": "public",
-        "base_types": [
-          "ScriptableObject"
-        ],
-        "interfaces": [],
-        "attributes": [],
-        "is_partial": false,
-        "is_generic": false
-      }
-    ],
-    "main_class_name": "StageDatabaseSO",
-    "unity_type": "ScriptableObject",
-    "methods": [
-      "TryGetStage",
-      "IsFinalStage",
-      "ResolveStages",
-      "OnValidate"
-    ],
-    "fields": [
-      {
-        "name": "StagesPerFloor",
-        "type": "int",
-        "access": "public",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "TotalStageCount",
-        "type": "int",
-        "access": "public",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "zeroBasedIndex",
-        "type": "var",
-        "access": "internal",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "floorIndex",
-        "type": "var",
-        "access": "internal",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "stageIndexInFloor",
-        "type": "var",
-        "access": "internal",
-        "serialized": false,
-        "is_static": false
-      }
-    ],
-    "properties": [],
-    "events": [],
-    "unity_messages": [],
-    "has_update": false,
-    "has_fixed_update": false,
-    "has_late_update": false,
-    "has_awake": false,
-    "has_start": false,
-    "has_on_enable": false,
-    "has_on_disable": false,
-    "serialize_field_count": 0,
-    "public_field_count": 2,
-    "get_component_count": 0,
-    "find_call_count": 0,
-    "new_keyword_count": 3,
-    "coroutine_count": 0,
-    "singleton_candidate": false,
-    "dont_destroy_on_load": false,
-    "referenced_types": [
-      "int",
-      "System",
-      "Collections",
-      "Generic",
-      "UnityEngine",
-      "Project2048",
-      "Stage",
-      "CreateAssetMenu",
-      "Game",
-      "Database",
-      "StagesPerFloor",
-      "TotalStageCount",
-      "StageSO",
-      "TryGetStage",
-      "ResolveStages",
-      "Count",
-      "IsFinalStage",
-      "OnValidate"
-    ],
-    "component_access_types": [],
-    "created_types": [
-      "List"
-    ],
-    "singleton_access_types": [],
-    "string_literals": [
-      "Game/Stage/Stage Database"
-    ],
-    "numeric_literals": [
-      10,
-      3
-    ],
-    "guessed_roles": [
-      "data",
-      "save-load"
-    ],
-    "summary_signals": [
-      "데이터 자산 중심 구조",
-      "저장/불러오기 관련 로직 포함"
-    ]
-  },
-  {
-    "file_id": "Project 2048/Assets/Scripts/Stage/StageFloor.cs",
-    "path": "Project 2048/Assets/Scripts/Stage/StageFloor.cs",
-    "file_name": "StageFloor.cs",
-    "content_hash": "caa479a3cb05f2366f90f06211e42761278f21df",
-    "size": 117,
-    "line_count": 10,
-    "namespace": "Project2048.Stage",
-    "using_list": [],
-    "classes": [],
-    "main_class_name": "StageFloor",
-    "unity_type": "None",
-    "methods": [],
-    "fields": [],
-    "properties": [],
-    "events": [],
-    "unity_messages": [],
-    "has_update": false,
-    "has_fixed_update": false,
-    "has_late_update": false,
-    "has_awake": false,
-    "has_start": false,
-    "has_on_enable": false,
-    "has_on_disable": false,
-    "serialize_field_count": 0,
-    "public_field_count": 0,
-    "get_component_count": 0,
-    "find_call_count": 0,
-    "new_keyword_count": 0,
-    "coroutine_count": 0,
-    "singleton_candidate": false,
-    "dont_destroy_on_load": false,
-    "referenced_types": [
-      "Project2048",
-      "Stage",
-      "StageFloor",
-      "Upper",
-      "Middle",
-      "Lower"
-    ],
-    "component_access_types": [],
-    "created_types": [],
-    "singleton_access_types": [],
-    "string_literals": [],
-    "numeric_literals": [],
-    "guessed_roles": [],
-    "summary_signals": []
-  },
-  {
-    "file_id": "Project 2048/Assets/Scripts/Stage/StageSO.cs",
-    "path": "Project 2048/Assets/Scripts/Stage/StageSO.cs",
-    "file_name": "StageSO.cs",
-    "content_hash": "2215e35668d37fc3c53a35dd4d16831a6a3efa60",
-    "size": 2278,
-    "line_count": 77,
-    "namespace": "Project2048.Stage",
-    "using_list": [
-      "System.Collections.Generic",
-      "Project2048.Enemy",
-      "UnityEngine"
-    ],
-    "classes": [
-      {
-        "name": "StageSO",
-        "kind": "class",
-        "access": "public",
-        "base_types": [
-          "ScriptableObject"
-        ],
-        "interfaces": [],
-        "attributes": [],
-        "is_partial": false,
-        "is_generic": false
-      }
-    ],
-    "main_class_name": "StageSO",
-    "unity_type": "ScriptableObject",
-    "methods": [
-      "Range",
-      "TrySelectEnemy",
-      "OnValidate"
-    ],
-    "fields": [
-      {
-        "name": "validCandidateCount",
-        "type": "var",
-        "access": "internal",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "candidate",
-        "type": "var",
-        "access": "internal",
-        "serialized": false,
-        "is_static": false
-      }
-    ],
-    "properties": [],
-    "events": [],
-    "unity_messages": [],
-    "has_update": false,
-    "has_fixed_update": false,
-    "has_late_update": false,
-    "has_awake": false,
-    "has_start": false,
-    "has_on_enable": false,
-    "has_on_disable": false,
-    "serialize_field_count": 0,
-    "public_field_count": 0,
-    "get_component_count": 0,
-    "find_call_count": 0,
-    "new_keyword_count": 1,
-    "coroutine_count": 0,
-    "singleton_candidate": false,
-    "dont_destroy_on_load": false,
-    "referenced_types": [
-      "System",
-      "Collections",
-      "Generic",
-      "Project2048",
-      "Enemy",
-      "UnityEngine",
-      "Stage",
-      "CreateAssetMenu",
-      "Game",
-      "StageFloor",
-      "Upper",
-      "StageDatabaseSO",
-      "StagesPerFloor",
-      "EnemySO",
-      "HideInInspector",
-      "Floor",
-      "StageNumberInFloor",
-      "IReadOnlyList",
-      "EnemyCandidates",
-      "TrySelectEnemy",
-      "Count",
-      "OnValidate",
-      "Clamp",
-      "Contains",
-      "Add"
-    ],
-    "component_access_types": [],
-    "created_types": [
-      "List"
-    ],
-    "singleton_access_types": [],
-    "string_literals": [
-      "Game/Stage/Stage"
-    ],
-    "numeric_literals": [],
-    "guessed_roles": [
-      "data",
-      "combat",
-      "save-load"
-    ],
-    "summary_signals": [
-      "데이터 자산 중심 구조",
-      "전투 계열 로직 포함",
-      "저장/불러오기 관련 로직 포함"
-    ]
-  },
-  {
     "file_id": "Project 2048/Assets/Scripts/Story/StoryController.cs",
     "path": "Project 2048/Assets/Scripts/Story/StoryController.cs",
     "file_name": "StoryController.cs",
-    "content_hash": "b67fe0ab26d5b0bea13ceeb55d5001251a4fff8a",
-    "size": 4877,
-    "line_count": 182,
+    "content_hash": "28a42fef01156d8607d97c362c8c39b07d248340",
+    "size": 4354,
+    "line_count": 166,
     "namespace": "Project2048.Story",
     "using_list": [
       "System",
       "System.Collections",
-      "Project2048.Core",
       "UnityEngine",
       "UnityEngine.UI"
     ],
@@ -20693,7 +20423,6 @@
     "methods": [
       "Awake",
       "Start",
-      "ResolveInitialStory",
       "StartStory",
       "Next",
       "ShowCurrentStep",
@@ -20777,10 +20506,9 @@
       "StoryStep",
       "System",
       "Collections",
-      "Project2048",
-      "Core",
       "UnityEngine",
       "UI",
+      "Project2048",
       "Story",
       "StoryTextView",
       "StoryBackgroundView",
@@ -20792,14 +20520,6 @@
       "GetComponentInChildren",
       "Start",
       "StartStory",
-      "ResolveInitialStory",
-      "GameManager",
-      "Instance",
-      "FlowController",
-      "CurrentGameState",
-      "GameContext",
-      "GameState",
-      "Ending",
       "Count",
       "FinishStory",
       "PlayCurrentStep",
@@ -20819,15 +20539,12 @@
     ],
     "component_access_types": [],
     "created_types": [],
-    "singleton_access_types": [
-      "GameManager"
-    ],
+    "singleton_access_types": [],
     "string_literals": [],
     "numeric_literals": [],
     "guessed_roles": [
       "runtime",
       "ui",
-      "manager",
       "data",
       "save-load"
     ],
@@ -24814,160 +24531,6 @@
     ]
   },
   {
-    "file_id": "Project 2048/Assets/Tests/EditMode/FlowControllerTests.cs",
-    "path": "Project 2048/Assets/Tests/EditMode/FlowControllerTests.cs",
-    "file_name": "FlowControllerTests.cs",
-    "content_hash": "0086925e1d14c2ba0aeebabba2638296c7535281",
-    "size": 1895,
-    "line_count": 61,
-    "namespace": "Project2048.Tests",
-    "using_list": [
-      "System.Reflection",
-      "NUnit.Framework",
-      "Project2048.Combat",
-      "Project2048.Core",
-      "Project2048.Flow",
-      "UnityEngine"
-    ],
-    "classes": [
-      {
-        "name": "FlowControllerTests",
-        "kind": "class",
-        "access": "public",
-        "base_types": [],
-        "interfaces": [],
-        "attributes": [],
-        "is_partial": false,
-        "is_generic": false
-      }
-    ],
-    "main_class_name": "FlowControllerTests",
-    "unity_type": "None",
-    "methods": [
-      "TearDown",
-      "HandleStageCompleted_RunCompleted_RequestsEndingScene",
-      "GameObject",
-      "GameContext",
-      "StageResult",
-      "InvokePrivateMethod"
-    ],
-    "fields": [
-      {
-        "name": "owner",
-        "type": "GameObject",
-        "access": "private",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "didRequestEnding",
-        "type": "var",
-        "access": "internal",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "didStartLoading",
-        "type": "var",
-        "access": "internal",
-        "serialized": false,
-        "is_static": false
-      }
-    ],
-    "properties": [],
-    "events": [],
-    "unity_messages": [],
-    "has_update": false,
-    "has_fixed_update": false,
-    "has_late_update": false,
-    "has_awake": false,
-    "has_start": false,
-    "has_on_enable": false,
-    "has_on_disable": false,
-    "serialize_field_count": 0,
-    "public_field_count": 0,
-    "get_component_count": 0,
-    "find_call_count": 0,
-    "new_keyword_count": 4,
-    "coroutine_count": 0,
-    "singleton_candidate": false,
-    "dont_destroy_on_load": false,
-    "referenced_types": [
-      "System",
-      "Reflection",
-      "NUnit",
-      "Framework",
-      "Project2048",
-      "Combat",
-      "Core",
-      "Flow",
-      "UnityEngine",
-      "Tests",
-      "TearDown",
-      "Object",
-      "DestroyImmediate",
-      "Test",
-      "HandleStageCompleted_RunCompleted_RequestsEndingScene",
-      "FlowController",
-      "AddComponent",
-      "GameContext",
-      "SetRunActive",
-      "Initialized",
-      "OnEndingSceneLoadRequested",
-      "OnLoadingStarted",
-      "InvokePrivateMethod",
-      "HandleStageCompleted",
-      "StageResult",
-      "StageEncounterType",
-      "Normal",
-      "CombatResult",
-      "Assert",
-      "That",
-      "IsRunActive",
-      "Is",
-      "False",
-      "CurrentGameState",
-      "EqualTo",
-      "GameState",
-      "Ending",
-      "True",
-      "GetType",
-      "GetMethod",
-      "BindingFlags",
-      "Instance",
-      "NonPublic",
-      "Invoke"
-    ],
-    "component_access_types": [],
-    "created_types": [
-      "GameObject",
-      "GameContext",
-      "StageResult",
-      "CombatResult"
-    ],
-    "singleton_access_types": [
-      "BindingFlags"
-    ],
-    "string_literals": [
-      "FlowController",
-      "HandleStageCompleted"
-    ],
-    "numeric_literals": [
-      30
-    ],
-    "guessed_roles": [
-      "combat",
-      "save-load",
-      "manager",
-      "scene",
-      "runtime"
-    ],
-    "summary_signals": [
-      "전투 계열 로직 포함",
-      "저장/불러오기 관련 로직 포함"
-    ]
-  },
-  {
     "file_id": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
     "path": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
     "file_name": "MainMenuControllerTests.cs",
@@ -25836,9 +25399,9 @@
     "file_id": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
     "path": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
     "file_name": "RewardGrowthTests.cs",
-    "content_hash": "f2544c2066bd8d56d8e79237643f7567c475c132",
-    "size": 40803,
-    "line_count": 845,
+    "content_hash": "72713e781b2166daac77676d645f82a0f808fea7",
+    "size": 41495,
+    "line_count": 857,
     "namespace": "Project2048.Tests",
     "using_list": [
       "UnityEditor",
@@ -25885,6 +25448,7 @@
       "RewardManager_OfferReward_AddsSecondCategoryWhenTableRollsOneCategory",
       "TemporaryRewardBuff_AppliesRankBonusToNextCombatOnce",
       "RewardManager_LearnSkill_PersistsEquippedSkillsIntoNextCombat",
+      "StageFlow_UsesEliteStagesEveryFiveAndFinalBossAtTwenty",
       "CombatUiView_VictoryShowsRewardOverlayUntilRewardChoiceIsClaimed",
       "CombatDefeat_WhenEnemyKillsPlayer_RaisesDefeatAndDoesNotOfferReward",
       "CreateRewardTable",
@@ -26048,6 +25612,14 @@
       "RewardManager_LearnSkill_PersistsEquippedSkillsIntoNextCombat",
       "Debuff",
       "EquippedSkills",
+      "StageFlow_UsesEliteStagesEveryFiveAndFinalBossAtTwenty",
+      "StageFlowController",
+      "StageFlow",
+      "ResolveEncounterType",
+      "StageEncounterType",
+      "Normal",
+      "Elite",
+      "FinalBoss",
       "CombatUiView_VictoryShowsRewardOverlayUntilRewardChoiceIsClaimed",
       "CreateOwnedGameObject",
       "CombatView",
@@ -26134,15 +25706,7 @@
       "WorldSpriteView",
       "CreateSprite",
       "Background",
-      "UnityTest",
-      "CombatWorldSpriteView_EnemyDeath_FadesEnemyRenderer",
-      "LessThanOrEqualTo",
-      "CombatWorldSpriteView_EnemyDeath_WaitsForPlayerAttackEffect",
-      "SkillVfxFamily",
-      "BuffAura",
-      "WaitForSecondsRealtime",
-      "EnemyDeathFadeDurationSeconds",
-      "CombatUiView_EnemyDeath_FadesEnemyPortrait"
+      "UnityTest"
     ],
     "component_access_types": [
       "Canvas",
@@ -26185,8 +25749,8 @@
       "low-stance",
       "flash",
       "bleeding-cut",
-      "CombatView",
-      "RewardOverlay"
+      "StageFlow",
+      "CombatView"
     ],
     "numeric_literals": [
       20,
@@ -26205,10 +25769,10 @@
       30,
       5,
       50,
+      15,
       99,
       9,
-      0.001,
-      14
+      0.001
     ],
     "guessed_roles": [
       "ui",
@@ -26662,147 +26226,6 @@
     "summary_signals": [
       "전투 계열 로직 포함",
       "저장/불러오기 관련 로직 포함"
-    ]
-  },
-  {
-    "file_id": "Project 2048/Assets/Tests/EditMode/StageDatabaseTests.cs",
-    "path": "Project 2048/Assets/Tests/EditMode/StageDatabaseTests.cs",
-    "file_name": "StageDatabaseTests.cs",
-    "content_hash": "388abe7f71e7071eb3a860fb3e00114cb17c961e",
-    "size": 4183,
-    "line_count": 115,
-    "namespace": "Project2048.Tests",
-    "using_list": [
-      "System.Collections.Generic",
-      "System.Reflection",
-      "NUnit.Framework",
-      "Project2048.Enemy",
-      "Project2048.Stage",
-      "UnityEngine"
-    ],
-    "classes": [
-      {
-        "name": "StageDatabaseTests",
-        "kind": "class",
-        "access": "public",
-        "base_types": [],
-        "interfaces": [],
-        "attributes": [],
-        "is_partial": false,
-        "is_generic": false
-      }
-    ],
-    "main_class_name": "StageDatabaseTests",
-    "unity_type": "None",
-    "methods": [
-      "TearDown",
-      "MapsUpperMiddleLowerStagesToThirtyStageRun",
-      "StageSelectsOneConfiguredEnemyCandidate",
-      "StageRejectsMissingEnemyCandidates",
-      "CreateStage",
-      "CreateEnemyData",
-      "SetPrivateField"
-    ],
-    "fields": [],
-    "properties": [],
-    "events": [],
-    "unity_messages": [],
-    "has_update": false,
-    "has_fixed_update": false,
-    "has_late_update": false,
-    "has_awake": false,
-    "has_start": false,
-    "has_on_enable": false,
-    "has_on_disable": false,
-    "serialize_field_count": 0,
-    "public_field_count": 0,
-    "get_component_count": 0,
-    "find_call_count": 0,
-    "new_keyword_count": 4,
-    "coroutine_count": 0,
-    "singleton_candidate": false,
-    "dont_destroy_on_load": false,
-    "referenced_types": [
-      "System",
-      "Collections",
-      "Generic",
-      "Reflection",
-      "NUnit",
-      "Framework",
-      "Project2048",
-      "Enemy",
-      "Stage",
-      "UnityEngine",
-      "Tests",
-      "Object",
-      "TearDown",
-      "DestroyImmediate",
-      "Clear",
-      "Test",
-      "MapsUpperMiddleLowerStagesToThirtyStageRun",
-      "CreateScriptableObject",
-      "StageDatabaseSO",
-      "CreateStage",
-      "StageFloor",
-      "Upper",
-      "CreateEnemyData",
-      "Middle",
-      "Lower",
-      "SetPrivateField",
-      "StageSO",
-      "Assert",
-      "That",
-      "TryGetStage",
-      "Is",
-      "True",
-      "SameAs",
-      "IsFinalStage",
-      "False",
-      "StageSelectsOneConfiguredEnemyCandidate",
-      "TrySelectEnemy",
-      "StageRejectsMissingEnemyCandidates",
-      "Null",
-      "EnemySO",
-      "CreateInstance",
-      "Add",
-      "GetType",
-      "GetField",
-      "BindingFlags",
-      "Instance",
-      "NonPublic",
-      "SetValue"
-    ],
-    "component_access_types": [],
-    "created_types": [
-      "List"
-    ],
-    "singleton_access_types": [
-      "BindingFlags"
-    ],
-    "string_literals": [
-      "upperStages",
-      "middleStages",
-      "lowerStages",
-      "floor",
-      "stageNumberInFloor",
-      "enemyCandidates"
-    ],
-    "numeric_literals": [
-      10,
-      20,
-      2,
-      30,
-      3,
-      11,
-      29
-    ],
-    "guessed_roles": [
-      "data",
-      "combat",
-      "manager"
-    ],
-    "summary_signals": [
-      "전투 계열 로직 포함"
     ]
   }
 ]

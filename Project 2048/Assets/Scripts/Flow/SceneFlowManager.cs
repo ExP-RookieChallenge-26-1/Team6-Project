@@ -11,6 +11,7 @@ namespace Project2048.Flow
         private const string MainMenuSceneName = "MainMenu";
         private const string StorySceneName = "StoryScene";
         private const string BattleSceneName = "BattleScene";
+        private const string EndingSceneName = StorySceneName;
 
         [SerializeField] private FlowController flowController;
         [SerializeField] private LoadingUI loadingUI;
@@ -35,6 +36,7 @@ namespace Project2048.Flow
             flowController.OnMainMenuSceneLoadRequested += LoadMainMenu;
             flowController.OnStorySceneLoadRequested += LoadStory;
             flowController.OnBattleSceneLoadRequested += LoadBattle;
+            flowController.OnEndingSceneLoadRequested += LoadEnding;
         }
 
         private void OnDisable()
@@ -47,6 +49,7 @@ namespace Project2048.Flow
             flowController.OnMainMenuSceneLoadRequested -= LoadMainMenu;
             flowController.OnStorySceneLoadRequested -= LoadStory;
             flowController.OnBattleSceneLoadRequested -= LoadBattle;
+            flowController.OnEndingSceneLoadRequested -= LoadEnding;
         }
 
         public void LoadMainMenu()
@@ -62,6 +65,11 @@ namespace Project2048.Flow
         public void LoadBattle()
         {
             LoadScene(BattleSceneName);
+        }
+
+        public void LoadEnding()
+        {
+            LoadScene(EndingSceneName);
         }
 
         public void LoadScene(string sceneName)

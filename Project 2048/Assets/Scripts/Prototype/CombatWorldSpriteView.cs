@@ -26,8 +26,6 @@ namespace Project2048.Prototype
         public const float ShieldImpactParticleLifetimeSeconds = 0.8f;
         public const float ShieldBashDurationSeconds = 0.58f;
         public const float ShieldBurstSkillDurationSeconds = 0.72f;
-        public const float DebuffCastParticleLifetimeSeconds = 0.9f;
-        public const float DebuffTargetParticleDelaySeconds = DebuffCastParticleLifetimeSeconds;
         public const float DamageNumberPopupDurationSeconds = 0.55f;
         public const float ChargedLightBeamDurationSeconds = 0.65f;
         public const float TentacleStrikeDurationSeconds = 0.58f;
@@ -37,7 +35,6 @@ namespace Project2048.Prototype
         public const float DarkShackleChainDurationSeconds = 0.84f;
 
         private const int ShieldImpactParticleCount = 22;
-        private const int DebuffCastParticleCount = 28;
         private const float ReusableSkillParticleMaxStartSize = 0.24f;
         private const int ShieldCircleRingSegmentCount = 72;
         private const float ShieldCircleBaseRadius = 0.78f;
@@ -112,10 +109,7 @@ namespace Project2048.Prototype
 
         private CombatManager combatManager;
         private CombatSnapshot snapshot;
-        private int lastPlayedEnemyDebuffVfxSequence;
         private Material runtimeShieldImpactParticleMaterial;
-        private Material runtimeFearDebuffParticleMaterial;
-        private Material runtimeDarknessDebuffParticleMaterial;
         private Material runtimeChargedLightBeamMaterial;
         private VisualEffectAsset resolvedShieldLightCircleVfxGraph;
         private VisualEffectAsset resolvedThornGuardSpikedCircleVfxGraph;
@@ -579,33 +573,6 @@ namespace Project2048.Prototype
                 enemyAnimator);
         }
 
-        private void PlayEnemyDebuffCastEffectIfNeeded(CombatVfxCue cue)
-        {
-            if (cue == null ||
-                cue.Sequence <= 0 ||
-                cue.Sequence == lastPlayedEnemyDebuffVfxSequence ||
-                cue.DebuffType == DebuffType.None)
-            {
-                return;
-            }
-
-            lastPlayedEnemyDebuffVfxSequence = cue.Sequence;
-            var enemyData = ResolveCurrentEnemyData();
-            var effect = enemyData?.FindActionEffect(ResolveDebuffActionId(cue.DebuffType));
-            PlayCombatantActionEffect(
-                effect,
-                enemyRenderer != null ? enemyRenderer.transform : transform,
-                enemyAnimator);
-            if (effect?.sfxClip == null)
-            {
-                PlayCombatantActionAudioEffect(enemyData?.FindActionEffect(CombatActionIds.Attack));
-            }
-
-            SpawnDebuffCastParticles(
-                cue.DebuffType,
-                enemyRenderer != null ? enemyRenderer.transform : transform);
-            PlayDebuffTargetEffectAfterCast(cue.DebuffType, ResolveDebuffParticleLifetimeSeconds(cue.DebuffType));
-        }
 
         private void PlayShieldImpactEffectIfNeeded(bool shieldWasHit, Transform anchor)
         {
@@ -3279,43 +3246,8 @@ namespace Project2048.Prototype
         }
 
 
-        private void PlayDebuffTargetEffectAfterCast(DebuffType debuffType, float delaySeconds)
-        {
-            var target = playerRenderer != null ? playerRenderer.transform : transform;
-            if (!isActiveAndEnabled)
-            {
-                SpawnDebuffCastParticles(debuffType, target);
-                return;
-            }
 
-            StartCoroutine(SpawnDebuffTargetParticlesAfterDelay(debuffType, target, delaySeconds));
-        }
 
-        private IEnumerator SpawnDebuffTargetParticlesAfterDelay(DebuffType debuffType, Transform target, float delaySeconds)
-        {
-            yield return new WaitForSecondsRealtime(Mathf.Max(0.05f, delaySeconds));
-            SpawnDebuffCastParticles(debuffType, target != null ? target : transform);
-        }
-
-        private void SpawnDebuffCastParticles(DebuffType debuffType, Transform anchor)
-        {
-            var effect = ResolveDebuffParticleEffect(debuffType);
-            var material = effect?.particleMaterial != null
-                ? effect.particleMaterial
-                : ResolveDebuffParticleMaterial(debuffType);
-            var color = material != null ? Color.white : ResolveDebuffParticleColor(debuffType);
-            SpawnParticleBurst(
-                effect?.particlePrefab != null ? effect.particlePrefab : debuffCastParticlePrefab,
-                anchor,
-                $"{debuffType}DebuffCastParticles",
-                color,
-                material,
-                effect != null ? effect.EffectiveLifetimeSeconds : DebuffCastParticleLifetimeSeconds,
-                effect != null ? effect.EffectiveBurstCount : DebuffCastParticleCount,
-                effect != null ? effect.EffectiveStartSpeed : 0.62f,
-                effect != null ? effect.EffectiveStartSize : 0.28f,
-                swirl: true);
-        }
 
         private ParticleSystem SpawnParticleBurst(
             CombatParticleEffectBinding effect,
@@ -4559,15 +4491,6 @@ namespace Project2048.Prototype
             return resolved;
         }
 
-        private Color ResolveDebuffParticleColor(DebuffType debuffType)
-        {
-            return debuffType switch
-            {
-                DebuffType.Fear => fearDebuffParticleColor,
-                DebuffType.Darkness => darknessDebuffParticleColor,
-                _ => shieldImpactParticleColor,
-            };
-        }
 
         private CombatParticleEffectBinding ResolveShieldImpactParticleEffect()
         {
@@ -4575,16 +4498,7 @@ namespace Project2048.Prototype
             return worldVfxProfile != null ? worldVfxProfile.shieldImpactEffect : null;
         }
 
-        private CombatParticleEffectBinding ResolveDebuffParticleEffect(DebuffType debuffType)
-        {
-            ResolveWorldVfxProfile();
-            return worldVfxProfile != null ? worldVfxProfile.ResolveDebuffCastEffect(debuffType) : null;
-        }
 
-        private float ResolveDebuffParticleLifetimeSeconds(DebuffType debuffType)
-        {
-            return ResolveDebuffParticleEffect(debuffType)?.EffectiveLifetimeSeconds ?? DebuffTargetParticleDelaySeconds;
-        }
 
         private Material ResolveShieldImpactParticleMaterial()
         {
@@ -4595,23 +4509,6 @@ namespace Project2048.Prototype
                     shieldImpactParticleColor);
         }
 
-        private Material ResolveDebuffParticleMaterial(DebuffType debuffType)
-        {
-            return debuffType switch
-            {
-                DebuffType.Fear => fearDebuffParticleMaterial != null
-                    ? fearDebuffParticleMaterial
-                    : runtimeFearDebuffParticleMaterial ??= CreateParticleMaterial(
-                        "FearDebuffParticleMaterial",
-                        fearDebuffParticleColor),
-                DebuffType.Darkness => darknessDebuffParticleMaterial != null
-                    ? darknessDebuffParticleMaterial
-                    : runtimeDarknessDebuffParticleMaterial ??= CreateParticleMaterial(
-                        "DarknessDebuffParticleMaterial",
-                        darknessDebuffParticleColor),
-                _ => ResolveShieldImpactParticleMaterial(),
-            };
-        }
 
         private Material ResolveRuntimeSkillParticleMaterial(string objectName, Color color)
         {
@@ -4779,15 +4676,6 @@ namespace Project2048.Prototype
             }
         }
 
-        private static string ResolveDebuffActionId(DebuffType debuffType)
-        {
-            return debuffType switch
-            {
-                DebuffType.Fear => CombatActionIds.DebuffFear,
-                DebuffType.Darkness => CombatActionIds.DebuffDarkness,
-                _ => null,
-            };
-        }
 
 
         private void ResolveMissingReferences()

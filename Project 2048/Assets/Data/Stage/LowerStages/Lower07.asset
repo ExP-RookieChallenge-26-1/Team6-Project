@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Lower07
   m_EditorClassIdentifier: Game.Core::Project2048.Stage.StageSO
   floor: 2
-  stageNumberInFloor: 1
+  stageNumberInFloor: 7
   enemyCandidates:
   - {fileID: 11400000, guid: 96b6afafa2ae7e7469eb3250899c6578, type: 2}
   - {fileID: 11400000, guid: a48d0adc9e651b7469557e689b98ba72, type: 2}

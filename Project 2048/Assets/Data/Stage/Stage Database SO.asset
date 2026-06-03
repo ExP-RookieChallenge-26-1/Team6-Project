@@ -35,13 +35,13 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a08e86b9887e25b469dc7af0fba37418, type: 2}
   - {fileID: 11400000, guid: d329344f424e5db409f9501d107927a5, type: 2}
   lowerStages:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 8619652313a813c4ba28b9664bd4a9b5, type: 2}
+  - {fileID: 11400000, guid: 4b748b6ea02e101458d89d9ab672d0ae, type: 2}
+  - {fileID: 11400000, guid: 754178408b7abbb4f9902075dd32414d, type: 2}
+  - {fileID: 11400000, guid: 918ab21dbd2957148ac0faa9dc4cc650, type: 2}
+  - {fileID: 11400000, guid: 8c696adc5a5f7bf44891628ed10e3326, type: 2}
+  - {fileID: 11400000, guid: 0cb1ec1909782134480767f4b9ee3536, type: 2}
+  - {fileID: 11400000, guid: 6a855fbc46c61a94487e823cb4b7465f, type: 2}
+  - {fileID: 11400000, guid: f32b559067f575949b2576c26f10405b, type: 2}
+  - {fileID: 11400000, guid: af9cd922b275a0a499ff4ec7d14124dd, type: 2}
+  - {fileID: 11400000, guid: ef4b3c489656abf4ab15d81e4f1c2565, type: 2}

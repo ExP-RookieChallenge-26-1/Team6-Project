@@ -27,7 +27,7 @@ namespace Project2048.Story
                 return;
             }
 
-            storyController.OnStoryFinished += flowController.CompleteOpeningStory;
+            storyController.OnStoryFinished += HandleStoryFinished;
         }
 
         private void OnDisable()
@@ -37,7 +37,17 @@ namespace Project2048.Story
                 return;
             }
 
-            storyController.OnStoryFinished -= flowController.CompleteOpeningStory;
+            storyController.OnStoryFinished -= HandleStoryFinished;
+        }
+
+        private void HandleStoryFinished()
+        {
+            if (flowController.CurrentGameState == GameContext.GameState.Ending)
+            {
+                return;
+            }
+
+            flowController.CompleteOpeningStory();
         }
     }
 }

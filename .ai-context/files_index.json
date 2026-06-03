@@ -2270,6 +2270,145 @@
     ]
   },
   {
+    "file_id": "Project 2048/Assets/Editor/SkillVfxShowcaseBuild.cs",
+    "path": "Project 2048/Assets/Editor/SkillVfxShowcaseBuild.cs",
+    "file_name": "SkillVfxShowcaseBuild.cs",
+    "content_hash": "d64c8c35cd76150691e7687f1060ae23ef4240c7",
+    "size": 1482,
+    "line_count": 46,
+    "namespace": "Project2048.EditorTools",
+    "using_list": [
+      "System",
+      "System.IO",
+      "UnityEditor",
+      "UnityEditor.Build.Reporting",
+      "UnityEngine"
+    ],
+    "classes": [
+      {
+        "name": "SkillVfxShowcaseBuild",
+        "kind": "class",
+        "access": "internal",
+        "base_types": [],
+        "interfaces": [],
+        "attributes": [],
+        "is_partial": false,
+        "is_generic": false
+      }
+    ],
+    "main_class_name": "SkillVfxShowcaseBuild",
+    "unity_type": "None",
+    "methods": [
+      "Showcase",
+      "BuildWindows",
+      "InvalidOperationException"
+    ],
+    "fields": [
+      {
+        "name": "ScenePath",
+        "type": "string",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "OutputPath",
+        "type": "string",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      }
+    ],
+    "properties": [],
+    "events": [],
+    "unity_messages": [],
+    "has_update": false,
+    "has_fixed_update": false,
+    "has_late_update": false,
+    "has_awake": false,
+    "has_start": false,
+    "has_on_enable": false,
+    "has_on_disable": false,
+    "serialize_field_count": 0,
+    "public_field_count": 0,
+    "get_component_count": 0,
+    "find_call_count": 0,
+    "new_keyword_count": 2,
+    "coroutine_count": 0,
+    "singleton_candidate": false,
+    "dont_destroy_on_load": false,
+    "referenced_types": [
+      "string",
+      "UNITY_EDITOR",
+      "System",
+      "IO",
+      "UnityEditor",
+      "Build",
+      "Reporting",
+      "UnityEngine",
+      "Project2048",
+      "EditorTools",
+      "ScenePath",
+      "Assets",
+      "Scenes",
+      "AttackEffectShowcase",
+      "OutputPath",
+      "Builds",
+      "SkillVfxShowcase",
+      "MenuItem",
+      "Skill",
+      "VFX",
+      "Showcase",
+      "Windows",
+      "BuildWindows",
+      "AttackEffectShowcaseSceneBuilder",
+      "Generate",
+      "Path",
+      "GetFullPath",
+      "GetDirectoryName",
+      "IsNullOrEmpty",
+      "Directory",
+      "CreateDirectory",
+      "BuildPipeline",
+      "BuildPlayer",
+      "BuildPlayerOptions",
+      "BuildTarget",
+      "StandaloneWindows64",
+      "BuildOptions",
+      "None",
+      "BuildResult",
+      "Succeeded",
+      "InvalidOperationException",
+      "Log",
+      "Built"
+    ],
+    "component_access_types": [],
+    "created_types": [
+      "InvalidOperationException"
+    ],
+    "singleton_access_types": [],
+    "string_literals": [
+      "Assets/Scenes/AttackEffectShowcase.unity",
+      "Builds/SkillVfxShowcase/SkillVfxShowcase.exe",
+      "Project2048/Build Skill VFX Showcase (Windows)",
+      "Skill VFX showcase build failed: {report.summary.result}",
+      "Built Skill VFX showcase: {absoluteOutputPath}"
+    ],
+    "numeric_literals": [],
+    "guessed_roles": [
+      "ui",
+      "player",
+      "inventory",
+      "combat",
+      "scene"
+    ],
+    "summary_signals": [
+      "UI 관련 로직 포함",
+      "인벤토리 계열 로직 포함",
+      "전투 계열 로직 포함"
+    ]
+  },
+  {
     "file_id": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioEmitter.cs",
     "path": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioEmitter.cs",
     "file_name": "ButtonClickAudioEmitter.cs",
@@ -13030,9 +13169,9 @@
     "file_id": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "path": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "file_name": "CombatWorldSpriteView.cs",
-    "content_hash": "dd25255bbc8658d12629fe9b373c6fd6f21ff4f7",
-    "size": 237098,
-    "line_count": 6173,
+    "content_hash": "696aba74d2e0bfdcedc6cc62feb56a9773a730aa",
+    "size": 237449,
+    "line_count": 6180,
     "namespace": "Project2048.Prototype",
     "using_list": [
       "System.Collections",
@@ -13059,7 +13198,7 @@
         ],
         "interfaces": [],
         "attributes": [],
-        "is_partial": false,
+        "is_partial": true,
         "is_generic": false
       },
       {
@@ -13772,6 +13911,13 @@
       },
       {
         "name": "LanternMuzzleLocalY",
+        "type": "float",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "WorldSfxDistance",
         "type": "float",
         "access": "private",
         "serialized": false,
@@ -15372,13 +15518,6 @@
         "access": "internal",
         "serialized": false,
         "is_static": false
-      },
-      {
-        "name": "velocity",
-        "type": "var",
-        "access": "internal",
-        "serialized": false,
-        "is_static": false
       }
     ],
     "properties": [],
@@ -15504,6 +15643,7 @@
       "FlameBurstTongueSegmentCount",
       "LanternMuzzleLocalX",
       "LanternMuzzleLocalY",
+      "WorldSfxDistance",
       "DefaultWorldVfxProfileResourceName",
       "PrototypeCombatWorldVfxProfile",
       "ShieldLightCircleVfxResourceName",
@@ -15600,8 +15740,7 @@
       "PlayReusableSkillParticleEffect",
       "DelayEnemyDeathFadeForSkillEffect",
       "PreviewSkillEffect",
-      "CombatEffectBinding",
-      "ShieldDome"
+      "CombatEffectBinding"
     ],
     "component_access_types": [
       "MeshFilter",
@@ -22941,9 +23080,9 @@
     "file_id": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
     "path": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
     "file_name": "CombatPresentationEffectTests.cs",
-    "content_hash": "1b7aad138c3d16e89c1feb1576b7b7faa33962ef",
-    "size": 117609,
-    "line_count": 2279,
+    "content_hash": "cdd7351a72bbc9f0fdb678d380b40792c4385463",
+    "size": 118978,
+    "line_count": 2309,
     "namespace": "Project2048.Tests",
     "using_list": [
       "System.Collections",
@@ -22994,6 +23133,7 @@
       "EnemySo_ResolvesActionEffectByActionId",
       "CombatEffectBinding_NormalizesPitchRangeAndStoresVfxOffset",
       "Vector3",
+      "CombatWorldSpriteView_EnsureAudioSourceRestoresAudibleDefaults",
       "BoardTileEffectProfile_UsesExplicitMergeEffectOnly",
       "AudioRouter_BuildsOneMoveCuePerBoardMoveAndEachMergedResult",
       "PrototypeCombatAudioRouter",
@@ -23263,6 +23403,21 @@
       "EffectiveMaxPitch",
       "ResolvePitch",
       "InRange",
+      "CombatWorldSpriteView_EnsureAudioSourceRestoresAudibleDefaults",
+      "WorldSpriteView",
+      "AddComponent",
+      "AudioSource",
+      "CombatWorldSpriteView",
+      "GetMethod",
+      "EnsureAudioSource",
+      "Reflection",
+      "BindingFlags",
+      "Instance",
+      "NonPublic",
+      "Invoke",
+      "False",
+      "AudioRolloffMode",
+      "Linear",
       "BoardTileEffectProfile_UsesExplicitMergeEffectOnly",
       "BoardTileEffectProfileSO",
       "Merge2048Vfx",
@@ -23289,7 +23444,6 @@
       "Position",
       "CombatEventAudioPlayer_TracksCombatAndRewardEventCues",
       "CombatManager",
-      "AddComponent",
       "RewardManager",
       "Player",
       "PlayerCombatController",
@@ -23326,8 +23480,6 @@
       "Defeat",
       "UnityTest",
       "CombatWorldSpriteView_StartCombat_PlaysEnemyIntroBeforeAppearEffectFromEnemySo",
-      "WorldSpriteView",
-      "CombatWorldSpriteView",
       "EnemySprite",
       "SpriteRenderer",
       "AudioClip",
@@ -23341,10 +23493,7 @@
       "CombatWorldSpriteView_EnemyAppearShake_UsesLongerStrongerTuning",
       "GetField",
       "EnemyAppearWorldShakeMagnitude",
-      "Reflection",
-      "BindingFlags",
       "Static",
-      "NonPublic",
       "EnemyAppearWorldShakeDurationSeconds",
       "GetValue",
       "CombatWorldSpriteView_EnemyAppear_UsesAssignedWorldShakeBriefly",
@@ -23363,16 +23512,7 @@
       "AddBlock",
       "ShieldImpactParticles",
       "EnemyAttackLungeDurationSeconds",
-      "CombatWorldSpriteView_EnemyAttack_UsesAuthoredAttackEffectArtAtPlayer",
-      "AttackEffectSprite",
-      "EnemyAttackArt",
-      "GetComponent",
-      "DeltaAngle",
-      "EnemyClawSlash2D",
-      "CombatWorldSpriteView_PlayerAttackAgainstEnemyBlock_SpawnsEnemyShieldParticles",
-      "ParticleSystem",
-      "ParticleSystemShapeType",
-      "Sphere"
+      "CombatWorldSpriteView_EnemyAttack_UsesAuthoredAttackEffectArtAtPlayer"
     ],
     "component_access_types": [
       "SpriteRenderer",
@@ -23408,6 +23548,8 @@
     "string_literals": [
       "{name}Texture",
       " missing ",
+      "WorldSpriteView",
+      "EnsureAudioSource",
       "Merge2048Vfx",
       "CombatManager",
       "RewardManager",
@@ -23418,14 +23560,12 @@
       "attack",
       "combatManager",
       "rewardManager",
-      "WorldSpriteView",
       "EnemySprite",
       "EnemyAppear",
       "enemyRenderer",
       "CombatEffectAudio",
       "EnemyAppearWorldShakeMagnitude",
-      "AssignedWorldShakeRoot",
-      "worldShake"
+      "AssignedWorldShakeRoot"
     ],
     "numeric_literals": [
       8,
@@ -23446,8 +23586,8 @@
       0.8,
       1.1,
       0.001,
-      2048,
-      128
+      1,
+      10000
     ],
     "guessed_roles": [
       "combat",
@@ -24971,9 +25111,9 @@
     "file_id": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
     "path": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
     "file_name": "MainMenuControllerTests.cs",
-    "content_hash": "bc9424db866b92337a8ee4ad255bc5f7cd3f7aff",
-    "size": 6689,
-    "line_count": 143,
+    "content_hash": "90fcd4cff5fa6aa2e61a7bb6c54ff48b276b4b4f",
+    "size": 7144,
+    "line_count": 149,
     "namespace": "Project2048.Tests",
     "using_list": [
       "System.IO",
@@ -25031,8 +25171,8 @@
     "serialize_field_count": 0,
     "public_field_count": 0,
     "get_component_count": 7,
-    "find_call_count": 3,
-    "new_keyword_count": 3,
+    "find_call_count": 4,
+    "new_keyword_count": 4,
     "coroutine_count": 0,
     "singleton_candidate": false,
     "dont_destroy_on_load": false,
@@ -25104,7 +25244,8 @@
       "RawImage",
       "GetAssetPath",
       "Art",
-      "MainMenuBackgroundPlaceholder",
+      "Backgrounds",
+      "StartBackground",
       "False",
       "RectTransform",
       "Object",
@@ -25116,13 +25257,22 @@
       "SettingPopup",
       "StoryScene_UsesSceneAuthoredBackground",
       "StoryScene",
-      "StoryBackground",
-      "FindProperty"
+      "BackGroundRoot",
+      "BackGroundContent",
+      "GroundBackgroundImage",
+      "Image",
+      "StoryArea",
+      "StoryGroundBackground",
+      "Story",
+      "StoryBackgroundView",
+      "FindProperty",
+      "SameAs"
     ],
     "component_access_types": [
       "Canvas",
       "CanvasScaler",
-      "RawImage"
+      "RawImage",
+      "Image"
     ],
     "created_types": [
       "Vector2",
@@ -25142,7 +25292,7 @@
       "Assets/Scenes/MainMenu.unity",
       "MainMenuCanvas",
       "MainMenuBackground",
-      "Assets/Art/MainMenu/MainMenuBackgroundPlaceholder.png",
+      "Assets/Art/Backgrounds/MainMenu/StartBackground.psd",
       "newGameButton",
       "settingButton",
       "quitButton",

@@ -141,6 +141,36 @@ namespace Project2048.Tests
         }
 
         [Test]
+        public void CombatWorldSpriteView_EnsureAudioSourceRestoresAudibleDefaults()
+        {
+            var viewObject = CreateOwnedGameObject("WorldSpriteView");
+            var source = viewObject.AddComponent<AudioSource>();
+            source.playOnAwake = true;
+            source.spatialBlend = 1f;
+            source.volume = 0f;
+            source.mute = true;
+            source.loop = true;
+            source.minDistance = 1f;
+            source.maxDistance = 2f;
+            var view = viewObject.AddComponent<CombatWorldSpriteView>();
+
+            typeof(CombatWorldSpriteView)
+                .GetMethod(
+                    "EnsureAudioSource",
+                    System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
+                ?.Invoke(view, null);
+
+            Assert.That(source.playOnAwake, Is.False);
+            Assert.That(source.spatialBlend, Is.EqualTo(0f).Within(0.001f));
+            Assert.That(source.volume, Is.EqualTo(1f).Within(0.001f));
+            Assert.That(source.mute, Is.False);
+            Assert.That(source.loop, Is.False);
+            Assert.That(source.minDistance, Is.GreaterThanOrEqualTo(10000f));
+            Assert.That(source.maxDistance, Is.GreaterThanOrEqualTo(10000f));
+            Assert.That(source.rolloffMode, Is.EqualTo(AudioRolloffMode.Linear));
+        }
+
+        [Test]
         public void BoardTileEffectProfile_UsesExplicitMergeEffectOnly()
         {
             var profile = ScriptableObject.CreateInstance<BoardTileEffectProfileSO>();

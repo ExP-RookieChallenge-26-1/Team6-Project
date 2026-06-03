@@ -14,7 +14,7 @@ using UnityEngine.VFX;
 
 namespace Project2048.Prototype
 {
-    public class CombatWorldSpriteView : MonoBehaviour
+    public partial class CombatWorldSpriteView : MonoBehaviour
     {
         private enum DarkShackleChainState
         {
@@ -95,6 +95,7 @@ namespace Project2048.Prototype
         private const int FlameBurstTongueSegmentCount = 12;
         private const float LanternMuzzleLocalX = 0.34f;
         private const float LanternMuzzleLocalY = 0.36f;
+        private const float WorldSfxDistance = 10000f;
         private const string DefaultWorldVfxProfileResourceName = "PrototypeCombatWorldVfxProfile";
         private const string ShieldLightCircleVfxResourceName = "VFX/ShieldLightCircle";
         private const string ThornGuardSpikedCircleVfxResourceName = "VFX/ThornGuardSpikedCircle";
@@ -5754,6 +5755,12 @@ namespace Project2048.Prototype
             ResolveAudioRouting();
             audioSource.playOnAwake = false;
             audioSource.spatialBlend = 0f;
+            audioSource.volume = 1f;
+            audioSource.mute = false;
+            audioSource.loop = false;
+            audioSource.maxDistance = WorldSfxDistance;
+            audioSource.minDistance = WorldSfxDistance;
+            audioSource.rolloffMode = AudioRolloffMode.Linear;
             if (sfxMixerGroup != null)
             {
                 audioSource.outputAudioMixerGroup = sfxMixerGroup;

@@ -1113,10 +1113,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1373239787}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -9}
-  m_SizeDelta: {x: 0, y: 18}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: -249.59998}
+  m_SizeDelta: {x: 1080, y: 1920}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1356519356
 MonoBehaviour:
@@ -1138,7 +1138,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 7607352727295721730, guid: f568ec3af37e0da44b32c1fb693ec7c1, type: 3}
+  m_Sprite: {fileID: 1109635737, guid: 7d394349b8ae487f9d06383789b1bb18, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1240,6 +1240,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Game.Core::Project2048.Story.StoryController
   openingStory: {fileID: 11400000, guid: f16d22f9bea5d7e4fac6b1df2da3c53e, type: 2}
+  endingStory: {fileID: 0}
   storyTextView: {fileID: 1508972387}
   storyBackgroundView: {fileID: 1508972389}
   storyLayoutView: {fileID: 1508972388}
@@ -1503,7 +1504,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: ac20f033bdceb3149b44f3a942308b67, type: 3}
+  m_Texture: {fileID: 2800000, guid: 7d394349b8ae487f9d06383789b1bb18, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0

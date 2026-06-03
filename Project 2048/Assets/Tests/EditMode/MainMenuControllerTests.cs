@@ -74,7 +74,7 @@ namespace Project2048.Tests
 
             var backgroundImage = background.GetComponent<RawImage>();
             Assert.That(backgroundImage, Is.Not.Null);
-            Assert.That(AssetDatabase.GetAssetPath(backgroundImage.texture), Is.EqualTo("Assets/Art/MainMenu/MainMenuBackgroundPlaceholder.png"));
+            Assert.That(AssetDatabase.GetAssetPath(backgroundImage.texture), Is.EqualTo("Assets/Art/Backgrounds/MainMenu/StartBackground.psd"));
             Assert.That(backgroundImage.raycastTarget, Is.False);
 
             var backgroundRect = (RectTransform)background;
@@ -114,21 +114,27 @@ namespace Project2048.Tests
             Assert.That(scaler.referenceResolution, Is.EqualTo(new Vector2(1080f, 1920f)));
             Assert.That(scaler.matchWidthOrHeight, Is.EqualTo(0.5f).Within(0.001f));
 
-            var background = canvas.transform.Find("StoryBackground");
-            Assert.That(background, Is.Not.Null);
-            Assert.That(background.gameObject.activeSelf, Is.True);
-            Assert.That(background.GetSiblingIndex(), Is.EqualTo(0));
+            var backgroundRoot = canvas.transform.Find("BackGroundRoot");
+            Assert.That(backgroundRoot, Is.Not.Null);
+            Assert.That(backgroundRoot.gameObject.activeSelf, Is.True);
 
-            var backgroundImage = background.GetComponent<RawImage>();
-            Assert.That(backgroundImage, Is.Not.Null);
-            Assert.That(AssetDatabase.GetAssetPath(backgroundImage.texture), Is.EqualTo("Assets/Art/MainMenu/MainMenuBackgroundPlaceholder.png"));
-            Assert.That(backgroundImage.raycastTarget, Is.False);
+            var backgroundContent = backgroundRoot.Find("BackGroundContent");
+            Assert.That(backgroundContent, Is.Not.Null);
+            Assert.That(backgroundContent.gameObject.activeSelf, Is.True);
 
-            var backgroundRect = (RectTransform)background;
-            Assert.That(backgroundRect.anchorMin, Is.EqualTo(Vector2.zero));
-            Assert.That(backgroundRect.anchorMax, Is.EqualTo(Vector2.one));
-            Assert.That(backgroundRect.offsetMin, Is.EqualTo(Vector2.zero));
-            Assert.That(backgroundRect.offsetMax, Is.EqualTo(Vector2.zero));
+            var groundBackground = backgroundContent.Find("GroundBackgroundImage");
+            Assert.That(groundBackground, Is.Not.Null);
+            Assert.That(groundBackground.gameObject.activeSelf, Is.True);
+
+            var groundImage = groundBackground.GetComponent<Image>();
+            Assert.That(groundImage, Is.Not.Null);
+            Assert.That(AssetDatabase.GetAssetPath(groundImage.sprite), Is.EqualTo("Assets/Art/Backgrounds/StoryArea/StoryGroundBackground.psd"));
+
+            var backgroundView = Object.FindAnyObjectByType<global::Project2048.Story.StoryBackgroundView>(FindObjectsInactive.Include);
+            Assert.That(backgroundView, Is.Not.Null);
+            var serializedBackgroundView = new SerializedObject(backgroundView);
+            Assert.That(serializedBackgroundView.FindProperty("currentBackgroundImage").objectReferenceValue, Is.SameAs(groundImage));
+            Assert.That(serializedBackgroundView.FindProperty("nextBackgroundImage").objectReferenceValue, Is.Not.Null);
         }
 
         private static void AssertSerializedReference(SerializedObject serializedObject, string propertyName)

@@ -68,7 +68,7 @@ MonoBehaviour:
       particlePrefab: {fileID: 0}
       particleMaterial: {fileID: 2100000, guid: 46bcafb98c745ebca9b53a7f50c1d1a4, type: 2}
       useParticleColor: 1
-      particleColor: {r: 0.95, g: 0.02, b: 0.04, a: 1}
+      particleColor: {r: 0.745365, g: 0.075765, b: 0.090165, a: 1}
       lifetimeSeconds: 0.72
       burstCount: 55
       startSpeed: 0.126
@@ -81,8 +81,8 @@ MonoBehaviour:
     localOffset: {x: 0, y: 0, z: 0}
     autoDestroySeconds: 1.25
   vfxFamily: 14
-  vfxPrimaryColor: {r: 0.95, g: 0.02, b: 0.04, a: 1}
-  vfxSecondaryColor: {r: 0.34, g: 0, b: 0.015, a: 1}
+  vfxPrimaryColor: {r: 0.745365, g: 0.075765, b: 0.090165, a: 1}
+  vfxSecondaryColor: {r: 0.265343, g: 0.020543, b: 0.031343, a: 1}
   vfxScale: 1.1
   vfxIntensity: 1.3
   vfxRepeatCount: 1

@@ -69,7 +69,7 @@ MonoBehaviour:
     autoDestroySeconds: 1.25
   vfxFamily: 5
   vfxPrimaryColor: {r: 1, g: 1, b: 1, a: 1}
-  vfxSecondaryColor: {r: 0.55, g: 0.82, b: 1, a: 1}
+  vfxSecondaryColor: {r: 0.613166, g: 0.807566, b: 0.937166, a: 1}
   vfxScale: 0.8
   vfxIntensity: 0.9
   vfxRepeatCount: 1

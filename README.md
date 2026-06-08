@@ -2,7 +2,7 @@
 
 2048 퍼즐 보드와 턴제 전투를 결합한 Unity 팀 프로젝트입니다.
 
-플레이어는 2048 보드를 움직여 행동 코스트를 만들고, 모은 코스트로 공격/방어 스킬을 사용합니다. 적은 다음 행동을 인텐트로 예고하며, 플레이어 턴이 끝나면 예고한 행동을 실행합니다.
+플레이어는 2048 보드를 움직여 행동 코스트를 만들고, 모은 코스트로 공격/방어/상태 변화 스킬을 사용합니다. 적은 다음 행동을 인텐트로 예고하며, 플레이어 턴이 끝나면 예고한 행동을 실행합니다. 전투에서 승리하면 보상을 선택하고 다음 스테이지 흐름으로 이어집니다.
 
 ## 프로젝트 정보
 
@@ -11,6 +11,7 @@
 | Engine | Unity 6000.4.5f1 |
 | Unity Project Path | `Project 2048` |
 | Main Scenes | `MainMenu`, `StoryScene`, `BattleScene` |
+| Showcase Scene | `AttackEffectShowcase` |
 | Render Pipeline | Universal Render Pipeline |
 | Test Framework | Unity Test Framework |
 
@@ -37,19 +38,32 @@
 -> 다음 스테이지 또는 결과 처리
 ```
 
-`BattleScene`의 전투 진입은 현재 `StageFlowController`가 담당합니다. 이 컨트롤러는 전투 시작, 승리/패배, 보상 진입, 보상 선택 후 스테이지 완료 흐름을 연결합니다.
+`BattleScene`의 전투 진입은 `StageFlowController`가 담당합니다. 이 컨트롤러는 전투 시작, 승리/패배 판정, 보상 진입, 보상 선택 후 스테이지 완료 흐름을 연결합니다.
 
 ## 현재 구현 상태
 
 - `StageFlowController`가 스테이지 단위 전투와 보상 흐름을 관리합니다.
 - `CombatManager`는 전투 규칙의 중심이며 `CombatSnapshot`과 command 메서드로 UI와 분리되어 있습니다.
 - `Board2048Manager`는 보드 이동, 병합, 랜덤 타일 생성, 장애물 배치를 처리합니다.
+- `SkillExecutor`는 `SkillSO` 데이터를 기반으로 공격, 방어, 회복, 디버프, 보드 간섭 계열 스킬을 실행합니다.
 - `EnemyAiBrain`과 `EnemyIntentSystem`은 적 인텐트 선택과 실행을 담당합니다.
-- `RewardManager`는 전투 결과를 받아 회복/강화 보상 선택을 제공합니다.
-- `CombatUiView`, `CombatWorldSpriteView`, `PrototypeCombatEventAudioPlayer`가 현재 전투 UI, 월드 연출, 이벤트 오디오를 담당합니다.
-- `CombatProjectileEffect`와 ScriptableObject 기반 effect binding으로 전투 VFX를 연결합니다.
+- `RewardManager`와 `RunProgress`가 전투 결과, 보상 선택, 런 진행 상태를 관리합니다.
+- `ScoreManager`와 `SaveLoadManager`가 점수 계산, 최고 점수, 저장 데이터 처리를 담당합니다.
+- `CombatUiView`는 partial 구조로 분리되어 있으며 전투 HUD, 보드 셀, 인텐트, 로그, 테마 색상을 담당합니다.
+- `CombatWorldSpriteView`는 적 연출, 피격 숫자, 디버프 연출, 월드 셰이크, 오디오 라우팅을 partial 파일로 나누어 처리합니다.
+- `CombatProjectileEffect`, `CombatEffectBinding`, `CombatWorldVfxProfileSO`가 ScriptableObject 기반 전투 VFX 연결을 담당합니다.
+- `PrototypeCombatEventAudioPlayer`, `PrototypeCombatAudioRouter`, `Project2048AudioSettings`, Audio Mixer가 전투/버튼/BGM 오디오를 연결합니다.
 
-## 적 데이터와 랜덤 선택
+## 데이터와 콘텐츠 현황
+
+| 항목 | 현재 수량/상태 |
+|---|---|
+| SkillSO assets | 41개 |
+| EnemySO assets | 12개 |
+| Skill reward assets | 20개 |
+| Unity scenes | 4개 |
+| Monster cutout images | 11개 |
+| Background folders | `MainMenu`, `StoryArea`, `BattleArea`, `PresentationArea` 기준으로 정리 |
 
 적 데이터는 `EnemySO` 에셋과 프로토타입 생성 로직을 함께 사용합니다.
 
@@ -58,11 +72,28 @@
 - 현재 `BattleScene`의 `StageFlowController.randomizeEnemyOnStart` 값은 꺼져 있어, 씬의 기본 `enemyData`가 우선 사용됩니다.
 - 랜덤 적 테스트가 필요하면 `StageFlowController`의 `Randomize Enemy On Start`를 켜고 `enemyPool` 연결을 확인합니다.
 
+## 최근 반영된 구조
+
+- `CombatUiView`가 partial 구조로 바뀌었고, 테마 색상/상수는 `CombatUiView.Theme.cs`로 분리되었습니다.
+- `CombatWorldSpriteView`의 오디오, 적 연출, 디버프, 피격 숫자 처리가 partial 파일로 나뉘었습니다.
+- 배경 에셋 폴더가 영어 기준 경로로 정리되었습니다.
+- `AttackEffectShowcase.unity`와 `SkillVfxShowcaseBuild`가 있어 스킬 VFX 쇼케이스 확인과 빌드 구성이 가능합니다.
+- `.ai-context` 프로젝트 분석 파일은 최신 코드 상태 기준으로 갱신되어 있습니다.
+
 ## 주요 폴더
 
 | 경로 | 설명 |
 |---|---|
-| `Project 2048/Assets/Scenes` | 메인 메뉴, 스토리, 전투 씬 |
+| `Project 2048/Assets/Scenes` | 메인 메뉴, 스토리, 전투, VFX 쇼케이스 씬 |
+| `Project 2048/Assets/Art/Backgrounds` | 메인 메뉴, 스토리, 전투, 프레젠테이션 배경 에셋 |
+| `Project 2048/Assets/Art/Effects/SkillVFX` | 스킬 VFX 텍스처, 머티리얼, 프리팹, VFX Graph 에셋 |
+| `Project 2048/Assets/Art/Monsters` | 선택 몬스터 컷아웃과 프리뷰 |
+| `Project 2048/Assets/Audio` | Audio Mixer |
+| `Project 2048/Assets/Sounds` | BGM, 전투 SFX, UI SFX |
+| `Project 2048/Assets/Data/Skills` | 스킬 ScriptableObject 데이터 |
+| `Project 2048/Assets/Data/Enemies` | 적 ScriptableObject 데이터 |
+| `Project 2048/Assets/Data/Rewards` | 보상 ScriptableObject 데이터 |
+| `Project 2048/Assets/Editor` | 씬/로스터/VFX/쇼케이스 빌드 보조 에디터 도구 |
 | `Project 2048/Assets/Scripts/Audio` | BGM, 버튼 SFX, 오디오 설정, BGM ducking |
 | `Project 2048/Assets/Scripts/Board2048` | 2048 보드 이동, 병합, 코스트 변환 |
 | `Project 2048/Assets/Scripts/Combat` | 전투 흐름, 턴 전환, 전투 상태 snapshot |
@@ -72,13 +103,14 @@
 | `Project 2048/Assets/Scripts/Presentation` | 전투 연출, VFX, effect binding |
 | `Project 2048/Assets/Scripts/Prototype` | 현재 전투 UI, 월드 스프라이트, 프로토타입 부트스트랩 |
 | `Project 2048/Assets/Scripts/Rewards` | 보상 테이블, 보상 선택, 런 진행 상태 |
+| `Project 2048/Assets/Scripts/SaveLoad` | 저장 경로, 저장 데이터, JSON 저장소 |
 | `Project 2048/Assets/Scripts/Score` | 점수 계산과 최고 점수 기록 |
-| `Project 2048/Assets/Scripts/Skills` | 공격/방어 스킬 데이터와 실행 |
+| `Project 2048/Assets/Scripts/Skills` | 공격/방어/상태 변화 스킬 데이터와 실행 |
 | `Project 2048/Assets/Scripts/UI` | 메인 메뉴, 로딩, 팝업, 스토리 UI |
 | `Project 2048/Assets/Tests/EditMode` | EditMode 테스트 |
 | `Project 2048/Docs` | 코드 흐름과 파일별 설명 문서 |
 
-## 역할 분담
+## 역할 분담 기준
 
 현재 코드는 초기 계획의 이름과 일부 다릅니다. 아래는 현재 파일 구조 기준으로 정리한 담당 영역입니다.
 
@@ -95,8 +127,9 @@ StageFlowController
 StageFlowState
 StageResult
 ScoreManager
-SaveLoadManager (예정)
-GameOver / Clear Flow (예정)
+SaveLoadManager
+GameSaveData
+JsonFileSaveRepository
 ```
 
 `GameManager`가 전역 진입점이고, `FlowController`와 `SceneFlowManager`가 메인 메뉴, 스토리, 전투 씬 전환을 담당합니다. `StageFlowController`는 전투 씬 안에서 스테이지 시작, 전투 종료, 보상, 스테이지 완료/실패 흐름을 관리합니다. `ScoreManager`는 전투 결과를 받아 점수를 계산하고 로컬 최고 점수를 기록합니다.

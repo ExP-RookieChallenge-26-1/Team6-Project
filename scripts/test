@@ -1,0 +1,42 @@
+#!/usr/bin/env sh
+set -u
+
+ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
+cd "$ROOT" || exit 1
+RAN=0
+
+echo "Running configured tests..."
+
+if [ -f package.json ]; then
+  if command -v npm >/dev/null 2>&1 && grep -q "\"test\"" package.json; then
+    npm test || exit $?
+    RAN=1
+  fi
+fi
+
+if [ -f pytest.ini ] || [ -f pyproject.toml ]; then
+  if command -v python >/dev/null 2>&1; then
+    python -m pytest || exit $?
+    RAN=1
+  else
+    echo "Python test config found, but python is not installed."
+  fi
+fi
+
+TEST_PROJECT="$(find . -maxdepth 4 -type f -name "*Tests*.csproj" 2>/dev/null | sort | head -n 1)"
+if [ -n "$TEST_PROJECT" ]; then
+  if command -v dotnet >/dev/null 2>&1; then
+    dotnet test "$TEST_PROJECT" -nologo -v:minimal -p:UseSharedCompilation=false || exit $?
+    RAN=1
+  else
+    echo "Test project found, but dotnet is not installed."
+  fi
+fi
+
+if find . -maxdepth 3 -type f -path "*/ProjectSettings/ProjectVersion.txt" 2>/dev/null | grep -q .; then
+  echo "Unity project detected. No Unity batchmode tests are configured by this harness."
+fi
+
+if [ "$RAN" -eq 0 ]; then
+  echo "No configured automated tests were detected."
+fi

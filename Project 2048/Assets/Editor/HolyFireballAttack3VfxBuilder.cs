@@ -13,12 +13,10 @@ namespace Project2048.EditorTools
             "Packages/com.unity.shadergraph/GraphTemplates/Cross Pipeline/0_Particle Unlit.shadergraph";
 
         private const string SkillVfxRootPath = "Assets/Art/Effects/SkillVFX";
-        private const string SkillVfxEffectsRootPath = SkillVfxRootPath + "/Effects";
-        private const string HolyFireballRootPath = SkillVfxEffectsRootPath + "/HolyFireball";
-        private const string HolyFireballTexturePath = HolyFireballRootPath + "/Textures";
-        private const string MaterialPath = HolyFireballRootPath + "/Materials";
-        private const string PrefabFolderPath = HolyFireballRootPath + "/Prefabs";
-        private const string ShaderFolderPath = HolyFireballRootPath + "/Shaders";
+        private const string HolyFireballTexturePath = SkillVfxRootPath + "/Textures";
+        private const string MaterialPath = SkillVfxRootPath + "/Materials";
+        private const string PrefabFolderPath = SkillVfxRootPath + "/Prefabs";
+        private const string ShaderFolderPath = SkillVfxRootPath + "/Shaders";
         private const string ShaderGraphPath = ShaderFolderPath + "/HolyFireParticle.shadergraph";
         private const string PrefabPath = PrefabFolderPath + "/HolyFireball_Attack3.prefab";
         private const float VisualScale = 3f;
@@ -33,8 +31,6 @@ namespace Project2048.EditorTools
         public static void Rebuild()
         {
             EnsureFolder(SkillVfxRootPath);
-            EnsureFolder(SkillVfxEffectsRootPath);
-            EnsureFolder(HolyFireballRootPath);
             EnsureFolder(HolyFireballTexturePath);
             EnsureFolder(MaterialPath);
             EnsureFolder(PrefabFolderPath);

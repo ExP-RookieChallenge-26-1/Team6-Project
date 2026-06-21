@@ -1028,28 +1028,28 @@ namespace Project2048.Tests
             Assert.That(profile.boundChainsEffectSprite, Is.Not.Null);
             Assert.That(
                 AssetDatabase.GetAssetPath(profile.attackEffectSprite),
-                Is.EqualTo("Assets/Art/Effects/SkillVFX/Effects/SlashArc/Textures/SkillVfx_AttackImpact.png"));
+                Is.EqualTo("Assets/Art/Effects/SkillVFX/Textures/SkillVfx_AttackImpact.png"));
             Assert.That(
                 AssetDatabase.GetAssetPath(profile.hitEffectSprite),
-                Is.EqualTo("Assets/Art/Effects/SkillVFX/Effects/ImpactBurst/Textures/SkillVfx_HitImpact.png"));
+                Is.EqualTo("Assets/Art/Effects/SkillVFX/Textures/SkillVfx_HitImpact.png"));
             Assert.That(
                 AssetDatabase.GetAssetPath(profile.shieldEffectSprite),
-                Is.EqualTo("Assets/Art/Effects/SkillVFX/Effects/ShieldDome/Textures/SkillVfx_ShieldBarrier.png"));
+                Is.EqualTo("Assets/Art/Effects/SkillVFX/Textures/SkillVfx_ShieldBarrier.png"));
             Assert.That(
                 AssetDatabase.GetAssetPath(profile.thornShieldEffectSprite),
-                Is.EqualTo("Assets/Art/Effects/SkillVFX/Effects/ShieldDome/Textures/SkillVfx_ThornShieldBarrier.png"));
+                Is.EqualTo("Assets/Art/Effects/SkillVFX/Textures/SkillVfx_ThornShieldBarrier.png"));
             Assert.That(
                 AssetDatabase.GetAssetPath(profile.magicCircleEffectSprite),
-                Is.EqualTo("Assets/Art/Effects/SkillVFX/Effects/MagicCircle/Textures/SkillVfx_MagicCircle.png"));
+                Is.EqualTo("Assets/Art/Effects/SkillVFX/Textures/SkillVfx_MagicCircle.png"));
             Assert.That(
                 AssetDatabase.GetAssetPath(profile.flameEffectSprite),
-                Is.EqualTo("Assets/Art/Effects/SkillVFX/Effects/FlameBurst/Textures/SkillVfx_FlameBurst.png"));
+                Is.EqualTo("Assets/Art/Effects/SkillVFX/Textures/SkillVfx_FlameBurst.png"));
             Assert.That(
                 AssetDatabase.GetAssetPath(profile.chainAttackEffectSprite),
-                Is.EqualTo("Assets/Art/Effects/SkillVFX/Effects/DarkChainBurst/Textures/SkillVfx_ChainAttack.png"));
+                Is.EqualTo("Assets/Art/Effects/SkillVFX/Textures/SkillVfx_ChainAttack.png"));
             Assert.That(
                 AssetDatabase.GetAssetPath(profile.boundChainsEffectSprite),
-                Is.EqualTo("Assets/Art/Effects/SkillVFX/Effects/DarkChainBurst/Textures/SkillVfx_BoundChains.png"));
+                Is.EqualTo("Assets/Art/Effects/SkillVFX/Textures/SkillVfx_BoundChains.png"));
             Assert.That(profile.shieldImpactEffect.particleMaterial, Is.Not.Null);
             Assert.That(profile.fearDebuffCastEffect.particleMaterial, Is.Not.Null);
             Assert.That(profile.darknessDebuffCastEffect.particleMaterial, Is.Not.Null);
@@ -1106,15 +1106,15 @@ namespace Project2048.Tests
         {
             var spritePaths = new[]
             {
-                "Assets/Art/Effects/SkillVFX/Effects/SlashArc/Textures/SkillVfx_AttackImpact.png",
-                "Assets/Art/Effects/SkillVFX/Effects/ImpactBurst/Textures/SkillVfx_HitImpact.png",
-                "Assets/Art/Effects/SkillVFX/Effects/ShieldDome/Textures/SkillVfx_ShieldBarrier.png",
-                "Assets/Art/Effects/SkillVFX/Effects/ShieldDome/Textures/SkillVfx_ThornShieldBarrier.png",
-                "Assets/Art/Effects/SkillVFX/Effects/MagicCircle/Textures/SkillVfx_MagicCircle.png",
-                "Assets/Art/Effects/SkillVFX/Effects/FlameBurst/Textures/SkillVfx_FlameBurst.png",
-                "Assets/Art/Effects/SkillVFX/Effects/DarkChainBurst/Textures/SkillVfx_ChainAttack.png",
-                "Assets/Art/Effects/SkillVFX/Effects/DarkChainBurst/Textures/SkillVfx_BoundChains.png",
-                "Assets/Art/Effects/SkillVFX/Effects/TentacleWhip/Textures/SkillVfx_TentacleWhip.png",
+                "Assets/Art/Effects/SkillVFX/Textures/SkillVfx_AttackImpact.png",
+                "Assets/Art/Effects/SkillVFX/Textures/SkillVfx_HitImpact.png",
+                "Assets/Art/Effects/SkillVFX/Textures/SkillVfx_ShieldBarrier.png",
+                "Assets/Art/Effects/SkillVFX/Textures/SkillVfx_ThornShieldBarrier.png",
+                "Assets/Art/Effects/SkillVFX/Textures/SkillVfx_MagicCircle.png",
+                "Assets/Art/Effects/SkillVFX/Textures/SkillVfx_FlameBurst.png",
+                "Assets/Art/Effects/SkillVFX/Textures/SkillVfx_ChainAttack.png",
+                "Assets/Art/Effects/SkillVFX/Textures/SkillVfx_BoundChains.png",
+                "Assets/Art/Effects/SkillVFX/Textures/SkillVfx_TentacleWhip.png",
                 "Assets/Art/UI/IntentIcons/Ui_Attack.png",
                 "Assets/Art/UI/IntentIcons/Ui_Defense.png",
                 "Assets/Art/UI/IntentIcons/Ui_Fear.png",
@@ -1139,23 +1139,23 @@ namespace Project2048.Tests
             var profile = Resources.Load<CombatWorldVfxProfileSO>("PrototypeCombatWorldVfxProfile");
 
             Assert.That(profile, Is.Not.Null);
-            AssertDesignTimePrefab(profile.attackEffectPrefab, "Assets/Art/Effects/SkillVFX/Effects/SlashArc/Prefabs/SkillVfx_AttackImpact.prefab");
-            AssertDesignTimePrefab(profile.hitEffectPrefab, "Assets/Art/Effects/SkillVFX/Effects/ImpactBurst/Prefabs/SkillVfx_HitImpact.prefab");
-            AssertDesignTimePrefab(profile.shieldEffectPrefab, "Assets/Art/Effects/SkillVFX/Effects/ShieldDome/Prefabs/SkillVfx_ShieldBarrier.prefab");
-            AssertDesignTimePrefab(profile.thornShieldEffectPrefab, "Assets/Art/Effects/SkillVFX/Effects/ShieldDome/Prefabs/SkillVfx_ThornShieldBarrier.prefab");
+            AssertDesignTimePrefab(profile.attackEffectPrefab, "Assets/Art/Effects/SkillVFX/Prefabs/SkillVfx_AttackImpact.prefab");
+            AssertDesignTimePrefab(profile.hitEffectPrefab, "Assets/Art/Effects/SkillVFX/Prefabs/SkillVfx_HitImpact.prefab");
+            AssertDesignTimePrefab(profile.shieldEffectPrefab, "Assets/Art/Effects/SkillVFX/Prefabs/SkillVfx_ShieldBarrier.prefab");
+            AssertDesignTimePrefab(profile.thornShieldEffectPrefab, "Assets/Art/Effects/SkillVFX/Prefabs/SkillVfx_ThornShieldBarrier.prefab");
             AssertShieldPrefabHasDedicatedArtAndSparkles(
                 profile.shieldEffectPrefab,
-                "Assets/Art/Effects/SkillVFX/Effects/ShieldDome/Textures/SkillVfx_ShieldBarrier.png",
+                "Assets/Art/Effects/SkillVFX/Textures/SkillVfx_ShieldBarrier.png",
                 "ShieldGuardSparkles");
             AssertShieldPrefabHasDedicatedArtAndSparkles(
                 profile.thornShieldEffectPrefab,
-                "Assets/Art/Effects/SkillVFX/Effects/ShieldDome/Textures/SkillVfx_ThornShieldBarrier.png",
+                "Assets/Art/Effects/SkillVFX/Textures/SkillVfx_ThornShieldBarrier.png",
                 "ThornGuardShieldSparkles");
-            AssertDesignTimePrefab(profile.magicCircleEffectPrefab, "Assets/Art/Effects/SkillVFX/Effects/MagicCircle/Prefabs/SkillVfx_MagicCircle.prefab");
-            AssertDesignTimePrefab(profile.flameEffectPrefab, "Assets/Art/Effects/SkillVFX/Effects/FlameBurst/Prefabs/SkillVfx_FlameBurst.prefab");
-            AssertDesignTimePrefab(profile.darkChainLaunchPrefab, "Assets/Art/Effects/SkillVFX/Effects/DarkChainBurst/Prefabs/SkillVfx_DarkShackleLaunch.prefab");
-            AssertDesignTimePrefab(profile.chainAttackEffectPrefab, "Assets/Art/Effects/SkillVFX/Effects/DarkChainBurst/Prefabs/SkillVfx_ChainAttack.prefab");
-            AssertDesignTimePrefab(profile.boundChainsEffectPrefab, "Assets/Art/Effects/SkillVFX/Effects/DarkChainBurst/Prefabs/SkillVfx_BoundChains.prefab");
+            AssertDesignTimePrefab(profile.magicCircleEffectPrefab, "Assets/Art/Effects/SkillVFX/Prefabs/SkillVfx_MagicCircle.prefab");
+            AssertDesignTimePrefab(profile.flameEffectPrefab, "Assets/Art/Effects/SkillVFX/Prefabs/SkillVfx_FlameBurst.prefab");
+            AssertDesignTimePrefab(profile.darkChainLaunchPrefab, "Assets/Art/Effects/SkillVFX/Prefabs/SkillVfx_DarkShackleLaunch.prefab");
+            AssertDesignTimePrefab(profile.chainAttackEffectPrefab, "Assets/Art/Effects/SkillVFX/Prefabs/SkillVfx_ChainAttack.prefab");
+            AssertDesignTimePrefab(profile.boundChainsEffectPrefab, "Assets/Art/Effects/SkillVFX/Prefabs/SkillVfx_BoundChains.prefab");
 
             var launchLines = profile.darkChainLaunchPrefab.GetComponentsInChildren<LineRenderer>(true);
             Assert.That(launchLines.Any(line => line.name == "DarkShackleChainLine"), Is.True);
@@ -1192,11 +1192,11 @@ namespace Project2048.Tests
                 Assert.That(binding.prefab, Is.Not.Null, family.ToString());
                 Assert.That(
                     AssetDatabase.GetAssetPath(binding.sprite),
-                    Does.StartWith("Assets/Art/Effects/SkillVFX/"),
+                    Does.StartWith("Assets/Art/Effects/SkillVFX/Textures/"),
                     family.ToString());
                 Assert.That(
                     AssetDatabase.GetAssetPath(binding.prefab),
-                    Does.StartWith("Assets/Art/Effects/SkillVFX/Effects/"),
+                    Does.StartWith("Assets/Art/Effects/SkillVFX/Prefabs/"),
                     family.ToString());
             }
         }
@@ -1210,7 +1210,7 @@ namespace Project2048.Tests
                 .OrderBy(family => family)
                 .ToArray();
             var packages = AssetDatabase
-                .FindAssets("t:SkillVfxPackageSO", new[] { "Assets/Art/Effects/SkillVFX/Effects" })
+                .FindAssets("t:SkillVfxPackageSO", new[] { "Assets/Art/Effects/SkillVFX/Packages" })
                 .Select(AssetDatabase.GUIDToAssetPath)
                 .Select(AssetDatabase.LoadAssetAtPath<SkillVfxPackageSO>)
                 .Where(package => package != null)
@@ -1227,14 +1227,14 @@ namespace Project2048.Tests
                 var path = AssetDatabase.GetAssetPath(package);
                 Assert.That(
                     path,
-                    Is.EqualTo($"Assets/Art/Effects/SkillVFX/Effects/{package.family}/SkillVfx_{package.family}Package.asset"),
+                    Is.EqualTo($"Assets/Art/Effects/SkillVFX/Packages/SkillVfx_{package.family}Package.asset"),
                     package.family.ToString());
                 Assert.That(package.HasAuthoredVisual, Is.True, path);
                 if (package.particleMaterial != null)
                 {
                     Assert.That(
                         AssetDatabase.GetAssetPath(package.particleMaterial),
-                        Does.StartWith("Assets/Art/Effects/SkillVFX/Effects/"),
+                        Does.StartWith("Assets/Art/Effects/SkillVFX/Materials/"),
                         path);
                 }
 
@@ -1242,17 +1242,17 @@ namespace Project2048.Tests
                 {
                     Assert.That(
                         AssetDatabase.GetAssetPath(package.primarySprite),
-                        Is.EqualTo("Assets/Art/Effects/SkillVFX/Effects/ShieldDome/Textures/SkillVfx_ShieldBarrier.png"));
+                        Is.EqualTo("Assets/Art/Effects/SkillVFX/Textures/SkillVfx_ShieldBarrier.png"));
                     Assert.That(
                         AssetDatabase.GetAssetPath(package.secondarySprite),
-                        Is.EqualTo("Assets/Art/Effects/SkillVFX/Effects/ShieldDome/Textures/SkillVfx_ThornShieldBarrier.png"));
+                        Is.EqualTo("Assets/Art/Effects/SkillVFX/Textures/SkillVfx_ThornShieldBarrier.png"));
                     AssertShieldPrefabHasDedicatedArtAndSparkles(
                         package.primaryPrefab,
-                        "Assets/Art/Effects/SkillVFX/Effects/ShieldDome/Textures/SkillVfx_ShieldBarrier.png",
+                        "Assets/Art/Effects/SkillVFX/Textures/SkillVfx_ShieldBarrier.png",
                         "ShieldGuardSparkles");
                     AssertShieldPrefabHasDedicatedArtAndSparkles(
                         package.secondaryPrefab,
-                        "Assets/Art/Effects/SkillVFX/Effects/ShieldDome/Textures/SkillVfx_ThornShieldBarrier.png",
+                        "Assets/Art/Effects/SkillVFX/Textures/SkillVfx_ThornShieldBarrier.png",
                         "ThornGuardShieldSparkles");
                 }
 
@@ -1260,33 +1260,33 @@ namespace Project2048.Tests
                 {
                     Assert.That(
                         AssetDatabase.GetAssetPath(package.primarySprite),
-                        Is.EqualTo("Assets/Art/Effects/SkillVFX/Effects/TentacleWhip/Textures/SkillVfx_TentacleWhip.png"));
+                        Is.EqualTo("Assets/Art/Effects/SkillVFX/Textures/SkillVfx_TentacleWhip.png"));
                     Assert.That(
                         AssetDatabase.GetAssetPath(package.primaryPrefab),
-                        Is.EqualTo("Assets/Art/Effects/SkillVFX/Effects/TentacleWhip/Prefabs/SkillVfx_TentacleWhip.prefab"));
+                        Is.EqualTo("Assets/Art/Effects/SkillVFX/Prefabs/SkillVfx_TentacleWhip.prefab"));
                 }
 
                 if (package.family == SkillVfxFamily.SupportFire)
                 {
                     Assert.That(
                         AssetDatabase.GetAssetPath(package.primaryPrefab),
-                        Is.EqualTo("Assets/Art/Effects/SkillVFX/Effects/SlashArc/Prefabs/SkillVfx_AttackImpact.prefab"));
+                        Is.EqualTo("Assets/Art/Effects/SkillVFX/Prefabs/SkillVfx_AttackImpact.prefab"));
                     Assert.That(
                         AssetDatabase.GetAssetPath(package.secondarySprite),
-                        Is.EqualTo("Assets/Art/Effects/SkillVFX/Effects/MagicCircle/Textures/SkillVfx_MagicCircle.png"));
+                        Is.EqualTo("Assets/Art/Effects/SkillVFX/Textures/SkillVfx_MagicCircle.png"));
                     Assert.That(
                         AssetDatabase.GetAssetPath(package.secondaryPrefab),
-                        Is.EqualTo("Assets/Art/Effects/SkillVFX/Effects/MagicCircle/Prefabs/SkillVfx_MagicCircle.prefab"));
+                        Is.EqualTo("Assets/Art/Effects/SkillVFX/Prefabs/SkillVfx_MagicCircle.prefab"));
                 }
 
                 if (package.family == SkillVfxFamily.FlameBurst)
                 {
                     Assert.That(
                         AssetDatabase.GetAssetPath(package.primarySprite),
-                        Is.EqualTo("Assets/Art/Effects/SkillVFX/Effects/FlameBurst/Textures/SkillVfx_FlameBurst.png"));
+                        Is.EqualTo("Assets/Art/Effects/SkillVFX/Textures/SkillVfx_FlameBurst.png"));
                     Assert.That(
                         AssetDatabase.GetAssetPath(package.primaryPrefab),
-                        Is.EqualTo("Assets/Art/Effects/SkillVFX/Effects/FlameBurst/Prefabs/SkillVfx_FlameBurst.prefab"));
+                        Is.EqualTo("Assets/Art/Effects/SkillVFX/Prefabs/SkillVfx_FlameBurst.prefab"));
                     Assert.That(package.localOffset.y, Is.LessThan(0f));
                 }
             }
@@ -1302,6 +1302,50 @@ namespace Project2048.Tests
                 .ToArray();
 
             Assert.That(paths, Is.Empty, string.Join("\n", paths));
+        }
+
+        [Test]
+        public void SkillVfxAssets_UseFlatTypeBucketsWithoutFamilyDummyFolders()
+        {
+            foreach (var requiredFolder in new[]
+            {
+                "Assets/Art/Effects/SkillVFX/Packages",
+                "Assets/Art/Effects/SkillVFX/Materials",
+                "Assets/Art/Effects/SkillVFX/Prefabs",
+                "Assets/Art/Effects/SkillVFX/Textures",
+                "Assets/Art/Effects/SkillVFX/Shaders",
+                "Assets/Art/Effects/SkillVFX/Resources/Shaders",
+            })
+            {
+                Assert.That(AssetDatabase.IsValidFolder(requiredFolder), Is.True, requiredFolder);
+            }
+
+            foreach (var obsoleteFolder in new[]
+            {
+                "Assets/Art/Effects/SkillVFX/Attack",
+                "Assets/Art/Effects/SkillVFX/Common",
+                "Assets/Art/Effects/SkillVFX/Effects",
+                "Assets/Art/Effects/SkillVFX/HolyFireball",
+                "Assets/Art/Effects/SkillVFX/Shield",
+                "Assets/Art/Effects/SkillVFX/SkillSO",
+                "Assets/Art/Effects/SkillVFX/Resources/Effects",
+                "Assets/Art/Effects/SkillVFX/Resources/VFX",
+            })
+            {
+                Assert.That(AssetDatabase.IsValidFolder(obsoleteFolder), Is.False, obsoleteFolder);
+            }
+
+            foreach (var flatBucket in new[]
+            {
+                "Assets/Art/Effects/SkillVFX/Packages",
+                "Assets/Art/Effects/SkillVFX/Materials",
+                "Assets/Art/Effects/SkillVFX/Prefabs",
+                "Assets/Art/Effects/SkillVFX/Textures",
+                "Assets/Art/Effects/SkillVFX/Shaders",
+            })
+            {
+                Assert.That(AssetDatabase.GetSubFolders(flatBucket), Is.Empty, flatBucket);
+            }
         }
 
         [UnityTest]
@@ -2621,7 +2665,7 @@ namespace Project2048.Tests
                 Assert.That(skill.activationEffect.particleEffect.useParticleColor, Is.True, path);
                 Assert.That(
                     AssetDatabase.GetAssetPath(skill.activationEffect.particleEffect.particleMaterial),
-                    Does.StartWith("Assets/Art/Effects/SkillVFX/Effects/"),
+                    Does.StartWith("Assets/Art/Effects/SkillVFX/Materials/"),
                     path);
                 if (path.EndsWith("LightShot.asset", System.StringComparison.Ordinal) ||
                     path.EndsWith("GatherLight.asset", System.StringComparison.Ordinal))

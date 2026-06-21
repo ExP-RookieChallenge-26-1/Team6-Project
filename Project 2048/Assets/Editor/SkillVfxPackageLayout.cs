@@ -11,20 +11,28 @@ namespace Project2048.EditorTools
     public static class SkillVfxPackageLayout
     {
         private const string SkillVfxRoot = "Assets/Art/Effects/SkillVFX";
-        private const string EffectsRoot = SkillVfxRoot + "/Effects";
+        private const string DeprecatedEffectsRoot = SkillVfxRoot + "/Effects";
+        private const string PackagesRoot = SkillVfxRoot + "/Packages";
+        private const string MaterialsRoot = SkillVfxRoot + "/Materials";
+        private const string PrefabsRoot = SkillVfxRoot + "/Prefabs";
+        private const string TexturesRoot = SkillVfxRoot + "/Textures";
+        private const string ShadersRoot = SkillVfxRoot + "/Shaders";
         private const string ResourcesRoot = SkillVfxRoot + "/Resources";
+        private const string ResourceShadersRoot = ResourcesRoot + "/Shaders";
         private const string WorldVfxProfilePath = ResourcesRoot + "/PrototypeCombatWorldVfxProfile.asset";
 
         [MenuItem("Tools/Project2048/VFX/Apply Holy Fireball Style Layout")]
         public static void ApplyHolyFireballStyleLayout()
         {
-            EnsureFolder(EffectsRoot);
+            EnsureCanonicalFolders();
 
             foreach (var move in Moves)
             {
                 MoveAsset(move.Source, move.Target);
             }
 
+            FlattenDeprecatedEffectsFolder();
+            FlattenDeprecatedResourceEffectsFolder();
             EnsureShieldDomePrefabs();
             EnsureTentacleWhipPrefab();
             CreateOrUpdatePackages();
@@ -34,76 +42,80 @@ namespace Project2048.EditorTools
             DeleteFolderIfEmpty(SkillVfxRoot + "/Attack");
             DeleteFolderIfEmpty(SkillVfxRoot + "/Common");
             DeleteFolderIfEmpty(SkillVfxRoot + "/Shield");
-            DeleteFolderIfEmpty(SkillVfxRoot + "/Materials");
-            DeleteFolderIfEmpty(SkillVfxRoot + "/Prefabs");
             DeleteFolderIfEmpty(SkillVfxRoot + "/SkillSO/Materials");
             DeleteFolderIfEmpty(SkillVfxRoot + "/SkillSO");
-            DeleteFolderIfEmpty(ResourcesRoot + "/VFX");
-            DeleteFolderIfEmpty(ResourcesRoot + "/Effects");
+            DeleteFolderTreeIfMetadataOnly(DeprecatedEffectsRoot);
+            DeleteFolderTreeIfMetadataOnly(ResourcesRoot + "/VFX");
+            DeleteFolderTreeIfMetadataOnly(ResourcesRoot + "/Effects");
 
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
-            Debug.Log("Skill VFX assets are organized under HolyFireball-style effect packages.");
+            Debug.Log("Skill VFX assets are organized into canonical type buckets.");
         }
 
         private static readonly AssetMove[] Moves =
         {
-            new(SkillVfxRoot + "/HolyFireball", EffectsRoot + "/HolyFireball"),
+            new(SkillVfxRoot + "/Attack/SkillVfx_AttackImpact.png", TexturesRoot + "/SkillVfx_AttackImpact.png"),
+            new(SkillVfxRoot + "/Attack/SkillVfx_HitImpact.png", TexturesRoot + "/SkillVfx_HitImpact.png"),
+            new(SkillVfxRoot + "/Common/SkillVfx_FlameBurst.png", TexturesRoot + "/SkillVfx_FlameBurst.png"),
+            new(SkillVfxRoot + "/Common/SkillVfx_ChainAttack.png", TexturesRoot + "/SkillVfx_ChainAttack.png"),
+            new(SkillVfxRoot + "/Common/SkillVfx_BoundChains.png", TexturesRoot + "/SkillVfx_BoundChains.png"),
+            new(SkillVfxRoot + "/Shield/SkillVfx_ShieldBarrier.png", TexturesRoot + "/SkillVfx_ShieldBarrier.png"),
+            new(SkillVfxRoot + "/Shield/SkillVfx_ThornShieldBarrier.png", TexturesRoot + "/SkillVfx_ThornShieldBarrier.png"),
+            new(SkillVfxRoot + "/Common/SkillVfx_MagicCircle.png", TexturesRoot + "/SkillVfx_MagicCircle.png"),
 
-            new(SkillVfxRoot + "/Attack/SkillVfx_AttackImpact.png", EffectsRoot + "/SlashArc/Textures/SkillVfx_AttackImpact.png"),
-            new(SkillVfxRoot + "/Prefabs/SkillVfx_AttackImpact.prefab", EffectsRoot + "/SlashArc/Prefabs/SkillVfx_AttackImpact.prefab"),
-            new(SkillVfxRoot + "/SkillSO/Materials/SkillVfx_SlashArc.mat", EffectsRoot + "/SlashArc/Materials/SkillVfx_SlashArc.mat"),
+            new(SkillVfxRoot + "/Prefabs/SkillVfx_AttackImpact.prefab", PrefabsRoot + "/SkillVfx_AttackImpact.prefab"),
+            new(SkillVfxRoot + "/Prefabs/SkillVfx_HitImpact.prefab", PrefabsRoot + "/SkillVfx_HitImpact.prefab"),
+            new(SkillVfxRoot + "/Prefabs/SkillVfx_FlameBurst.prefab", PrefabsRoot + "/SkillVfx_FlameBurst.prefab"),
+            new(SkillVfxRoot + "/Prefabs/SkillVfx_ChainAttack.prefab", PrefabsRoot + "/SkillVfx_ChainAttack.prefab"),
+            new(SkillVfxRoot + "/Prefabs/SkillVfx_BoundChains.prefab", PrefabsRoot + "/SkillVfx_BoundChains.prefab"),
+            new(SkillVfxRoot + "/Prefabs/SkillVfx_DarkShackleLaunch.prefab", PrefabsRoot + "/SkillVfx_DarkShackleLaunch.prefab"),
+            new(SkillVfxRoot + "/Prefabs/SkillVfx_ShieldBarrier.prefab", PrefabsRoot + "/SkillVfx_ShieldBarrier.prefab"),
+            new(SkillVfxRoot + "/Prefabs/SkillVfx_ThornShieldBarrier.prefab", PrefabsRoot + "/SkillVfx_ThornShieldBarrier.prefab"),
+            new(SkillVfxRoot + "/Prefabs/SkillVfx_MagicCircle.prefab", PrefabsRoot + "/SkillVfx_MagicCircle.prefab"),
 
-            new(SkillVfxRoot + "/Attack/SkillVfx_HitImpact.png", EffectsRoot + "/ImpactBurst/Textures/SkillVfx_HitImpact.png"),
-            new(SkillVfxRoot + "/Prefabs/SkillVfx_HitImpact.prefab", EffectsRoot + "/ImpactBurst/Prefabs/SkillVfx_HitImpact.prefab"),
-            new(SkillVfxRoot + "/SkillSO/Materials/SkillVfx_ImpactBurst.mat", EffectsRoot + "/ImpactBurst/Materials/SkillVfx_ImpactBurst.mat"),
+            new(SkillVfxRoot + "/SkillSO/Materials/SkillVfx_SlashArc.mat", MaterialsRoot + "/SkillVfx_SlashArc.mat"),
+            new(SkillVfxRoot + "/SkillSO/Materials/SkillVfx_ImpactBurst.mat", MaterialsRoot + "/SkillVfx_ImpactBurst.mat"),
+            new(SkillVfxRoot + "/SkillSO/Materials/SkillVfx_FlameBurst.mat", MaterialsRoot + "/SkillVfx_FlameBurst.mat"),
+            new(SkillVfxRoot + "/SkillSO/Materials/SkillVfx_DarkChainBurst.mat", MaterialsRoot + "/SkillVfx_DarkChainBurst.mat"),
+            new(SkillVfxRoot + "/SkillSO/Materials/SkillVfx_ShieldDome.mat", MaterialsRoot + "/SkillVfx_ShieldDome.mat"),
+            new(SkillVfxRoot + "/SkillSO/Materials/SkillVfx_LightProjectile.mat", MaterialsRoot + "/SkillVfx_LightProjectile.mat"),
+            new(SkillVfxRoot + "/SkillSO/Materials/SkillVfx_LightBeam.mat", MaterialsRoot + "/SkillVfx_LightBeam.mat"),
+            new(SkillVfxRoot + "/SkillSO/Materials/SkillVfx_BuffAura.mat", MaterialsRoot + "/SkillVfx_BuffAura.mat"),
+            new(SkillVfxRoot + "/SkillSO/Materials/SkillVfx_DebuffWave.mat", MaterialsRoot + "/SkillVfx_DebuffWave.mat"),
+            new(SkillVfxRoot + "/SkillSO/Materials/SkillVfx_DrainTether.mat", MaterialsRoot + "/SkillVfx_DrainTether.mat"),
+            new(SkillVfxRoot + "/SkillSO/Materials/SkillVfx_CounterReady.mat", MaterialsRoot + "/SkillVfx_CounterReady.mat"),
+            new(SkillVfxRoot + "/SkillSO/Materials/SkillVfx_BoardDisturb.mat", MaterialsRoot + "/SkillVfx_BoardDisturb.mat"),
+            new(SkillVfxRoot + "/SkillSO/Materials/SkillVfx_SupportFire.mat", MaterialsRoot + "/SkillVfx_SupportFire.mat"),
+            new(SkillVfxRoot + "/SkillSO/Materials/SkillVfx_TentacleWhip.mat", MaterialsRoot + "/SkillVfx_TentacleWhip.mat"),
+            new(SkillVfxRoot + "/SkillSO/Materials/SkillVfx_SpikedBurst.mat", MaterialsRoot + "/SkillVfx_SpikedBurst.mat"),
+            new(SkillVfxRoot + "/SkillSO/Materials/SkillVfx_BloodFountainSlash.mat", MaterialsRoot + "/SkillVfx_BloodFountainSlash.mat"),
+            new(SkillVfxRoot + "/Materials/ShieldImpactParticles.mat", MaterialsRoot + "/ShieldImpactParticles.mat"),
+            new(SkillVfxRoot + "/Materials/FearDebuffParticles.mat", MaterialsRoot + "/FearDebuffParticles.mat"),
+            new(SkillVfxRoot + "/Materials/DarknessDebuffParticles.mat", MaterialsRoot + "/DarknessDebuffParticles.mat"),
 
-            new(SkillVfxRoot + "/Common/SkillVfx_FlameBurst.png", EffectsRoot + "/FlameBurst/Textures/SkillVfx_FlameBurst.png"),
-            new(SkillVfxRoot + "/Prefabs/SkillVfx_FlameBurst.prefab", EffectsRoot + "/FlameBurst/Prefabs/SkillVfx_FlameBurst.prefab"),
-            new(SkillVfxRoot + "/SkillSO/Materials/SkillVfx_FlameBurst.mat", EffectsRoot + "/FlameBurst/Materials/SkillVfx_FlameBurst.mat"),
+            new(SkillVfxRoot + "/HolyFireball/Materials/HolyFireball_Core.mat", MaterialsRoot + "/HolyFireball_Core.mat"),
+            new(SkillVfxRoot + "/HolyFireball/Materials/HolyFireball_Halo.mat", MaterialsRoot + "/HolyFireball_Halo.mat"),
+            new(SkillVfxRoot + "/HolyFireball/Materials/HolyFireball_Spark.mat", MaterialsRoot + "/HolyFireball_Spark.mat"),
+            new(SkillVfxRoot + "/HolyFireball/Materials/HolyFireball_Wisp.mat", MaterialsRoot + "/HolyFireball_Wisp.mat"),
+            new(SkillVfxRoot + "/HolyFireball/Prefabs/HolyFireball_Attack3.prefab", PrefabsRoot + "/HolyFireball_Attack3.prefab"),
+            new(SkillVfxRoot + "/HolyFireball/Shaders/HolyFireParticle.shadergraph", ShadersRoot + "/HolyFireParticle.shadergraph"),
+            new(SkillVfxRoot + "/HolyFireball/Textures/HolyFire_Halo.png", TexturesRoot + "/HolyFire_Halo.png"),
+            new(SkillVfxRoot + "/HolyFireball/Textures/HolyFire_Orb.png", TexturesRoot + "/HolyFire_Orb.png"),
+            new(SkillVfxRoot + "/HolyFireball/Textures/HolyFire_Spark.png", TexturesRoot + "/HolyFire_Spark.png"),
+            new(SkillVfxRoot + "/HolyFireball/Textures/HolyFire_Wisp.png", TexturesRoot + "/HolyFire_Wisp.png"),
 
-            new(SkillVfxRoot + "/Common/SkillVfx_ChainAttack.png", EffectsRoot + "/DarkChainBurst/Textures/SkillVfx_ChainAttack.png"),
-            new(SkillVfxRoot + "/Common/SkillVfx_BoundChains.png", EffectsRoot + "/DarkChainBurst/Textures/SkillVfx_BoundChains.png"),
-            new(SkillVfxRoot + "/Prefabs/SkillVfx_ChainAttack.prefab", EffectsRoot + "/DarkChainBurst/Prefabs/SkillVfx_ChainAttack.prefab"),
-            new(SkillVfxRoot + "/Prefabs/SkillVfx_BoundChains.prefab", EffectsRoot + "/DarkChainBurst/Prefabs/SkillVfx_BoundChains.prefab"),
-            new(SkillVfxRoot + "/Prefabs/SkillVfx_DarkShackleLaunch.prefab", EffectsRoot + "/DarkChainBurst/Prefabs/SkillVfx_DarkShackleLaunch.prefab"),
-            new(SkillVfxRoot + "/SkillSO/Materials/SkillVfx_DarkChainBurst.mat", EffectsRoot + "/DarkChainBurst/Materials/SkillVfx_DarkChainBurst.mat"),
-
-            new(SkillVfxRoot + "/Shield/SkillVfx_ShieldBarrier.png", EffectsRoot + "/ShieldDome/Textures/SkillVfx_ShieldBarrier.png"),
-            new(SkillVfxRoot + "/Shield/SkillVfx_ThornShieldBarrier.png", EffectsRoot + "/ShieldDome/Textures/SkillVfx_ThornShieldBarrier.png"),
-            new(SkillVfxRoot + "/Prefabs/SkillVfx_ShieldBarrier.prefab", EffectsRoot + "/ShieldDome/Prefabs/SkillVfx_ShieldBarrier.prefab"),
-            new(SkillVfxRoot + "/Prefabs/SkillVfx_ThornShieldBarrier.prefab", EffectsRoot + "/ShieldDome/Prefabs/SkillVfx_ThornShieldBarrier.prefab"),
-            new(SkillVfxRoot + "/SkillSO/Materials/SkillVfx_ShieldDome.mat", EffectsRoot + "/ShieldDome/Materials/SkillVfx_ShieldDome.mat"),
-
-            new(SkillVfxRoot + "/Common/SkillVfx_MagicCircle.png", EffectsRoot + "/MagicCircle/Textures/SkillVfx_MagicCircle.png"),
-            new(SkillVfxRoot + "/Prefabs/SkillVfx_MagicCircle.prefab", EffectsRoot + "/MagicCircle/Prefabs/SkillVfx_MagicCircle.prefab"),
-
-            new(SkillVfxRoot + "/SkillSO/Materials/SkillVfx_LightProjectile.mat", EffectsRoot + "/LightProjectile/Materials/SkillVfx_LightProjectile.mat"),
-            new(SkillVfxRoot + "/SkillSO/Materials/SkillVfx_LightBeam.mat", EffectsRoot + "/LightBeam/Materials/SkillVfx_LightBeam.mat"),
-            new(SkillVfxRoot + "/SkillSO/Materials/SkillVfx_BuffAura.mat", EffectsRoot + "/BuffAura/Materials/SkillVfx_BuffAura.mat"),
-            new(SkillVfxRoot + "/SkillSO/Materials/SkillVfx_DebuffWave.mat", EffectsRoot + "/DebuffWave/Materials/SkillVfx_DebuffWave.mat"),
-            new(SkillVfxRoot + "/SkillSO/Materials/SkillVfx_DrainTether.mat", EffectsRoot + "/DrainTether/Materials/SkillVfx_DrainTether.mat"),
-            new(SkillVfxRoot + "/SkillSO/Materials/SkillVfx_CounterReady.mat", EffectsRoot + "/CounterReady/Materials/SkillVfx_CounterReady.mat"),
-            new(SkillVfxRoot + "/SkillSO/Materials/SkillVfx_BoardDisturb.mat", EffectsRoot + "/BoardDisturb/Materials/SkillVfx_BoardDisturb.mat"),
-            new(SkillVfxRoot + "/SkillSO/Materials/SkillVfx_SupportFire.mat", EffectsRoot + "/SupportFire/Materials/SkillVfx_SupportFire.mat"),
-            new(SkillVfxRoot + "/SkillSO/Materials/SkillVfx_TentacleWhip.mat", EffectsRoot + "/TentacleWhip/Materials/SkillVfx_TentacleWhip.mat"),
-            new(SkillVfxRoot + "/SkillSO/Materials/SkillVfx_SpikedBurst.mat", EffectsRoot + "/SpikedBurst/Materials/SkillVfx_SpikedBurst.mat"),
-            new(SkillVfxRoot + "/SkillSO/Materials/SkillVfx_BloodFountainSlash.mat", EffectsRoot + "/BloodFountainSlash/Materials/SkillVfx_BloodFountainSlash.mat"),
-
-            new(SkillVfxRoot + "/Materials/ShieldImpactParticles.mat", EffectsRoot + "/ShieldImpact/Materials/ShieldImpactParticles.mat"),
-            new(SkillVfxRoot + "/Materials/FearDebuffParticles.mat", EffectsRoot + "/FearDebuff/Materials/FearDebuffParticles.mat"),
-            new(SkillVfxRoot + "/Materials/DarknessDebuffParticles.mat", EffectsRoot + "/DarknessDebuff/Materials/DarknessDebuffParticles.mat"),
-
-            new(ResourcesRoot + "/Effects/ClawSlash2D.shader", ResourcesRoot + "/Effects/ClawSlash2D/Shaders/ClawSlash2D.shader"),
+            new(ResourcesRoot + "/Effects/ClawSlash2D.shader", ResourceShadersRoot + "/ClawSlash2D.shader"),
+            new(ResourcesRoot + "/Effects/ClawSlash2D/Shaders/ClawSlash2D.shader", ResourceShadersRoot + "/ClawSlash2D.shader"),
         };
 
         private static readonly PackageDefinition[] Packages =
         {
             new(SkillVfxFamily.SlashArc, "SlashArc")
             {
-                primarySpritePath = EffectsRoot + "/SlashArc/Textures/SkillVfx_AttackImpact.png",
-                primaryPrefabPath = EffectsRoot + "/SlashArc/Prefabs/SkillVfx_AttackImpact.prefab",
-                particleMaterialPath = EffectsRoot + "/SlashArc/Materials/SkillVfx_SlashArc.mat",
+                primarySpritePath = TexturesRoot + "/SkillVfx_AttackImpact.png",
+                primaryPrefabPath = PrefabsRoot + "/SkillVfx_AttackImpact.prefab",
+                particleMaterialPath = MaterialsRoot + "/SkillVfx_SlashArc.mat",
                 localOffset = new Vector3(0f, 0.16f, 0f),
                 radiusMultiplier = 1f,
                 sortingOffset = 12,
@@ -111,77 +123,77 @@ namespace Project2048.EditorTools
             },
             new(SkillVfxFamily.LightProjectile, "LightProjectile")
             {
-                projectilePrefabPath = EffectsRoot + "/HolyFireball/Prefabs/HolyFireball_Attack3.prefab",
-                primarySpritePath = EffectsRoot + "/SlashArc/Textures/SkillVfx_AttackImpact.png",
-                primaryPrefabPath = EffectsRoot + "/SlashArc/Prefabs/SkillVfx_AttackImpact.prefab",
-                particleMaterialPath = EffectsRoot + "/LightProjectile/Materials/SkillVfx_LightProjectile.mat",
+                projectilePrefabPath = PrefabsRoot + "/HolyFireball_Attack3.prefab",
+                primarySpritePath = TexturesRoot + "/SkillVfx_AttackImpact.png",
+                primaryPrefabPath = PrefabsRoot + "/SkillVfx_AttackImpact.prefab",
+                particleMaterialPath = MaterialsRoot + "/SkillVfx_LightProjectile.mat",
                 radiusMultiplier = 0.92f,
                 rotationDegrees = -8f,
             },
             new(SkillVfxFamily.ShieldDome, "ShieldDome")
             {
-                primarySpritePath = EffectsRoot + "/ShieldDome/Textures/SkillVfx_ShieldBarrier.png",
-                primaryPrefabPath = EffectsRoot + "/ShieldDome/Prefabs/SkillVfx_ShieldBarrier.prefab",
-                secondarySpritePath = EffectsRoot + "/ShieldDome/Textures/SkillVfx_ThornShieldBarrier.png",
-                secondaryPrefabPath = EffectsRoot + "/ShieldDome/Prefabs/SkillVfx_ThornShieldBarrier.prefab",
-                particleMaterialPath = EffectsRoot + "/ShieldDome/Materials/SkillVfx_ShieldDome.mat",
+                primarySpritePath = TexturesRoot + "/SkillVfx_ShieldBarrier.png",
+                primaryPrefabPath = PrefabsRoot + "/SkillVfx_ShieldBarrier.prefab",
+                secondarySpritePath = TexturesRoot + "/SkillVfx_ThornShieldBarrier.png",
+                secondaryPrefabPath = PrefabsRoot + "/SkillVfx_ThornShieldBarrier.prefab",
+                particleMaterialPath = MaterialsRoot + "/SkillVfx_ShieldDome.mat",
                 localOffset = new Vector3(0f, 0.12f, 0f),
             },
             new(SkillVfxFamily.ImpactBurst, "ImpactBurst")
             {
-                primarySpritePath = EffectsRoot + "/ImpactBurst/Textures/SkillVfx_HitImpact.png",
-                primaryPrefabPath = EffectsRoot + "/ImpactBurst/Prefabs/SkillVfx_HitImpact.prefab",
-                particleMaterialPath = EffectsRoot + "/ImpactBurst/Materials/SkillVfx_ImpactBurst.mat",
+                primarySpritePath = TexturesRoot + "/SkillVfx_HitImpact.png",
+                primaryPrefabPath = PrefabsRoot + "/SkillVfx_HitImpact.prefab",
+                particleMaterialPath = MaterialsRoot + "/SkillVfx_ImpactBurst.mat",
                 radiusMultiplier = 1.08f,
                 rotationDegrees = 0f,
             },
             new(SkillVfxFamily.BuffAura, "BuffAura")
             {
-                primarySpritePath = EffectsRoot + "/MagicCircle/Textures/SkillVfx_MagicCircle.png",
-                primaryPrefabPath = EffectsRoot + "/MagicCircle/Prefabs/SkillVfx_MagicCircle.prefab",
-                particleMaterialPath = EffectsRoot + "/BuffAura/Materials/SkillVfx_BuffAura.mat",
+                primarySpritePath = TexturesRoot + "/SkillVfx_MagicCircle.png",
+                primaryPrefabPath = PrefabsRoot + "/SkillVfx_MagicCircle.prefab",
+                particleMaterialPath = MaterialsRoot + "/SkillVfx_BuffAura.mat",
                 localOffset = new Vector3(0f, 0.08f, 0f),
                 rotationDegrees = -8f,
             },
             new(SkillVfxFamily.DebuffWave, "DebuffWave")
             {
-                primarySpritePath = EffectsRoot + "/MagicCircle/Textures/SkillVfx_MagicCircle.png",
-                primaryPrefabPath = EffectsRoot + "/MagicCircle/Prefabs/SkillVfx_MagicCircle.prefab",
-                particleMaterialPath = EffectsRoot + "/DebuffWave/Materials/SkillVfx_DebuffWave.mat",
+                primarySpritePath = TexturesRoot + "/SkillVfx_MagicCircle.png",
+                primaryPrefabPath = PrefabsRoot + "/SkillVfx_MagicCircle.prefab",
+                particleMaterialPath = MaterialsRoot + "/SkillVfx_DebuffWave.mat",
                 localOffset = new Vector3(0f, 0.08f, 0f),
                 rotationDegrees = -8f,
             },
             new(SkillVfxFamily.DrainTether, "DrainTether")
             {
-                primarySpritePath = EffectsRoot + "/MagicCircle/Textures/SkillVfx_MagicCircle.png",
-                primaryPrefabPath = EffectsRoot + "/MagicCircle/Prefabs/SkillVfx_MagicCircle.prefab",
-                particleMaterialPath = EffectsRoot + "/DrainTether/Materials/SkillVfx_DrainTether.mat",
+                primarySpritePath = TexturesRoot + "/SkillVfx_MagicCircle.png",
+                primaryPrefabPath = PrefabsRoot + "/SkillVfx_MagicCircle.prefab",
+                particleMaterialPath = MaterialsRoot + "/SkillVfx_DrainTether.mat",
                 localOffset = new Vector3(0f, 0.08f, 0f),
                 rotationDegrees = -8f,
             },
             new(SkillVfxFamily.CounterReady, "CounterReady")
             {
-                primarySpritePath = EffectsRoot + "/MagicCircle/Textures/SkillVfx_MagicCircle.png",
-                primaryPrefabPath = EffectsRoot + "/MagicCircle/Prefabs/SkillVfx_MagicCircle.prefab",
-                particleMaterialPath = EffectsRoot + "/CounterReady/Materials/SkillVfx_CounterReady.mat",
+                primarySpritePath = TexturesRoot + "/SkillVfx_MagicCircle.png",
+                primaryPrefabPath = PrefabsRoot + "/SkillVfx_MagicCircle.prefab",
+                particleMaterialPath = MaterialsRoot + "/SkillVfx_CounterReady.mat",
                 localOffset = new Vector3(0f, 0.08f, 0f),
                 rotationDegrees = -8f,
             },
             new(SkillVfxFamily.BoardDisturb, "BoardDisturb")
             {
-                primarySpritePath = EffectsRoot + "/MagicCircle/Textures/SkillVfx_MagicCircle.png",
-                primaryPrefabPath = EffectsRoot + "/MagicCircle/Prefabs/SkillVfx_MagicCircle.prefab",
-                particleMaterialPath = EffectsRoot + "/BoardDisturb/Materials/SkillVfx_BoardDisturb.mat",
+                primarySpritePath = TexturesRoot + "/SkillVfx_MagicCircle.png",
+                primaryPrefabPath = PrefabsRoot + "/SkillVfx_MagicCircle.prefab",
+                particleMaterialPath = MaterialsRoot + "/SkillVfx_BoardDisturb.mat",
                 localOffset = new Vector3(0f, 0.08f, 0f),
                 rotationDegrees = -8f,
             },
             new(SkillVfxFamily.SupportFire, "SupportFire")
             {
-                primarySpritePath = EffectsRoot + "/SlashArc/Textures/SkillVfx_AttackImpact.png",
-                primaryPrefabPath = EffectsRoot + "/SlashArc/Prefabs/SkillVfx_AttackImpact.prefab",
-                secondarySpritePath = EffectsRoot + "/MagicCircle/Textures/SkillVfx_MagicCircle.png",
-                secondaryPrefabPath = EffectsRoot + "/MagicCircle/Prefabs/SkillVfx_MagicCircle.prefab",
-                particleMaterialPath = EffectsRoot + "/SupportFire/Materials/SkillVfx_SupportFire.mat",
+                primarySpritePath = TexturesRoot + "/SkillVfx_AttackImpact.png",
+                primaryPrefabPath = PrefabsRoot + "/SkillVfx_AttackImpact.prefab",
+                secondarySpritePath = TexturesRoot + "/SkillVfx_MagicCircle.png",
+                secondaryPrefabPath = PrefabsRoot + "/SkillVfx_MagicCircle.prefab",
+                particleMaterialPath = MaterialsRoot + "/SkillVfx_SupportFire.mat",
                 localOffset = new Vector3(0f, 0.48f, 0f),
                 radiusMultiplier = 0.82f,
                 tintWhiteBlend = 0.2f,
@@ -190,46 +202,46 @@ namespace Project2048.EditorTools
             },
             new(SkillVfxFamily.LightBeam, "LightBeam")
             {
-                projectilePrefabPath = EffectsRoot + "/HolyFireball/Prefabs/HolyFireball_Attack3.prefab",
-                primarySpritePath = EffectsRoot + "/SlashArc/Textures/SkillVfx_AttackImpact.png",
-                primaryPrefabPath = EffectsRoot + "/SlashArc/Prefabs/SkillVfx_AttackImpact.prefab",
-                particleMaterialPath = EffectsRoot + "/LightBeam/Materials/SkillVfx_LightBeam.mat",
+                projectilePrefabPath = PrefabsRoot + "/HolyFireball_Attack3.prefab",
+                primarySpritePath = TexturesRoot + "/SkillVfx_AttackImpact.png",
+                primaryPrefabPath = PrefabsRoot + "/SkillVfx_AttackImpact.prefab",
+                particleMaterialPath = MaterialsRoot + "/SkillVfx_LightBeam.mat",
                 localOffset = new Vector3(0f, 0.14f, 0f),
                 radiusMultiplier = 1.18f,
                 rotationDegrees = -10f,
             },
             new(SkillVfxFamily.TentacleWhip, "TentacleWhip")
             {
-                primarySpritePath = EffectsRoot + "/TentacleWhip/Textures/SkillVfx_TentacleWhip.png",
-                primaryPrefabPath = EffectsRoot + "/TentacleWhip/Prefabs/SkillVfx_TentacleWhip.prefab",
-                particleMaterialPath = EffectsRoot + "/TentacleWhip/Materials/SkillVfx_TentacleWhip.mat",
+                primarySpritePath = TexturesRoot + "/SkillVfx_TentacleWhip.png",
+                primaryPrefabPath = PrefabsRoot + "/SkillVfx_TentacleWhip.prefab",
+                particleMaterialPath = MaterialsRoot + "/SkillVfx_TentacleWhip.mat",
                 localOffset = new Vector3(0f, 0.14f, 0f),
                 radiusMultiplier = 0.92f,
                 rotationDegrees = -8f,
             },
             new(SkillVfxFamily.SpikedBurst, "SpikedBurst")
             {
-                primarySpritePath = EffectsRoot + "/ImpactBurst/Textures/SkillVfx_HitImpact.png",
-                primaryPrefabPath = EffectsRoot + "/ImpactBurst/Prefabs/SkillVfx_HitImpact.prefab",
-                particleMaterialPath = EffectsRoot + "/SpikedBurst/Materials/SkillVfx_SpikedBurst.mat",
+                primarySpritePath = TexturesRoot + "/SkillVfx_HitImpact.png",
+                primaryPrefabPath = PrefabsRoot + "/SkillVfx_HitImpact.prefab",
+                particleMaterialPath = MaterialsRoot + "/SkillVfx_SpikedBurst.mat",
                 localOffset = new Vector3(0f, 0.14f, 0f),
                 radiusMultiplier = 1.12f,
                 rotationDegrees = 0f,
             },
             new(SkillVfxFamily.BloodFountainSlash, "BloodFountainSlash")
             {
-                primarySpritePath = EffectsRoot + "/SlashArc/Textures/SkillVfx_AttackImpact.png",
-                primaryPrefabPath = EffectsRoot + "/SlashArc/Prefabs/SkillVfx_AttackImpact.prefab",
-                particleMaterialPath = EffectsRoot + "/BloodFountainSlash/Materials/SkillVfx_BloodFountainSlash.mat",
+                primarySpritePath = TexturesRoot + "/SkillVfx_AttackImpact.png",
+                primaryPrefabPath = PrefabsRoot + "/SkillVfx_AttackImpact.prefab",
+                particleMaterialPath = MaterialsRoot + "/SkillVfx_BloodFountainSlash.mat",
                 localOffset = new Vector3(0f, 0.14f, 0f),
                 radiusMultiplier = 1.08f,
                 rotationDegrees = -16f,
             },
             new(SkillVfxFamily.FlameBurst, "FlameBurst")
             {
-                primarySpritePath = EffectsRoot + "/FlameBurst/Textures/SkillVfx_FlameBurst.png",
-                primaryPrefabPath = EffectsRoot + "/FlameBurst/Prefabs/SkillVfx_FlameBurst.prefab",
-                particleMaterialPath = EffectsRoot + "/FlameBurst/Materials/SkillVfx_FlameBurst.mat",
+                primarySpritePath = TexturesRoot + "/SkillVfx_FlameBurst.png",
+                primaryPrefabPath = PrefabsRoot + "/SkillVfx_FlameBurst.prefab",
+                particleMaterialPath = MaterialsRoot + "/SkillVfx_FlameBurst.mat",
                 localOffset = new Vector3(0f, -0.42f, 0f),
                 radiusMultiplier = 1.1f,
                 sortingOffset = 11,
@@ -239,12 +251,12 @@ namespace Project2048.EditorTools
             },
             new(SkillVfxFamily.DarkChainBurst, "DarkChainBurst")
             {
-                primarySpritePath = EffectsRoot + "/DarkChainBurst/Textures/SkillVfx_ChainAttack.png",
-                primaryPrefabPath = EffectsRoot + "/DarkChainBurst/Prefabs/SkillVfx_ChainAttack.prefab",
-                projectilePrefabPath = EffectsRoot + "/DarkChainBurst/Prefabs/SkillVfx_DarkShackleLaunch.prefab",
-                secondarySpritePath = EffectsRoot + "/DarkChainBurst/Textures/SkillVfx_BoundChains.png",
-                secondaryPrefabPath = EffectsRoot + "/DarkChainBurst/Prefabs/SkillVfx_BoundChains.prefab",
-                particleMaterialPath = EffectsRoot + "/DarkChainBurst/Materials/SkillVfx_DarkChainBurst.mat",
+                primarySpritePath = TexturesRoot + "/SkillVfx_ChainAttack.png",
+                primaryPrefabPath = PrefabsRoot + "/SkillVfx_ChainAttack.prefab",
+                projectilePrefabPath = PrefabsRoot + "/SkillVfx_DarkShackleLaunch.prefab",
+                secondarySpritePath = TexturesRoot + "/SkillVfx_BoundChains.png",
+                secondaryPrefabPath = PrefabsRoot + "/SkillVfx_BoundChains.prefab",
+                particleMaterialPath = MaterialsRoot + "/SkillVfx_DarkChainBurst.mat",
                 localOffset = new Vector3(0f, 0.04f, 0f),
                 radiusMultiplier = 0.95f,
                 tintWhiteBlend = 0.14f,
@@ -253,11 +265,102 @@ namespace Project2048.EditorTools
             },
         };
 
+        private static void EnsureCanonicalFolders()
+        {
+            EnsureFolder(PackagesRoot);
+            EnsureFolder(MaterialsRoot);
+            EnsureFolder(PrefabsRoot);
+            EnsureFolder(TexturesRoot);
+            EnsureFolder(ShadersRoot);
+            EnsureFolder(ResourcesRoot);
+            EnsureFolder(ResourceShadersRoot);
+        }
+
+        private static void FlattenDeprecatedEffectsFolder()
+        {
+            FlattenFolderByType(
+                DeprecatedEffectsRoot,
+                packageRoot: PackagesRoot,
+                materialRoot: MaterialsRoot,
+                prefabRoot: PrefabsRoot,
+                textureRoot: TexturesRoot,
+                shaderRoot: ShadersRoot);
+        }
+
+        private static void FlattenDeprecatedResourceEffectsFolder()
+        {
+            FlattenFolderByType(
+                ResourcesRoot + "/Effects",
+                packageRoot: null,
+                materialRoot: null,
+                prefabRoot: null,
+                textureRoot: null,
+                shaderRoot: ResourceShadersRoot);
+        }
+
+        private static void FlattenFolderByType(
+            string sourceRoot,
+            string packageRoot,
+            string materialRoot,
+            string prefabRoot,
+            string textureRoot,
+            string shaderRoot)
+        {
+            if (!AssetDatabase.IsValidFolder(sourceRoot))
+            {
+                return;
+            }
+
+            var paths = AssetDatabase
+                .FindAssets(string.Empty, new[] { sourceRoot })
+                .Select(AssetDatabase.GUIDToAssetPath)
+                .Where(path => !AssetDatabase.IsValidFolder(path))
+                .OrderBy(path => path, StringComparer.Ordinal)
+                .ToArray();
+
+            foreach (var path in paths)
+            {
+                var bucketRoot = ResolveBucketRootForExtension(
+                    Path.GetExtension(path),
+                    packageRoot,
+                    materialRoot,
+                    prefabRoot,
+                    textureRoot,
+                    shaderRoot);
+                if (string.IsNullOrWhiteSpace(bucketRoot))
+                {
+                    continue;
+                }
+
+                MoveAsset(path, bucketRoot + "/" + Path.GetFileName(path));
+            }
+        }
+
+        private static string ResolveBucketRootForExtension(
+            string extension,
+            string packageRoot,
+            string materialRoot,
+            string prefabRoot,
+            string textureRoot,
+            string shaderRoot)
+        {
+            return extension?.ToLowerInvariant() switch
+            {
+                ".asset" => packageRoot,
+                ".mat" => materialRoot,
+                ".prefab" => prefabRoot,
+                ".png" => textureRoot,
+                ".shader" => shaderRoot,
+                ".shadergraph" => shaderRoot,
+                _ => null,
+            };
+        }
+
         private static void CreateOrUpdatePackages()
         {
             foreach (var definition in Packages)
             {
-                var packagePath = EffectsRoot + $"/{definition.folderName}/SkillVfx_{definition.folderName}Package.asset";
+                var packagePath = PackagesRoot + $"/SkillVfx_{definition.folderName}Package.asset";
                 EnsureFolder(Path.GetDirectoryName(packagePath)?.Replace('\\', '/'));
                 var package = AssetDatabase.LoadAssetAtPath<SkillVfxPackageSO>(packagePath);
                 if (package == null)
@@ -353,7 +456,7 @@ namespace Project2048.EditorTools
         private static void AssignPackagesToSkills()
         {
             var packagesByFamily = new System.Collections.Generic.Dictionary<SkillVfxFamily, SkillVfxPackageSO>();
-            foreach (var guid in AssetDatabase.FindAssets("t:SkillVfxPackageSO", new[] { EffectsRoot }))
+            foreach (var guid in AssetDatabase.FindAssets("t:SkillVfxPackageSO", new[] { PackagesRoot }))
             {
                 var path = AssetDatabase.GUIDToAssetPath(guid);
                 var package = AssetDatabase.LoadAssetAtPath<SkillVfxPackageSO>(path);
@@ -391,18 +494,18 @@ namespace Project2048.EditorTools
         private static void EnsureShieldDomePrefabs()
         {
             EnsureShieldDomePrefab(
-                EffectsRoot + "/ShieldDome/Prefabs/SkillVfx_ShieldBarrier.prefab",
+                PrefabsRoot + "/SkillVfx_ShieldBarrier.prefab",
                 "SkillVfx_ShieldBarrier",
-                EffectsRoot + "/ShieldDome/Textures/SkillVfx_ShieldBarrier.png",
+                TexturesRoot + "/SkillVfx_ShieldBarrier.png",
                 "ShieldGuardSparkles",
                 new Color(0.78f, 0.94f, 1f, 0.62f),
                 new Color(1f, 1f, 1f, 0.9f),
                 14);
 
             EnsureShieldDomePrefab(
-                EffectsRoot + "/ShieldDome/Prefabs/SkillVfx_ThornShieldBarrier.prefab",
+                PrefabsRoot + "/SkillVfx_ThornShieldBarrier.prefab",
                 "SkillVfx_ThornShieldBarrier",
-                EffectsRoot + "/ShieldDome/Textures/SkillVfx_ThornShieldBarrier.png",
+                TexturesRoot + "/SkillVfx_ThornShieldBarrier.png",
                 "ThornGuardShieldSparkles",
                 new Color(0.78f, 0.96f, 0.86f, 0.58f),
                 new Color(1f, 0.78f, 0.72f, 0.86f),
@@ -412,10 +515,10 @@ namespace Project2048.EditorTools
         private static void EnsureTentacleWhipPrefab()
         {
             EnsureSpriteEffectPrefab(
-                EffectsRoot + "/TentacleWhip/Prefabs/SkillVfx_TentacleWhip.prefab",
+                PrefabsRoot + "/SkillVfx_TentacleWhip.prefab",
                 "SkillVfx_TentacleWhip",
-                EffectsRoot + "/TentacleWhip/Textures/SkillVfx_TentacleWhip.png",
-                EffectsRoot + "/TentacleWhip/Materials/SkillVfx_TentacleWhip.mat",
+                TexturesRoot + "/SkillVfx_TentacleWhip.png",
+                MaterialsRoot + "/SkillVfx_TentacleWhip.mat",
                 new Color(1f, 1f, 1f, 0.82f));
         }
 
@@ -470,7 +573,7 @@ namespace Project2048.EditorTools
         {
             EnsureFolder(Path.GetDirectoryName(prefabPath)?.Replace('\\', '/'));
             var sprite = LoadAsset<Sprite>(spritePath);
-            var material = LoadAsset<Material>(EffectsRoot + "/ShieldDome/Materials/SkillVfx_ShieldDome.mat");
+            var material = LoadAsset<Material>(MaterialsRoot + "/SkillVfx_ShieldDome.mat");
             var existingPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
             var root = existingPrefab != null
                 ? PrefabUtility.LoadPrefabContents(prefabPath)
@@ -709,6 +812,29 @@ namespace Project2048.EditorTools
                 {
                     return;
                 }
+            }
+
+            AssetDatabase.DeleteAsset(assetPath);
+        }
+
+        private static void DeleteFolderTreeIfMetadataOnly(string assetPath)
+        {
+            if (!AssetDatabase.IsValidFolder(assetPath))
+            {
+                return;
+            }
+
+            var absolutePath = Path.GetFullPath(Path.Combine(Application.dataPath, "..", assetPath));
+            if (!Directory.Exists(absolutePath))
+            {
+                return;
+            }
+
+            if (Directory
+                .EnumerateFiles(absolutePath, "*", SearchOption.AllDirectories)
+                .Any(path => !path.EndsWith(".meta", StringComparison.OrdinalIgnoreCase)))
+            {
+                return;
             }
 
             AssetDatabase.DeleteAsset(assetPath);

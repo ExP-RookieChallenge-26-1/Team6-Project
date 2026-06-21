@@ -13,7 +13,183 @@ MonoBehaviour:
   m_Name: PrototypeCombatWorldVfxProfile
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.CombatWorldVfxProfileSO
   attackEffectSprite: {fileID: 21300000, guid: e18b788083f586d650f0bcb9e2a927a4, type: 3}
+  hitEffectSprite: {fileID: 21300000, guid: 9b5fc44167244de7b10fa372b672de89, type: 3}
   shieldEffectSprite: {fileID: -3554453865146640057, guid: 0bd3564bbef8b9b44baf3cd330c01c1b, type: 3}
+  thornShieldEffectSprite: {fileID: 21300000, guid: 8c49f1f430d44e7e8e1abef7d849a339, type: 3}
+  magicCircleEffectSprite: {fileID: 21300000, guid: 91b7d11e1f9d4ecf95de8b6a82fa3a87, type: 3}
+  flameEffectSprite: {fileID: 21300000, guid: e83fe29d407142ba931d90d518a538a2, type: 3}
+  chainAttackEffectSprite: {fileID: 21300000, guid: be27da63da4d43dd86a43c511375ac07, type: 3}
+  boundChainsEffectSprite: {fileID: 21300000, guid: 302feda477c54bb9888434aab0dfaa2d, type: 3}
+  attackEffectPrefab: {fileID: 756328571287768908, guid: d6c612ca12e9ae34d903714e8fc4f81e, type: 3}
+  hitEffectPrefab: {fileID: 8614566233561317893, guid: 06a9b239017d8e44bb20c48fca385733, type: 3}
+  shieldEffectPrefab: {fileID: 7427817718329016933, guid: 5455b1b837377fe4fa0a6ec39baceb62, type: 3}
+  thornShieldEffectPrefab: {fileID: 334930548413494215, guid: 2aa76a56c853c054ca191435c455f36e, type: 3}
+  magicCircleEffectPrefab: {fileID: 678183688835185469, guid: 4687ea7fc00f3154a9ac6e179a7cda97, type: 3}
+  flameEffectPrefab: {fileID: 1827861628062789563, guid: 11867b2eedd68a545aa83d1f7781b799, type: 3}
+  darkChainLaunchPrefab: {fileID: 6112283777073703144, guid: 7606bfa0f29aca24da347d455045fe30, type: 3}
+  chainAttackEffectPrefab: {fileID: 3746632578855000458, guid: f5829cd5b554e58468ee6f5d098d1d94, type: 3}
+  boundChainsEffectPrefab: {fileID: 2128731538229030202, guid: b8ace7993b619e7468da03635a1b4819, type: 3}
+  designTimeBindings:
+  - family: 1
+    sprite: {fileID: 21300000, guid: e18b788083f586d650f0bcb9e2a927a4, type: 3}
+    prefab: {fileID: 756328571287768908, guid: d6c612ca12e9ae34d903714e8fc4f81e, type: 3}
+    localOffset: {x: 0, y: 0.16, z: 0}
+    radiusMultiplier: 1
+    lifetimeSeconds: -1
+    sortingOffset: 12
+    tintWhiteBlend: 0.18
+    alpha: 0.9
+    rotationDegrees: -12
+  - family: 2
+    sprite: {fileID: 21300000, guid: e18b788083f586d650f0bcb9e2a927a4, type: 3}
+    prefab: {fileID: 756328571287768908, guid: d6c612ca12e9ae34d903714e8fc4f81e, type: 3}
+    localOffset: {x: 0, y: 0.16, z: 0}
+    radiusMultiplier: 0.92
+    lifetimeSeconds: -1
+    sortingOffset: 12
+    tintWhiteBlend: 0.18
+    alpha: 0.9
+    rotationDegrees: -8
+  - family: 3
+    sprite: {fileID: -3554453865146640057, guid: 0bd3564bbef8b9b44baf3cd330c01c1b, type: 3}
+    prefab: {fileID: 7427817718329016933, guid: 5455b1b837377fe4fa0a6ec39baceb62, type: 3}
+    localOffset: {x: 0, y: 0.12, z: 0}
+    radiusMultiplier: 1
+    lifetimeSeconds: -1
+    sortingOffset: 12
+    tintWhiteBlend: 0.18
+    alpha: 0.9
+    rotationDegrees: -12
+  - family: 4
+    sprite: {fileID: 21300000, guid: 9b5fc44167244de7b10fa372b672de89, type: 3}
+    prefab: {fileID: 8614566233561317893, guid: 06a9b239017d8e44bb20c48fca385733, type: 3}
+    localOffset: {x: 0, y: 0.16, z: 0}
+    radiusMultiplier: 1.08
+    lifetimeSeconds: -1
+    sortingOffset: 12
+    tintWhiteBlend: 0.18
+    alpha: 0.9
+    rotationDegrees: 0
+  - family: 5
+    sprite: {fileID: 21300000, guid: 91b7d11e1f9d4ecf95de8b6a82fa3a87, type: 3}
+    prefab: {fileID: 678183688835185469, guid: 4687ea7fc00f3154a9ac6e179a7cda97, type: 3}
+    localOffset: {x: 0, y: 0.08, z: 0}
+    radiusMultiplier: 1
+    lifetimeSeconds: -1
+    sortingOffset: 12
+    tintWhiteBlend: 0.18
+    alpha: 0.9
+    rotationDegrees: -8
+  - family: 6
+    sprite: {fileID: 21300000, guid: 91b7d11e1f9d4ecf95de8b6a82fa3a87, type: 3}
+    prefab: {fileID: 678183688835185469, guid: 4687ea7fc00f3154a9ac6e179a7cda97, type: 3}
+    localOffset: {x: 0, y: 0.08, z: 0}
+    radiusMultiplier: 1
+    lifetimeSeconds: -1
+    sortingOffset: 12
+    tintWhiteBlend: 0.18
+    alpha: 0.9
+    rotationDegrees: -8
+  - family: 7
+    sprite: {fileID: 21300000, guid: 91b7d11e1f9d4ecf95de8b6a82fa3a87, type: 3}
+    prefab: {fileID: 678183688835185469, guid: 4687ea7fc00f3154a9ac6e179a7cda97, type: 3}
+    localOffset: {x: 0, y: 0.08, z: 0}
+    radiusMultiplier: 1
+    lifetimeSeconds: -1
+    sortingOffset: 12
+    tintWhiteBlend: 0.18
+    alpha: 0.9
+    rotationDegrees: -8
+  - family: 8
+    sprite: {fileID: 21300000, guid: 91b7d11e1f9d4ecf95de8b6a82fa3a87, type: 3}
+    prefab: {fileID: 678183688835185469, guid: 4687ea7fc00f3154a9ac6e179a7cda97, type: 3}
+    localOffset: {x: 0, y: 0.08, z: 0}
+    radiusMultiplier: 1
+    lifetimeSeconds: -1
+    sortingOffset: 12
+    tintWhiteBlend: 0.18
+    alpha: 0.9
+    rotationDegrees: -8
+  - family: 9
+    sprite: {fileID: 21300000, guid: 91b7d11e1f9d4ecf95de8b6a82fa3a87, type: 3}
+    prefab: {fileID: 678183688835185469, guid: 4687ea7fc00f3154a9ac6e179a7cda97, type: 3}
+    localOffset: {x: 0, y: 0.08, z: 0}
+    radiusMultiplier: 1
+    lifetimeSeconds: -1
+    sortingOffset: 12
+    tintWhiteBlend: 0.18
+    alpha: 0.9
+    rotationDegrees: -8
+  - family: 10
+    sprite: {fileID: 21300000, guid: e18b788083f586d650f0bcb9e2a927a4, type: 3}
+    prefab: {fileID: 756328571287768908, guid: d6c612ca12e9ae34d903714e8fc4f81e, type: 3}
+    localOffset: {x: 0, y: 0.48, z: 0}
+    radiusMultiplier: 0.82
+    lifetimeSeconds: -1
+    sortingOffset: 12
+    tintWhiteBlend: 0.2
+    alpha: 0.86
+    rotationDegrees: -6
+  - family: 11
+    sprite: {fileID: 21300000, guid: e18b788083f586d650f0bcb9e2a927a4, type: 3}
+    prefab: {fileID: 756328571287768908, guid: d6c612ca12e9ae34d903714e8fc4f81e, type: 3}
+    localOffset: {x: 0, y: 0.14, z: 0}
+    radiusMultiplier: 1.18
+    lifetimeSeconds: -1
+    sortingOffset: 12
+    tintWhiteBlend: 0.18
+    alpha: 0.9
+    rotationDegrees: -10
+  - family: 12
+    sprite: {fileID: 8308453775926402793, guid: 6a8de39c90871b84f948aa4b0fc1d938, type: 3}
+    prefab: {fileID: 4661553209743665296, guid: b6ad87597eb493f4e9a99c793656b9ff, type: 3}
+    localOffset: {x: 0, y: 0.14, z: 0}
+    radiusMultiplier: 0.92
+    lifetimeSeconds: -1
+    sortingOffset: 12
+    tintWhiteBlend: 0.18
+    alpha: 0.9
+    rotationDegrees: -8
+  - family: 13
+    sprite: {fileID: 21300000, guid: 9b5fc44167244de7b10fa372b672de89, type: 3}
+    prefab: {fileID: 8614566233561317893, guid: 06a9b239017d8e44bb20c48fca385733, type: 3}
+    localOffset: {x: 0, y: 0.14, z: 0}
+    radiusMultiplier: 1.12
+    lifetimeSeconds: -1
+    sortingOffset: 12
+    tintWhiteBlend: 0.18
+    alpha: 0.9
+    rotationDegrees: 0
+  - family: 14
+    sprite: {fileID: 21300000, guid: e18b788083f586d650f0bcb9e2a927a4, type: 3}
+    prefab: {fileID: 756328571287768908, guid: d6c612ca12e9ae34d903714e8fc4f81e, type: 3}
+    localOffset: {x: 0, y: 0.14, z: 0}
+    radiusMultiplier: 1.08
+    lifetimeSeconds: -1
+    sortingOffset: 12
+    tintWhiteBlend: 0.18
+    alpha: 0.9
+    rotationDegrees: -16
+  - family: 15
+    sprite: {fileID: 21300000, guid: e83fe29d407142ba931d90d518a538a2, type: 3}
+    prefab: {fileID: 1827861628062789563, guid: 11867b2eedd68a545aa83d1f7781b799, type: 3}
+    localOffset: {x: 0, y: -0.42, z: 0}
+    radiusMultiplier: 1.1
+    lifetimeSeconds: -1
+    sortingOffset: 11
+    tintWhiteBlend: 0.16
+    alpha: 0.84
+    rotationDegrees: -8
+  - family: 16
+    sprite: {fileID: 21300000, guid: be27da63da4d43dd86a43c511375ac07, type: 3}
+    prefab: {fileID: 3746632578855000458, guid: f5829cd5b554e58468ee6f5d098d1d94, type: 3}
+    localOffset: {x: 0, y: 0.04, z: 0}
+    radiusMultiplier: 0.95
+    lifetimeSeconds: -1
+    sortingOffset: 12
+    tintWhiteBlend: 0.14
+    alpha: 0.78
+    rotationDegrees: -4
   shieldImpactEffect:
     objectName: ShieldImpactParticles
     particlePrefab: {fileID: 0}

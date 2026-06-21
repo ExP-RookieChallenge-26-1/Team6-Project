@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Taunt
   m_EditorClassIdentifier: Game.Core::Project2048.Skills.SkillSO
   skillId: taunt
-  skillName: "도발"
+  skillName: "\uB3C4\uBC1C"
   skillType: 2
   effectKind: 30
   damageStatSource: 0
@@ -80,10 +80,12 @@ MonoBehaviour:
     sfxDelaySeconds: 0
     localOffset: {x: 0, y: 0, z: 0}
     autoDestroySeconds: 1.25
+  vfxPackage: {fileID: 11400000, guid: 88b30072ed0cb6d4eb21f3ffcc8cac9f, type: 2}
   vfxFamily: 6
   vfxPrimaryColor: {r: 0.942967, g: 0.798967, b: 0.338167, a: 1}
   vfxSecondaryColor: {r: 0.449777, g: 0.125777, b: 0.089777, a: 1}
   vfxScale: 0.9
   vfxIntensity: 1.1
   vfxRepeatCount: 1
-  description: "적의 다음 행동 인텐드를 공격으로 강제하고, 적의 공격 랭크를 2 올린다."
+  description: "\uC801\uC758 \uB2E4\uC74C \uD589\uB3D9 \uC778\uD150\uB4DC\uB97C \uACF5\uACA9\uC73C\uB85C
+    \uAC15\uC81C\uD558\uACE0, \uC801\uC758 \uACF5\uACA9 \uB7AD\uD06C\uB97C 2 \uC62C\uB9B0\uB2E4."

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Overburn
   m_EditorClassIdentifier: Game.Core::Project2048.Skills.SkillSO
   skillId: overburn
-  skillName: "초과연소"
+  skillName: "\uCD08\uACFC\uC5F0\uC18C"
   skillType: 0
   effectKind: 28
   damageStatSource: 0
@@ -80,10 +80,14 @@ MonoBehaviour:
     sfxDelaySeconds: 0
     localOffset: {x: 0, y: 0, z: 0}
     autoDestroySeconds: 1.25
+  vfxPackage: {fileID: 11400000, guid: af9010c52a1d9e74f84699f320a1fe23, type: 2}
   vfxFamily: 15
   vfxPrimaryColor: {r: 0.865253, g: 0.447653, b: 0.202853, a: 1}
   vfxSecondaryColor: {r: 0.359202, g: 0.064002, b: 0.049602, a: 1}
   vfxScale: 1.2
   vfxIntensity: 1.45
   vfxRepeatCount: 1
-  description: "적에게 위력 50 피해를 준다. 사용 후 남은 코스트를 모두 추가 소모하고, 추가 소모한 코스트 1당 위력 +10을 적용한다."
+  description: "\uC801\uC5D0\uAC8C \uC704\uB825 50 \uD53C\uD574\uB97C \uC900\uB2E4.
+    \uC0AC\uC6A9 \uD6C4 \uB0A8\uC740 \uCF54\uC2A4\uD2B8\uB97C \uBAA8\uB450 \uCD94\uAC00
+    \uC18C\uBAA8\uD558\uACE0, \uCD94\uAC00 \uC18C\uBAA8\uD55C \uCF54\uC2A4\uD2B8
+    1\uB2F9 \uC704\uB825 +10\uC744 \uC801\uC6A9\uD55C\uB2E4."

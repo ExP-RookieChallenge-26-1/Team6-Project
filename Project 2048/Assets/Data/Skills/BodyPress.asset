@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: BodyPress
   m_EditorClassIdentifier: Game.Core::Project2048.Skills.SkillSO
   skillId: body-press
-  skillName: "육중한 압박"
+  skillName: "\uC721\uC911\uD55C \uC555\uBC15"
   skillType: 0
   effectKind: 15
   damageStatSource: 1
@@ -25,6 +25,8 @@ MonoBehaviour:
   selfCriticalStageModifier: 0
   targetAttackModifier: 0
   targetDefenseModifier: 0
+  debuffType: 0
+  debuffValue: 0
   selfDefenseBonus: 0
   selfDefensePowerModifier: 0
   selfThornRetaliationDamage: 0
@@ -38,6 +40,17 @@ MonoBehaviour:
   hpCostPercent: 0
   hpCostLeavesOne: 1
   nextBoardMoveCountModifier: 0
+  nextCostGainModifier: 0
+  nextCostGainMultiplier: 1
+  conditionalPowerBonus: 0
+  conditionalHpThreshold: 0
+  statusDuration: 0
+  statusDamage: 0
+  statusMaxHpDamagePercent: 0
+  shieldPiercePercent: 0
+  extraPowerPerConsumedCost: 0
+  maxCostCarry: 0
+  costRefund: 0
   chargedPower: 0
   consumesAllShield: 0
   nextAttackPowerMultiplier: 1
@@ -67,10 +80,12 @@ MonoBehaviour:
     sfxDelaySeconds: 0
     localOffset: {x: 0, y: 0, z: 0}
     autoDestroySeconds: 1.25
+  vfxPackage: {fileID: 11400000, guid: f4b4a8658c0969c4c8e0271753d3026c, type: 2}
   vfxFamily: 4
   vfxPrimaryColor: {r: 0.62, g: 0.62, b: 0.62, a: 1}
   vfxSecondaryColor: {r: 0.294846, g: 0.338046, b: 0.395646, a: 1}
   vfxScale: 1.2
   vfxIntensity: 1.2
   vfxRepeatCount: 1
-  description: "공격력 대신 방어력으로 계산하여 적에게 위력 80 피해를 준다."
+  description: "\uACF5\uACA9\uB825 \uB300\uC2E0 \uBC29\uC5B4\uB825\uC73C\uB85C \uACC4\uC0B0\uD558\uC5EC
+    \uC801\uC5D0\uAC8C \uC704\uB825 80 \uD53C\uD574\uB97C \uC900\uB2E4."

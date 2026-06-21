@@ -6,7 +6,7 @@ namespace Project2048.Presentation
     {
         public const int DefaultSegmentCount = 28;
         public const string ShaderName = "Project2048/Effects/ClawSlash2D";
-        private const string ShaderResourcePath = "Effects/ClawSlash2D";
+        private const string ShaderResourcePath = "Effects/ClawSlash2D/Shaders/ClawSlash2D";
 
         private const int ClawCount = 3;
         private const float TangentSampleDistance = 0.03f;

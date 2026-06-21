@@ -63,13 +63,16 @@ namespace Project2048.Prototype
         [ContextMenu("Replay Effect")]
         public void Replay()
         {
-            if (!Application.isPlaying || skill == null || worldView == null)
+            if (skill == null || worldView == null)
             {
                 return;
             }
 
             worldView.PreviewSkillEffect(skill);
-            nextReplayTime = Time.time + Mathf.Max(0.25f, replayIntervalSeconds);
+            if (Application.isPlaying)
+            {
+                nextReplayTime = Time.time + Mathf.Max(0.25f, replayIntervalSeconds);
+            }
         }
 
         private void RefreshLabels()
@@ -82,7 +85,7 @@ namespace Project2048.Prototype
             if (detailText != null)
             {
                 detailText.text = skill != null
-                    ? $"{skill.skillId}  /  {skill.vfxFamily}"
+                    ? $"{skill.skillId}  /  {skill.ResolveVfxFamily()}"
                     : string.Empty;
             }
         }

@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class MainMenuController : MonoBehaviour
+public partial class MainMenuController : MonoBehaviour
 {
     [Header("Button Groups")]
     [SerializeField] private GameObject mainButtonGroup;
@@ -28,6 +28,8 @@ public class MainMenuController : MonoBehaviour
 
     private void Awake()
     {
+        ApplyReferencePosterLayout();
+
         if (gameStartButton != null)
         {
             gameStartButton.onClick.AddListener(OnGameStartClicked);

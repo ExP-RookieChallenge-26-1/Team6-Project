@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5508e377883536d4ea0141dcd28586c8, type: 3}
+  m_Name: SkillVfx_CounterReadyPackage
+  m_EditorClassIdentifier: Game.Core::Project2048.Skills.SkillVfxPackageSO
+  family: 8
+  primarySprite: {fileID: 21300000, guid: 91b7d11e1f9d4ecf95de8b6a82fa3a87, type: 3}
+  primaryPrefab: {fileID: 678183688835185469, guid: 4687ea7fc00f3154a9ac6e179a7cda97, type: 3}
+  projectilePrefab: {fileID: 0}
+  secondarySprite: {fileID: 0}
+  secondaryPrefab: {fileID: 0}
+  particleMaterial: {fileID: 2100000, guid: 2e95984efeaf19d3b5ed8cb1a7f95957, type: 2}
+  localOffset: {x: 0, y: 0.08, z: 0}
+  radiusMultiplier: 1
+  lifetimeSeconds: -1
+  sortingOffset: 12
+  tintWhiteBlend: 0.18
+  alpha: 0.9
+  rotationDegrees: -8

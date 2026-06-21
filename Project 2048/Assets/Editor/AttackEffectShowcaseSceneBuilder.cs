@@ -17,6 +17,8 @@ namespace Project2048.EditorTools
         private const string PlayerSpritePath = "Assets/Art/Prototype/PrototypePlayerCutout.png";
         private const string EnemySpritePath = "Assets/Art/Prototype/PrototypeEnemyCutout.png";
         private const string KoreanFontAssetPath = "Assets/Fonts/MaruBuri-Regular SDF.asset";
+        private const string WorldVfxProfilePath =
+            "Assets/Art/Effects/SkillVFX/Resources/PrototypeCombatWorldVfxProfile.asset";
         private const int ColumnCount = 4;
         private const float SlotWidth = 5.85f;
         private const float SlotHeight = 3.25f;
@@ -49,6 +51,7 @@ namespace Project2048.EditorTools
             var playerSprite = AssetDatabase.LoadAssetAtPath<Sprite>(PlayerSpritePath);
             var enemySprite = AssetDatabase.LoadAssetAtPath<Sprite>(EnemySpritePath);
             var font = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(KoreanFontAssetPath);
+            var worldVfxProfile = AssetDatabase.LoadAssetAtPath<CombatWorldVfxProfileSO>(WorldVfxProfilePath);
             var totalHeight = CalculateTotalHeight(groups);
             var topY = totalHeight * 0.5f - 0.75f;
             var totalWidth = ColumnCount * SlotWidth;
@@ -78,7 +81,15 @@ namespace Project2048.EditorTools
                     var column = index % ColumnCount;
                     var row = index / ColumnCount;
                     var position = new Vector3(leftX + column * SlotWidth, currentY - row * SlotHeight, 0f);
-                    CreateSlot(root.transform, group.Skills[index], playerSprite, enemySprite, font, position, slotIndex);
+                    CreateSlot(
+                        root.transform,
+                        group.Skills[index],
+                        playerSprite,
+                        enemySprite,
+                        font,
+                        worldVfxProfile,
+                        position,
+                        slotIndex);
                     slotIndex++;
                 }
 
@@ -180,6 +191,7 @@ namespace Project2048.EditorTools
             Sprite playerSprite,
             Sprite enemySprite,
             TMP_FontAsset font,
+            CombatWorldVfxProfileSO worldVfxProfile,
             Vector3 position,
             int sortingIndex)
         {
@@ -213,7 +225,7 @@ namespace Project2048.EditorTools
                 new Color(0.68f, 0.76f, 0.82f, 1f),
                 TextAlignmentOptions.Center);
 
-            BindWorldView(worldView, player, enemy);
+            BindWorldView(worldView, player, enemy, worldVfxProfile);
             showcaseSlot.Configure(skill, worldView, title, detail, 3f, sortingIndex * 0.12f);
             title.text = skill.skillName;
             detail.text = $"{skill.skillId}  /  {skill.vfxFamily}";
@@ -346,11 +358,16 @@ namespace Project2048.EditorTools
             };
         }
 
-        private static void BindWorldView(CombatWorldSpriteView view, SpriteRenderer player, SpriteRenderer enemy)
+        private static void BindWorldView(
+            CombatWorldSpriteView view,
+            SpriteRenderer player,
+            SpriteRenderer enemy,
+            CombatWorldVfxProfileSO worldVfxProfile)
         {
             var serialized = new SerializedObject(view);
             SetReference(serialized, "playerRenderer", player);
             SetReference(serialized, "enemyRenderer", enemy);
+            SetReference(serialized, "worldVfxProfile", worldVfxProfile);
             serialized.ApplyModifiedPropertiesWithoutUndo();
             EditorUtility.SetDirty(view);
         }

@@ -13,7 +13,8 @@ namespace Project2048.EditorTools
             "Packages/com.unity.shadergraph/GraphTemplates/Cross Pipeline/0_Particle Unlit.shadergraph";
 
         private const string SkillVfxRootPath = "Assets/Art/Effects/SkillVFX";
-        private const string HolyFireballRootPath = SkillVfxRootPath + "/HolyFireball";
+        private const string SkillVfxEffectsRootPath = SkillVfxRootPath + "/Effects";
+        private const string HolyFireballRootPath = SkillVfxEffectsRootPath + "/HolyFireball";
         private const string HolyFireballTexturePath = HolyFireballRootPath + "/Textures";
         private const string MaterialPath = HolyFireballRootPath + "/Materials";
         private const string PrefabFolderPath = HolyFireballRootPath + "/Prefabs";
@@ -32,6 +33,7 @@ namespace Project2048.EditorTools
         public static void Rebuild()
         {
             EnsureFolder(SkillVfxRootPath);
+            EnsureFolder(SkillVfxEffectsRootPath);
             EnsureFolder(HolyFireballRootPath);
             EnsureFolder(HolyFireballTexturePath);
             EnsureFolder(MaterialPath);

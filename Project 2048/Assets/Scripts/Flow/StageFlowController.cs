@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Project2048.Combat;
 using Project2048.Enemy;
 using Project2048.Rewards;
+using Project2048.Skills;
 using Project2048.Stage;
 using UnityEngine;
 
@@ -95,6 +97,23 @@ namespace Project2048.Flow
             {
                 rewardManager.Initialize(RunProgress, rewardTable);
             }
+        }
+
+        public IEnumerable<SkillSO> GetKnownSkillsForSaveRestore()
+        {
+            var knownSkills = new List<SkillSO>();
+            AddKnownSkills(knownSkills, playerData != null ? playerData.startingSkills : null);
+
+            if (rewardTable != null && rewardTable.rewards != null)
+            {
+                AddKnownSkills(
+                    knownSkills,
+                    rewardTable.rewards
+                        .Where(reward => reward != null)
+                        .Select(reward => reward.skillToLearn));
+            }
+
+            return knownSkills;
         }
 
         private void ResolveSceneReferences()
@@ -250,6 +269,29 @@ namespace Project2048.Flow
         private void ChangeState(StageFlowState nextState)
         {
             CurrentState = nextState;
+        }
+
+        private static void AddKnownSkills(List<SkillSO> target, IEnumerable<SkillSO> skills)
+        {
+            if (target == null || skills == null)
+            {
+                return;
+            }
+
+            foreach (var skill in skills)
+            {
+                if (skill == null || string.IsNullOrWhiteSpace(skill.skillId))
+                {
+                    continue;
+                }
+
+                if (target.Any(existing => existing != null && existing.skillId == skill.skillId))
+                {
+                    continue;
+                }
+
+                target.Add(skill);
+            }
         }
     }
 }

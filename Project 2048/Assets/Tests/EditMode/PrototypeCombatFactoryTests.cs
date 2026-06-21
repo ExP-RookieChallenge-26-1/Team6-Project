@@ -97,7 +97,7 @@ namespace Project2048.Tests
 
             try
             {
-                Assert.That(loadout.Skills.Select(skill => skill.vfxFamily), Is.EqualTo(new[]
+                Assert.That(loadout.Skills.Select(skill => skill.ResolveVfxFamily()), Is.EqualTo(new[]
                 {
                     SkillVfxFamily.SlashArc,
                     SkillVfxFamily.LightProjectile,
@@ -152,7 +152,7 @@ namespace Project2048.Tests
                 Assert.That(roster.All(enemy => !string.IsNullOrWhiteSpace(enemy.GetAiProfileLabel())), Is.True);
                 Assert.That(roster.Where(enemy => enemy.aiStrength == EnemyAiStrength.Normal).Select(enemy => enemy.maxHp), Is.All.EqualTo(160));
                 Assert.That(roster.Where(enemy => enemy.aiStrength == EnemyAiStrength.Enhanced).Select(enemy => enemy.maxHp), Is.All.EqualTo(210));
-                Assert.That(roster.SelectMany(enemy => enemy.skills).All(skill => skill.vfxFamily != SkillVfxFamily.None), Is.True);
+                Assert.That(roster.SelectMany(enemy => enemy.skills).All(skill => skill.ResolveVfxFamily() != SkillVfxFamily.None), Is.True);
                 Assert.That(roster.SelectMany(enemy => enemy.skills).Select(skill => skill.skillId), Is.SupersetOf(new[]
                 {
                     "bleeding-cut",

@@ -1149,6 +1149,10 @@ namespace Project2048.Prototype
         {
             turnCounterText ??= FindComponentInChildrenByName<TMP_Text>("TurnCounterText");
             intentHeaderText ??= FindComponentInChildrenByName<TMP_Text>("IntentHeaderText");
+            bottomPanelBackground ??= FindComponentInChildrenByName<Image>("BottomPanelBackground");
+            boardPanel ??= FindChildByName("BoardPanel")?.gameObject;
+            actionPanel ??= FindChildByName("ActionPanel")?.gameObject;
+            enemyTurnPanel ??= FindChildByName("EnemyTurnPanel")?.gameObject;
             playerPortrait ??= FindComponentInChildrenByName<Image>("PlayerPortrait");
             enemyPortrait ??= FindComponentInChildrenByName<Image>("EnemyPortrait");
             enemyNameText ??= FindComponentInChildrenByName<TMP_Text>("EnemyNameText");
@@ -1170,6 +1174,10 @@ namespace Project2048.Prototype
             boardCostFormulaHelpIcon ??= FindChildByName("BoardCostFormulaHelpIcon")?.gameObject;
             boardCostFormulaHelpLabel ??= FindNestedComponentByName<TMP_Text>("BoardCostFormulaHelpIcon", "Label");
             playerBoardStatusEffectsRoot ??= FindComponentInChildrenByName<RectTransform>("PlayerBoardStatusEffects");
+            costText ??= FindComponentInChildrenByName<TMP_Text>("CostText");
+            skillsView ??= FindChildByName("SkillsView")?.gameObject;
+            skillsHeaderText ??= FindComponentInChildrenByName<TMP_Text>("SkillsHeaderText");
+            skillsEndTurnButton ??= FindComponentInChildrenByName<Button>("TurnEndButton");
             actionDescriptionText ??= FindComponentInChildrenByName<TMP_Text>("ActionDescriptionText");
             enemyTurnText ??= FindComponentInChildrenByName<TMP_Text>("EnemyTurnText");
         }

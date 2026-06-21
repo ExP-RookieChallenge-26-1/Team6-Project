@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: TentacleStrike
   m_EditorClassIdentifier: Game.Core::Project2048.Skills.SkillSO
   skillId: tentacle-strike
-  skillName: "촉수 치기"
+  skillName: "\uCD09\uC218 \uCE58\uAE30"
   skillType: 0
   effectKind: 17
   damageStatSource: 0
@@ -25,6 +25,8 @@ MonoBehaviour:
   selfCriticalStageModifier: 0
   targetAttackModifier: 0
   targetDefenseModifier: 0
+  debuffType: 0
+  debuffValue: 0
   selfDefenseBonus: 0
   selfDefensePowerModifier: 0
   selfThornRetaliationDamage: 0
@@ -38,6 +40,17 @@ MonoBehaviour:
   hpCostPercent: 0
   hpCostLeavesOne: 1
   nextBoardMoveCountModifier: -1
+  nextCostGainModifier: 0
+  nextCostGainMultiplier: 1
+  conditionalPowerBonus: 0
+  conditionalHpThreshold: 0
+  statusDuration: 0
+  statusDamage: 0
+  statusMaxHpDamagePercent: 0
+  shieldPiercePercent: 0
+  extraPowerPerConsumedCost: 0
+  maxCostCarry: 0
+  costRefund: 0
   chargedPower: 0
   consumesAllShield: 0
   nextAttackPowerMultiplier: 1
@@ -67,10 +80,13 @@ MonoBehaviour:
     sfxDelaySeconds: 0
     localOffset: {x: 0, y: 0, z: 0}
     autoDestroySeconds: 1.25
+  vfxPackage: {fileID: 11400000, guid: 0aa7e6a1e3b452548ab43fd5215134e6, type: 2}
   vfxFamily: 12
   vfxPrimaryColor: {r: 0.169576, g: 0.054376, b: 0.227176, a: 1}
   vfxSecondaryColor: {r: 0.479342, g: 0.212942, b: 0.601742, a: 1}
   vfxScale: 1.1
   vfxIntensity: 1.1
   vfxRepeatCount: 1
-  description: "적에게 위력 90 피해를 준다. 다음 플레이어 턴의 보드 이동 횟수가 1 감소한다."
+  description: "\uC801\uC5D0\uAC8C \uC704\uB825 90 \uD53C\uD574\uB97C \uC900\uB2E4.
+    \uB2E4\uC74C \uD50C\uB808\uC774\uC5B4 \uD134\uC758 \uBCF4\uB4DC \uC774\uB3D9
+    \uD69F\uC218\uAC00 1 \uAC10\uC18C\uD55C\uB2E4."

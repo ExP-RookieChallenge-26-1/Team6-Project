@@ -134,7 +134,10 @@ namespace Project2048.Flow
                 return;
             }
 
-            if (saveLoadManager != null && saveLoadManager.TryApplyLoadedRunProgress(stageFlowController.RunProgress))
+            if (saveLoadManager != null &&
+                saveLoadManager.TryApplyLoadedRunProgress(
+                    stageFlowController.RunProgress,
+                    stageFlowController.GetKnownSkillsForSaveRestore()))
             {
                 stageFlowController.InitializeRunProgress();
             }

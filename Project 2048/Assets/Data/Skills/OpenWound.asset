@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: OpenWound
   m_EditorClassIdentifier: Game.Core::Project2048.Skills.SkillSO
   skillId: open-wound
-  skillName: "상처 벌리기"
+  skillName: "\uC0C1\uCC98 \uBC8C\uB9AC\uAE30"
   skillType: 0
   effectKind: 25
   damageStatSource: 0
@@ -80,10 +80,14 @@ MonoBehaviour:
     sfxDelaySeconds: 0
     localOffset: {x: 0, y: 0, z: 0}
     autoDestroySeconds: 1.25
+  vfxPackage: {fileID: 11400000, guid: f553efba8a5ee744ab0f10ec6b804de2, type: 2}
   vfxFamily: 1
   vfxPrimaryColor: {r: 0.793042, g: 0.289042, b: 0.195442, a: 1}
   vfxSecondaryColor: {r: 0.28504, g: 0.04024, b: 0.04024, a: 1}
   vfxScale: 0.9
   vfxIntensity: 1.05
   vfxRepeatCount: 1
-  description: "적에게 위력 70 피해를 준다. 대상이 독 또는 출혈 상태라면 위력 120으로 공격하고 해당 상태들의 지속시간을 1턴 늘린다."
+  description: "\uC801\uC5D0\uAC8C \uC704\uB825 70 \uD53C\uD574\uB97C \uC900\uB2E4.
+    \uB300\uC0C1\uC774 \uB3C5 \uB610\uB294 \uCD9C\uD608 \uC0C1\uD0DC\uB77C\uBA74
+    \uC704\uB825 120\uC73C\uB85C \uACF5\uACA9\uD558\uACE0 \uD574\uB2F9 \uC0C1\uD0DC\uB4E4\uC758
+    \uC9C0\uC18D\uC2DC\uAC04\uC744 1\uD134 \uB298\uB9B0\uB2E4."

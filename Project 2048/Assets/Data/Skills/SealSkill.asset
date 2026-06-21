@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: SealSkill
   m_EditorClassIdentifier: Game.Core::Project2048.Skills.SkillSO
   skillId: seal-skill
-  skillName: "봉인"
+  skillName: "\uBD09\uC778"
   skillType: 2
   effectKind: 29
   damageStatSource: 0
@@ -80,10 +80,14 @@ MonoBehaviour:
     sfxDelaySeconds: 0
     localOffset: {x: 0, y: 0, z: 0}
     autoDestroySeconds: 1.25
+  vfxPackage: {fileID: 11400000, guid: 88b30072ed0cb6d4eb21f3ffcc8cac9f, type: 2}
   vfxFamily: 6
   vfxPrimaryColor: {r: 0.518035, g: 0.374035, b: 0.806035, a: 1}
   vfxSecondaryColor: {r: 0.167416, g: 0.109816, b: 0.289816, a: 1}
   vfxScale: 0.85
   vfxIntensity: 1
   vfxRepeatCount: 1
-  description: "대상이 마지막으로 사용한 비기본 스킬을 다음 턴 1회 사용할 수 없게 한다. 봉인할 스킬이 없으면 효과가 없다."
+  description: "\uB300\uC0C1\uC774 \uB9C8\uC9C0\uB9C9\uC73C\uB85C \uC0AC\uC6A9\uD55C
+    \uBE44\uAE30\uBCF8 \uC2A4\uD0AC\uC744 \uB2E4\uC74C \uD134 1\uD68C \uC0AC\uC6A9\uD560
+    \uC218 \uC5C6\uAC8C \uD55C\uB2E4. \uBD09\uC778\uD560 \uC2A4\uD0AC\uC774 \uC5C6\uC73C\uBA74
+    \uD6A8\uACFC\uAC00 \uC5C6\uB2E4."

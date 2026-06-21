@@ -1,5 +1,7 @@
+using System.Collections.Generic;
 using Project2048.Core;
 using Project2048.Rewards;
+using Project2048.Skills;
 using UnityEngine;
 
 namespace Project2048.Save
@@ -58,14 +60,14 @@ namespace Project2048.Save
             return true;
         }
 
-        public bool TryApplyLoadedRunProgress(RunProgress runProgress)
+        public bool TryApplyLoadedRunProgress(RunProgress runProgress, IEnumerable<SkillSO> knownSkills = null)
         {
             if (loadedData == null || runProgress == null)
             {
                 return false;
             }
 
-            loadedData.ApplyTo(runProgress);
+            loadedData.ApplyTo(runProgress, knownSkills);
             loadedData = null;
             return true;
         }

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: BloodFang
   m_EditorClassIdentifier: Game.Core::Project2048.Skills.SkillSO
   skillId: blood-fang
-  skillName: "피의 이빨"
+  skillName: "\uD53C\uC758 \uC774\uBE68"
   skillType: 0
   effectKind: 11
   damageStatSource: 0
@@ -25,6 +25,8 @@ MonoBehaviour:
   selfCriticalStageModifier: 0
   targetAttackModifier: 0
   targetDefenseModifier: 0
+  debuffType: 0
+  debuffValue: 0
   selfDefenseBonus: 0
   selfDefensePowerModifier: 0
   selfThornRetaliationDamage: 0
@@ -38,6 +40,17 @@ MonoBehaviour:
   hpCostPercent: 0.1
   hpCostLeavesOne: 1
   nextBoardMoveCountModifier: 0
+  nextCostGainModifier: 0
+  nextCostGainMultiplier: 1
+  conditionalPowerBonus: 0
+  conditionalHpThreshold: 0
+  statusDuration: 0
+  statusDamage: 0
+  statusMaxHpDamagePercent: 0
+  shieldPiercePercent: 0
+  extraPowerPerConsumedCost: 0
+  maxCostCarry: 0
+  costRefund: 0
   chargedPower: 0
   consumesAllShield: 0
   nextAttackPowerMultiplier: 1
@@ -67,10 +80,13 @@ MonoBehaviour:
     sfxDelaySeconds: 0
     localOffset: {x: 0, y: 0, z: 0}
     autoDestroySeconds: 1.25
+  vfxPackage: {fileID: 11400000, guid: 6dd877a3f2df1dc428cca30fa7bb2685, type: 2}
   vfxFamily: 7
   vfxPrimaryColor: {r: 0.679415, g: 0.089015, b: 0.096215, a: 1}
   vfxSecondaryColor: {r: 0.218672, g: 0.017072, b: 0.031472, a: 1}
   vfxScale: 1.1
   vfxIntensity: 1.15
   vfxRepeatCount: 1
-  description: "최대 체력의 10%를 지불하고 적에게 위력 100 피해를 준다. 이 비용으로 체력은 1 아래로 내려가지 않는다."
+  description: "\uCD5C\uB300 \uCCB4\uB825\uC758 10%\uB97C \uC9C0\uBD88\uD558\uACE0
+    \uC801\uC5D0\uAC8C \uC704\uB825 100 \uD53C\uD574\uB97C \uC900\uB2E4. \uC774 \uBE44\uC6A9\uC73C\uB85C
+    \uCCB4\uB825\uC740 1 \uC544\uB798\uB85C \uB0B4\uB824\uAC00\uC9C0 \uC54A\uB294\uB2E4."

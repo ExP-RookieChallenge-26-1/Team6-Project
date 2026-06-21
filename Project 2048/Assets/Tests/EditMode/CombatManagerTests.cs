@@ -66,6 +66,34 @@ namespace Project2048.Tests
         }
 
         [Test]
+        public void RequestUseSkillById_UsesRequestedEnemyIndex()
+        {
+            var manager = CreateGameObject<CombatManager>("CombatManager");
+            var player = CreateGameObject<PlayerCombatController>("Player");
+            var firstEnemy = CreateGameObject<EnemyController>("FirstEnemy");
+            var secondEnemy = CreateGameObject<EnemyController>("SecondEnemy");
+            var attackSkill = CreateSkill("targeted-strike", SkillType.Attack, cost: 0, power: 100);
+            var playerData = CreatePlayerData(maxHp: 20, attackPower: 4);
+            var firstEnemyData = CreateEnemyData(maxHp: 30, attackValue: 0);
+            var secondEnemyData = CreateEnemyData(maxHp: 30, attackValue: 0);
+
+            playerData.startingSkills = new List<SkillSO> { attackSkill };
+            manager.SetCombatants(player, new[] { firstEnemy, secondEnemy });
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new List<EnemySO> { firstEnemyData, secondEnemyData },
+                boardMoveCount = 1,
+            });
+
+            manager.ResolveBoardPhase();
+
+            Assert.That(manager.RequestUseSkillById("targeted-strike", targetIndex: 1), Is.True);
+            Assert.That(firstEnemy.CurrentHp, Is.EqualTo(firstEnemy.MaxHp));
+            Assert.That(secondEnemy.CurrentHp, Is.LessThan(secondEnemy.MaxHp));
+        }
+
+        [Test]
         public void RequestEndPlayerTurn_ExecutesEnemyAttack_AndStartsNextPlayerTurn()
         {
             var manager = CreateGameObject<CombatManager>("CombatManager");

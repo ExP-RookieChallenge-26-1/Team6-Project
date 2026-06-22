@@ -91,15 +91,21 @@ namespace Project2048.Prototype
                 return;
             }
 
+            var playerAnchor = ResolvePlayerAnchor();
             var sortingReference = playerRenderer != null ? playerRenderer : enemyRenderer;
-            var parent = sortingReference != null ? sortingReference.transform : transform;
+            var parent = playerAnchor != null
+                ? playerAnchor
+                : sortingReference != null
+                    ? sortingReference.transform
+                    : transform;
+            var localOffset = ResolveVisualCenterLocalOffset(parent, enemyClawSlashLocalOffset);
             var attackArt = SpawnAttackArtSpriteLayer(
                 parent,
                 "EnemyAttackArt",
                 Color.white,
                 AttackArtBaseRadius * 1.08f,
                 AttackArtLifetimeSeconds,
-                enemyClawSlashLocalOffset,
+                localOffset,
                 sortingOffset: 12);
             if (attackArt != null)
             {
@@ -117,7 +123,7 @@ namespace Project2048.Prototype
             }
 
             slash.gameObject.name = "EnemyClawSlash2D";
-            slash.transform.localPosition = enemyClawSlashLocalOffset;
+            slash.transform.localPosition = localOffset;
             slash.transform.localRotation = Quaternion.Euler(enemyClawSlashLocalEulerAngles);
             slash.transform.localScale = Vector3.one * Mathf.Max(0.01f, enemyClawSlashScale);
             slash.Play(
@@ -135,12 +141,14 @@ namespace Project2048.Prototype
 
         private float ResolveEnemyAttackDirectionSign()
         {
-            if (enemyRenderer == null || playerRenderer == null)
+            var playerAnchor = ResolvePlayerAnchor();
+            if (enemyRenderer == null || playerAnchor == null)
             {
                 return -1f;
             }
 
-            var deltaX = playerRenderer.transform.position.x - enemyRenderer.transform.position.x;
+            var deltaX = ResolveAnchorVisualCenterWorldPosition(playerAnchor).x -
+                ResolveAnchorVisualCenterWorldPosition(enemyRenderer.transform).x;
             return deltaX >= 0f ? 1f : -1f;
         }
 
@@ -519,9 +527,10 @@ namespace Project2048.Prototype
             }
 
             var enemyTransform = enemyRenderer.transform;
-            var enemyWorldPosition = enemyTransform.position;
-            var targetWorldPosition = playerRenderer != null
-                ? playerRenderer.transform.position
+            var enemyWorldPosition = ResolveAnchorVisualCenterWorldPosition(enemyTransform);
+            var playerAnchor = ResolvePlayerAnchor();
+            var targetWorldPosition = playerAnchor != null
+                ? ResolveAnchorVisualCenterWorldPosition(playerAnchor)
                 : enemyWorldPosition + Vector3.left;
             var direction = targetWorldPosition - enemyWorldPosition;
             direction.z = 0f;

@@ -377,7 +377,7 @@ namespace Project2048.Prototype
 
         private bool TryPlayProjectileSkillEffect(CombatEffectBinding effect, EnemyController target, out float lifetimeSeconds)
         {
-            var sourceTransform = playerRenderer != null ? playerRenderer.transform : transform;
+            var sourceTransform = ResolvePlayerAnchor() ?? transform;
             var targetTransform = target != null && enemyRenderer != null ? enemyRenderer.transform : transform;
             return TryPlayProjectileSkillEffect(null, effect, sourceTransform, targetTransform, enemyAnimator, out lifetimeSeconds);
         }
@@ -844,7 +844,7 @@ namespace Project2048.Prototype
             {
                 PlayTentacleStrikeSkillEffect(
                     skill,
-                    playerRenderer != null ? playerRenderer.transform : transform,
+                    ResolvePlayerAnchor() ?? transform,
                     anchor);
                 return;
             }
@@ -859,7 +859,7 @@ namespace Project2048.Prototype
             {
                 PlayBloodFountainSlashSkillEffect(
                     skill,
-                    playerRenderer != null ? playerRenderer.transform : transform,
+                    ResolvePlayerAnchor() ?? transform,
                     anchor);
                 return;
             }
@@ -883,7 +883,7 @@ namespace Project2048.Prototype
             {
                 PlayDarkShackleSkillEffect(
                     skill,
-                    playerRenderer != null ? playerRenderer.transform : transform,
+                    ResolvePlayerAnchor() ?? transform,
                     anchor);
                 return;
             }
@@ -1465,7 +1465,7 @@ namespace Project2048.Prototype
             PlaySpecializedSkillArtLayer(
                 skill,
                 anchor,
-                playerRenderer != null ? playerRenderer.transform : transform);
+                ResolvePlayerAnchor() ?? transform);
 
             for (var i = 0; i < shotCount; i++)
             {
@@ -2883,7 +2883,8 @@ namespace Project2048.Prototype
             }
 
             var facingSign = ResolveAttackFacingSign(sourceAnchor, targetAnchor);
-            return sourceAnchor.position + new Vector3(LanternMuzzleLocalX * facingSign, LanternMuzzleLocalY, 0f);
+            return ResolveAnchorVisualCenterWorldPosition(sourceAnchor) +
+                new Vector3(LanternMuzzleLocalX * facingSign, LanternMuzzleLocalY, 0f);
         }
 
         private static Vector3 ResolveLanternSkillLocalOffset(Transform sourceAnchor, Transform targetAnchor)
@@ -2899,7 +2900,7 @@ namespace Project2048.Prototype
         private static Vector3 ResolveSkillImpactWorldPosition(Transform targetAnchor)
         {
             return targetAnchor != null
-                ? targetAnchor.position + new Vector3(0f, 0.18f, 0f)
+                ? ResolveAnchorVisualCenterWorldPosition(targetAnchor) + new Vector3(0f, 0.18f, 0f)
                 : Vector3.zero;
         }
 
@@ -3015,7 +3016,7 @@ namespace Project2048.Prototype
 
         private void PlayChargedLightBeamEffect(SkillSO skill, Transform targetTransform)
         {
-            var sourceTransform = playerRenderer != null ? playerRenderer.transform : transform;
+            var sourceTransform = ResolvePlayerAnchor() ?? transform;
             var sourcePosition = ResolveLanternSkillSourcePosition(sourceTransform, targetTransform);
             var targetPosition = ResolveSkillImpactWorldPosition(targetTransform);
 
@@ -3099,7 +3100,7 @@ namespace Project2048.Prototype
                 return;
             }
 
-            var source = playerRenderer != null ? playerRenderer.transform : transform;
+            var source = ResolvePlayerAnchor() ?? transform;
             var facingSign = ResolveAttackFacingSign(source, targetTransform);
             art.transform.localRotation = Quaternion.Euler(
                 0f,
@@ -4008,7 +4009,7 @@ namespace Project2048.Prototype
                 return;
             }
 
-            var source = playerRenderer != null ? playerRenderer.transform : transform;
+            var source = ResolvePlayerAnchor() ?? transform;
             var facingSign = ResolveAttackFacingSign(source, anchor);
             art.transform.localRotation = Quaternion.Euler(
                 0f,
@@ -4517,7 +4518,9 @@ namespace Project2048.Prototype
 
         private static Vector3 ResolveAnchorWorldPosition(Transform anchor, Vector3 localOffset)
         {
-            return anchor != null ? anchor.TransformPoint(localOffset) : localOffset;
+            return anchor != null
+                ? ResolveAnchorVisualCenterWorldPosition(anchor) + anchor.TransformVector(localOffset)
+                : localOffset;
         }
 
         private static Vector3 ResolveFootEffectLocalOffset(Transform anchor, Vector3 fallback)
@@ -5480,7 +5483,52 @@ namespace Project2048.Prototype
 
         private Transform ResolvePlayerAnchor()
         {
-            return playerActorRoot != null ? playerActorRoot : playerRenderer != null ? playerRenderer.transform : null;
+            return playerRenderer != null ? playerRenderer.transform : playerActorRoot != null ? playerActorRoot : null;
+        }
+
+        private static Vector3 ResolveAnchorVisualCenterWorldPosition(Transform anchor)
+        {
+            if (anchor == null)
+            {
+                return Vector3.zero;
+            }
+
+            var renderer = anchor.GetComponent<SpriteRenderer>();
+            if (renderer != null && renderer.sprite != null)
+            {
+                return renderer.bounds.center;
+            }
+
+            if (!string.Equals(anchor.name, LayeredPlayerActorRootName, System.StringComparison.Ordinal))
+            {
+                return anchor.position;
+            }
+
+            var childRenderers = anchor.GetComponentsInChildren<SpriteRenderer>(includeInactive: true)
+                .Where(childRenderer => childRenderer != null && childRenderer.sprite != null)
+                .ToArray();
+            if (childRenderers.Length == 0)
+            {
+                return anchor.position;
+            }
+
+            var bounds = childRenderers[0].bounds;
+            for (var i = 1; i < childRenderers.Length; i++)
+            {
+                bounds.Encapsulate(childRenderers[i].bounds);
+            }
+
+            return bounds.center;
+        }
+
+        private static Vector3 ResolveVisualCenterLocalOffset(Transform anchor, Vector3 worldOffset)
+        {
+            if (anchor == null)
+            {
+                return worldOffset;
+            }
+
+            return anchor.InverseTransformPoint(ResolveAnchorVisualCenterWorldPosition(anchor) + worldOffset);
         }
 
         private bool ShouldAssignPlayerRendererSprite()
@@ -5550,7 +5598,7 @@ namespace Project2048.Prototype
             if (activePlayerShieldArtVfx == null)
             {
                 activePlayerShieldArtVfx = CreatePlayerShieldArtVfxRoot(
-                    playerRenderer != null ? playerRenderer.transform : transform,
+                    ResolvePlayerAnchor() ?? transform,
                     shieldHp);
             }
 

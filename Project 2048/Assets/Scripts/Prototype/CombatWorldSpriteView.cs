@@ -65,7 +65,10 @@ namespace Project2048.Prototype
         private const float LanternMuzzleLocalX = 0.34f;
         private const float LanternMuzzleLocalY = 0.36f;
         private const string DefaultWorldVfxProfileResourceName = "PrototypeCombatWorldVfxProfile";
+        private const string LayeredPlayerActorRootName = "player_all";
+        private const string LayeredPlayerBodyRendererName = "Body";
         private const string OpenWoundSkillId = "open-wound";
+        private static readonly int PlayerAttackStateHash = Animator.StringToHash("Attack");
         private static readonly Vector3 OpenWoundExplosionLocalOffset = new(0f, 0.18f, 0f);
         private static readonly Color ShieldCircleLightTint = new(1f, 0.96f, 0.72f, 0.94f);
         private static readonly Color ThornGuardShadowTint = new(0.025f, 0.035f, 0.03f, 0.96f);
@@ -73,6 +76,7 @@ namespace Project2048.Prototype
 
         [SerializeField] private PrototypeCombatBootstrap bootstrap;
         [SerializeField] private SpriteRenderer backgroundRenderer;
+        [SerializeField] private Transform playerActorRoot;
         [SerializeField] private SpriteRenderer playerRenderer;
         [SerializeField] private SpriteRenderer enemyRenderer;
         [SerializeField] private Sprite defaultBackgroundSprite;
@@ -193,7 +197,7 @@ namespace Project2048.Prototype
             UpdatePlayerThornGuardVfx(nextSnapshot?.Player);
             PlayEnemyAppearEffectIfNeeded(enemyAppeared);
             PlayEnemyAttackEffectIfNeeded(enemyUsedAttack);
-            PlayShieldImpactEffectIfNeeded(playerShieldWasHit, playerRenderer != null ? playerRenderer.transform : transform);
+            PlayShieldImpactEffectIfNeeded(playerShieldWasHit, ResolvePlayerAnchor() ?? transform);
             PlayShieldImpactEffectIfNeeded(enemyShieldWasHit, enemyRenderer != null ? enemyRenderer.transform : transform);
             UpdatePlayerShieldArtVfx(nextSnapshot?.Player);
             PlayPlayerActionEffectIfNeeded(playerWasHit);
@@ -215,6 +219,7 @@ namespace Project2048.Prototype
 
             ResolveMissingReferences();
             ResolveWorldVfxProfile();
+            PlayPlayerAttackAnimationIfNeeded(skill);
             PlaySkillPresentationEffect(skill, delayEnemyDeathFade: true);
         }
 
@@ -235,7 +240,7 @@ namespace Project2048.Prototype
             var effect = skill.activationEffect;
             var isAttack = skill.skillType == SkillType.Attack;
             var isChargeAttack = IsChargeAttackSkill(skill);
-            var sourceAnchor = playerRenderer != null ? playerRenderer.transform : transform;
+            var sourceAnchor = ResolvePlayerAnchor() ?? transform;
             var targetAnchor = isAttack && enemyRenderer != null
                 ? enemyRenderer.transform
                 : sourceAnchor;
@@ -528,6 +533,8 @@ namespace Project2048.Prototype
 
         private void HandlePlayerChargedAttackReleased(string skillName, int chargedPower, EnemyController target)
         {
+            ResolveMissingReferences();
+            PlayPlayerAttackAnimation();
             PlayChargedLightBeamEffect(target);
             DelayEnemyDeathFade(ChargedLightBeamDurationSeconds);
         }
@@ -536,7 +543,7 @@ namespace Project2048.Prototype
         {
             RenderBackground();
 
-            if (playerRenderer != null)
+            if (ShouldAssignPlayerRendererSprite())
             {
                 playerRenderer.sprite = combatManager?.Player?.Data?.portrait;
             }
@@ -563,7 +570,7 @@ namespace Project2048.Prototype
 
             PlayCombatantActionEffect(
                 combatManager?.Player?.Data?.FindActionEffect(CombatActionIds.Hit),
-                playerRenderer != null ? playerRenderer.transform : transform,
+                ResolvePlayerAnchor() ?? transform,
                 playerAnimator);
         }
 
@@ -5393,14 +5400,37 @@ namespace Project2048.Prototype
                 backgroundRenderer = FindRendererByName("BackgroundSprite");
             }
 
-            if (playerRenderer == null)
+            if (playerActorRoot == null)
+            {
+                playerActorRoot = FindTransformByName(LayeredPlayerActorRootName);
+            }
+
+            if (playerActorRoot != null && IsLayeredPlayerActorRoot(playerActorRoot))
+            {
+                var layeredRenderer = ResolveLayeredPlayerPrimaryRenderer(playerActorRoot);
+                if (layeredRenderer != null)
+                {
+                    playerRenderer = layeredRenderer;
+                }
+            }
+            else if (playerRenderer == null)
             {
                 playerRenderer = FindRendererByName("PlayerSprite");
+            }
+
+            if (playerActorRoot == null && playerRenderer != null)
+            {
+                playerActorRoot = playerRenderer.transform;
             }
 
             if (enemyRenderer == null)
             {
                 enemyRenderer = FindRendererByName("EnemySprite");
+            }
+
+            if (playerAnimator == null && playerActorRoot != null)
+            {
+                playerAnimator = playerActorRoot.GetComponentInChildren<Animator>(includeInactive: true);
             }
 
             if (playerAnimator == null && playerRenderer != null)
@@ -5427,6 +5457,73 @@ namespace Project2048.Prototype
         {
             var target = GameObject.Find(objectName);
             return target != null ? target.GetComponent<SpriteRenderer>() : null;
+        }
+
+        private static Transform FindTransformByName(string objectName)
+        {
+            var target = GameObject.Find(objectName);
+            return target != null ? target.transform : null;
+        }
+
+        private static SpriteRenderer ResolveLayeredPlayerPrimaryRenderer(Transform actorRoot)
+        {
+            if (actorRoot == null)
+            {
+                return null;
+            }
+
+            var renderers = actorRoot.GetComponentsInChildren<SpriteRenderer>(includeInactive: true);
+            return renderers.FirstOrDefault(renderer =>
+                    string.Equals(renderer.name, LayeredPlayerBodyRendererName, System.StringComparison.Ordinal)) ??
+                renderers.FirstOrDefault();
+        }
+
+        private Transform ResolvePlayerAnchor()
+        {
+            return playerActorRoot != null ? playerActorRoot : playerRenderer != null ? playerRenderer.transform : null;
+        }
+
+        private bool ShouldAssignPlayerRendererSprite()
+        {
+            if (playerRenderer == null)
+            {
+                return false;
+            }
+
+            return playerActorRoot == null || !IsLayeredPlayerActorRoot(playerActorRoot);
+        }
+
+        private static bool IsLayeredPlayerActorRoot(Transform actorRoot)
+        {
+            return actorRoot != null &&
+                string.Equals(actorRoot.name, LayeredPlayerActorRootName, System.StringComparison.Ordinal) &&
+                actorRoot.GetComponentsInChildren<SpriteRenderer>(includeInactive: true).Length > 1;
+        }
+
+        private void PlayPlayerAttackAnimationIfNeeded(SkillSO skill)
+        {
+            if (skill == null || skill.skillType != SkillType.Attack)
+            {
+                return;
+            }
+
+            PlayPlayerAttackAnimation();
+        }
+
+        private void PlayPlayerAttackAnimation()
+        {
+            if (playerAnimator == null)
+            {
+                return;
+            }
+
+            if (playerAnimator.runtimeAnimatorController == null ||
+                !playerAnimator.HasState(0, PlayerAttackStateHash))
+            {
+                return;
+            }
+
+            playerAnimator.Play(PlayerAttackStateHash, 0, 0f);
         }
 
         private static bool PlayerWasHit(CombatSnapshot previous, CombatSnapshot next)

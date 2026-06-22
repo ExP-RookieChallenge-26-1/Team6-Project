@@ -103,7 +103,7 @@ namespace Project2048.Prototype
                 parent,
                 "EnemyAttackArt",
                 Color.white,
-                AttackArtBaseRadius * 1.08f,
+                AttackArtBaseRadius * 1.08f * AttackEffectArtSizeMultiplier,
                 AttackArtLifetimeSeconds,
                 localOffset,
                 sortingOffset: 12);

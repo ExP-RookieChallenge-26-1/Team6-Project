@@ -22,6 +22,9 @@ namespace Project2048.Tests
             }
 
             ownedObjects.Clear();
+            Project2048AudioPreferences.DeleteSavedVolumes();
+            Project2048AudioPreferences.ApplySavedVolumes(LoadAudioSettings());
+            PlayerPrefs.Save();
         }
 
         [Test]
@@ -50,8 +53,7 @@ namespace Project2048.Tests
         [Test]
         public void Project2048AudioSettings_DefaultAssetDefinesMixerGroupsAndMainTheme()
         {
-            var settings = AssetDatabase.LoadAssetAtPath<Project2048AudioSettings>(
-                "Assets/Resources/Audio/Project2048AudioSettings.asset");
+            var settings = LoadAudioSettings();
             var serializedSettings = SerializedObjectFor(settings);
 
             Assert.That(settings, Is.Not.Null);
@@ -68,8 +70,7 @@ namespace Project2048.Tests
         [Test]
         public void RuntimeAudioRouting_AssignsKnownCombatSourcesToSfxMixerGroup()
         {
-            var settings = AssetDatabase.LoadAssetAtPath<Project2048AudioSettings>(
-                "Assets/Resources/Audio/Project2048AudioSettings.asset");
+            var settings = LoadAudioSettings();
             var duckerObject = CreateOwnedGameObject("Ducker");
             var ducker = duckerObject.AddComponent<SimpleBgmDucker>();
             ducker.Initialize(settings);
@@ -99,8 +100,7 @@ namespace Project2048.Tests
         [Test]
         public void ButtonClickAudioRouter_AttachesEmitterToSceneButtonsAndRoutesToUiGroup()
         {
-            var settings = AssetDatabase.LoadAssetAtPath<Project2048AudioSettings>(
-                "Assets/Resources/Audio/Project2048AudioSettings.asset");
+            var settings = LoadAudioSettings();
             var routerType = System.Type.GetType("Project2048.Audio.ButtonClickAudioRouter, Game.Core");
             var emitterType = System.Type.GetType("Project2048.Audio.ButtonClickAudioEmitter, Game.Core");
             var root = CreateOwnedGameObject("ButtonAudioRoot");
@@ -133,8 +133,7 @@ namespace Project2048.Tests
         [Test]
         public void ButtonClickAudioRouter_RebindsAfterRuntimeButtonListenersAreReplaced()
         {
-            var settings = AssetDatabase.LoadAssetAtPath<Project2048AudioSettings>(
-                "Assets/Resources/Audio/Project2048AudioSettings.asset");
+            var settings = LoadAudioSettings();
             var root = CreateOwnedGameObject("ButtonAudioRoot");
             var router = root.AddComponent<ButtonClickAudioRouter>();
             var buttonObject = CreateOwnedGameObject("RuntimeButton");
@@ -169,8 +168,7 @@ namespace Project2048.Tests
         [Test]
         public void ButtonClickAudioEmitter_PlaysWhenEarlierHandlerDisablesButton()
         {
-            var settings = AssetDatabase.LoadAssetAtPath<Project2048AudioSettings>(
-                "Assets/Resources/Audio/Project2048AudioSettings.asset");
+            var settings = LoadAudioSettings();
             var root = CreateOwnedGameObject("ButtonAudioRoot");
             root.AddComponent<AudioSource>();
             var router = root.AddComponent<ButtonClickAudioRouter>();
@@ -206,8 +204,7 @@ namespace Project2048.Tests
         [Test]
         public void Project2048AudioBootstrap_CreatesPersistentBgmPlayerAndDucker()
         {
-            var settings = AssetDatabase.LoadAssetAtPath<Project2048AudioSettings>(
-                "Assets/Resources/Audio/Project2048AudioSettings.asset");
+            var settings = LoadAudioSettings();
 
             var root = Project2048AudioBootstrap.EnsureAudioRoot();
             ownedObjects.Add(root);
@@ -222,11 +219,79 @@ namespace Project2048.Tests
             Assert.That(player.Source.outputAudioMixerGroup, Is.SameAs(settings.BgmGroup));
         }
 
+        [Test]
+        public void Project2048AudioPreferences_ConvertsNormalizedVolumeWithChannelDefaults()
+        {
+            Assert.That(
+                Project2048AudioPreferences.VolumeToDb(Project2048AudioChannel.BGM, 1f),
+                Is.EqualTo(-14f).Within(0.001f));
+            Assert.That(
+                Project2048AudioPreferences.VolumeToDb(Project2048AudioChannel.SFX, 1f),
+                Is.EqualTo(0f).Within(0.001f));
+            Assert.That(
+                Project2048AudioPreferences.VolumeToDb(Project2048AudioChannel.SFX, 0.5f),
+                Is.EqualTo(-6.0206f).Within(0.001f));
+            Assert.That(
+                Project2048AudioPreferences.VolumeToDb(Project2048AudioChannel.UI, 0f),
+                Is.EqualTo(Project2048AudioSettings.MinVolumeDb).Within(0.001f));
+            Assert.That(
+                Project2048AudioPreferences.OffsetDb(Project2048AudioSettings.MinVolumeDb, -6f),
+                Is.EqualTo(Project2048AudioSettings.MinVolumeDb).Within(0.001f));
+        }
+
+        [Test]
+        public void Project2048AudioPreferences_SetNormalizedVolumePersistsAndAppliesMixer()
+        {
+            var settings = LoadAudioSettings();
+            const float normalizedVolume = 0.25f;
+
+            Project2048AudioPreferences.SetNormalizedVolume(
+                settings,
+                Project2048AudioChannel.SFX,
+                normalizedVolume,
+                saveImmediately: false);
+
+            Assert.That(
+                Project2048AudioPreferences.GetNormalizedVolume(Project2048AudioChannel.SFX),
+                Is.EqualTo(normalizedVolume).Within(0.001f));
+            Assert.That(settings.MasterMixer.GetFloat(settings.SfxVolumeParameter, out var sfxVolumeDb), Is.True);
+            Assert.That(sfxVolumeDb, Is.EqualTo(-12.0412f).Within(0.001f));
+        }
+
+        [Test]
+        public void SimpleBgmDucker_ApplyBaseVolumeUsesSavedPreference()
+        {
+            var settings = LoadAudioSettings();
+            const float normalizedVolume = 0.5f;
+            Project2048AudioPreferences.SetNormalizedVolume(
+                settings,
+                Project2048AudioChannel.BGM,
+                normalizedVolume,
+                saveImmediately: false);
+
+            var gameObject = CreateOwnedGameObject("Ducker");
+            var ducker = gameObject.AddComponent<SimpleBgmDucker>();
+            ducker.Initialize(settings);
+
+            Assert.That(
+                ducker.CurrentBgmVolumeDb,
+                Is.EqualTo(Project2048AudioPreferences.VolumeToDb(Project2048AudioChannel.BGM, normalizedVolume))
+                    .Within(0.001f));
+            Assert.That(ducker.BaseVolumeDb, Is.EqualTo(-14f).Within(0.001f));
+            Assert.That(ducker.DuckedVolumeDb, Is.EqualTo(-20f).Within(0.001f));
+        }
+
         private GameObject CreateOwnedGameObject(string name)
         {
             var gameObject = new GameObject(name);
             ownedObjects.Add(gameObject);
             return gameObject;
+        }
+
+        private static Project2048AudioSettings LoadAudioSettings()
+        {
+            return AssetDatabase.LoadAssetAtPath<Project2048AudioSettings>(
+                "Assets/Resources/Audio/Project2048AudioSettings.asset");
         }
 
         private static SerializedObject SerializedObjectFor(Object target)

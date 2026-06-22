@@ -19,8 +19,8 @@ MonoBehaviour:
   secondarySprite: {fileID: 0}
   secondaryPrefab: {fileID: 0}
   particleMaterial: {fileID: 2100000, guid: fa4eba04624f2cd09c5b181876c24239, type: 2}
-  localOffset: {x: 0, y: 0.16, z: 0}
-  radiusMultiplier: 1
+  localOffset: {x: 0.68, y: 0.16, z: 0}
+  radiusMultiplier: 3
   lifetimeSeconds: -1
   sortingOffset: 12
   tintWhiteBlend: 0.18

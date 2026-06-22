@@ -33,8 +33,8 @@ MonoBehaviour:
   - family: 1
     sprite: {fileID: 21300000, guid: e18b788083f586d650f0bcb9e2a927a4, type: 3}
     prefab: {fileID: 756328571287768908, guid: d6c612ca12e9ae34d903714e8fc4f81e, type: 3}
-    localOffset: {x: 0, y: 0.16, z: 0}
-    radiusMultiplier: 1
+    localOffset: {x: 0.68, y: 0.16, z: 0}
+    radiusMultiplier: 3
     lifetimeSeconds: -1
     sortingOffset: 12
     tintWhiteBlend: 0.18
@@ -43,8 +43,8 @@ MonoBehaviour:
   - family: 2
     sprite: {fileID: 21300000, guid: e18b788083f586d650f0bcb9e2a927a4, type: 3}
     prefab: {fileID: 756328571287768908, guid: d6c612ca12e9ae34d903714e8fc4f81e, type: 3}
-    localOffset: {x: 0, y: 0.16, z: 0}
-    radiusMultiplier: 0.92
+    localOffset: {x: 0.68, y: 0.16, z: 0}
+    radiusMultiplier: 2.76
     lifetimeSeconds: -1
     sortingOffset: 12
     tintWhiteBlend: 0.18
@@ -64,17 +64,17 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 9b5fc44167244de7b10fa372b672de89, type: 3}
     prefab: {fileID: 8614566233561317893, guid: 06a9b239017d8e44bb20c48fca385733, type: 3}
     localOffset: {x: 0, y: 0.16, z: 0}
-    radiusMultiplier: 1.08
+    radiusMultiplier: 3.24
     lifetimeSeconds: -1
     sortingOffset: 12
     tintWhiteBlend: 0.18
-    alpha: 0.9
+    alpha: 0.62
     rotationDegrees: 0
   - family: 5
     sprite: {fileID: 21300000, guid: 91b7d11e1f9d4ecf95de8b6a82fa3a87, type: 3}
     prefab: {fileID: 678183688835185469, guid: 4687ea7fc00f3154a9ac6e179a7cda97, type: 3}
-    localOffset: {x: 0, y: 0.08, z: 0}
-    radiusMultiplier: 1
+    localOffset: {x: 0.76, y: 0.1, z: 0}
+    radiusMultiplier: 2.56
     lifetimeSeconds: -1
     sortingOffset: 12
     tintWhiteBlend: 0.18
@@ -84,7 +84,7 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 9b5fc44167244de7b10fa372b672de89, type: 3}
     prefab: {fileID: 8614566233561317893, guid: 06a9b239017d8e44bb20c48fca385733, type: 3}
     localOffset: {x: 0, y: 0.1, z: 0}
-    radiusMultiplier: 1.02
+    radiusMultiplier: 3.06
     lifetimeSeconds: -1
     sortingOffset: 12
     tintWhiteBlend: 0.18
@@ -103,8 +103,8 @@ MonoBehaviour:
   - family: 8
     sprite: {fileID: -3554453865146640057, guid: 0bd3564bbef8b9b44baf3cd330c01c1b, type: 3}
     prefab: {fileID: 7427817718329016933, guid: 5455b1b837377fe4fa0a6ec39baceb62, type: 3}
-    localOffset: {x: 0, y: 0.1, z: 0}
-    radiusMultiplier: 0.94
+    localOffset: {x: 0.76, y: 0.1, z: 0}
+    radiusMultiplier: 2.36
     lifetimeSeconds: -1
     sortingOffset: 12
     tintWhiteBlend: 0.18
@@ -124,7 +124,7 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: e18b788083f586d650f0bcb9e2a927a4, type: 3}
     prefab: {fileID: 756328571287768908, guid: d6c612ca12e9ae34d903714e8fc4f81e, type: 3}
     localOffset: {x: 0, y: 0.48, z: 0}
-    radiusMultiplier: 0.82
+    radiusMultiplier: 2.46
     lifetimeSeconds: -1
     sortingOffset: 12
     tintWhiteBlend: 0.2
@@ -133,8 +133,8 @@ MonoBehaviour:
   - family: 11
     sprite: {fileID: 21300000, guid: e18b788083f586d650f0bcb9e2a927a4, type: 3}
     prefab: {fileID: 756328571287768908, guid: d6c612ca12e9ae34d903714e8fc4f81e, type: 3}
-    localOffset: {x: 0, y: 0.14, z: 0}
-    radiusMultiplier: 1.18
+    localOffset: {x: 0.68, y: 0.14, z: 0}
+    radiusMultiplier: 3.54
     lifetimeSeconds: -1
     sortingOffset: 12
     tintWhiteBlend: 0.18
@@ -154,7 +154,7 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 9b5fc44167244de7b10fa372b672de89, type: 3}
     prefab: {fileID: 8614566233561317893, guid: 06a9b239017d8e44bb20c48fca385733, type: 3}
     localOffset: {x: 0, y: 0.14, z: 0}
-    radiusMultiplier: 1.12
+    radiusMultiplier: 3.36
     lifetimeSeconds: -1
     sortingOffset: 12
     tintWhiteBlend: 0.18
@@ -164,7 +164,7 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: e18b788083f586d650f0bcb9e2a927a4, type: 3}
     prefab: {fileID: 756328571287768908, guid: d6c612ca12e9ae34d903714e8fc4f81e, type: 3}
     localOffset: {x: 0, y: 0.14, z: 0}
-    radiusMultiplier: 1.08
+    radiusMultiplier: 3.24
     lifetimeSeconds: -1
     sortingOffset: 12
     tintWhiteBlend: 0.18

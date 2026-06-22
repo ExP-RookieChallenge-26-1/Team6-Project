@@ -11,6 +11,9 @@ namespace Project2048.Audio
         public const string SfxVolumeParameterName = "SFXVolume";
         public const string UiVolumeParameterName = "UIVolume";
         public const string AmbienceVolumeParameterName = "AmbienceVolume";
+        public const float DefaultBgmVolumeDb = -14f;
+        public const float MinVolumeDb = -80f;
+        public const float MaxVolumeDb = 0f;
 
         [SerializeField] private AudioClip mainThemeClip;
         [SerializeField] private AudioClip buttonClickClip;
@@ -98,6 +101,118 @@ namespace Project2048.Audio
         private static string ResolveParameterName(string configuredName, string fallbackName)
         {
             return string.IsNullOrWhiteSpace(configuredName) ? fallbackName : configuredName;
+        }
+    }
+
+    public static class Project2048AudioPreferences
+    {
+        public const float DefaultNormalizedVolume = 1f;
+
+        private const string KeyPrefix = "Project2048.Audio.Volume.";
+
+        public static float GetNormalizedVolume(Project2048AudioChannel channel)
+        {
+            return Mathf.Clamp01(PlayerPrefs.GetFloat(GetVolumeKey(channel), DefaultNormalizedVolume));
+        }
+
+        public static void SetNormalizedVolume(
+            Project2048AudioSettings settings,
+            Project2048AudioChannel channel,
+            float normalizedVolume,
+            bool saveImmediately = true)
+        {
+            var clampedVolume = Mathf.Clamp01(normalizedVolume);
+            PlayerPrefs.SetFloat(GetVolumeKey(channel), clampedVolume);
+            ApplyVolume(settings, channel, clampedVolume);
+
+            if (saveImmediately)
+            {
+                PlayerPrefs.Save();
+            }
+        }
+
+        public static void ApplySavedVolumes(Project2048AudioSettings settings)
+        {
+            if (settings == null)
+            {
+                settings = Project2048AudioSettings.LoadDefault();
+            }
+
+            foreach (Project2048AudioChannel channel in System.Enum.GetValues(typeof(Project2048AudioChannel)))
+            {
+                ApplyVolume(settings, channel, GetNormalizedVolume(channel));
+            }
+        }
+
+        public static void DeleteSavedVolumes()
+        {
+            foreach (Project2048AudioChannel channel in System.Enum.GetValues(typeof(Project2048AudioChannel)))
+            {
+                PlayerPrefs.DeleteKey(GetVolumeKey(channel));
+            }
+        }
+
+        public static float VolumeToDb(Project2048AudioChannel channel, float normalizedVolume)
+        {
+            return VolumeToDb(normalizedVolume, GetChannelDefaultDb(channel));
+        }
+
+        public static float VolumeToDb(float normalizedVolume, float fullScaleDb)
+        {
+            var clampedVolume = Mathf.Clamp01(normalizedVolume);
+            if (clampedVolume <= 0f)
+            {
+                return Project2048AudioSettings.MinVolumeDb;
+            }
+
+            return Mathf.Clamp(
+                fullScaleDb + 20f * Mathf.Log10(clampedVolume),
+                Project2048AudioSettings.MinVolumeDb,
+                Project2048AudioSettings.MaxVolumeDb);
+        }
+
+        public static float OffsetDb(float volumeDb, float offsetDb)
+        {
+            if (volumeDb <= Project2048AudioSettings.MinVolumeDb)
+            {
+                return Project2048AudioSettings.MinVolumeDb;
+            }
+
+            return Mathf.Clamp(
+                volumeDb + offsetDb,
+                Project2048AudioSettings.MinVolumeDb,
+                Project2048AudioSettings.MaxVolumeDb);
+        }
+
+        public static float GetChannelDefaultDb(Project2048AudioChannel channel)
+        {
+            return channel == Project2048AudioChannel.BGM
+                ? Project2048AudioSettings.DefaultBgmVolumeDb
+                : Project2048AudioSettings.MaxVolumeDb;
+        }
+
+        private static void ApplyVolume(
+            Project2048AudioSettings settings,
+            Project2048AudioChannel channel,
+            float normalizedVolume)
+        {
+            if (settings == null)
+            {
+                return;
+            }
+
+            if (channel == Project2048AudioChannel.BGM && SimpleBgmDucker.Active != null)
+            {
+                SimpleBgmDucker.Active.ApplyBaseVolume();
+                return;
+            }
+
+            settings.TrySetVolume(channel, VolumeToDb(channel, normalizedVolume));
+        }
+
+        private static string GetVolumeKey(Project2048AudioChannel channel)
+        {
+            return KeyPrefix + channel;
         }
     }
 }

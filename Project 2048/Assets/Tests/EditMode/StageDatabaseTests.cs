@@ -79,6 +79,17 @@ namespace Project2048.Tests
             Assert.That(selectedEnemy, Is.Null);
         }
 
+        [Test]
+        public void StageExposesPresentationBackgroundSprite()
+        {
+            var backgroundSprite = CreateSprite("StageBackground");
+            var stage = CreateStage(StageFloor.Middle, 1, CreateEnemyData(maxHp: 10, attackValue: 1));
+
+            SetPrivateField(stage, "presentationBackgroundSprite", backgroundSprite);
+
+            Assert.That(stage.PresentationBackgroundSprite, Is.EqualTo(backgroundSprite));
+        }
+
         private StageSO CreateStage(StageFloor floor, int stageNumberInFloor, params EnemySO[] enemies)
         {
             var stage = CreateScriptableObject<StageSO>();
@@ -102,6 +113,17 @@ namespace Project2048.Tests
             var data = ScriptableObject.CreateInstance<T>();
             ownedObjects.Add(data);
             return data;
+        }
+
+        private Sprite CreateSprite(string name)
+        {
+            var texture = new Texture2D(2, 2);
+            texture.name = $"{name}Texture";
+            var sprite = Sprite.Create(texture, new Rect(0, 0, 2, 2), new Vector2(0.5f, 0.5f), 100f);
+            sprite.name = $"{name}Sprite";
+            ownedObjects.Add(texture);
+            ownedObjects.Add(sprite);
+            return sprite;
         }
 
         private static void SetPrivateField(object target, string fieldName, object value)

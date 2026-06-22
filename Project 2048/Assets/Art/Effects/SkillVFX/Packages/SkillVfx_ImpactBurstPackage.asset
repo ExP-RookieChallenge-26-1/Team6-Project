@@ -20,9 +20,9 @@ MonoBehaviour:
   secondaryPrefab: {fileID: 0}
   particleMaterial: {fileID: 2100000, guid: 4e5f30199110694336ce651e0fe533ce, type: 2}
   localOffset: {x: 0, y: 0.16, z: 0}
-  radiusMultiplier: 1.08
+  radiusMultiplier: 3.24
   lifetimeSeconds: -1
   sortingOffset: 12
   tintWhiteBlend: 0.18
-  alpha: 0.9
+  alpha: 0.62
   rotationDegrees: 0

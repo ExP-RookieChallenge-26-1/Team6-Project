@@ -96,7 +96,22 @@ namespace Project2048.Tests
 
             var settingPopup = canvas.transform.Find("SettingPopup");
             Assert.That(settingPopup, Is.Not.Null);
-            Assert.That(settingPopup.GetComponent<global::SettingPopup>(), Is.Not.Null);
+            var popup = settingPopup.GetComponent<global::SettingPopup>();
+            Assert.That(popup, Is.Not.Null);
+
+            popup.Open();
+            var volumeSliders = settingPopup
+                .GetComponentsInChildren<Slider>(true)
+                .Where(slider => slider.gameObject.name.EndsWith("VolumeSlider"))
+                .ToArray();
+            Assert.That(volumeSliders.Select(slider => slider.gameObject.name), Is.EquivalentTo(new[]
+            {
+                "BGMVolumeSlider",
+                "SFXVolumeSlider",
+                "UIVolumeSlider",
+                "AmbienceVolumeSlider",
+            }));
+            popup.Close();
         }
 
         [Test]

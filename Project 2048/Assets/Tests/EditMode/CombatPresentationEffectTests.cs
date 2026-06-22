@@ -655,6 +655,7 @@ namespace Project2048.Tests
             Assert.That(art.sprite, Is.EqualTo(attackSprite));
             Assert.That(art.transform.localPosition.x, Is.GreaterThan(0.65f));
             Assert.That(art.transform.localPosition.y, Is.GreaterThan(0.55f));
+            Assert.That(art.transform.localScale.x, Is.GreaterThan(4.5f));
             Assert.That(Mathf.DeltaAngle(art.transform.localEulerAngles.z, 90f), Is.EqualTo(0f).Within(0.001f));
             Assert.That(art.sortingOrder, Is.GreaterThan(playerRenderer.sortingOrder));
             Assert.That(playerRenderer.transform.Find("EnemyClawSlash2D"), Is.Null);
@@ -1207,6 +1208,23 @@ namespace Project2048.Tests
                     Does.StartWith("Assets/Art/Effects/SkillVFX/Prefabs/"),
                     family.ToString());
             }
+
+            Assert.That(profile.ResolveDesignTimeBinding(SkillVfxFamily.SlashArc).localOffset.x, Is.GreaterThan(0f));
+            Assert.That(profile.ResolveDesignTimeBinding(SkillVfxFamily.SlashArc).radiusMultiplier, Is.EqualTo(3f).Within(0.001f));
+            Assert.That(profile.ResolveDesignTimeBinding(SkillVfxFamily.LightProjectile).localOffset.x, Is.GreaterThan(0f));
+            Assert.That(profile.ResolveDesignTimeBinding(SkillVfxFamily.LightProjectile).radiusMultiplier, Is.EqualTo(2.76f).Within(0.001f));
+            Assert.That(profile.ResolveDesignTimeBinding(SkillVfxFamily.LightBeam).localOffset.x, Is.GreaterThan(0f));
+            Assert.That(profile.ResolveDesignTimeBinding(SkillVfxFamily.LightBeam).radiusMultiplier, Is.EqualTo(3.54f).Within(0.001f));
+            Assert.That(profile.ResolveDesignTimeBinding(SkillVfxFamily.BuffAura).localOffset.x, Is.GreaterThan(0f));
+            Assert.That(profile.ResolveDesignTimeBinding(SkillVfxFamily.BuffAura).radiusMultiplier, Is.EqualTo(2.56f).Within(0.001f));
+            Assert.That(profile.ResolveDesignTimeBinding(SkillVfxFamily.CounterReady).localOffset.x, Is.GreaterThan(0f));
+            Assert.That(profile.ResolveDesignTimeBinding(SkillVfxFamily.CounterReady).radiusMultiplier, Is.EqualTo(2.36f).Within(0.001f));
+            Assert.That(profile.ResolveDesignTimeBinding(SkillVfxFamily.SupportFire).radiusMultiplier, Is.EqualTo(2.46f).Within(0.001f));
+            Assert.That(profile.ResolveDesignTimeBinding(SkillVfxFamily.ImpactBurst).alpha, Is.LessThan(0.75f));
+            Assert.That(profile.ResolveDesignTimeBinding(SkillVfxFamily.ImpactBurst).radiusMultiplier, Is.EqualTo(3.24f).Within(0.001f));
+            Assert.That(profile.ResolveDesignTimeBinding(SkillVfxFamily.DebuffWave).radiusMultiplier, Is.EqualTo(3.06f).Within(0.001f));
+            Assert.That(profile.ResolveDesignTimeBinding(SkillVfxFamily.SpikedBurst).radiusMultiplier, Is.EqualTo(3.36f).Within(0.001f));
+            Assert.That(profile.ResolveDesignTimeBinding(SkillVfxFamily.BloodFountainSlash).radiusMultiplier, Is.EqualTo(3.24f).Within(0.001f));
         }
 
         [Test]
@@ -1244,6 +1262,40 @@ namespace Project2048.Tests
                         AssetDatabase.GetAssetPath(package.particleMaterial),
                         Does.StartWith("Assets/Art/Effects/SkillVFX/Materials/"),
                         path);
+                }
+
+                if (package.family == SkillVfxFamily.SlashArc ||
+                    package.family == SkillVfxFamily.LightProjectile ||
+                    package.family == SkillVfxFamily.LightBeam ||
+                    package.family == SkillVfxFamily.SupportFire ||
+                    package.family == SkillVfxFamily.BloodFountainSlash)
+                {
+                    if (package.family == SkillVfxFamily.SlashArc ||
+                        package.family == SkillVfxFamily.LightProjectile ||
+                        package.family == SkillVfxFamily.LightBeam)
+                    {
+                        Assert.That(package.localOffset.x, Is.GreaterThan(0f), path);
+                    }
+
+                    Assert.That(package.radiusMultiplier, Is.GreaterThanOrEqualTo(2.46f), path);
+                }
+
+                if (package.family == SkillVfxFamily.BuffAura ||
+                    package.family == SkillVfxFamily.CounterReady)
+                {
+                    Assert.That(package.localOffset.x, Is.GreaterThan(0f), path);
+                    Assert.That(package.radiusMultiplier, Is.GreaterThanOrEqualTo(2.36f), path);
+                }
+
+                if (package.family == SkillVfxFamily.ImpactBurst ||
+                    package.family == SkillVfxFamily.DebuffWave ||
+                    package.family == SkillVfxFamily.SpikedBurst)
+                {
+                    Assert.That(package.radiusMultiplier, Is.GreaterThanOrEqualTo(3.06f), path);
+                    if (package.family == SkillVfxFamily.ImpactBurst)
+                    {
+                        Assert.That(package.alpha, Is.LessThan(0.75f), path);
+                    }
                 }
 
                 if (package.family == SkillVfxFamily.ShieldDome)
@@ -1295,6 +1347,23 @@ namespace Project2048.Tests
                     Assert.That(
                         AssetDatabase.GetAssetPath(package.primaryPrefab),
                         Is.EqualTo("Assets/Art/Effects/SkillVFX/Prefabs/SkillVfx_FlameBurst.prefab"));
+                    Assert.That(
+                        AssetDatabase.GetAssetPath(package.projectilePrefab),
+                        Is.EqualTo("Assets/VFX Test/Prefab/vfx_Fireball_vfxgraph.prefab"));
+                    Assert.That(package.projectilePrefab.transform.localScale.x, Is.EqualTo(0.7f).Within(0.001f));
+                    Assert.That(package.projectilePrefab.transform.localScale.y, Is.EqualTo(0.7f).Within(0.001f));
+                    Assert.That(package.projectilePrefab.transform.localScale.z, Is.EqualTo(0.7f).Within(0.001f));
+                    var projectile = package.projectilePrefab.GetComponentInChildren<CombatProjectileEffect>(true);
+                    Assert.That(projectile, Is.Not.Null);
+                    Assert.That(new SerializedObject(projectile).FindProperty("arcHeight").floatValue, Is.Zero);
+                    Assert.That(
+                        AssetDatabase.GetAssetPath(package.secondaryPrefab),
+                        Is.EqualTo("Assets/Art/Effects/SkillVFX/Prefabs/SkillVfx_LayeredExplosion.prefab"));
+                    var explosion = package.secondaryPrefab.GetComponentInChildren<LayeredExplosionEffect>(true);
+                    Assert.That(explosion, Is.Not.Null);
+                    Assert.That(
+                        new SerializedObject(explosion).FindProperty("scaleMultiplier").floatValue,
+                        Is.GreaterThan(1f));
                     Assert.That(package.localOffset.y, Is.LessThan(0f));
                 }
             }
@@ -1461,6 +1530,7 @@ namespace Project2048.Tests
         {
             var viewObject = CreateOwnedGameObject("WorldSpriteView");
             var view = viewObject.AddComponent<CombatWorldSpriteView>();
+            var playerRenderer = CreateOwnedGameObject("PlayerSprite").AddComponent<SpriteRenderer>();
             var enemyRenderer = CreateOwnedGameObject("EnemySprite").AddComponent<SpriteRenderer>();
             var manager = CreateOwnedGameObject("CombatManager").AddComponent<CombatManager>();
             var player = CreateOwnedGameObject("Player").AddComponent<PlayerCombatController>();
@@ -1470,12 +1540,13 @@ namespace Project2048.Tests
             var enemyData = CreateEnemyData(maxHp: 10, attackValue: 0);
             var attack = CreateSkill("attack", SkillType.Attack, cost: 0, power: 1);
             var expectedColor = new Color(0.4f, 0.8f, 1f, 0.9f);
-            var magicCircleSprite = CreateOwnedSprite("MagicCircleEffectSprite");
+            playerRenderer.transform.localPosition = new Vector3(-1f, 0f, 0f);
+            enemyRenderer.transform.localPosition = new Vector3(1f, 0f, 0f);
             attack.vfxFamily = SkillVfxFamily.BuffAura;
             attack.vfxPrimaryColor = expectedColor;
 
+            SetPrivateField(view, "playerRenderer", playerRenderer);
             SetPrivateField(view, "enemyRenderer", enemyRenderer);
-            SetPrivateField(view, "magicCircleEffectSprite", magicCircleSprite);
             SetPrivateField(bootstrap, "combatManager", manager);
 
             manager.SetCombatants(player, new[] { enemy });
@@ -1497,9 +1568,13 @@ namespace Project2048.Tests
             AssertColorApproximately(ResolveMaterialColor(renderer.sharedMaterial), expectedColor);
             Assert.That(particles.main.startSize.constant, Is.LessThanOrEqualTo(0.22f));
 
-            var magicCircleArt = enemyRenderer.transform.Find("MagicCircleEffectArt")?.GetComponent<SpriteRenderer>();
+            var magicCircleArt = playerRenderer.transform.Find("BuffAuraEffectArt")?.GetComponent<SpriteRenderer>();
             Assert.That(magicCircleArt, Is.Not.Null);
-            Assert.That(magicCircleArt.sprite, Is.EqualTo(magicCircleSprite));
+            Assert.That(
+                AssetDatabase.GetAssetPath(magicCircleArt.sprite),
+                Is.EqualTo("Assets/Art/Effects/SkillVFX/Textures/SkillVfx_MagicCircle.png"));
+            Assert.That(magicCircleArt.transform.position.x, Is.GreaterThan(playerRenderer.transform.position.x));
+            Assert.That(enemyRenderer.transform.Find("BuffAuraEffectArt"), Is.Null);
         }
 
         [Test]
@@ -1564,7 +1639,6 @@ namespace Project2048.Tests
             var view = viewObject.AddComponent<CombatWorldSpriteView>();
             var playerRenderer = CreateOwnedGameObject("PlayerSprite").AddComponent<SpriteRenderer>();
             var enemyRenderer = CreateOwnedGameObject("EnemySprite").AddComponent<SpriteRenderer>();
-            var hitSprite = CreateOwnedSprite("HitImpactEffectSprite");
             var impact = CreateSkill("body-press", SkillType.Attack, cost: 0, power: 80);
             playerRenderer.transform.localPosition = new Vector3(-1f, 0f, 0f);
             enemyRenderer.transform.localPosition = new Vector3(1f, 0f, 0f);
@@ -1574,14 +1648,17 @@ namespace Project2048.Tests
 
             SetPrivateField(view, "playerRenderer", playerRenderer);
             SetPrivateField(view, "enemyRenderer", enemyRenderer);
-            SetPrivateField(view, "hitEffectSprite", hitSprite);
 
             view.PreviewSkillEffect(impact);
 
             var art = enemyRenderer.transform.Find("HitImpactEffectArt")?.GetComponent<SpriteRenderer>();
             Assert.That(art, Is.Not.Null);
-            Assert.That(art.sprite, Is.EqualTo(hitSprite));
+            Assert.That(
+                AssetDatabase.GetAssetPath(art.sprite),
+                Is.EqualTo("Assets/Art/Effects/SkillVFX/Textures/SkillVfx_HitImpact.png"));
+            Assert.That(art.color.a, Is.LessThan(0.75f));
             Assert.That(enemyRenderer.transform.Find("AttackEffectArt"), Is.Null);
+            Assert.That(enemyRenderer.transform.Find("ImpactBurstSkillParticles"), Is.Null);
         }
 
         [Test]
@@ -1606,6 +1683,7 @@ namespace Project2048.Tests
                     family = SkillVfxFamily.LightProjectile,
                     sprite = projectileSprite,
                     localOffset = new Vector3(0f, 0.16f, 0f),
+                    radiusMultiplier = 3f,
                 },
             };
             ownedObjects.Add(profile);
@@ -1616,9 +1694,13 @@ namespace Project2048.Tests
 
             view.PreviewSkillEffect(projectile);
 
-            var art = enemyRenderer.transform.Find("LightProjectileEffectArt")?.GetComponent<SpriteRenderer>();
+            var art = playerRenderer.transform.Find("LightProjectileEffectArt")?.GetComponent<SpriteRenderer>();
             Assert.That(art, Is.Not.Null);
             Assert.That(art.sprite, Is.EqualTo(projectileSprite));
+            Assert.That(art.transform.position.x, Is.GreaterThan(playerRenderer.transform.position.x));
+            Assert.That(art.transform.localScale.x, Is.GreaterThan(4f));
+            Assert.That(enemyRenderer.transform.Find("LightProjectileEffectArt"), Is.Null);
+            Assert.That(enemyRenderer.transform.Find("LightProjectileSkillParticles"), Is.Null);
         }
 
         [Test]
@@ -1680,6 +1762,7 @@ namespace Project2048.Tests
             supportPackage.primaryPrefab = attackPrefab;
             supportPackage.secondarySprite = magicCircleSprite;
             supportPackage.secondaryPrefab = magicCirclePrefab;
+            supportPackage.radiusMultiplier = 2.46f;
             var supportFire = CreateSkill("light-echo", SkillType.Attack, cost: 0, power: 20);
             playerRenderer.transform.localPosition = new Vector3(-1f, 0f, 0f);
             enemyRenderer.transform.localPosition = new Vector3(1f, 0f, 0f);
@@ -1695,14 +1778,18 @@ namespace Project2048.Tests
 
             view.PreviewSkillEffect(supportFire);
 
-            var magicCircleArt = enemyRenderer.transform.Find("MagicCircleEffectArt")?.GetComponent<SpriteRenderer>();
+            var magicCircleArt = playerRenderer.transform.Find("MagicCircleEffectArt")?.GetComponent<SpriteRenderer>();
             Assert.That(magicCircleArt, Is.Not.Null);
             Assert.That(magicCircleArt.sprite, Is.EqualTo(magicCircleSprite));
-            Assert.That(enemyRenderer.transform.Find("MagicCircleEffectArt/SupportFireMagicCirclePrefabMarker"), Is.Not.Null);
+            Assert.That(magicCircleArt.transform.position.x, Is.GreaterThan(playerRenderer.transform.position.x));
+            Assert.That(magicCircleArt.transform.localScale.x, Is.GreaterThan(2.8f));
+            Assert.That(playerRenderer.transform.Find("MagicCircleEffectArt/SupportFireMagicCirclePrefabMarker"), Is.Not.Null);
+            Assert.That(enemyRenderer.transform.Find("MagicCircleEffectArt"), Is.Null);
 
             var impactArt = enemyRenderer.transform.Find("SupportFireImpactArt")?.GetComponent<SpriteRenderer>();
             Assert.That(impactArt, Is.Not.Null);
             Assert.That(impactArt.sprite, Is.EqualTo(attackSprite));
+            Assert.That(impactArt.transform.localScale.x, Is.GreaterThan(3.5f));
             Assert.That(enemyRenderer.transform.Find("SupportFireImpactArt/SupportFireImpactPrefabMarker"), Is.Not.Null);
             Assert.That(enemyRenderer.transform.Find("LightEchoSupportFireParticles"), Is.Not.Null);
         }
@@ -1949,6 +2036,7 @@ namespace Project2048.Tests
             Assert.That(viewObject.transform.Find("ChargedLightBeam"), Is.Null);
             Assert.That(viewObject.transform.Find("ChargedLightBeamGlow"), Is.Null);
             Assert.That(enemyRenderer.transform.Find("ChargedLightAttackArt"), Is.Null);
+            Assert.That(playerRenderer.transform.Find("ChargedLightAttackArt"), Is.Null);
             Assert.That(playerRenderer.transform.Find("gather-lightChargeParticles"), Is.Not.Null);
 
             manager.RequestEndPlayerTurn();
@@ -1966,10 +2054,13 @@ namespace Project2048.Tests
             Assert.That(beam.sortingOrder, Is.GreaterThan(enemyRenderer.sortingOrder));
             Assert.That(viewObject.transform.Find("ChargedLightBeamGlow")?.GetComponent<LineRenderer>(), Is.Not.Null);
             Assert.That(enemyRenderer.transform.Find("ChargedLightBeamImpactParticles"), Is.Not.Null);
-            var art = enemyRenderer.transform.Find("ChargedLightAttackArt")?.GetComponent<SpriteRenderer>();
+            var art = playerRenderer.transform.Find("ChargedLightAttackArt")?.GetComponent<SpriteRenderer>();
             Assert.That(art, Is.Not.Null);
             Assert.That(art.sprite, Is.EqualTo(attackSprite));
+            Assert.That(art.transform.position.x, Is.GreaterThan(playerRenderer.transform.position.x));
+            Assert.That(art.transform.localScale.x, Is.GreaterThan(5f));
             Assert.That(art.sortingOrder, Is.GreaterThan(enemyRenderer.sortingOrder));
+            Assert.That(enemyRenderer.transform.Find("ChargedLightAttackArt"), Is.Null);
         }
 
         [Test]
@@ -2085,20 +2176,26 @@ namespace Project2048.Tests
         }
 
         [Test]
-        public void CombatWorldSpriteView_BleedingCutPreview_LaunchesFireballProjectile()
+        public void CombatWorldSpriteView_BleedingCutPreview_LaunchesFireballProjectileAndImpactExplosion()
         {
             var viewObject = CreateOwnedGameObject("WorldSpriteView");
             var view = viewObject.AddComponent<CombatWorldSpriteView>();
             var playerRenderer = CreateOwnedGameObject("PlayerSprite").AddComponent<SpriteRenderer>();
             var enemyRenderer = CreateOwnedGameObject("EnemySprite").AddComponent<SpriteRenderer>();
             var bleedingCut = CreateSkill("bleeding-cut", SkillType.Attack, cost: 0, power: 50);
+            var flamePackage = CreateOwnedVfxPackage(SkillVfxFamily.FlameBurst);
             var fireballPrefab = CreateOwnedGameObject("FireballPrefab");
+            var explosionPrefab = CreateOwnedGameObject("LayeredExplosionPrefab");
             fireballPrefab.AddComponent<CombatProjectileEffect>();
+            explosionPrefab.AddComponent<LayeredExplosionEffect>();
             playerRenderer.transform.localPosition = new Vector3(-1f, 0f, 0f);
             enemyRenderer.transform.localPosition = new Vector3(1f, 0f, 0f);
             enemyRenderer.sortingOrder = 4;
+            flamePackage.projectilePrefab = fireballPrefab;
+            flamePackage.secondaryPrefab = explosionPrefab;
             bleedingCut.effectKind = SkillEffectKind.OverburnAttack;
             bleedingCut.vfxFamily = SkillVfxFamily.FlameBurst;
+            bleedingCut.vfxPackage = flamePackage;
             bleedingCut.vfxPrimaryColor = new Color(0.286275f, 0.686275f, 0.709804f, 1f);
             bleedingCut.vfxSecondaryColor = new Color(0.078431f, 0.360784f, 0.388235f, 1f);
             bleedingCut.vfxScale = 1.2f;
@@ -2116,9 +2213,14 @@ namespace Project2048.Tests
 
             var fireball = Object.FindObjectsByType<CombatProjectileEffect>(FindObjectsInactive.Exclude)
                 .SingleOrDefault(projectile => projectile.name == "FireballPrefab(Clone)");
+            var explosion = enemyRenderer.transform.Find("LayeredExplosionPrefab(Clone)")
+                ?.GetComponentInChildren<LayeredExplosionEffect>();
             Assert.That(fireball, Is.Not.Null);
+            Assert.That(explosion, Is.Not.Null);
             Assert.That(fireball.transform.parent, Is.Null);
             Assert.That(fireball.transform.position.x, Is.GreaterThan(playerRenderer.transform.position.x));
+            Assert.That(explosion.transform.position.x, Is.EqualTo(enemyRenderer.transform.position.x).Within(0.001f));
+            Assert.That(explosion.transform.position.y, Is.GreaterThan(enemyRenderer.transform.position.y));
             Assert.That(enemyRenderer.transform.Find("BloodFountainSlashArt"), Is.Null);
             Assert.That(enemyRenderer.transform.Find("BleedingCutSlashArc"), Is.Null);
             Assert.That(enemyRenderer.transform.Find("BleedingCutBloodFountain"), Is.Null);
@@ -2166,7 +2268,6 @@ namespace Project2048.Tests
             Assert.That(explosion.transform.position.x, Is.EqualTo(enemyRenderer.transform.position.x).Within(0.001f));
             Assert.That(explosion.transform.position.y, Is.GreaterThan(enemyRenderer.transform.position.y));
             Object.DestroyImmediate(fireball.gameObject);
-            Object.DestroyImmediate(explosion.gameObject);
         }
 
         [Test]
@@ -2236,17 +2337,21 @@ namespace Project2048.Tests
             Assert.That(head.GetPosition(0).x, Is.GreaterThan(enemyRenderer.transform.position.x - 0.05f));
             Assert.That(head.GetPosition(0).y, Is.GreaterThan(enemyRenderer.transform.position.y));
             Assert.That(chainRoot.Cast<Transform>().Count(child => child.name.StartsWith("DarkShackleChainLink")), Is.GreaterThanOrEqualTo(8));
-            Assert.That(enemyRenderer.transform.Find("DarkShackleImpactExplosion")?.GetComponent<ParticleSystem>(), Is.Not.Null);
-            Assert.That(enemyRenderer.transform.Find("DarkShackleImpactRing")?.GetComponent<LineRenderer>(), Is.Not.Null);
+            Assert.That(enemyRenderer.transform.Find("DarkShackleImpactExplosion"), Is.Null);
+            Assert.That(enemyRenderer.transform.Find("DarkShackleImpactRing"), Is.Null);
+            Assert.That(enemyRenderer.transform.Find("DarkShackleImpactSparks"), Is.Null);
             var chainAttackArt = chainRoot.Find("DarkShackleChainAttackArt")?.GetComponent<SpriteRenderer>();
             Assert.That(chainAttackArt, Is.Not.Null);
             Assert.That(chainAttackArt.sprite, Is.EqualTo(chainAttackSprite));
             Assert.That(chainAttackArt.transform.position.x, Is.GreaterThan(playerRenderer.transform.position.x));
             Assert.That(enemyRenderer.transform.Find("DarkShackleChainAttackArt"), Is.Null);
             Assert.That(chainRoot.Find("DarkShackleChainAttackArt/SharedChainAttackPrefabMarker"), Is.Not.Null);
+            Assert.That(enemyRenderer.transform.Cast<Transform>().Count(child => child.name == "DarkShackleBoundChainsArt"), Is.EqualTo(1));
             var boundChainsArt = enemyRenderer.transform.Find("DarkShackleBoundChainsArt")?.GetComponent<SpriteRenderer>();
             Assert.That(boundChainsArt, Is.Not.Null);
             Assert.That(boundChainsArt.sprite, Is.EqualTo(boundChainsSprite));
+            Assert.That(boundChainsArt.transform.localScale.x, Is.GreaterThan(chainAttackArt.transform.localScale.x));
+            Assert.That(boundChainsArt.transform.localScale.x, Is.GreaterThan(7.2f));
             Assert.That(enemyRenderer.transform.Find("DarkShackleBoundChainsArt/SharedBoundChainsPrefabMarker"), Is.Not.Null);
         }
 
@@ -2271,9 +2376,12 @@ namespace Project2048.Tests
                 "FlameBurstPrefab",
                 flameSprite,
                 "FlameBurstPrefabMarker");
+            var explosionPrefab = CreateOwnedGameObject("LayeredExplosionPrefab");
+            explosionPrefab.AddComponent<LayeredExplosionEffect>();
             var flamePackage = CreateOwnedVfxPackage(SkillVfxFamily.FlameBurst);
             flamePackage.primarySprite = flameSprite;
             flamePackage.primaryPrefab = flamePrefab;
+            flamePackage.secondaryPrefab = explosionPrefab;
             flamePackage.localOffset = new Vector3(0f, -0.42f, 0f);
             overburn.vfxPackage = flamePackage;
 
@@ -2305,6 +2413,10 @@ namespace Project2048.Tests
             Assert.That(flame.velocityOverLifetime.enabled, Is.True);
             Assert.That(enemyRenderer.transform.Find("FlameBurstEmbers")?.GetComponent<ParticleSystem>(), Is.Not.Null);
             Assert.That(enemyRenderer.transform.Find("FlameBurstSmoke")?.GetComponent<ParticleSystem>(), Is.Not.Null);
+            var explosion = enemyRenderer.transform.Find("LayeredExplosionPrefab(Clone)")
+                ?.GetComponentInChildren<LayeredExplosionEffect>();
+            Assert.That(explosion, Is.Not.Null);
+            Assert.That(explosion.transform.position.x, Is.EqualTo(enemyRenderer.transform.position.x).Within(0.001f));
         }
 
         [UnityTest]
@@ -2533,6 +2645,11 @@ namespace Project2048.Tests
             var groups = Object.FindObjectsByType<Transform>(
                     FindObjectsInactive.Include)
                 .Count(item => item.name.StartsWith("Group_", System.StringComparison.Ordinal));
+            var misleadingEditableVfxGroups = Object.FindObjectsByType<Transform>(
+                    FindObjectsInactive.Include)
+                .Count(item =>
+                    item.name.StartsWith("EditableVFX__", System.StringComparison.Ordinal) ||
+                    item.name.StartsWith("_EditableVfxPrefabRef__", System.StringComparison.Ordinal));
 
             Assert.That(slots.Length, Is.EqualTo(expectedSkillIds.Length));
             Assert.That(slotSkillIds, Is.EquivalentTo(expectedSkillIds));
@@ -2548,8 +2665,90 @@ namespace Project2048.Tests
             }
 
             Assert.That(groups, Is.EqualTo(12));
+            Assert.That(misleadingEditableVfxGroups, Is.Zero);
+            foreach (var slot in slots)
+            {
+                var serialized = new SerializedObject(slot);
+                var runtimePrefabs = serialized.FindProperty("runtimeVfxPrefabs");
+                Assert.That(runtimePrefabs, Is.Not.Null, slot.name);
+                Assert.That(runtimePrefabs.arraySize, Is.GreaterThan(0), slot.name);
+                for (var i = 0; i < runtimePrefabs.arraySize; i++)
+                {
+                    var prefab = runtimePrefabs.GetArrayElementAtIndex(i).objectReferenceValue;
+                    Assert.That(prefab, Is.Not.Null, $"{slot.name} runtime prefab {i}");
+                    Assert.That(AssetDatabase.GetAssetPath(prefab), Does.StartWith("Assets/"), prefab.name);
+                }
+            }
+
             Assert.That(slotSkillIds, Does.Contain("light-guard"));
             Assert.That(slotSkillIds, Does.Contain("dark-shackle"));
+        }
+
+        [Test]
+        public void AttackEffectShowcaseScene_MatchesBattleSceneActorLayoutWithPreviewPlayerScale()
+        {
+            var previewPlayerScale = new Vector3(0.6f, 0.6f, 0.6f);
+
+            EditorSceneManager.OpenScene("Assets/Scenes/BattleScene.unity");
+
+            var battleView = Object.FindAnyObjectByType<CombatWorldSpriteView>(
+                FindObjectsInactive.Include);
+            Assert.That(battleView, Is.Not.Null);
+
+            var battleSerialized = new SerializedObject(battleView);
+            var battlePlayerRoot = battleSerialized
+                .FindProperty("playerActorRoot")
+                .objectReferenceValue as Transform;
+            var battleEnemyRenderer = battleSerialized
+                .FindProperty("enemyRenderer")
+                .objectReferenceValue as SpriteRenderer;
+            Assert.That(battlePlayerRoot, Is.Not.Null);
+            Assert.That(battleEnemyRenderer, Is.Not.Null);
+
+            var battlePlayerLocalPosition = battlePlayerRoot.localPosition;
+            var battleEnemyLocalPosition = battleEnemyRenderer.transform.localPosition;
+            var battleEnemyLocalScale = battleEnemyRenderer.transform.localScale;
+
+            EditorSceneManager.OpenScene("Assets/Scenes/AttackEffectShowcase.unity");
+
+            var worldViews = Object.FindObjectsByType<CombatWorldSpriteView>(
+                FindObjectsInactive.Include);
+            var virtualAllies = Object.FindObjectsByType<Transform>(
+                    FindObjectsInactive.Include)
+                .Count(item => item.name == "VirtualAlly");
+
+            Assert.That(worldViews.Length, Is.GreaterThan(0));
+            Assert.That(virtualAllies, Is.Zero);
+            foreach (var worldView in worldViews)
+            {
+                var serialized = new SerializedObject(worldView);
+                var playerRoot = serialized
+                    .FindProperty("playerActorRoot")
+                    .objectReferenceValue as Transform;
+                var enemyRenderer = serialized
+                    .FindProperty("enemyRenderer")
+                    .objectReferenceValue as SpriteRenderer;
+
+                Assert.That(playerRoot, Is.Not.Null, worldView.name);
+                Assert.That(playerRoot.name, Is.EqualTo("player_all"), worldView.name);
+                Assert.That(enemyRenderer, Is.Not.Null, worldView.name);
+                AssertVector3Approximately(
+                    playerRoot.localPosition,
+                    battlePlayerLocalPosition,
+                    $"{worldView.name} player position");
+                AssertVector3Approximately(
+                    playerRoot.localScale,
+                    previewPlayerScale,
+                    $"{worldView.name} player scale");
+                AssertVector3Approximately(
+                    enemyRenderer.transform.localPosition,
+                    battleEnemyLocalPosition,
+                    $"{worldView.name} enemy position");
+                AssertVector3Approximately(
+                    enemyRenderer.transform.localScale,
+                    battleEnemyLocalScale,
+                    $"{worldView.name} enemy scale");
+            }
         }
 
         [Test]
@@ -2744,6 +2943,7 @@ namespace Project2048.Tests
                     skill.skillId == "blood-fang")
                 {
                     Assert.That(resolvedFamily, Is.EqualTo(SkillVfxFamily.FlameBurst), path);
+                    AssertFlameBurstPackageHasImpactExplosion(skill, path);
                     Assert.That(skill.activationEffect?.vfxPrefab, Is.Not.Null, path);
                     Assert.That(
                         AssetDatabase.GetAssetPath(skill.activationEffect.vfxPrefab),
@@ -2753,23 +2953,17 @@ namespace Project2048.Tests
                         skill.activationEffect.vfxPrefab.GetComponentInChildren<CombatProjectileEffect>(true),
                         Is.Not.Null,
                         path);
-                    if (skill.skillId == "open-wound")
-                    {
-                        Assert.That(skill.vfxPackage.secondaryPrefab, Is.Not.Null, path);
-                        Assert.That(
-                            skill.vfxPackage.secondaryPrefab.GetComponentInChildren<LayeredExplosionEffect>(true),
-                            Is.Not.Null,
-                            path);
-                    }
                 }
                 else if (path.EndsWith("Overburn.asset", System.StringComparison.Ordinal))
                 {
                     Assert.That(resolvedFamily, Is.EqualTo(SkillVfxFamily.FlameBurst), path);
+                    AssertFlameBurstPackageHasImpactExplosion(skill, path);
                     Assert.That(skill.vfxScale, Is.GreaterThan(1f), path);
                 }
                 else if (path.EndsWith("RecklessBlow.asset", System.StringComparison.Ordinal))
                 {
                     Assert.That(resolvedFamily, Is.EqualTo(SkillVfxFamily.FlameBurst), path);
+                    AssertFlameBurstPackageHasImpactExplosion(skill, path);
                     Assert.That(skill.vfxScale, Is.LessThanOrEqualTo(1f), path);
                 }
                 else if (path.EndsWith("LightEcho.asset", System.StringComparison.Ordinal))
@@ -2862,6 +3056,16 @@ namespace Project2048.Tests
             Assert.That(AssetDatabase.GetAssetPath(prefab), Is.EqualTo(expectedPath));
         }
 
+        private static void AssertFlameBurstPackageHasImpactExplosion(SkillSO skill, string context)
+        {
+            Assert.That(skill.vfxPackage, Is.Not.Null, context);
+            Assert.That(skill.vfxPackage.secondaryPrefab, Is.Not.Null, context);
+            Assert.That(
+                skill.vfxPackage.secondaryPrefab.GetComponentInChildren<LayeredExplosionEffect>(true),
+                Is.Not.Null,
+                context);
+        }
+
         private static void AssertShieldPrefabHasDedicatedArtAndSparkles(
             GameObject prefab,
             string expectedSpritePath,
@@ -2922,6 +3126,16 @@ namespace Project2048.Tests
             Assert.That(actual.g, Is.EqualTo(expected.g).Within(0.001f));
             Assert.That(actual.b, Is.EqualTo(expected.b).Within(0.001f));
             Assert.That(actual.a, Is.EqualTo(expected.a).Within(0.001f));
+        }
+
+        private static void AssertVector3Approximately(
+            Vector3 actual,
+            Vector3 expected,
+            string context)
+        {
+            Assert.That(actual.x, Is.EqualTo(expected.x).Within(0.001f), $"{context} x");
+            Assert.That(actual.y, Is.EqualTo(expected.y).Within(0.001f), $"{context} y");
+            Assert.That(actual.z, Is.EqualTo(expected.z).Within(0.001f), $"{context} z");
         }
     }
 }

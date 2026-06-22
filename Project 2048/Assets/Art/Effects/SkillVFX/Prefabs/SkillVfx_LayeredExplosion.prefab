@@ -48,7 +48,7 @@ MonoBehaviour:
   playOnEnable: 1
   disableInsteadOfDestroy: 0
   destroyPaddingSeconds: 0.05
-  scaleMultiplier: 1
+  scaleMultiplier: 1.35
   includeShockwave: 1
   horizontalShockwave: 0
   includeFlashLight: 0

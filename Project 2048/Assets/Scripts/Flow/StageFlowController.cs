@@ -1,8 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Project2048.Combat;
 using Project2048.Enemy;
+using Project2048.Prototype;
 using Project2048.Rewards;
+using Project2048.Skills;
 using Project2048.Stage;
 using UnityEngine;
 
@@ -14,6 +17,7 @@ namespace Project2048.Flow
         [SerializeField] private PlayerCombatController playerController;
         [SerializeField] private List<EnemyController> enemyControllers = new();
         [SerializeField] private RewardManager rewardManager;
+        [SerializeField] private CombatWorldSpriteView combatWorldSpriteView;
 
         [Header("Stage Data")]
         [SerializeField] private StageDatabaseSO stageDatabase;
@@ -55,7 +59,7 @@ namespace Project2048.Flow
             ResolveSceneReferences();
 
             currentStageIndex = Mathf.Max(1, stageIndex);
-            if (!CanStartStage(out var stageEnemyData))
+            if (!CanStartStage(out var stage, out var stageEnemyData))
             {
                 return;
             }
@@ -66,6 +70,7 @@ namespace Project2048.Flow
             OnStageFlowStarted?.Invoke(currentStageIndex);
 
             rewardManager.Initialize(RunProgress, rewardTable);
+            combatWorldSpriteView?.SetStage(stage);
 
             combatManager.SetCombatants(playerController, enemyControllers);
             combatManager.EnemyTurnDelaySeconds = enemyTurnDelaySeconds;
@@ -97,6 +102,23 @@ namespace Project2048.Flow
             }
         }
 
+        public IEnumerable<SkillSO> GetKnownSkillsForSaveRestore()
+        {
+            var knownSkills = new List<SkillSO>();
+            AddKnownSkills(knownSkills, playerData != null ? playerData.startingSkills : null);
+
+            if (rewardTable != null && rewardTable.rewards != null)
+            {
+                AddKnownSkills(
+                    knownSkills,
+                    rewardTable.rewards
+                        .Where(reward => reward != null)
+                        .Select(reward => reward.skillToLearn));
+            }
+
+            return knownSkills;
+        }
+
         private void ResolveSceneReferences()
         {
             if (combatManager == null)
@@ -118,10 +140,20 @@ namespace Project2048.Flow
             {
                 rewardManager = GetComponentInChildren<RewardManager>(true);
             }
+
+            if (combatWorldSpriteView == null)
+            {
+#if UNITY_2023_1_OR_NEWER
+                combatWorldSpriteView = UnityEngine.Object.FindAnyObjectByType<CombatWorldSpriteView>(FindObjectsInactive.Include);
+#else
+                combatWorldSpriteView = UnityEngine.Object.FindObjectOfType<CombatWorldSpriteView>(true);
+#endif
+            }
         }
 
-        private bool CanStartStage(out EnemySO stageEnemyData)
+        private bool CanStartStage(out StageSO stage, out EnemySO stageEnemyData)
         {
+            stage = null;
             stageEnemyData = null;
             if (combatManager == null)
             {
@@ -159,7 +191,7 @@ namespace Project2048.Flow
                 return false;
             }
 
-            if (!stageDatabase.TryGetStage(currentStageIndex, out var stage))
+            if (!stageDatabase.TryGetStage(currentStageIndex, out stage))
             {
                 Debug.LogError($"Stage {currentStageIndex} is not configured.");
                 return false;
@@ -250,6 +282,29 @@ namespace Project2048.Flow
         private void ChangeState(StageFlowState nextState)
         {
             CurrentState = nextState;
+        }
+
+        private static void AddKnownSkills(List<SkillSO> target, IEnumerable<SkillSO> skills)
+        {
+            if (target == null || skills == null)
+            {
+                return;
+            }
+
+            foreach (var skill in skills)
+            {
+                if (skill == null || string.IsNullOrWhiteSpace(skill.skillId))
+                {
+                    continue;
+                }
+
+                if (target.Any(existing => existing != null && existing.skillId == skill.skillId))
+                {
+                    continue;
+                }
+
+                target.Add(skill);
+            }
         }
     }
 }

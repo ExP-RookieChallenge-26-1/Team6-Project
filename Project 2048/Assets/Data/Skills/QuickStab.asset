@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: QuickStab
   m_EditorClassIdentifier: Game.Core::Project2048.Skills.SkillSO
   skillId: quick-stab
-  skillName: "빠른 찌르기"
+  skillName: "\uBE60\uB978 \uCC0C\uB974\uAE30"
   skillType: 0
   effectKind: 1
   damageStatSource: 0
@@ -25,6 +25,8 @@ MonoBehaviour:
   selfCriticalStageModifier: 0
   targetAttackModifier: 0
   targetDefenseModifier: 0
+  debuffType: 0
+  debuffValue: 0
   selfDefenseBonus: 0
   selfDefensePowerModifier: 0
   selfThornRetaliationDamage: 0
@@ -38,6 +40,17 @@ MonoBehaviour:
   hpCostPercent: 0
   hpCostLeavesOne: 1
   nextBoardMoveCountModifier: 0
+  nextCostGainModifier: 0
+  nextCostGainMultiplier: 1
+  conditionalPowerBonus: 0
+  conditionalHpThreshold: 0
+  statusDuration: 0
+  statusDamage: 0
+  statusMaxHpDamagePercent: 0
+  shieldPiercePercent: 0
+  extraPowerPerConsumedCost: 0
+  maxCostCarry: 0
+  costRefund: 0
   chargedPower: 0
   consumesAllShield: 0
   nextAttackPowerMultiplier: 1
@@ -67,10 +80,11 @@ MonoBehaviour:
     sfxDelaySeconds: 0
     localOffset: {x: 0, y: 0, z: 0}
     autoDestroySeconds: 1.25
+  vfxPackage: {fileID: 11400000, guid: f553efba8a5ee744ab0f10ec6b804de2, type: 2}
   vfxFamily: 1
   vfxPrimaryColor: {r: 1, g: 1, b: 1, a: 1}
   vfxSecondaryColor: {r: 0.76705, g: 0.81745, b: 0.87505, a: 1}
   vfxScale: 0.7
   vfxIntensity: 0.8
   vfxRepeatCount: 1
-  description: "적에게 위력 40 피해를 준다."
+  description: "\uC801\uC5D0\uAC8C \uC704\uB825 40 \uD53C\uD574\uB97C \uC900\uB2E4."

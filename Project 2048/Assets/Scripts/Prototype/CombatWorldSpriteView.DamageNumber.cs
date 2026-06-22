@@ -102,9 +102,6 @@ namespace Project2048.Prototype
             label.color = DamageNumberPopupTextColor;
             label.textWrappingMode = TextWrappingModes.NoWrap;
             label.overflowMode = TextOverflowModes.Overflow;
-            label.faceColor = DamageNumberPopupTextColor;
-            label.outlineColor = DamageNumberPopupOutlineColor;
-            label.outlineWidth = DamageNumberPopupOutlineWidth;
             ConfigureDamageNumberGlow(label);
         }
 

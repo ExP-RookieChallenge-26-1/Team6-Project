@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5508e377883536d4ea0141dcd28586c8, type: 3}
+  m_Name: SkillVfx_FlameBurstPackage
+  m_EditorClassIdentifier: Game.Core::Project2048.Skills.SkillVfxPackageSO
+  family: 15
+  primarySprite: {fileID: 21300000, guid: e83fe29d407142ba931d90d518a538a2, type: 3}
+  primaryPrefab: {fileID: 1827861628062789563, guid: 11867b2eedd68a545aa83d1f7781b799, type: 3}
+  projectilePrefab: {fileID: 5592946645197749577, guid: e9b54a20e0cab144a95032ef68460208, type: 3}
+  secondarySprite: {fileID: 0}
+  secondaryPrefab: {fileID: 1102443034553506000, guid: 6b42daab6b3d4baa9d5542cb14853d92, type: 3}
+  particleMaterial: {fileID: 2100000, guid: a19a598f9cd9ddb0f7543ff1237ae3cd, type: 2}
+  localOffset: {x: 0, y: -0.42, z: 0}
+  radiusMultiplier: 1.1
+  lifetimeSeconds: -1
+  sortingOffset: 11
+  tintWhiteBlend: 0.16
+  alpha: 0.84
+  rotationDegrees: -8

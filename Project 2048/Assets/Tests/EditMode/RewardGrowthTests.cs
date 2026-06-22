@@ -10,6 +10,7 @@ using Project2048.Flow;
 using Project2048.Prototype;
 using Project2048.Rewards;
 using Project2048.Skills;
+using Project2048.Stage;
 using TMPro;
 using UnityEngine;
 using UnityEngine.TestTools;
@@ -503,6 +504,7 @@ namespace Project2048.Tests
             var serializedView = new SerializedObject(view);
             var rewardOverlay = serializedView.FindProperty("rewardOverlay").objectReferenceValue as GameObject;
             var resultOverlay = serializedView.FindProperty("resultOverlay").objectReferenceValue as GameObject;
+            var serializedWorldView = new SerializedObject(worldSpriteView);
 
             Assert.That(serializedView.FindProperty("rewardManager").objectReferenceValue, Is.EqualTo(rewardManager));
             Assert.That(rewardOverlay, Is.Not.Null);
@@ -515,6 +517,18 @@ namespace Project2048.Tests
             Assert.That(resultOverlay.transform.parent.name, Is.EqualTo("CombatCanvas"));
             Assert.That(rewardOverlay.activeSelf, Is.True);
             Assert.That(resultOverlay.activeSelf, Is.True);
+            Assert.That(
+                AssetGuid(serializedWorldView.FindProperty("upperStageBackgroundSprite").objectReferenceValue),
+                Is.EqualTo("163faba4684ccae4d9db68d43ba672a9"));
+            Assert.That(
+                AssetGuid(serializedWorldView.FindProperty("middleStageBackgroundSprite").objectReferenceValue),
+                Is.EqualTo("9e1ad007a13410142a6da69e5c00074e"));
+            Assert.That(
+                AssetGuid(serializedWorldView.FindProperty("lowerStageBackgroundSprite").objectReferenceValue),
+                Is.EqualTo("1fb74fbbb05439b46826312757f9664a"));
+            Assert.That(
+                AssetGuid(serializedWorldView.FindProperty("rewardMothSprite").objectReferenceValue),
+                Is.EqualTo("1b1b8bc2583af9349b6cc5fb6673e155"));
         }
 
         [Test]
@@ -555,6 +569,77 @@ namespace Project2048.Tests
 
             Assert.That(backgroundRenderer.sprite, Is.EqualTo(backgroundSprite));
             Assert.That(playerRenderer.sprite, Is.EqualTo(playerSprite));
+            Assert.That(enemyRenderer.sprite, Is.EqualTo(enemySprite));
+            Assert.That(enemyRenderer.color.a, Is.EqualTo(1f).Within(0.001f));
+        }
+
+        [Test]
+        public void CombatWorldSpriteView_SetStage_UsesStagePresentationBackground()
+        {
+            var viewObject = CreateOwnedGameObject("WorldSpriteView");
+            var view = viewObject.AddComponent<CombatWorldSpriteView>();
+            var backgroundRenderer = CreateGameObject<SpriteRenderer>("BackgroundSprite");
+            var defaultBackgroundSprite = CreateSprite("DefaultBackground");
+            var stageBackgroundSprite = CreateSprite("StageBackground");
+            var stage = ScriptableObject.CreateInstance<StageSO>();
+
+            ownedObjects.Add(stage);
+            SetPrivateField(stage, "floor", StageFloor.Middle);
+            SetPrivateField(stage, "presentationBackgroundSprite", stageBackgroundSprite);
+            SetPrivateField(view, "backgroundRenderer", backgroundRenderer);
+            SetPrivateField(view, "defaultBackgroundSprite", defaultBackgroundSprite);
+
+            view.SetStage(stage);
+
+            Assert.That(backgroundRenderer.sprite, Is.EqualTo(stageBackgroundSprite));
+        }
+
+        [Test]
+        public void CombatWorldSpriteView_RewardChoices_ShowMothAtEnemyPosition()
+        {
+            var viewObject = CreateOwnedGameObject("WorldSpriteView");
+            var view = viewObject.AddComponent<CombatWorldSpriteView>();
+            var enemyRenderer = CreateGameObject<SpriteRenderer>("EnemySprite");
+            var manager = CreateGameObject<CombatManager>("CombatManager");
+            var rewardManager = CreateGameObject<RewardManager>("RewardManager");
+            var player = CreateGameObject<PlayerCombatController>("Player");
+            var enemy = CreateGameObject<EnemyController>("Enemy");
+            var bootstrap = CreateGameObject<PrototypeCombatBootstrap>("Bootstrap");
+            var enemySprite = CreateSprite("Enemy");
+            var mothSprite = CreateSprite("RewardMoth");
+            var playerData = CreatePlayerData(maxHp: 20, attackPower: 2);
+            var enemyData = CreateEnemyData(maxHp: 10, attackValue: 0);
+            var reward = CreateReward(healPercentOfMaxHp: 0.3f, extraBoardMoveCount: 1);
+            var table = CreateRewardTable(reward);
+            var enemyLocalPosition = new Vector3(1.5f, 2.25f, 0f);
+
+            reward.rewardKind = RewardChoiceKind.TemporaryBoardMoveCount;
+            reward.temporaryBoardMoveCountBonus = 2;
+            enemyData.portrait = enemySprite;
+            enemyRenderer.transform.localPosition = enemyLocalPosition;
+            SetPrivateField(view, "enemyRenderer", enemyRenderer);
+            SetPrivateField(view, "rewardMothSprite", mothSprite);
+            SetPrivateField(bootstrap, "combatManager", manager);
+            SetPrivateField(bootstrap, "rewardManager", rewardManager);
+
+            manager.SetCombatants(player, new[] { enemy });
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new List<EnemySO> { enemyData },
+                boardMoveCount = 1,
+            });
+
+            rewardManager.Initialize(new RunProgress(), table);
+            view.Initialize(bootstrap);
+            rewardManager.OfferReward(new CombatResult(), player);
+
+            Assert.That(enemyRenderer.sprite, Is.EqualTo(mothSprite));
+            Assert.That(enemyRenderer.color.a, Is.EqualTo(1f).Within(0.001f));
+            Assert.That(enemyRenderer.transform.localPosition, Is.EqualTo(enemyLocalPosition));
+
+            rewardManager.ChooseReward(0, player);
+
             Assert.That(enemyRenderer.sprite, Is.EqualTo(enemySprite));
             Assert.That(enemyRenderer.color.a, Is.EqualTo(1f).Within(0.001f));
         }
@@ -825,6 +910,13 @@ namespace Project2048.Tests
             ownedObjects.Add(texture);
             ownedObjects.Add(sprite);
             return sprite;
+        }
+
+        private static string AssetGuid(Object asset)
+        {
+            return asset == null
+                ? string.Empty
+                : AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(asset));
         }
 
         private static void SetPrivateField(object target, string fieldName, object value)

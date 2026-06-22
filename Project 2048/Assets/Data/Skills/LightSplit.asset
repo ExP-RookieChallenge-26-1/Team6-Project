@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: LightSplit
   m_EditorClassIdentifier: Game.Core::Project2048.Skills.SkillSO
   skillId: light-split
-  skillName: "빛의 분산"
+  skillName: "\uBE5B\uC758 \uBD84\uC0B0"
   skillType: 1
   effectKind: 20
   damageStatSource: 0
@@ -25,6 +25,8 @@ MonoBehaviour:
   selfCriticalStageModifier: 0
   targetAttackModifier: 0
   targetDefenseModifier: 0
+  debuffType: 0
+  debuffValue: 0
   selfDefenseBonus: 0
   selfDefensePowerModifier: 0
   selfThornRetaliationDamage: 0
@@ -38,6 +40,17 @@ MonoBehaviour:
   hpCostPercent: 0
   hpCostLeavesOne: 1
   nextBoardMoveCountModifier: 0
+  nextCostGainModifier: 0
+  nextCostGainMultiplier: 1
+  conditionalPowerBonus: 0
+  conditionalHpThreshold: 0
+  statusDuration: 0
+  statusDamage: 0
+  statusMaxHpDamagePercent: 0
+  shieldPiercePercent: 0
+  extraPowerPerConsumedCost: 0
+  maxCostCarry: 0
+  costRefund: 0
   chargedPower: 0
   consumesAllShield: 0
   nextAttackPowerMultiplier: 1
@@ -67,10 +80,13 @@ MonoBehaviour:
     sfxDelaySeconds: 0
     localOffset: {x: 0, y: 0, z: 0}
     autoDestroySeconds: 1.25
+  vfxPackage: {fileID: 11400000, guid: b5d4f6cee7a9bc645af68e1f5e477490, type: 2}
   vfxFamily: 5
   vfxPrimaryColor: {r: 0.94418, g: 0.80018, b: 0.38258, a: 1}
   vfxSecondaryColor: {r: 1, g: 1, b: 1, a: 1}
   vfxScale: 1
   vfxIntensity: 1.1
   vfxRepeatCount: 2
-  description: "다음 공격이 2회 공격으로 바뀐다. 각 공격은 원래 기술 위력의 60%로 계산된다."
+  description: "\uB2E4\uC74C \uACF5\uACA9\uC774 2\uD68C \uACF5\uACA9\uC73C\uB85C
+    \uBC14\uB010\uB2E4. \uAC01 \uACF5\uACA9\uC740 \uC6D0\uB798 \uAE30\uC220 \uC704\uB825\uC758
+    60%\uB85C \uACC4\uC0B0\uB41C\uB2E4."

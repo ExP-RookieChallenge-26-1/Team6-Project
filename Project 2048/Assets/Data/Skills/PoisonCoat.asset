@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: PoisonCoat
   m_EditorClassIdentifier: Game.Core::Project2048.Skills.SkillSO
   skillId: poison-coat
-  skillName: "독 묻히기"
+  skillName: "\uB3C5 \uBB3B\uD788\uAE30"
   skillType: 0
   effectKind: 24
   damageStatSource: 0
@@ -80,10 +80,14 @@ MonoBehaviour:
     sfxDelaySeconds: 0
     localOffset: {x: 0, y: 0, z: 0}
     autoDestroySeconds: 1.25
+  vfxPackage: {fileID: 11400000, guid: 6dd877a3f2df1dc428cca30fa7bb2685, type: 2}
   vfxFamily: 7
   vfxPrimaryColor: {r: 0.458119, g: 0.854119, b: 0.386119, a: 1}
   vfxSecondaryColor: {r: 0.14966, g: 0.32966, b: 0.13526, a: 1}
   vfxScale: 0.8
   vfxIntensity: 0.95
   vfxRepeatCount: 1
-  description: "적에게 위력 30 피해를 주고 독 3턴을 부여한다. 독은 대상 턴 종료 시 최대 체력의 5% 피해를 주며 최소 1 피해를 준다."
+  description: "\uC801\uC5D0\uAC8C \uC704\uB825 30 \uD53C\uD574\uB97C \uC8FC\uACE0
+    \uB3C5 3\uD134\uC744 \uBD80\uC5EC\uD55C\uB2E4. \uB3C5\uC740 \uB300\uC0C1 \uD134
+    \uC885\uB8CC \uC2DC \uCD5C\uB300 \uCCB4\uB825\uC758 5% \uD53C\uD574\uB97C \uC8FC\uBA70
+    \uCD5C\uC18C 1 \uD53C\uD574\uB97C \uC900\uB2E4."

@@ -1,0 +1,55 @@
+#!/usr/bin/env sh
+set -u
+
+ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
+cd "$ROOT" || exit 1
+RAN=0
+
+echo "Running configured checks..."
+
+if [ -f package.json ]; then
+  if command -v npm >/dev/null 2>&1; then
+    for script in check lint typecheck build; do
+      if grep -q "\"$script\"" package.json; then
+        npm run "$script" || exit $?
+        RAN=1
+      fi
+    done
+  else
+    echo "package.json found, but npm is not installed."
+  fi
+fi
+
+BUILD_TARGET="$(find . -maxdepth 3 -type f \( -name "*.sln" -o -name "*.slnx" \) 2>/dev/null | sort | head -n 1)"
+if [ -z "$BUILD_TARGET" ]; then
+  BUILD_TARGET="$(find . -maxdepth 3 -type f -name "*.csproj" 2>/dev/null | sort | head -n 1)"
+fi
+if [ -n "$BUILD_TARGET" ]; then
+  if command -v dotnet >/dev/null 2>&1; then
+    dotnet build "$BUILD_TARGET" -nologo -v:minimal -p:UseSharedCompilation=false || exit $?
+    RAN=1
+  else
+    echo ".NET project found, but dotnet is not installed."
+  fi
+fi
+
+if [ -f pyproject.toml ] || [ -f setup.py ]; then
+  if command -v python >/dev/null 2>&1; then
+    if [ -d src ]; then
+      python -m compileall src || exit $?
+      RAN=1
+    else
+      echo "Python config found, but no src directory was detected for compile checks."
+    fi
+  else
+    echo "Python config found, but python is not installed."
+  fi
+fi
+
+if find . -maxdepth 3 -type f -path "*/ProjectSettings/ProjectVersion.txt" 2>/dev/null | grep -q .; then
+  echo "Unity project detected. No Unity batchmode check is configured by this harness."
+fi
+
+if [ "$RAN" -eq 0 ]; then
+  echo "No configured automated checks were detected."
+fi

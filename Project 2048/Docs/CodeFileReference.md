@@ -1201,8 +1201,8 @@ SO action effect에서 쓰는 문자열 키 모음이다.
 임시 전투 씬을 시작하는 부트스트랩이다.
 
 - 필요한 `CombatManager`, `PlayerCombatController`, `EnemyController`가 없으면 런타임에 만든다.
-- 지정된 Player/Enemy 데이터가 없으면 `PrototypeCombatFactory`로 임시 데이터를 만든다.
-- `randomizeEnemyOnStart`가 켜져 있으면 전투 시작마다 임시 적 AI 풀에서 랜덤 적을 뽑는다.
+- 지정된 Player/Enemy 데이터가 없으면 전투를 시작하지 않고 오류를 남긴다.
+- `randomizeEnemyOnStart`가 켜져 있으면 씬에 바인딩된 `enemyPool`에서 랜덤 적을 뽑고, 풀이 비어 있으면 기본 `enemyData`를 그대로 쓴다.
 - `FlowController`가 있으면 `OnGameStarted`를 받은 뒤 `StartCombat`을 호출한다.
 - `FlowController`가 없는 단독 테스트/임시 실행에서는 기존처럼 `Start()`에서 바로 시작한다.
 - 씬에 작성된 `RewardManager`와 `ScoreManager`가 있으면 전투 이벤트에 바인딩한다.
@@ -1253,42 +1253,6 @@ SO action effect에서 쓰는 문자열 키 모음이다.
 조심할 점:
 
 - 툴팁 UI 자체를 만들지 않는다. 표시/숨김 콜백만 호출한다.
-
-### `Assets/Scripts/Prototype/PrototypeCombatFactory.cs`
-
-임시 플레이에 쓸 기본 데이터 세트를 만든다.
-
-- 공격 스킬 3개, 방어 스킬 3개를 만든다.
-- 임시 플레이어와 임시 적 데이터를 만든다.
-- 12개 임시 적 AI 풀을 만든다.
-- 랜덤 전투용 임시 적 하나를 만들 수 있다.
-- 적 이름과 AI 브레인 설정도 임시로 넣는다.
-
-연결:
-
-- `PrototypeCombatBootstrap`이 데이터가 없을 때 호출한다.
-- `CombatUiBuilder`도 비슷한 프로토타입 데이터를 에셋으로 만든다.
-
-조심할 점:
-
-- 여기 수치는 정식 밸런스가 아니라 확인용이다.
-- 런타임 생성 ScriptableObject라 `PrototypeCombatLoadout.Dispose`로 정리한다.
-
-### `Assets/Scripts/Prototype/PrototypeCombatLoadout.cs`
-
-임시로 만든 ScriptableObject 묶음을 관리한다.
-
-- 플레이어 데이터, 적 데이터, 스킬 목록을 담는다.
-- `ownsAssets`가 true면 Dispose 때 생성한 오브젝트를 제거한다.
-
-연결:
-
-- `PrototypeCombatFactory`가 만든 결과를 담는다.
-- `PrototypeCombatBootstrap`이 전투 재시작이나 종료 시 정리한다.
-
-조심할 점:
-
-- 플레이 중이면 `Destroy`, 에디터 모드면 `DestroyImmediate`를 쓴다.
 
 ### `Assets/Scripts/Prototype/PrototypeCombatText.cs`
 
@@ -1681,17 +1645,6 @@ UI가 전투 내부 객체를 직접 잡지 않고 snapshot/command만으로 전
 보호하는 규칙:
 
 - `PlayerSO`가 UI 초상화 등 데이터 바인딩에 남아 있어야 한다.
-
-### `Assets/Tests/EditMode/PrototypeCombatFactoryTests.cs`
-
-임시 전투 데이터 생성 규칙을 검증한다.
-
-보호하는 규칙:
-
-- 임시 로드아웃에 공격 3개, 방어 3개가 들어간다.
-- 임시 스킬 이름이 한국어 단계 이름으로 만들어진다.
-- 임시 적 AI 풀은 12개이며 일반형 8개, 강화형 4개로 구성된다.
-- 임시 적 AI 풀에는 공격 몰빵, 방어 몰빵, 밸런스와 두 디버프 순서가 포함된다.
 
 ### `Assets/Tests/EditMode/PrototypeCombatTextTests.cs`
 

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: FocusBreath
   m_EditorClassIdentifier: Game.Core::Project2048.Skills.SkillSO
   skillId: focus-breath
-  skillName: "집중 호흡"
+  skillName: "\uC9D1\uC911 \uD638\uD761"
   skillType: 1
   effectKind: 6
   damageStatSource: 0
@@ -25,6 +25,8 @@ MonoBehaviour:
   selfCriticalStageModifier: 1
   targetAttackModifier: 0
   targetDefenseModifier: 0
+  debuffType: 0
+  debuffValue: 0
   selfDefenseBonus: 0
   selfDefensePowerModifier: 0
   selfThornRetaliationDamage: 0
@@ -38,6 +40,17 @@ MonoBehaviour:
   hpCostPercent: 0
   hpCostLeavesOne: 1
   nextBoardMoveCountModifier: 0
+  nextCostGainModifier: 0
+  nextCostGainMultiplier: 1
+  conditionalPowerBonus: 0
+  conditionalHpThreshold: 0
+  statusDuration: 0
+  statusDamage: 0
+  statusMaxHpDamagePercent: 0
+  shieldPiercePercent: 0
+  extraPowerPerConsumedCost: 0
+  maxCostCarry: 0
+  costRefund: 0
   chargedPower: 0
   consumesAllShield: 0
   nextAttackPowerMultiplier: 1
@@ -67,10 +80,11 @@ MonoBehaviour:
     sfxDelaySeconds: 0
     localOffset: {x: 0, y: 0, z: 0}
     autoDestroySeconds: 1.25
+  vfxPackage: {fileID: 11400000, guid: b5d4f6cee7a9bc645af68e1f5e477490, type: 2}
   vfxFamily: 5
   vfxPrimaryColor: {r: 1, g: 1, b: 1, a: 1}
   vfxSecondaryColor: {r: 0.613166, g: 0.807566, b: 0.937166, a: 1}
   vfxScale: 0.8
   vfxIntensity: 0.9
   vfxRepeatCount: 1
-  description: "치명타 랭크를 1 올린다."
+  description: "\uCE58\uBA85\uD0C0 \uB7AD\uD06C\uB97C 1 \uC62C\uB9B0\uB2E4."

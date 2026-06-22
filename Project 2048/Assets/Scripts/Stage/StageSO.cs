@@ -9,11 +9,13 @@ namespace Project2048.Stage
     {
         [SerializeField] private StageFloor floor = StageFloor.Upper;
         [SerializeField, Range(1, StageDatabaseSO.StagesPerFloor)] private int stageNumberInFloor = 1;
+        [SerializeField] private Sprite presentationBackgroundSprite;
         [SerializeField] private List<EnemySO> enemyCandidates = new();
         [SerializeField, HideInInspector] private EnemySO enemyData;
 
         public StageFloor Floor => floor;
         public int StageNumberInFloor => stageNumberInFloor;
+        public Sprite PresentationBackgroundSprite => presentationBackgroundSprite;
         public IReadOnlyList<EnemySO> EnemyCandidates => enemyCandidates;
 
         public bool TrySelectEnemy(out EnemySO enemy)

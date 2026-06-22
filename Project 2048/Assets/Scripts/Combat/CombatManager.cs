@@ -115,6 +115,7 @@ namespace Project2048.Combat
             TurnController.Reset();
             CostWallet.Clear();
             UnbindEntityEvents();
+            enemyIntentSystem.Reset();
 
             player.Init(currentSetup.playerData);
             ApplyRunProgressToPlayer();
@@ -253,6 +254,17 @@ namespace Project2048.Combat
             if (skill == null || !skill.RequiresEnemyTarget)
             {
                 return null;
+            }
+
+            if (targetIndex >= 0)
+            {
+                if (targetIndex >= enemies.Count)
+                {
+                    return null;
+                }
+
+                var indexedTarget = enemies[targetIndex];
+                return indexedTarget != null && !indexedTarget.IsDead ? indexedTarget : null;
             }
 
             return enemies.FirstOrDefault(enemy => enemy != null && !enemy.IsDead);

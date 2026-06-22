@@ -134,6 +134,11 @@ namespace Project2048.Rewards
             }
         }
 
+        public void RestoreEquippedSkills(IEnumerable<SkillSO> skills)
+        {
+            CapturePlayerSkills(skills);
+        }
+
         public int ResolveStartingHp(int maxHp)
         {
             maxHp = Mathf.Max(1, maxHp);

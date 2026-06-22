@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Game.Core::Project2048.Stage.StageSO
   floor: 1
   stageNumberInFloor: 7
+  presentationBackgroundSprite: {fileID: -6790826067759457387, guid: 9e1ad007a13410142a6da69e5c00074e, type: 3}
   enemyCandidates:
   - {fileID: 11400000, guid: cdaaac025227dcf4d8318ff118f4d344, type: 2}
   - {fileID: 11400000, guid: bc9047c32898cce46b25ea3f49d79a0c, type: 2}

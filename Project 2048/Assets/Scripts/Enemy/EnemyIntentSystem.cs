@@ -25,6 +25,21 @@ namespace Project2048.Enemy
             aiBrain = new EnemyAiBrain(random);
         }
 
+        public void Reset()
+        {
+            intentIndexMap.Clear();
+        }
+
+        public void Reset(EnemyController enemy)
+        {
+            if (enemy == null)
+            {
+                return;
+            }
+
+            intentIndexMap.Remove(enemy);
+        }
+
         public void SetNextIntent(EnemyController enemy)
         {
             SetNextIntents(enemy, 1);

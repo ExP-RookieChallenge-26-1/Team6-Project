@@ -1,0 +1,51 @@
+#!/usr/bin/env sh
+set -u
+
+ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
+cd "$ROOT" || exit 1
+RAN=0
+
+echo "Bootstrapping detected stacks..."
+
+if [ -f package.json ]; then
+  if command -v npm >/dev/null 2>&1; then
+    if [ -f package-lock.json ]; then
+      npm ci || exit $?
+    else
+      npm install || exit $?
+    fi
+    RAN=1
+  else
+    echo "package.json found, but npm is not installed."
+  fi
+fi
+
+BUILD_TARGET="$(find . -maxdepth 3 -type f \( -name "*.sln" -o -name "*.slnx" \) 2>/dev/null | sort | head -n 1)"
+if [ -z "$BUILD_TARGET" ]; then
+  BUILD_TARGET="$(find . -maxdepth 3 -type f -name "*.csproj" 2>/dev/null | sort | head -n 1)"
+fi
+if [ -n "$BUILD_TARGET" ]; then
+  if command -v dotnet >/dev/null 2>&1; then
+    dotnet restore "$BUILD_TARGET" || exit $?
+    RAN=1
+  else
+    echo ".NET project found, but dotnet is not installed."
+  fi
+fi
+
+if [ -f requirements.txt ]; then
+  if command -v python >/dev/null 2>&1; then
+    python -m pip install -r requirements.txt || exit $?
+    RAN=1
+  else
+    echo "requirements.txt found, but python is not installed."
+  fi
+fi
+
+if find . -maxdepth 3 -type f -path "*/ProjectSettings/ProjectVersion.txt" 2>/dev/null | grep -q .; then
+  echo "Unity project detected. Unity Package Manager dependencies are resolved by Unity Editor; no CLI install was assumed."
+fi
+
+if [ "$RAN" -eq 0 ]; then
+  echo "No installable root dependency stack was detected."
+fi

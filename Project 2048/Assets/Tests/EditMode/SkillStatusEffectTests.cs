@@ -34,13 +34,13 @@ namespace Project2048.Tests
             var enemy = CreateEnemy(maxHp: 220, attackPower: 0);
             var executor = new SkillExecutor();
 
-            executor.Execute(CreateSkill("bleeding-cut", SkillType.Attack, SkillEffectKind.BleedAttack, power: 0, statusDuration: 2, statusDamage: 20), player, enemy, new DamageCalculator(new System.Random(1)));
+            executor.Execute(CreateSkill("bleed-test", SkillType.Attack, SkillEffectKind.BleedAttack, power: 0, statusDuration: 2, statusDamage: 20), player, enemy, new DamageCalculator(new System.Random(1)));
             executor.Execute(CreateSkill("poison-coat", SkillType.Attack, SkillEffectKind.PoisonAttack, power: 0, statusDuration: 3, statusMaxHpDamagePercent: 0.05f), player, enemy, new DamageCalculator(new System.Random(1)));
 
             Assert.That(enemy.BleedTurns, Is.EqualTo(2));
             Assert.That(enemy.PoisonTurns, Is.EqualTo(3));
 
-            executor.Execute(CreateSkill("open-wound", SkillType.Attack, SkillEffectKind.OpenWoundAttack, power: 0, conditionalPowerBonus: 50), player, enemy, new DamageCalculator(new System.Random(1)));
+            executor.Execute(CreateSkill("open-wound-test", SkillType.Attack, SkillEffectKind.OpenWoundAttack, power: 0, conditionalPowerBonus: 50), player, enemy, new DamageCalculator(new System.Random(1)));
 
             Assert.That(enemy.BleedTurns, Is.EqualTo(3));
             Assert.That(enemy.PoisonTurns, Is.EqualTo(4));

@@ -6,7 +6,7 @@ namespace Project2048.Audio
 {
     public class SimpleBgmDucker : MonoBehaviour
     {
-        public const float DefaultBaseVolumeDb = -14f;
+        public const float DefaultBaseVolumeDb = Project2048AudioSettings.DefaultBgmVolumeDb;
         public const float DefaultDuckedVolumeDb = -20f;
         public const float DefaultAttackSeconds = 0.05f;
         public const float DefaultHoldSeconds = 0.15f;
@@ -59,7 +59,7 @@ namespace Project2048.Audio
 
         public void ApplyBaseVolume()
         {
-            ApplyBgmVolume(baseVolumeDb);
+            ApplyBgmVolume(ResolveUserBaseVolumeDb());
         }
 
         public static float EvaluateVolumeDb(
@@ -133,6 +133,7 @@ namespace Project2048.Audio
         {
             var attack = Mathf.Max(0f, attackSeconds);
             var release = Mathf.Max(0f, releaseSeconds);
+            var targetDuckedVolumeDb = ResolveUserDuckedVolumeDb();
 
             if (attack > 0f)
             {
@@ -140,12 +141,12 @@ namespace Project2048.Audio
                 while (elapsed < attack)
                 {
                     elapsed += Time.unscaledDeltaTime;
-                    ApplyBgmVolume(Mathf.Lerp(startVolumeDb, duckedVolumeDb, Mathf.Clamp01(elapsed / attack)));
+                    ApplyBgmVolume(Mathf.Lerp(startVolumeDb, targetDuckedVolumeDb, Mathf.Clamp01(elapsed / attack)));
                     yield return null;
                 }
             }
 
-            ApplyBgmVolume(duckedVolumeDb);
+            ApplyBgmVolume(targetDuckedVolumeDb);
 
             var holdEnd = Time.unscaledTime + Mathf.Max(0f, holdSeconds);
             while (Time.unscaledTime < holdEnd)
@@ -153,13 +154,14 @@ namespace Project2048.Audio
                 yield return null;
             }
 
+            var targetBaseVolumeDb = ResolveUserBaseVolumeDb();
             if (release > 0f)
             {
                 var elapsed = 0f;
                 while (elapsed < release)
                 {
                     elapsed += Time.unscaledDeltaTime;
-                    ApplyBgmVolume(Mathf.Lerp(duckedVolumeDb, baseVolumeDb, Mathf.Clamp01(elapsed / release)));
+                    ApplyBgmVolume(Mathf.Lerp(targetDuckedVolumeDb, targetBaseVolumeDb, Mathf.Clamp01(elapsed / release)));
                     yield return null;
                 }
             }
@@ -195,6 +197,20 @@ namespace Project2048.Audio
             {
                 audioMixer.SetFloat(bgmVolumeParameter, volumeDb);
             }
+        }
+
+        private float ResolveUserBaseVolumeDb()
+        {
+            return Project2048AudioPreferences.VolumeToDb(
+                Project2048AudioChannel.BGM,
+                Project2048AudioPreferences.GetNormalizedVolume(Project2048AudioChannel.BGM));
+        }
+
+        private float ResolveUserDuckedVolumeDb()
+        {
+            return Project2048AudioPreferences.OffsetDb(
+                ResolveUserBaseVolumeDb(),
+                duckedVolumeDb - baseVolumeDb);
         }
     }
 }

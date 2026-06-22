@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: GatherLight
   m_EditorClassIdentifier: Game.Core::Project2048.Skills.SkillSO
   skillId: gather-light
-  skillName: "빛 모으기"
+  skillName: "\uBE5B \uBAA8\uC73C\uAE30"
   skillType: 0
   effectKind: 7
   damageStatSource: 0
@@ -25,6 +25,8 @@ MonoBehaviour:
   selfCriticalStageModifier: 0
   targetAttackModifier: 0
   targetDefenseModifier: 0
+  debuffType: 0
+  debuffValue: 0
   selfDefenseBonus: 0
   selfDefensePowerModifier: 0
   selfThornRetaliationDamage: 0
@@ -38,6 +40,17 @@ MonoBehaviour:
   hpCostPercent: 0
   hpCostLeavesOne: 1
   nextBoardMoveCountModifier: 0
+  nextCostGainModifier: 0
+  nextCostGainMultiplier: 1
+  conditionalPowerBonus: 0
+  conditionalHpThreshold: 0
+  statusDuration: 0
+  statusDamage: 0
+  statusMaxHpDamagePercent: 0
+  shieldPiercePercent: 0
+  extraPowerPerConsumedCost: 0
+  maxCostCarry: 0
+  costRefund: 0
   chargedPower: 120
   consumesAllShield: 0
   nextAttackPowerMultiplier: 1
@@ -67,10 +80,13 @@ MonoBehaviour:
     sfxDelaySeconds: 0.3
     localOffset: {x: 0, y: 0, z: 0}
     autoDestroySeconds: 1.55
+  vfxPackage: {fileID: 11400000, guid: ce6936567c524c2419e38a7e576cff43, type: 2}
   vfxFamily: 11
   vfxPrimaryColor: {r: 0.882856, g: 0.954856, b: 0.983656, a: 1}
   vfxSecondaryColor: {r: 1, g: 1, b: 1, a: 1}
   vfxScale: 1.8
   vfxIntensity: 1.4
   vfxRepeatCount: 1
-  description: "이번 턴에는 빛을 모은다. 다음 플레이어 턴 시작 시 적에게 위력 120의 빛 공격을 자동으로 사용한다."
+  description: "\uC774\uBC88 \uD134\uC5D0\uB294 \uBE5B\uC744 \uBAA8\uC740\uB2E4.
+    \uB2E4\uC74C \uD50C\uB808\uC774\uC5B4 \uD134 \uC2DC\uC791 \uC2DC \uC801\uC5D0\uAC8C
+    \uC704\uB825 120\uC758 \uBE5B \uACF5\uACA9\uC744 \uC790\uB3D9\uC73C\uB85C \uC0AC\uC6A9\uD55C\uB2E4."

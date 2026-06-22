@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Execute
   m_EditorClassIdentifier: Game.Core::Project2048.Skills.SkillSO
   skillId: execute
-  skillName: "마무리"
+  skillName: "\uB9C8\uBB34\uB9AC"
   skillType: 0
   effectKind: 26
   damageStatSource: 0
@@ -80,10 +80,13 @@ MonoBehaviour:
     sfxDelaySeconds: 0
     localOffset: {x: 0, y: 0, z: 0}
     autoDestroySeconds: 1.25
+  vfxPackage: {fileID: 11400000, guid: f4b4a8658c0969c4c8e0271753d3026c, type: 2}
   vfxFamily: 4
   vfxPrimaryColor: {r: 0.935944, g: 0.899944, b: 0.791944, a: 1}
   vfxSecondaryColor: {r: 0.242577, g: 0.220977, b: 0.192177, a: 1}
   vfxScale: 0.95
   vfxIntensity: 1.1
   vfxRepeatCount: 1
-  description: "적에게 위력 40 피해를 준다. 대상의 현재 체력이 최대 체력의 30% 이하라면 위력 80으로 공격한다."
+  description: "\uC801\uC5D0\uAC8C \uC704\uB825 40 \uD53C\uD574\uB97C \uC900\uB2E4.
+    \uB300\uC0C1\uC758 \uD604\uC7AC \uCCB4\uB825\uC774 \uCD5C\uB300 \uCCB4\uB825\uC758
+    30% \uC774\uD558\uB77C\uBA74 \uC704\uB825 80\uC73C\uB85C \uACF5\uACA9\uD55C\uB2E4."

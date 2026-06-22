@@ -1,0 +1,48 @@
+#!/usr/bin/env sh
+set -u
+
+ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
+cd "$ROOT" || exit 1
+
+echo "Codex harness doctor"
+echo "Root: $ROOT"
+echo "Current directory: $(pwd)"
+echo
+
+if command -v git >/dev/null 2>&1; then
+  echo "Git status:"
+  git status --short
+else
+  echo "git: not installed"
+fi
+
+echo
+echo "Detected project files:"
+FOUND=0
+for path in package.json pyproject.toml pytest.ini requirements.txt; do
+  if [ -e "$path" ]; then
+    echo " - $path"
+    FOUND=1
+  fi
+done
+
+PROJECT_FILES="$(find . -maxdepth 3 -type f \( -name "*.sln" -o -name "*.slnx" -o -name "*.csproj" \) 2>/dev/null | sort)"
+if [ -n "$PROJECT_FILES" ]; then
+  printf '%s\n' "$PROJECT_FILES" | while IFS= read -r path; do
+    echo " - ${path#./}"
+  done
+  FOUND=1
+fi
+
+UNITY_FILES="$(find . -maxdepth 3 -type f -path "*/ProjectSettings/ProjectVersion.txt" 2>/dev/null | sort)"
+if [ -n "$UNITY_FILES" ]; then
+  printf '%s\n' "$UNITY_FILES" | while IFS= read -r version_file; do
+    project_dir="$(dirname "$(dirname "$version_file")")"
+    echo " - Unity project: ${project_dir#./}"
+  done
+  FOUND=1
+fi
+
+if [ "$FOUND" -eq 0 ]; then
+  echo " - none of the common stack markers were found"
+fi

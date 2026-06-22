@@ -13,10 +13,13 @@ namespace Project2048.Prototype
         [SerializeField] private TMP_Text detailText;
         [SerializeField, Min(0.25f)] private float replayIntervalSeconds = 2.35f;
         [SerializeField, Min(0f)] private float initialReplayDelaySeconds;
+        [SerializeField, Tooltip("Prefab assets used by the runtime PreviewSkillEffect path. These are references, not duplicate scene playback.")]
+        private GameObject[] runtimeVfxPrefabs = System.Array.Empty<GameObject>();
 
         private float nextReplayTime;
 
         public SkillSO Skill => skill;
+        public GameObject[] RuntimeVfxPrefabs => runtimeVfxPrefabs;
 
         public void Configure(
             SkillSO assignedSkill,
@@ -63,13 +66,16 @@ namespace Project2048.Prototype
         [ContextMenu("Replay Effect")]
         public void Replay()
         {
-            if (!Application.isPlaying || skill == null || worldView == null)
+            if (skill == null || worldView == null)
             {
                 return;
             }
 
             worldView.PreviewSkillEffect(skill);
-            nextReplayTime = Time.time + Mathf.Max(0.25f, replayIntervalSeconds);
+            if (Application.isPlaying)
+            {
+                nextReplayTime = Time.time + Mathf.Max(0.25f, replayIntervalSeconds);
+            }
         }
 
         private void RefreshLabels()
@@ -82,7 +88,7 @@ namespace Project2048.Prototype
             if (detailText != null)
             {
                 detailText.text = skill != null
-                    ? $"{skill.skillId}  /  {skill.vfxFamily}"
+                    ? $"{skill.skillId}  /  {skill.ResolveVfxFamily()}"
                     : string.Empty;
             }
         }

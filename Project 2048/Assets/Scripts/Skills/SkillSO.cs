@@ -66,6 +66,7 @@ namespace Project2048.Skills
         public Sprite icon;
         public CombatEffectBinding activationEffect = new();
         [Header("Reusable VFX")]
+        public SkillVfxPackageSO vfxPackage;
         public SkillVfxFamily vfxFamily;
         public Color vfxPrimaryColor = Color.white;
         public Color vfxSecondaryColor = Color.white;
@@ -81,6 +82,13 @@ namespace Project2048.Skills
         public bool CanEnemyUse =>
             availability == SkillAvailability.Shared ||
             availability == SkillAvailability.EnemyOnly;
+
+        public SkillVfxFamily ResolveVfxFamily()
+        {
+            return vfxPackage != null && vfxPackage.family != SkillVfxFamily.None
+                ? vfxPackage.family
+                : vfxFamily;
+        }
 
         public bool RequiresEnemyTarget => ResolveEffectKind() switch
         {

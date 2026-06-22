@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Darkness
   m_EditorClassIdentifier: Game.Core::Project2048.Skills.SkillSO
   skillId: darkness
-  skillName: "암흑"
+  skillName: "\uC554\uD751"
   skillType: 2
   effectKind: 22
   damageStatSource: 0
@@ -42,6 +42,15 @@ MonoBehaviour:
   nextBoardMoveCountModifier: 0
   nextCostGainModifier: 0
   nextCostGainMultiplier: 1
+  conditionalPowerBonus: 0
+  conditionalHpThreshold: 0
+  statusDuration: 0
+  statusDamage: 0
+  statusMaxHpDamagePercent: 0
+  shieldPiercePercent: 0
+  extraPowerPerConsumedCost: 0
+  maxCostCarry: 0
+  costRefund: 0
   chargedPower: 0
   consumesAllShield: 0
   nextAttackPowerMultiplier: 1
@@ -71,10 +80,12 @@ MonoBehaviour:
     sfxDelaySeconds: 0
     localOffset: {x: 0, y: 0, z: 0}
     autoDestroySeconds: 1.25
+  vfxPackage: {fileID: 11400000, guid: f552e5b78b592674fa925c734724031d, type: 2}
   vfxFamily: 9
   vfxPrimaryColor: {r: 0.02, g: 0.02, b: 0.04, a: 1}
   vfxSecondaryColor: {r: 0.243386, g: 0.099386, b: 0.365786, a: 1}
   vfxScale: 1
   vfxIntensity: 1.1
   vfxRepeatCount: 1
-  description: "다음 플레이어 보드에 암흑 장애물 1개를 생성한다."
+  description: "\uB2E4\uC74C \uD50C\uB808\uC774\uC5B4 \uBCF4\uB4DC\uC5D0 \uC554\uD751
+    \uC7A5\uC560\uBB3C 1\uAC1C\uB97C \uC0DD\uC131\uD55C\uB2E4."

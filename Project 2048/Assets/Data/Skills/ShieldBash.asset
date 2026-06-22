@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ShieldBash
   m_EditorClassIdentifier: Game.Core::Project2048.Skills.SkillSO
   skillId: shield-bash
-  skillName: "방패 밀치기"
+  skillName: "\uBC29\uD328 \uBC00\uCE58\uAE30"
   skillType: 0
   effectKind: 13
   damageStatSource: 2
@@ -25,6 +25,8 @@ MonoBehaviour:
   selfCriticalStageModifier: 0
   targetAttackModifier: 0
   targetDefenseModifier: 0
+  debuffType: 0
+  debuffValue: 0
   selfDefenseBonus: 0
   selfDefensePowerModifier: 0
   selfThornRetaliationDamage: 0
@@ -38,6 +40,17 @@ MonoBehaviour:
   hpCostPercent: 0
   hpCostLeavesOne: 1
   nextBoardMoveCountModifier: 0
+  nextCostGainModifier: 0
+  nextCostGainMultiplier: 1
+  conditionalPowerBonus: 0
+  conditionalHpThreshold: 0
+  statusDuration: 0
+  statusDamage: 0
+  statusMaxHpDamagePercent: 0
+  shieldPiercePercent: 0
+  extraPowerPerConsumedCost: 0
+  maxCostCarry: 0
+  costRefund: 0
   chargedPower: 0
   consumesAllShield: 0
   nextAttackPowerMultiplier: 1
@@ -67,10 +80,13 @@ MonoBehaviour:
     sfxDelaySeconds: 0
     localOffset: {x: 0, y: 0, z: 0}
     autoDestroySeconds: 1.25
+  vfxPackage: {fileID: 11400000, guid: 33de0e3e1b3a6d14bbbb965818d265ca, type: 2}
   vfxFamily: 3
   vfxPrimaryColor: {r: 0.354632, g: 0.570632, b: 0.873032, a: 1}
   vfxSecondaryColor: {r: 0.799457, g: 0.857057, b: 0.921857, a: 1}
   vfxScale: 1
   vfxIntensity: 1.05
   vfxRepeatCount: 1
-  description: "현재 보호막 수치로 계산하여 적에게 위력 60 피해를 준다. 보호막은 소모하지 않는다."
+  description: "\uD604\uC7AC \uBCF4\uD638\uB9C9 \uC218\uCE58\uB85C \uACC4\uC0B0\uD558\uC5EC
+    \uC801\uC5D0\uAC8C \uC704\uB825 60 \uD53C\uD574\uB97C \uC900\uB2E4. \uBCF4\uD638\uB9C9\uC740
+    \uC18C\uBAA8\uD558\uC9C0 \uC54A\uB294\uB2E4."

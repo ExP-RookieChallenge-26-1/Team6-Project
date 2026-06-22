@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: AfterglowSave
   m_EditorClassIdentifier: Game.Core::Project2048.Skills.SkillSO
   skillId: afterglow-save
-  skillName: "잔광 저장"
+  skillName: "\uC794\uAD11 \uC800\uC7A5"
   skillType: 1
   effectKind: 32
   damageStatSource: 0
@@ -80,10 +80,14 @@ MonoBehaviour:
     sfxDelaySeconds: 0
     localOffset: {x: 0, y: 0, z: 0}
     autoDestroySeconds: 1.25
+  vfxPackage: {fileID: 11400000, guid: b5d4f6cee7a9bc645af68e1f5e477490, type: 2}
   vfxFamily: 5
   vfxPrimaryColor: {r: 0.862222, g: 0.775822, b: 0.372622, a: 1}
   vfxSecondaryColor: {r: 0.32391, g: 0.25191, b: 0.10791, a: 1}
   vfxScale: 0.8
   vfxIntensity: 1
   vfxRepeatCount: 1
-  description: "이번 턴 종료 시 남은 코스트를 최대 4까지 다음 턴으로 이월한다. 이월 코스트는 한 번 적용되면 사라진다."
+  description: "\uC774\uBC88 \uD134 \uC885\uB8CC \uC2DC \uB0A8\uC740 \uCF54\uC2A4\uD2B8\uB97C
+    \uCD5C\uB300 4\uAE4C\uC9C0 \uB2E4\uC74C \uD134\uC73C\uB85C \uC774\uC6D4\uD55C\uB2E4.
+    \uC774\uC6D4 \uCF54\uC2A4\uD2B8\uB294 \uD55C \uBC88 \uC801\uC6A9\uB418\uBA74
+    \uC0AC\uB77C\uC9C4\uB2E4."

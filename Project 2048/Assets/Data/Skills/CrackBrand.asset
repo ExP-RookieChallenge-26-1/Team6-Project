@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: CrackBrand
   m_EditorClassIdentifier: Game.Core::Project2048.Skills.SkillSO
   skillId: crack-brand
-  skillName: "균열 낙인"
+  skillName: "\uADE0\uC5F4 \uB099\uC778"
   skillType: 2
   effectKind: 31
   damageStatSource: 0
@@ -80,10 +80,14 @@ MonoBehaviour:
     sfxDelaySeconds: 0
     localOffset: {x: 0, y: 0, z: 0}
     autoDestroySeconds: 1.25
+  vfxPackage: {fileID: 11400000, guid: 88b30072ed0cb6d4eb21f3ffcc8cac9f, type: 2}
   vfxFamily: 6
   vfxPrimaryColor: {r: 0.671591, g: 0.477191, b: 0.873191, a: 1}
   vfxSecondaryColor: {r: 0.072009, g: 0.036009, b: 0.144009, a: 1}
   vfxScale: 0.85
   vfxIntensity: 1
   vfxRepeatCount: 1
-  description: "대상에게 낙인을 부여한다. 낙인이 있는 대상이 다음 공격을 받으면 추가 피해 40을 받고 낙인이 해제된다."
+  description: "\uB300\uC0C1\uC5D0\uAC8C \uB099\uC778\uC744 \uBD80\uC5EC\uD55C\uB2E4.
+    \uB099\uC778\uC774 \uC788\uB294 \uB300\uC0C1\uC774 \uB2E4\uC74C \uACF5\uACA9\uC744
+    \uBC1B\uC73C\uBA74 \uCD94\uAC00 \uD53C\uD574 40\uC744 \uBC1B\uACE0 \uB099\uC778\uC774
+    \uD574\uC81C\uB41C\uB2E4."

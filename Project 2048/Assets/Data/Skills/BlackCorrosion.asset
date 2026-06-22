@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: BlackCorrosion
   m_EditorClassIdentifier: Game.Core::Project2048.Skills.SkillSO
   skillId: black-corrosion
-  skillName: "검은 부식"
+  skillName: "\uAC80\uC740 \uBD80\uC2DD"
   skillType: 2
   effectKind: 21
   damageStatSource: 0
@@ -80,10 +80,14 @@ MonoBehaviour:
     sfxDelaySeconds: 0
     localOffset: {x: 0, y: 0, z: 0}
     autoDestroySeconds: 1.25
+  vfxPackage: {fileID: 11400000, guid: f552e5b78b592674fa925c734724031d, type: 2}
   vfxFamily: 9
   vfxPrimaryColor: {r: 0.089008, g: 0.081808, b: 0.125008, a: 1}
   vfxSecondaryColor: {r: 0.370562, g: 0.183362, b: 0.464162, a: 1}
   vfxScale: 0.95
   vfxIntensity: 1
   vfxRepeatCount: 1
-  description: "플레이어의 다음 턴 코스트 획득량에서 3을 차감한다. 코스트 획득량은 0 미만으로 내려가지 않는다."
+  description: "\uD50C\uB808\uC774\uC5B4\uC758 \uB2E4\uC74C \uD134 \uCF54\uC2A4\uD2B8
+    \uD68D\uB4DD\uB7C9\uC5D0\uC11C 3\uC744 \uCC28\uAC10\uD55C\uB2E4. \uCF54\uC2A4\uD2B8
+    \uD68D\uB4DD\uB7C9\uC740 0 \uBBF8\uB9CC\uC73C\uB85C \uB0B4\uB824\uAC00\uC9C0
+    \uC54A\uB294\uB2E4."

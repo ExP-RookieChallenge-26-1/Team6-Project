@@ -50,6 +50,40 @@ namespace Project2048.Tests
         }
 
         [Test]
+        public void Reset_RestartsPatternForReusedController()
+        {
+            var enemy = CreateEnemy("ReusedEnemy");
+            var data = CreateEnemyData();
+            data.intentPattern = new List<EnemyIntent>
+            {
+                new()
+                {
+                    intentType = EnemyIntentType.Attack,
+                    value = 9,
+                },
+                new()
+                {
+                    intentType = EnemyIntentType.Defense,
+                    value = 5,
+                },
+            };
+            enemy.Init(data);
+
+            var system = new EnemyIntentSystem(new System.Random(1));
+            system.SetNextIntent(enemy);
+            Assert.That(enemy.CurrentIntent.intentType, Is.EqualTo(EnemyIntentType.Attack));
+
+            system.SetNextIntent(enemy);
+            Assert.That(enemy.CurrentIntent.intentType, Is.EqualTo(EnemyIntentType.Defense));
+
+            system.Reset();
+            system.SetNextIntent(enemy);
+
+            Assert.That(enemy.CurrentIntent.intentType, Is.EqualTo(EnemyIntentType.Attack));
+            Assert.That(enemy.CurrentIntent.value, Is.EqualTo(9));
+        }
+
+        [Test]
         public void SetNextIntent_WhenPatternIsEmpty_InsertsDebuffsByConfiguredPattern()
         {
             var enemy = CreateEnemy("BrainEnemy");

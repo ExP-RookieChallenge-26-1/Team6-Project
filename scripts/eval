@@ -1,0 +1,8 @@
+#!/usr/bin/env sh
+set -u
+
+SCRIPT_DIR="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
+
+"$SCRIPT_DIR/doctor" || exit $?
+"$SCRIPT_DIR/bootstrap" || exit $?
+"$SCRIPT_DIR/check" || exit $?

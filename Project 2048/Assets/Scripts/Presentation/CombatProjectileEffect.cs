@@ -7,7 +7,7 @@ namespace Project2048.Presentation
         [SerializeField] private Vector3 sourceLocalOffset = new(0.45f, 0.25f, 0f);
         [SerializeField] private Vector3 targetLocalOffset = new(-0.2f, 0.35f, 0f);
         [SerializeField, Min(0.05f)] private float travelSeconds = 0.55f;
-        [SerializeField, Min(0f)] private float arcHeight = 0.45f;
+        [SerializeField, Min(0f)] private float arcHeight;
         [SerializeField, Min(0f)] private float impactLifetimeSeconds = 0.55f;
         [SerializeField] private ParticleSystem[] travelParticles;
         [SerializeField] private ParticleSystem[] impactParticles;
@@ -21,7 +21,9 @@ namespace Project2048.Presentation
         private bool launched;
         private bool impacted;
 
-        public float EstimatedLifetimeSeconds => Mathf.Max(0.05f, travelSeconds) + Mathf.Max(0f, impactLifetimeSeconds);
+        public float TravelSeconds => Mathf.Max(0.05f, travelSeconds);
+
+        public float EstimatedLifetimeSeconds => TravelSeconds + Mathf.Max(0f, impactLifetimeSeconds);
 
         public void Launch(Transform sourceTransform, Transform targetTransform, Vector3 targetOffsetOverride)
         {

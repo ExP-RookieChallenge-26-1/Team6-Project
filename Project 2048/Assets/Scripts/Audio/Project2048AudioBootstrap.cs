@@ -17,7 +17,9 @@ namespace Project2048.Audio
             var existingPlayer = Object.FindAnyObjectByType<PersistentBgmPlayer>(FindObjectsInactive.Include);
             if (existingPlayer != null)
             {
-                EnsureButtonClickRouter(existingPlayer.gameObject, Project2048AudioSettings.LoadDefault());
+                var existingSettings = Project2048AudioSettings.LoadDefault();
+                Project2048AudioPreferences.ApplySavedVolumes(existingSettings);
+                EnsureButtonClickRouter(existingPlayer.gameObject, existingSettings);
                 return existingPlayer.gameObject;
             }
 
@@ -37,6 +39,7 @@ namespace Project2048.Audio
             bgmPlayer.Initialize(settings);
 
             EnsureButtonClickRouter(root, settings);
+            Project2048AudioPreferences.ApplySavedVolumes(settings);
 
             return root;
         }

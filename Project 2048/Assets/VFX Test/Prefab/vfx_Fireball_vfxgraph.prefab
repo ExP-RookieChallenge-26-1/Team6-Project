@@ -103,7 +103,7 @@ TrailRenderer:
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 0.05660379, g: 0.018259289, b: 0, a: 1}
+      key0: {r: 0.078431, g: 0.360784, b: 0.388235, a: 1}
       key1: {r: 0, g: 0, b: 0, a: 0}
       key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
@@ -269,6 +269,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2444439819238075316}
+  - component: {fileID: 6893143204754316401}
   m_Layer: 0
   m_Name: vfx_Fireball_vfxgraph
   m_TagString: Untagged
@@ -285,7 +286,7 @@ Transform:
   m_GameObject: {fileID: 5592946645197749577}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.66, y: 0.29441, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -294,6 +295,25 @@ Transform:
   - {fileID: 2372053742977271319}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6893143204754316401
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5592946645197749577}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8717abe26227d2a41bc3f97ce864346c, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Game.Core::Project2048.Presentation.CombatProjectileEffect
+  sourceLocalOffset: {x: 0.48, y: 0.28, z: 0}
+  targetLocalOffset: {x: -0.2, y: 0.34, z: 0}
+  travelSeconds: 0.48
+  arcHeight: 0.32
+  impactLifetimeSeconds: 0.5
+  travelParticles: []
+  impactParticles: []
 --- !u!1 &8149894579875175495
 GameObject:
   m_ObjectHideFlags: 0
@@ -397,7 +417,7 @@ TrailRenderer:
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 0.6784314, g: 0.21176471, b: 0, a: 1}
+      key0: {r: 0.286275, g: 0.686275, b: 0.709804, a: 1}
       key1: {r: 0, g: 0, b: 0, a: 0}
       key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}

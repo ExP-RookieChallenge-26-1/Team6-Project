@@ -420,9 +420,9 @@ namespace Project2048.Presentation
             var velocity = system.velocityOverLifetime;
             velocity.enabled = true;
             velocity.space = ParticleSystemSimulationSpace.World;
-            velocity.x = 0f;
+            velocity.x = new ParticleSystem.MinMaxCurve(0f, 0f);
             velocity.y = new ParticleSystem.MinMaxCurve(minY, maxY);
-            velocity.z = 0f;
+            velocity.z = new ParticleSystem.MinMaxCurve(0f, 0f);
         }
 
         private static void ConfigureNoise(

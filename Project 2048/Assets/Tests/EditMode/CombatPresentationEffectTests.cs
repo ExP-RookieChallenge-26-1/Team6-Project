@@ -2729,17 +2729,21 @@ namespace Project2048.Tests
                 {
                     Assert.That(resolvedFamily, Is.EqualTo(SkillVfxFamily.SpikedBurst), path);
                 }
-                else if (path.EndsWith("BleedingCut.asset", System.StringComparison.Ordinal) ||
-                    path.EndsWith("OpenWound.asset", System.StringComparison.Ordinal) ||
-                    path.EndsWith("BloodFang.asset", System.StringComparison.Ordinal))
+                else if (skill.skillId == "bleeding-cut" ||
+                    skill.skillId == "open-wound" ||
+                    skill.skillId == "blood-fang")
                 {
                     Assert.That(resolvedFamily, Is.EqualTo(SkillVfxFamily.FlameBurst), path);
                     Assert.That(skill.activationEffect?.vfxPrefab, Is.Not.Null, path);
                     Assert.That(
+                        AssetDatabase.GetAssetPath(skill.activationEffect.vfxPrefab),
+                        Is.EqualTo("Assets/VFX Test/Prefab/vfx_Fireball_vfxgraph.prefab"),
+                        path);
+                    Assert.That(
                         skill.activationEffect.vfxPrefab.GetComponentInChildren<CombatProjectileEffect>(true),
                         Is.Not.Null,
                         path);
-                    if (path.EndsWith("OpenWound.asset", System.StringComparison.Ordinal))
+                    if (skill.skillId == "open-wound")
                     {
                         Assert.That(skill.vfxPackage.secondaryPrefab, Is.Not.Null, path);
                         Assert.That(

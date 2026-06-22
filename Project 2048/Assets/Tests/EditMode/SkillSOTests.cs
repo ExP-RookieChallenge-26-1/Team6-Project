@@ -62,6 +62,10 @@ namespace Project2048.Tests
                 Assert.That(fireballSkill.vfxPrimaryColor, Is.EqualTo(new Color(0.286275f, 0.686275f, 0.709804f, 1f)), fireballSkill.skillId);
                 Assert.That(fireballSkill.activationEffect?.vfxPrefab, Is.Not.Null, fireballSkill.skillId);
                 Assert.That(
+                    AssetDatabase.GetAssetPath(fireballSkill.activationEffect.vfxPrefab),
+                    Is.EqualTo("Assets/VFX Test/Prefab/vfx_Fireball_vfxgraph.prefab"),
+                    fireballSkill.skillId);
+                Assert.That(
                     fireballSkill.activationEffect.vfxPrefab.GetComponentInChildren<CombatProjectileEffect>(true),
                     Is.Not.Null,
                     fireballSkill.skillId);

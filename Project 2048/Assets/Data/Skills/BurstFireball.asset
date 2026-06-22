@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e39edfbbdac2c064e877e5f3f784bab9, type: 3}
-  m_Name: OpenWound
+  m_Name: 폭렬
   m_EditorClassIdentifier: Game.Core::Project2048.Skills.SkillSO
   skillId: open-wound
   skillName: "폭렬"
@@ -61,10 +61,10 @@ MonoBehaviour:
   icon: {fileID: 0}
   activationEffect:
     sfxClip: {fileID: 8300000, guid: eea8202b4af9e2343b6c28a4bdd87ca2, type: 3}
-    vfxPrefab: {fileID: 899824043960030591, guid: 5f8cf79947e4ddf47aee451b2b9de40a, type: 3}
+    vfxPrefab: {fileID: 5592946645197749577, guid: e9b54a20e0cab144a95032ef68460208, type: 3}
     animationClip: {fileID: 0}
     particleEffect:
-      objectName: OpenWoundSkillParticles
+      objectName: BurstFireballSkillParticles
       particlePrefab: {fileID: 0}
       particleMaterial: {fileID: 2100000, guid: a19a598f9cd9ddb0f7543ff1237ae3cd, type: 2}
       useParticleColor: 1

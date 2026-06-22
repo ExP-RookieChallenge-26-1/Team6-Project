@@ -3437,7 +3437,7 @@ GameObject:
   - component: {fileID: 207056475}
   - component: {fileID: 207056474}
   m_Layer: 0
-  m_Name: Slot_02_open-wound
+  m_Name: Slot_02_BurstFireball
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6599,7 +6599,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: blood-fang  /  Fireball + FlameBurst
+  m_text: 불사르기  /  Fireball VFX Graph
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 04f6d590a48a3f44c8b54409e54f5fde, type: 2}
   m_sharedMaterial: {fileID: 1794097870625567047, guid: 04f6d590a48a3f44c8b54409e54f5fde, type: 2}
@@ -21723,7 +21723,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: open-wound  /  Fireball + LayeredExplosion
+  m_text: 폭렬  /  Fireball VFX Graph + LayeredExplosion
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 04f6d590a48a3f44c8b54409e54f5fde, type: 2}
   m_sharedMaterial: {fileID: 1794097870625567047, guid: 04f6d590a48a3f44c8b54409e54f5fde, type: 2}
@@ -21996,7 +21996,7 @@ GameObject:
   - component: {fileID: 1295573309}
   - component: {fileID: 1295573308}
   m_Layer: 0
-  m_Name: Slot_04_bleeding-cut
+  m_Name: Slot_04_Fireball
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -24894,7 +24894,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: bleeding-cut  /  Fireball + FlameBurst
+  m_text: 화염구  /  Fireball VFX Graph
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 04f6d590a48a3f44c8b54409e54f5fde, type: 2}
   m_sharedMaterial: {fileID: 1794097870625567047, guid: 04f6d590a48a3f44c8b54409e54f5fde, type: 2}
@@ -28175,7 +28175,7 @@ GameObject:
   - component: {fileID: 1749886524}
   - component: {fileID: 1749886523}
   m_Layer: 0
-  m_Name: Slot_30_blood-fang
+  m_Name: Slot_30_BurnOut
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -28,4 +28,4 @@ MonoBehaviour:
   permanentCriticalDamageMultiplierBonus: 0
   skillToLearn: {fileID: 11400000, guid: df0e4934c5af4ae3ac415c92684f8787, type: 2}
   enemySkillOfferChance: 0.1
-  encounterText: "출혈 베기 기술을 배웁니다."
+  encounterText: "화염구 기술을 배웁니다."

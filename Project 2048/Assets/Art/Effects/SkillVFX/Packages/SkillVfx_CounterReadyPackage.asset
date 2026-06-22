@@ -13,16 +13,16 @@ MonoBehaviour:
   m_Name: SkillVfx_CounterReadyPackage
   m_EditorClassIdentifier: Game.Core::Project2048.Skills.SkillVfxPackageSO
   family: 8
-  primarySprite: {fileID: 21300000, guid: 91b7d11e1f9d4ecf95de8b6a82fa3a87, type: 3}
-  primaryPrefab: {fileID: 678183688835185469, guid: 4687ea7fc00f3154a9ac6e179a7cda97, type: 3}
+  primarySprite: {fileID: -3554453865146640057, guid: 0bd3564bbef8b9b44baf3cd330c01c1b, type: 3}
+  primaryPrefab: {fileID: 7427817718329016933, guid: 5455b1b837377fe4fa0a6ec39baceb62, type: 3}
   projectilePrefab: {fileID: 0}
   secondarySprite: {fileID: 0}
   secondaryPrefab: {fileID: 0}
   particleMaterial: {fileID: 2100000, guid: 2e95984efeaf19d3b5ed8cb1a7f95957, type: 2}
-  localOffset: {x: 0, y: 0.08, z: 0}
-  radiusMultiplier: 1
+  localOffset: {x: 0, y: 0.1, z: 0}
+  radiusMultiplier: 0.94
   lifetimeSeconds: -1
   sortingOffset: 12
   tintWhiteBlend: 0.18
-  alpha: 0.9
-  rotationDegrees: -8
+  alpha: 0.86
+  rotationDegrees: -10

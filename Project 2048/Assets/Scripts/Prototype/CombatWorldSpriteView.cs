@@ -65,6 +65,8 @@ namespace Project2048.Prototype
         private const float LanternMuzzleLocalX = 0.34f;
         private const float LanternMuzzleLocalY = 0.36f;
         private const string DefaultWorldVfxProfileResourceName = "PrototypeCombatWorldVfxProfile";
+        private const string OpenWoundSkillId = "open-wound";
+        private static readonly Vector3 OpenWoundExplosionLocalOffset = new(0f, 0.18f, 0f);
         private static readonly Color ShieldCircleLightTint = new(1f, 0.96f, 0.72f, 0.94f);
         private static readonly Color ThornGuardShadowTint = new(0.025f, 0.035f, 0.03f, 0.96f);
         private static readonly Color ThornGuardBloodTint = new(0.44f, 0.07f, 0.08f, 0.9f);
@@ -260,7 +262,7 @@ namespace Project2048.Prototype
                 return;
             }
 
-            if (isAttack && TryPlayProjectileSkillEffect(effect, sourceAnchor, targetAnchor, animator, out var projectileLifetimeSeconds))
+            if (isAttack && TryPlayProjectileSkillEffect(skill, effect, sourceAnchor, targetAnchor, animator, out var projectileLifetimeSeconds))
             {
                 if (delayEnemyDeathFade)
                 {
@@ -372,10 +374,11 @@ namespace Project2048.Prototype
         {
             var sourceTransform = playerRenderer != null ? playerRenderer.transform : transform;
             var targetTransform = target != null && enemyRenderer != null ? enemyRenderer.transform : transform;
-            return TryPlayProjectileSkillEffect(effect, sourceTransform, targetTransform, enemyAnimator, out lifetimeSeconds);
+            return TryPlayProjectileSkillEffect(null, effect, sourceTransform, targetTransform, enemyAnimator, out lifetimeSeconds);
         }
 
         private bool TryPlayProjectileSkillEffect(
+            SkillSO skill,
             CombatEffectBinding effect,
             Transform sourceTransform,
             Transform targetTransform,
@@ -409,13 +412,96 @@ namespace Project2048.Prototype
             var lifetime = projectile != null
                 ? Mathf.Max(effect.EffectiveAutoDestroySeconds, projectile.EstimatedLifetimeSeconds + 0.2f)
                 : effect.EffectiveAutoDestroySeconds;
+            if (TryScheduleOpenWoundImpactExplosion(skill, targetTransform, projectile, out var explosionLifetimeSeconds))
+            {
+                lifetime = Mathf.Max(lifetime, explosionLifetimeSeconds);
+            }
+
             lifetimeSeconds = lifetime;
-            if (lifetime > 0f)
+            if (lifetime > 0f && Application.isPlaying)
             {
                 Destroy(instance, lifetime);
             }
 
             return true;
+        }
+
+        private bool TryScheduleOpenWoundImpactExplosion(
+            SkillSO skill,
+            Transform targetTransform,
+            CombatProjectileEffect projectile,
+            out float lifetimeSeconds)
+        {
+            lifetimeSeconds = 0f;
+            if (!IsOpenWoundSkill(skill) || targetTransform == null)
+            {
+                return false;
+            }
+
+            var explosionPrefab = skill.vfxPackage != null ? skill.vfxPackage.secondaryPrefab : null;
+            if (explosionPrefab == null)
+            {
+                return false;
+            }
+
+            var prefabExplosion = explosionPrefab.GetComponentInChildren<LayeredExplosionEffect>(true);
+            if (prefabExplosion == null)
+            {
+                return false;
+            }
+
+            var impactDelaySeconds = projectile != null ? projectile.TravelSeconds : 0f;
+            lifetimeSeconds = impactDelaySeconds + prefabExplosion.EstimatedLifetimeSeconds + 0.25f;
+            if (Application.isPlaying && impactDelaySeconds > 0f)
+            {
+                StartCoroutine(PlayOpenWoundImpactExplosionAfterDelay(explosionPrefab, targetTransform, impactDelaySeconds));
+            }
+            else
+            {
+                PlayOpenWoundImpactExplosion(explosionPrefab, targetTransform);
+            }
+
+            return true;
+        }
+
+        private IEnumerator PlayOpenWoundImpactExplosionAfterDelay(
+            GameObject explosionPrefab,
+            Transform targetTransform,
+            float delaySeconds)
+        {
+            yield return new WaitForSeconds(delaySeconds);
+            PlayOpenWoundImpactExplosion(explosionPrefab, targetTransform);
+        }
+
+        private void PlayOpenWoundImpactExplosion(GameObject explosionPrefab, Transform targetTransform)
+        {
+            if (explosionPrefab == null || targetTransform == null)
+            {
+                return;
+            }
+
+            var worldPosition = targetTransform.position + targetTransform.TransformVector(OpenWoundExplosionLocalOffset);
+            var instance = Instantiate(explosionPrefab, worldPosition, Quaternion.identity, targetTransform);
+            var explosion = instance.GetComponentInChildren<LayeredExplosionEffect>(true);
+            if (explosion == null)
+            {
+                return;
+            }
+
+            var targetRenderer = targetTransform.GetComponent<SpriteRenderer>();
+            explosion.ApplySorting(targetRenderer, 16);
+            explosion.PlayAt(worldPosition);
+
+            if (Application.isPlaying)
+            {
+                Destroy(instance, explosion.EstimatedLifetimeSeconds + 0.25f);
+            }
+        }
+
+        private static bool IsOpenWoundSkill(SkillSO skill)
+        {
+            return skill != null &&
+                string.Equals(skill.skillId, OpenWoundSkillId, System.StringComparison.Ordinal);
         }
 
         private void DelayEnemyDeathFadeForSkillEffect(SkillSO skill, CombatEffectBinding effect)
@@ -1445,7 +1531,11 @@ namespace Project2048.Prototype
                 0.2f,
                 0.86f);
             var objectName = "SpecializedSkillArt";
-            var sprite = ResolveDesignTimeSprite(package, designTimeBinding, attackEffectSprite, ResolveAttackEffectSprite());
+            var sprite = ResolveDesignTimeSprite(
+                package,
+                designTimeBinding,
+                null,
+                attackEffectSprite != null ? attackEffectSprite : ResolveAttackEffectSprite());
             var prefab = ResolveDesignTimePrefab(package, designTimeBinding, ResolveAttackEffectPrefab());
             var radiusMultiplier = ResolveDesignTimeRadiusMultiplier(package, designTimeBinding, 1f);
             var lifetime = AttackArtLifetimeSeconds;
@@ -3900,7 +3990,11 @@ namespace Project2048.Prototype
                 ResolveDesignTimeLifetime(package, designTimeBinding, AttackArtLifetimeSeconds),
                 ResolveDesignTimeLocalOffset(package, designTimeBinding, new Vector3(0f, 0.16f, 0f)),
                 sortingOffset: ResolveDesignTimeSortingOffset(package, designTimeBinding, 12),
-                spriteOverride: ResolveDesignTimeSprite(package, designTimeBinding, explicitSprite, fallbackSprite),
+                spriteOverride: ResolveDesignTimeSprite(
+                    package,
+                    designTimeBinding,
+                    null,
+                    explicitSprite != null ? explicitSprite : fallbackSprite),
                 prefabOverride: ResolveDesignTimePrefab(package, designTimeBinding, fallbackPrefab));
             if (art == null)
             {
@@ -4111,7 +4205,11 @@ namespace Project2048.Prototype
 
             var package = ResolveSkillVfxPackage(skill);
             var designTimeBinding = ResolveSkillVfxDesignTimeBinding(skill);
-            var sprite = ResolveDesignTimeSprite(package, designTimeBinding, magicCircleEffectSprite, ResolveMagicCircleEffectSprite());
+            var sprite = ResolveDesignTimeSprite(
+                package,
+                designTimeBinding,
+                null,
+                magicCircleEffectSprite != null ? magicCircleEffectSprite : ResolveMagicCircleEffectSprite());
             if (sprite == null)
             {
                 return;
@@ -4124,9 +4222,18 @@ namespace Project2048.Prototype
                 designTimeBinding,
                 0.32f,
                 0.72f);
+            var objectName = family switch
+            {
+                SkillVfxFamily.BuffAura => "BuffAuraEffectArt",
+                SkillVfxFamily.DebuffWave => "DebuffWaveEffectArt",
+                SkillVfxFamily.CounterReady => "CounterReadyEffectArt",
+                SkillVfxFamily.BoardDisturb => "BoardDisturbEffectArt",
+                SkillVfxFamily.DrainTether => "DrainTetherEffectArt",
+                _ => "ReusableSkillEffectArt",
+            };
             var art = SpawnAttackArtSpriteLayer(
                 anchor,
-                "MagicCircleEffectArt",
+                objectName,
                 color,
                 AttackArtBaseRadius *
                     ResolveDesignTimeRadiusMultiplier(package, designTimeBinding, 1f) *

@@ -2075,45 +2075,88 @@ namespace Project2048.Tests
         }
 
         [Test]
-        public void CombatWorldSpriteView_BleedingCutPreview_SpawnsSlashAndBloodFountain()
+        public void CombatWorldSpriteView_BleedingCutPreview_LaunchesFireballProjectile()
         {
             var viewObject = CreateOwnedGameObject("WorldSpriteView");
             var view = viewObject.AddComponent<CombatWorldSpriteView>();
             var playerRenderer = CreateOwnedGameObject("PlayerSprite").AddComponent<SpriteRenderer>();
             var enemyRenderer = CreateOwnedGameObject("EnemySprite").AddComponent<SpriteRenderer>();
             var bleedingCut = CreateSkill("bleeding-cut", SkillType.Attack, cost: 0, power: 50);
-            var attackSprite = CreateOwnedSprite("BloodFountainSlashSprite");
+            var fireballPrefab = CreateOwnedGameObject("FireballPrefab");
+            fireballPrefab.AddComponent<CombatProjectileEffect>();
             playerRenderer.transform.localPosition = new Vector3(-1f, 0f, 0f);
             enemyRenderer.transform.localPosition = new Vector3(1f, 0f, 0f);
             enemyRenderer.sortingOrder = 4;
-            bleedingCut.vfxFamily = SkillVfxFamily.BloodFountainSlash;
-            bleedingCut.vfxPrimaryColor = new Color(0.95f, 0.02f, 0.04f, 1f);
-            bleedingCut.vfxSecondaryColor = new Color(0.34f, 0f, 0.015f, 1f);
-            bleedingCut.vfxScale = 1.1f;
-            bleedingCut.vfxIntensity = 1.3f;
+            bleedingCut.effectKind = SkillEffectKind.OverburnAttack;
+            bleedingCut.vfxFamily = SkillVfxFamily.FlameBurst;
+            bleedingCut.vfxPrimaryColor = new Color(0.286275f, 0.686275f, 0.709804f, 1f);
+            bleedingCut.vfxSecondaryColor = new Color(0.078431f, 0.360784f, 0.388235f, 1f);
+            bleedingCut.vfxScale = 1.2f;
+            bleedingCut.vfxIntensity = 1.45f;
+            bleedingCut.activationEffect = new CombatEffectBinding
+            {
+                vfxPrefab = fireballPrefab,
+                autoDestroySeconds = 1.55f,
+            };
 
             SetPrivateField(view, "playerRenderer", playerRenderer);
             SetPrivateField(view, "enemyRenderer", enemyRenderer);
-            SetPrivateField(view, "attackEffectSprite", attackSprite);
 
             view.PreviewSkillEffect(bleedingCut);
 
-            var impactArt = enemyRenderer.transform.Find("BloodFountainSlashArt")?.GetComponent<SpriteRenderer>();
-            Assert.That(impactArt, Is.Not.Null);
-            Assert.That(impactArt.sprite, Is.EqualTo(attackSprite));
-            var slashRoot = enemyRenderer.transform.Find("BleedingCutSlashArc");
-            Assert.That(slashRoot, Is.Not.Null);
-            var slash = slashRoot.Find("BleedingCutSlashLine")?.GetComponent<LineRenderer>();
-            Assert.That(slash, Is.Not.Null);
-            Assert.That(slash.positionCount, Is.GreaterThan(8));
-            Assert.That(slash.startWidth, Is.GreaterThan(slash.endWidth));
-            Assert.That(slashRoot.Find("BleedingCutSlashEdge")?.GetComponent<LineRenderer>(), Is.Not.Null);
-            var fountain = enemyRenderer.transform.Find("BleedingCutBloodFountain")?.GetComponent<ParticleSystem>();
-            Assert.That(fountain, Is.Not.Null);
-            Assert.That(fountain.main.startSize.constantMax, Is.LessThan(0.1f));
-            Assert.That(fountain.main.maxParticles, Is.GreaterThanOrEqualTo(90));
-            Assert.That(fountain.shape.radius, Is.LessThan(0.08f));
-            Assert.That(enemyRenderer.transform.Find("BleedingCutBloodMist")?.GetComponent<ParticleSystem>(), Is.Not.Null);
+            var fireball = Object.FindObjectsByType<CombatProjectileEffect>(FindObjectsInactive.Exclude)
+                .SingleOrDefault(projectile => projectile.name == "FireballPrefab(Clone)");
+            Assert.That(fireball, Is.Not.Null);
+            Assert.That(fireball.transform.parent, Is.Null);
+            Assert.That(fireball.transform.position.x, Is.GreaterThan(playerRenderer.transform.position.x));
+            Assert.That(enemyRenderer.transform.Find("BloodFountainSlashArt"), Is.Null);
+            Assert.That(enemyRenderer.transform.Find("BleedingCutSlashArc"), Is.Null);
+            Assert.That(enemyRenderer.transform.Find("BleedingCutBloodFountain"), Is.Null);
+            Object.DestroyImmediate(fireball.gameObject);
+        }
+
+        [Test]
+        public void CombatWorldSpriteView_OpenWoundPreview_LaunchesFireballAndImpactExplosion()
+        {
+            var viewObject = CreateOwnedGameObject("WorldSpriteView");
+            var view = viewObject.AddComponent<CombatWorldSpriteView>();
+            var playerRenderer = CreateOwnedGameObject("PlayerSprite").AddComponent<SpriteRenderer>();
+            var enemyRenderer = CreateOwnedGameObject("EnemySprite").AddComponent<SpriteRenderer>();
+            var openWound = CreateSkill("open-wound", SkillType.Attack, cost: 0, power: 70);
+            var flamePackage = CreateOwnedVfxPackage(SkillVfxFamily.FlameBurst);
+            var fireballPrefab = CreateOwnedGameObject("FireballPrefab");
+            var explosionPrefab = CreateOwnedGameObject("LayeredExplosionPrefab");
+            fireballPrefab.AddComponent<CombatProjectileEffect>();
+            explosionPrefab.AddComponent<LayeredExplosionEffect>();
+            playerRenderer.transform.localPosition = new Vector3(-1f, 0f, 0f);
+            enemyRenderer.transform.localPosition = new Vector3(1f, 0f, 0f);
+            enemyRenderer.sortingOrder = 4;
+            flamePackage.projectilePrefab = fireballPrefab;
+            flamePackage.secondaryPrefab = explosionPrefab;
+            openWound.effectKind = SkillEffectKind.OverburnAttack;
+            openWound.vfxFamily = SkillVfxFamily.FlameBurst;
+            openWound.vfxPackage = flamePackage;
+            openWound.activationEffect = new CombatEffectBinding
+            {
+                vfxPrefab = fireballPrefab,
+                autoDestroySeconds = 1.55f,
+            };
+
+            SetPrivateField(view, "playerRenderer", playerRenderer);
+            SetPrivateField(view, "enemyRenderer", enemyRenderer);
+
+            view.PreviewSkillEffect(openWound);
+
+            var fireball = Object.FindObjectsByType<CombatProjectileEffect>(FindObjectsInactive.Exclude)
+                .SingleOrDefault(projectile => projectile.name == "FireballPrefab(Clone)");
+            var explosion = enemyRenderer.transform.Find("LayeredExplosionPrefab(Clone)")
+                ?.GetComponentInChildren<LayeredExplosionEffect>();
+            Assert.That(fireball, Is.Not.Null);
+            Assert.That(explosion, Is.Not.Null);
+            Assert.That(explosion.transform.position.x, Is.EqualTo(enemyRenderer.transform.position.x).Within(0.001f));
+            Assert.That(explosion.transform.position.y, Is.GreaterThan(enemyRenderer.transform.position.y));
+            Object.DestroyImmediate(fireball.gameObject);
+            Object.DestroyImmediate(explosion.gameObject);
         }
 
         [Test]
@@ -2686,9 +2729,24 @@ namespace Project2048.Tests
                 {
                     Assert.That(resolvedFamily, Is.EqualTo(SkillVfxFamily.SpikedBurst), path);
                 }
-                else if (path.EndsWith("BleedingCut.asset", System.StringComparison.Ordinal))
+                else if (path.EndsWith("BleedingCut.asset", System.StringComparison.Ordinal) ||
+                    path.EndsWith("OpenWound.asset", System.StringComparison.Ordinal) ||
+                    path.EndsWith("BloodFang.asset", System.StringComparison.Ordinal))
                 {
-                    Assert.That(resolvedFamily, Is.EqualTo(SkillVfxFamily.BloodFountainSlash), path);
+                    Assert.That(resolvedFamily, Is.EqualTo(SkillVfxFamily.FlameBurst), path);
+                    Assert.That(skill.activationEffect?.vfxPrefab, Is.Not.Null, path);
+                    Assert.That(
+                        skill.activationEffect.vfxPrefab.GetComponentInChildren<CombatProjectileEffect>(true),
+                        Is.Not.Null,
+                        path);
+                    if (path.EndsWith("OpenWound.asset", System.StringComparison.Ordinal))
+                    {
+                        Assert.That(skill.vfxPackage.secondaryPrefab, Is.Not.Null, path);
+                        Assert.That(
+                            skill.vfxPackage.secondaryPrefab.GetComponentInChildren<LayeredExplosionEffect>(true),
+                            Is.Not.Null,
+                            path);
+                    }
                 }
                 else if (path.EndsWith("Overburn.asset", System.StringComparison.Ordinal))
                 {

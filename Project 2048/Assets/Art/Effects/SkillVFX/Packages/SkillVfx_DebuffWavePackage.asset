@@ -13,16 +13,16 @@ MonoBehaviour:
   m_Name: SkillVfx_DebuffWavePackage
   m_EditorClassIdentifier: Game.Core::Project2048.Skills.SkillVfxPackageSO
   family: 6
-  primarySprite: {fileID: 21300000, guid: 91b7d11e1f9d4ecf95de8b6a82fa3a87, type: 3}
-  primaryPrefab: {fileID: 678183688835185469, guid: 4687ea7fc00f3154a9ac6e179a7cda97, type: 3}
+  primarySprite: {fileID: 21300000, guid: 9b5fc44167244de7b10fa372b672de89, type: 3}
+  primaryPrefab: {fileID: 8614566233561317893, guid: 06a9b239017d8e44bb20c48fca385733, type: 3}
   projectilePrefab: {fileID: 0}
   secondarySprite: {fileID: 0}
   secondaryPrefab: {fileID: 0}
   particleMaterial: {fileID: 2100000, guid: 82c3cfc8517cbe9838ab60c1888d9587, type: 2}
-  localOffset: {x: 0, y: 0.08, z: 0}
-  radiusMultiplier: 1
+  localOffset: {x: 0, y: 0.1, z: 0}
+  radiusMultiplier: 1.02
   lifetimeSeconds: -1
   sortingOffset: 12
   tintWhiteBlend: 0.18
-  alpha: 0.9
-  rotationDegrees: -8
+  alpha: 0.86
+  rotationDegrees: 0

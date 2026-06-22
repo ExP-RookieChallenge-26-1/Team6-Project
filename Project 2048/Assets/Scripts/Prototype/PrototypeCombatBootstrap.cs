@@ -27,9 +27,6 @@ namespace Project2048.Prototype
         [SerializeField] private float enemyTurnDelaySeconds = 1.2f;
         [SerializeField] private RunProgress runProgress = new();
 
-        private PrototypeCombatLoadout runtimeLoadout;
-        private EnemySO runtimeRandomEnemy;
-
         public CombatManager CombatManager => combatManager;
         public PrototypeCombatEventAudioPlayer CombatEventAudioPlayer => combatEventAudioPlayer;
         public RewardManager RewardManager => rewardManager;
@@ -74,9 +71,6 @@ namespace Project2048.Prototype
         private void OnDestroy()
         {
             UnbindFlowEvents();
-            runtimeLoadout?.Dispose();
-            runtimeLoadout = null;
-            DestroyRuntimeRandomEnemy();
         }
 
         public void RestartCombat()
@@ -93,23 +87,15 @@ namespace Project2048.Prototype
         {
             EnsureRuntimeObjects();
 
-            runtimeLoadout?.Dispose();
-            runtimeLoadout = null;
-            DestroyRuntimeRandomEnemy();
-
             var setupPlayerData = playerData;
             var setupEnemyData = enemyData;
             if (setupPlayerData == null || setupEnemyData == null)
             {
-                runtimeLoadout = PrototypeCombatFactory.CreateDefaultLoadout();
-                setupPlayerData = runtimeLoadout.PlayerData;
-                setupEnemyData = runtimeLoadout.EnemyData;
-            }
-            else
-            {
-                setupEnemyData = SelectEnemyData(setupEnemyData);
+                Debug.LogError("PrototypeCombatBootstrap requires scene-authored PlayerSO and EnemySO assets.");
+                return;
             }
 
+            setupEnemyData = SelectEnemyData(setupEnemyData);
             combatManager.SetCombatants(playerController, new[] { enemyController });
             combatManager.EnemyTurnDelaySeconds = enemyTurnDelaySeconds;
             combatManager.StartCombat(new CombatSetup
@@ -186,13 +172,7 @@ namespace Project2048.Prototype
                 return pooledEnemy;
             }
 
-            runtimeRandomEnemy = PrototypeCombatFactory.CreateRandomPrototypeEnemy();
-            if (fallback != null)
-            {
-                runtimeRandomEnemy.portrait = fallback.portrait;
-            }
-
-            return runtimeRandomEnemy;
+            return fallback;
         }
 
         private EnemySO SelectPooledEnemy()
@@ -214,25 +194,6 @@ namespace Project2048.Prototype
             return validEnemies.Count == 0
                 ? null
                 : validEnemies[Random.Range(0, validEnemies.Count)];
-        }
-
-        private void DestroyRuntimeRandomEnemy()
-        {
-            if (runtimeRandomEnemy == null)
-            {
-                return;
-            }
-
-            if (Application.isPlaying)
-            {
-                Destroy(runtimeRandomEnemy);
-            }
-            else
-            {
-                DestroyImmediate(runtimeRandomEnemy);
-            }
-
-            runtimeRandomEnemy = null;
         }
 
         private void EnsureRuntimeObjects()

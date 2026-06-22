@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: BloodFang
   m_EditorClassIdentifier: Game.Core::Project2048.Skills.SkillSO
   skillId: blood-fang
-  skillName: "\uD53C\uC758 \uC774\uBE68"
+  skillName: "불사르기"
   skillType: 0
   effectKind: 11
   damageStatSource: 0
@@ -61,32 +61,30 @@ MonoBehaviour:
   icon: {fileID: 0}
   activationEffect:
     sfxClip: {fileID: 8300000, guid: f14a9cc4988c4b30b9835d1967a70b92, type: 3}
-    vfxPrefab: {fileID: 0}
+    vfxPrefab: {fileID: 899824043960030591, guid: 5f8cf79947e4ddf47aee451b2b9de40a, type: 3}
     animationClip: {fileID: 0}
     particleEffect:
       objectName: BloodFangSkillParticles
       particlePrefab: {fileID: 0}
-      particleMaterial: {fileID: 2100000, guid: 52db5297964ff1a019f11971b256efa6, type: 2}
+      particleMaterial: {fileID: 2100000, guid: a19a598f9cd9ddb0f7543ff1237ae3cd, type: 2}
       useParticleColor: 1
-      particleColor: {r: 0.679415, g: 0.089015, b: 0.096215, a: 1}
-      lifetimeSeconds: 0.8
-      burstCount: 34
-      startSpeed: 0.472
-      startSize: 0.187
-      swirl: 1
+      particleColor: {r: 0.286275, g: 0.686275, b: 0.709804, a: 1}
+      lifetimeSeconds: 0.82
+      burstCount: 55
+      startSpeed: 0.548
+      startSize: 0.156
+      swirl: 0
     volumeScale: 1
     minPitch: 1
     maxPitch: 1
     sfxDelaySeconds: 0
     localOffset: {x: 0, y: 0, z: 0}
-    autoDestroySeconds: 1.25
-  vfxPackage: {fileID: 11400000, guid: 6dd877a3f2df1dc428cca30fa7bb2685, type: 2}
-  vfxFamily: 7
-  vfxPrimaryColor: {r: 0.679415, g: 0.089015, b: 0.096215, a: 1}
-  vfxSecondaryColor: {r: 0.218672, g: 0.017072, b: 0.031472, a: 1}
-  vfxScale: 1.1
-  vfxIntensity: 1.15
+    autoDestroySeconds: 1.55
+  vfxPackage: {fileID: 11400000, guid: af9010c52a1d9e74f84699f320a1fe23, type: 2}
+  vfxFamily: 15
+  vfxPrimaryColor: {r: 0.286275, g: 0.686275, b: 0.709804, a: 1}
+  vfxSecondaryColor: {r: 0.078431, g: 0.360784, b: 0.388235, a: 1}
+  vfxScale: 1.2
+  vfxIntensity: 1.45
   vfxRepeatCount: 1
-  description: "\uCD5C\uB300 \uCCB4\uB825\uC758 10%\uB97C \uC9C0\uBD88\uD558\uACE0
-    \uC801\uC5D0\uAC8C \uC704\uB825 100 \uD53C\uD574\uB97C \uC900\uB2E4. \uC774 \uBE44\uC6A9\uC73C\uB85C
-    \uCCB4\uB825\uC740 1 \uC544\uB798\uB85C \uB0B4\uB824\uAC00\uC9C0 \uC54A\uB294\uB2E4."
+  description: "최대 체력의 10%를 불태워 화염구를 발사하고 적에게 위력 100 피해를 준다. 이 비용으로 체력은 1 아래로 내려가지 않는다."

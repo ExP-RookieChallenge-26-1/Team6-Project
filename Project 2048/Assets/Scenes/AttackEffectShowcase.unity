@@ -6599,7 +6599,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: blood-fang  /  DrainTether
+  m_text: blood-fang  /  Fireball + FlameBurst
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 04f6d590a48a3f44c8b54409e54f5fde, type: 2}
   m_sharedMaterial: {fileID: 1794097870625567047, guid: 04f6d590a48a3f44c8b54409e54f5fde, type: 2}
@@ -21723,7 +21723,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: open-wound  /  SlashArc
+  m_text: open-wound  /  Fireball + LayeredExplosion
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 04f6d590a48a3f44c8b54409e54f5fde, type: 2}
   m_sharedMaterial: {fileID: 1794097870625567047, guid: 04f6d590a48a3f44c8b54409e54f5fde, type: 2}
@@ -24894,7 +24894,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: bleeding-cut  /  BloodFountainSlash
+  m_text: bleeding-cut  /  Fireball + FlameBurst
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 04f6d590a48a3f44c8b54409e54f5fde, type: 2}
   m_sharedMaterial: {fileID: 1794097870625567047, guid: 04f6d590a48a3f44c8b54409e54f5fde, type: 2}

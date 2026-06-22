@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: BleedingCut
   m_EditorClassIdentifier: Game.Core::Project2048.Skills.SkillSO
   skillId: bleeding-cut
-  skillName: "\uCD9C\uD608 \uBCA0\uAE30"
+  skillName: "화염구"
   skillType: 0
-  effectKind: 23
+  effectKind: 28
   damageStatSource: 0
   cost: 6
   power: 50
@@ -44,11 +44,11 @@ MonoBehaviour:
   nextCostGainMultiplier: 1
   conditionalPowerBonus: 0
   conditionalHpThreshold: 0
-  statusDuration: 2
-  statusDamage: 20
+  statusDuration: 0
+  statusDamage: 0
   statusMaxHpDamagePercent: 0
   shieldPiercePercent: 0
-  extraPowerPerConsumedCost: 0
+  extraPowerPerConsumedCost: 10
   maxCostCarry: 0
   costRefund: 0
   chargedPower: 0
@@ -61,33 +61,30 @@ MonoBehaviour:
   icon: {fileID: 0}
   activationEffect:
     sfxClip: {fileID: 8300000, guid: f14a9cc4988c4b30b9835d1967a70b92, type: 3}
-    vfxPrefab: {fileID: 0}
+    vfxPrefab: {fileID: 899824043960030591, guid: 5f8cf79947e4ddf47aee451b2b9de40a, type: 3}
     animationClip: {fileID: 0}
     particleEffect:
       objectName: BleedingCutSkillParticles
       particlePrefab: {fileID: 0}
-      particleMaterial: {fileID: 2100000, guid: 46bcafb98c745ebca9b53a7f50c1d1a4, type: 2}
+      particleMaterial: {fileID: 2100000, guid: a19a598f9cd9ddb0f7543ff1237ae3cd, type: 2}
       useParticleColor: 1
-      particleColor: {r: 0.745365, g: 0.075765, b: 0.090165, a: 1}
-      lifetimeSeconds: 0.72
+      particleColor: {r: 0.286275, g: 0.686275, b: 0.709804, a: 1}
+      lifetimeSeconds: 0.82
       burstCount: 55
-      startSpeed: 0.126
-      startSize: 0.143
+      startSpeed: 0.548
+      startSize: 0.156
       swirl: 0
     volumeScale: 1
     minPitch: 1
     maxPitch: 1
     sfxDelaySeconds: 0
     localOffset: {x: 0, y: 0, z: 0}
-    autoDestroySeconds: 1.25
-  vfxPackage: {fileID: 11400000, guid: 220620d16cb9ebf4e8f8aada386f833a, type: 2}
-  vfxFamily: 14
-  vfxPrimaryColor: {r: 0.745365, g: 0.075765, b: 0.090165, a: 1}
-  vfxSecondaryColor: {r: 0.265343, g: 0.020543, b: 0.031343, a: 1}
-  vfxScale: 1.1
-  vfxIntensity: 1.3
+    autoDestroySeconds: 1.55
+  vfxPackage: {fileID: 11400000, guid: af9010c52a1d9e74f84699f320a1fe23, type: 2}
+  vfxFamily: 15
+  vfxPrimaryColor: {r: 0.286275, g: 0.686275, b: 0.709804, a: 1}
+  vfxSecondaryColor: {r: 0.078431, g: 0.360784, b: 0.388235, a: 1}
+  vfxScale: 1.2
+  vfxIntensity: 1.45
   vfxRepeatCount: 1
-  description: "\uC801\uC5D0\uAC8C \uC704\uB825 50 \uD53C\uD574\uB97C \uC8FC\uACE0
-    \uCD9C\uD608 2\uD134\uC744 \uBD80\uC5EC\uD55C\uB2E4. \uCD9C\uD608 \uC0C1\uD0DC\uC778
-    \uB300\uC0C1\uC740 \uACF5\uACA9\uC744 \uBC1B\uC744 \uB54C\uB9C8\uB2E4 \uCD94\uAC00
-    \uD53C\uD574 20\uC744 \uBC1B\uB294\uB2E4."
+  description: "적에게 위력 50 피해를 준다. 사용 후 남은 코스트를 모두 추가 소모하고, 추가 소모한 코스트 1당 위력 +10을 적용한다. 화염구를 발사한다."

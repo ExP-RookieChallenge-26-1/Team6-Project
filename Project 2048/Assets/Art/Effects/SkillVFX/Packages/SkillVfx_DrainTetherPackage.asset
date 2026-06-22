@@ -13,16 +13,16 @@ MonoBehaviour:
   m_Name: SkillVfx_DrainTetherPackage
   m_EditorClassIdentifier: Game.Core::Project2048.Skills.SkillVfxPackageSO
   family: 7
-  primarySprite: {fileID: 21300000, guid: 91b7d11e1f9d4ecf95de8b6a82fa3a87, type: 3}
-  primaryPrefab: {fileID: 678183688835185469, guid: 4687ea7fc00f3154a9ac6e179a7cda97, type: 3}
+  primarySprite: {fileID: 21300000, guid: be27da63da4d43dd86a43c511375ac07, type: 3}
+  primaryPrefab: {fileID: 3746632578855000458, guid: f5829cd5b554e58468ee6f5d098d1d94, type: 3}
   projectilePrefab: {fileID: 0}
   secondarySprite: {fileID: 0}
   secondaryPrefab: {fileID: 0}
   particleMaterial: {fileID: 2100000, guid: 52db5297964ff1a019f11971b256efa6, type: 2}
-  localOffset: {x: 0, y: 0.08, z: 0}
-  radiusMultiplier: 1
+  localOffset: {x: 0, y: 0.06, z: 0}
+  radiusMultiplier: 0.95
   lifetimeSeconds: -1
   sortingOffset: 12
   tintWhiteBlend: 0.18
-  alpha: 0.9
-  rotationDegrees: -8
+  alpha: 0.82
+  rotationDegrees: -4

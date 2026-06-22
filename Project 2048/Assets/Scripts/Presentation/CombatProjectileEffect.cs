@@ -21,7 +21,9 @@ namespace Project2048.Presentation
         private bool launched;
         private bool impacted;
 
-        public float EstimatedLifetimeSeconds => Mathf.Max(0.05f, travelSeconds) + Mathf.Max(0f, impactLifetimeSeconds);
+        public float TravelSeconds => Mathf.Max(0.05f, travelSeconds);
+
+        public float EstimatedLifetimeSeconds => TravelSeconds + Mathf.Max(0f, impactLifetimeSeconds);
 
         public void Launch(Transform sourceTransform, Transform targetTransform, Vector3 targetOffsetOverride)
         {

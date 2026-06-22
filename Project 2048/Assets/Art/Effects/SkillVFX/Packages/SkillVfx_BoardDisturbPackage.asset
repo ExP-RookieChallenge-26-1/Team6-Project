@@ -13,16 +13,16 @@ MonoBehaviour:
   m_Name: SkillVfx_BoardDisturbPackage
   m_EditorClassIdentifier: Game.Core::Project2048.Skills.SkillVfxPackageSO
   family: 9
-  primarySprite: {fileID: 21300000, guid: 91b7d11e1f9d4ecf95de8b6a82fa3a87, type: 3}
-  primaryPrefab: {fileID: 678183688835185469, guid: 4687ea7fc00f3154a9ac6e179a7cda97, type: 3}
+  primarySprite: {fileID: 21300000, guid: 302feda477c54bb9888434aab0dfaa2d, type: 3}
+  primaryPrefab: {fileID: 2128731538229030202, guid: b8ace7993b619e7468da03635a1b4819, type: 3}
   projectilePrefab: {fileID: 0}
   secondarySprite: {fileID: 0}
   secondaryPrefab: {fileID: 0}
   particleMaterial: {fileID: 2100000, guid: 1c6fa673ea3346c4eeaf0cfb17ed70cc, type: 2}
-  localOffset: {x: 0, y: 0.08, z: 0}
-  radiusMultiplier: 1
+  localOffset: {x: 0, y: 0.04, z: 0}
+  radiusMultiplier: 0.96
   lifetimeSeconds: -1
   sortingOffset: 12
   tintWhiteBlend: 0.18
-  alpha: 0.9
-  rotationDegrees: -8
+  alpha: 0.78
+  rotationDegrees: -4

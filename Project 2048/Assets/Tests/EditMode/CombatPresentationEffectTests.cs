@@ -53,6 +53,11 @@ namespace Project2048.Tests
 
         private Sprite CreateOwnedSprite(string name)
         {
+            return CreateOwnedSprite(name, new Vector2(0.5f, 0.5f));
+        }
+
+        private Sprite CreateOwnedSprite(string name, Vector2 pivot)
+        {
             var texture = new Texture2D(8, 8);
             texture.name = $"{name}Texture";
             ownedObjects.Add(texture);
@@ -61,7 +66,7 @@ namespace Project2048.Tests
             texture.SetPixels(pixels);
             texture.Apply();
 
-            var sprite = Sprite.Create(texture, new Rect(0f, 0f, 8f, 8f), new Vector2(0.5f, 0.5f), 8f);
+            var sprite = Sprite.Create(texture, new Rect(0f, 0f, 8f, 8f), pivot, 8f);
             sprite.name = name;
             ownedObjects.Add(sprite);
             return sprite;
@@ -622,8 +627,10 @@ namespace Project2048.Tests
             var playerData = CreatePlayerData(maxHp: 20, attackPower: 2);
             var enemyData = CreateEnemyData(maxHp: 10, attackValue: 3);
             var attackSprite = CreateOwnedSprite("AttackEffectSprite");
+            var bottomPivotPlayerSprite = CreateOwnedSprite("BottomPivotPlayerSprite", Vector2.zero);
 
             playerRenderer.sortingOrder = 7;
+            playerRenderer.sprite = bottomPivotPlayerSprite;
             playerRenderer.transform.localPosition = new Vector3(-1f, 0f, 0f);
             enemyRenderer.transform.localPosition = new Vector3(1f, 0f, 0f);
             SetPrivateField(view, "playerRenderer", playerRenderer);
@@ -646,7 +653,8 @@ namespace Project2048.Tests
             var art = playerRenderer.transform.Find("EnemyAttackArt")?.GetComponent<SpriteRenderer>();
             Assert.That(art, Is.Not.Null);
             Assert.That(art.sprite, Is.EqualTo(attackSprite));
-            Assert.That(art.transform.localPosition.x, Is.GreaterThan(0.2f));
+            Assert.That(art.transform.localPosition.x, Is.GreaterThan(0.65f));
+            Assert.That(art.transform.localPosition.y, Is.GreaterThan(0.55f));
             Assert.That(Mathf.DeltaAngle(art.transform.localEulerAngles.z, 90f), Is.EqualTo(0f).Within(0.001f));
             Assert.That(art.sortingOrder, Is.GreaterThan(playerRenderer.sortingOrder));
             Assert.That(playerRenderer.transform.Find("EnemyClawSlash2D"), Is.Null);
@@ -1913,9 +1921,11 @@ namespace Project2048.Tests
             var enemyData = CreateEnemyData(maxHp: 50, attackValue: 0);
             var charge = CreateSkill("gather-light", SkillType.Attack, cost: 0, power: 0);
             var attackSprite = CreateOwnedSprite("SkillVfx_AttackImpact");
+            var bottomPivotPlayerSprite = CreateOwnedSprite("BottomPivotPlayerSprite", Vector2.zero);
             charge.effectKind = SkillEffectKind.ChargeAttack;
             charge.chargedPower = 120;
             playerData.startingSkills = new List<SkillSO> { charge };
+            playerRenderer.sprite = bottomPivotPlayerSprite;
             playerRenderer.transform.localPosition = new Vector3(-1f, 0f, 0f);
             enemyRenderer.transform.localPosition = new Vector3(1f, 0f, 0f);
             enemyRenderer.sortingOrder = 5;
@@ -1952,7 +1962,7 @@ namespace Project2048.Tests
             Assert.That(beam.startWidth, Is.EqualTo(0.08f).Within(0.001f));
             Assert.That(beam.endWidth, Is.EqualTo(0.16f).Within(0.001f));
             Assert.That(beam.GetPosition(0).x, Is.GreaterThan(playerRenderer.transform.position.x));
-            Assert.That(beam.GetPosition(0).y, Is.GreaterThan(playerRenderer.transform.position.y + 0.3f));
+            Assert.That(beam.GetPosition(0).y, Is.GreaterThan(playerRenderer.bounds.center.y + 0.3f));
             Assert.That(beam.sortingOrder, Is.GreaterThan(enemyRenderer.sortingOrder));
             Assert.That(viewObject.transform.Find("ChargedLightBeamGlow")?.GetComponent<LineRenderer>(), Is.Not.Null);
             Assert.That(enemyRenderer.transform.Find("ChargedLightBeamImpactParticles"), Is.Not.Null);

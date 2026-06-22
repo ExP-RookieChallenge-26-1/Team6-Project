@@ -38,6 +38,14 @@ Final responses must include:
 - Preserve backward compatibility unless the task explicitly allows breaking changes.
 - Do not edit Unity-generated folders such as `Library/`, `Logs/`, `Temp/`, or `UserSettings/` unless the task explicitly requires it.
 
+## Unity UI Rules
+
+- All UI must be authored at design time in Unity scenes or prefabs.
+- Do not create, position, resize, recolor, restyle, or add UI layout/effect components from gameplay/runtime scripts.
+- Runtime UI scripts may bind serialized references, subscribe to events, toggle active state, update interactable state, and change displayed data.
+- If a UI layout or style changes, update the scene/prefab asset and add or update EditMode tests that read the authored asset.
+- `Project 2048/Assets/Scenes/MainMenu.unity` is the design-time source of truth for the main menu layout.
+
 ## Task Discipline
 
 Before making non-trivial changes:

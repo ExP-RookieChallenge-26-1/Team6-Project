@@ -1,5 +1,6 @@
-using System.Reflection;
+using System.IO;
 using NUnit.Framework;
+using TMPro;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,18 +10,21 @@ namespace Project2048.Tests
     public class MainMenuLayoutTests
     {
         [Test]
-        public void MainMenuLayout_ArrangesTitleAndThreeButtonsLikePosterReference()
+        public void MainMenuController_DoesNotApplyRuntimeUiLayout()
+        {
+            var controllerSource = File.ReadAllText("Assets/Scripts/UI/MainMenuController.cs");
+
+            Assert.That(controllerSource, Does.Not.Contain("ApplyReferencePosterLayout"));
+            Assert.That(File.Exists("Assets/Scripts/UI/MainMenuController.Layout.cs"), Is.False);
+        }
+
+        [Test]
+        public void MainMenuScene_StoresPosterLayoutAtDesignTime()
         {
             EditorSceneManager.OpenScene("Assets/Scenes/MainMenu.unity", OpenSceneMode.Single);
 
             var controller = Object.FindAnyObjectByType<global::MainMenuController>(FindObjectsInactive.Include);
             Assert.That(controller, Is.Not.Null);
-
-            var method = typeof(global::MainMenuController).GetMethod(
-                "ApplyReferencePosterLayout",
-                BindingFlags.Instance | BindingFlags.NonPublic);
-            Assert.That(method, Is.Not.Null);
-            method.Invoke(controller, null);
 
             var canvas = GameObject.Find("MainMenuCanvas");
             Assert.That(canvas, Is.Not.Null);
@@ -47,10 +51,24 @@ namespace Project2048.Tests
                 var button = group.Find(buttonNames[index]);
                 Assert.That(button, Is.Not.Null, buttonNames[index]);
                 Assert.That(button.GetComponent<Button>(), Is.Not.Null, buttonNames[index]);
+                Assert.That(button.GetComponent<Outline>(), Is.Not.Null, buttonNames[index]);
 
                 var buttonRect = (RectTransform)button;
                 Assert.That(buttonRect.anchoredPosition, Is.EqualTo(new Vector2(expectedX[index], 0f)));
                 Assert.That(buttonRect.sizeDelta, Is.EqualTo(new Vector2(250f, 86f)));
+
+                var image = button.GetComponent<Image>();
+                Assert.That(image, Is.Not.Null, buttonNames[index]);
+                Assert.That(image.color.r, Is.EqualTo(0.47f).Within(0.001f), buttonNames[index]);
+                Assert.That(image.color.g, Is.EqualTo(0.47f).Within(0.001f), buttonNames[index]);
+                Assert.That(image.color.b, Is.EqualTo(0.45f).Within(0.001f), buttonNames[index]);
+                Assert.That(image.color.a, Is.EqualTo(0.96f).Within(0.001f), buttonNames[index]);
+
+                var label = button.GetComponentInChildren<TMP_Text>(true);
+                Assert.That(label, Is.Not.Null, buttonNames[index]);
+                Assert.That(label.enableAutoSizing, Is.True, buttonNames[index]);
+                Assert.That(label.fontSizeMin, Is.EqualTo(24f).Within(0.001f), buttonNames[index]);
+                Assert.That(label.fontSizeMax, Is.EqualTo(42f).Within(0.001f), buttonNames[index]);
             }
         }
     }

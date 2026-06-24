@@ -72,3 +72,36 @@ Added ExP SpriteSkin tentacle strike prefab playback, combat presentation lock, 
 ### Next Steps
 
 - None - task complete
+
+
+## Session 3: Fire Shield Slash VFX Polish
+
+**Date**: 2026-06-24
+**Task**: Fire Shield Slash VFX Polish
+**Branch**: `Feature/vfx-restructure-phase1`
+
+### Summary
+
+Polished fireball launch and flame palette, simplified shield bash/burst to shield travel plus EasyExplosion, and changed slash skills to ExP attack beams with heavy-impact hits.
+
+### Main Changes
+
+(Add details)
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `15132b5` | (see git log) |
+
+### Testing
+
+- [OK] (Add test results)
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete

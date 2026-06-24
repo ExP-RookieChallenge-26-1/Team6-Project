@@ -2509,8 +2509,8 @@ namespace Project2048.Tests
             tentacle.vfxFamily = SkillVfxFamily.TentacleWhip;
             tentacle.vfx = CreateOwnedVfxTuning(SkillVfxFamily.TentacleWhip);
             tentacle.vfx.primaryPrefab = prefab;
-            tentacle.vfx.localOffset = new Vector3(-0.34f, 0.46f, 0f);
-            tentacle.vfxScale = 1f;
+            tentacle.vfx.localOffset = new Vector3(-0.38f, 0.46f, 0f);
+            tentacle.vfxScale = 1.2f;
 
             Assert.That(prefab, Is.Not.Null);
 
@@ -2529,10 +2529,10 @@ namespace Project2048.Tests
             Assert.That(AssetDatabase.GetAssetPath(animator.runtimeAnimatorController), Is.EqualTo(ControllerPath));
             Assert.That(renderer, Is.Not.Null);
             Assert.That(renderer.color, Is.EqualTo(prefabRenderer.color));
-            Assert.That(whipRoot.position.x, Is.EqualTo(playerRenderer.bounds.center.x - 0.34f).Within(0.001f));
+            Assert.That(whipRoot.position.x, Is.EqualTo(playerRenderer.bounds.center.x - 0.38f).Within(0.001f));
             Assert.That(whipRoot.position.y, Is.EqualTo(playerRenderer.bounds.center.y + 0.46f).Within(0.001f));
-            Assert.That(Mathf.Abs(whipRoot.localScale.x), Is.EqualTo(Mathf.Abs(prefab.transform.localScale.x)).Within(0.001f));
-            Assert.That(whipRoot.localScale.y, Is.EqualTo(prefab.transform.localScale.y).Within(0.001f));
+            Assert.That(Mathf.Abs(whipRoot.localScale.x), Is.EqualTo(Mathf.Abs(prefab.transform.localScale.x) * 1.2f).Within(0.001f));
+            Assert.That(whipRoot.localScale.y, Is.EqualTo(prefab.transform.localScale.y * 1.2f).Within(0.001f));
             Assert.That(renderer.bounds.min.x, Is.LessThan(playerRenderer.bounds.center.x));
             Assert.That(renderer.bounds.max.x, Is.GreaterThan(playerRenderer.bounds.center.x));
             Assert.That(renderer.sortingOrder, Is.EqualTo(playerRenderer.sortingOrder + 12));
@@ -3518,10 +3518,10 @@ namespace Project2048.Tests
                 else if (path.EndsWith("TentacleStrike.asset", System.StringComparison.Ordinal))
                 {
                     Assert.That(resolvedFamily, Is.EqualTo(SkillVfxFamily.TentacleWhip), path);
-                    AssertVector3Approximately(skill.vfx.localOffset, new Vector3(-0.34f, 0.46f, 0f), path);
+                    AssertVector3Approximately(skill.vfx.localOffset, new Vector3(-0.38f, 0.46f, 0f), path);
                     Assert.That(skill.vfx.tintWhiteBlend, Is.EqualTo(0f).Within(0.001f), path);
                     Assert.That(skill.vfx.alpha, Is.EqualTo(1f).Within(0.001f), path);
-                    Assert.That(skill.vfxScale, Is.EqualTo(1f).Within(0.001f), path);
+                    Assert.That(skill.vfxScale, Is.EqualTo(1.2f).Within(0.001f), path);
                 }
                 else if (path.EndsWith("HeavyStrike.asset", System.StringComparison.Ordinal))
                 {

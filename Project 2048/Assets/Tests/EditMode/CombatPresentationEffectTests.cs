@@ -2162,6 +2162,74 @@ namespace Project2048.Tests
         }
 
         [Test]
+        public void CombatWorldSpriteView_PlayerShieldArt_KeepsFirstStyleButThornGuardOverridesUntilShieldBreaks()
+        {
+            var viewObject = CreateOwnedGameObject("WorldSpriteView");
+            var view = viewObject.AddComponent<CombatWorldSpriteView>();
+            var playerRenderer = CreateOwnedGameObject("PlayerSprite").AddComponent<SpriteRenderer>();
+            var enemyRenderer = CreateOwnedGameObject("EnemySprite").AddComponent<SpriteRenderer>();
+            var manager = CreateOwnedGameObject("CombatManager").AddComponent<CombatManager>();
+            var player = CreateOwnedGameObject("Player").AddComponent<PlayerCombatController>();
+            var enemy = CreateOwnedGameObject("Enemy").AddComponent<EnemyController>();
+            var bootstrap = CreateOwnedGameObject("Bootstrap").AddComponent<PrototypeCombatBootstrap>();
+            var playerData = CreatePlayerData(maxHp: 80, attackPower: 2);
+            var enemyData = CreateEnemyData(maxHp: 10, attackValue: 0);
+            var lowStance = CreateSkill("low-stance", SkillType.Defense, cost: 0, power: 20);
+            var thornGuard = CreateSkill("thorn-guard", SkillType.Defense, cost: 0, power: 30);
+            var shieldSprite = CreateOwnedSprite("PersistentGenericShieldSprite");
+            var thornShieldSprite = CreateOwnedSprite("PersistentThornShieldSprite");
+            var thornShieldPrefab = CreateOwnedShieldPrefab(
+                "PersistentThornShieldPrefab",
+                thornShieldSprite,
+                "PersistentThornShieldSparkles");
+            var thornPackage = CreateOwnedVfxTuning(SkillVfxFamily.ShieldDome);
+            thornPackage.secondarySprite = thornShieldSprite;
+            thornPackage.secondaryPrefab = thornShieldPrefab;
+            lowStance.vfxFamily = SkillVfxFamily.ShieldDome;
+            thornGuard.effectKind = SkillEffectKind.ThornGuard;
+            thornGuard.selfThornRetaliationDamage = 12;
+            thornGuard.vfxFamily = SkillVfxFamily.ShieldDome;
+            thornGuard.vfx = thornPackage;
+
+            SetPrivateField(view, "playerRenderer", playerRenderer);
+            SetPrivateField(view, "enemyRenderer", enemyRenderer);
+            SetPrivateField(view, "shieldEffectSprite", shieldSprite);
+            SetPrivateField(view, "thornShieldEffectSprite", thornShieldSprite);
+            SetPrivateField(bootstrap, "combatManager", manager);
+
+            manager.SetCombatants(player, new[] { enemy });
+            view.Initialize(bootstrap);
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new List<EnemySO> { enemyData },
+                boardMoveCount = 1,
+            });
+            manager.ResolveBoardPhase();
+
+            Assert.That(manager.RequestUseSkill(lowStance), Is.True);
+            Assert.That(viewObject.transform.Find("PlayerShieldArtVfx"), Is.Not.Null);
+            Assert.That(viewObject.transform.Find("ThornGuardShieldVfx"), Is.Null);
+
+            manager.ClearSkillPresentationLock();
+            Assert.That(manager.RequestUseSkill(thornGuard), Is.True);
+            var thornRoot = viewObject.transform.Find("ThornGuardShieldVfx");
+            Assert.That(viewObject.transform.Find("PlayerShieldArtVfx"), Is.Null);
+            Assert.That(thornRoot, Is.Not.Null);
+            Assert.That(thornRoot.Find("ThornGuardShieldArt")?.GetComponent<SpriteRenderer>()?.sprite, Is.EqualTo(thornShieldSprite));
+
+            manager.ClearSkillPresentationLock();
+            Assert.That(manager.RequestUseSkill(lowStance), Is.True);
+            Assert.That(viewObject.transform.Find("PlayerShieldArtVfx"), Is.Null);
+            Assert.That(viewObject.transform.Find("ThornGuardShieldVfx"), Is.Not.Null);
+
+            player.TakeDamage(player.ShieldHp);
+            manager.ClearSkillPresentationLock();
+            Assert.That(viewObject.transform.Find("PlayerShieldArtVfx"), Is.Null);
+            Assert.That(viewObject.transform.Find("ThornGuardShieldVfx"), Is.Null);
+        }
+
+        [Test]
         public void CombatWorldSpriteView_ShieldBurstAttack_FliesShieldAndSpawnsEasyExplosion()
         {
             var viewObject = CreateOwnedGameObject("WorldSpriteView");

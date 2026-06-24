@@ -174,6 +174,7 @@ namespace Project2048.Prototype
         private Material runtimeChargedLightBeamMaterial;
         private FollowingShieldVfx activePlayerShieldArtVfx;
         private FollowingShieldVfx activePlayerThornGuardVfx;
+        private bool playerShieldStyleLockedToThornGuard;
         private Coroutine playerAttackAnimationSpeedCoroutine;
         private Coroutine gatherLightPreviewReleaseCoroutine;
         private float playerAttackAnimationSpeedRestoreValue = 1f;
@@ -194,6 +195,8 @@ namespace Project2048.Prototype
             CacheEnemyRendererRestTransform();
             HideRewardPresenter();
             RenderBackground();
+            playerShieldStyleLockedToThornGuard = false;
+            ClearActivePlayerShieldArtVfx();
             ClearActivePlayerThornGuardVfx();
             BindRewardEvents();
 
@@ -1578,41 +1581,18 @@ namespace Project2048.Prototype
             float intensity,
             int repeatCount)
         {
+            playerShieldStyleLockedToThornGuard = true;
+            ClearActivePlayerShieldArtVfx();
             var primary = ResolveThornGuardDarkColor(ResolveReusableSkillParticleColor(skill), ThornGuardShadowTint, 0.68f);
-            var secondary = ResolveThornGuardDarkColor(ResolveReusableSkillSecondaryParticleColor(skill), ThornGuardBloodTint, 0.74f);
             var radius = ShieldCircleBaseRadius *
                 ThornGuardShieldRadiusMultiplier *
                 Mathf.Clamp(Mathf.Sqrt(scale), 0.78f, 1.42f);
             var lifetime = Mathf.Max(0.5f, lifetimeSeconds * 1.08f);
-            var shieldRoot = CreateThornGuardShieldVfxRoot(anchor, skill);
-            var tuning = ResolveSkillVfxTuning(skill);
-            var package = ResolveSkillVfxPackage(skill);
-
-            var thornArtColor = Color.Lerp(secondary, Color.white, 0.18f);
-            thornArtColor.a = 0.72f;
-            SpawnShieldArtSpriteLayer(
-                shieldRoot.transform,
-                "ThornGuardShieldArt",
-                thornArtColor,
-                radius,
-                lifetime,
-                Vector3.zero,
-                sortingOffset: 3,
-                sortingAnchor: anchor,
-                autoDestroy: false,
-                persistentPulse: true,
-                spriteOverride: ResolveDesignTimeSecondarySprite(
-                    tuning,
-                    package,
-                    thornShieldEffectSprite,
-                    ResolveThornShieldEffectSprite()),
-                prefabOverride: ResolveDesignTimeSecondaryPrefab(
-                    tuning,
-                    package,
-                    ResolveThornShieldEffectPrefab()));
+            var shieldRoot = CreateThornGuardShieldVfxRoot(anchor, skill != null ? skill.power : 1);
+            SpawnThornGuardShieldArt(shieldRoot, anchor, skill, radius, lifetime);
 
             activePlayerThornGuardVfx = shieldRoot;
-            shieldRoot.SetShieldValue(Mathf.Max(1, skill.power));
+            shieldRoot.SetShieldValue(Mathf.Max(1, skill != null ? skill.power : 1));
         }
 
         private void PlayShieldAttackSkillEffect(SkillSO skill, Transform sourceAnchor, Transform targetAnchor)
@@ -1843,9 +1823,7 @@ namespace Project2048.Prototype
             return follower;
         }
 
-        private FollowingShieldVfx CreateThornGuardShieldVfxRoot(
-            Transform anchor,
-            SkillSO skill)
+        private FollowingShieldVfx CreateThornGuardShieldVfxRoot(Transform anchor, int shieldHp)
         {
             ClearActivePlayerThornGuardVfx();
 
@@ -1857,9 +1835,51 @@ namespace Project2048.Prototype
                 anchor != null ? anchor : transform,
                 new Vector3(0f, ShieldCircleBaseYOffset, 0f),
                 ThornGuardShieldFollowSharpness,
-                Mathf.Max(1, skill != null ? skill.power : 1));
+                Mathf.Max(1, shieldHp));
 
             return follower;
+        }
+
+        private void SpawnThornGuardShieldArt(
+            FollowingShieldVfx shieldRoot,
+            Transform anchor,
+            SkillSO skill,
+            float radius,
+            float lifetime)
+        {
+            if (shieldRoot == null)
+            {
+                return;
+            }
+
+            var secondary = ResolveThornGuardDarkColor(
+                skill != null ? ResolveReusableSkillSecondaryParticleColor(skill) : ThornGuardBloodTint,
+                ThornGuardBloodTint,
+                0.74f);
+            var tuning = ResolveSkillVfxTuning(skill);
+            var package = ResolveSkillVfxPackage(skill);
+            var thornArtColor = Color.Lerp(secondary, Color.white, 0.18f);
+            thornArtColor.a = 0.72f;
+            SpawnShieldArtSpriteLayer(
+                shieldRoot.transform,
+                "ThornGuardShieldArt",
+                thornArtColor,
+                radius,
+                Mathf.Max(0.5f, lifetime),
+                Vector3.zero,
+                sortingOffset: 3,
+                sortingAnchor: anchor,
+                autoDestroy: false,
+                persistentPulse: true,
+                spriteOverride: ResolveDesignTimeSecondarySprite(
+                    tuning,
+                    package,
+                    thornShieldEffectSprite,
+                    ResolveThornShieldEffectSprite()),
+                prefabOverride: ResolveDesignTimeSecondaryPrefab(
+                    tuning,
+                    package,
+                    ResolveThornShieldEffectPrefab()));
         }
 
         private void PlayFlameBurstSkillParticleEffect(
@@ -6869,10 +6889,38 @@ namespace Project2048.Prototype
             var shieldHp = playerSnapshot != null ? playerSnapshot.ShieldHp : 0;
             if (shieldHp <= 0)
             {
+                playerShieldStyleLockedToThornGuard = false;
                 ClearActivePlayerShieldArtVfx();
+                ClearActivePlayerThornGuardVfx();
                 return;
             }
 
+            if (PlayerSnapshotHasThornGuard(playerSnapshot))
+            {
+                playerShieldStyleLockedToThornGuard = true;
+            }
+
+            if (playerShieldStyleLockedToThornGuard)
+            {
+                ClearActivePlayerShieldArtVfx();
+                if (activePlayerThornGuardVfx == null)
+                {
+                    activePlayerThornGuardVfx = CreateThornGuardShieldVfxRoot(
+                        ResolvePlayerAnchor() ?? transform,
+                        shieldHp);
+                    SpawnThornGuardShieldArt(
+                        activePlayerThornGuardVfx,
+                        ResolvePlayerAnchor() ?? transform,
+                        null,
+                        ShieldCircleBaseRadius * ThornGuardShieldRadiusMultiplier,
+                        0.5f);
+                }
+
+                activePlayerThornGuardVfx?.SetShieldValue(shieldHp);
+                return;
+            }
+
+            ClearActivePlayerThornGuardVfx();
             if (activePlayerShieldArtVfx == null)
             {
                 activePlayerShieldArtVfx = CreatePlayerShieldArtVfxRoot(
@@ -6881,6 +6929,15 @@ namespace Project2048.Prototype
             }
 
             activePlayerShieldArtVfx?.SetShieldValue(shieldHp);
+        }
+
+        private static bool PlayerSnapshotHasThornGuard(PlayerCombatSnapshot playerSnapshot)
+        {
+            return playerSnapshot?.StatusEffects != null &&
+                playerSnapshot.StatusEffects.Any(effect =>
+                    effect != null &&
+                    effect.Value > 0 &&
+                    string.Equals(effect.Id, "thorn-guard", System.StringComparison.OrdinalIgnoreCase));
         }
 
         private void UpdatePlayerThornGuardVfx(PlayerCombatSnapshot playerSnapshot)

@@ -1,5 +1,6 @@
 using Project2048.Skills;
 using UnityEngine;
+using UnityEngine.VFX;
 
 namespace Project2048.Presentation
 {
@@ -88,11 +89,18 @@ namespace Project2048.Presentation
                 instance.transform.localScale *= cue.scale;
             }
 
+            ApplyTint(instance, cue.tint);
+
             var projectile = instance.GetComponentInChildren<CombatProjectileEffect>(true);
             if (projectile != null)
             {
+                // 프로젝타일은 스스로 이동/임팩트 파티클을 재생한다.
                 var targetAnchor = ctx.OppositeAnchorFor(cue.placement.target);
                 projectile.LaunchFromWorldPosition(pos, targetAnchor, Vector3.zero);
+            }
+            else
+            {
+                PlayVisuals(instance);
             }
 
             var lifetime = cue.lifetimeOverride > 0f ? cue.lifetimeOverride : 0f;
@@ -102,6 +110,40 @@ namespace Project2048.Presentation
             }
 
             return instance;
+        }
+
+        private static void ApplyTint(GameObject instance, Color tint)
+        {
+            if (tint.a <= 0f) return; // Color.clear = leave the prefab's authored colors
+
+            foreach (var sr in instance.GetComponentsInChildren<SpriteRenderer>(true))
+            {
+                sr.color = tint;
+            }
+
+            foreach (var ps in instance.GetComponentsInChildren<ParticleSystem>(true))
+            {
+                var main = ps.main;
+                main.startColor = tint;
+            }
+        }
+
+        private static void PlayVisuals(GameObject instance)
+        {
+            foreach (var ps in instance.GetComponentsInChildren<ParticleSystem>(true))
+            {
+                ps.Play(true);
+            }
+
+            foreach (var vfx in instance.GetComponentsInChildren<VisualEffect>(true))
+            {
+                if (Application.isPlaying)
+                {
+                    vfx.Reinit();
+                }
+
+                vfx.Play();
+            }
         }
     }
 }

@@ -85,5 +85,80 @@ namespace Project2048.Tests
             Object.DestroyImmediate(player.gameObject);
             Object.DestroyImmediate(enemy.gameObject);
         }
+
+        [Test]
+        public void Play_ParticleCue_AutoPlaysAndAppliesTint()
+        {
+            var player = MakeUnitSprite("P", Vector3.zero);
+            var enemy = MakeUnitSprite("E", new Vector3(1, 0, 0));
+            var prefab = new GameObject("ParticleFx");
+            var ps = prefab.AddComponent<ParticleSystem>();
+            var main = ps.main;
+            main.playOnAwake = false;
+            main.startColor = Color.white;
+            var tint = new Color(1f, 0f, 0f, 1f);
+            var def = new SkillVfxDefinition
+            {
+                cues = new[]
+                {
+                    new SkillVfxCue
+                    {
+                        trigger = SkillVfxTrigger.Activate,
+                        prefab = prefab,
+                        placement = new SkillVfxPlacement { target = SkillVfxTarget.Player, vertical = SkillVfxVertical.Body },
+                        tint = tint,
+                    },
+                },
+            };
+            var ctx = new SkillVfxContext(player.transform, enemy.transform, SkillVfxTrigger.Activate);
+
+            var spawned = SkillVfxPlayer.Play(def, ctx, parent: null, isPlaying: false);
+
+            Assert.That(spawned.Count, Is.EqualTo(1));
+            var spawnedPs = spawned[0].GetComponent<ParticleSystem>();
+            Assert.That(spawnedPs.main.startColor.color, Is.EqualTo(tint));      // tint applied
+            Assert.That(spawnedPs.isPlaying, Is.True);                           // auto-played
+
+            foreach (var go in spawned) Object.DestroyImmediate(go);
+            Object.DestroyImmediate(prefab);
+            Object.DestroyImmediate(player.gameObject);
+            Object.DestroyImmediate(enemy.gameObject);
+        }
+
+        [Test]
+        public void Play_ClearTint_LeavesPrefabColor()
+        {
+            var player = MakeUnitSprite("P", Vector3.zero);
+            var enemy = MakeUnitSprite("E", new Vector3(1, 0, 0));
+            var prefab = new GameObject("ParticleFx2");
+            var ps = prefab.AddComponent<ParticleSystem>();
+            var main = ps.main;
+            main.playOnAwake = false;
+            main.startColor = Color.green;
+            var def = new SkillVfxDefinition
+            {
+                cues = new[]
+                {
+                    new SkillVfxCue
+                    {
+                        trigger = SkillVfxTrigger.Activate,
+                        prefab = prefab,
+                        placement = new SkillVfxPlacement { target = SkillVfxTarget.Player, vertical = SkillVfxVertical.Body },
+                        tint = Color.clear,
+                    },
+                },
+            };
+            var ctx = new SkillVfxContext(player.transform, enemy.transform, SkillVfxTrigger.Activate);
+
+            var spawned = SkillVfxPlayer.Play(def, ctx, parent: null, isPlaying: false);
+
+            var spawnedPs = spawned[0].GetComponent<ParticleSystem>();
+            Assert.That(spawnedPs.main.startColor.color, Is.EqualTo(Color.green)); // clear tint → unchanged
+
+            foreach (var go in spawned) Object.DestroyImmediate(go);
+            Object.DestroyImmediate(prefab);
+            Object.DestroyImmediate(player.gameObject);
+            Object.DestroyImmediate(enemy.gameObject);
+        }
     }
 }

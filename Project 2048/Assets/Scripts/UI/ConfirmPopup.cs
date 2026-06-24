@@ -13,38 +13,65 @@ public class ConfirmPopup : MonoBehaviour
 
     private Action onYesAction;
     private Action onNoAction;
+    private bool _isInitialized;
+    private bool _wantsOpen;
 
     private void Awake()
     {
-        yesButton.onClick.AddListener(OnYesClicked);
-        noButton.onClick.AddListener(OnNoClicked);
-        backgroundButton.onClick.AddListener(OnNoClicked);
-        popupRoot.SetActive(false);
+        InitializeIfNeeded();
+
+        if (!_wantsOpen && popupRoot != null)
+        {
+            popupRoot.SetActive(false);
+        }
     }
 
     public void Show(string message, Action onYes, Action onNo = null)
     {
-        CheckMessage.text = message;
-        onYesAction = onYes;
-        onNoAction = onNo;
-        popupRoot.SetActive(true);
+        _wantsOpen = true;
+        InitializeIfNeeded();
 
-        
         CheckMessage.text = message;
         onYesAction = onYes;
         onNoAction = onNo;
         popupRoot.SetActive(true);
-       
+    }
+
+    private void InitializeIfNeeded()
+    {
+        if (_isInitialized)
+        {
+            return;
+        }
+
+        _isInitialized = true;
+
+        if (yesButton != null)
+        {
+            yesButton.onClick.AddListener(OnYesClicked);
+        }
+
+        if (noButton != null)
+        {
+            noButton.onClick.AddListener(OnNoClicked);
+        }
+
+        if (backgroundButton != null)
+        {
+            backgroundButton.onClick.AddListener(OnNoClicked);
+        }
     }
 
     private void OnYesClicked()
     {
+        _wantsOpen = false;
         popupRoot.SetActive(false);
         onYesAction?.Invoke();
     }
 
     private void OnNoClicked()
     {
+        _wantsOpen = false;
         popupRoot.SetActive(false);
         onNoAction?.Invoke();
     }

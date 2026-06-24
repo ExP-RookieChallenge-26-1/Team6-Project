@@ -80,6 +80,38 @@ MonoBehaviour:
     sfxDelaySeconds: 0
     localOffset: {x: 0, y: 0, z: 0}
     autoDestroySeconds: 1.55
+  vfxDefinition:
+    cues:
+    - trigger: 0
+      prefab: {fileID: 5592946645197749577, guid: e9b54a20e0cab144a95032ef68460208, type: 3}
+      placement:
+        target: 0
+        vertical: 1
+        localOffset: {x: 0.18, y: 0.08, z: 0}
+      delaySeconds: 0
+      scale: 1
+      tint: {r: 0, g: 0, b: 0, a: 0}
+      lifetimeOverride: -1
+    - trigger: 0
+      prefab: {fileID: 5997275962859508079, guid: 896b69cea0924a64d85efe2863756ea6, type: 3}
+      placement:
+        target: 1
+        vertical: 0
+        localOffset: {x: 0, y: 0.03, z: 0}
+      delaySeconds: 0.42
+      scale: 1
+      tint: {r: 0, g: 0, b: 0, a: 0}
+      lifetimeOverride: 1.35
+    - trigger: 0
+      prefab: {fileID: 4498762637842804159, guid: a0fb7f5b26fce7f4aa39fbc40939fd0d, type: 3}
+      placement:
+        target: 1
+        vertical: 1
+        localOffset: {x: -0.08, y: 0.08, z: 0}
+      delaySeconds: 0.48
+      scale: 1.08
+      tint: {r: 0, g: 0, b: 0, a: 0}
+      lifetimeOverride: 1.45
   vfx:
     family: 15
     primarySprite: {fileID: 21300000, guid: e83fe29d407142ba931d90d518a538a2, type: 3}

@@ -69,14 +69,14 @@ namespace Project2048.Presentation
             {
                 // Edit mode / tests: ignore delay, spawn synchronously. Play-mode delay is handled
                 // by the caller (the view) via a coroutine.
-                var go = SpawnCue(cue, ctx, parent, isPlaying);
+                var go = PlayCue(cue, ctx, parent, isPlaying);
                 if (go != null) spawned.Add(go);
             }
 
             return spawned;
         }
 
-        private static GameObject SpawnCue(SkillVfxCue cue, SkillVfxContext ctx, Transform parent, bool isPlaying)
+        public static GameObject PlayCue(SkillVfxCue cue, SkillVfxContext ctx, Transform parent, bool isPlaying)
         {
             if (cue == null || !cue.HasPrefab) return null;
 

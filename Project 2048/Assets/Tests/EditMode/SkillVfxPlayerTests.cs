@@ -2,6 +2,7 @@ using NUnit.Framework;
 using Project2048.Presentation;
 using Project2048.Skills;
 using UnityEngine;
+using UnityEngine.VFX;
 
 namespace Project2048.Tests
 {
@@ -154,6 +155,40 @@ namespace Project2048.Tests
 
             var spawnedPs = spawned[0].GetComponent<ParticleSystem>();
             Assert.That(spawnedPs.main.startColor.color, Is.EqualTo(Color.green)); // clear tint → unchanged
+
+            foreach (var go in spawned) Object.DestroyImmediate(go);
+            Object.DestroyImmediate(prefab);
+            Object.DestroyImmediate(player.gameObject);
+            Object.DestroyImmediate(enemy.gameObject);
+        }
+
+        [Test]
+        public void Play_ProjectileCueWithVisualEffect_SpawnsPrefab()
+        {
+            var player = MakeUnitSprite("P", Vector3.zero);
+            var enemy = MakeUnitSprite("E", new Vector3(1, 0, 0));
+            var prefab = new GameObject("VfxProjectile");
+            prefab.AddComponent<VisualEffect>();
+            prefab.AddComponent<CombatProjectileEffect>();
+            var def = new SkillVfxDefinition
+            {
+                cues = new[]
+                {
+                    new SkillVfxCue
+                    {
+                        trigger = SkillVfxTrigger.Activate,
+                        prefab = prefab,
+                        placement = new SkillVfxPlacement { target = SkillVfxTarget.Player, vertical = SkillVfxVertical.Body },
+                    },
+                },
+            };
+            var ctx = new SkillVfxContext(player.transform, enemy.transform, SkillVfxTrigger.Activate);
+
+            var spawned = SkillVfxPlayer.Play(def, ctx, parent: null, isPlaying: false);
+
+            Assert.That(spawned.Count, Is.EqualTo(1));
+            Assert.That(spawned[0].GetComponent<VisualEffect>(), Is.Not.Null);
+            Assert.That(spawned[0].GetComponent<CombatProjectileEffect>(), Is.Not.Null);
 
             foreach (var go in spawned) Object.DestroyImmediate(go);
             Object.DestroyImmediate(prefab);

@@ -68,8 +68,8 @@ namespace Project2048.Prototype
         private const int DarkShackleMinChainLinkCount = 8;
         private const int DarkShackleMaxChainLinkCount = 24;
         private const int DarkShackleRingSegmentCount = 18;
-        private const float DarkShackleChainFlySpeed = 14f;
-        private const float DarkShackleMaxFlySeconds = 0.26f;
+        private const float DarkShackleChainFlySpeed = 8f;
+        private const float DarkShackleMaxFlySeconds = 0.42f;
         private const float DarkShackleLatchSeconds = 0.42f;
         private const float DarkShackleFadeSeconds = 0.16f;
         private const float DarkShackleInitialExtension = 0.1f;
@@ -363,7 +363,11 @@ namespace Project2048.Prototype
             PlayPlayerAttackAnimationIfNeeded(skill, family);
             if (isChargeAttack)
             {
-                if (!TryPlayDefinitionCues(skill, SkillVfxTrigger.ChargeStart))
+                if (TryPlayDefinitionCues(skill, SkillVfxTrigger.ChargeStart))
+                {
+                    PlayCombatantActionAudioEffect(effect);
+                }
+                else
                 {
                     PlayChargeAttackStartEffect(skill, effect, sourceAnchor);
                 }
@@ -378,6 +382,7 @@ namespace Project2048.Prototype
 
             if (TryPlayDefinitionCues(skill, SkillVfxTrigger.Activate))
             {
+                PlayCombatantActionAudioEffect(effect);
                 if (delayEnemyDeathFade)
                 {
                     DelayEnemyDeathFadeForSkillEffect(skill, effect);
@@ -475,8 +480,32 @@ namespace Project2048.Prototype
             }
 
             var ctx = BuildSkillVfxContext(trigger);
-            var spawned = SkillVfxPlayer.Play(skill.vfxDefinition, ctx, transform, Application.isPlaying);
-            return spawned.Count > 0;
+            var playedAnyCue = false;
+            foreach (var cue in skill.vfxDefinition.CuesFor(trigger))
+            {
+                if (cue == null || !cue.HasPrefab)
+                {
+                    continue;
+                }
+
+                playedAnyCue = true;
+                if (Application.isPlaying && cue.delaySeconds > 0f)
+                {
+                    StartCoroutine(PlayDefinitionCueAfterDelay(cue, ctx, cue.delaySeconds));
+                }
+                else
+                {
+                    SkillVfxPlayer.PlayCue(cue, ctx, transform, Application.isPlaying);
+                }
+            }
+
+            return playedAnyCue;
+        }
+
+        private IEnumerator PlayDefinitionCueAfterDelay(SkillVfxCue cue, SkillVfxContext ctx, float delaySeconds)
+        {
+            yield return new WaitForSeconds(Mathf.Max(0f, delaySeconds));
+            SkillVfxPlayer.PlayCue(cue, ctx, transform, Application.isPlaying);
         }
 
         private bool TryPlayDirectedSkillEffect(

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.VFX;
 
 namespace Project2048.Presentation
 {
@@ -11,6 +12,8 @@ namespace Project2048.Presentation
         [SerializeField, Min(0f)] private float impactLifetimeSeconds = 0.55f;
         [SerializeField] private ParticleSystem[] travelParticles;
         [SerializeField] private ParticleSystem[] impactParticles;
+        [SerializeField] private VisualEffect[] travelVisualEffects;
+        [SerializeField] private VisualEffect[] impactVisualEffects;
 
         private Transform source;
         private Transform target;
@@ -53,6 +56,8 @@ namespace Project2048.Presentation
             transform.position = startPosition;
             PlayParticles(travelParticles);
             StopParticles(impactParticles, ParticleSystemStopBehavior.StopEmittingAndClear);
+            PlayVisualEffects(ResolveTravelVisualEffects());
+            StopVisualEffects(impactVisualEffects);
         }
 
         private void Update()
@@ -102,11 +107,20 @@ namespace Project2048.Presentation
             transform.position = ResolveTargetPosition();
             StopParticles(travelParticles, ParticleSystemStopBehavior.StopEmitting);
             PlayParticles(impactParticles);
+            StopVisualEffects(ResolveTravelVisualEffects());
+            PlayVisualEffects(impactVisualEffects);
 
             if (impactLifetimeSeconds > 0f)
             {
                 Destroy(gameObject, impactLifetimeSeconds);
             }
+        }
+
+        private VisualEffect[] ResolveTravelVisualEffects()
+        {
+            return travelVisualEffects != null && travelVisualEffects.Length > 0
+                ? travelVisualEffects
+                : GetComponentsInChildren<VisualEffect>(true);
         }
 
         private static void PlayParticles(ParticleSystem[] particles)
@@ -142,6 +156,47 @@ namespace Project2048.Presentation
                 }
 
                 particle.Stop(true, stopBehavior);
+            }
+        }
+
+        private static void PlayVisualEffects(VisualEffect[] visualEffects)
+        {
+            if (visualEffects == null)
+            {
+                return;
+            }
+
+            foreach (var visualEffect in visualEffects)
+            {
+                if (visualEffect == null)
+                {
+                    continue;
+                }
+
+                if (Application.isPlaying)
+                {
+                    visualEffect.Reinit();
+                }
+
+                visualEffect.Play();
+            }
+        }
+
+        private static void StopVisualEffects(VisualEffect[] visualEffects)
+        {
+            if (visualEffects == null)
+            {
+                return;
+            }
+
+            foreach (var visualEffect in visualEffects)
+            {
+                if (visualEffect == null)
+                {
+                    continue;
+                }
+
+                visualEffect.Stop();
             }
         }
     }

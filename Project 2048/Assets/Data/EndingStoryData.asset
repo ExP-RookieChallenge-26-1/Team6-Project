@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ed2436f25ed56b49a1653db6550e50c, type: 3}
+  m_Name: EndingStoryData
+  m_EditorClassIdentifier: Game.Core::Project2048.Story.StoryDataSO
+  currentBackgroundSprite: {fileID: 7947183576441275804, guid: 94faa321322df9348b507c0cc4e371b6, type: 3}
+  nextBackgroundSprite: {fileID: 7947183576441275804, guid: 94faa321322df9348b507c0cc4e371b6, type: 3}
+  steps:
+  - speakerName: "\uCC3D\uC870\uC8FC"
+    text: "\uB05D\uAE4C\uC9C0 \uB3C4\uB2EC\uD588\uAD6C\uB098"
+    shouldChangeBackground: 0
+  - speakerName: "\uD50C\uB808\uC774\uC5B4"
+    text: "\uBB38\uBA85\uC758 \uBE5B\uC744 \uC804\uD588\uC2B5\uB2C8\uB2E4"
+    shouldChangeBackground: 0
+  - speakerName: "\uCC3D\uC870\uC8FC"
+    text: "\uC774\uC81C \uB108\uC758 \uB4F1\uBD88\uC740 \uC9C0\uC0C1\uC5D0\uB3C4 \uB2FF\uC744 \uAC83\uC774\uB2E4"
+    shouldChangeBackground: 0
+  - speakerName: "\uD50C\uB808\uC774\uC5B4"
+    text: "\uB3CC\uC544\uAC00\uACA0\uC2B5\uB2C8\uB2E4. \uBAA8\uB450\uAC00 \uBE5B\uC744 \uBCFC \uC218 \uC788\uB3C4\uB85D"
+    shouldChangeBackground: 0

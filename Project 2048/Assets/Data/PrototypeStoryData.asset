@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ed2436f25ed56b49a1653db6550e50c, type: 3}
   m_Name: PrototypeStoryData
   m_EditorClassIdentifier: Game.Core::Project2048.Story.StoryDataSO
+  currentBackgroundSprite: {fileID: 0}
+  nextBackgroundSprite: {fileID: 0}
   steps:
   - speakerName: "\uCC3D\uC870\uC8FC"
     text: "\uB098\uC758 \uC544\uC774\uC57C"

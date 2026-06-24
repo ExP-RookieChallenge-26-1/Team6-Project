@@ -131,6 +131,13 @@ namespace Project2048.Tests
             {
                 Assert.That(fireballSkill.ResolveVfxFamily(), Is.EqualTo(SkillVfxFamily.FlameBurst), fireballSkill.skillId);
                 Assert.That(fireballSkill.vfxPrimaryColor, Is.EqualTo(new Color(0.286275f, 0.686275f, 0.709804f, 1f)), fireballSkill.skillId);
+                Assert.That(fireballSkill.vfxDefinition.HasAnyCue, Is.True, fireballSkill.skillId);
+                var cuePaths = fireballSkill.vfxDefinition
+                    .CuesFor(SkillVfxTrigger.Activate)
+                    .Select(cue => AssetDatabase.GetAssetPath(cue.prefab))
+                    .ToArray();
+                Assert.That(cuePaths, Does.Contain("Assets/VFX Test/Prefab/vfx_Fire.prefab"), fireballSkill.skillId);
+                Assert.That(cuePaths, Does.Contain("Assets/VFX Test/Prefab/vfx_EasyExplosion.prefab"), fireballSkill.skillId);
                 Assert.That(fireballSkill.activationEffect?.vfxPrefab, Is.Not.Null, fireballSkill.skillId);
                 Assert.That(
                     AssetDatabase.GetAssetPath(fireballSkill.activationEffect.vfxPrefab),
@@ -140,6 +147,16 @@ namespace Project2048.Tests
                     fireballSkill.activationEffect.vfxPrefab.GetComponentInChildren<CombatProjectileEffect>(true),
                     Is.Not.Null,
                     fireballSkill.skillId);
+            }
+
+            foreach (var supportSkill in new[] { skills["light-recover"], skills["focus-breath"] })
+            {
+                Assert.That(supportSkill.vfxDefinition.HasAnyCue, Is.True, supportSkill.skillId);
+                var cuePaths = supportSkill.vfxDefinition
+                    .CuesFor(SkillVfxTrigger.Activate)
+                    .Select(cue => AssetDatabase.GetAssetPath(cue.prefab))
+                    .ToArray();
+                Assert.That(cuePaths, Does.Contain("Assets/VFX Test/Prefab/vfx_Healing.prefab"), supportSkill.skillId);
             }
 
             var rewardTable = AssetDatabase.LoadAssetAtPath<RewardTableSO>("Assets/Data/Rewards/PrototypeRewardTable.asset");

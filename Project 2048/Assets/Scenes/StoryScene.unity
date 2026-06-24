@@ -1240,7 +1240,7 @@ MonoBehaviour:
   m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Story.StoryController
   openingStory: {fileID: 11400000, guid: f16d22f9bea5d7e4fac6b1df2da3c53e, type: 2}
-  endingStory: {fileID: 0}
+  endingStory: {fileID: 11400000, guid: c3af4a62f1294bbfb5fc4d4f3a22fbea, type: 2}
   storyTextView: {fileID: 1508972387}
   storyBackgroundView: {fileID: 1508972389}
   storyLayoutView: {fileID: 1508972388}

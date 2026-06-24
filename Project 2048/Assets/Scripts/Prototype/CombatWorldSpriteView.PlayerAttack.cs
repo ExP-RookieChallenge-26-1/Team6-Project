@@ -181,11 +181,13 @@ namespace Project2048.Prototype
             var tuning = ResolveSkillVfxTuning(skill);
             var package = ResolveSkillVfxPackage(skill);
             var designTimeBinding = ResolveSkillVfxDesignTimeBinding(skill);
-            var fallbackSprite = family == SkillVfxFamily.ImpactBurst
+            var usesHitImpactArt = family == SkillVfxFamily.ImpactBurst ||
+                family == SkillVfxFamily.SlashArc;
+            var fallbackSprite = usesHitImpactArt
                 ? ResolveHitEffectSprite()
                 : ResolveAttackEffectSprite();
-            var explicitSprite = family == SkillVfxFamily.ImpactBurst ? hitEffectSprite : attackEffectSprite;
-            var fallbackPrefab = family == SkillVfxFamily.ImpactBurst
+            var explicitSprite = usesHitImpactArt ? hitEffectSprite : attackEffectSprite;
+            var fallbackPrefab = usesHitImpactArt
                 ? ResolveHitEffectPrefab()
                 : ResolveAttackEffectPrefab();
             var localOffset = ResolveCloseRangeImpactLocalOffset(
@@ -199,7 +201,7 @@ namespace Project2048.Prototype
 
             var art = SpawnAttackArtSpriteLayer(
                 targetAnchor,
-                family == SkillVfxFamily.ImpactBurst ? "HitImpactEffectArt" : "AttackEffectArt",
+                usesHitImpactArt ? "HitImpactEffectArt" : "AttackEffectArt",
                 ResolveDesignTimeArtColor(
                     ResolveReusableSkillParticleColor(skill),
                     tuning,
@@ -213,7 +215,7 @@ namespace Project2048.Prototype
                         tuning,
                         package,
                         designTimeBinding,
-                        family == SkillVfxFamily.ImpactBurst
+                        usesHitImpactArt
                             ? 1.08f * HitEffectArtSizeMultiplier
                             : AttackEffectArtSizeMultiplier),
                 ResolveDesignTimeLifetime(tuning, package, designTimeBinding, AttackArtLifetimeSeconds),

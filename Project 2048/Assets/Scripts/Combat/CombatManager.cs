@@ -911,7 +911,7 @@ namespace Project2048.Combat
             }
 
             AddStatusEffect(effects, "poison", player.PoisonTurns, "독", $"턴 종료 시 최대 체력의 {Mathf.RoundToInt(player.PoisonMaxHpDamagePercent * 100f)}% 피해를 받습니다. 남은 턴: {{0}}", "독", false);
-            AddStatusEffect(effects, "bleed", player.BleedTurns, "출혈", $"공격을 받을 때마다 추가 피해 {player.BleedDamage}를 받습니다. 남은 턴: {{0}}", "출", false);
+            AddStatusEffect(effects, "bleed", player.BleedTurns, "화염", $"공격을 받을 때마다 화염 피해 {player.BleedDamage}를 받습니다. 남은 턴: {{0}}", "화", false);
             AddStatusEffect(effects, "brand", player.BrandDamage, "낙인", "다음 공격을 받을 때 추가 피해 {0}을 받고 해제됩니다.", "낙", false);
             AddStatusEffect(effects, "seal", player.SealTurns, "봉인", $"{player.SealedSkillId} 사용 불가. 남은 턴: {{0}}", "봉", false);
             AddStatusEffect(effects, "cost-carry-ready", player.PendingCostCarryLimit, "잔광 저장", "이번 턴 종료 시 남은 코스트를 최대 {0}까지 이월합니다.", "저", true);
@@ -988,7 +988,7 @@ namespace Project2048.Combat
 
             AddEnemyDefenseStatusEffect(effects, enemy);
             AddStatusEffect(effects, "poison", enemy.PoisonTurns, "독", $"턴 종료 시 최대 체력의 {Mathf.RoundToInt(enemy.PoisonMaxHpDamagePercent * 100f)}% 피해를 받습니다. 남은 턴: {{0}}", "독", false);
-            AddStatusEffect(effects, "bleed", enemy.BleedTurns, "출혈", $"공격을 받을 때마다 추가 피해 {enemy.BleedDamage}를 받습니다. 남은 턴: {{0}}", "출", false);
+            AddStatusEffect(effects, "bleed", enemy.BleedTurns, "화염", $"공격을 받을 때마다 화염 피해 {enemy.BleedDamage}를 받습니다. 남은 턴: {{0}}", "화", false);
             AddStatusEffect(effects, "brand", enemy.BrandDamage, "낙인", "다음 공격을 받을 때 추가 피해 {0}을 받고 해제됩니다.", "낙", false);
             AddStatusEffect(effects, "seal", enemy.SealTurns, "봉인", $"{enemy.SealedSkillId} 사용 불가. 남은 턴: {{0}}", "봉", false);
             AddStatusEffect(effects, "taunt", enemy.TauntTurns, "도발", "다음 행동에서 비공격 스킬을 사용할 수 없습니다. 남은 턴: {0}", "도", false);

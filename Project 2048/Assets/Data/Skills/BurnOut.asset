@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e39edfbbdac2c064e877e5f3f784bab9, type: 3}
-  m_Name: "\uD53C\uC758 \uC774\uBE68"
+  m_Name: BurnOut
   m_EditorClassIdentifier: Game.Core::Project2048.Skills.SkillSO
-  skillId: blood-fang
-  skillName: "\uD53C\uC758 \uC774\uBE68"
+  skillId: burn-out
+  skillName: "\uD654\uC5FC \uC18C\uBAA8"
   skillType: 0
   effectKind: 11
   damageStatSource: 0

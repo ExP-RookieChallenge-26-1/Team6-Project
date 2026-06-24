@@ -42,30 +42,30 @@ namespace Project2048.Tests
         {
             var skills = LoadPrototypeSkills();
 
-            var bleedingCut = skills["bleeding-cut"];
-            var openWound = skills["open-wound"];
-            var bloodFang = skills["blood-fang"];
+            var fireball = skills["fireball"];
+            var burstFireball = skills["burst-fireball"];
+            var burnOut = skills["burn-out"];
             var overburn = skills["overburn"];
             var afterglowSave = skills["afterglow-save"];
             var cleanseHand = skills["cleanse-hand"];
             var blackCorrosion = skills["black-corrosion"];
 
-            Assert.That(bleedingCut.skillName, Is.EqualTo("\uCD9C\uD608 \uBCA0\uAE30"));
-            Assert.That(bleedingCut.cost, Is.EqualTo(20));
-            Assert.That(bleedingCut.ResolveEffectKind(), Is.EqualTo(SkillEffectKind.BleedAttack));
-            Assert.That(bleedingCut.statusDuration, Is.EqualTo(2));
-            Assert.That(bleedingCut.statusDamage, Is.EqualTo(20));
+            Assert.That(fireball.skillName, Is.EqualTo("\uD654\uC5FC\uAD6C"));
+            Assert.That(fireball.cost, Is.EqualTo(20));
+            Assert.That(fireball.ResolveEffectKind(), Is.EqualTo(SkillEffectKind.BleedAttack));
+            Assert.That(fireball.statusDuration, Is.EqualTo(2));
+            Assert.That(fireball.statusDamage, Is.EqualTo(20));
 
-            Assert.That(openWound.skillName, Is.EqualTo("\uC0C1\uCC98 \uBC8C\uB9AC\uAE30"));
-            Assert.That(openWound.cost, Is.EqualTo(30));
-            Assert.That(openWound.ResolveEffectKind(), Is.EqualTo(SkillEffectKind.OpenWoundAttack));
-            Assert.That(openWound.conditionalPowerBonus, Is.EqualTo(50));
+            Assert.That(burstFireball.skillName, Is.EqualTo("\uD3ED\uBC1C \uD654\uC5FC\uAD6C"));
+            Assert.That(burstFireball.cost, Is.EqualTo(30));
+            Assert.That(burstFireball.ResolveEffectKind(), Is.EqualTo(SkillEffectKind.OpenWoundAttack));
+            Assert.That(burstFireball.conditionalPowerBonus, Is.EqualTo(50));
 
-            Assert.That(bloodFang.skillName, Is.EqualTo("\uD53C\uC758 \uC774\uBE68"));
-            Assert.That(bloodFang.cost, Is.EqualTo(30));
-            Assert.That(bloodFang.ResolveEffectKind(), Is.EqualTo(SkillEffectKind.SacrificeAttack));
-            Assert.That(bloodFang.power, Is.EqualTo(100));
-            Assert.That(bloodFang.lifeStealPercent, Is.Zero);
+            Assert.That(burnOut.skillName, Is.EqualTo("\uD654\uC5FC \uC18C\uBAA8"));
+            Assert.That(burnOut.cost, Is.EqualTo(30));
+            Assert.That(burnOut.ResolveEffectKind(), Is.EqualTo(SkillEffectKind.SacrificeAttack));
+            Assert.That(burnOut.power, Is.EqualTo(100));
+            Assert.That(burnOut.lifeStealPercent, Is.Zero);
 
             Assert.That(overburn.cost, Is.EqualTo(40));
             Assert.That(overburn.ResolveEffectKind(), Is.EqualTo(SkillEffectKind.OverburnAttack));
@@ -89,7 +89,7 @@ namespace Project2048.Tests
                 ["cleanse-hand"] = 10,
                 ["afterglow-save"] = 10,
                 ["light-shot"] = 20,
-                ["bleeding-cut"] = 20,
+                ["fireball"] = 20,
                 ["poison-coat"] = 20,
                 ["execute"] = 20,
                 ["shield-bash"] = 20,
@@ -106,9 +106,9 @@ namespace Project2048.Tests
                 ["intimidating-shot"] = 30,
                 ["life-drain"] = 30,
                 ["body-press"] = 30,
-                ["open-wound"] = 30,
+                ["burst-fireball"] = 30,
                 ["shield-burst"] = 30,
-                ["blood-fang"] = 30,
+                ["burn-out"] = 30,
                 ["heavy-strike"] = 30,
                 ["gather-light"] = 30,
                 ["black-pressure"] = 30,
@@ -127,7 +127,7 @@ namespace Project2048.Tests
                 Assert.That(skills[expectedCost.Key].cost, Is.EqualTo(expectedCost.Value), expectedCost.Key);
             }
 
-            foreach (var fireballSkill in new[] { bleedingCut, openWound, bloodFang })
+            foreach (var fireballSkill in new[] { fireball, burstFireball, burnOut })
             {
                 Assert.That(fireballSkill.ResolveVfxFamily(), Is.EqualTo(SkillVfxFamily.FlameBurst), fireballSkill.skillId);
                 Assert.That(fireballSkill.vfxPrimaryColor, Is.EqualTo(new Color(0.286275f, 0.686275f, 0.709804f, 1f)), fireballSkill.skillId);
@@ -156,9 +156,9 @@ namespace Project2048.Tests
 
             Assert.That(skills.Keys, Is.SupersetOf(new[]
             {
-                "bleeding-cut",
+                "fireball",
                 "poison-coat",
-                "open-wound",
+                "burst-fireball",
                 "execute",
                 "overburn",
                 "seal-skill",
@@ -168,7 +168,7 @@ namespace Project2048.Tests
                 "cleanse-hand",
                 "black-corrosion",
             }));
-            Assert.That(rewardSkillIds, Does.Contain("bleeding-cut"));
+            Assert.That(rewardSkillIds, Does.Contain("fireball"));
             Assert.That(rewardSkillIds, Does.Contain("cleanse-hand"));
             Assert.That(rewardSkillIds, Does.Not.Contain("black-corrosion"));
         }
@@ -222,7 +222,7 @@ namespace Project2048.Tests
             {
                 "quick-stab",
                 "low-stance",
-                "bleeding-cut",
+                "fireball",
                 "thorn-guard",
                 "flash",
                 "poison-coat",
@@ -234,14 +234,14 @@ namespace Project2048.Tests
                 "seal-skill",
                 "crack-brand",
                 "intimidating-shot",
-                "open-wound",
+                "burst-fireball",
                 "black-pressure",
                 "overburn",
                 "howl",
                 "body-press",
                 "endure",
                 "heavy-strike",
-                "blood-fang",
+                "burn-out",
                 "reckless-blow",
             }));
         }

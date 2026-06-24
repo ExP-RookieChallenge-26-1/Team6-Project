@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e39edfbbdac2c064e877e5f3f784bab9, type: 3}
-  m_Name: "\uCD9C\uD608 \uBCA0\uAE30"
+  m_Name: Fireball
   m_EditorClassIdentifier: Game.Core::Project2048.Skills.SkillSO
-  skillId: bleeding-cut
-  skillName: "\uCD9C\uD608 \uBCA0\uAE30"
+  skillId: fireball
+  skillName: "\uD654\uC5FC\uAD6C"
   skillType: 0
   effectKind: 23
   damageStatSource: 0
@@ -103,4 +103,4 @@ MonoBehaviour:
   vfxScale: 1.2
   vfxIntensity: 1.45
   vfxRepeatCount: 1
-  description: "Deals 50 power damage and applies Bleed 20 for 2 turns."
+  description: "Deals 50 power damage and applies 20 recurring damage for 2 turns."

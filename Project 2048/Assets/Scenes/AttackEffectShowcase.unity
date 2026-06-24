@@ -6922,7 +6922,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: blood-fang  /  FlameBurst
+  m_text: burn-out  /  FlameBurst
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 04f6d590a48a3f44c8b54409e54f5fde, type: 2}
   m_sharedMaterial: {fileID: 1794097870625567047, guid: 04f6d590a48a3f44c8b54409e54f5fde, type: 2}
@@ -13761,7 +13761,7 @@ GameObject:
   m_Component:
   - component: {fileID: 801285806}
   m_Layer: 0
-  m_Name: Group_20_blood
+  m_Name: Group_20_flame
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -22504,7 +22504,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: open-wound  /  FlameBurst
+  m_text: burst-fireball  /  FlameBurst
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 04f6d590a48a3f44c8b54409e54f5fde, type: 2}
   m_sharedMaterial: {fileID: 1794097870625567047, guid: 04f6d590a48a3f44c8b54409e54f5fde, type: 2}
@@ -26673,7 +26673,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: bleeding-cut  /  FlameBurst
+  m_text: fireball  /  FlameBurst
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 04f6d590a48a3f44c8b54409e54f5fde, type: 2}
   m_sharedMaterial: {fileID: 1794097870625567047, guid: 04f6d590a48a3f44c8b54409e54f5fde, type: 2}

@@ -247,7 +247,7 @@ namespace Project2048.Tests
             var lightShot = CreateSkill("light-shot", SkillType.Attack, cost: 6, power: 60);
             var lowStance = CreateSkill("low-stance", SkillType.Defense, cost: 4, power: 30);
             var flash = CreateSkill("flash", SkillType.Debuff, cost: 5, power: 0);
-            var learnedSkill = CreateSkill("bleeding-cut", SkillType.Attack, cost: 6, power: 50);
+            var learnedSkill = CreateSkill("fireball", SkillType.Attack, cost: 6, power: 50);
             var reward = CreateReward(healPercentOfMaxHp: 0.3f, extraBoardMoveCount: 1);
             var table = CreateRewardTable(reward);
             var runProgress = new RunProgress();
@@ -264,7 +264,7 @@ namespace Project2048.Tests
 
             Assert.That(result.Kind, Is.EqualTo(RewardChoiceKind.LearnSkill));
             Assert.That(player.Skills.Count, Is.EqualTo(4));
-            Assert.That(player.Skills[3].skillId, Is.EqualTo("bleeding-cut"));
+            Assert.That(player.Skills[3].skillId, Is.EqualTo("fireball"));
             Assert.That(runProgress.EquippedSkills.Count, Is.EqualTo(4));
 
             manager.SetCombatants(player, new[] { enemy });
@@ -280,7 +280,7 @@ namespace Project2048.Tests
             Assert.That(player.Skills[0].skillId, Is.EqualTo("light-shot"));
             Assert.That(player.Skills[1].skillId, Is.EqualTo("low-stance"));
             Assert.That(player.Skills[2].skillId, Is.EqualTo("flash"));
-            Assert.That(player.Skills[3].skillId, Is.EqualTo("bleeding-cut"));
+            Assert.That(player.Skills[3].skillId, Is.EqualTo("fireball"));
         }
 
         [Test]

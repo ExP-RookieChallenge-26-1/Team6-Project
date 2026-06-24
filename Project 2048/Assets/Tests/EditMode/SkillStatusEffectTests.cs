@@ -40,7 +40,7 @@ namespace Project2048.Tests
             Assert.That(enemy.BleedTurns, Is.EqualTo(2));
             Assert.That(enemy.PoisonTurns, Is.EqualTo(3));
 
-            executor.Execute(CreateSkill("open-wound-test", SkillType.Attack, SkillEffectKind.OpenWoundAttack, power: 0, conditionalPowerBonus: 50), player, enemy, new DamageCalculator(new System.Random(1)));
+            executor.Execute(CreateSkill("burst-fireball-test", SkillType.Attack, SkillEffectKind.OpenWoundAttack, power: 0, conditionalPowerBonus: 50), player, enemy, new DamageCalculator(new System.Random(1)));
 
             Assert.That(enemy.BleedTurns, Is.EqualTo(3));
             Assert.That(enemy.PoisonTurns, Is.EqualTo(4));

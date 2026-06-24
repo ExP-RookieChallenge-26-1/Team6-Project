@@ -150,7 +150,7 @@ MonoBehaviour:
     shieldPiercePercent: 0
     minSelfHpPercent: 0.7
     maxSelfHpPercent: 0
-  - skillId: blood-fang
+  - skillId: burn-out
     displayName: "\uD53C\uC758 \uC774\uBE68"
     skillType: 0
     skillEffectKind: 11
@@ -243,7 +243,7 @@ MonoBehaviour:
     shieldPiercePercent: 0
     minSelfHpPercent: 0.35
     maxSelfHpPercent: 0.7
-  - skillId: blood-fang
+  - skillId: burn-out
     displayName: "\uD53C\uC758 \uC774\uBE68"
     skillType: 0
     skillEffectKind: 11
@@ -367,7 +367,7 @@ MonoBehaviour:
     shieldPiercePercent: 0
     minSelfHpPercent: 0
     maxSelfHpPercent: 0.35
-  - skillId: blood-fang
+  - skillId: burn-out
     displayName: "\uD53C\uC758 \uC774\uBE68"
     skillType: 0
     skillEffectKind: 11

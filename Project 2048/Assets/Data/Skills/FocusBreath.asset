@@ -86,7 +86,7 @@ MonoBehaviour:
     primaryPrefab: {fileID: 678183688835185469, guid: 4687ea7fc00f3154a9ac6e179a7cda97, type: 3}
     projectilePrefab: {fileID: 0}
     secondarySprite: {fileID: 0}
-    secondaryPrefab: {fileID: 0}
+    secondaryPrefab: {fileID: 7936256264085202695, guid: f0164d765a6b5f84ebd35cf4d8597a15, type: 3}
     particlePrefab: {fileID: 957232862726013403, guid: 887664bf91244304892e16e72032c214, type: 3}
     particleMaterial: {fileID: 2100000, guid: 45ec00e6f551b1eeb762958e709a5042, type: 2}
     localOffset: {x: 0.76, y: 0.1, z: 0}
@@ -98,8 +98,8 @@ MonoBehaviour:
     rotationDegrees: -8
   vfxPackage: {fileID: 0}
   vfxFamily: 5
-  vfxPrimaryColor: {r: 1, g: 1, b: 1, a: 1}
-  vfxSecondaryColor: {r: 0.613166, g: 0.807566, b: 0.937166, a: 1}
+  vfxPrimaryColor: {r: 0.622, g: 0.902, b: 1, a: 1}
+  vfxSecondaryColor: {r: 0.94, g: 1, b: 1, a: 1}
   vfxScale: 0.8
   vfxIntensity: 0.9
   vfxRepeatCount: 1

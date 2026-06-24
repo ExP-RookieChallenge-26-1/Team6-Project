@@ -86,9 +86,9 @@ MonoBehaviour:
     primaryPrefab: {fileID: 756328571287768908, guid: d6c612ca12e9ae34d903714e8fc4f81e, type: 3}
     projectilePrefab: {fileID: 899824043960030591, guid: 5f8cf79947e4ddf47aee451b2b9de40a, type: 3}
     secondarySprite: {fileID: 0}
-    secondaryPrefab: {fileID: 0}
-    particlePrefab: {fileID: 6213610474127753294, guid: b9d43ddcf6302c246bad4632701ed29e, type: 3}
-    particleMaterial: {fileID: 2100000, guid: a310f9c1e8727d82a8842f77f6cde2fd, type: 2}
+    secondaryPrefab: {fileID: 787109193594478752, guid: c6ed2b3d5e884fb4a975ff1a9848bd0d, type: 3}
+    particlePrefab: {fileID: 0}
+    particleMaterial: {fileID: 0}
     localOffset: {x: 0.68, y: 0.14, z: 0}
     radiusMultiplier: 3.54
     lifetimeSeconds: -1
@@ -103,4 +103,4 @@ MonoBehaviour:
   vfxScale: 1.8
   vfxIntensity: 1.4
   vfxRepeatCount: 1
-  description: ""
+  description:

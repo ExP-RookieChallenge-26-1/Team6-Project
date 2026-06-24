@@ -150,7 +150,7 @@ MonoBehaviour:
     shieldPiercePercent: 0
     minSelfHpPercent: 0
     maxSelfHpPercent: 0
-  - skillId: bleeding-cut
+  - skillId: fireball
     displayName: "\uCD9C\uD608 \uBCA0\uAE30"
     skillType: 0
     skillEffectKind: 23

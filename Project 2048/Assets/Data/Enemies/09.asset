@@ -150,7 +150,7 @@ MonoBehaviour:
     shieldPiercePercent: 0
     minSelfHpPercent: 0
     maxSelfHpPercent: 0
-  - skillId: open-wound
+  - skillId: burst-fireball
     displayName: "\uC0C1\uCC98 \uBC8C\uB9AC\uAE30"
     skillType: 0
     skillEffectKind: 25

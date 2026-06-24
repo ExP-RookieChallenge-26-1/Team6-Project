@@ -82,20 +82,20 @@ MonoBehaviour:
     autoDestroySeconds: 1.25
   vfx:
     family: 1
-    primarySprite: {fileID: 21300000, guid: e18b788083f586d650f0bcb9e2a927a4, type: 3}
-    primaryPrefab: {fileID: 756328571287768908, guid: d6c612ca12e9ae34d903714e8fc4f81e, type: 3}
+    primarySprite: {fileID: 21300000, guid: 9b5fc44167244de7b10fa372b672de89, type: 3}
+    primaryPrefab: {fileID: 8614566233561317893, guid: 06a9b239017d8e44bb20c48fca385733, type: 3}
     projectilePrefab: {fileID: 0}
     secondarySprite: {fileID: 0}
     secondaryPrefab: {fileID: 0}
     particlePrefab: {fileID: 2479667755594776677, guid: a7eee696b46a1a04dbeee1a0474b2d5b, type: 3}
     particleMaterial: {fileID: 2100000, guid: fa4eba04624f2cd09c5b181876c24239, type: 2}
-    localOffset: {x: 0.68, y: 0.16, z: 0}
-    radiusMultiplier: 3
+    localOffset: {x: 0, y: 0.16, z: 0}
+    radiusMultiplier: 3.24
     lifetimeSeconds: -1
     sortingOffset: 12
     tintWhiteBlend: 0.18
-    alpha: 0.9
-    rotationDegrees: -12
+    alpha: 0.62
+    rotationDegrees: 0
   vfxPackage: {fileID: 0}
   vfxFamily: 1
   vfxPrimaryColor: {r: 0.351272, g: 0.660872, b: 0.891272, a: 1}

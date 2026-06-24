@@ -32,22 +32,22 @@ namespace Project2048.Tests
         {
             var lightShot = CreateSkill("light-shot");
             var lowStance = CreateSkill("low-stance");
-            var bleedingCut = CreateSkill("bleeding-cut");
+            var fireball = CreateSkill("fireball");
             var context = new GameContext();
             var progress = new RunProgress();
 
             context.SetRunActive(true);
             context.SetStageIndex(3);
-            progress.CapturePlayerSkills(new[] { lightShot, lowStance, bleedingCut });
+            progress.CapturePlayerSkills(new[] { lightShot, lowStance, fireball });
 
             var saveData = GameSaveData.From(context, progress);
             var restoredProgress = new RunProgress();
-            saveData.ApplyTo(restoredProgress, new[] { bleedingCut, lightShot, lowStance });
+            saveData.ApplyTo(restoredProgress, new[] { fireball, lightShot, lowStance });
 
-            Assert.That(saveData.equippedSkillIds, Is.EqualTo(new[] { "light-shot", "low-stance", "bleeding-cut" }));
+            Assert.That(saveData.equippedSkillIds, Is.EqualTo(new[] { "light-shot", "low-stance", "fireball" }));
             Assert.That(
                 restoredProgress.EquippedSkills.Select(skill => skill.skillId),
-                Is.EqualTo(new[] { "light-shot", "low-stance", "bleeding-cut" }));
+                Is.EqualTo(new[] { "light-shot", "low-stance", "fireball" }));
         }
 
         private SkillSO CreateSkill(string skillId)

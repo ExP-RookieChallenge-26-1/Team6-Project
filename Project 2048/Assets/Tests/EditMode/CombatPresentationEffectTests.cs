@@ -1045,7 +1045,7 @@ namespace Project2048.Tests
                 Is.EqualTo("Assets/Art/Source/ExP/Effects/Effect_Attack.png"));
             Assert.That(
                 AssetDatabase.GetAssetPath(profile.hitEffectSprite),
-                Is.EqualTo("Assets/Art/Effects/SkillVFX/Textures/SkillVfx_HitImpact.png"));
+                Is.EqualTo("Assets/Art/Source/ExP/Effects/Effect_HitImpact.png"));
             Assert.That(
                 AssetDatabase.GetAssetPath(profile.shieldEffectSprite),
                 Is.EqualTo("Assets/Art/Source/ExP/Effects/Effect_Shield.png"));
@@ -1121,7 +1121,7 @@ namespace Project2048.Tests
             var spritePaths = new[]
             {
                 "Assets/Art/Source/ExP/Effects/Effect_Attack.png",
-                "Assets/Art/Effects/SkillVFX/Textures/SkillVfx_HitImpact.png",
+                "Assets/Art/Source/ExP/Effects/Effect_HitImpact.png",
                 "Assets/Art/Source/ExP/Effects/Effect_Shield.png",
                 "Assets/Art/Effects/SkillVFX/Textures/SkillVfx_ThornShieldBarrier.png",
                 "Assets/Art/Effects/SkillVFX/Textures/SkillVfx_MagicCircle.png",
@@ -1755,7 +1755,7 @@ namespace Project2048.Tests
             Assert.That(art, Is.Not.Null);
             Assert.That(
                 AssetDatabase.GetAssetPath(art.sprite),
-                Is.EqualTo("Assets/Art/Effects/SkillVFX/Textures/SkillVfx_HitImpact.png"));
+                Is.EqualTo("Assets/Art/Source/ExP/Effects/Effect_HitImpact.png"));
             Assert.That(art.color.a, Is.LessThan(0.75f));
             Assert.That(art.transform.localPosition.x, Is.LessThan(0f));
             Assert.That(enemyRenderer.transform.Find("ImpactBurstCloseRangeImpactParticles"), Is.Not.Null);
@@ -1764,7 +1764,7 @@ namespace Project2048.Tests
         }
 
         [Test]
-        public void CombatWorldSpriteView_SlashArcPreview_UsesWhiteCenteredOriginalRatioArtOnly()
+        public void CombatWorldSpriteView_SlashArcPreview_UsesExpAttackBetweenCombatantsAndHitOnEnemy()
         {
             var viewObject = CreateOwnedGameObject("WorldSpriteView");
             var view = viewObject.AddComponent<CombatWorldSpriteView>();
@@ -1787,15 +1787,21 @@ namespace Project2048.Tests
 
             view.PreviewSkillEffect(slash);
 
-            var beam = enemyRenderer.transform.Find("SlashArcAttackBeamArt")?.GetComponent<SpriteRenderer>();
+            var beam = viewObject.transform.Find("SlashArcAttackBeamArt")?.GetComponent<SpriteRenderer>();
             Assert.That(beam, Is.Not.Null);
             Assert.That(beam.sprite, Is.EqualTo(attackSprite));
             AssertColorApproximately(beam.color, Color.white);
-            Assert.That(beam.transform.localPosition.x, Is.EqualTo(0f).Within(0.001f));
+            Assert.That(beam.bounds.center.x, Is.GreaterThan(playerRenderer.transform.position.x));
+            Assert.That(beam.bounds.center.x, Is.LessThan(enemyRenderer.transform.position.x));
             Assert.That(beam.transform.localScale.x, Is.EqualTo(beam.transform.localScale.y).Within(0.001f));
 
-            var impactArt = enemyRenderer.transform.Find("HeavyStrikeSpikedBurstArt")?.GetComponent<SpriteRenderer>();
-            Assert.That(impactArt, Is.Null);
+            var impactArt = enemyRenderer.transform.Find("HitImpactEffectArt")?.GetComponent<SpriteRenderer>();
+            Assert.That(impactArt, Is.Not.Null);
+            Assert.That(impactArt.sprite, Is.EqualTo(hitSprite));
+            AssertColorApproximately(impactArt.color, Color.white);
+            Assert.That(impactArt.bounds.center.x, Is.EqualTo(enemyRenderer.transform.position.x).Within(0.001f));
+            Assert.That(impactArt.transform.localScale.x, Is.EqualTo(impactArt.transform.localScale.y).Within(0.001f));
+            Assert.That(enemyRenderer.transform.Find("HeavyStrikeSpikedBurstArt"), Is.Null);
             Assert.That(enemyRenderer.transform.Find("HeavyStrikeSpikedBurst"), Is.Null);
             Assert.That(enemyRenderer.transform.Find("SlashArcSkillParticles"), Is.Null);
         }

@@ -2510,12 +2510,6 @@ namespace Project2048.Prototype
 
         private void PlaySlashBeamSkillEffect(SkillSO skill, Transform sourceAnchor, Transform targetAnchor)
         {
-            if (ResolveSkillVfxFamily(skill) == SkillVfxFamily.SlashArc)
-            {
-                PlaySlashArcImpactArt(skill, targetAnchor);
-                return;
-            }
-
             var source = ResolveSlashSkillSourcePosition(sourceAnchor != null ? sourceAnchor : transform, targetAnchor);
             var target = targetAnchor != null ? ResolveSkillImpactWorldPosition(targetAnchor) : source + Vector3.right;
             if ((target - source).sqrMagnitude <= 0.0001f)
@@ -2523,14 +2517,35 @@ namespace Project2048.Prototype
                 target = source + Vector3.right;
             }
 
+            if (ResolveSkillVfxFamily(skill) == SkillVfxFamily.SlashArc)
+            {
+                PlaySlashArcAttackAndHitArt(skill, sourceAnchor, targetAnchor, source, target);
+                return;
+            }
+
             SpawnSlashBeamArt(skill, sourceAnchor, targetAnchor, source, target);
             PlaySlashHeavyImpactArt(skill, sourceAnchor, targetAnchor);
             PlaySpikedBurstSkillEffect(skill, targetAnchor, sourceAnchor);
         }
 
-        private void PlaySlashArcImpactArt(SkillSO skill, Transform targetAnchor)
+        private void PlaySlashArcAttackAndHitArt(
+            SkillSO skill,
+            Transform sourceAnchor,
+            Transform targetAnchor,
+            Vector3 sourceWorldPosition,
+            Vector3 targetWorldPosition)
         {
-            var parent = targetAnchor != null ? targetAnchor : transform;
+            PlaySlashArcAttackArt(skill, sourceAnchor, targetAnchor, sourceWorldPosition, targetWorldPosition);
+            PlaySlashArcHitImpactArt(skill, targetAnchor);
+        }
+
+        private void PlaySlashArcAttackArt(
+            SkillSO skill,
+            Transform sourceAnchor,
+            Transform targetAnchor,
+            Vector3 sourceWorldPosition,
+            Vector3 targetWorldPosition)
+        {
             var tuning = ResolveSkillVfxTuning(skill);
             var package = ResolveSkillVfxPackage(skill);
             var designTimeBinding = ResolveSkillVfxDesignTimeBinding(skill);
@@ -2545,36 +2560,87 @@ namespace Project2048.Prototype
                 return;
             }
 
-            var scale = Mathf.Max(0.01f, skill != null ? skill.vfxScale : 1f);
-            var localOffset = ResolveDesignTimeLocalOffset(
-                tuning,
-                package,
-                designTimeBinding,
-                new Vector3(0f, 0.16f, 0f));
-            localOffset.x = 0f;
+            var direction = targetWorldPosition - sourceWorldPosition;
+            direction.z = 0f;
+            if (direction.sqrMagnitude <= 0.0001f)
+            {
+                direction = Vector3.right;
+            }
 
+            var center = Vector3.Lerp(sourceWorldPosition, targetWorldPosition, 0.5f);
+            var scale = Mathf.Max(0.01f, skill != null ? skill.vfxScale : 1f);
             var art = SpawnAttackArtSpriteLayer(
-                parent,
+                transform,
                 "SlashArcAttackBeamArt",
                 Color.white,
                 AttackArtBaseRadius *
                     Mathf.Clamp(Mathf.Sqrt(scale), 0.7f, 1.42f) *
                     ResolveDesignTimeRadiusMultiplier(tuning, package, designTimeBinding, 1f),
                 ResolveDesignTimeLifetime(tuning, package, designTimeBinding, SlashBeamDurationSeconds),
-                localOffset,
+                transform.InverseTransformPoint(center),
                 sortingOffset: ResolveDesignTimeSortingOffset(tuning, package, designTimeBinding, 14),
                 spriteOverride: sprite,
-                prefabOverride: null,
+                prefabOverride: ResolveDesignTimePrefab(tuning, package, designTimeBinding, ResolveAttackEffectPrefab()),
                 animatePulse: false);
             if (art == null)
             {
                 return;
             }
 
-            art.transform.localRotation = Quaternion.Euler(
-                0f,
-                0f,
-                ResolveDesignTimeRotationDegrees(tuning, package, designTimeBinding, 0f));
+            art.transform.rotation =
+                Quaternion.FromToRotation(Vector3.right, direction.normalized) *
+                Quaternion.Euler(0f, 0f, ResolveDesignTimeRotationDegrees(tuning, package, designTimeBinding, 0f));
+            CenterSpriteRendererBoundsOnWorldPosition(art, center);
+            ApplyAnchorSorting(art, targetAnchor != null ? targetAnchor : sourceAnchor, 14);
+        }
+
+        private void PlaySlashArcHitImpactArt(SkillSO skill, Transform targetAnchor)
+        {
+            var parent = targetAnchor != null ? targetAnchor : transform;
+            var tuning = ResolveSkillVfxTuning(skill);
+            var package = ResolveSkillVfxPackage(skill);
+            var scale = Mathf.Max(0.01f, skill != null ? skill.vfxScale : 1f);
+            var localOffset = ResolveDesignTimeLocalOffset(
+                tuning,
+                package,
+                null,
+                new Vector3(0f, 0.18f, 0f));
+            localOffset.x = 0f;
+            var hitSprite = ResolveDesignTimeSecondarySprite(
+                tuning,
+                package,
+                hitEffectSprite,
+                ResolveHitEffectSprite());
+            var art = SpawnAttackArtSpriteLayer(
+                parent,
+                "HitImpactEffectArt",
+                Color.white,
+                AttackArtBaseRadius *
+                    Mathf.Clamp(Mathf.Sqrt(scale), 0.78f, 1.5f) *
+                    1.08f *
+                    HitEffectArtSizeMultiplier,
+                HeavyStrikeSpikedBurstDurationSeconds,
+                localOffset,
+                sortingOffset: 15,
+                spriteOverride: hitSprite,
+                prefabOverride: ResolveHitEffectPrefab(),
+                animatePulse: false);
+            if (art != null)
+            {
+                CenterSpriteRendererBoundsOnWorldPosition(art, parent.TransformPoint(localOffset));
+            }
+        }
+
+        private static void CenterSpriteRendererBoundsOnWorldPosition(SpriteRenderer renderer, Vector3 worldPosition)
+        {
+            if (renderer == null)
+            {
+                return;
+            }
+
+            var delta = worldPosition - renderer.bounds.center;
+            delta.z = 0f;
+            renderer.transform.position += delta;
         }
 
         private void PlaySlashHeavyImpactArt(SkillSO skill, Transform sourceAnchor, Transform targetAnchor)

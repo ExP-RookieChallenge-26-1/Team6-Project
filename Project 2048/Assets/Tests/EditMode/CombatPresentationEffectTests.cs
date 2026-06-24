@@ -2373,19 +2373,71 @@ namespace Project2048.Tests
         }
 
         [Test]
-        public void CombatWorldSpriteView_TentacleStrikePreview_SpawnsFlexibleWhipShape()
+        public void CombatWorldSpriteView_EnemySkillPresentation_MirrorsCasterAndTargetPlacements()
         {
             var viewObject = CreateOwnedGameObject("WorldSpriteView");
             var view = viewObject.AddComponent<CombatWorldSpriteView>();
             var playerRenderer = CreateOwnedGameObject("PlayerSprite").AddComponent<SpriteRenderer>();
             var enemyRenderer = CreateOwnedGameObject("EnemySprite").AddComponent<SpriteRenderer>();
+            var casterCuePrefab = CreateOwnedGameObject("EnemyCasterCuePrefab");
+            var targetCuePrefab = CreateOwnedGameObject("EnemyTargetCuePrefab");
+            var skill = CreateSkill("enemy-authored", SkillType.Attack, cost: 0, power: 10);
+            playerRenderer.transform.position = new Vector3(-1.5f, 0f, 0f);
+            enemyRenderer.transform.position = new Vector3(1.25f, 0f, 0f);
+            skill.vfxDefinition = new SkillVfxDefinition
+            {
+                cues = new[]
+                {
+                    new SkillVfxCue
+                    {
+                        trigger = SkillVfxTrigger.Activate,
+                        prefab = casterCuePrefab,
+                        placement = new SkillVfxPlacement { target = SkillVfxTarget.Player, vertical = SkillVfxVertical.Body },
+                    },
+                    new SkillVfxCue
+                    {
+                        trigger = SkillVfxTrigger.Activate,
+                        prefab = targetCuePrefab,
+                        placement = new SkillVfxPlacement { target = SkillVfxTarget.Enemy, vertical = SkillVfxVertical.Body },
+                    },
+                },
+            };
+            SetPrivateField(view, "playerRenderer", playerRenderer);
+            SetPrivateField(view, "enemyRenderer", enemyRenderer);
+
+            var method = typeof(CombatWorldSpriteView).GetMethod(
+                "PlayEnemySkillPresentationEffect",
+                System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+            var lifetime = (float)method.Invoke(view, new object[] { skill, true });
+
+            var casterCue = viewObject.transform.Find("EnemyCasterCuePrefab");
+            var targetCue = viewObject.transform.Find("EnemyTargetCuePrefab");
+            Assert.That(lifetime, Is.GreaterThan(0f));
+            Assert.That(casterCue, Is.Not.Null);
+            Assert.That(targetCue, Is.Not.Null);
+            Assert.That(casterCue.position.x, Is.EqualTo(enemyRenderer.transform.position.x).Within(0.001f));
+            Assert.That(targetCue.position.x, Is.EqualTo(playerRenderer.transform.position.x).Within(0.001f));
+        }
+
+        [Test]
+        public void CombatWorldSpriteView_TentacleStrikePreview_SpawnsAnimatorWhipAtCasterThenImpactAtTarget()
+        {
+            const string PrefabPath = "Assets/Art/Effects/SkillVFX/Prefabs/SkillVfx_TentacleWhip.prefab";
+            const string ControllerPath = "Assets/VFX Test/Effect_촉수_0.controller";
+            var viewObject = CreateOwnedGameObject("WorldSpriteView");
+            var view = viewObject.AddComponent<CombatWorldSpriteView>();
+            var playerRenderer = CreateOwnedGameObject("PlayerSprite").AddComponent<SpriteRenderer>();
+            var enemyRenderer = CreateOwnedGameObject("EnemySprite").AddComponent<SpriteRenderer>();
+            var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(PrefabPath);
             var tentacle = CreateSkill("tentacle-strike", SkillType.Attack, cost: 0, power: 90);
             playerRenderer.transform.localPosition = new Vector3(-1f, 0f, 0f);
             enemyRenderer.transform.localPosition = new Vector3(1f, 0f, 0f);
             enemyRenderer.sortingOrder = 4;
             tentacle.vfxFamily = SkillVfxFamily.TentacleWhip;
-            tentacle.vfxPrimaryColor = new Color(0.2f, 0.04f, 0.28f, 1f);
-            tentacle.vfxSecondaryColor = new Color(0.55f, 0.18f, 0.72f, 1f);
+            tentacle.vfx = CreateOwnedVfxTuning(SkillVfxFamily.TentacleWhip);
+            tentacle.vfx.primaryPrefab = prefab;
+
+            Assert.That(prefab, Is.Not.Null);
 
             SetPrivateField(view, "playerRenderer", playerRenderer);
             SetPrivateField(view, "enemyRenderer", enemyRenderer);
@@ -2394,57 +2446,45 @@ namespace Project2048.Tests
 
             var whipRoot = viewObject.transform.Find("TentacleStrikeWhip");
             Assert.That(whipRoot, Is.Not.Null);
-            var skinnedWhip = whipRoot.GetComponentInChildren<TentacleBoneStrikeEffect>();
-            if (skinnedWhip != null)
-            {
-                skinnedWhip.ConfigureBonesFromSprite();
-                Assert.That(skinnedWhip.BoneCount, Is.GreaterThanOrEqualTo(7));
-                Assert.That(whipRoot.GetComponentInChildren<SpriteRenderer>().sortingOrder, Is.GreaterThan(enemyRenderer.sortingOrder));
-                return;
-            }
-
-            var whip = whipRoot.GetComponent<LineRenderer>();
-            Assert.That(whip, Is.Not.Null);
-            Assert.That(whip.positionCount, Is.GreaterThan(8));
-            Assert.That(whip.startWidth, Is.GreaterThan(whip.endWidth));
-            Assert.That(whip.sortingOrder, Is.GreaterThan(enemyRenderer.sortingOrder));
-            Assert.That(whip.transform.Find("TentacleStrikeHighlight")?.GetComponent<LineRenderer>(), Is.Not.Null);
-            Assert.That(whip.transform.Cast<Transform>().Count(child => child.name.StartsWith("TentacleSuctionCup")), Is.GreaterThanOrEqualTo(3));
-            var finalPoint = whip.GetPosition(whip.positionCount - 1);
-            var previousPoint = whip.GetPosition(whip.positionCount - 2);
-            var highestPoint = Enumerable.Range(0, whip.positionCount)
-                .Select(whip.GetPosition)
-                .OrderByDescending(point => point.y)
-                .First();
-            Assert.That(whip.GetPosition(0).x, Is.GreaterThan(playerRenderer.transform.position.x));
-            Assert.That(highestPoint.y, Is.GreaterThan(finalPoint.y + 0.65f));
-            Assert.That(previousPoint.y, Is.GreaterThan(finalPoint.y));
+            var animator = whipRoot.GetComponentInChildren<Animator>();
+            var renderer = whipRoot.GetComponentInChildren<SpriteRenderer>();
+            var prefabRenderer = prefab.GetComponentInChildren<SpriteRenderer>();
+            Assert.That(animator, Is.Not.Null);
+            Assert.That(AssetDatabase.GetAssetPath(animator.runtimeAnimatorController), Is.EqualTo(ControllerPath));
+            Assert.That(renderer, Is.Not.Null);
+            Assert.That(renderer.color, Is.EqualTo(prefabRenderer.color));
+            Assert.That(whipRoot.position.x, Is.EqualTo(playerRenderer.transform.position.x).Within(0.001f));
+            Assert.That(whipRoot.GetComponent<LineRenderer>(), Is.Null);
+            Assert.That(whipRoot.Find("TentacleStrikeHighlight"), Is.Null);
+            Assert.That(whipRoot.Cast<Transform>().Any(child => child.name.StartsWith("TentacleSuctionCup")), Is.False);
+            Assert.That(enemyRenderer.transform.Find("HeavyStrikeSpikedBurst"), Is.Not.Null);
         }
 
         [Test]
-        public void SkillVfxTentacleWhipPrefab_UsesExpSkinnedTentacle()
+        public void SkillVfxTentacleWhipPrefab_UsesExpAnimatorTentacle()
         {
             const string PrefabPath = "Assets/Art/Effects/SkillVFX/Prefabs/SkillVfx_TentacleWhip.prefab";
             const string ExpTentaclePath = "Assets/Art/Source/ExP/Effects/Effect_Tentacle.png";
+            const string ControllerPath = "Assets/VFX Test/Effect_촉수_0.controller";
+            const string AnimationPath = "Assets/VFX Test/Tentacle Attack.anim";
             var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(PrefabPath);
 
             Assert.That(prefab, Is.Not.Null);
             var renderer = prefab.GetComponent<SpriteRenderer>();
+            var animator = prefab.GetComponent<Animator>();
             var hasSpriteSkin = prefab.GetComponents<Component>()
                 .Any(component => component != null && component.GetType().Name == "SpriteSkin");
-            var effect = prefab.GetComponent<TentacleBoneStrikeEffect>();
+            var hasProceduralTentacleComponent = prefab.GetComponents<Component>()
+                .Any(component => component != null && component.GetType().Name == "TentacleBoneStrikeEffect");
             Assert.That(renderer, Is.Not.Null);
             Assert.That(hasSpriteSkin, Is.True);
-            Assert.That(effect, Is.Not.Null);
+            Assert.That(animator, Is.Not.Null);
+            Assert.That(hasProceduralTentacleComponent, Is.False);
             Assert.That(AssetDatabase.GetAssetPath(renderer.sprite), Is.EqualTo(ExpTentaclePath));
-
-            var instance = Object.Instantiate(prefab);
-            ownedObjects.Add(instance);
-            var runtimeEffect = instance.GetComponent<TentacleBoneStrikeEffect>();
-            runtimeEffect.ConfigureBonesFromSprite();
-
-            Assert.That(runtimeEffect.SourceSprite, Is.EqualTo(renderer.sprite));
-            Assert.That(runtimeEffect.BoneCount, Is.GreaterThanOrEqualTo(7));
+            Assert.That(AssetDatabase.GetAssetPath(animator.runtimeAnimatorController), Is.EqualTo(ControllerPath));
+            Assert.That(
+                animator.runtimeAnimatorController.animationClips.Select(AssetDatabase.GetAssetPath),
+                Does.Contain(AnimationPath));
         }
 
         [Test]

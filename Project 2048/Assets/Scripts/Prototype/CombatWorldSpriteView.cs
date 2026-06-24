@@ -60,9 +60,6 @@ namespace Project2048.Prototype
         private const float ShieldArtLeftOffsetX = -0.12f;
         private const int ShieldArtFrontSortingOffset = 12;
         private const float ThornGuardShieldFollowSharpness = 30f;
-        private const int TentacleStrikeSegmentCount = 18;
-        private const int TentacleStrikeCupCount = 5;
-        private const int TentacleStrikeCupSegmentCount = 12;
         private const int HeavyStrikeStarSegmentCount = 28;
         private const int HeavyStrikeSpikeRayCount = 12;
         private const int BloodSlashSegmentCount = 18;
@@ -313,8 +310,10 @@ namespace Project2048.Prototype
             var enemyWasHit = EnemyWasHit(snapshot, nextSnapshot);
             var playerShieldWasHit = PlayerShieldWasHit(snapshot, nextSnapshot);
             var enemyShieldWasHit = EnemyShieldWasHit(snapshot, nextSnapshot);
-            var enemyUsedAttack = EnemyUsedAttack(snapshot, nextSnapshot, playerWasHit);
+            var enemyUsedAttack = EnemyUsedAttack(snapshot, nextSnapshot, playerWasHit || playerShieldWasHit);
             var enemyUsedDefense = EnemyUsedDefense(snapshot, nextSnapshot);
+            var enemyAttackIntent = ResolveEnemyUsedIntent(nextSnapshot, EnemyIntentType.Attack);
+            var enemyDefenseIntent = ResolveEnemyUsedIntent(nextSnapshot, EnemyIntentType.Defense);
             var enemyAppeared = EnemyAppeared(snapshot, nextSnapshot);
             var nextEnemyDead = nextSnapshot?.Enemies?.FirstOrDefault()?.IsDead ?? false;
             var enemyJustDied = !lastEnemyWasDead && nextEnemyDead;
@@ -325,7 +324,7 @@ namespace Project2048.Prototype
             PlayPlayerThornGuardHitPulseIfNeeded(playerShieldWasHit);
             UpdatePlayerThornGuardVfx(nextSnapshot?.Player);
             PlayEnemyAppearEffectIfNeeded(enemyAppeared);
-            PlayEnemyAttackEffectIfNeeded(enemyUsedAttack);
+            PlayEnemyAttackEffectIfNeeded(enemyUsedAttack, enemyAttackIntent);
             PlayShieldImpactEffectIfNeeded(playerShieldWasHit, ResolvePlayerAnchor() ?? transform);
             PlayShieldImpactEffectIfNeeded(enemyShieldWasHit, enemyRenderer != null ? enemyRenderer.transform : transform);
             UpdatePlayerShieldArtVfx(nextSnapshot?.Player);
@@ -334,7 +333,7 @@ namespace Project2048.Prototype
             PlayDamageNumberPopupIfNeeded(playerHpDamage, playerRenderer);
             PlayDamageNumberPopupIfNeeded(enemyHpDamage, enemyRenderer);
             PlayEnemyDebuffCastEffectIfNeeded(snapshot?.LastVfxCue);
-            PlayEnemyDefenseEffectIfNeeded(enemyUsedDefense);
+            PlayEnemyDefenseEffectIfNeeded(enemyUsedDefense, enemyDefenseIntent);
             PlayEnemyDeathFadeIfNeeded(enemyJustDied, nextEnemyDead);
             lastEnemyWasDead = nextEnemyDead;
         }
@@ -366,19 +365,60 @@ namespace Project2048.Prototype
 
         private float PlaySkillPresentationEffect(SkillSO skill, bool delayEnemyDeathFade, bool previewChargeRelease = false)
         {
+            var sourceAnchor = ResolvePlayerAnchor() ?? transform;
+            var targetAnchor = skill != null && skill.skillType == SkillType.Attack && enemyRenderer != null
+                ? enemyRenderer.transform
+                : sourceAnchor;
+            return PlaySkillPresentationEffect(
+                skill,
+                delayEnemyDeathFade,
+                previewChargeRelease,
+                sourceAnchor,
+                targetAnchor,
+                isEnemyCaster: false);
+        }
+
+        private float PlayEnemySkillPresentationEffect(SkillSO skill, bool isAttack)
+        {
+            if (skill == null)
+            {
+                return 0f;
+            }
+
+            var sourceAnchor = enemyRenderer != null ? enemyRenderer.transform : transform;
+            var targetAnchor = isAttack ? ResolvePlayerAnchor() ?? transform : sourceAnchor;
+            return PlaySkillPresentationEffect(
+                skill,
+                delayEnemyDeathFade: false,
+                previewChargeRelease: false,
+                sourceAnchor,
+                targetAnchor,
+                isEnemyCaster: true);
+        }
+
+        private float PlaySkillPresentationEffect(
+            SkillSO skill,
+            bool delayEnemyDeathFade,
+            bool previewChargeRelease,
+            Transform sourceAnchor,
+            Transform targetAnchor,
+            bool isEnemyCaster)
+        {
             var effect = skill.activationEffect;
             var isAttack = skill.skillType == SkillType.Attack;
             var isChargeAttack = IsChargeAttackSkill(skill);
-            var sourceAnchor = ResolvePlayerAnchor() ?? transform;
-            var targetAnchor = isAttack && enemyRenderer != null
-                ? enemyRenderer.transform
-                : sourceAnchor;
-            var animator = isAttack ? enemyAnimator : playerAnimator;
+            sourceAnchor = sourceAnchor != null ? sourceAnchor : transform;
+            targetAnchor = targetAnchor != null ? targetAnchor : sourceAnchor;
+            var animator = isEnemyCaster ? enemyAnimator : isAttack ? enemyAnimator : playerAnimator;
             var family = ResolveSkillVfxFamily(skill);
-            PlayPlayerAttackAnimationIfNeeded(skill, family);
+            if (!isEnemyCaster)
+            {
+                PlayPlayerAttackAnimationIfNeeded(skill, family);
+            }
+
             if (isChargeAttack)
             {
-                if (TryPlayDefinitionCues(skill, SkillVfxTrigger.ChargeStart))
+                if (TryPlayDefinitionCues(skill, SkillVfxTrigger.ChargeStart, sourceAnchor, targetAnchor))
                 {
                     PlayCombatantActionAudioEffect(effect);
                 }
@@ -397,7 +437,7 @@ namespace Project2048.Prototype
                     ResolveDefinitionCueDurationSeconds(skill, SkillVfxTrigger.ChargeStart));
             }
 
-            if (TryPlayDefinitionCues(skill, SkillVfxTrigger.Activate))
+            if (TryPlayDefinitionCues(skill, SkillVfxTrigger.Activate, sourceAnchor, targetAnchor))
             {
                 PlayCombatantActionAudioEffect(effect);
                 if (delayEnemyDeathFade)
@@ -420,6 +460,7 @@ namespace Project2048.Prototype
                 effect,
                 sourceAnchor,
                 targetAnchor,
+                playAttackAnimation: !isEnemyCaster,
                 out var closeRangeLifetimeSeconds))
             {
                 if (delayEnemyDeathFade)
@@ -473,7 +514,7 @@ namespace Project2048.Prototype
 
             if (playReusableFamilyEffect || effect?.HasAuthoredVisual != true)
             {
-                PlayReusableSkillParticleEffect(skill, anchor);
+                PlayReusableSkillParticleEffect(skill, anchor, sourceAnchor);
             }
 
             if (delayEnemyDeathFade)
@@ -491,16 +532,39 @@ namespace Project2048.Prototype
             return new SkillVfxContext(playerAnchor, enemyAnchor, trigger);
         }
 
+        private static SkillVfxContext BuildSkillVfxContext(
+            SkillVfxTrigger trigger,
+            Transform sourceAnchor,
+            Transform targetAnchor)
+        {
+            return new SkillVfxContext(sourceAnchor, targetAnchor, trigger);
+        }
+
         // 새 데이터 기반 VFX: 해당 트리거의 큐가 하나라도 재생됐으면 true(→ 기존 절차 경로 skip).
         // vfxDefinition이 비면 false → 기존 경로로 폴백(현재 화면 유지).
         private bool TryPlayDefinitionCues(SkillSO skill, SkillVfxTrigger trigger)
+        {
+            var ctx = BuildSkillVfxContext(trigger);
+            return TryPlayDefinitionCues(skill, trigger, ctx);
+        }
+
+        private bool TryPlayDefinitionCues(
+            SkillSO skill,
+            SkillVfxTrigger trigger,
+            Transform sourceAnchor,
+            Transform targetAnchor)
+        {
+            var ctx = BuildSkillVfxContext(trigger, sourceAnchor, targetAnchor);
+            return TryPlayDefinitionCues(skill, trigger, ctx);
+        }
+
+        private bool TryPlayDefinitionCues(SkillSO skill, SkillVfxTrigger trigger, SkillVfxContext ctx)
         {
             if (skill == null || skill.vfxDefinition == null || !skill.vfxDefinition.HasAnyCue)
             {
                 return false;
             }
 
-            var ctx = BuildSkillVfxContext(trigger);
             var playedAnyCue = false;
             foreach (var cue in skill.vfxDefinition.CuesFor(trigger))
             {
@@ -624,10 +688,13 @@ namespace Project2048.Prototype
                     lifetimeSeconds = ChargedLightBeamDurationSeconds;
                     return true;
                 case SkillVfxFamily.TentacleWhip:
+                    if (!PlayTentacleStrikeSkillEffect(skill, sourceAnchor, targetAnchor))
+                    {
+                        return false;
+                    }
+
                     PlayCombatantActionAudioEffect(effect);
-                    PlayTentacleStrikeSkillEffect(skill, sourceAnchor, targetAnchor);
-                    PlayCombatantActionParticleEffect(effect, targetAnchor);
-                    lifetimeSeconds = TentacleStrikeDurationSeconds;
+                    lifetimeSeconds = TentacleStrikeDurationSeconds + HeavyStrikeSpikedBurstDurationSeconds;
                     return true;
                 case SkillVfxFamily.SlashArc:
                     PlayCombatantActionAudioEffect(effect);
@@ -1014,7 +1081,7 @@ namespace Project2048.Prototype
                 playerAnimator);
         }
 
-        private void PlayEnemyAttackEffectIfNeeded(bool enemyUsedAttack)
+        private void PlayEnemyAttackEffectIfNeeded(bool enemyUsedAttack, EnemyIntent enemyAttackIntent)
         {
             if (!enemyUsedAttack)
             {
@@ -1023,6 +1090,12 @@ namespace Project2048.Prototype
 
             var enemyData = ResolveCurrentEnemyData();
             PlayEnemyOneShotAnimation(enemyData?.attackAnimation, returnToIdle: true);
+            var skill = ResolveEnemySkillForIntent(enemyAttackIntent);
+            if (skill != null && PlayEnemySkillPresentationEffect(skill, isAttack: true) > 0f)
+            {
+                return;
+            }
+
             PlayEnemyAttackLunge(enemyData?.FindActionEffect(CombatActionIds.Attack));
         }
 
@@ -1065,9 +1138,15 @@ namespace Project2048.Prototype
                 delayAudioUntilAuthoredVisualEnds: true);
         }
 
-        private void PlayEnemyDefenseEffectIfNeeded(bool enemyUsedDefense)
+        private void PlayEnemyDefenseEffectIfNeeded(bool enemyUsedDefense, EnemyIntent enemyDefenseIntent)
         {
             if (!enemyUsedDefense)
+            {
+                return;
+            }
+
+            var skill = ResolveEnemySkillForIntent(enemyDefenseIntent);
+            if (skill != null && PlayEnemySkillPresentationEffect(skill, isAttack: false) > 0f)
             {
                 return;
             }
@@ -1296,7 +1375,7 @@ namespace Project2048.Prototype
             return duration;
         }
 
-        private void PlayReusableSkillParticleEffect(SkillSO skill, Transform anchor)
+        private void PlayReusableSkillParticleEffect(SkillSO skill, Transform anchor, Transform sourceAnchor = null)
         {
             var family = ResolveSkillVfxFamily(skill);
             if (family == SkillVfxFamily.None)
@@ -1316,6 +1395,7 @@ namespace Project2048.Prototype
             var intensity = Mathf.Max(0.1f, skill.vfxIntensity);
             var repeatCount = Mathf.Max(1, skill.vfxRepeatCount);
             var scaledStartSize = Mathf.Min(startSize * scale, ReusableSkillParticleMaxStartSize);
+            var resolvedSourceAnchor = sourceAnchor != null ? sourceAnchor : ResolvePlayerAnchor() ?? transform;
             if (family == SkillVfxFamily.LightBeam)
             {
                 PlayChargedLightBeamEffect(skill, anchor);
@@ -1326,14 +1406,14 @@ namespace Project2048.Prototype
             {
                 PlayTentacleStrikeSkillEffect(
                     skill,
-                    ResolvePlayerAnchor() ?? transform,
+                    resolvedSourceAnchor,
                     anchor);
                 return;
             }
 
             if (family == SkillVfxFamily.SpikedBurst)
             {
-                PlaySpikedBurstSkillEffect(skill, anchor, ResolvePlayerAnchor() ?? transform);
+                PlaySpikedBurstSkillEffect(skill, anchor, resolvedSourceAnchor);
                 return;
             }
 
@@ -1341,7 +1421,7 @@ namespace Project2048.Prototype
             {
                 PlayBloodFountainSlashSkillEffect(
                     skill,
-                    ResolvePlayerAnchor() ?? transform,
+                    resolvedSourceAnchor,
                     anchor);
                 return;
             }
@@ -1366,7 +1446,7 @@ namespace Project2048.Prototype
                 PlayDarkShackleSkillEffect(
                     skill,
                     null,
-                    ResolvePlayerAnchor() ?? transform,
+                    resolvedSourceAnchor,
                     anchor);
                 return;
             }
@@ -1382,7 +1462,8 @@ namespace Project2048.Prototype
                     scaledStartSize,
                     scale,
                     intensity,
-                    repeatCount);
+                    repeatCount,
+                    resolvedSourceAnchor);
                 return;
             }
 
@@ -1401,15 +1482,14 @@ namespace Project2048.Prototype
                 return;
             }
 
-            var sourceAnchor = ResolvePlayerAnchor() ?? transform;
-            PlaySupportBuffHealingVisualEffect(skill, sourceAnchor, lifetimeSeconds);
+            PlaySupportBuffHealingVisualEffect(skill, resolvedSourceAnchor, lifetimeSeconds);
             if (UsesSupportBuffHealingVisualEffect(skill))
             {
                 return;
             }
 
-            PlayMagicCircleArtForReusableSkill(skill, sourceAnchor, lifetimeSeconds);
-            PlayAttackArtForReusableSkill(skill, anchor, sourceAnchor);
+            PlayMagicCircleArtForReusableSkill(skill, resolvedSourceAnchor, lifetimeSeconds);
+            PlayAttackArtForReusableSkill(skill, anchor, resolvedSourceAnchor);
             if (UsesSpriteOnlyReusableSkillEffect(family))
             {
                 return;
@@ -1913,7 +1993,8 @@ namespace Project2048.Prototype
             float startSize,
             float scale,
             float intensity,
-            int repeatCount)
+            int repeatCount,
+            Transform sourceAnchor)
         {
             if (IsLightEchoSkill(skill))
             {
@@ -1933,11 +2014,11 @@ namespace Project2048.Prototype
                 new Vector3(0.18f, 0.54f, 0f),
             };
 
-            PlaySupportBuffMagicCircleArt(skill, ResolvePlayerAnchor() ?? transform, lifetimeSeconds);
+            PlaySupportBuffMagicCircleArt(skill, sourceAnchor != null ? sourceAnchor : transform, lifetimeSeconds);
             PlaySpecializedSkillArtLayer(
                 skill,
                 anchor,
-                ResolvePlayerAnchor() ?? transform);
+                sourceAnchor != null ? sourceAnchor : transform);
 
             for (var i = 0; i < shotCount; i++)
             {
@@ -4316,296 +4397,91 @@ namespace Project2048.Prototype
             }
         }
 
-        private bool TryPlayAuthoredTentacleStrikeSkillEffect(SkillSO skill, Transform sourceAnchor, Transform targetAnchor)
+        private bool PlayTentacleStrikeSkillEffect(SkillSO skill, Transform sourceAnchor, Transform targetAnchor)
         {
             var tuning = ResolveSkillVfxTuning(skill);
             var package = ResolveSkillVfxPackage(skill);
             var designTimeBinding = ResolveSkillVfxDesignTimeBinding(skill);
             var prefab = ResolveDesignTimePrefab(tuning, package, designTimeBinding, null);
-            if (prefab == null || prefab.GetComponentInChildren<TentacleBoneStrikeEffect>(true) == null)
+            if (prefab == null || prefab.GetComponentInChildren<Animator>(true) == null)
             {
                 return false;
             }
 
-            var source = ResolveLanternSkillSourcePosition(sourceAnchor != null ? sourceAnchor : transform, targetAnchor);
+            var source = ResolveAnchorVisualCenterWorldPosition(sourceAnchor != null ? sourceAnchor : transform);
             var target = targetAnchor != null ? ResolveSkillImpactWorldPosition(targetAnchor) : source + Vector3.right;
             if ((target - source).sqrMagnitude <= 0.0001f)
             {
                 target = source + Vector3.right;
             }
 
-            var root = Instantiate(prefab, transform);
+            var root = Instantiate(prefab, source, Quaternion.identity, transform);
             root.name = "TentacleStrikeWhip";
-            root.transform.localPosition = Vector3.zero;
             root.transform.localRotation = Quaternion.identity;
-            root.transform.localScale = Vector3.one;
 
-            var effect = root.GetComponentInChildren<TentacleBoneStrikeEffect>(true);
             var renderer = root.GetComponentInChildren<SpriteRenderer>(true);
-            if (effect == null || renderer == null)
+            var animator = root.GetComponentInChildren<Animator>(true);
+            if (renderer == null || animator == null)
             {
                 DestroySpawnedObject(root);
                 return false;
             }
 
-            var primary = ResolveTentacleColor(ResolveReusableSkillParticleColor(skill), new Color(0.18f, 0.035f, 0.24f, 0.96f), 0.48f);
-            var secondary = ResolveTentacleColor(ResolveReusableSkillSecondaryParticleColor(skill), new Color(0.72f, 0.24f, 0.92f, 0.86f), 0.36f);
             var scale = Mathf.Clamp(Mathf.Max(0.01f, skill != null ? skill.vfxScale : 1f), 0.72f, 1.8f);
-            ApplyAnchorSorting(renderer, targetAnchor, 12);
-            ApplyAuthoredChildRendererSorting(root, renderer, targetAnchor, 13);
-            effect.Play(source, target, TentacleStrikeDurationSeconds, scale, primary, secondary, renderer.sortingOrder);
+            var facingSign = target.x >= source.x ? 1f : -1f;
+            root.transform.localScale = new Vector3(Mathf.Abs(scale) * facingSign, Mathf.Abs(scale), 1f);
 
-            SpawnParticleBurst(
-                null,
-                targetAnchor,
-                "TentacleStrikeImpactParticles",
-                secondary,
-                null,
-                0.38f,
-                16,
-                0.42f,
-                Mathf.Clamp(0.11f * scale, 0.08f, 0.18f),
-                swirl: true,
-                new Vector3(-0.08f, 0.08f, 0f));
+            var sortingAnchor = sourceAnchor != null ? sourceAnchor : targetAnchor;
+            ApplyAnchorSorting(renderer, sortingAnchor, 12);
+            ApplyAuthoredChildRendererSorting(root, renderer, sortingAnchor, 13);
 
-            if (Application.isPlaying)
+            animator.enabled = true;
+            if (animator.runtimeAnimatorController != null)
             {
-                Destroy(root, TentacleStrikeDurationSeconds + 0.2f);
+                animator.Play("Tentacle Attack", 0, 0f);
+                if (!Application.isPlaying)
+                {
+                    animator.Update(0f);
+                }
+            }
+
+            var animationDuration = ResolvePrefabVisualDurationSeconds(prefab, TentacleStrikeDurationSeconds);
+            if (Application.isPlaying && isActiveAndEnabled)
+            {
+                StartCoroutine(PlayTentacleStrikeImpactAfterDelay(
+                    skill,
+                    targetAnchor,
+                    sourceAnchor,
+                    root,
+                    animationDuration));
+            }
+            else
+            {
+                PlayTentacleStrikeImpact(skill, targetAnchor, sourceAnchor);
             }
 
             return true;
         }
 
-        private void PlayTentacleStrikeSkillEffect(SkillSO skill, Transform sourceAnchor, Transform targetAnchor)
+        private IEnumerator PlayTentacleStrikeImpactAfterDelay(
+            SkillSO skill,
+            Transform targetAnchor,
+            Transform sourceAnchor,
+            GameObject tentacleRoot,
+            float delaySeconds)
         {
-            if (TryPlayAuthoredTentacleStrikeSkillEffect(skill, sourceAnchor, targetAnchor))
+            yield return new WaitForSeconds(Mathf.Max(0f, delaySeconds));
+            PlayTentacleStrikeImpact(skill, targetAnchor, sourceAnchor);
+
+            if (tentacleRoot != null)
             {
-                return;
-            }
-
-            var source = ResolveLanternSkillSourcePosition(sourceAnchor != null ? sourceAnchor : transform, targetAnchor);
-            var target = targetAnchor != null ? ResolveSkillImpactWorldPosition(targetAnchor) : source + Vector3.right;
-            if ((target - source).sqrMagnitude <= 0.0001f)
-            {
-                target = source + Vector3.right;
-            }
-
-            var primary = ResolveTentacleColor(ResolveReusableSkillParticleColor(skill), new Color(0.18f, 0.035f, 0.24f, 0.96f), 0.48f);
-            var secondary = ResolveTentacleColor(ResolveReusableSkillSecondaryParticleColor(skill), new Color(0.72f, 0.24f, 0.92f, 0.86f), 0.36f);
-            var scale = Mathf.Clamp(Mathf.Max(0.01f, skill != null ? skill.vfxScale : 1f), 0.72f, 1.8f);
-
-            var root = new GameObject("TentacleStrikeWhip", typeof(LineRenderer));
-            root.transform.SetParent(transform, false);
-            var bodyLine = root.GetComponent<LineRenderer>();
-            ConfigureTentacleLine(
-                bodyLine,
-                primary,
-                Mathf.Clamp(0.18f * scale, 0.11f, 0.3f),
-                Mathf.Clamp(0.055f * scale, 0.032f, 0.12f),
-                targetAnchor,
-                10);
-
-            var highlightObject = new GameObject("TentacleStrikeHighlight", typeof(LineRenderer));
-            highlightObject.transform.SetParent(root.transform, false);
-            var highlightLine = highlightObject.GetComponent<LineRenderer>();
-            ConfigureTentacleLine(
-                highlightLine,
-                secondary,
-                Mathf.Clamp(0.058f * scale, 0.035f, 0.11f),
-                Mathf.Clamp(0.018f * scale, 0.012f, 0.05f),
-                targetAnchor,
-                11);
-
-            var cups = new LineRenderer[TentacleStrikeCupCount];
-            for (var i = 0; i < cups.Length; i++)
-            {
-                var cupObject = new GameObject($"TentacleSuctionCup{i + 1}", typeof(LineRenderer));
-                cupObject.transform.SetParent(root.transform, false);
-                cups[i] = cupObject.GetComponent<LineRenderer>();
-                ConfigureTentacleCupLine(cups[i], secondary, Mathf.Clamp(0.012f * scale, 0.008f, 0.02f), targetAnchor, 12);
-            }
-
-            UpdateTentacleStrikeGeometry(bodyLine, highlightLine, cups, source, target, scale, 1f, 0f);
-            SpawnParticleBurst(
-                null,
-                targetAnchor,
-                "TentacleStrikeImpactParticles",
-                secondary,
-                null,
-                0.38f,
-                16,
-                0.42f,
-                Mathf.Clamp(0.11f * scale, 0.08f, 0.18f),
-                swirl: true,
-                new Vector3(-0.08f, 0.08f, 0f));
-
-            if (Application.isPlaying && isActiveAndEnabled)
-            {
-                StartCoroutine(AnimateTentacleStrikeRoutine(root, bodyLine, highlightLine, cups, source, target, scale, primary, secondary));
+                Destroy(tentacleRoot, 0.05f);
             }
         }
 
-        private void ConfigureTentacleLine(
-            LineRenderer line,
-            Color color,
-            float startWidth,
-            float endWidth,
-            Transform sortingAnchor,
-            int sortingOffset)
+        private void PlayTentacleStrikeImpact(SkillSO skill, Transform targetAnchor, Transform sourceAnchor)
         {
-            if (line == null)
-            {
-                return;
-            }
-
-            line.useWorldSpace = true;
-            line.positionCount = TentacleStrikeSegmentCount + 1;
-            line.numCapVertices = 8;
-            line.numCornerVertices = 8;
-            line.startWidth = Mathf.Max(0.01f, startWidth);
-            line.endWidth = Mathf.Max(0.01f, endWidth);
-            line.widthCurve = new AnimationCurve(
-                new Keyframe(0f, 1f),
-                new Keyframe(0.68f, 0.78f),
-                new Keyframe(1f, 0.32f));
-            line.sharedMaterial = ResolveRuntimeSkillParticleMaterial(line.gameObject.name, color);
-            line.startColor = color;
-            line.endColor = color;
-            ApplyAnchorSorting(line, sortingAnchor, sortingOffset);
-        }
-
-        private void ConfigureTentacleCupLine(
-            LineRenderer line,
-            Color color,
-            float width,
-            Transform sortingAnchor,
-            int sortingOffset)
-        {
-            if (line == null)
-            {
-                return;
-            }
-
-            line.useWorldSpace = true;
-            line.positionCount = TentacleStrikeCupSegmentCount + 1;
-            line.numCapVertices = 3;
-            line.numCornerVertices = 3;
-            line.startWidth = Mathf.Max(0.004f, width);
-            line.endWidth = Mathf.Max(0.004f, width);
-            line.sharedMaterial = ResolveRuntimeSkillParticleMaterial(line.gameObject.name, color);
-            line.startColor = color;
-            line.endColor = color;
-            ApplyAnchorSorting(line, sortingAnchor, sortingOffset);
-        }
-
-        private static IEnumerator AnimateTentacleStrikeRoutine(
-            GameObject root,
-            LineRenderer bodyLine,
-            LineRenderer highlightLine,
-            LineRenderer[] cups,
-            Vector3 source,
-            Vector3 target,
-            float scale,
-            Color bodyColor,
-            Color highlightColor)
-        {
-            var elapsed = 0f;
-            while (elapsed < TentacleStrikeDurationSeconds)
-            {
-                if (root == null || bodyLine == null)
-                {
-                    yield break;
-                }
-
-                elapsed += Time.unscaledDeltaTime;
-                var progress = Mathf.Clamp01(elapsed / TentacleStrikeDurationSeconds);
-                var revealProgress = Mathf.Clamp01(progress / 0.38f);
-                var fade = 1f - Mathf.Clamp01((progress - 0.58f) / 0.42f);
-                UpdateTentacleStrikeGeometry(bodyLine, highlightLine, cups, source, target, scale, revealProgress, progress);
-                SetLineAlpha(bodyLine, bodyColor, fade);
-                SetLineAlpha(highlightLine, highlightColor, fade);
-                if (cups != null)
-                {
-                    foreach (var cup in cups)
-                    {
-                        SetLineAlpha(cup, highlightColor, fade * 0.86f);
-                    }
-                }
-
-                yield return null;
-            }
-
-            if (root != null)
-            {
-                Destroy(root);
-            }
-        }
-
-        private static void UpdateTentacleStrikeGeometry(
-            LineRenderer bodyLine,
-            LineRenderer highlightLine,
-            LineRenderer[] cups,
-            Vector3 source,
-            Vector3 target,
-            float scale,
-            float revealProgress,
-            float motionProgress)
-        {
-            var revealedTarget = Vector3.Lerp(source, target, 1f - Mathf.Pow(1f - Mathf.Clamp01(revealProgress), 3f));
-            for (var i = 0; i <= TentacleStrikeSegmentCount; i++)
-            {
-                var t = i / (float)TentacleStrikeSegmentCount;
-                var point = ResolveTentaclePoint(source, revealedTarget, t, scale, motionProgress);
-                bodyLine?.SetPosition(i, point);
-                highlightLine?.SetPosition(i, point + new Vector3(0f, 0.035f * scale, 0f));
-            }
-
-            if (cups == null)
-            {
-                return;
-            }
-
-            for (var i = 0; i < cups.Length; i++)
-            {
-                var t = Mathf.Lerp(0.22f, 0.78f, cups.Length == 1 ? 0f : i / (float)(cups.Length - 1));
-                if (t > Mathf.Clamp01(revealProgress) + 0.08f)
-                {
-                    SetTentacleCupRadius(cups[i], Vector3.zero, 0f);
-                    continue;
-                }
-
-                var center = ResolveTentaclePoint(source, revealedTarget, t, scale, motionProgress) - new Vector3(0f, 0.06f * scale, 0f);
-                var radius = Mathf.Lerp(0.035f, 0.022f, t) * scale;
-                SetTentacleCupRadius(cups[i], center, radius);
-            }
-        }
-
-        private static Vector3 ResolveTentaclePoint(Vector3 source, Vector3 target, float t, float scale, float motionProgress)
-        {
-            var direction = target - source;
-            direction.z = 0f;
-            if (direction.sqrMagnitude <= 0.0001f)
-            {
-                direction = Vector3.right;
-            }
-
-            var facingSign = direction.x >= 0f ? 1f : -1f;
-            var strikeStart = target + new Vector3(-0.08f * facingSign * scale, 1.08f * scale, 0f);
-            if (t < 0.58f)
-            {
-                var travel = Mathf.Clamp01(t / 0.58f);
-                var control = Vector3.Lerp(source, strikeStart, 0.48f) +
-                    new Vector3(0.22f * facingSign * scale, 0.42f * scale, 0f);
-                var flex = Mathf.Sin((travel * 2.4f + motionProgress * 1.8f) * Mathf.PI) *
-                    0.08f * scale * (1f - travel * 0.25f);
-                return QuadraticBezier(source, control, strikeStart, travel) + new Vector3(flex, 0f, 0f);
-            }
-
-            var slam = Mathf.Clamp01((t - 0.58f) / 0.42f);
-            var easedSlam = slam * slam * (3f - 2f * slam);
-            var verticalBase = Vector3.Lerp(strikeStart, target, easedSlam);
-            var whip = Mathf.Sin((slam + motionProgress * 2.2f) * Mathf.PI) * 0.045f * scale * (1f - slam);
-            return verticalBase + new Vector3(whip * facingSign, 0f, 0f);
+            PlaySpikedBurstSkillEffect(skill, targetAnchor, sourceAnchor);
         }
 
         private static Vector3 QuadraticBezier(Vector3 a, Vector3 b, Vector3 c, float t)
@@ -4613,20 +4489,6 @@ namespace Project2048.Prototype
             var inverse = 1f - Mathf.Clamp01(t);
             var clamped = Mathf.Clamp01(t);
             return inverse * inverse * a + 2f * inverse * clamped * b + clamped * clamped * c;
-        }
-
-        private static void SetTentacleCupRadius(LineRenderer cup, Vector3 center, float radius)
-        {
-            if (cup == null)
-            {
-                return;
-            }
-
-            for (var i = 0; i <= TentacleStrikeCupSegmentCount; i++)
-            {
-                var angle = Mathf.PI * 2f * i / TentacleStrikeCupSegmentCount;
-                cup.SetPosition(i, center + new Vector3(Mathf.Cos(angle) * radius, Mathf.Sin(angle) * radius, 0f));
-            }
         }
 
         private static void SetLineAlpha(LineRenderer line, Color color, float alpha)
@@ -4652,18 +4514,6 @@ namespace Project2048.Prototype
             endColor.a *= Mathf.Clamp01(alpha);
             line.startColor = startColor;
             line.endColor = endColor;
-        }
-
-        private static Color ResolveTentacleColor(Color color, Color tint, float tintWeight)
-        {
-            if (color.a <= 0f)
-            {
-                color = tint;
-            }
-
-            var resolved = Color.Lerp(color, tint, Mathf.Clamp01(tintWeight));
-            resolved.a = Mathf.Max(0.82f, Mathf.Min(0.98f, color.a));
-            return resolved;
         }
 
         private static Color ResolveSkillTintedColor(Color color, Color tint, float tintWeight, float minimumAlpha)
@@ -7137,9 +6987,9 @@ namespace Project2048.Prototype
             return previousEnemy.Block > 0 && nextEnemy.Block < previousEnemy.Block;
         }
 
-        private static bool EnemyUsedAttack(CombatSnapshot previous, CombatSnapshot next, bool playerWasHit)
+        private static bool EnemyUsedAttack(CombatSnapshot previous, CombatSnapshot next, bool attackConnected)
         {
-            if (!playerWasHit || next?.Phase != CombatPhase.EnemyTurn)
+            if (!attackConnected || next?.Phase != CombatPhase.EnemyTurn)
             {
                 return false;
             }
@@ -7159,7 +7009,43 @@ namespace Project2048.Prototype
 
             return next.Phase == CombatPhase.EnemyTurn &&
                 EnemyHasDefenseIntent(nextEnemy) &&
-                nextEnemy.Block > previousEnemy.Block;
+                (nextEnemy.Block > previousEnemy.Block || EnemyHasDefenseSkillIntent(nextEnemy));
+        }
+
+        private static EnemyIntent ResolveEnemyUsedIntent(CombatSnapshot snapshot, EnemyIntentType intentType)
+        {
+            var enemy = snapshot?.Enemies?.FirstOrDefault();
+            if (enemy?.Intents != null)
+            {
+                var skillIntent = enemy.Intents.FirstOrDefault(intent =>
+                    intent?.intentType == intentType &&
+                    !string.IsNullOrWhiteSpace(intent.skillId));
+                if (skillIntent != null)
+                {
+                    return skillIntent;
+                }
+
+                var matchingIntent = enemy.Intents.FirstOrDefault(intent => intent?.intentType == intentType);
+                if (matchingIntent != null)
+                {
+                    return matchingIntent;
+                }
+            }
+
+            return enemy?.Intent?.intentType == intentType ? enemy.Intent : null;
+        }
+
+        private SkillSO ResolveEnemySkillForIntent(EnemyIntent intent)
+        {
+            if (intent == null || string.IsNullOrWhiteSpace(intent.skillId))
+            {
+                return null;
+            }
+
+            var skills = ResolveCurrentEnemyData()?.skills;
+            return skills?.FirstOrDefault(skill =>
+                skill != null &&
+                string.Equals(skill.skillId, intent.skillId, System.StringComparison.OrdinalIgnoreCase));
         }
 
         private static bool EnemyHasAttackIntent(EnemyCombatSnapshot enemy)
@@ -7180,6 +7066,19 @@ namespace Project2048.Prototype
             }
 
             return enemy?.Intent?.intentType == EnemyIntentType.Defense;
+        }
+
+        private static bool EnemyHasDefenseSkillIntent(EnemyCombatSnapshot enemy)
+        {
+            if (enemy?.Intents != null && enemy.Intents.Any(intent =>
+                intent?.intentType == EnemyIntentType.Defense &&
+                !string.IsNullOrWhiteSpace(intent.skillId)))
+            {
+                return true;
+            }
+
+            return enemy?.Intent?.intentType == EnemyIntentType.Defense &&
+                !string.IsNullOrWhiteSpace(enemy.Intent.skillId);
         }
 
         private static bool EnemyAppeared(CombatSnapshot previous, CombatSnapshot next)

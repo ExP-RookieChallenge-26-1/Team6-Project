@@ -17,7 +17,7 @@ MonoBehaviour:
   skillType: 1
   effectKind: 12
   damageStatSource: 0
-  cost: 7
+  cost: 30
   power: 40
   targetAttackStageModifier: 0
   targetDefenseStageModifier: 0
@@ -65,7 +65,7 @@ MonoBehaviour:
     animationClip: {fileID: 0}
     particleEffect:
       objectName: ThornGuardSkillParticles
-      particlePrefab: {fileID: 0}
+      particlePrefab: {fileID: 3967671219066916926, guid: 17358b86df3ec454eb71456748b55093, type: 3}
       particleMaterial: {fileID: 2100000, guid: 65e092e01d9dbe741072906fbc723c04, type: 2}
       useParticleColor: 1
       particleColor: {r: 0.086267, g: 0.208667, b: 0.165467, a: 1}
@@ -80,14 +80,27 @@ MonoBehaviour:
     sfxDelaySeconds: 0
     localOffset: {x: 0, y: 0, z: 0}
     autoDestroySeconds: 1.25
-  vfxPackage: {fileID: 11400000, guid: 33de0e3e1b3a6d14bbbb965818d265ca, type: 2}
+  vfx:
+    family: 3
+    primarySprite: {fileID: -3554453865146640057, guid: 0bd3564bbef8b9b44baf3cd330c01c1b, type: 3}
+    primaryPrefab: {fileID: 7427817718329016933, guid: 5455b1b837377fe4fa0a6ec39baceb62, type: 3}
+    projectilePrefab: {fileID: 0}
+    secondarySprite: {fileID: 21300000, guid: 8c49f1f430d44e7e8e1abef7d849a339, type: 3}
+    secondaryPrefab: {fileID: 334930548413494215, guid: 2aa76a56c853c054ca191435c455f36e, type: 3}
+    particlePrefab: {fileID: 3967671219066916926, guid: 17358b86df3ec454eb71456748b55093, type: 3}
+    particleMaterial: {fileID: 2100000, guid: 65e092e01d9dbe741072906fbc723c04, type: 2}
+    localOffset: {x: 0, y: 0.12, z: 0}
+    radiusMultiplier: 1
+    lifetimeSeconds: -1
+    sortingOffset: 12
+    tintWhiteBlend: 0.18
+    alpha: 0.9
+    rotationDegrees: -12
+  vfxPackage: {fileID: 0}
   vfxFamily: 3
   vfxPrimaryColor: {r: 0.086267, g: 0.208667, b: 0.165467, a: 1}
   vfxSecondaryColor: {r: 0.380226, g: 0.121026, b: 0.106626, a: 1}
   vfxScale: 1.1
   vfxIntensity: 1.15
   vfxRepeatCount: 1
-  description: "\uBCF4\uD638\uB9C9 40\uC744 \uC5BB\uB294\uB2E4. \uBCF4\uD638\uB9C9\uC774
-    \uB0A8\uC544 \uC788\uC744 \uB54C \uC801\uC758 \uC9C1\uC811 \uACF5\uACA9\uC744
-    \uBC1B\uC73C\uBA74, \uD604\uC7AC \uBCF4\uD638\uB9C9 \uC218\uCE58\uB85C \uC704\uB825
-    40 \uBC18\uACA9\uC744 \uD55C\uB2E4."
+  description: ""

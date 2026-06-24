@@ -17,7 +17,7 @@ MonoBehaviour:
   skillType: 1
   effectKind: 32
   damageStatSource: 0
-  cost: 4
+  cost: 10
   power: 0
   targetAttackStageModifier: 0
   targetDefenseStageModifier: 0
@@ -40,7 +40,7 @@ MonoBehaviour:
   hpCostPercent: 0
   hpCostLeavesOne: 1
   nextBoardMoveCountModifier: 0
-  nextCostGainModifier: 0
+  nextCostGainModifier: 20
   nextCostGainMultiplier: 1
   conditionalPowerBonus: 0
   conditionalHpThreshold: 0
@@ -49,7 +49,7 @@ MonoBehaviour:
   statusMaxHpDamagePercent: 0
   shieldPiercePercent: 0
   extraPowerPerConsumedCost: 0
-  maxCostCarry: 4
+  maxCostCarry: 0
   costRefund: 0
   chargedPower: 0
   consumesAllShield: 0
@@ -65,7 +65,7 @@ MonoBehaviour:
     animationClip: {fileID: 0}
     particleEffect:
       objectName: AfterglowSaveSkillParticles
-      particlePrefab: {fileID: 0}
+      particlePrefab: {fileID: 957232862726013403, guid: 887664bf91244304892e16e72032c214, type: 3}
       particleMaterial: {fileID: 2100000, guid: 45ec00e6f551b1eeb762958e709a5042, type: 2}
       useParticleColor: 1
       particleColor: {r: 0.862222, g: 0.775822, b: 0.372622, a: 1}
@@ -80,14 +80,27 @@ MonoBehaviour:
     sfxDelaySeconds: 0
     localOffset: {x: 0, y: 0, z: 0}
     autoDestroySeconds: 1.25
-  vfxPackage: {fileID: 11400000, guid: b5d4f6cee7a9bc645af68e1f5e477490, type: 2}
+  vfx:
+    family: 5
+    primarySprite: {fileID: 21300000, guid: 91b7d11e1f9d4ecf95de8b6a82fa3a87, type: 3}
+    primaryPrefab: {fileID: 678183688835185469, guid: 4687ea7fc00f3154a9ac6e179a7cda97, type: 3}
+    projectilePrefab: {fileID: 0}
+    secondarySprite: {fileID: 0}
+    secondaryPrefab: {fileID: 0}
+    particlePrefab: {fileID: 957232862726013403, guid: 887664bf91244304892e16e72032c214, type: 3}
+    particleMaterial: {fileID: 2100000, guid: 45ec00e6f551b1eeb762958e709a5042, type: 2}
+    localOffset: {x: 0.76, y: 0.1, z: 0}
+    radiusMultiplier: 2.56
+    lifetimeSeconds: -1
+    sortingOffset: 12
+    tintWhiteBlend: 0.18
+    alpha: 0.9
+    rotationDegrees: -8
+  vfxPackage: {fileID: 0}
   vfxFamily: 5
   vfxPrimaryColor: {r: 0.862222, g: 0.775822, b: 0.372622, a: 1}
   vfxSecondaryColor: {r: 0.32391, g: 0.25191, b: 0.10791, a: 1}
   vfxScale: 0.8
   vfxIntensity: 1
   vfxRepeatCount: 1
-  description: "\uC774\uBC88 \uD134 \uC885\uB8CC \uC2DC \uB0A8\uC740 \uCF54\uC2A4\uD2B8\uB97C
-    \uCD5C\uB300 4\uAE4C\uC9C0 \uB2E4\uC74C \uD134\uC73C\uB85C \uC774\uC6D4\uD55C\uB2E4.
-    \uC774\uC6D4 \uCF54\uC2A4\uD2B8\uB294 \uD55C \uBC88 \uC801\uC6A9\uB418\uBA74
-    \uC0AC\uB77C\uC9C4\uB2E4."
+  description: "Next turn starts with +20 cost."

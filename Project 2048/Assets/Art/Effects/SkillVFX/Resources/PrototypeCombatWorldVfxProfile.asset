@@ -18,8 +18,8 @@ MonoBehaviour:
   thornShieldEffectSprite: {fileID: 21300000, guid: 8c49f1f430d44e7e8e1abef7d849a339, type: 3}
   magicCircleEffectSprite: {fileID: 21300000, guid: 91b7d11e1f9d4ecf95de8b6a82fa3a87, type: 3}
   flameEffectSprite: {fileID: 21300000, guid: e83fe29d407142ba931d90d518a538a2, type: 3}
-  chainAttackEffectSprite: {fileID: 21300000, guid: be27da63da4d43dd86a43c511375ac07, type: 3}
-  boundChainsEffectSprite: {fileID: 21300000, guid: 302feda477c54bb9888434aab0dfaa2d, type: 3}
+  chainAttackEffectSprite: {fileID: -6272862024312062455, guid: 0f723c449d8f40c44b1c7d85e4e722e3, type: 3}
+  boundChainsEffectSprite: {fileID: 3792518726696312516, guid: 113d8d29d9fcd594f8971aa5316799b6, type: 3}
   attackEffectPrefab: {fileID: 756328571287768908, guid: d6c612ca12e9ae34d903714e8fc4f81e, type: 3}
   hitEffectPrefab: {fileID: 8614566233561317893, guid: 06a9b239017d8e44bb20c48fca385733, type: 3}
   shieldEffectPrefab: {fileID: 7427817718329016933, guid: 5455b1b837377fe4fa0a6ec39baceb62, type: 3}
@@ -27,8 +27,48 @@ MonoBehaviour:
   magicCircleEffectPrefab: {fileID: 678183688835185469, guid: 4687ea7fc00f3154a9ac6e179a7cda97, type: 3}
   flameEffectPrefab: {fileID: 1827861628062789563, guid: 11867b2eedd68a545aa83d1f7781b799, type: 3}
   darkChainLaunchPrefab: {fileID: 6112283777073703144, guid: 7606bfa0f29aca24da347d455045fe30, type: 3}
-  chainAttackEffectPrefab: {fileID: 3746632578855000458, guid: f5829cd5b554e58468ee6f5d098d1d94, type: 3}
+  chainAttackEffectPrefab: {fileID: 648211251900000001, guid: 6dfc2d6cca4f4bd9874d55be63c6cfde, type: 3}
   boundChainsEffectPrefab: {fileID: 2128731538229030202, guid: b8ace7993b619e7468da03635a1b4819, type: 3}
+  supportBuffVisualEffectPrefab: {fileID: 7936256264085202695, guid: f0164d765a6b5f84ebd35cf4d8597a15, type: 3}
+  defaultSkillParticlePrefab: {fileID: 2475268085276667373, guid: 30153da8301a3094fa24598b1dc1f6fe, type: 3}
+  swirlSkillParticlePrefab: {fileID: 1530637583372570424, guid: e1dfcb88f068b05469bd40b2e00bb332, type: 3}
+  particlePrefabBindings:
+  - objectName: ShieldImpactParticles
+    prefab: {fileID: 6430505343359792508, guid: e837ef3f90e505348ae45606716cb857, type: 3}
+  - objectName: FearDebuffCastParticles
+    prefab: {fileID: 2255879233917747369, guid: 12dea4cc24c612f43bb9feae2f7813f5, type: 3}
+  - objectName: DarknessDebuffCastParticles
+    prefab: {fileID: 4335111770625128212, guid: 3016b1fbf66e2db47b72de27d6c8a6ae, type: 3}
+  - objectName: ShieldBashLaunchParticles
+    prefab: {fileID: 6397600632244277791, guid: e5e28e5cfed5f0f4d9d1fbee33b81209, type: 3}
+  - objectName: ShieldBurstShardParticles
+    prefab: {fileID: 316138120423118788, guid: be1e7a6bde0d82548b1125b13ac52f7b, type: 3}
+  - objectName: FlameBurstFlameParticles
+    prefab: {fileID: 2482922635782273925, guid: 2747419a9d2065c4199a3f5095155f8f, type: 3}
+  - objectName: FlameBurstEmbers
+    prefab: {fileID: 7669894375522752588, guid: d5d828f9d8b038d4d801443f3c31bdf9, type: 3}
+  - objectName: FlameBurstSmoke
+    prefab: {fileID: 7420244738189818401, guid: 19fcb9b9e356c8f4b9b554a889edfa80, type: 3}
+  - objectName: LightEchoSupportFireParticles
+    prefab: {fileID: 3636991205146807587, guid: 960c64dc975c785499864b37ce311447, type: 3}
+  - objectName: HeavyStrikeSpikedExplosionParticles
+    prefab: {fileID: 1238331265973899015, guid: b2cd671da5e59f045b0f0de345585af8, type: 3}
+  - objectName: HeavyStrikeSpikeShards
+    prefab: {fileID: 6039323677303942691, guid: ec52b4d5b2297f54195cc384a95aafe1, type: 3}
+  - objectName: BleedingCutBloodFountain
+    prefab: {fileID: 7282923797637341098, guid: 61a68212831a1ce40b4feafc8d68a607, type: 3}
+  - objectName: BleedingCutBloodMist
+    prefab: {fileID: 8171794560918841062, guid: 55af188eb7013ff4ca26e49f40d128e7, type: 3}
+  - objectName: DarkShackleMuzzleParticles
+    prefab: {fileID: 7808856072869260083, guid: 99142f3c1ae665f4087fda10a4e0f2ba, type: 3}
+  - objectName: LanternSkillMuzzleParticles
+    prefab: {fileID: 703030006499957052, guid: d893de138bdd34544b959fec31cedba3, type: 3}
+  - objectName: ChargedLightBeamMuzzleParticles
+    prefab: {fileID: 6191353080026783552, guid: b0142d648c9ad414eaebaef9738c7d46, type: 3}
+  - objectName: ChargedLightBeamImpactParticles
+    prefab: {fileID: 6283749467474217711, guid: 36f30350449179c41b7fc013c50230b5, type: 3}
+  - objectName: TentacleStrikeImpactParticles
+    prefab: {fileID: 7577564455647303022, guid: 10ea2257a0fbfa2479306c1026a74ba9, type: 3}
   designTimeBindings:
   - family: 1
     sprite: {fileID: 21300000, guid: e18b788083f586d650f0bcb9e2a927a4, type: 3}
@@ -91,14 +131,14 @@ MonoBehaviour:
     alpha: 0.86
     rotationDegrees: 0
   - family: 7
-    sprite: {fileID: 21300000, guid: be27da63da4d43dd86a43c511375ac07, type: 3}
+    sprite: {fileID: -6272862024312062455, guid: 0f723c449d8f40c44b1c7d85e4e722e3, type: 3}
     prefab: {fileID: 3746632578855000458, guid: f5829cd5b554e58468ee6f5d098d1d94, type: 3}
     localOffset: {x: 0, y: 0.06, z: 0}
     radiusMultiplier: 0.95
     lifetimeSeconds: -1
     sortingOffset: 12
-    tintWhiteBlend: 0.18
-    alpha: 0.82
+    tintWhiteBlend: 0
+    alpha: 1
     rotationDegrees: -4
   - family: 8
     sprite: {fileID: -3554453865146640057, guid: 0bd3564bbef8b9b44baf3cd330c01c1b, type: 3}
@@ -111,14 +151,14 @@ MonoBehaviour:
     alpha: 0.86
     rotationDegrees: -10
   - family: 9
-    sprite: {fileID: 21300000, guid: 302feda477c54bb9888434aab0dfaa2d, type: 3}
+    sprite: {fileID: 3792518726696312516, guid: 113d8d29d9fcd594f8971aa5316799b6, type: 3}
     prefab: {fileID: 2128731538229030202, guid: b8ace7993b619e7468da03635a1b4819, type: 3}
     localOffset: {x: 0, y: 0.04, z: 0}
     radiusMultiplier: 0.96
     lifetimeSeconds: -1
     sortingOffset: 12
-    tintWhiteBlend: 0.18
-    alpha: 0.78
+    tintWhiteBlend: 0
+    alpha: 1
     rotationDegrees: -4
   - family: 10
     sprite: {fileID: 21300000, guid: e18b788083f586d650f0bcb9e2a927a4, type: 3}
@@ -141,7 +181,7 @@ MonoBehaviour:
     alpha: 0.9
     rotationDegrees: -10
   - family: 12
-    sprite: {fileID: 8308453775926402793, guid: 6a8de39c90871b84f948aa4b0fc1d938, type: 3}
+    sprite: {fileID: 21300000, guid: 6a8de39c90871b84f948aa4b0fc1d938, type: 3}
     prefab: {fileID: 4661553209743665296, guid: b6ad87597eb493f4e9a99c793656b9ff, type: 3}
     localOffset: {x: 0, y: 0.14, z: 0}
     radiusMultiplier: 0.92
@@ -181,18 +221,18 @@ MonoBehaviour:
     alpha: 0.84
     rotationDegrees: -8
   - family: 16
-    sprite: {fileID: 21300000, guid: be27da63da4d43dd86a43c511375ac07, type: 3}
-    prefab: {fileID: 3746632578855000458, guid: f5829cd5b554e58468ee6f5d098d1d94, type: 3}
+    sprite: {fileID: -6272862024312062455, guid: 0f723c449d8f40c44b1c7d85e4e722e3, type: 3}
+    prefab: {fileID: 648211251900000001, guid: 6dfc2d6cca4f4bd9874d55be63c6cfde, type: 3}
     localOffset: {x: 0, y: 0.04, z: 0}
     radiusMultiplier: 0.95
     lifetimeSeconds: -1
     sortingOffset: 12
-    tintWhiteBlend: 0.14
-    alpha: 0.78
+    tintWhiteBlend: 0
+    alpha: 1
     rotationDegrees: -4
   shieldImpactEffect:
     objectName: ShieldImpactParticles
-    particlePrefab: {fileID: 0}
+    particlePrefab: {fileID: 6430505343359792508, guid: e837ef3f90e505348ae45606716cb857, type: 3}
     particleMaterial: {fileID: 2100000, guid: a5a4f5b9bc0f42af8d3c52df445df941, type: 2}
     useParticleColor: 0
     particleColor: {r: 0.687759, g: 0.903759, b: 0.961359, a: 0.96}
@@ -203,7 +243,7 @@ MonoBehaviour:
     swirl: 0
   fearDebuffCastEffect:
     objectName: FearDebuffCastParticles
-    particlePrefab: {fileID: 0}
+    particlePrefab: {fileID: 2255879233917747369, guid: 12dea4cc24c612f43bb9feae2f7813f5, type: 3}
     particleMaterial: {fileID: 2100000, guid: e3c729c7f6bb4aa78ff3c8a385a4762f, type: 2}
     useParticleColor: 0
     particleColor: {r: 0.597893, g: 0.093893, b: 0.173093, a: 0.95}
@@ -214,7 +254,7 @@ MonoBehaviour:
     swirl: 1
   darknessDebuffCastEffect:
     objectName: DarknessDebuffCastParticles
-    particlePrefab: {fileID: 0}
+    particlePrefab: {fileID: 4335111770625128212, guid: 3016b1fbf66e2db47b72de27d6c8a6ae, type: 3}
     particleMaterial: {fileID: 2100000, guid: 9dc2d6350ec44e5ba1f2dfbc1762b0d2, type: 2}
     useParticleColor: 0
     particleColor: {r: 0.216816, g: 0.116016, b: 0.389616, a: 0.95}

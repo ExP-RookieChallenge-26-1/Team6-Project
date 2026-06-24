@@ -12,22 +12,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6115ca39d511d049965aae02efc3f23, type: 3}
   m_Name: 08
   m_EditorClassIdentifier: Game.Core::Project2048.Enemy.EnemySO
-  enemyName: "\uCE74\uB974\uBBFC\uB290"
+  enemyName: "\uBD80\uC5C9\uC774"
   encounterRank: 0
-  maxHp: 220
-  attackPower: 7
+  maxHp: 300
+  attackPower: 6
   baseDefensePower: 0
-  defensePower: 3
+  defensePower: 5
   debuffPower: 2
   criticalChance: 0
   criticalDamageMultiplier: 1.5
   aiComplexity: 1
   actionsPerTurn: 2
   skills:
-  - {fileID: 11400000, guid: 7598901042154ed89bf747d8e39ee11e, type: 2}
-  - {fileID: 11400000, guid: c1744bc96e754468b74f2e389042e23f, type: 2}
-  - {fileID: 11400000, guid: 104fae93c7b64922bbaf09b45b586dc3, type: 2}
-  - {fileID: 11400000, guid: 00966bf157b01874e90775ed704b2b9b, type: 2}
+  - {fileID: 11400000, guid: bdb2766095452cd4094c7768ff8b1d0d, type: 2}
+  - {fileID: 11400000, guid: 5e4548f0126440518f149d423d4efba6, type: 2}
+  - {fileID: 11400000, guid: 0edf80831457439892d5803f916cf1f6, type: 2}
+  - {fileID: 11400000, guid: 98a8d0cce1fbc5e429a506f26be1122e, type: 2}
   portrait: {fileID: 21300000, guid: 19dc22c267eeaaf41a4aba6ba1318870, type: 3}
   actionEffects:
   - actionId: appear
@@ -118,14 +118,138 @@ MonoBehaviour:
       sfxDelaySeconds: 0
       localOffset: {x: 0, y: 0, z: 0}
       autoDestroySeconds: 1.25
-  intentPattern: []
-  aiActionBias: 1
+  intentPattern:
+  - skillId: iron-wall
+    displayName: "\uCCA0\uBCBD"
+    skillType: 1
+    skillEffectKind: 5
+    damageStatSource: 0
+    intentType: 1
+    value: 0
+    movePower: 0
+    debuffType: 0
+    isThornGuard: 0
+    retaliationDamage: 0
+    targetAttackModifier: 0
+    targetDefenseModifier: 0
+    selfDefensePowerModifier: 2
+    selfCriticalStageModifier: 0
+    selfEndureTurns: 0
+    lifeStealPercent: 0
+    hpCost: 0
+    hpCostPercent: 0
+    hpCostLeavesOne: 1
+    nextBoardMoveCountModifier: 0
+    nextCostGainModifier: 0
+    nextCostGainMultiplier: 1
+    conditionalPowerBonus: 0
+    conditionalHpThreshold: 0
+    statusDuration: 0
+    statusDamage: 0
+    statusMaxHpDamagePercent: 0
+    shieldPiercePercent: 0
+    minSelfHpPercent: 0
+    maxSelfHpPercent: 0
+  - skillId: crack-brand
+    displayName: "\uADE0\uC5F4 \uB099\uC778"
+    skillType: 2
+    skillEffectKind: 31
+    damageStatSource: 0
+    intentType: 2
+    value: 40
+    movePower: 0
+    debuffType: 0
+    isThornGuard: 0
+    retaliationDamage: 0
+    targetAttackModifier: 0
+    targetDefenseModifier: 0
+    selfDefensePowerModifier: 0
+    selfCriticalStageModifier: 0
+    selfEndureTurns: 0
+    lifeStealPercent: 0
+    hpCost: 0
+    hpCostPercent: 0
+    hpCostLeavesOne: 1
+    nextBoardMoveCountModifier: 0
+    nextCostGainModifier: 0
+    nextCostGainMultiplier: 1
+    conditionalPowerBonus: 0
+    conditionalHpThreshold: 0
+    statusDuration: 0
+    statusDamage: 40
+    statusMaxHpDamagePercent: 0
+    shieldPiercePercent: 0
+    minSelfHpPercent: 0
+    maxSelfHpPercent: 0
+  - skillId: seal-skill
+    displayName: "\uBD09\uC778"
+    skillType: 2
+    skillEffectKind: 29
+    damageStatSource: 0
+    intentType: 2
+    value: 1
+    movePower: 0
+    debuffType: 0
+    isThornGuard: 0
+    retaliationDamage: 0
+    targetAttackModifier: 0
+    targetDefenseModifier: 0
+    selfDefensePowerModifier: 0
+    selfCriticalStageModifier: 0
+    selfEndureTurns: 0
+    lifeStealPercent: 0
+    hpCost: 0
+    hpCostPercent: 0
+    hpCostLeavesOne: 1
+    nextBoardMoveCountModifier: 0
+    nextCostGainModifier: 0
+    nextCostGainMultiplier: 1
+    conditionalPowerBonus: 0
+    conditionalHpThreshold: 0
+    statusDuration: 1
+    statusDamage: 0
+    statusMaxHpDamagePercent: 0
+    shieldPiercePercent: 0
+    minSelfHpPercent: 0
+    maxSelfHpPercent: 0
+  - skillId: intimidating-shot
+    displayName: "\uC704\uD611 \uC0AC\uACA9"
+    skillType: 0
+    skillEffectKind: 3
+    damageStatSource: 0
+    intentType: 2
+    value: 1
+    movePower: 0
+    debuffType: 0
+    isThornGuard: 0
+    retaliationDamage: 0
+    targetAttackModifier: -1
+    targetDefenseModifier: 0
+    selfDefensePowerModifier: 0
+    selfCriticalStageModifier: 0
+    selfEndureTurns: 0
+    lifeStealPercent: 0
+    hpCost: 0
+    hpCostPercent: 0
+    hpCostLeavesOne: 1
+    nextBoardMoveCountModifier: 0
+    nextCostGainModifier: 0
+    nextCostGainMultiplier: 1
+    conditionalPowerBonus: 0
+    conditionalHpThreshold: 0
+    statusDuration: 0
+    statusDamage: 0
+    statusMaxHpDamagePercent: 0
+    shieldPiercePercent: 0
+    minSelfHpPercent: 0
+    maxSelfHpPercent: 0
+  aiActionBias: 2
   aiDebuffPattern: 1
-  aiStrength: 1
-  aiDebuffInterval: 2
+  aiStrength: 0
+  aiDebuffInterval: 3
   canUseThornGuard: 0
   thornGuardShieldHp: 4
   thornGuardRetaliationDamage: 2
-  canUseBullRush: 1
+  canUseBullRush: 0
   bullRushInterval: 3
   bullRushBonusDamage: 3

@@ -428,6 +428,7 @@ namespace Project2048.Enemy
                 skillEffectKind = effectKind,
                 damageStatSource = ResolveEnemyDamageStatSource(skill),
                 hpCost = skill.hpCost,
+                hpCostPercent = skill.hpCostPercent,
                 hpCostLeavesOne = skill.hpCostLeavesOne,
                 lifeStealPercent = skill.lifeStealPercent,
                 nextBoardMoveCountModifier = skill.nextBoardMoveCountModifier,
@@ -436,6 +437,8 @@ namespace Project2048.Enemy
                 targetAttackModifier = skill.targetAttackModifier,
                 targetDefenseModifier = skill.targetDefenseModifier,
                 selfDefensePowerModifier = skill.selfDefensePowerModifier,
+                selfCriticalStageModifier = skill.selfCriticalStageModifier,
+                selfEndureTurns = skill.selfEndureTurns,
                 conditionalPowerBonus = skill.conditionalPowerBonus,
                 conditionalHpThreshold = skill.conditionalHpThreshold,
                 statusDuration = skill.statusDuration,
@@ -484,6 +487,16 @@ namespace Project2048.Enemy
                     intent.intentType = EnemyIntentType.Defense;
                     intent.value = 0;
                     intent.selfDefensePowerModifier = ResolveStageModifier(skill.selfDefenseStageModifier, skill.selfDefensePowerModifier, 1);
+                    return intent;
+                case SkillEffectKind.CriticalStageUp:
+                    intent.intentType = EnemyIntentType.Defense;
+                    intent.value = 0;
+                    intent.selfCriticalStageModifier = skill.selfCriticalStageModifier > 0 ? skill.selfCriticalStageModifier : 1;
+                    return intent;
+                case SkillEffectKind.Endure:
+                    intent.intentType = EnemyIntentType.Defense;
+                    intent.value = 0;
+                    intent.selfEndureTurns = skill.selfEndureTurns > 0 ? skill.selfEndureTurns : 1;
                     return intent;
                 case SkillEffectKind.ChargeAttack:
                     intent.intentType = EnemyIntentType.Attack;

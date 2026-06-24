@@ -19,8 +19,11 @@ namespace Project2048.Enemy
         public int targetAttackModifier;
         public int targetDefenseModifier;
         public int selfDefensePowerModifier;
+        public int selfCriticalStageModifier;
+        public int selfEndureTurns;
         public float lifeStealPercent;
         public int hpCost;
+        public float hpCostPercent;
         public bool hpCostLeavesOne = true;
         public int nextBoardMoveCountModifier;
         public int nextCostGainModifier;
@@ -31,6 +34,8 @@ namespace Project2048.Enemy
         public int statusDamage;
         public float statusMaxHpDamagePercent;
         public int shieldPiercePercent;
+        public float minSelfHpPercent;
+        public float maxSelfHpPercent;
 
         public EnemyIntent Clone()
         {
@@ -50,8 +55,11 @@ namespace Project2048.Enemy
                 targetAttackModifier = targetAttackModifier,
                 targetDefenseModifier = targetDefenseModifier,
                 selfDefensePowerModifier = selfDefensePowerModifier,
+                selfCriticalStageModifier = selfCriticalStageModifier,
+                selfEndureTurns = selfEndureTurns,
                 lifeStealPercent = lifeStealPercent,
                 hpCost = hpCost,
+                hpCostPercent = hpCostPercent,
                 hpCostLeavesOne = hpCostLeavesOne,
                 nextBoardMoveCountModifier = nextBoardMoveCountModifier,
                 nextCostGainModifier = nextCostGainModifier,
@@ -62,6 +70,8 @@ namespace Project2048.Enemy
                 statusDamage = statusDamage,
                 statusMaxHpDamagePercent = statusMaxHpDamagePercent,
                 shieldPiercePercent = shieldPiercePercent,
+                minSelfHpPercent = minSelfHpPercent,
+                maxSelfHpPercent = maxSelfHpPercent,
             };
         }
     }

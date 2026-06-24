@@ -17,7 +17,7 @@ MonoBehaviour:
   skillType: 0
   effectKind: 17
   damageStatSource: 0
-  cost: 8
+  cost: 40
   power: 110
   targetAttackStageModifier: 0
   targetDefenseStageModifier: 0
@@ -65,7 +65,7 @@ MonoBehaviour:
     animationClip: {fileID: 0}
     particleEffect:
       objectName: RecklessBlowSkillParticles
-      particlePrefab: {fileID: 0}
+      particlePrefab: {fileID: 327951452759943371, guid: 3b5aa8b16af23fc44947322efc54c05f, type: 3}
       particleMaterial: {fileID: 2100000, guid: a19a598f9cd9ddb0f7543ff1237ae3cd, type: 2}
       useParticleColor: 1
       particleColor: {r: 0.286275, g: 0.686275, b: 0.709804, a: 1}
@@ -80,13 +80,27 @@ MonoBehaviour:
     sfxDelaySeconds: 0
     localOffset: {x: 0, y: 0, z: 0}
     autoDestroySeconds: 1.25
-  vfxPackage: {fileID: 11400000, guid: af9010c52a1d9e74f84699f320a1fe23, type: 2}
+  vfx:
+    family: 15
+    primarySprite: {fileID: 21300000, guid: e83fe29d407142ba931d90d518a538a2, type: 3}
+    primaryPrefab: {fileID: 1827861628062789563, guid: 11867b2eedd68a545aa83d1f7781b799, type: 3}
+    projectilePrefab: {fileID: 5592946645197749577, guid: e9b54a20e0cab144a95032ef68460208, type: 3}
+    secondarySprite: {fileID: 0}
+    secondaryPrefab: {fileID: 1102443034553506000, guid: 6b42daab6b3d4baa9d5542cb14853d92, type: 3}
+    particlePrefab: {fileID: 327951452759943371, guid: 3b5aa8b16af23fc44947322efc54c05f, type: 3}
+    particleMaterial: {fileID: 2100000, guid: a19a598f9cd9ddb0f7543ff1237ae3cd, type: 2}
+    localOffset: {x: 0, y: -0.42, z: 0}
+    radiusMultiplier: 1.1
+    lifetimeSeconds: -1
+    sortingOffset: 11
+    tintWhiteBlend: 0.16
+    alpha: 0.84
+    rotationDegrees: -8
+  vfxPackage: {fileID: 0}
   vfxFamily: 15
   vfxPrimaryColor: {r: 0.286275, g: 0.686275, b: 0.709804, a: 1}
   vfxSecondaryColor: {r: 0.078431, g: 0.360784, b: 0.388235, a: 1}
   vfxScale: 0.95
   vfxIntensity: 1.1
   vfxRepeatCount: 1
-  description: "\uC801\uC5D0\uAC8C \uC704\uB825 110 \uD53C\uD574\uB97C \uC900\uB2E4.
-    \uB2E4\uC74C \uD50C\uB808\uC774\uC5B4 \uD134\uC758 \uBCF4\uB4DC \uC774\uB3D9
-    \uD69F\uC218\uAC00 2 \uAC10\uC18C\uD55C\uB2E4."
+  description: ""

@@ -288,41 +288,41 @@ namespace Project2048.Rewards
                 return;
             }
 
-            var lightShot = CreateRuntimeSkill("light-shot", "빛 발사", SkillType.Attack, SkillEffectKind.BasicAttack, cost: 6, power: 60);
+            var lightShot = CreateRuntimeSkill("light-shot", "Light Shot", SkillType.Attack, SkillEffectKind.BasicAttack, cost: 20, power: 60);
             lightShot.availability = SkillAvailability.PlayerOnly;
             var shieldBash = CreateRuntimeSkill(
                 "shield-bash",
-                "방패 밀치기",
+                "Shield Bash",
                 SkillType.Attack,
                 SkillEffectKind.ShieldScalingAttack,
-                cost: 5,
+                cost: 20,
                 power: 60,
                 damageStatSource: DamageStatSource.ShieldHp);
             var ironWall = CreateRuntimeSkill(
                 "iron-wall",
-                "철벽",
+                "Iron Wall",
                 SkillType.Defense,
                 SkillEffectKind.DefenseStageUp,
-                cost: 6,
+                cost: 20,
                 power: 0,
                 selfDefenseStageModifier: 2);
 
-            runtimeDefaultRewards.Add(CreateRuntimeReward("heal-2", "회복 2단계", RewardChoiceKind.HealTwo));
-            runtimeDefaultRewards.Add(CreateRuntimeReward("next-attack", "다음 전투 공격 랭크", RewardChoiceKind.TemporaryAttackPower, temporaryAttack: 1));
-            runtimeDefaultRewards.Add(CreateRuntimeReward("perm-attack", "공격력 영구 증가", RewardChoiceKind.PermanentAttackPower, permanentAttack: 1));
+            runtimeDefaultRewards.Add(CreateRuntimeReward("heal-2", "Heal II", RewardChoiceKind.HealTwo));
+            runtimeDefaultRewards.Add(CreateRuntimeReward("next-attack", "Next Combat Attack", RewardChoiceKind.TemporaryAttackPower, temporaryAttack: 1));
+            runtimeDefaultRewards.Add(CreateRuntimeReward("perm-attack", "Permanent Attack", RewardChoiceKind.PermanentAttackPower, permanentAttack: 1));
             runtimeDefaultRewards.Add(CreateRuntimeReward(
                 "learn-iron-wall",
-                "기술 습득",
+                "Learn Skill",
                 RewardChoiceKind.LearnSkill,
                 skillToLearn: ironWall));
             runtimeDefaultRewards.Add(CreateRuntimeReward(
                 "learn-shield-bash",
-                "湲곗닠 ?듬뱷",
+                "Learn Skill",
                 RewardChoiceKind.LearnSkill,
                 skillToLearn: shieldBash));
             runtimeDefaultRewards.Add(CreateRuntimeReward(
                 "learn-light-shot",
-                "湲곗닠 ?듬뱷",
+                "Learn Skill",
                 RewardChoiceKind.LearnSkill,
                 skillToLearn: lightShot));
         }

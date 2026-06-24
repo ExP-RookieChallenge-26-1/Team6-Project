@@ -163,7 +163,7 @@ namespace Project2048.Skills
             }
 
             var extraPowerPerCost = skill.extraPowerPerConsumedCost > 0 ? skill.extraPowerPerConsumedCost : 10;
-            return skill.power + extraCost * extraPowerPerCost;
+            return skill.power + extraCost / 10 * extraPowerPerCost;
         }
 
         private static int ResolveDamageStat(PlayerCombatController player, DamageStatSource statSource)

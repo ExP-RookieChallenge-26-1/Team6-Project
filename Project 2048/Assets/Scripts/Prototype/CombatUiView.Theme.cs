@@ -1,4 +1,3 @@
-using Project2048.Board2048;
 using UnityEngine;
 
 namespace Project2048.Prototype
@@ -46,6 +45,8 @@ namespace Project2048.Prototype
         private const float UiSfxDistance = 10000f;
 
         private static readonly string CostFormulaTooltipDescription =
-            $"2048 코스트 환산식\nlog2(전체 타일 합) + log2(가장 큰 타일) x {CostConverter.LargestTileBonusMultiplier} - (타일 개수 - 1) / {CostConverter.FragmentationPenaltyDivisor}\n빈 칸, 장애물, 2의 거듭제곱이 아닌 타일은 제외";
+            "2048 \uCF54\uC2A4\uD2B8 \uD658\uC0B0\uC2DD\n" +
+            "\uC804\uCCB4 \uD0C0\uC77C \uD569\uACFC \uCD5C\uB300 \uD0C0\uC77C\uC744 \uCD94\uCC9C\uD45C\uB85C \uD658\uC0B0\uD558\uACE0, \uC870\uAC01\uD654\uB41C \uD0C0\uC77C \uC218\uB9CC\uD07C \uCC28\uAC10\n" +
+            "\uBE48 \uCE78, \uC7A5\uC560\uBB3C, 2\uC758 \uAC70\uB4ED\uC81C\uACF1\uC774 \uC544\uB2CC \uD0C0\uC77C\uC740 \uC81C\uC678";
     }
 }

@@ -7,7 +7,10 @@ namespace Project2048.Stage
     public class StageDatabaseSO : ScriptableObject
     {
         public const int StagesPerFloor = 10;
-        public const int TotalStageCount = StagesPerFloor * 3;
+        public const int UpperStageCount = 6;
+        public const int MiddleStageCount = 8;
+        public const int LowerStageCount = 6;
+        public const int TotalStageCount = UpperStageCount + MiddleStageCount + LowerStageCount;
 
         [SerializeField] private List<StageSO> upperStages = new();
         [SerializeField] private List<StageSO> middleStages = new();
@@ -21,10 +24,7 @@ namespace Project2048.Stage
                 return false;
             }
 
-            var zeroBasedIndex = stageIndex - 1;
-            var floorIndex = zeroBasedIndex / StagesPerFloor;
-            var stageIndexInFloor = zeroBasedIndex % StagesPerFloor;
-            var stages = ResolveStages(floorIndex);
+            var stages = ResolveStages(stageIndex, out var stageIndexInFloor);
             if (stages == null || stageIndexInFloor >= stages.Count)
             {
                 return false;
@@ -39,14 +39,22 @@ namespace Project2048.Stage
             return stageIndex >= TotalStageCount;
         }
 
-        private List<StageSO> ResolveStages(int floorIndex)
+        private List<StageSO> ResolveStages(int stageIndex, out int stageIndexInFloor)
         {
-            return floorIndex switch
+            stageIndexInFloor = stageIndex - 1;
+            if (stageIndex <= UpperStageCount)
             {
-                0 => upperStages,
-                1 => middleStages,
-                _ => lowerStages,
-            };
+                return upperStages;
+            }
+
+            stageIndexInFloor = stageIndex - UpperStageCount - 1;
+            if (stageIndex <= UpperStageCount + MiddleStageCount)
+            {
+                return middleStages;
+            }
+
+            stageIndexInFloor = stageIndex - UpperStageCount - MiddleStageCount - 1;
+            return lowerStages;
         }
 
         private void OnValidate()

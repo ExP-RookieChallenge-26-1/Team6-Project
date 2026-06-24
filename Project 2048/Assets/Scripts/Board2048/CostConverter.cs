@@ -1,14 +1,15 @@
 namespace Project2048.Board2048
 {
     /// <summary>
-    /// 2048 보드에 남은 모든 숫자를 행동 코스트로 바꿉니다.
-    /// 전체 타일 양, 가장 큰 타일 보너스, 조각난 타일 페널티를 함께 봅니다.
-    /// 타일값 자체가 아니라 2048 단계(log2)를 쓰기 때문에 고레벨 타일도 과하게 폭증하지 않습니다.
+    /// Converts a 2048 board into action cost using the design team's tile-cost curve.
+    /// Board cost keeps the existing total-value/largest-tile/fragments shape so merges
+    /// remain better than scattered low tiles.
     /// </summary>
     public class CostConverter
     {
-        public const int LargestTileBonusMultiplier = 2;
-        public const int FragmentationPenaltyDivisor = 2;
+        private const int MaxSupportedTileCost = 40;
+        private const int LargestTileBonusMultiplier = 2;
+        private const int FragmentationPenaltyDivisor = 2;
 
         public int ConvertBoardToCost(int[,] board)
         {
@@ -36,18 +37,29 @@ namespace Project2048.Board2048
                 return 0;
             }
 
-            var totalValueWeight = CalculateLog2CostWeight(totalTileValue);
-            var largestTileBonus = CalculateLog2CostWeight(largestTileValue) * LargestTileBonusMultiplier;
+            var totalValueWeight = CalculateCostWeight(totalTileValue);
+            var largestTileBonus = CalculateCostWeight(largestTileValue) * LargestTileBonusMultiplier;
             var fragmentationPenalty = (playableTileCount - 1) / FragmentationPenaltyDivisor;
 
-            return System.Math.Max(0, totalValueWeight + largestTileBonus - fragmentationPenalty);
+            return System.Math.Max(
+                0,
+                (totalValueWeight + largestTileBonus) / (1 + LargestTileBonusMultiplier) - fragmentationPenalty);
         }
 
         public int ConvertTileToCost(int tileValue)
         {
-            return IsPlayableTileValue(tileValue)
-                ? CalculateLog2CostWeight(tileValue) * (1 + LargestTileBonusMultiplier)
-                : 0;
+            if (!IsPlayableTileValue(tileValue))
+            {
+                return 0;
+            }
+
+            var tier = CalculateLog2CostWeight(tileValue);
+            if (tier <= 4)
+            {
+                return tier * 2;
+            }
+
+            return CalculateTileCost(tier);
         }
 
         private static bool IsPlayableTileValue(int tileValue)
@@ -65,6 +77,23 @@ namespace Project2048.Board2048
             }
 
             return weight;
+        }
+
+        private static int CalculateCostWeight(long value)
+        {
+            return CalculateTileCost(CalculateLog2CostWeight(value));
+        }
+
+        private static int CalculateTileCost(int tier)
+        {
+            if (tier <= 0)
+            {
+                return 0;
+            }
+
+            return tier <= 4
+                ? tier * 2
+                : System.Math.Min(MaxSupportedTileCost, (tier - 2) * 4);
         }
     }
 }

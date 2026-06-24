@@ -17,7 +17,7 @@ MonoBehaviour:
   skillType: 0
   effectKind: 17
   damageStatSource: 0
-  cost: 0
+  cost: 20
   power: 40
   targetAttackStageModifier: 0
   targetDefenseStageModifier: 0
@@ -65,7 +65,7 @@ MonoBehaviour:
     animationClip: {fileID: 0}
     particleEffect:
       objectName: DarkShackleSkillParticles
-      particlePrefab: {fileID: 0}
+      particlePrefab: {fileID: 9136839385617999936, guid: 99a93460bff53b245a24c7f64eeb1777, type: 3}
       particleMaterial: {fileID: 2100000, guid: b51c9438239e4a1aa094f040608955f2, type: 2}
       useParticleColor: 1
       particleColor: {r: 0.02, g: 0.02, b: 0.04, a: 1}
@@ -80,12 +80,27 @@ MonoBehaviour:
     sfxDelaySeconds: 0
     localOffset: {x: 0, y: 0, z: 0}
     autoDestroySeconds: 1.25
-  vfxPackage: {fileID: 11400000, guid: 30f5541e59f80bb449d6fe3a488b6f5a, type: 2}
+  vfx:
+    family: 16
+    primarySprite: {fileID: -6272862024312062455, guid: 0f723c449d8f40c44b1c7d85e4e722e3, type: 3}
+    primaryPrefab: {fileID: 648211251900000001, guid: 6dfc2d6cca4f4bd9874d55be63c6cfde, type: 3}
+    projectilePrefab: {fileID: 0}
+    secondarySprite: {fileID: 3792518726696312516, guid: 113d8d29d9fcd594f8971aa5316799b6, type: 3}
+    secondaryPrefab: {fileID: 2128731538229030202, guid: b8ace7993b619e7468da03635a1b4819, type: 3}
+    particlePrefab: {fileID: 9136839385617999936, guid: 99a93460bff53b245a24c7f64eeb1777, type: 3}
+    particleMaterial: {fileID: 2100000, guid: b51c9438239e4a1aa094f040608955f2, type: 2}
+    localOffset: {x: 0, y: 0.04, z: 0}
+    radiusMultiplier: 0.95
+    lifetimeSeconds: -1
+    sortingOffset: 12
+    tintWhiteBlend: 0.14
+    alpha: 0.78
+    rotationDegrees: -4
+  vfxPackage: {fileID: 0}
   vfxFamily: 16
-  vfxPrimaryColor: {r: 0.02, g: 0.02, b: 0.04, a: 1}
-  vfxSecondaryColor: {r: 0.401413, g: 0.070213, b: 0.171013, a: 1}
+  vfxPrimaryColor: {r: 1, g: 1, b: 1, a: 1}
+  vfxSecondaryColor: {r: 1, g: 1, b: 1, a: 1}
   vfxScale: 1.2
   vfxIntensity: 1.2
   vfxRepeatCount: 1
-  description: "\uC704\uB825 40 \uD53C\uD574\uB97C \uC8FC\uACE0, \uB2E4\uC74C \uD50C\uB808\uC774\uC5B4
-    \uD134\uC758 \uBCF4\uB4DC \uC774\uB3D9 \uD69F\uC218\uB97C 1 \uC904\uC778\uB2E4."
+  description: ""

@@ -74,7 +74,7 @@ namespace Project2048.Tests
             Assert.That(enemy.Block, Is.LessThan(100));
 
             var wallet = new ActionCostWallet();
-            wallet.SetCost(4);
+            wallet.SetCost(25);
             executor.Execute(
                 CreateSkill("overburn", SkillType.Attack, SkillEffectKind.OverburnAttack, power: 50, extraPowerPerConsumedCost: 10),
                 player,
@@ -106,9 +106,8 @@ namespace Project2048.Tests
             Assert.That(enemy.IsTaunted, Is.True);
             Assert.That(enemy.AttackModifier, Is.EqualTo(2));
 
-            executor.Execute(CreateSkill("afterglow-save", SkillType.Defense, SkillEffectKind.CostCarry, maxCostCarry: 4), player, enemy, new DamageCalculator(new System.Random(1)));
-            Assert.That(player.CaptureCostCarry(7), Is.EqualTo(4));
-            Assert.That(player.ConsumeCarriedCost(), Is.EqualTo(4));
+            executor.Execute(CreateSkill("afterglow-save", SkillType.Defense, SkillEffectKind.CostCarry, nextCostGainModifier: 20), player, enemy, new DamageCalculator(new System.Random(1)));
+            Assert.That(player.ApplyAndConsumeNextTurnCostGainModifiers(7), Is.EqualTo(27));
 
             var board = new Board2048Manager();
             board.SetBoardState(
@@ -122,14 +121,14 @@ namespace Project2048.Tests
                 0);
             var wallet = new ActionCostWallet();
             executor.Execute(
-                CreateSkill("cleanse-hand", SkillType.Defense, SkillEffectKind.DarknessCleanse, costRefund: 2),
+                CreateSkill("cleanse-hand", SkillType.Defense, SkillEffectKind.DarknessCleanse, costRefund: 10),
                 player,
                 enemy,
                 new DamageCalculator(new System.Random(1)),
                 new SkillExecutionContext { BoardManager = board, CostWallet = wallet });
 
             Assert.That(board.GetBoardSnapshot()[0, 0], Is.Zero);
-            Assert.That(wallet.CurrentCost, Is.EqualTo(2));
+            Assert.That(wallet.CurrentCost, Is.EqualTo(10));
 
             new EnemyIntentSystem().ExecuteIntent(
                 enemy,
@@ -138,11 +137,11 @@ namespace Project2048.Tests
                     skillType = SkillType.Debuff,
                     skillEffectKind = SkillEffectKind.CostGainDown,
                     intentType = EnemyIntentType.Debuff,
-                    nextCostGainModifier = -3,
+                    nextCostGainModifier = -10,
                 },
                 player);
 
-            Assert.That(player.ApplyAndConsumeNextTurnCostGainModifiers(10), Is.EqualTo(7));
+            Assert.That(player.ApplyAndConsumeNextTurnCostGainModifiers(20), Is.EqualTo(10));
         }
 
         [Test]
@@ -193,6 +192,60 @@ namespace Project2048.Tests
             intentSystem.SetNextIntents(enemy, 1, player);
 
             Assert.That(enemy.CurrentIntent.skillId, Is.Not.EqualTo("enemy-guard"));
+        }
+
+        [Test]
+        public void EnemyPattern_SkipsHpGatedIntentsAndAppliesCriticalAndEndure()
+        {
+            var player = CreatePlayer(maxHp: 100, attackPower: 10);
+            var enemyData = ScriptableObject.CreateInstance<EnemySO>();
+            ownedObjects.Add(enemyData);
+            enemyData.maxHp = 100;
+            enemyData.attackPower = 0;
+            enemyData.baseDefensePower = 0;
+            enemyData.criticalChance = 0f;
+            enemyData.intentPattern = new List<EnemyIntent>
+            {
+                new()
+                {
+                    skillId = "endure",
+                    skillType = SkillType.Defense,
+                    skillEffectKind = SkillEffectKind.Endure,
+                    intentType = EnemyIntentType.Defense,
+                    selfEndureTurns = 1,
+                    maxSelfHpPercent = 0.5f,
+                },
+                new()
+                {
+                    skillId = "sharp-senses",
+                    skillType = SkillType.Defense,
+                    skillEffectKind = SkillEffectKind.CriticalStageUp,
+                    intentType = EnemyIntentType.Defense,
+                    selfCriticalStageModifier = 2,
+                },
+            };
+
+            var enemy = CreateGameObject<EnemyController>("PatternEnemy");
+            enemy.Init(enemyData);
+            var intentSystem = new EnemyIntentSystem(new System.Random(1));
+
+            intentSystem.SetNextIntents(enemy, 1, player);
+            Assert.That(enemy.CurrentIntent.skillId, Is.EqualTo("sharp-senses"));
+
+            intentSystem.ExecuteIntent(enemy, enemy.CurrentIntent, player);
+            Assert.That(enemy.CriticalStage, Is.EqualTo(2));
+            Assert.That(enemy.CriticalChance, Is.EqualTo(0.4f).Within(0.0001f));
+
+            enemy.TakeDamage(60);
+            intentSystem.SetNextIntents(enemy, 1, player);
+            Assert.That(enemy.CurrentIntent.skillId, Is.EqualTo("endure"));
+
+            intentSystem.ExecuteIntent(enemy, enemy.CurrentIntent, player);
+            Assert.That(enemy.EndureTurns, Is.EqualTo(1));
+            enemy.TakeDamage(999);
+
+            Assert.That(enemy.CurrentHp, Is.EqualTo(1));
+            Assert.That(enemy.EndureTurns, Is.Zero);
         }
 
         [Test]
@@ -285,7 +338,8 @@ namespace Project2048.Tests
             int shieldPiercePercent = 0,
             int extraPowerPerConsumedCost = 0,
             int maxCostCarry = 0,
-            int costRefund = 0)
+            int costRefund = 0,
+            int nextCostGainModifier = 0)
         {
             var skill = ScriptableObject.CreateInstance<SkillSO>();
             ownedObjects.Add(skill);
@@ -306,6 +360,7 @@ namespace Project2048.Tests
             skill.extraPowerPerConsumedCost = extraPowerPerConsumedCost;
             skill.maxCostCarry = maxCostCarry;
             skill.costRefund = costRefund;
+            skill.nextCostGainModifier = nextCostGainModifier;
             return skill;
         }
 

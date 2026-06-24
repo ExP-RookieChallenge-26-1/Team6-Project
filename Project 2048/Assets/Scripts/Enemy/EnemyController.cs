@@ -7,7 +7,11 @@ namespace Project2048.Enemy
 {
     public class EnemyController : MonoBehaviour
     {
+        private const int MaxCriticalStage = 4;
+        private const float CriticalChancePerStage = 0.2f;
+
         private readonly List<EnemyIntent> baseIntents = new();
+        private float baseCriticalChance;
 
         public EnemySO Data { get; private set; }
         public int MaxHp { get; private set; }
@@ -21,7 +25,8 @@ namespace Project2048.Enemy
         public int ShieldHp => Block;
         public int ThornRetaliationDamage { get; private set; }
         public int AttackModifier { get; private set; }
-        public float CriticalChance { get; private set; }
+        public int CriticalStage { get; private set; }
+        public float CriticalChance => Mathf.Clamp01(baseCriticalChance + CriticalStage * CriticalChancePerStage);
         public float CriticalDamageMultiplier { get; private set; } = 1.5f;
         public int PoisonTurns { get; private set; }
         public float PoisonMaxHpDamagePercent { get; private set; }
@@ -31,6 +36,7 @@ namespace Project2048.Enemy
         public string SealedSkillId { get; private set; }
         public int SealTurns { get; private set; }
         public int TauntTurns { get; private set; }
+        public int EndureTurns { get; private set; }
         public string LastUsedSkillId { get; private set; }
         public SkillType LastUsedSkillType { get; private set; }
         public SkillEffectKind LastUsedSkillEffectKind { get; private set; }
@@ -64,7 +70,8 @@ namespace Project2048.Enemy
             Block = 0;
             ThornRetaliationDamage = 0;
             AttackModifier = 0;
-            CriticalChance = Mathf.Clamp01(data.criticalChance);
+            baseCriticalChance = Mathf.Clamp01(data.criticalChance);
+            CriticalStage = 0;
             CriticalDamageMultiplier = Mathf.Max(1f, data.criticalDamageMultiplier);
             PoisonTurns = 0;
             PoisonMaxHpDamagePercent = 0f;
@@ -74,6 +81,7 @@ namespace Project2048.Enemy
             SealedSkillId = null;
             SealTurns = 0;
             TauntTurns = 0;
+            EndureTurns = 0;
             LastUsedSkillId = null;
             LastUsedSkillType = SkillType.Attack;
             LastUsedSkillEffectKind = SkillEffectKind.Default;
@@ -98,7 +106,7 @@ namespace Project2048.Enemy
             CurrentHp = Mathf.Clamp(CurrentHp, 0, MaxHp);
             AttackPower = Mathf.Max(0, Data.attackPower);
             BaseDefensePower = Mathf.Max(0, Data.baseDefensePower);
-            CriticalChance = Mathf.Clamp01(Data.criticalChance);
+            baseCriticalChance = Mathf.Clamp01(Data.criticalChance);
             CriticalDamageMultiplier = Mathf.Max(1f, Data.criticalDamageMultiplier);
 
             OnHpChanged?.Invoke(CurrentHp, MaxHp);
@@ -118,7 +126,13 @@ namespace Project2048.Enemy
                 ThornRetaliationDamage = 0;
             }
             var hpBefore = CurrentHp;
-            CurrentHp = Mathf.Max(0, CurrentHp - remainingDamage);
+            var lethalBeforeEndure = CurrentHp > 0 && CurrentHp - remainingDamage <= 0;
+            var minimumHp = EndureTurns > 0 && CurrentHp > 0 ? 1 : 0;
+            CurrentHp = Mathf.Max(minimumHp, CurrentHp - remainingDamage);
+            if (lethalBeforeEndure && CurrentHp > 0 && EndureTurns > 0)
+            {
+                EndureTurns = 0;
+            }
 
             OnHpChanged?.Invoke(CurrentHp, MaxHp);
             OnBlockChanged?.Invoke(Block);
@@ -140,7 +154,13 @@ namespace Project2048.Enemy
             }
 
             var hpBefore = CurrentHp;
-            CurrentHp = Mathf.Max(0, CurrentHp - damage);
+            var lethalBeforeEndure = CurrentHp > 0 && CurrentHp - damage <= 0;
+            var minimumHp = EndureTurns > 0 && CurrentHp > 0 ? 1 : 0;
+            CurrentHp = Mathf.Max(minimumHp, CurrentHp - damage);
+            if (lethalBeforeEndure && CurrentHp > 0 && EndureTurns > 0)
+            {
+                EndureTurns = 0;
+            }
             OnHpChanged?.Invoke(CurrentHp, MaxHp);
             if (CurrentHp <= 0)
             {
@@ -207,6 +227,21 @@ namespace Project2048.Enemy
             Block += shieldHp;
             ThornRetaliationDamage = Mathf.Max(0, retaliationDamage);
             OnBlockChanged?.Invoke(Block);
+        }
+
+        public void ApplyEndure(int turns)
+        {
+            EndureTurns = Mathf.Max(EndureTurns, Mathf.Max(1, turns));
+        }
+
+        public void ApplyCriticalStageModifier(int amount)
+        {
+            if (amount <= 0)
+            {
+                return;
+            }
+
+            CriticalStage = Mathf.Clamp(CriticalStage + amount, 0, MaxCriticalStage);
         }
 
         public void ClearBlock()

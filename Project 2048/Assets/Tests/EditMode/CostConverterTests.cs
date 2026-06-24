@@ -5,18 +5,18 @@ namespace Project2048.Tests
 {
     public class CostConverterTests
     {
-        [TestCase(2, 3)]
-        [TestCase(4, 6)]
-        [TestCase(8, 9)]
-        [TestCase(16, 12)]
-        [TestCase(32, 15)]
-        [TestCase(64, 18)]
-        [TestCase(128, 21)]
+        [TestCase(2, 2)]
+        [TestCase(4, 4)]
+        [TestCase(8, 6)]
+        [TestCase(16, 8)]
+        [TestCase(32, 12)]
+        [TestCase(64, 16)]
+        [TestCase(128, 20)]
         [TestCase(256, 24)]
-        [TestCase(512, 27)]
-        [TestCase(1024, 30)]
-        [TestCase(2048, 33)]
-        [TestCase(4096, 36)]
+        [TestCase(512, 28)]
+        [TestCase(1024, 32)]
+        [TestCase(2048, 36)]
+        [TestCase(4096, 40)]
         public void ConvertTileToCost_CountsEveryPlayableTileValue(int tileValue, int expectedCost)
         {
             var converter = new CostConverter();
@@ -36,7 +36,7 @@ namespace Project2048.Tests
                 { Board2048Manager.ObstacleValue, 3, 6, 999 },
             };
 
-            Assert.That(converter.ConvertBoardToCost(board), Is.EqualTo(28));
+            Assert.That(converter.ConvertBoardToCost(board), Is.EqualTo(31));
         }
 
         [TestCase(2, 4)]

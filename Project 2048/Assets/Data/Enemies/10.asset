@@ -12,22 +12,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6115ca39d511d049965aae02efc3f23, type: 3}
   m_Name: 10
   m_EditorClassIdentifier: Game.Core::Project2048.Enemy.EnemySO
-  enemyName: "\uB098\uC120\uBFD4 \uBAA9\uB3D9"
+  enemyName: "\uC5FC\uC18C"
   encounterRank: 1
-  maxHp: 240
-  attackPower: 5
+  maxHp: 580
+  attackPower: 7
   baseDefensePower: 0
-  defensePower: 6
+  defensePower: 8
   debuffPower: 2
   criticalChance: 0
   criticalDamageMultiplier: 1.5
   aiComplexity: 2
   actionsPerTurn: 3
   skills:
+  - {fileID: 11400000, guid: ca3270a0745d7534185428c9b944d28b, type: 2}
   - {fileID: 11400000, guid: bdb2766095452cd4094c7768ff8b1d0d, type: 2}
   - {fileID: 11400000, guid: 497dec488fdb44308c0935135004d9c3, type: 2}
-  - {fileID: 11400000, guid: 20faed357e2347d2a18d106d1b4f028b, type: 2}
-  - {fileID: 11400000, guid: 5e4548f0126440518f149d423d4efba6, type: 2}
+  - {fileID: 11400000, guid: 4832d2b5a42e555419fe48cad1e68571, type: 2}
   portrait: {fileID: 21300000, guid: d5eca2f55471f0c43b968697dd288ff4, type: 3}
   actionEffects:
   - actionId: appear
@@ -118,11 +118,135 @@ MonoBehaviour:
       sfxDelaySeconds: 0
       localOffset: {x: 0, y: 0, z: 0}
       autoDestroySeconds: 1.25
-  intentPattern: []
+  intentPattern:
+  - skillId: iron-wall
+    displayName: "\uCCA0\uBCBD"
+    skillType: 1
+    skillEffectKind: 5
+    damageStatSource: 0
+    intentType: 1
+    value: 0
+    movePower: 0
+    debuffType: 0
+    isThornGuard: 0
+    retaliationDamage: 0
+    targetAttackModifier: 0
+    targetDefenseModifier: 0
+    selfDefensePowerModifier: 2
+    selfCriticalStageModifier: 0
+    selfEndureTurns: 0
+    lifeStealPercent: 0
+    hpCost: 0
+    hpCostPercent: 0
+    hpCostLeavesOne: 1
+    nextBoardMoveCountModifier: 0
+    nextCostGainModifier: 0
+    nextCostGainMultiplier: 1
+    conditionalPowerBonus: 0
+    conditionalHpThreshold: 0
+    statusDuration: 0
+    statusDamage: 0
+    statusMaxHpDamagePercent: 0
+    shieldPiercePercent: 0
+    minSelfHpPercent: 0
+    maxSelfHpPercent: 0
+  - skillId: thorn-guard
+    displayName: "\uAC00\uC2DC \uBC29\uC5B4"
+    skillType: 1
+    skillEffectKind: 12
+    damageStatSource: 0
+    intentType: 1
+    value: 40
+    movePower: 0
+    debuffType: 0
+    isThornGuard: 1
+    retaliationDamage: 40
+    targetAttackModifier: 0
+    targetDefenseModifier: 0
+    selfDefensePowerModifier: 0
+    selfCriticalStageModifier: 0
+    selfEndureTurns: 0
+    lifeStealPercent: 0
+    hpCost: 0
+    hpCostPercent: 0
+    hpCostLeavesOne: 1
+    nextBoardMoveCountModifier: 0
+    nextCostGainModifier: 0
+    nextCostGainMultiplier: 1
+    conditionalPowerBonus: 0
+    conditionalHpThreshold: 0
+    statusDuration: 0
+    statusDamage: 0
+    statusMaxHpDamagePercent: 0
+    shieldPiercePercent: 0
+    minSelfHpPercent: 0
+    maxSelfHpPercent: 0
+  - skillId: body-press
+    displayName: "\uC721\uC911\uD55C \uC555\uBC15"
+    skillType: 0
+    skillEffectKind: 15
+    damageStatSource: 1
+    intentType: 0
+    value: 80
+    movePower: 80
+    debuffType: 0
+    isThornGuard: 0
+    retaliationDamage: 0
+    targetAttackModifier: 0
+    targetDefenseModifier: 0
+    selfDefensePowerModifier: 0
+    selfCriticalStageModifier: 0
+    selfEndureTurns: 0
+    lifeStealPercent: 0
+    hpCost: 0
+    hpCostPercent: 0
+    hpCostLeavesOne: 1
+    nextBoardMoveCountModifier: 0
+    nextCostGainModifier: 0
+    nextCostGainMultiplier: 1
+    conditionalPowerBonus: 0
+    conditionalHpThreshold: 0
+    statusDuration: 0
+    statusDamage: 0
+    statusMaxHpDamagePercent: 0
+    shieldPiercePercent: 0
+    minSelfHpPercent: 0
+    maxSelfHpPercent: 0
+  - skillId: howl
+    displayName: "\uC6B8\uBD80\uC9D6\uAE30"
+    skillType: 2
+    skillEffectKind: 4
+    damageStatSource: 0
+    intentType: 2
+    value: 1
+    movePower: 0
+    debuffType: 0
+    isThornGuard: 0
+    retaliationDamage: 0
+    targetAttackModifier: 0
+    targetDefenseModifier: -1
+    selfDefensePowerModifier: 0
+    selfCriticalStageModifier: 0
+    selfEndureTurns: 0
+    lifeStealPercent: 0
+    hpCost: 0
+    hpCostPercent: 0
+    hpCostLeavesOne: 1
+    nextBoardMoveCountModifier: 0
+    nextCostGainModifier: 0
+    nextCostGainMultiplier: 1
+    conditionalPowerBonus: 0
+    conditionalHpThreshold: 0
+    statusDuration: 0
+    statusDamage: 0
+    statusMaxHpDamagePercent: 0
+    shieldPiercePercent: 0
+    minSelfHpPercent: 0
+    maxSelfHpPercent: 0
   aiActionBias: 2
   aiDebuffPattern: 0
   aiStrength: 1
-  aiDebuffInterval: 3
+  aiDebuffInterval: 2
   canUseThornGuard: 1
   thornGuardShieldHp: 4
   thornGuardRetaliationDamage: 2

@@ -65,8 +65,11 @@ namespace Project2048.Skills
         public SkillAvailability availability = SkillAvailability.Shared;
         public Sprite icon;
         public CombatEffectBinding activationEffect = new();
-        [Header("Reusable VFX")]
+        [Header("Skill VFX")]
+        public SkillVfxTuning vfx = new();
+        [HideInInspector]
         public SkillVfxPackageSO vfxPackage;
+        [HideInInspector]
         public SkillVfxFamily vfxFamily;
         public Color vfxPrimaryColor = Color.white;
         public Color vfxSecondaryColor = Color.white;
@@ -85,9 +88,19 @@ namespace Project2048.Skills
 
         public SkillVfxFamily ResolveVfxFamily()
         {
+            if (vfx != null && vfx.family != SkillVfxFamily.None)
+            {
+                return vfx.family;
+            }
+
             return vfxPackage != null && vfxPackage.family != SkillVfxFamily.None
                 ? vfxPackage.family
                 : vfxFamily;
+        }
+
+        public SkillVfxTuning ResolveVfxTuning()
+        {
+            return vfx != null && vfx.HasAnySetting ? vfx : null;
         }
 
         public bool RequiresEnemyTarget => ResolveEffectKind() switch
@@ -163,6 +176,7 @@ namespace Project2048.Skills
             vfxScale = Mathf.Max(0.01f, vfxScale);
             vfxIntensity = Mathf.Max(0f, vfxIntensity);
             vfxRepeatCount = Mathf.Max(1, vfxRepeatCount);
+            vfx?.Sanitize();
         }
     }
 }

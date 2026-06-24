@@ -1,11 +1,11 @@
-using System.Reflection;
 using System.Linq;
-using Project2048.Enemy;
-using NUnit.Framework;
+using System.Reflection;
 using Project2048.Combat;
+using Project2048.Enemy;
 using Project2048.Presentation;
 using Project2048.Rewards;
 using Project2048.Skills;
+using NUnit.Framework;
 using UnityEditor;
 using UnityEngine;
 
@@ -45,17 +45,88 @@ namespace Project2048.Tests
             var bleedingCut = skills["bleeding-cut"];
             var openWound = skills["open-wound"];
             var bloodFang = skills["blood-fang"];
-            Assert.That(bleedingCut.ResolveEffectKind(), Is.EqualTo(SkillEffectKind.OverburnAttack));
-            Assert.That(bleedingCut.statusDuration, Is.Zero);
-            Assert.That(bleedingCut.statusDamage, Is.Zero);
-            Assert.That(bleedingCut.extraPowerPerConsumedCost, Is.EqualTo(10));
-            Assert.That(openWound.ResolveEffectKind(), Is.EqualTo(SkillEffectKind.OverburnAttack));
-            Assert.That(openWound.conditionalPowerBonus, Is.Zero);
-            Assert.That(openWound.extraPowerPerConsumedCost, Is.EqualTo(10));
+            var overburn = skills["overburn"];
+            var afterglowSave = skills["afterglow-save"];
+            var cleanseHand = skills["cleanse-hand"];
+            var blackCorrosion = skills["black-corrosion"];
+
+            Assert.That(bleedingCut.skillName, Is.EqualTo("\uCD9C\uD608 \uBCA0\uAE30"));
+            Assert.That(bleedingCut.cost, Is.EqualTo(20));
+            Assert.That(bleedingCut.ResolveEffectKind(), Is.EqualTo(SkillEffectKind.BleedAttack));
+            Assert.That(bleedingCut.statusDuration, Is.EqualTo(2));
+            Assert.That(bleedingCut.statusDamage, Is.EqualTo(20));
+
+            Assert.That(openWound.skillName, Is.EqualTo("\uC0C1\uCC98 \uBC8C\uB9AC\uAE30"));
+            Assert.That(openWound.cost, Is.EqualTo(30));
+            Assert.That(openWound.ResolveEffectKind(), Is.EqualTo(SkillEffectKind.OpenWoundAttack));
+            Assert.That(openWound.conditionalPowerBonus, Is.EqualTo(50));
+
+            Assert.That(bloodFang.skillName, Is.EqualTo("\uD53C\uC758 \uC774\uBE68"));
+            Assert.That(bloodFang.cost, Is.EqualTo(30));
             Assert.That(bloodFang.ResolveEffectKind(), Is.EqualTo(SkillEffectKind.SacrificeAttack));
             Assert.That(bloodFang.power, Is.EqualTo(100));
             Assert.That(bloodFang.lifeStealPercent, Is.Zero);
-            Assert.That(bloodFang.description, Does.Not.Contain("회복"));
+
+            Assert.That(overburn.cost, Is.EqualTo(40));
+            Assert.That(overburn.ResolveEffectKind(), Is.EqualTo(SkillEffectKind.OverburnAttack));
+            Assert.That(overburn.extraPowerPerConsumedCost, Is.EqualTo(10));
+            Assert.That(afterglowSave.cost, Is.EqualTo(10));
+            Assert.That(afterglowSave.nextCostGainModifier, Is.EqualTo(20));
+            Assert.That(afterglowSave.maxCostCarry, Is.Zero);
+            Assert.That(cleanseHand.cost, Is.EqualTo(10));
+            Assert.That(cleanseHand.costRefund, Is.EqualTo(10));
+            Assert.That(blackCorrosion.cost, Is.EqualTo(20));
+            Assert.That(blackCorrosion.nextCostGainModifier, Is.EqualTo(-10));
+
+            var expectedCosts = new System.Collections.Generic.Dictionary<string, int>
+            {
+                ["quick-stab"] = 10,
+                ["flash"] = 10,
+                ["howl"] = 10,
+                ["taunt"] = 10,
+                ["low-stance"] = 10,
+                ["focus-breath"] = 10,
+                ["cleanse-hand"] = 10,
+                ["afterglow-save"] = 10,
+                ["light-shot"] = 20,
+                ["bleeding-cut"] = 20,
+                ["poison-coat"] = 20,
+                ["execute"] = 20,
+                ["shield-bash"] = 20,
+                ["crack-brand"] = 20,
+                ["seal-skill"] = 20,
+                ["black-corrosion"] = 20,
+                ["dark-shackle"] = 20,
+                ["darkness"] = 20,
+                ["light-echo"] = 20,
+                ["iron-wall"] = 20,
+                ["light-guard"] = 20,
+                ["sharp-senses"] = 20,
+                ["flow-strike"] = 30,
+                ["intimidating-shot"] = 30,
+                ["life-drain"] = 30,
+                ["body-press"] = 30,
+                ["open-wound"] = 30,
+                ["shield-burst"] = 30,
+                ["blood-fang"] = 30,
+                ["heavy-strike"] = 30,
+                ["gather-light"] = 30,
+                ["black-pressure"] = 30,
+                ["deep-darkness"] = 30,
+                ["endure"] = 30,
+                ["light-split"] = 30,
+                ["thorn-guard"] = 30,
+                ["light-recover"] = 30,
+                ["tentacle-strike"] = 40,
+                ["bioluminescence"] = 40,
+                ["reckless-blow"] = 40,
+                ["overburn"] = 40,
+            };
+            foreach (var expectedCost in expectedCosts)
+            {
+                Assert.That(skills[expectedCost.Key].cost, Is.EqualTo(expectedCost.Value), expectedCost.Key);
+            }
+
             foreach (var fireballSkill in new[] { bleedingCut, openWound, bloodFang })
             {
                 Assert.That(fireballSkill.ResolveVfxFamily(), Is.EqualTo(SkillVfxFamily.FlameBurst), fireballSkill.skillId);
@@ -63,13 +134,12 @@ namespace Project2048.Tests
                 Assert.That(fireballSkill.activationEffect?.vfxPrefab, Is.Not.Null, fireballSkill.skillId);
                 Assert.That(
                     AssetDatabase.GetAssetPath(fireballSkill.activationEffect.vfxPrefab),
-                    Is.EqualTo("Assets/VFX Test/Prefab/vfx_Fireball_vfxgraph.prefab"),
+                    Is.EqualTo("Assets/Art/Effects/SkillVFX/Prefabs/SkillVfx_FireballProjectile.prefab"),
                     fireballSkill.skillId);
                 Assert.That(
                     fireballSkill.activationEffect.vfxPrefab.GetComponentInChildren<CombatProjectileEffect>(true),
                     Is.Not.Null,
                     fireballSkill.skillId);
-                Assert.That(fireballSkill.description, Does.Contain("화염구"), fireballSkill.skillId);
             }
 
             var rewardTable = AssetDatabase.LoadAssetAtPath<RewardTableSO>("Assets/Data/Rewards/PrototypeRewardTable.asset");
@@ -132,23 +202,47 @@ namespace Project2048.Tests
 
                 Assert.That(enemy, Is.Not.Null, path);
                 Assert.That(enemy.AssignedSkillCount, Is.EqualTo(EnemySO.MaxEquippedSkillSlots), path);
+                Assert.That(enemy.intentPattern, Is.Not.Null.And.Not.Empty, path);
                 foreach (var skill in enemy.skills.Take(EnemySO.MaxEquippedSkillSlots))
                 {
                     Assert.That(skill, Is.Not.Null, path);
                     Assert.That(skill.CanEnemyUse, Is.True, $"{path}:{skill.skillId}");
                     assignedSkillIds.Add(skill.skillId);
                 }
+
+                foreach (var intent in enemy.intentPattern)
+                {
+                    Assert.That(intent, Is.Not.Null, path);
+                    Assert.That(intent.skillId, Is.Not.Empty, path);
+                    Assert.That(enemy.skills.Take(EnemySO.MaxEquippedSkillSlots).Any(skill => skill != null && skill.skillId == intent.skillId), Is.True, $"{path}:{intent.skillId}");
+                }
             }
 
             Assert.That(assignedSkillIds, Is.SupersetOf(new[]
             {
+                "quick-stab",
+                "low-stance",
                 "bleeding-cut",
+                "thorn-guard",
+                "flash",
                 "poison-coat",
-                "open-wound",
                 "execute",
+                "focus-breath",
+                "dark-shackle",
+                "sharp-senses",
+                "iron-wall",
                 "seal-skill",
                 "crack-brand",
-                "black-corrosion",
+                "intimidating-shot",
+                "open-wound",
+                "black-pressure",
+                "overburn",
+                "howl",
+                "body-press",
+                "endure",
+                "heavy-strike",
+                "blood-fang",
+                "reckless-blow",
             }));
         }
 

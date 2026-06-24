@@ -6,6 +6,13 @@ using UnityEngine;
 namespace Project2048.Prototype
 {
     [System.Serializable]
+    public sealed class SkillVfxParticlePrefabBinding
+    {
+        public string objectName;
+        public ParticleSystem prefab;
+    }
+
+    [System.Serializable]
     public sealed class SkillVfxDesignTimeBinding
     {
         public SkillVfxFamily family;
@@ -40,6 +47,10 @@ namespace Project2048.Prototype
         public GameObject darkChainLaunchPrefab;
         public GameObject chainAttackEffectPrefab;
         public GameObject boundChainsEffectPrefab;
+        public GameObject supportBuffVisualEffectPrefab;
+        public ParticleSystem defaultSkillParticlePrefab;
+        public ParticleSystem swirlSkillParticlePrefab;
+        public SkillVfxParticlePrefabBinding[] particlePrefabBindings = System.Array.Empty<SkillVfxParticlePrefabBinding>();
         public SkillVfxDesignTimeBinding[] designTimeBindings = System.Array.Empty<SkillVfxDesignTimeBinding>();
 
         public CombatParticleEffectBinding shieldImpactEffect = new()
@@ -82,6 +93,26 @@ namespace Project2048.Prototype
                 DebuffType.Darkness => darknessDebuffCastEffect,
                 _ => null,
             };
+        }
+
+        public ParticleSystem ResolveParticlePrefab(string objectName, bool swirl)
+        {
+            if (!string.IsNullOrWhiteSpace(objectName) && particlePrefabBindings != null)
+            {
+                foreach (var binding in particlePrefabBindings)
+                {
+                    if (binding != null &&
+                        binding.prefab != null &&
+                        string.Equals(binding.objectName, objectName, System.StringComparison.Ordinal))
+                    {
+                        return binding.prefab;
+                    }
+                }
+            }
+
+            return swirl && swirlSkillParticlePrefab != null
+                ? swirlSkillParticlePrefab
+                : defaultSkillParticlePrefab;
         }
 
         public SkillVfxDesignTimeBinding ResolveDesignTimeBinding(SkillVfxFamily family)

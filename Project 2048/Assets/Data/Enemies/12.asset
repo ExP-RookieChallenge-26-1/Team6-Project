@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6115ca39d511d049965aae02efc3f23, type: 3}
   m_Name: 12
   m_EditorClassIdentifier: Game.Core::Project2048.Enemy.EnemySO
-  enemyName: "\uB124\uD06C\uB9B4\uB77C"
+  enemyName: "\uD669\uC18C"
   encounterRank: 3
-  maxHp: 230
-  attackPower: 5
+  maxHp: 1100
+  attackPower: 11
   baseDefensePower: 0
   defensePower: 6
   debuffPower: 2
@@ -24,10 +24,10 @@ MonoBehaviour:
   aiComplexity: 2
   actionsPerTurn: 3
   skills:
-  - {fileID: 11400000, guid: 24e7d5bd671f4a918e6a6e8f9bb27809, type: 2}
-  - {fileID: 11400000, guid: c0a0d6e833444cd883b8f769e3b9ea71, type: 2}
-  - {fileID: 11400000, guid: 4832d2b5a42e555419fe48cad1e68571, type: 2}
-  - {fileID: 11400000, guid: 104fae93c7b64922bbaf09b45b586dc3, type: 2}
+  - {fileID: 11400000, guid: 5a7d25bf22a4191409d36e7de7128a1c, type: 2}
+  - {fileID: 11400000, guid: ced275c3ac4587d4f9f513c34c461400, type: 2}
+  - {fileID: 11400000, guid: 86594764d38346438a3c7a144303854a, type: 2}
+  - {fileID: 11400000, guid: 27f5295ffd4a4738b40f9d791c06ac4f, type: 2}
   portrait: {fileID: 21300000, guid: 291cf8f99c0e25248befb8a9f3b770c9, type: 3}
   actionEffects:
   - actionId: appear
@@ -118,14 +118,293 @@ MonoBehaviour:
       sfxDelaySeconds: 0
       localOffset: {x: 0, y: 0, z: 0}
       autoDestroySeconds: 1.25
-  intentPattern: []
-  aiActionBias: 2
+  intentPattern:
+  - skillId: heavy-strike
+    displayName: "\uAC15\uD0C0"
+    skillType: 0
+    skillEffectKind: 1
+    damageStatSource: 0
+    intentType: 0
+    value: 80
+    movePower: 80
+    debuffType: 0
+    isThornGuard: 0
+    retaliationDamage: 0
+    targetAttackModifier: 0
+    targetDefenseModifier: 0
+    selfDefensePowerModifier: 0
+    selfCriticalStageModifier: 0
+    selfEndureTurns: 0
+    lifeStealPercent: 0
+    hpCost: 0
+    hpCostPercent: 0
+    hpCostLeavesOne: 1
+    nextBoardMoveCountModifier: 0
+    nextCostGainModifier: 0
+    nextCostGainMultiplier: 1
+    conditionalPowerBonus: 0
+    conditionalHpThreshold: 0
+    statusDuration: 0
+    statusDamage: 0
+    statusMaxHpDamagePercent: 0
+    shieldPiercePercent: 0
+    minSelfHpPercent: 0.7
+    maxSelfHpPercent: 0
+  - skillId: blood-fang
+    displayName: "\uD53C\uC758 \uC774\uBE68"
+    skillType: 0
+    skillEffectKind: 11
+    damageStatSource: 0
+    intentType: 0
+    value: 100
+    movePower: 100
+    debuffType: 0
+    isThornGuard: 0
+    retaliationDamage: 0
+    targetAttackModifier: 0
+    targetDefenseModifier: 0
+    selfDefensePowerModifier: 0
+    selfCriticalStageModifier: 0
+    selfEndureTurns: 0
+    lifeStealPercent: 0
+    hpCost: 0
+    hpCostPercent: 0.1
+    hpCostLeavesOne: 1
+    nextBoardMoveCountModifier: 0
+    nextCostGainModifier: 0
+    nextCostGainMultiplier: 1
+    conditionalPowerBonus: 0
+    conditionalHpThreshold: 0
+    statusDuration: 0
+    statusDamage: 0
+    statusMaxHpDamagePercent: 0
+    shieldPiercePercent: 0
+    minSelfHpPercent: 0.7
+    maxSelfHpPercent: 0
+  - skillId: endure
+    displayName: "\uC774\uC545\uBB3C\uAE30"
+    skillType: 1
+    skillEffectKind: 9
+    damageStatSource: 0
+    intentType: 1
+    value: 0
+    movePower: 0
+    debuffType: 0
+    isThornGuard: 0
+    retaliationDamage: 0
+    targetAttackModifier: 0
+    targetDefenseModifier: 0
+    selfDefensePowerModifier: 0
+    selfCriticalStageModifier: 0
+    selfEndureTurns: 1
+    lifeStealPercent: 0
+    hpCost: 0
+    hpCostPercent: 0
+    hpCostLeavesOne: 1
+    nextBoardMoveCountModifier: 0
+    nextCostGainModifier: 0
+    nextCostGainMultiplier: 1
+    conditionalPowerBonus: 0
+    conditionalHpThreshold: 0
+    statusDuration: 0
+    statusDamage: 0
+    statusMaxHpDamagePercent: 0
+    shieldPiercePercent: 0
+    minSelfHpPercent: 0.7
+    maxSelfHpPercent: 0
+  - skillId: heavy-strike
+    displayName: "\uAC15\uD0C0"
+    skillType: 0
+    skillEffectKind: 1
+    damageStatSource: 0
+    intentType: 0
+    value: 80
+    movePower: 80
+    debuffType: 0
+    isThornGuard: 0
+    retaliationDamage: 0
+    targetAttackModifier: 0
+    targetDefenseModifier: 0
+    selfDefensePowerModifier: 0
+    selfCriticalStageModifier: 0
+    selfEndureTurns: 0
+    lifeStealPercent: 0
+    hpCost: 0
+    hpCostPercent: 0
+    hpCostLeavesOne: 1
+    nextBoardMoveCountModifier: 0
+    nextCostGainModifier: 0
+    nextCostGainMultiplier: 1
+    conditionalPowerBonus: 0
+    conditionalHpThreshold: 0
+    statusDuration: 0
+    statusDamage: 0
+    statusMaxHpDamagePercent: 0
+    shieldPiercePercent: 0
+    minSelfHpPercent: 0.35
+    maxSelfHpPercent: 0.7
+  - skillId: blood-fang
+    displayName: "\uD53C\uC758 \uC774\uBE68"
+    skillType: 0
+    skillEffectKind: 11
+    damageStatSource: 0
+    intentType: 0
+    value: 100
+    movePower: 100
+    debuffType: 0
+    isThornGuard: 0
+    retaliationDamage: 0
+    targetAttackModifier: 0
+    targetDefenseModifier: 0
+    selfDefensePowerModifier: 0
+    selfCriticalStageModifier: 0
+    selfEndureTurns: 0
+    lifeStealPercent: 0
+    hpCost: 0
+    hpCostPercent: 0.1
+    hpCostLeavesOne: 1
+    nextBoardMoveCountModifier: 0
+    nextCostGainModifier: 0
+    nextCostGainMultiplier: 1
+    conditionalPowerBonus: 0
+    conditionalHpThreshold: 0
+    statusDuration: 0
+    statusDamage: 0
+    statusMaxHpDamagePercent: 0
+    shieldPiercePercent: 0
+    minSelfHpPercent: 0.35
+    maxSelfHpPercent: 0.7
+  - skillId: reckless-blow
+    displayName: "\uBB34\uB9AC\uD55C \uAC15\uD0C0"
+    skillType: 0
+    skillEffectKind: 17
+    damageStatSource: 0
+    intentType: 0
+    value: 110
+    movePower: 110
+    debuffType: 0
+    isThornGuard: 0
+    retaliationDamage: 0
+    targetAttackModifier: 0
+    targetDefenseModifier: 0
+    selfDefensePowerModifier: 0
+    selfCriticalStageModifier: 0
+    selfEndureTurns: 0
+    lifeStealPercent: 0
+    hpCost: 0
+    hpCostPercent: 0
+    hpCostLeavesOne: 1
+    nextBoardMoveCountModifier: -2
+    nextCostGainModifier: 0
+    nextCostGainMultiplier: 1
+    conditionalPowerBonus: 0
+    conditionalHpThreshold: 0
+    statusDuration: 0
+    statusDamage: 0
+    statusMaxHpDamagePercent: 0
+    shieldPiercePercent: 0
+    minSelfHpPercent: 0.35
+    maxSelfHpPercent: 0.7
+  - skillId: endure
+    displayName: "\uC774\uC545\uBB3C\uAE30"
+    skillType: 1
+    skillEffectKind: 9
+    damageStatSource: 0
+    intentType: 1
+    value: 0
+    movePower: 0
+    debuffType: 0
+    isThornGuard: 0
+    retaliationDamage: 0
+    targetAttackModifier: 0
+    targetDefenseModifier: 0
+    selfDefensePowerModifier: 0
+    selfCriticalStageModifier: 0
+    selfEndureTurns: 1
+    lifeStealPercent: 0
+    hpCost: 0
+    hpCostPercent: 0
+    hpCostLeavesOne: 1
+    nextBoardMoveCountModifier: 0
+    nextCostGainModifier: 0
+    nextCostGainMultiplier: 1
+    conditionalPowerBonus: 0
+    conditionalHpThreshold: 0
+    statusDuration: 0
+    statusDamage: 0
+    statusMaxHpDamagePercent: 0
+    shieldPiercePercent: 0
+    minSelfHpPercent: 0
+    maxSelfHpPercent: 0.35
+  - skillId: reckless-blow
+    displayName: "\uBB34\uB9AC\uD55C \uAC15\uD0C0"
+    skillType: 0
+    skillEffectKind: 17
+    damageStatSource: 0
+    intentType: 0
+    value: 110
+    movePower: 110
+    debuffType: 0
+    isThornGuard: 0
+    retaliationDamage: 0
+    targetAttackModifier: 0
+    targetDefenseModifier: 0
+    selfDefensePowerModifier: 0
+    selfCriticalStageModifier: 0
+    selfEndureTurns: 0
+    lifeStealPercent: 0
+    hpCost: 0
+    hpCostPercent: 0
+    hpCostLeavesOne: 1
+    nextBoardMoveCountModifier: -2
+    nextCostGainModifier: 0
+    nextCostGainMultiplier: 1
+    conditionalPowerBonus: 0
+    conditionalHpThreshold: 0
+    statusDuration: 0
+    statusDamage: 0
+    statusMaxHpDamagePercent: 0
+    shieldPiercePercent: 0
+    minSelfHpPercent: 0
+    maxSelfHpPercent: 0.35
+  - skillId: blood-fang
+    displayName: "\uD53C\uC758 \uC774\uBE68"
+    skillType: 0
+    skillEffectKind: 11
+    damageStatSource: 0
+    intentType: 0
+    value: 100
+    movePower: 100
+    debuffType: 0
+    isThornGuard: 0
+    retaliationDamage: 0
+    targetAttackModifier: 0
+    targetDefenseModifier: 0
+    selfDefensePowerModifier: 0
+    selfCriticalStageModifier: 0
+    selfEndureTurns: 0
+    lifeStealPercent: 0
+    hpCost: 0
+    hpCostPercent: 0.1
+    hpCostLeavesOne: 1
+    nextBoardMoveCountModifier: 0
+    nextCostGainModifier: 0
+    nextCostGainMultiplier: 1
+    conditionalPowerBonus: 0
+    conditionalHpThreshold: 0
+    statusDuration: 0
+    statusDamage: 0
+    statusMaxHpDamagePercent: 0
+    shieldPiercePercent: 0
+    minSelfHpPercent: 0
+    maxSelfHpPercent: 0.35
+  aiActionBias: 1
   aiDebuffPattern: 1
   aiStrength: 1
-  aiDebuffInterval: 3
-  canUseThornGuard: 1
+  aiDebuffInterval: 2
+  canUseThornGuard: 0
   thornGuardShieldHp: 4
   thornGuardRetaliationDamage: 2
-  canUseBullRush: 0
+  canUseBullRush: 1
   bullRushInterval: 3
   bullRushBonusDamage: 3

@@ -17,7 +17,7 @@ MonoBehaviour:
   skillType: 2
   effectKind: 29
   damageStatSource: 0
-  cost: 6
+  cost: 20
   power: 0
   targetAttackStageModifier: 0
   targetDefenseStageModifier: 0
@@ -65,7 +65,7 @@ MonoBehaviour:
     animationClip: {fileID: 0}
     particleEffect:
       objectName: SealSkillSkillParticles
-      particlePrefab: {fileID: 0}
+      particlePrefab: {fileID: 9019354365140873948, guid: 3f73d65237fdcca43a48356107553631, type: 3}
       particleMaterial: {fileID: 2100000, guid: 82c3cfc8517cbe9838ab60c1888d9587, type: 2}
       useParticleColor: 1
       particleColor: {r: 0.518035, g: 0.374035, b: 0.806035, a: 1}
@@ -80,14 +80,27 @@ MonoBehaviour:
     sfxDelaySeconds: 0
     localOffset: {x: 0, y: 0, z: 0}
     autoDestroySeconds: 1.25
-  vfxPackage: {fileID: 11400000, guid: 88b30072ed0cb6d4eb21f3ffcc8cac9f, type: 2}
+  vfx:
+    family: 6
+    primarySprite: {fileID: 21300000, guid: 9b5fc44167244de7b10fa372b672de89, type: 3}
+    primaryPrefab: {fileID: 8614566233561317893, guid: 06a9b239017d8e44bb20c48fca385733, type: 3}
+    projectilePrefab: {fileID: 0}
+    secondarySprite: {fileID: 0}
+    secondaryPrefab: {fileID: 0}
+    particlePrefab: {fileID: 9019354365140873948, guid: 3f73d65237fdcca43a48356107553631, type: 3}
+    particleMaterial: {fileID: 2100000, guid: 82c3cfc8517cbe9838ab60c1888d9587, type: 2}
+    localOffset: {x: 0, y: 0.1, z: 0}
+    radiusMultiplier: 3.06
+    lifetimeSeconds: -1
+    sortingOffset: 12
+    tintWhiteBlend: 0.18
+    alpha: 0.86
+    rotationDegrees: 0
+  vfxPackage: {fileID: 0}
   vfxFamily: 6
   vfxPrimaryColor: {r: 0.518035, g: 0.374035, b: 0.806035, a: 1}
   vfxSecondaryColor: {r: 0.167416, g: 0.109816, b: 0.289816, a: 1}
   vfxScale: 0.85
   vfxIntensity: 1
   vfxRepeatCount: 1
-  description: "\uB300\uC0C1\uC774 \uB9C8\uC9C0\uB9C9\uC73C\uB85C \uC0AC\uC6A9\uD55C
-    \uBE44\uAE30\uBCF8 \uC2A4\uD0AC\uC744 \uB2E4\uC74C \uD134 1\uD68C \uC0AC\uC6A9\uD560
-    \uC218 \uC5C6\uAC8C \uD55C\uB2E4. \uBD09\uC778\uD560 \uC2A4\uD0AC\uC774 \uC5C6\uC73C\uBA74
-    \uD6A8\uACFC\uAC00 \uC5C6\uB2E4."
+  description: ""

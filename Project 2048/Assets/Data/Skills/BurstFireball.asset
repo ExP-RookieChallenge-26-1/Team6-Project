@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e39edfbbdac2c064e877e5f3f784bab9, type: 3}
-  m_Name: 폭렬
+  m_Name: "\uC0C1\uCC98 \uBC8C\uB9AC\uAE30"
   m_EditorClassIdentifier: Game.Core::Project2048.Skills.SkillSO
   skillId: open-wound
-  skillName: "폭렬"
+  skillName: "\uC0C1\uCC98 \uBC8C\uB9AC\uAE30"
   skillType: 0
-  effectKind: 28
+  effectKind: 25
   damageStatSource: 0
-  cost: 7
+  cost: 30
   power: 70
   targetAttackStageModifier: 0
   targetDefenseStageModifier: 0
@@ -42,13 +42,13 @@ MonoBehaviour:
   nextBoardMoveCountModifier: 0
   nextCostGainModifier: 0
   nextCostGainMultiplier: 1
-  conditionalPowerBonus: 0
+  conditionalPowerBonus: 50
   conditionalHpThreshold: 0
   statusDuration: 0
   statusDamage: 0
   statusMaxHpDamagePercent: 0
   shieldPiercePercent: 0
-  extraPowerPerConsumedCost: 10
+  extraPowerPerConsumedCost: 0
   maxCostCarry: 0
   costRefund: 0
   chargedPower: 0
@@ -65,7 +65,7 @@ MonoBehaviour:
     animationClip: {fileID: 0}
     particleEffect:
       objectName: BurstFireballSkillParticles
-      particlePrefab: {fileID: 0}
+      particlePrefab: {fileID: 327951452759943371, guid: 3b5aa8b16af23fc44947322efc54c05f, type: 3}
       particleMaterial: {fileID: 2100000, guid: a19a598f9cd9ddb0f7543ff1237ae3cd, type: 2}
       useParticleColor: 1
       particleColor: {r: 0.286275, g: 0.686275, b: 0.709804, a: 1}
@@ -80,11 +80,27 @@ MonoBehaviour:
     sfxDelaySeconds: 0
     localOffset: {x: 0, y: 0, z: 0}
     autoDestroySeconds: 1.55
-  vfxPackage: {fileID: 11400000, guid: af9010c52a1d9e74f84699f320a1fe23, type: 2}
+  vfx:
+    family: 15
+    primarySprite: {fileID: 21300000, guid: e83fe29d407142ba931d90d518a538a2, type: 3}
+    primaryPrefab: {fileID: 1827861628062789563, guid: 11867b2eedd68a545aa83d1f7781b799, type: 3}
+    projectilePrefab: {fileID: 5592946645197749577, guid: e9b54a20e0cab144a95032ef68460208, type: 3}
+    secondarySprite: {fileID: 0}
+    secondaryPrefab: {fileID: 1102443034553506000, guid: 6b42daab6b3d4baa9d5542cb14853d92, type: 3}
+    particlePrefab: {fileID: 327951452759943371, guid: 3b5aa8b16af23fc44947322efc54c05f, type: 3}
+    particleMaterial: {fileID: 2100000, guid: a19a598f9cd9ddb0f7543ff1237ae3cd, type: 2}
+    localOffset: {x: 0, y: -0.42, z: 0}
+    radiusMultiplier: 1.1
+    lifetimeSeconds: -1
+    sortingOffset: 11
+    tintWhiteBlend: 0.16
+    alpha: 0.84
+    rotationDegrees: -8
+  vfxPackage: {fileID: 0}
   vfxFamily: 15
   vfxPrimaryColor: {r: 0.286275, g: 0.686275, b: 0.709804, a: 1}
   vfxSecondaryColor: {r: 0.078431, g: 0.360784, b: 0.388235, a: 1}
   vfxScale: 1.2
   vfxIntensity: 1.45
   vfxRepeatCount: 1
-  description: "적에게 위력 70 피해를 준다. 사용 후 남은 코스트를 모두 추가 소모하고, 추가 소모한 코스트 1당 위력 +10을 적용한다. 폭발하는 화염구를 발사하고, 적중 시 적 위치에 폭발 이펙트를 일으킨다."
+  description: "Deals 70 power damage. Deals +50 power if the target has poison or bleed."

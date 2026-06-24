@@ -9,9 +9,9 @@ ScriptedImporter:
   internalIDToNameTable: []
   externalObjects: {}
   serializedVersion: 2
-  userData:
-  assetBundleName:
-  assetBundleVariant:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
   script: {fileID: 11500000, guid: b2a9591990af98743ba3ff7cf1000886, type: 3}
   textureImporterSettings:
     alphaSource: 1
@@ -76,12 +76,12 @@ ScriptedImporter:
     textureFormatSet: 0
     applyGammaDecoding: 0
   singleSpriteImportData:
-  - name:
-    originalName:
+  - name: 
+    originalName: 
     pivot: {x: 0, y: 0}
     alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
-    customData:
+    customData: 
     rect:
       serializedVersion: 2
       x: 0
@@ -93,7 +93,7 @@ ScriptedImporter:
     spriteOutline: []
     vertices: []
     spritePhysicsOutline: []
-    indices:
+    indices: 
     edges: []
     tessellationDetail: 0
     uvTransform: {x: 0, y: 0}
@@ -101,11 +101,11 @@ ScriptedImporter:
   multiSpriteImportData: []
   layeredSpriteImportData:
   - name: RightArm
-    originalName:
+    originalName: 
     pivot: {x: 0.5, y: 0.5}
     alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
-    customData:
+    customData: 
     rect:
       serializedVersion: 2
       x: 776
@@ -643,11 +643,11 @@ ScriptedImporter:
     uvTransform: {x: 570, y: -31}
     spritePosition: {x: 206, y: 35}
   - name: LeftArm
-    originalName:
+    originalName: 
     pivot: {x: 0.5, y: 0.5}
     alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
-    customData:
+    customData: 
     rect:
       serializedVersion: 2
       x: 369
@@ -1251,11 +1251,11 @@ ScriptedImporter:
     uvTransform: {x: -83, y: 240}
     spritePosition: {x: 452, y: 256}
   - name: Mask
-    originalName:
+    originalName: 
     pivot: {x: 0.5, y: 0.5}
     alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
-    customData:
+    customData: 
     rect:
       serializedVersion: 2
       x: 4
@@ -1902,11 +1902,11 @@ ScriptedImporter:
     uvTransform: {x: -255, y: 79}
     spritePosition: {x: 259, y: 417}
   - name: Lantern
-    originalName:
+    originalName: 
     pivot: {x: 0.5, y: 0.5}
     alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
-    customData:
+    customData: 
     rect:
       serializedVersion: 2
       x: 596
@@ -2739,11 +2739,11 @@ ScriptedImporter:
     uvTransform: {x: -131, y: 274}
     spritePosition: {x: 727, y: 222}
   - name: Stick
-    originalName:
+    originalName: 
     pivot: {x: 0.5, y: 0.5}
     alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
-    customData:
+    customData: 
     rect:
       serializedVersion: 2
       x: 774
@@ -3768,11 +3768,11 @@ ScriptedImporter:
     uvTransform: {x: 111, y: 104}
     spritePosition: {x: 663, y: 392}
   - name: Head
-    originalName:
+    originalName: 
     pivot: {x: 0.5, y: 0.5}
     alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
-    customData:
+    customData: 
     rect:
       serializedVersion: 2
       x: 4
@@ -5260,11 +5260,11 @@ ScriptedImporter:
     uvTransform: {x: -137, y: -467}
     spritePosition: {x: 141, y: 471}
   - name: Body
-    originalName:
+    originalName: 
     pivot: {x: 0.5, y: 0}
     alignment: 7
     border: {x: 0, y: 0, z: 0, w: 0}
-    customData:
+    customData: 
     rect:
       serializedVersion: 2
       x: 429
@@ -6707,17 +6707,17 @@ ScriptedImporter:
   tileTemplate: {instanceID: 0}
   padding: 4
   spriteSizeExpand: 0
-  skeletonAssetReferenceID:
+  skeletonAssetReferenceID: 
   pipeline: {instanceID: 0}
-  pipelineVersion:
+  pipelineVersion: 
   spriteCategoryList:
     categories: []
-  spritePackingTag:
+  spritePackingTag: 
   resliceFromLayer: 0
   pSDLayerImportSetting: []
   psdLayers:
   - name: "\uB808\uC774\uC5B4 1"
-    spriteName:
+    spriteName: 
     isGroup: 0
     parentIndex: -1
     spriteID: d9ddfa4ef2d467b4b80fad79c02090b7
@@ -6727,7 +6727,7 @@ ScriptedImporter:
     isImported: 0
     isVisible: 0
   - name: "\uB808\uC774\uC5B4 2"
-    spriteName:
+    spriteName: 
     isGroup: 0
     parentIndex: -1
     spriteID: 7a55622cece31c3469d44a46ea95e6ee
@@ -6807,7 +6807,7 @@ ScriptedImporter:
     isImported: 1
     isVisible: 1
   - name: "\uBC30\uACBD"
-    spriteName:
+    spriteName: 
     isGroup: 0
     parentIndex: -1
     spriteID: 853c0be4cac09c84ca81457d1e127c17
@@ -6823,8 +6823,8 @@ ScriptedImporter:
   platformSettingsDirtyTick: 0
   spriteSizeExpandChanged: 0
   generateGOHierarchy: 0
-  textureAssetName:
-  prefabAssetName:
-  spriteLibAssetName:
-  skeletonAssetName:
+  textureAssetName: 
+  prefabAssetName: 
+  spriteLibAssetName: 
+  skeletonAssetName: 
   secondarySpriteTextures: []

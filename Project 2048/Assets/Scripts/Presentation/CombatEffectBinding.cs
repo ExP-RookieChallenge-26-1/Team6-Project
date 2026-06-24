@@ -63,7 +63,11 @@ namespace Project2048.Presentation
             source.PlayOneShot(effect.sfxClip, volumeScale);
 
             var lifetime = Mathf.Max(0.1f, effect.sfxClip.length / Mathf.Max(0.01f, Mathf.Abs(pitch)));
-            UnityEngine.Object.Destroy(tempObject, lifetime);
+            if (Application.isPlaying)
+            {
+                UnityEngine.Object.Destroy(tempObject, lifetime);
+            }
+
             return true;
         }
 

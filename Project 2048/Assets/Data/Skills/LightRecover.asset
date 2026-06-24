@@ -17,7 +17,7 @@ MonoBehaviour:
   skillType: 3
   effectKind: 18
   damageStatSource: 0
-  cost: 6
+  cost: 30
   power: 0
   targetAttackStageModifier: 0
   targetDefenseStageModifier: 0
@@ -65,7 +65,7 @@ MonoBehaviour:
     animationClip: {fileID: 0}
     particleEffect:
       objectName: LightRecoverSkillParticles
-      particlePrefab: {fileID: 0}
+      particlePrefab: {fileID: 957232862726013403, guid: 887664bf91244304892e16e72032c214, type: 3}
       particleMaterial: {fileID: 2100000, guid: 45ec00e6f551b1eeb762958e709a5042, type: 2}
       useParticleColor: 1
       particleColor: {r: 0.952797, g: 0.837597, b: 0.412797, a: 1}
@@ -80,11 +80,27 @@ MonoBehaviour:
     sfxDelaySeconds: 0
     localOffset: {x: 0, y: 0, z: 0}
     autoDestroySeconds: 1.25
-  vfxPackage: {fileID: 11400000, guid: b5d4f6cee7a9bc645af68e1f5e477490, type: 2}
+  vfx:
+    family: 5
+    primarySprite: {fileID: 21300000, guid: 91b7d11e1f9d4ecf95de8b6a82fa3a87, type: 3}
+    primaryPrefab: {fileID: 678183688835185469, guid: 4687ea7fc00f3154a9ac6e179a7cda97, type: 3}
+    projectilePrefab: {fileID: 0}
+    secondarySprite: {fileID: 0}
+    secondaryPrefab: {fileID: 0}
+    particlePrefab: {fileID: 957232862726013403, guid: 887664bf91244304892e16e72032c214, type: 3}
+    particleMaterial: {fileID: 2100000, guid: 45ec00e6f551b1eeb762958e709a5042, type: 2}
+    localOffset: {x: 0.76, y: 0.1, z: 0}
+    radiusMultiplier: 2.56
+    lifetimeSeconds: -1
+    sortingOffset: 12
+    tintWhiteBlend: 0.18
+    alpha: 0.9
+    rotationDegrees: -8
+  vfxPackage: {fileID: 0}
   vfxFamily: 5
   vfxPrimaryColor: {r: 0.952797, g: 0.837597, b: 0.412797, a: 1}
   vfxSecondaryColor: {r: 0.997574, g: 0.997574, b: 0.911174, a: 1}
   vfxScale: 1
   vfxIntensity: 1.1
   vfxRepeatCount: 1
-  description: "\uCD5C\uB300 \uCCB4\uB825\uC758 25%\uB9CC\uD07C \uD68C\uBCF5\uD55C\uB2E4."
+  description: ""

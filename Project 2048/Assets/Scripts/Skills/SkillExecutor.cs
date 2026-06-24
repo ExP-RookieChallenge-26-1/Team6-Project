@@ -168,7 +168,14 @@ namespace Project2048.Skills
                     target?.ApplyBrand(ResolveStatusDamage(skill, 40));
                     break;
                 case SkillEffectKind.CostCarry:
-                    player.ApplyCostCarry(skill.maxCostCarry > 0 ? skill.maxCostCarry : 4);
+                    if (skill.nextCostGainModifier > 0)
+                    {
+                        player.ApplyNextTurnCostGainModifier(skill.nextCostGainModifier);
+                    }
+                    else
+                    {
+                        player.ApplyCostCarry(skill.maxCostCarry > 0 ? skill.maxCostCarry : 4);
+                    }
                     break;
                 case SkillEffectKind.DarknessCleanse:
                     if (context?.BoardManager != null &&

@@ -88,15 +88,17 @@ namespace Project2048.Enemy
             var nextIntents = new List<EnemyIntent>(intentCount);
             for (var index = 0; index < intentCount; index++)
             {
-                var patternIndex = intentIndexMap[enemy] % pattern.Count;
-                var nextIntent = pattern[patternIndex]?.Clone();
-                if (nextIntent != null &&
-                    !enemy.IsSkillIdSealed(nextIntent.skillId))
+                for (var attempts = 0; attempts < pattern.Count; attempts++)
                 {
-                    nextIntents.Add(nextIntent);
+                    var patternIndex = intentIndexMap[enemy] % pattern.Count;
+                    var nextIntent = pattern[patternIndex]?.Clone();
+                    intentIndexMap[enemy]++;
+                    if (CanUsePatternIntent(enemy, nextIntent))
+                    {
+                        nextIntents.Add(nextIntent);
+                        break;
+                    }
                 }
-
-                intentIndexMap[enemy]++;
             }
 
             if (nextIntents.Count == 0)
@@ -105,6 +107,32 @@ namespace Project2048.Enemy
             }
 
             return nextIntents;
+        }
+
+        private static bool CanUsePatternIntent(EnemyController enemy, EnemyIntent intent)
+        {
+            if (enemy == null || intent == null)
+            {
+                return false;
+            }
+
+            if (enemy.IsSkillIdSealed(intent.skillId))
+            {
+                return false;
+            }
+
+            if (enemy.MaxHp <= 0)
+            {
+                return true;
+            }
+
+            var hpPercent = enemy.CurrentHp / (float)enemy.MaxHp;
+            if (intent.minSelfHpPercent > 0f && hpPercent < intent.minSelfHpPercent)
+            {
+                return false;
+            }
+
+            return intent.maxSelfHpPercent <= 0f || hpPercent <= intent.maxSelfHpPercent;
         }
 
         public void ExecuteIntent(
@@ -134,6 +162,11 @@ namespace Project2048.Enemy
             {
                 case EnemyIntentType.Attack:
                     enemy.SpendHp(intent.hpCost, intent.hpCostLeavesOne);
+                    if (intent.hpCostPercent > 0f)
+                    {
+                        enemy.SpendHp(Mathf.CeilToInt(enemy.MaxHp * Mathf.Clamp01(intent.hpCostPercent)), intent.hpCostLeavesOne);
+                    }
+
                     var effectiveIntent = ResolveEffectiveAttackIntent(intent, player);
                     var damage = damageCalculator.CalculateEnemyDamage(enemy, effectiveIntent, player);
                     var shieldBeforeHit = player.ShieldHp;
@@ -172,7 +205,15 @@ namespace Project2048.Enemy
                     }
                     break;
                 case EnemyIntentType.Defense:
-                    if (intent.isThornGuard)
+                    if (intent.skillEffectKind == SkillEffectKind.Endure)
+                    {
+                        enemy.ApplyEndure(intent.selfEndureTurns > 0 ? intent.selfEndureTurns : 1);
+                    }
+                    else if (intent.skillEffectKind == SkillEffectKind.CriticalStageUp)
+                    {
+                        enemy.ApplyCriticalStageModifier(intent.selfCriticalStageModifier > 0 ? intent.selfCriticalStageModifier : 1);
+                    }
+                    else if (intent.isThornGuard)
                     {
                         enemy.ApplyThornGuard(intent.value, intent.retaliationDamage);
                     }

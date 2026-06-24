@@ -2,7 +2,6 @@ using UnityEngine;
 
 namespace Project2048.Skills
 {
-    [CreateAssetMenu(menuName = "Game/Skill VFX Package")]
     public sealed class SkillVfxPackageSO : ScriptableObject
     {
         public SkillVfxFamily family;
@@ -11,6 +10,7 @@ namespace Project2048.Skills
         public GameObject projectilePrefab;
         public Sprite secondarySprite;
         public GameObject secondaryPrefab;
+        public ParticleSystem particlePrefab;
         public Material particleMaterial;
         public Vector3 localOffset = new(0f, 0.16f, 0f);
         public float radiusMultiplier = 1f;
@@ -25,6 +25,7 @@ namespace Project2048.Skills
             primaryPrefab != null ||
             projectilePrefab != null ||
             secondarySprite != null ||
-            secondaryPrefab != null;
+            secondaryPrefab != null ||
+            particlePrefab != null;
     }
 }

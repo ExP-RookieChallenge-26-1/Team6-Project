@@ -93,13 +93,13 @@ MonoBehaviour:
     radiusMultiplier: 3.24
     lifetimeSeconds: -1
     sortingOffset: 12
-    tintWhiteBlend: 0.18
-    alpha: 0.62
+    tintWhiteBlend: 0
+    alpha: 1
     rotationDegrees: 0
   vfxPackage: {fileID: 0}
   vfxFamily: 1
   vfxPrimaryColor: {r: 1, g: 1, b: 1, a: 1}
-  vfxSecondaryColor: {r: 0.76705, g: 0.81745, b: 0.87505, a: 1}
+  vfxSecondaryColor: {r: 1, g: 1, b: 1, a: 1}
   vfxScale: 0.7
   vfxIntensity: 0.8
   vfxRepeatCount: 1

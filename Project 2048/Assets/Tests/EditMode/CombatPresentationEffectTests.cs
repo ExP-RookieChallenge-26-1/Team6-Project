@@ -1290,7 +1290,8 @@ namespace Project2048.Tests
             var slashArcBinding = profile.ResolveDesignTimeBinding(SkillVfxFamily.SlashArc);
             Assert.That(slashArcBinding.localOffset.x, Is.EqualTo(0f).Within(0.001f));
             Assert.That(slashArcBinding.radiusMultiplier, Is.EqualTo(3.24f).Within(0.001f));
-            Assert.That(slashArcBinding.alpha, Is.LessThan(0.75f));
+            Assert.That(slashArcBinding.tintWhiteBlend, Is.EqualTo(0f).Within(0.001f));
+            Assert.That(slashArcBinding.alpha, Is.EqualTo(1f).Within(0.001f));
             Assert.That(
                 AssetDatabase.GetAssetPath(slashArcBinding.prefab),
                 Is.EqualTo("Assets/Art/Effects/SkillVFX/Prefabs/SkillVfx_AttackImpact.prefab"));
@@ -1641,6 +1642,42 @@ namespace Project2048.Tests
         }
 
         [Test]
+        public void CombatWorldSpriteView_EndurePreview_UsesWhiteHealingVfxOnly()
+        {
+            var viewObject = CreateOwnedGameObject("WorldSpriteView");
+            var view = viewObject.AddComponent<CombatWorldSpriteView>();
+            var playerRenderer = CreateOwnedGameObject("PlayerSprite").AddComponent<SpriteRenderer>();
+            var healingPrefab = CreateOwnedGameObject("EndureHealingPrefab");
+            healingPrefab.AddComponent<ParticleSystem>();
+            var endure = CreateSkill("endure", SkillType.Defense, cost: 0, power: 0);
+            endure.effectKind = SkillEffectKind.Endure;
+            endure.vfxFamily = SkillVfxFamily.CounterReady;
+            endure.vfx = CreateOwnedVfxTuning(SkillVfxFamily.CounterReady);
+            endure.vfx.secondaryPrefab = healingPrefab;
+            endure.vfxPrimaryColor = Color.white;
+            endure.vfxSecondaryColor = Color.white;
+            endure.activationEffect.particleEffect = new CombatParticleEffectBinding
+            {
+                objectName = "EndureSkillParticles",
+                useParticleColor = true,
+                particleColor = Color.white,
+            };
+
+            SetPrivateField(view, "playerRenderer", playerRenderer);
+
+            view.PreviewSkillEffect(endure);
+
+            var healing = playerRenderer.transform.Find("CounterReadyHealingVisualEffect");
+            Assert.That(healing, Is.Not.Null);
+            var healingParticles = healing.GetComponent<ParticleSystem>();
+            Assert.That(healingParticles, Is.Not.Null);
+            AssertColorApproximately(healingParticles.main.startColor.color, Color.white);
+            Assert.That(healing.localPosition.y, Is.GreaterThan(0.2f));
+            Assert.That(playerRenderer.transform.Find("CounterReadySkillParticles"), Is.Null);
+            Assert.That(playerRenderer.transform.Find("CounterReadyEffectArt"), Is.Null);
+        }
+
+        [Test]
         public void CombatWorldSpriteView_PlayerReusableSkill_UsesSoBoundParticleMaterial()
         {
             var viewObject = CreateOwnedGameObject("WorldSpriteView");
@@ -1727,7 +1764,7 @@ namespace Project2048.Tests
         }
 
         [Test]
-        public void CombatWorldSpriteView_SlashArcPreview_UsesExpAttackBeamAndHeavyImpact()
+        public void CombatWorldSpriteView_SlashArcPreview_UsesWhiteCenteredOriginalRatioArtOnly()
         {
             var viewObject = CreateOwnedGameObject("WorldSpriteView");
             var view = viewObject.AddComponent<CombatWorldSpriteView>();
@@ -1742,7 +1779,7 @@ namespace Project2048.Tests
             slash.vfxFamily = SkillVfxFamily.SlashArc;
             slash.vfx = CreateOwnedVfxTuning(SkillVfxFamily.SlashArc);
             slash.vfx.primarySprite = attackSprite;
-            slash.vfxPrimaryColor = new Color(0.92f, 0.96f, 1f, 1f);
+            slash.vfxPrimaryColor = new Color(0.2f, 0.6f, 1f, 1f);
 
             SetPrivateField(view, "playerRenderer", playerRenderer);
             SetPrivateField(view, "enemyRenderer", enemyRenderer);
@@ -1750,18 +1787,16 @@ namespace Project2048.Tests
 
             view.PreviewSkillEffect(slash);
 
-            var beam = viewObject.transform.Find("SlashArcAttackBeamArt")?.GetComponent<SpriteRenderer>();
+            var beam = enemyRenderer.transform.Find("SlashArcAttackBeamArt")?.GetComponent<SpriteRenderer>();
             Assert.That(beam, Is.Not.Null);
             Assert.That(beam.sprite, Is.EqualTo(attackSprite));
-            Assert.That(beam.transform.position.x, Is.GreaterThan(playerRenderer.transform.position.x));
-            Assert.That(beam.transform.position.x, Is.LessThan(enemyRenderer.transform.position.x));
-            Assert.That(beam.transform.localScale.x, Is.GreaterThan(0.1f));
+            AssertColorApproximately(beam.color, Color.white);
+            Assert.That(beam.transform.localPosition.x, Is.EqualTo(0f).Within(0.001f));
+            Assert.That(beam.transform.localScale.x, Is.EqualTo(beam.transform.localScale.y).Within(0.001f));
 
             var impactArt = enemyRenderer.transform.Find("HeavyStrikeSpikedBurstArt")?.GetComponent<SpriteRenderer>();
-            Assert.That(impactArt, Is.Not.Null);
-            Assert.That(impactArt.sprite, Is.EqualTo(hitSprite));
-            Assert.That(impactArt.transform.localPosition.x, Is.LessThan(0f));
-            Assert.That(enemyRenderer.transform.Find("HeavyStrikeSpikedBurst"), Is.Not.Null);
+            Assert.That(impactArt, Is.Null);
+            Assert.That(enemyRenderer.transform.Find("HeavyStrikeSpikedBurst"), Is.Null);
             Assert.That(enemyRenderer.transform.Find("SlashArcSkillParticles"), Is.Null);
         }
 
@@ -1867,7 +1902,7 @@ namespace Project2048.Tests
             supportPackage.secondarySprite = magicCircleSprite;
             supportPackage.secondaryPrefab = magicCirclePrefab;
             supportPackage.radiusMultiplier = 2.46f;
-            var supportFire = CreateSkill("light-echo", SkillType.Attack, cost: 0, power: 20);
+            var supportFire = CreateSkill("support-fire-test", SkillType.Attack, cost: 0, power: 20);
             playerRenderer.transform.localPosition = new Vector3(-1f, 0f, 0f);
             enemyRenderer.transform.localPosition = new Vector3(1f, 0f, 0f);
             enemyRenderer.sortingOrder = 4;
@@ -1896,6 +1931,64 @@ namespace Project2048.Tests
             Assert.That(impactArt.transform.localScale.x, Is.GreaterThan(3.5f));
             Assert.That(enemyRenderer.transform.Find("SupportFireImpactArt/SupportFireImpactPrefabMarker"), Is.Not.Null);
             Assert.That(enemyRenderer.transform.Find("LightEchoSupportFireParticles"), Is.Not.Null);
+        }
+
+        [Test]
+        public void CombatWorldSpriteView_LightEchoPreview_UsesYellowBuffParticlesOnly()
+        {
+            var viewObject = CreateOwnedGameObject("WorldSpriteView");
+            var view = viewObject.AddComponent<CombatWorldSpriteView>();
+            var playerRenderer = CreateOwnedGameObject("PlayerSprite").AddComponent<SpriteRenderer>();
+            var enemyRenderer = CreateOwnedGameObject("EnemySprite").AddComponent<SpriteRenderer>();
+            var attackSprite = CreateOwnedSprite("IgnoredLightEchoImpactSprite");
+            var magicCircleSprite = CreateOwnedSprite("IgnoredLightEchoMagicCircleSprite");
+            var attackPrefab = CreateOwnedSpritePrefab(
+                "IgnoredLightEchoImpactPrefab",
+                attackSprite,
+                "IgnoredLightEchoImpactPrefabMarker");
+            var magicCirclePrefab = CreateOwnedSpritePrefab(
+                "IgnoredLightEchoMagicCirclePrefab",
+                magicCircleSprite,
+                "IgnoredLightEchoMagicCirclePrefabMarker");
+            var particlePrefab = CreateOwnedGameObject("LightEchoParticlePrefab").AddComponent<ParticleSystem>();
+            var lightEcho = CreateSkill("light-echo", SkillType.Defense, cost: 0, power: 0);
+            var yellow = new Color(0.94f, 0.76f, 0.34f, 1f);
+            playerRenderer.transform.localPosition = new Vector3(-1f, 0f, 0f);
+            enemyRenderer.transform.localPosition = new Vector3(1f, 0f, 0f);
+            lightEcho.effectKind = SkillEffectKind.NextAttackPowerMultiplier;
+            lightEcho.vfxFamily = SkillVfxFamily.SupportFire;
+            lightEcho.vfx = CreateOwnedVfxTuning(SkillVfxFamily.SupportFire);
+            lightEcho.vfx.primarySprite = attackSprite;
+            lightEcho.vfx.primaryPrefab = attackPrefab;
+            lightEcho.vfx.secondarySprite = magicCircleSprite;
+            lightEcho.vfx.secondaryPrefab = magicCirclePrefab;
+            lightEcho.vfxPrimaryColor = yellow;
+            lightEcho.activationEffect.particleEffect = new CombatParticleEffectBinding
+            {
+                objectName = "LightEchoSkillParticles",
+                particlePrefab = particlePrefab,
+                useParticleColor = true,
+                particleColor = yellow,
+                lifetimeSeconds = 0.55f,
+                burstCount = 130,
+                startSpeed = 1.05f,
+                startSize = 0.14f,
+                swirl = false,
+            };
+
+            SetPrivateField(view, "playerRenderer", playerRenderer);
+            SetPrivateField(view, "enemyRenderer", enemyRenderer);
+
+            view.PreviewSkillEffect(lightEcho);
+
+            var particles = playerRenderer.transform.Find("LightEchoSkillParticles")?.GetComponent<ParticleSystem>();
+            Assert.That(particles, Is.Not.Null);
+            AssertColorApproximately(particles.main.startColor.color, yellow);
+            Assert.That(playerRenderer.transform.Find("MagicCircleEffectArt"), Is.Null);
+            Assert.That(playerRenderer.transform.Find("SupportFireImpactArt"), Is.Null);
+            Assert.That(enemyRenderer.transform.Find("SupportFireImpactArt"), Is.Null);
+            Assert.That(playerRenderer.transform.Find("LightEchoSupportFireParticles"), Is.Null);
+            Assert.That(enemyRenderer.transform.Find("LightEchoSupportFireParticles"), Is.Null);
         }
 
         [Test]
@@ -2130,14 +2223,20 @@ namespace Project2048.Tests
             var playerData = CreatePlayerData(maxHp: 20, attackPower: 2);
             var enemyData = CreateEnemyData(maxHp: 50, attackValue: 0);
             var charge = CreateSkill("gather-light", SkillType.Attack, cost: 0, power: 0);
+            var projectilePrefab = CreateOwnedGameObject("GatherLightProjectilePrefab");
             var verticalBeamPrefab = CreateOwnedGameObject("GatherLightVerticalBeamPrefab");
             var attackSprite = CreateOwnedSprite("SkillVfx_AttackImpact");
             var bottomPivotPlayerSprite = CreateOwnedSprite("BottomPivotPlayerSprite", Vector2.zero);
+            projectilePrefab.AddComponent<CombatProjectileEffect>();
             charge.effectKind = SkillEffectKind.ChargeAttack;
             charge.chargedPower = 120;
             charge.vfx = CreateOwnedVfxTuning(SkillVfxFamily.LightBeam);
             charge.vfx.secondaryPrefab = verticalBeamPrefab;
             charge.vfx.radiusMultiplier = 3.54f;
+            charge.activationEffect = new CombatEffectBinding
+            {
+                vfxPrefab = projectilePrefab,
+            };
             playerData.startingSkills = new List<SkillSO> { charge };
             playerRenderer.sprite = bottomPivotPlayerSprite;
             playerRenderer.transform.localPosition = new Vector3(-1f, 0f, 0f);
@@ -2164,7 +2263,8 @@ namespace Project2048.Tests
             Assert.That(viewObject.transform.Find("ChargedLightBeamGlow"), Is.Null);
             Assert.That(enemyRenderer.transform.Find("ChargedLightAttackArt"), Is.Null);
             Assert.That(playerRenderer.transform.Find("ChargedLightAttackArt"), Is.Null);
-            Assert.That(playerRenderer.transform.Find("gather-lightChargeParticles"), Is.Not.Null);
+            Assert.That(playerRenderer.transform.Find("GatherLightBuffParticles"), Is.Not.Null);
+            Assert.That(GameObject.Find("GatherLightProjectilePrefab(Clone)"), Is.Null);
 
             manager.RequestEndPlayerTurn();
 
@@ -2177,6 +2277,7 @@ namespace Project2048.Tests
 
             // 랜턴 발사 트레일도 제거되고, 화면에 남는 빔은 버티컬 빔뿐이다.
             Assert.That(viewObject.transform.Find("LightBeamLanternLaunchTrail"), Is.Null);
+            Assert.That(GameObject.Find("GatherLightProjectilePrefab(Clone)"), Is.Not.Null);
             Assert.That(viewObject.transform.Find("GatherLightVerticalBeam"), Is.Not.Null);
         }
 
@@ -2215,7 +2316,7 @@ namespace Project2048.Tests
             Assert.That(viewObject.transform.Find("LightBeamLanternLaunchTrail"), Is.Null);
             Assert.That(GameObject.Find("GatherLightProjectilePrefab(Clone)"), Is.Not.Null);
             Assert.That(viewObject.transform.Find("GatherLightVerticalBeam"), Is.Not.Null);
-            Assert.That(playerRenderer.transform.Find("gather-lightChargeParticles"), Is.Not.Null);
+            Assert.That(playerRenderer.transform.Find("GatherLightBuffParticles"), Is.Not.Null);
         }
 
         [Test]
@@ -3203,7 +3304,11 @@ namespace Project2048.Tests
                 Assert.That(skill.vfx.HasAnySetting, Is.True, path);
                 Assert.That(resolvedFamily, Is.Not.EqualTo(SkillVfxFamily.None), path);
                 Assert.That(skill.vfx.family, Is.EqualTo(resolvedFamily), path);
-                AssertDesignTimeParticlePrefab(skill.vfx.particlePrefab, path);
+                if (skill.vfx.particlePrefab != null)
+                {
+                    AssertDesignTimeParticlePrefab(skill.vfx.particlePrefab, path);
+                }
+
                 Assert.That(skill.vfxScale, Is.GreaterThan(0f), path);
                 Assert.That(skill.vfxIntensity, Is.GreaterThan(0f), path);
                 Assert.That(skill.vfxRepeatCount, Is.GreaterThanOrEqualTo(1), path);
@@ -3214,7 +3319,11 @@ namespace Project2048.Tests
                     Does.Match(@"^Assets/Sounds/GameplaySfx/(player_attack_0[1-5]|player_defense_0[1-3]|skill_buff(_0[1-2])?|skill_heal)\.mp3$"),
                     path);
                 Assert.That(skill.activationEffect.particleEffect, Is.Not.Null, path);
-                AssertDesignTimeParticlePrefab(skill.activationEffect.particleEffect.particlePrefab, path);
+                if (skill.activationEffect.particleEffect.particlePrefab != null)
+                {
+                    AssertDesignTimeParticlePrefab(skill.activationEffect.particleEffect.particlePrefab, path);
+                }
+
                 Assert.That(skill.activationEffect.particleEffect.particleMaterial, Is.Not.Null, path);
                 Assert.That(skill.activationEffect.particleEffect.useParticleColor, Is.True, path);
                 Assert.That(
@@ -3266,8 +3375,11 @@ namespace Project2048.Tests
                         path);
                     AssertVector3Approximately(skill.vfx.localOffset, new Vector3(0f, 0.16f, 0f), path);
                     Assert.That(skill.vfx.radiusMultiplier, Is.EqualTo(3.24f).Within(0.001f), path);
-                    Assert.That(skill.vfx.alpha, Is.EqualTo(0.62f).Within(0.001f), path);
+                    Assert.That(skill.vfx.tintWhiteBlend, Is.EqualTo(0f).Within(0.001f), path);
+                    Assert.That(skill.vfx.alpha, Is.EqualTo(1f).Within(0.001f), path);
                     Assert.That(skill.vfx.rotationDegrees, Is.EqualTo(0f).Within(0.001f), path);
+                    AssertColorApproximately(skill.vfxPrimaryColor, Color.white);
+                    AssertColorApproximately(skill.vfxSecondaryColor, Color.white);
                 }
                 else if (path.EndsWith("TentacleStrike.asset", System.StringComparison.Ordinal))
                 {
@@ -3308,7 +3420,24 @@ namespace Project2048.Tests
                 else if (path.EndsWith("LightEcho.asset", System.StringComparison.Ordinal))
                 {
                     Assert.That(resolvedFamily, Is.EqualTo(SkillVfxFamily.SupportFire), path);
-                    Assert.That(skill.vfxRepeatCount, Is.GreaterThanOrEqualTo(3), path);
+                    Assert.That(skill.vfx.primarySprite, Is.Null, path);
+                    Assert.That(skill.vfx.primaryPrefab, Is.Null, path);
+                    Assert.That(skill.vfx.secondarySprite, Is.Null, path);
+                    Assert.That(skill.vfx.secondaryPrefab, Is.Null, path);
+                    Assert.That(skill.vfxRepeatCount, Is.EqualTo(1), path);
+                }
+                else if (path.EndsWith("Endure.asset", System.StringComparison.Ordinal))
+                {
+                    Assert.That(resolvedFamily, Is.EqualTo(SkillVfxFamily.CounterReady), path);
+                    Assert.That(skill.vfx.primarySprite, Is.Null, path);
+                    Assert.That(skill.vfx.primaryPrefab, Is.Null, path);
+                    Assert.That(skill.vfx.secondaryPrefab, Is.Not.Null, path);
+                    Assert.That(
+                        AssetDatabase.GetAssetPath(skill.vfx.secondaryPrefab),
+                        Is.EqualTo("Assets/Art/Effects/SkillVFX/Prefabs/SkillVfx_BuffAuraHealing.prefab"),
+                        path);
+                    AssertColorApproximately(skill.vfxPrimaryColor, Color.white);
+                    AssertColorApproximately(skill.vfxSecondaryColor, Color.white);
                 }
                 else if (path.EndsWith("DarkShackle.asset", System.StringComparison.Ordinal))
                 {

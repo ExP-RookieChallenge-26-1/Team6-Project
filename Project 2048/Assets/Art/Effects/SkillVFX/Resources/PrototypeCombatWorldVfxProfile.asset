@@ -77,8 +77,8 @@ MonoBehaviour:
     radiusMultiplier: 3.24
     lifetimeSeconds: -1
     sortingOffset: 12
-    tintWhiteBlend: 0.18
-    alpha: 0.62
+    tintWhiteBlend: 0
+    alpha: 1
     rotationDegrees: 0
   - family: 2
     sprite: {fileID: 21300000, guid: e18b788083f586d650f0bcb9e2a927a4, type: 3}

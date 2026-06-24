@@ -90,7 +90,8 @@ namespace Project2048.Prototype
         private const float SlashSkillMuzzleLocalX = 0.34f;
         private const float SlashSkillMuzzleLocalY = 0.05f;
         // 버프류 마법진이 너무 낮게 깔려서 플레이어 옆 허리 높이로 올린다.
-        private const float BuffAuraMagicCircleLift = 0.4f;
+        private const float SelfBuffMagicCircleYOffset = 0.18f;
+        private const float SelfBuffParticleLift = 0.18f;
         private const float CloseRangeAttackAnimationSpeedMultiplier = 1.55f;
         private const float PlayerAttackAnimationSpeedResetSeconds = 0.42f;
         private const string DefaultWorldVfxProfileResourceName = "PrototypeCombatWorldVfxProfile";
@@ -101,7 +102,7 @@ namespace Project2048.Prototype
         private static readonly Vector3 PlayerFrontAttackArtLocalOffset = new(0.68f, 0.16f, 0f);
         private static readonly Vector3 PlayerRightMagicCircleLocalOffset = new(0.76f, 0.1f, 0f);
         private static readonly Vector3 FlameBurstExplosionLocalOffset = new(0f, 0.18f, 0f);
-        private static readonly Vector3 SupportBuffHealingVisualEffectLocalOffset = new(0f, 0.08f, 0f);
+        private static readonly Vector3 SupportBuffHealingVisualEffectLocalOffset = new(0f, 0.24f, 0f);
         private static readonly string[] SupportBuffVisualEffectColorPropertyNames =
         {
             "_Color",
@@ -1185,6 +1186,12 @@ namespace Project2048.Prototype
         private void PlayChargeAttackStartEffect(SkillSO skill, CombatEffectBinding effect, Transform sourceAnchor)
         {
             PlayCombatantActionAudioEffect(effect);
+            if (IsGatherLightSkill(skill))
+            {
+                PlayGatherLightChargeBuffEffect(skill, effect, sourceAnchor);
+                return;
+            }
+
             // 충전 버프 이펙트는 캐릭터 발이 아니라 몸(스프라이트 시각적 중앙)에서 빛이 모이게 한다.
             var bodyLocalOffset = ResolveVisualCenterLocalOffset(sourceAnchor, Vector3.zero);
             if (effect?.particleEffect?.HasParticleVisual == true)
@@ -1205,6 +1212,25 @@ namespace Project2048.Prototype
                 0.14f,
                 swirl: true,
                 bodyLocalOffset);
+        }
+
+        private void PlayGatherLightChargeBuffEffect(SkillSO skill, CombatEffectBinding effect, Transform sourceAnchor)
+        {
+            var anchor = sourceAnchor != null ? sourceAnchor : transform;
+            var localOffset = ResolveVisualCenterLocalOffset(anchor, new Vector3(0f, SelfBuffParticleLift, 0f));
+            SpawnParticleBurst(
+                effect?.particleEffect,
+                anchor,
+                "GatherLightBuffParticles",
+                null,
+                skill != null ? ResolveReusableSkillParticleColor(skill) : new Color(0.86f, 0.96f, 1f, 0.78f),
+                null,
+                0.65f,
+                42,
+                0.47f,
+                0.18f,
+                swirl: true,
+                localOffset);
         }
 
         private static bool ShouldPlayReusableFamilyEffectFromSkillSo(SkillSO skill, CombatEffectBinding effect)
@@ -1389,6 +1415,9 @@ namespace Project2048.Prototype
                 return;
             }
 
+            var particleLocalOffset = IsSelfBuffPresentationSkill(skill)
+                ? ResolveVisualCenterLocalOffset(anchor, new Vector3(0f, SelfBuffParticleLift, 0f))
+                : Vector3.zero;
             SpawnParticleBurst(
                 skill.activationEffect?.particleEffect,
                 anchor,
@@ -1400,7 +1429,8 @@ namespace Project2048.Prototype
                 Mathf.RoundToInt(burstCount * intensity * repeatCount),
                 startSpeed * Mathf.Sqrt(scale),
                 scaledStartSize,
-                swirl);
+                swirl,
+                particleLocalOffset);
         }
 
         private void PlayShieldCircleSkillParticleEffect(
@@ -1885,6 +1915,12 @@ namespace Project2048.Prototype
             float intensity,
             int repeatCount)
         {
+            if (IsLightEchoSkill(skill))
+            {
+                PlayLightEchoBuffOnlyEffect(skill, anchor, lifetimeSeconds, burstCount, startSpeed, startSize, scale, intensity);
+                return;
+            }
+
             var primary = ResolveReusableSkillParticleColor(skill);
             var secondary = ResolveReusableSkillSecondaryParticleColor(skill);
             var shotCount = Mathf.Clamp(repeatCount, 2, 4);
@@ -1920,6 +1956,33 @@ namespace Project2048.Prototype
             }
         }
 
+        private void PlayLightEchoBuffOnlyEffect(
+            SkillSO skill,
+            Transform anchor,
+            float lifetimeSeconds,
+            int burstCount,
+            float startSpeed,
+            float startSize,
+            float scale,
+            float intensity)
+        {
+            var parent = anchor != null ? anchor : transform;
+            var localOffset = ResolveVisualCenterLocalOffset(parent, new Vector3(0f, SelfBuffParticleLift, 0f));
+            SpawnParticleBurst(
+                skill != null ? skill.activationEffect?.particleEffect : null,
+                parent,
+                "LightEchoBuffParticles",
+                null,
+                skill != null ? ResolveReusableSkillParticleColor(skill) : new Color(0.94f, 0.76f, 0.34f, 1f),
+                null,
+                lifetimeSeconds,
+                Mathf.RoundToInt(burstCount * intensity),
+                startSpeed * Mathf.Sqrt(Mathf.Max(0.01f, scale)),
+                startSize,
+                swirl: true,
+                localOffset);
+        }
+
         private void PlaySupportBuffMagicCircleArt(SkillSO skill, Transform anchor, float lifetimeSeconds)
         {
             var tuning = ResolveSkillVfxTuning(skill);
@@ -1939,6 +2002,9 @@ namespace Project2048.Prototype
                 Color.white,
                 0.32f,
                 0.72f);
+            var magicCircleLocalOffset = ResolvePlayerRightLocalOffset(new Vector3(0f, 0.08f, 0f));
+            magicCircleLocalOffset.y += SelfBuffMagicCircleYOffset;
+
             var art = SpawnAttackArtSpriteLayer(
                 anchor,
                 "MagicCircleEffectArt",
@@ -1947,7 +2013,7 @@ namespace Project2048.Prototype
                     MagicCircleArtSizeMultiplier *
                     Mathf.Clamp(Mathf.Sqrt(Mathf.Max(0.01f, skill.vfxScale)), 0.84f, 1.5f),
                 Mathf.Clamp(lifetimeSeconds, 0.38f, 0.9f),
-                ResolvePlayerRightLocalOffset(new Vector3(0f, 0.08f, 0f)),
+                magicCircleLocalOffset,
                 sortingOffset: 6,
                 spriteOverride: sprite,
                 prefabOverride: ResolveDesignTimeSecondaryPrefab(tuning, package, ResolveMagicCircleEffectPrefab()));
@@ -2444,6 +2510,12 @@ namespace Project2048.Prototype
 
         private void PlaySlashBeamSkillEffect(SkillSO skill, Transform sourceAnchor, Transform targetAnchor)
         {
+            if (ResolveSkillVfxFamily(skill) == SkillVfxFamily.SlashArc)
+            {
+                PlaySlashArcImpactArt(skill, targetAnchor);
+                return;
+            }
+
             var source = ResolveSlashSkillSourcePosition(sourceAnchor != null ? sourceAnchor : transform, targetAnchor);
             var target = targetAnchor != null ? ResolveSkillImpactWorldPosition(targetAnchor) : source + Vector3.right;
             if ((target - source).sqrMagnitude <= 0.0001f)
@@ -2454,6 +2526,55 @@ namespace Project2048.Prototype
             SpawnSlashBeamArt(skill, sourceAnchor, targetAnchor, source, target);
             PlaySlashHeavyImpactArt(skill, sourceAnchor, targetAnchor);
             PlaySpikedBurstSkillEffect(skill, targetAnchor, sourceAnchor);
+        }
+
+        private void PlaySlashArcImpactArt(SkillSO skill, Transform targetAnchor)
+        {
+            var parent = targetAnchor != null ? targetAnchor : transform;
+            var tuning = ResolveSkillVfxTuning(skill);
+            var package = ResolveSkillVfxPackage(skill);
+            var designTimeBinding = ResolveSkillVfxDesignTimeBinding(skill);
+            var sprite = ResolveDesignTimeSprite(
+                tuning,
+                package,
+                designTimeBinding,
+                attackEffectSprite,
+                ResolveAttackEffectSprite());
+            if (sprite == null)
+            {
+                return;
+            }
+
+            var scale = Mathf.Max(0.01f, skill != null ? skill.vfxScale : 1f);
+            var localOffset = ResolveDesignTimeLocalOffset(
+                tuning,
+                package,
+                designTimeBinding,
+                new Vector3(0f, 0.16f, 0f));
+            localOffset.x = 0f;
+
+            var art = SpawnAttackArtSpriteLayer(
+                parent,
+                "SlashArcAttackBeamArt",
+                Color.white,
+                AttackArtBaseRadius *
+                    Mathf.Clamp(Mathf.Sqrt(scale), 0.7f, 1.42f) *
+                    ResolveDesignTimeRadiusMultiplier(tuning, package, designTimeBinding, 1f),
+                ResolveDesignTimeLifetime(tuning, package, designTimeBinding, SlashBeamDurationSeconds),
+                localOffset,
+                sortingOffset: ResolveDesignTimeSortingOffset(tuning, package, designTimeBinding, 14),
+                spriteOverride: sprite,
+                prefabOverride: null,
+                animatePulse: false);
+            if (art == null)
+            {
+                return;
+            }
+
+            art.transform.localRotation = Quaternion.Euler(
+                0f,
+                0f,
+                ResolveDesignTimeRotationDegrees(tuning, package, designTimeBinding, 0f));
         }
 
         private void PlaySlashHeavyImpactArt(SkillSO skill, Transform sourceAnchor, Transform targetAnchor)
@@ -5318,6 +5439,16 @@ namespace Project2048.Prototype
                 designTimeBinding,
                 0.32f,
                 0.72f);
+            var magicCircleLocalOffset = ResolvePlayerRightLocalOffset(ResolveDesignTimeLocalOffset(
+                tuning,
+                package,
+                designTimeBinding,
+                PlayerRightMagicCircleLocalOffset));
+            if (IsSelfBuffPresentationSkill(skill))
+            {
+                magicCircleLocalOffset.y += SelfBuffMagicCircleYOffset;
+            }
+
             var objectName = family switch
             {
                 SkillVfxFamily.BuffAura => "BuffAuraEffectArt",
@@ -5339,13 +5470,7 @@ namespace Project2048.Prototype
                         MagicCircleArtSizeMultiplier) *
                     Mathf.Clamp(Mathf.Sqrt(scale), 0.84f, 1.5f),
                 ResolveDesignTimeLifetime(tuning, package, designTimeBinding, Mathf.Clamp(lifetimeSeconds, 0.38f, 0.9f)),
-                ResolvePlayerRightLocalOffset(ResolveDesignTimeLocalOffset(
-                    tuning,
-                    package,
-                    designTimeBinding,
-                    family == SkillVfxFamily.BuffAura
-                        ? PlayerRightMagicCircleLocalOffset + new Vector3(0f, BuffAuraMagicCircleLift, 0f)
-                        : PlayerRightMagicCircleLocalOffset)),
+                magicCircleLocalOffset,
                 sortingOffset: ResolveDesignTimeSortingOffset(tuning, package, designTimeBinding, 6),
                 spriteOverride: sprite,
                 prefabOverride: ResolveDesignTimePrefab(tuning, package, designTimeBinding, ResolveMagicCircleEffectPrefab()));
@@ -6306,6 +6431,27 @@ namespace Project2048.Prototype
         {
             return skill != null &&
                 string.Equals(skill.skillId, "gather-light", System.StringComparison.OrdinalIgnoreCase);
+        }
+
+        private static bool IsLightEchoSkill(SkillSO skill)
+        {
+            return skill != null &&
+                string.Equals(skill.skillId, "light-echo", System.StringComparison.OrdinalIgnoreCase);
+        }
+
+        private static bool IsSelfBuffPresentationSkill(SkillSO skill)
+        {
+            if (skill == null || (skill.skillType == SkillType.Attack && skill.RequiresEnemyTarget))
+            {
+                return false;
+            }
+
+            var family = ResolveSkillVfxFamily(skill);
+            return family == SkillVfxFamily.BuffAura ||
+                family == SkillVfxFamily.CounterReady ||
+                family == SkillVfxFamily.BoardDisturb ||
+                IsGatherLightSkill(skill) ||
+                IsLightEchoSkill(skill);
         }
 
         private static bool IsShieldAttackSkill(SkillSO skill)

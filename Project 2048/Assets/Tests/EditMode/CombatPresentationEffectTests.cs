@@ -2264,7 +2264,6 @@ namespace Project2048.Tests
             var playerRenderer = CreateOwnedGameObject("PlayerSprite").AddComponent<SpriteRenderer>();
             var enemyRenderer = CreateOwnedGameObject("EnemySprite").AddComponent<SpriteRenderer>();
             var tentacle = CreateSkill("tentacle-strike", SkillType.Attack, cost: 0, power: 90);
-            var attackSprite = CreateOwnedSprite("TentacleStrikeImpactSprite");
             playerRenderer.transform.localPosition = new Vector3(-1f, 0f, 0f);
             enemyRenderer.transform.localPosition = new Vector3(1f, 0f, 0f);
             enemyRenderer.sortingOrder = 4;
@@ -2274,14 +2273,21 @@ namespace Project2048.Tests
 
             SetPrivateField(view, "playerRenderer", playerRenderer);
             SetPrivateField(view, "enemyRenderer", enemyRenderer);
-            SetPrivateField(view, "attackEffectSprite", attackSprite);
 
             view.PreviewSkillEffect(tentacle);
 
-            var impactArt = enemyRenderer.transform.Find("TentacleStrikeImpactArt")?.GetComponent<SpriteRenderer>();
-            Assert.That(impactArt, Is.Not.Null);
-            Assert.That(impactArt.sprite, Is.EqualTo(attackSprite));
-            var whip = viewObject.transform.Find("TentacleStrikeWhip")?.GetComponent<LineRenderer>();
+            var whipRoot = viewObject.transform.Find("TentacleStrikeWhip");
+            Assert.That(whipRoot, Is.Not.Null);
+            var skinnedWhip = whipRoot.GetComponentInChildren<TentacleBoneStrikeEffect>();
+            if (skinnedWhip != null)
+            {
+                skinnedWhip.ConfigureBonesFromSprite();
+                Assert.That(skinnedWhip.BoneCount, Is.GreaterThanOrEqualTo(7));
+                Assert.That(whipRoot.GetComponentInChildren<SpriteRenderer>().sortingOrder, Is.GreaterThan(enemyRenderer.sortingOrder));
+                return;
+            }
+
+            var whip = whipRoot.GetComponent<LineRenderer>();
             Assert.That(whip, Is.Not.Null);
             Assert.That(whip.positionCount, Is.GreaterThan(8));
             Assert.That(whip.startWidth, Is.GreaterThan(whip.endWidth));
@@ -2297,6 +2303,32 @@ namespace Project2048.Tests
             Assert.That(whip.GetPosition(0).x, Is.GreaterThan(playerRenderer.transform.position.x));
             Assert.That(highestPoint.y, Is.GreaterThan(finalPoint.y + 0.65f));
             Assert.That(previousPoint.y, Is.GreaterThan(finalPoint.y));
+        }
+
+        [Test]
+        public void SkillVfxTentacleWhipPrefab_UsesExpSkinnedTentacle()
+        {
+            const string PrefabPath = "Assets/Art/Effects/SkillVFX/Prefabs/SkillVfx_TentacleWhip.prefab";
+            const string ExpTentaclePath = "Assets/Art/Source/ExP/Effects/Effect_Tentacle.png";
+            var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(PrefabPath);
+
+            Assert.That(prefab, Is.Not.Null);
+            var renderer = prefab.GetComponent<SpriteRenderer>();
+            var hasSpriteSkin = prefab.GetComponents<Component>()
+                .Any(component => component != null && component.GetType().Name == "SpriteSkin");
+            var effect = prefab.GetComponent<TentacleBoneStrikeEffect>();
+            Assert.That(renderer, Is.Not.Null);
+            Assert.That(hasSpriteSkin, Is.True);
+            Assert.That(effect, Is.Not.Null);
+            Assert.That(AssetDatabase.GetAssetPath(renderer.sprite), Is.EqualTo(ExpTentaclePath));
+
+            var instance = Object.Instantiate(prefab);
+            ownedObjects.Add(instance);
+            var runtimeEffect = instance.GetComponent<TentacleBoneStrikeEffect>();
+            runtimeEffect.ConfigureBonesFromSprite();
+
+            Assert.That(runtimeEffect.SourceSprite, Is.EqualTo(renderer.sprite));
+            Assert.That(runtimeEffect.BoneCount, Is.GreaterThanOrEqualTo(7));
         }
 
         [Test]

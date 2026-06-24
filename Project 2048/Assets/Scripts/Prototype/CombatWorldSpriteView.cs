@@ -39,6 +39,7 @@ namespace Project2048.Prototype
         public const float FlameBurstDurationSeconds = 0.82f;
         public const float DarkShackleChainDurationSeconds = 0.84f;
 
+        private const float DefinitionCueFallbackLifetimeSeconds = 0.8f;
         private const int ShieldImpactParticleCount = 22;
         private const float ReusableSkillParticleMaxStartSize = 0.24f;
         private const int ShieldCircleRingSegmentCount = 72;
@@ -334,7 +335,8 @@ namespace Project2048.Prototype
 
             ResolveMissingReferences();
             ResolveWorldVfxProfile();
-            PlaySkillPresentationEffect(skill, delayEnemyDeathFade: true);
+            var lifetimeSeconds = PlaySkillPresentationEffect(skill, delayEnemyDeathFade: true);
+            combatManager?.BeginSkillPresentationLock(lifetimeSeconds);
         }
 
         public void PreviewSkillEffect(SkillSO skill)
@@ -349,7 +351,7 @@ namespace Project2048.Prototype
             PlaySkillPresentationEffect(skill, delayEnemyDeathFade: false, previewChargeRelease: true);
         }
 
-        private void PlaySkillPresentationEffect(SkillSO skill, bool delayEnemyDeathFade, bool previewChargeRelease = false)
+        private float PlaySkillPresentationEffect(SkillSO skill, bool delayEnemyDeathFade, bool previewChargeRelease = false)
         {
             var effect = skill.activationEffect;
             var isAttack = skill.skillType == SkillType.Attack;
@@ -377,7 +379,9 @@ namespace Project2048.Prototype
                     PreviewGatherLightReleaseIfNeeded(skill, targetAnchor);
                 }
 
-                return;
+                return Mathf.Max(
+                    ResolveSkillEffectVisualDurationSeconds(skill, effect),
+                    ResolveDefinitionCueDurationSeconds(skill, SkillVfxTrigger.ChargeStart));
             }
 
             if (TryPlayDefinitionCues(skill, SkillVfxTrigger.Activate))
@@ -388,12 +392,14 @@ namespace Project2048.Prototype
                     DelayEnemyDeathFadeForSkillEffect(skill, effect);
                 }
 
-                return;
+                return Mathf.Max(
+                    ResolveSkillEffectVisualDurationSeconds(skill, effect),
+                    ResolveDefinitionCueDurationSeconds(skill, SkillVfxTrigger.Activate));
             }
 
             if ((effect == null || !effect.HasAnyAsset) && family == SkillVfxFamily.None)
             {
-                return;
+                return 0f;
             }
 
             if (isAttack && TryPlayCloseRangePlayerAttackSkillEffect(
@@ -408,7 +414,7 @@ namespace Project2048.Prototype
                     DelayEnemyDeathFade(closeRangeLifetimeSeconds);
                 }
 
-                return;
+                return closeRangeLifetimeSeconds;
             }
 
             if (isAttack && TryPlayDirectedSkillEffect(skill, effect, sourceAnchor, targetAnchor, out var directedLifetimeSeconds))
@@ -418,7 +424,7 @@ namespace Project2048.Prototype
                     DelayEnemyDeathFade(directedLifetimeSeconds);
                 }
 
-                return;
+                return directedLifetimeSeconds;
             }
 
             if (isAttack && TryPlayProjectileSkillEffect(skill, effect, sourceAnchor, targetAnchor, animator, out var projectileLifetimeSeconds))
@@ -428,7 +434,7 @@ namespace Project2048.Prototype
                     DelayEnemyDeathFade(projectileLifetimeSeconds);
                 }
 
-                return;
+                return projectileLifetimeSeconds;
             }
 
             if (isAttack)
@@ -461,6 +467,8 @@ namespace Project2048.Prototype
             {
                 DelayEnemyDeathFadeForSkillEffect(skill, effect);
             }
+
+            return ResolveSkillEffectVisualDurationSeconds(skill, effect);
         }
 
         private SkillVfxContext BuildSkillVfxContext(SkillVfxTrigger trigger)
@@ -508,6 +516,69 @@ namespace Project2048.Prototype
             SkillVfxPlayer.PlayCue(cue, ctx, transform, Application.isPlaying);
         }
 
+        private static float ResolveDefinitionCueDurationSeconds(SkillSO skill, SkillVfxTrigger trigger)
+        {
+            if (skill == null || skill.vfxDefinition == null || !skill.vfxDefinition.HasAnyCue)
+            {
+                return 0f;
+            }
+
+            var duration = 0f;
+            foreach (var cue in skill.vfxDefinition.CuesFor(trigger))
+            {
+                if (cue == null || !cue.HasPrefab)
+                {
+                    continue;
+                }
+
+                var lifetime = cue.lifetimeOverride > 0f
+                    ? cue.lifetimeOverride
+                    : ResolvePrefabVisualDurationSeconds(cue.prefab, DefinitionCueFallbackLifetimeSeconds);
+                duration = Mathf.Max(duration, Mathf.Max(0f, cue.delaySeconds) + lifetime);
+            }
+
+            return duration;
+        }
+
+        private static float ResolvePrefabVisualDurationSeconds(GameObject prefab, float fallbackLifetimeSeconds)
+        {
+            if (prefab == null)
+            {
+                return fallbackLifetimeSeconds;
+            }
+
+            var duration = 0f;
+            foreach (var particles in prefab.GetComponentsInChildren<ParticleSystem>(true))
+            {
+                if (particles == null)
+                {
+                    continue;
+                }
+
+                var main = particles.main;
+                duration = Mathf.Max(duration, main.duration + main.startLifetime.constantMax);
+            }
+
+            foreach (var animator in prefab.GetComponentsInChildren<Animator>(true))
+            {
+                var controller = animator != null ? animator.runtimeAnimatorController : null;
+                if (controller == null || controller.animationClips == null)
+                {
+                    continue;
+                }
+
+                foreach (var clip in controller.animationClips)
+                {
+                    if (clip != null)
+                    {
+                        duration = Mathf.Max(duration, clip.length);
+                    }
+                }
+            }
+
+            return duration > 0f ? duration : fallbackLifetimeSeconds;
+        }
+
         private bool TryPlayDirectedSkillEffect(
             SkillSO skill,
             CombatEffectBinding effect,
@@ -544,7 +615,6 @@ namespace Project2048.Prototype
                     return true;
                 case SkillVfxFamily.TentacleWhip:
                     PlayCombatantActionAudioEffect(effect);
-                    PlaySpecializedSkillArtLayer(skill, targetAnchor, sourceAnchor);
                     PlayTentacleStrikeSkillEffect(skill, sourceAnchor, targetAnchor);
                     PlayCombatantActionParticleEffect(effect, targetAnchor);
                     lifetimeSeconds = TentacleStrikeDurationSeconds;
@@ -3975,8 +4045,73 @@ namespace Project2048.Prototype
             }
         }
 
+        private bool TryPlayAuthoredTentacleStrikeSkillEffect(SkillSO skill, Transform sourceAnchor, Transform targetAnchor)
+        {
+            var tuning = ResolveSkillVfxTuning(skill);
+            var package = ResolveSkillVfxPackage(skill);
+            var designTimeBinding = ResolveSkillVfxDesignTimeBinding(skill);
+            var prefab = ResolveDesignTimePrefab(tuning, package, designTimeBinding, null);
+            if (prefab == null || prefab.GetComponentInChildren<TentacleBoneStrikeEffect>(true) == null)
+            {
+                return false;
+            }
+
+            var source = ResolveLanternSkillSourcePosition(sourceAnchor != null ? sourceAnchor : transform, targetAnchor);
+            var target = targetAnchor != null ? ResolveSkillImpactWorldPosition(targetAnchor) : source + Vector3.right;
+            if ((target - source).sqrMagnitude <= 0.0001f)
+            {
+                target = source + Vector3.right;
+            }
+
+            var root = Instantiate(prefab, transform);
+            root.name = "TentacleStrikeWhip";
+            root.transform.localPosition = Vector3.zero;
+            root.transform.localRotation = Quaternion.identity;
+            root.transform.localScale = Vector3.one;
+
+            var effect = root.GetComponentInChildren<TentacleBoneStrikeEffect>(true);
+            var renderer = root.GetComponentInChildren<SpriteRenderer>(true);
+            if (effect == null || renderer == null)
+            {
+                DestroySpawnedObject(root);
+                return false;
+            }
+
+            var primary = ResolveTentacleColor(ResolveReusableSkillParticleColor(skill), new Color(0.18f, 0.035f, 0.24f, 0.96f), 0.48f);
+            var secondary = ResolveTentacleColor(ResolveReusableSkillSecondaryParticleColor(skill), new Color(0.72f, 0.24f, 0.92f, 0.86f), 0.36f);
+            var scale = Mathf.Clamp(Mathf.Max(0.01f, skill != null ? skill.vfxScale : 1f), 0.72f, 1.8f);
+            ApplyAnchorSorting(renderer, targetAnchor, 12);
+            ApplyAuthoredChildRendererSorting(root, renderer, targetAnchor, 13);
+            effect.Play(source, target, TentacleStrikeDurationSeconds, scale, primary, secondary, renderer.sortingOrder);
+
+            SpawnParticleBurst(
+                null,
+                targetAnchor,
+                "TentacleStrikeImpactParticles",
+                secondary,
+                null,
+                0.38f,
+                16,
+                0.42f,
+                Mathf.Clamp(0.11f * scale, 0.08f, 0.18f),
+                swirl: true,
+                new Vector3(-0.08f, 0.08f, 0f));
+
+            if (Application.isPlaying)
+            {
+                Destroy(root, TentacleStrikeDurationSeconds + 0.2f);
+            }
+
+            return true;
+        }
+
         private void PlayTentacleStrikeSkillEffect(SkillSO skill, Transform sourceAnchor, Transform targetAnchor)
         {
+            if (TryPlayAuthoredTentacleStrikeSkillEffect(skill, sourceAnchor, targetAnchor))
+            {
+                return;
+            }
+
             var source = ResolveLanternSkillSourcePosition(sourceAnchor != null ? sourceAnchor : transform, targetAnchor);
             var target = targetAnchor != null ? ResolveSkillImpactWorldPosition(targetAnchor) : source + Vector3.right;
             if ((target - source).sqrMagnitude <= 0.0001f)

@@ -938,12 +938,13 @@ namespace Project2048.Prototype
                 var isSlot = i < PlayerCombatController.MaxEquippedSkillSlots;
                 var hasSkill = isSlot && i < visibleSkills.Count && visibleSkills[i] != null;
                 var canAfford = hasSkill && snapshot != null && visibleSkills[i].Cost <= snapshot.CurrentCost;
+                var canUseSkill = canAfford && snapshot?.IsSkillPresentationLocked != true;
                 var button = skillTierButtons[i];
                 if (button != null)
                 {
                     button.gameObject.SetActive(isSlot);
-                    button.interactable = hasSkill && canAfford;
-                    ApplySkillSlotTheme(button, hasSkill ? visibleSkills[i] : null, canAfford);
+                    button.interactable = hasSkill && canUseSkill;
+                    ApplySkillSlotTheme(button, hasSkill ? visibleSkills[i] : null, canUseSkill);
                     BindTooltip(button, hasSkill ? PrototypeCombatText.FormatSkillTooltip(visibleSkills[i]) : string.Empty);
                     var slotIndex = i;
                     BindButton(button, () => OnSkillSlotClicked(slotIndex));

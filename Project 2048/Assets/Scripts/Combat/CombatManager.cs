@@ -40,6 +40,8 @@ namespace Project2048.Combat
         private string lastActionDescription = "대기";
         private CombatVfxCue lastVfxCue;
         private int vfxCueSequence;
+        private Coroutine skillPresentationLockRoutine;
+        private int skillPresentationLockSequence;
 
         public CombatPhase CurrentPhase { get; private set; } = CombatPhase.None;
         public TurnController TurnController { get; } = new();
@@ -47,6 +49,7 @@ namespace Project2048.Combat
         public ActionCostWallet CostWallet { get; } = new();
         public IReadOnlyList<EnemyController> Enemies => enemies;
         public PlayerCombatController Player => player;
+        public bool IsSkillPresentationLocked { get; private set; }
 
         public event Action<CombatPhase> OnPhaseChanged;
         public event Action<CombatResult> OnCombatVictory;
@@ -108,6 +111,7 @@ namespace Project2048.Combat
             // 시작 중에는 phase, HP, intent가 연달아 바뀐다. 중간 snapshot을 UI에 여러 번 보내지 않고
             // 모든 초기화가 끝난 뒤 완성된 snapshot 하나만 발행한다.
             suppressStateNotifications = true;
+            ResetSkillPresentationLock(stopRoutine: true);
             lastActionDescription = "2048 진행";
             lastVfxCue = null;
             vfxCueSequence = 0;
@@ -141,6 +145,7 @@ namespace Project2048.Combat
                 Phase = CurrentPhase,
                 CurrentCost = CostWallet.CurrentCost,
                 RemainingBoardMoves = BoardManager.MoveCount,
+                IsSkillPresentationLocked = IsSkillPresentationLocked,
                 LastActionDescription = lastActionDescription,
                 LastVfxCue = lastVfxCue?.Clone(),
                 Board = BoardManager.GetBoardSnapshot(),
@@ -162,6 +167,7 @@ namespace Project2048.Combat
             var cost = player != null
                 ? player.ApplyAndConsumeNextTurnCostGainModifiers(rawCost)
                 : rawCost;
+            cost = ApplyFirstTurnMinimumSkillCost(cost);
             var carriedCost = player != null ? player.ConsumeCarriedCost() : 0;
             cost += carriedCost;
             lastActionDescription = $"코스트 획득: {cost}";
@@ -173,7 +179,7 @@ namespace Project2048.Combat
         public bool RequestUseSkill(SkillSO skill, EnemyController target = null)
         {
             EnsureRuntimeState();
-            if (CurrentPhase != CombatPhase.ActionPhase || skill == null)
+            if (CurrentPhase != CombatPhase.ActionPhase || IsSkillPresentationLocked || skill == null)
             {
                 return false;
             }
@@ -247,6 +253,37 @@ namespace Project2048.Combat
             }
 
             return RequestUseSkill(skill, target);
+        }
+
+        public void BeginSkillPresentationLock(float durationSeconds)
+        {
+            EnsureRuntimeState();
+            if (durationSeconds <= 0f)
+            {
+                return;
+            }
+
+            var sequence = ++skillPresentationLockSequence;
+            IsSkillPresentationLocked = true;
+            NotifyStateChanged();
+
+            if (skillPresentationLockRoutine != null)
+            {
+                StopCoroutine(skillPresentationLockRoutine);
+                skillPresentationLockRoutine = null;
+            }
+
+            if (isActiveAndEnabled)
+            {
+                skillPresentationLockRoutine = StartCoroutine(ReleaseSkillPresentationLockAfterDelay(sequence, durationSeconds));
+            }
+        }
+
+        public void ClearSkillPresentationLock()
+        {
+            EnsureRuntimeState();
+            ResetSkillPresentationLock(stopRoutine: true);
+            NotifyStateChanged();
         }
 
         private EnemyController ResolveSkillTarget(SkillSO skill, int targetIndex)
@@ -383,6 +420,74 @@ namespace Project2048.Combat
             return currentSetup.playerData != null
                 ? currentSetup.playerData.ResolveInitialBoardMoveCount()
                 : 0;
+        }
+
+        private int ApplyFirstTurnMinimumSkillCost(int convertedCost)
+        {
+            if (convertedCost <= 0 || TurnController.TurnCount != 1)
+            {
+                return convertedCost;
+            }
+
+            var minimumCost = ResolveCheapestUsableSkillCost();
+            return minimumCost > 0 ? Mathf.Max(convertedCost, minimumCost) : convertedCost;
+        }
+
+        private int ResolveCheapestUsableSkillCost()
+        {
+            if (player == null || player.Skills == null)
+            {
+                return 0;
+            }
+
+            var minimumCost = int.MaxValue;
+            var hasLivingEnemy = enemies.Any(enemy => enemy != null && !enemy.IsDead);
+            foreach (var skill in player.Skills)
+            {
+                if (skill == null || skill.cost <= 0)
+                {
+                    continue;
+                }
+
+                if (skill.RequiresEnemyTarget && !hasLivingEnemy)
+                {
+                    continue;
+                }
+
+                if (player.IsSkillSealed(skill) || !skillExecutor.CanExecute(skill, player))
+                {
+                    continue;
+                }
+
+                minimumCost = Mathf.Min(minimumCost, skill.cost);
+            }
+
+            return minimumCost == int.MaxValue ? 0 : minimumCost;
+        }
+
+        private IEnumerator ReleaseSkillPresentationLockAfterDelay(int sequence, float durationSeconds)
+        {
+            yield return new WaitForSeconds(Mathf.Max(0f, durationSeconds));
+            if (sequence != skillPresentationLockSequence)
+            {
+                yield break;
+            }
+
+            skillPresentationLockRoutine = null;
+            IsSkillPresentationLocked = false;
+            NotifyStateChanged();
+        }
+
+        private void ResetSkillPresentationLock(bool stopRoutine)
+        {
+            if (stopRoutine && skillPresentationLockRoutine != null)
+            {
+                StopCoroutine(skillPresentationLockRoutine);
+                skillPresentationLockRoutine = null;
+            }
+
+            skillPresentationLockSequence++;
+            IsSkillPresentationLocked = false;
         }
 
         private void StartEnemyTurn()

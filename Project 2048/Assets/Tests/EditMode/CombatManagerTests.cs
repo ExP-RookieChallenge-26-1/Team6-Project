@@ -804,6 +804,126 @@ namespace Project2048.Tests
         }
 
         [Test]
+        public void ResolveBoardPhase_FirstPlayerTurn_FloorsPositiveCostToCheapestEquippedSkill()
+        {
+            var manager = CreateGameObject<CombatManager>("CombatManager");
+            var player = CreateGameObject<PlayerCombatController>("Player");
+            var enemy = CreateGameObject<EnemyController>("Enemy");
+            var strike = CreateSkill("strike", SkillType.Attack, cost: 10, power: 20);
+            var playerData = CreatePlayerData(maxHp: 20, attackPower: 2);
+            var enemyData = CreateEnemyData(maxHp: 50, attackValue: 0);
+            playerData.startingSkills = new List<SkillSO> { strike };
+
+            manager.SetCombatants(player, new[] { enemy });
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new List<EnemySO> { enemyData },
+                boardMoveCount = 1,
+            });
+            manager.BoardManager.SetBoardState(
+                new[,]
+                {
+                    { 2, 0, 0, 0 },
+                    { 0, 0, 0, 0 },
+                    { 0, 0, 0, 0 },
+                    { 0, 0, 0, 0 },
+                },
+                0);
+
+            var resolvedCost = manager.ResolveBoardPhase();
+
+            Assert.That(resolvedCost, Is.EqualTo(10));
+            Assert.That(manager.RequestUseSkillById("strike", 0), Is.True);
+        }
+
+        [Test]
+        public void ResolveBoardPhase_AfterFirstPlayerTurn_DoesNotFloorLowCost()
+        {
+            var manager = CreateGameObject<CombatManager>("CombatManager");
+            var player = CreateGameObject<PlayerCombatController>("Player");
+            var enemy = CreateGameObject<EnemyController>("Enemy");
+            var strike = CreateSkill("strike", SkillType.Attack, cost: 10, power: 20);
+            var playerData = CreatePlayerData(maxHp: 20, attackPower: 2);
+            var enemyData = CreateEnemyData(maxHp: 50, attackValue: 0);
+            playerData.startingSkills = new List<SkillSO> { strike };
+
+            manager.SetCombatants(player, new[] { enemy });
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new List<EnemySO> { enemyData },
+                boardMoveCount = 1,
+            });
+            manager.BoardManager.SetBoardState(
+                new[,]
+                {
+                    { 2, 0, 0, 0 },
+                    { 0, 0, 0, 0 },
+                    { 0, 0, 0, 0 },
+                    { 0, 0, 0, 0 },
+                },
+                0);
+            manager.ResolveBoardPhase();
+            manager.RequestEndPlayerTurn();
+            Assert.That(manager.TurnController.TurnCount, Is.EqualTo(2));
+            manager.BoardManager.SetBoardState(
+                new[,]
+                {
+                    { 2, 0, 0, 0 },
+                    { 0, 0, 0, 0 },
+                    { 0, 0, 0, 0 },
+                    { 0, 0, 0, 0 },
+                },
+                0);
+
+            var resolvedCost = manager.ResolveBoardPhase();
+
+            Assert.That(resolvedCost, Is.LessThan(strike.cost));
+            Assert.That(manager.RequestUseSkillById("strike", 0), Is.False);
+        }
+
+        [Test]
+        public void RequestUseSkill_ReturnsFalseWhilePresentationLocked()
+        {
+            var manager = CreateGameObject<CombatManager>("CombatManager");
+            var player = CreateGameObject<PlayerCombatController>("Player");
+            var enemy = CreateGameObject<EnemyController>("Enemy");
+            var strike = CreateSkill("strike", SkillType.Attack, cost: 5, power: 20);
+            var playerData = CreatePlayerData(maxHp: 20, attackPower: 2);
+            var enemyData = CreateEnemyData(maxHp: 50, attackValue: 0);
+            playerData.startingSkills = new List<SkillSO> { strike };
+
+            manager.SetCombatants(player, new[] { enemy });
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new List<EnemySO> { enemyData },
+                boardMoveCount = 1,
+            });
+            manager.BoardManager.SetBoardState(
+                new[,]
+                {
+                    { 64, 0, 0, 0 },
+                    { 0, 0, 0, 0 },
+                    { 0, 0, 0, 0 },
+                    { 0, 0, 0, 0 },
+                },
+                0);
+            manager.ResolveBoardPhase();
+
+            manager.BeginSkillPresentationLock(1f);
+
+            Assert.That(manager.GetSnapshot().IsSkillPresentationLocked, Is.True);
+            Assert.That(manager.RequestUseSkillById("strike", 0), Is.False);
+            Assert.That(enemy.CurrentHp, Is.EqualTo(enemy.MaxHp));
+
+            manager.ClearSkillPresentationLock();
+
+            Assert.That(manager.RequestUseSkillById("strike", 0), Is.True);
+        }
+
+        [Test]
         public void SplitAndEcho_ModifyFutureAttackDamage()
         {
             var player = CreateGameObject<PlayerCombatController>("Player");

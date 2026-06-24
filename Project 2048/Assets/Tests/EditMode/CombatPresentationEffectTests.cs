@@ -2227,6 +2227,36 @@ namespace Project2048.Tests
         }
 
         [Test]
+        public void CombatWorldSpriteView_VfxDefinitionActivateCue_SpawnsAuthoredPrefab()
+        {
+            var viewObject = CreateOwnedGameObject("WorldSpriteView");
+            var view = viewObject.AddComponent<CombatWorldSpriteView>();
+            var playerRenderer = CreateOwnedGameObject("PlayerSprite").AddComponent<SpriteRenderer>();
+            var enemyRenderer = CreateOwnedGameObject("EnemySprite").AddComponent<SpriteRenderer>();
+            var cuePrefab = CreateOwnedGameObject("AuthoredVfxPrefab");
+            var skill = CreateSkill("authored", SkillType.Attack, cost: 0, power: 10);
+            skill.vfxDefinition = new SkillVfxDefinition
+            {
+                cues = new[]
+                {
+                    new SkillVfxCue
+                    {
+                        trigger = SkillVfxTrigger.Activate,
+                        prefab = cuePrefab,
+                        placement = new SkillVfxPlacement { target = SkillVfxTarget.Enemy, vertical = SkillVfxVertical.Body },
+                    },
+                },
+            };
+            SetPrivateField(view, "playerRenderer", playerRenderer);
+            SetPrivateField(view, "enemyRenderer", enemyRenderer);
+
+            // 저작된 vfxDefinition 큐가 뷰를 통해 실제로 스폰됨(새 데이터 경로 end-to-end).
+            view.PreviewSkillEffect(skill);
+
+            Assert.That(viewObject.transform.Find("AuthoredVfxPrefab"), Is.Not.Null);
+        }
+
+        [Test]
         public void CombatWorldSpriteView_TentacleStrikePreview_SpawnsFlexibleWhipShape()
         {
             var viewObject = CreateOwnedGameObject("WorldSpriteView");

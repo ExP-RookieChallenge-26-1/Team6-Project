@@ -1,5 +1,1349 @@
 [
   {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "ParticleSystem",
+    "relation_type": "component-access",
+    "strength": 3
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "ParticleSystemRenderer",
+    "relation_type": "component-access",
+    "strength": 3
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "CombatEffectBinding",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "CombatParticleEffectBinding",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "Dictionary",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "GameObject",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "SkillVfxTuning",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "AddComponent",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "Art",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "AssetDatabase",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "AssetPathToGUID",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "Assets",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "Billboard",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "BleedingCutBloodFountain",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "BleedingCutBloodMist",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "BloodFountainSlash",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "BuffAura",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "Burst",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "ChargedLightBeamImpactParticles",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "ChargedLightBeamMuzzleParticles",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "Collections",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "Color",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "CombatEffectBinding",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "CombatParticleEffectBinding",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "CombatWorldVfxProfileSO",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "CounterReady",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "CreateFamilyPrefabs",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "CreateFolder",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "CreateNamedParticlePrefabs",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "CreateParticlePrefab",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "DarkChainBurst",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "DarknessDebuffCastParticles",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "DarknessDebuffParticles",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "DarkShackleMuzzleParticles",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "Data",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "DebuffWave",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "Design",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "DestroyImmediate",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "Editor",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "EditorUtility",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "Effects",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "EnsureFolder",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "EnsureFolders",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "Enum",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "Failed",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "FearDebuffCastParticles",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "FearDebuffParticles",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "FindAssets",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "Fireball",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "FireballFlare",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "FireballSphere",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "FireballTexture",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "FireballTrail",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "FireballTrail_AB",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "FireballTrail_Add",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "FlameBurst",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "FlameBurstEmbers",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "FlameBurstFlameParticles",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "FlameBurstSmoke",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "Generic",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "GetComponent",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "GetValues",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "Graphs",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "GUIDToAssetPath",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "HeavyStrikeSpikedExplosionParticles",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "HeavyStrikeSpikeShards",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "IReadOnlyDictionary",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "IsNullOrEmpty",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "IsValidFolder",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "Key",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "LanternSkillMuzzleParticles",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "LastIndexOf",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "LightBeam",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "LightEchoSupportFireParticles",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "Linq",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "LoadAssetAtPath",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "LoadMaterial",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "Local",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "Log",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "LogError",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "LogWarning",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "Material",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "Materials",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "Max",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "MenuItem",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "Missing",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "Models",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "MoveAsset",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "MoveAssetIfNeeded",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "MoveLiveFireballAssetsIntoSkillVfx",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "None",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "Object",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "Panshader_Unlit",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "Particles",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "ParticleSystem",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "ParticleSystemRenderer",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "ParticleSystemRenderMode",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "ParticleSystemShapeType",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "ParticleSystemSimulationSpace",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "PatchProfile",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "PatchSkillAssets",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "Prefab",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "Prefabs",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "PrefabUtility",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "Presentation",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "ProfilePath",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "Project2048",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "Prototype",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "PrototypeCombatWorldVfxProfile",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "Rebuild",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "Rebuilt",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "Refresh",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "ResolveFamilyRadiusMultiplier",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "ResolveFamilySizeMultiplier",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "ResolveVfxFamily",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "Resources",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "Root",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "SaveAsPrefabAsset",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "SaveAssets",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "Select",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "SetBursts",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "SetDirty",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "Shader",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "Shaders",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "ShieldBashLaunchParticles",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "ShieldBurstShardParticles",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "ShieldDome",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "ShieldImpactParticles",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "Skill",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "Skills",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "SkillSO",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "SkillVFX",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "SkillVfx_",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "SkillVfx_BleedingCutBloodFountain",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "SkillVfx_BleedingCutBloodMist",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "SkillVfx_BloodFountainSlash",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "SkillVfx_BuffAura",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "SkillVfx_ChargedLightBeamImpactParticles",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "SkillVfx_ChargedLightBeamMuzzleParticles",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "SkillVfx_DarkChainBurst",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "SkillVfx_DarknessDebuffCastParticles",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "SkillVfx_DarkShackleMuzzleParticles",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "SkillVfx_FearDebuffCastParticles",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "SkillVfx_Fireball_Unlit",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "SkillVfx_FireballFlare",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "SkillVfx_FireballProjectile",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "SkillVfx_FireballSphere",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "SkillVfx_FireballTexture",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "SkillVfx_FireballTrail",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "SkillVfx_FireballTrail_AB",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "SkillVfx_FireballTrail_Add",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "SkillVfx_FlameBurst",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "SkillVfx_FlameBurstEmbers",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "SkillVfx_FlameBurstFlameParticles",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "SkillVfx_FlameBurstSmoke",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "SkillVfx_GenericParticleBurst",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "SkillVfx_HeavyStrikeSpikedExplosionParticles",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "SkillVfx_HeavyStrikeSpikeShards",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "SkillVfx_LanternSkillMuzzleParticles",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "SkillVfx_LightBeam",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "SkillVfx_LightEchoSupportFireParticles",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "SkillVfx_LightProjectile",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "SkillVfx_ShieldBashLaunchParticles",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "SkillVfx_ShieldBurstShardParticles",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "SkillVfx_ShieldDome",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "SkillVfx_ShieldImpactParticles",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "SkillVfx_SpikedBurst",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "SkillVfx_SupportFire",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "SkillVfx_SwirlParticleBurst",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "SkillVfx_TentacleStrikeImpactParticles",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "SkillVfx_TentacleWhip",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "SkillVfxFamily",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "SkillVfxParticleBurstPrefab",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "SkillVfxParticlePrefabBinding",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "SkillVfxTuning",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "Sphere",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "SpikedBurst",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "string",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "System",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "TentacleStrikeImpactParticles",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "Test",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "Texture",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "Textures",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "ToArray",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "ToDictionary",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "TryGetValue",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "UnityEditor",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "UnityEngine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "Value",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "Vector3",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "VFX",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "Where",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
     "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioEmitter.cs",
     "from_class": "ButtonClickAudioEmitter",
     "to_type": "Button",
@@ -2655,7 +3999,21 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Board2048/CostConverter.cs",
     "from_class": "CostConverter",
+    "to_type": "Board",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Board2048/CostConverter.cs",
+    "from_class": "CostConverter",
     "to_type": "Board2048",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Board2048/CostConverter.cs",
+    "from_class": "CostConverter",
+    "to_type": "CalculateCostWeight",
     "relation_type": "uses",
     "strength": 1
   },
@@ -2669,7 +4027,21 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Board2048/CostConverter.cs",
     "from_class": "CostConverter",
+    "to_type": "CalculateTileCost",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Board2048/CostConverter.cs",
+    "from_class": "CostConverter",
     "to_type": "ConvertBoardToCost",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Board2048/CostConverter.cs",
+    "from_class": "CostConverter",
+    "to_type": "Converts",
     "relation_type": "uses",
     "strength": 1
   },
@@ -2726,6 +4098,20 @@
     "from_file": "Project 2048/Assets/Scripts/Board2048/CostConverter.cs",
     "from_class": "CostConverter",
     "to_type": "Max",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Board2048/CostConverter.cs",
+    "from_class": "CostConverter",
+    "to_type": "MaxSupportedTileCost",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Board2048/CostConverter.cs",
+    "from_class": "CostConverter",
+    "to_type": "Min",
     "relation_type": "uses",
     "strength": 1
   },
@@ -7303,6 +8689,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyAiBrain.cs",
     "from_class": "EnemyAiBrain",
+    "to_type": "CriticalStageUp",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyAiBrain.cs",
+    "from_class": "EnemyAiBrain",
     "to_type": "CurrentHp",
     "relation_type": "uses",
     "strength": 1
@@ -7409,6 +8802,13 @@
     "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyAiBrain.cs",
     "from_class": "EnemyAiBrain",
     "to_type": "EffectiveDefensePower",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyAiBrain.cs",
+    "from_class": "EnemyAiBrain",
+    "to_type": "Endure",
     "relation_type": "uses",
     "strength": 1
   },
@@ -8192,7 +9592,21 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyController.cs",
     "from_class": "EnemyController",
+    "to_type": "ApplyCriticalStageModifier",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyController.cs",
+    "from_class": "EnemyController",
     "to_type": "ApplyDefenseModifier",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyController.cs",
+    "from_class": "EnemyController",
+    "to_type": "ApplyEndure",
     "relation_type": "uses",
     "strength": 1
   },
@@ -8395,7 +9809,21 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyController.cs",
     "from_class": "EnemyController",
+    "to_type": "CriticalChancePerStage",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyController.cs",
+    "from_class": "EnemyController",
     "to_type": "CriticalDamageMultiplier",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyController.cs",
+    "from_class": "EnemyController",
+    "to_type": "CriticalStage",
     "relation_type": "uses",
     "strength": 1
   },
@@ -8459,6 +9887,13 @@
     "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyController.cs",
     "from_class": "EnemyController",
     "to_type": "Empty",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyController.cs",
+    "from_class": "EnemyController",
+    "to_type": "EndureTurns",
     "relation_type": "uses",
     "strength": 1
   },
@@ -8627,6 +10062,13 @@
     "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyController.cs",
     "from_class": "EnemyController",
     "to_type": "Max",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyController.cs",
+    "from_class": "EnemyController",
+    "to_type": "MaxCriticalStage",
     "relation_type": "uses",
     "strength": 1
   },
@@ -9109,6 +10551,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyIntentSystem.cs",
     "from_class": "EnemyIntentSystem",
+    "to_type": "ApplyCriticalStageModifier",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyIntentSystem.cs",
+    "from_class": "EnemyIntentSystem",
     "to_type": "ApplyDebuff",
     "relation_type": "uses",
     "strength": 1
@@ -9124,6 +10573,13 @@
     "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyIntentSystem.cs",
     "from_class": "EnemyIntentSystem",
     "to_type": "ApplyDefensePowerModifier",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyIntentSystem.cs",
+    "from_class": "EnemyIntentSystem",
+    "to_type": "ApplyEndure",
     "relation_type": "uses",
     "strength": 1
   },
@@ -9242,6 +10698,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyIntentSystem.cs",
     "from_class": "EnemyIntentSystem",
+    "to_type": "CanUsePatternIntent",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyIntentSystem.cs",
+    "from_class": "EnemyIntentSystem",
     "to_type": "CeilToInt",
     "relation_type": "uses",
     "strength": 1
@@ -9326,6 +10789,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyIntentSystem.cs",
     "from_class": "EnemyIntentSystem",
+    "to_type": "CriticalStageUp",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyIntentSystem.cs",
+    "from_class": "EnemyIntentSystem",
     "to_type": "CurrentHp",
     "relation_type": "uses",
     "strength": 1
@@ -9383,6 +10853,13 @@
     "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyIntentSystem.cs",
     "from_class": "EnemyIntentSystem",
     "to_type": "DefenseStageDown",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyIntentSystem.cs",
+    "from_class": "EnemyIntentSystem",
+    "to_type": "Endure",
     "relation_type": "uses",
     "strength": 1
   },
@@ -13708,6 +15185,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Presentation/CombatEffectBinding.cs",
     "from_class": "CombatEffectBinding",
+    "to_type": "Application",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/CombatEffectBinding.cs",
+    "from_class": "CombatEffectBinding",
     "to_type": "Approximately",
     "relation_type": "uses",
     "strength": 1
@@ -15571,6 +17055,97 @@
     "from_file": "Project 2048/Assets/Scripts/Presentation/LayeredExplosionEffect.cs",
     "from_class": "LayeredExplosionEffect",
     "to_type": "World",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/SkillVfxParticleBurstPrefab.cs",
+    "from_class": "SkillVfxParticleBurstPrefab",
+    "to_type": "MonoBehaviour",
+    "relation_type": "inherits",
+    "strength": 4
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/SkillVfxParticleBurstPrefab.cs",
+    "from_class": "SkillVfxParticleBurstPrefab",
+    "to_type": "bool",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/SkillVfxParticleBurstPrefab.cs",
+    "from_class": "SkillVfxParticleBurstPrefab",
+    "to_type": "EffectiveBurstMultiplier",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/SkillVfxParticleBurstPrefab.cs",
+    "from_class": "SkillVfxParticleBurstPrefab",
+    "to_type": "EffectiveLifetimeMultiplier",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/SkillVfxParticleBurstPrefab.cs",
+    "from_class": "SkillVfxParticleBurstPrefab",
+    "to_type": "EffectiveRadiusMultiplier",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/SkillVfxParticleBurstPrefab.cs",
+    "from_class": "SkillVfxParticleBurstPrefab",
+    "to_type": "EffectiveSizeMultiplier",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/SkillVfxParticleBurstPrefab.cs",
+    "from_class": "SkillVfxParticleBurstPrefab",
+    "to_type": "EffectiveSpeedMultiplier",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/SkillVfxParticleBurstPrefab.cs",
+    "from_class": "SkillVfxParticleBurstPrefab",
+    "to_type": "int",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/SkillVfxParticleBurstPrefab.cs",
+    "from_class": "SkillVfxParticleBurstPrefab",
+    "to_type": "Max",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/SkillVfxParticleBurstPrefab.cs",
+    "from_class": "SkillVfxParticleBurstPrefab",
+    "to_type": "Min",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/SkillVfxParticleBurstPrefab.cs",
+    "from_class": "SkillVfxParticleBurstPrefab",
+    "to_type": "Presentation",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/SkillVfxParticleBurstPrefab.cs",
+    "from_class": "SkillVfxParticleBurstPrefab",
+    "to_type": "Project2048",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/SkillVfxParticleBurstPrefab.cs",
+    "from_class": "SkillVfxParticleBurstPrefab",
+    "to_type": "UnityEngine",
     "relation_type": "uses",
     "strength": 1
   },
@@ -17985,21 +19560,7 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.Theme.cs",
     "from_class": "CombatUiView",
-    "to_type": "Board2048",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.Theme.cs",
-    "from_class": "CombatUiView",
     "to_type": "Color",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.Theme.cs",
-    "from_class": "CombatUiView",
-    "to_type": "CostConverter",
     "relation_type": "uses",
     "strength": 1
   },
@@ -18014,13 +19575,6 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.Theme.cs",
     "from_class": "CombatUiView",
     "to_type": "float",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.Theme.cs",
-    "from_class": "CombatUiView",
-    "to_type": "FragmentationPenaltyDivisor",
     "relation_type": "uses",
     "strength": 1
   },
@@ -18126,13 +19680,6 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.Theme.cs",
     "from_class": "CombatUiView",
     "to_type": "IntentBubbleTextPadding",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.Theme.cs",
-    "from_class": "CombatUiView",
-    "to_type": "LargestTileBonusMultiplier",
     "relation_type": "uses",
     "strength": 1
   },
@@ -18685,6 +20232,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
+    "to_type": "Vector4",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
     "to_type": "WaitForSeconds",
     "relation_type": "creates",
     "strength": 2
@@ -18763,6 +20317,13 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
     "to_type": "AudioSource",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "BaseColor",
     "relation_type": "uses",
     "strength": 1
   },
@@ -18867,7 +20428,28 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
+    "to_type": "ClearPlayerAttackAnimationSpeed",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "ClearPlayerCloseRangeAttackLunge",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
     "to_type": "ClearWorldShake",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "CloseRangeAttackAnimationSpeedMultiplier",
     "relation_type": "uses",
     "strength": 1
   },
@@ -18902,13 +20484,6 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
-    "to_type": "CombatEffectBinding",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
-    "from_class": "CombatWorldSpriteView",
     "to_type": "CombatManager",
     "relation_type": "uses",
     "strength": 1
@@ -18924,6 +20499,13 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
     "to_type": "CombatWorldVfxProfileSO",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "Coroutine",
     "relation_type": "uses",
     "strength": 1
   },
@@ -18993,6 +20575,20 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
+    "to_type": "DarkShackleImpactDustLifetimeSeconds",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "DarkShackleInitialExtension",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
     "to_type": "DarkShackleLatchSeconds",
     "relation_type": "uses",
     "strength": 1
@@ -19036,20 +20632,6 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
     "to_type": "DefaultWorldVfxProfileResourceName",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
-    "from_class": "CombatWorldSpriteView",
-    "to_type": "DelayEnemyDeathFade",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
-    "from_class": "CombatWorldSpriteView",
-    "to_type": "DelayEnemyDeathFadeForSkillEffect",
     "relation_type": "uses",
     "strength": 1
   },
@@ -19238,13 +20820,6 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
-    "to_type": "HasAuthoredVisual",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
-    "from_class": "CombatWorldSpriteView",
     "to_type": "HeavyStrikeSpikedBurstDurationSeconds",
     "relation_type": "uses",
     "strength": 1
@@ -19309,20 +20884,6 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
     "to_type": "IsDead",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
-    "from_class": "CombatWorldSpriteView",
-    "to_type": "IsShieldAttackSkill",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
-    "from_class": "CombatWorldSpriteView",
-    "to_type": "IsShieldBurstSkill",
     "relation_type": "uses",
     "strength": 1
   },
@@ -19462,6 +21023,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
+    "to_type": "ParticleColor",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
     "to_type": "ParticleSystem",
     "relation_type": "uses",
     "strength": 1
@@ -19477,27 +21045,6 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
     "to_type": "PlayChargeAttackStartEffect",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
-    "from_class": "CombatWorldSpriteView",
-    "to_type": "PlayCombatantActionAudioEffect",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
-    "from_class": "CombatWorldSpriteView",
-    "to_type": "PlayCombatantActionEffect",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
-    "from_class": "CombatWorldSpriteView",
-    "to_type": "PlayCombatantActionParticleEffect",
     "relation_type": "uses",
     "strength": 1
   },
@@ -19560,6 +21107,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
+    "to_type": "PlayerAttackAnimationSpeedResetSeconds",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
     "to_type": "PlayerAttackStateHash",
     "relation_type": "uses",
     "strength": 1
@@ -19595,13 +21149,6 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
-    "to_type": "PlayLanternSkillLaunchCue",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
-    "from_class": "CombatWorldSpriteView",
     "to_type": "PlayPlayerActionEffectIfNeeded",
     "relation_type": "uses",
     "strength": 1
@@ -19617,20 +21164,6 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
     "to_type": "PlayPlayerThornGuardHitPulseIfNeeded",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
-    "from_class": "CombatWorldSpriteView",
-    "to_type": "PlayReusableSkillParticleEffect",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
-    "from_class": "CombatWorldSpriteView",
-    "to_type": "PlayShieldAttackSkillEffect",
     "relation_type": "uses",
     "strength": 1
   },
@@ -19861,14 +21394,14 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
-    "to_type": "ShieldCircleRingSegmentCount",
+    "to_type": "ShieldCircleRadiusMultiplier",
     "relation_type": "uses",
     "strength": 1
   },
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
-    "to_type": "ShieldDome",
+    "to_type": "ShieldCircleRingSegmentCount",
     "relation_type": "uses",
     "strength": 1
   },
@@ -19883,13 +21416,6 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
     "to_type": "ShieldImpactParticleLifetimeSeconds",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
-    "from_class": "CombatWorldSpriteView",
-    "to_type": "ShouldPlayReusableFamilyEffectFromSkillSo",
     "relation_type": "uses",
     "strength": 1
   },
@@ -19980,6 +21506,20 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
+    "to_type": "SupportBuffHealingVisualEffectLocalOffset",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "SupportBuffVisualEffectColorPropertyNames",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
     "to_type": "System",
     "relation_type": "uses",
     "strength": 1
@@ -20036,21 +21576,28 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
+    "to_type": "ThornGuardShieldRadiusMultiplier",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "Tint",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "TintColor",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
     "to_type": "TMPro",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
-    "from_class": "CombatWorldSpriteView",
-    "to_type": "TryPlayDirectedSkillEffect",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
-    "from_class": "CombatWorldSpriteView",
-    "to_type": "TryPlayProjectileSkillEffect",
     "relation_type": "uses",
     "strength": 1
   },
@@ -20093,6 +21640,13 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
     "to_type": "Vector3",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "VFX",
     "relation_type": "uses",
     "strength": 1
   },
@@ -22036,6 +23590,811 @@
     "strength": 1
   },
   {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "AnimationCurve",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "Color",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "Keyframe",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "Vector3",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "WaitForSeconds",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "AnimationCurve",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "Application",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "AttackArtBaseRadius",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "AttackArtLifetimeSeconds",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "AttackEffectArt",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "AttackEffectArtSizeMultiplier",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "BloodFountainSlash",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "BloodFountainSlashDurationSeconds",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "bool",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "CachePlayerCloseRangeAttackRestTransform",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "Circle",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "Clamp",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "Clamp01",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "ClearPlayerCloseRangeAttackLunge",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "CloseRangeImpactParticles",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "CloseRangeImpactTowardSourceOffset",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "Collections",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "Color",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "CombatEffectBinding",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "ConfigureCloseRangeImpactParticles",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "Coroutine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "Euler",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "float",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "HeavyStrikeSpikedBurstDurationSeconds",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "HitEffectArtSizeMultiplier",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "HitImpactEffectArt",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "ImpactBurst",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "InverseTransformPoint",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "Keyframe",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "Lerp",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "Local",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "Max",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "Min",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "MinMaxCurve",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "MovePlayerCloseRangeAttackActorRoutine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "ParticleSystem",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "ParticleSystemShapeType",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "ParticleSystemSimulationSpace",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "PI",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "PlayBloodFountainSlashSkillEffect",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "PlayCloseRangePlayerAttackImpactEffects",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "PlayCloseRangeReusableAttackImpactArt",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "PlayCombatantActionAudioEffect",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "PlayCombatantActionParticleEffect",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "PlayerCloseRangeAttackAdvanceSeconds",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "PlayerCloseRangeAttackHoldSeconds",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "PlayerCloseRangeAttackMaxLungeDistance",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "PlayerCloseRangeAttackRecoverSeconds",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "PlayerCloseRangeAttackRoutine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "PlayerCloseRangeAttackScalePop",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "PlayerCloseRangeAttackStopDistance",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "PlayerCloseRangeAttackTotalSeconds",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "PlayerCloseRangeAttackWindupSeconds",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "PlayPlayerAttackAnimation",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "PlaySpecializedSkillArtLayer",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "PlaySpikedBurstSkillEffect",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "Pow",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "Presentation",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "Project2048",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "Prototype",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "Quaternion",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "ResolveAnchorVisualCenterWorldPosition",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "ResolveAttackEffectPrefab",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "ResolveAttackEffectSprite",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "ResolveAttackFacingSign",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "ResolveCloseRangeImpactLifetimeSeconds",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "ResolveCloseRangeImpactLocalOffset",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "ResolveDesignTimeArtColor",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "ResolveDesignTimeLifetime",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "ResolveDesignTimeLocalOffset",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "ResolveDesignTimePrefab",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "ResolveDesignTimeRadiusMultiplier",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "ResolveDesignTimeRotationDegrees",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "ResolveDesignTimeSortingOffset",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "ResolveDesignTimeSprite",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "ResolveHitEffectPrefab",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "ResolveHitEffectSprite",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "ResolvePlayerAttackAnimationSpeedMultiplier",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "ResolvePlayerCloseRangeAttackTargetLocalPosition",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "ResolveReusableSkillParticleColor",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "ResolveReusableSkillParticleDefaults",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "ResolveReusableSkillSecondaryParticleColor",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "ResolveSkillTintedColor",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "ResolveSkillVfxDesignTimeBinding",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "ResolveSkillVfxFamily",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "ResolveSkillVfxPackage",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "ResolveSkillVfxTuning",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "RestorePlayerCloseRangeAttackTransform",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "RoundToInt",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "Sign",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "Sin",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "Skills",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "SkillSO",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "SkillVfxFamily",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "SlashArc",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "SmoothStep",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "SpawnAttackArtSpriteLayer",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "SpawnCloseRangeReusableAttackImpactParticles",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "SpawnParticleBurst",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "SpikedBurst",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "Sqrt",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "StartCoroutine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "StopCoroutine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "System",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "TransformVector",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "TryPlayCloseRangePlayerAttackSkillEffect",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "UnityEngine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "UsesCloseRangePlayerLunge",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "Vector3",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.PlayerAttack.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "WaitForSeconds",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldVfxProfileSO.cs",
     "from_class": "CombatWorldVfxProfileSO",
     "to_type": "Color",
@@ -22122,6 +24481,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldVfxProfileSO.cs",
     "from_class": "CombatWorldVfxProfileSO",
+    "to_type": "Equals",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldVfxProfileSO.cs",
+    "from_class": "CombatWorldVfxProfileSO",
     "to_type": "Fear",
     "relation_type": "uses",
     "strength": 1
@@ -22157,7 +24523,28 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldVfxProfileSO.cs",
     "from_class": "CombatWorldVfxProfileSO",
+    "to_type": "IsNullOrWhiteSpace",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldVfxProfileSO.cs",
+    "from_class": "CombatWorldVfxProfileSO",
     "to_type": "None",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldVfxProfileSO.cs",
+    "from_class": "CombatWorldVfxProfileSO",
+    "to_type": "Ordinal",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldVfxProfileSO.cs",
+    "from_class": "CombatWorldVfxProfileSO",
+    "to_type": "ParticleSystem",
     "relation_type": "uses",
     "strength": 1
   },
@@ -22206,6 +24593,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldVfxProfileSO.cs",
     "from_class": "CombatWorldVfxProfileSO",
+    "to_type": "ResolveParticlePrefab",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldVfxProfileSO.cs",
+    "from_class": "CombatWorldVfxProfileSO",
     "to_type": "Serializable",
     "relation_type": "uses",
     "strength": 1
@@ -22235,6 +24629,20 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldVfxProfileSO.cs",
     "from_class": "CombatWorldVfxProfileSO",
     "to_type": "Sprite",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldVfxProfileSO.cs",
+    "from_class": "CombatWorldVfxProfileSO",
+    "to_type": "string",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldVfxProfileSO.cs",
+    "from_class": "CombatWorldVfxProfileSO",
+    "to_type": "StringComparison",
     "relation_type": "uses",
     "strength": 1
   },
@@ -25629,6 +28037,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
     "from_class": "RewardManager",
+    "to_type": "Bash",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
+    "from_class": "RewardManager",
     "to_type": "BasicAttack",
     "relation_type": "uses",
     "strength": 1
@@ -26042,6 +28457,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
     "from_class": "RewardManager",
+    "to_type": "II",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
+    "from_class": "RewardManager",
     "to_type": "Initialize",
     "relation_type": "uses",
     "strength": 1
@@ -26064,6 +28486,13 @@
     "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
     "from_class": "RewardManager",
     "to_type": "IReadOnlyList",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
+    "from_class": "RewardManager",
+    "to_type": "Iron",
     "relation_type": "uses",
     "strength": 1
   },
@@ -26119,6 +28548,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
     "from_class": "RewardManager",
+    "to_type": "Learn",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
+    "from_class": "RewardManager",
     "to_type": "LearnedSkill",
     "relation_type": "uses",
     "strength": 1
@@ -26127,6 +28563,13 @@
     "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
     "from_class": "RewardManager",
     "to_type": "LearnSkill",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
+    "from_class": "RewardManager",
+    "to_type": "Light",
     "relation_type": "uses",
     "strength": 1
   },
@@ -26162,6 +28605,13 @@
     "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
     "from_class": "RewardManager",
     "to_type": "MoveFirstCategoryReward",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
+    "from_class": "RewardManager",
+    "to_type": "Next",
     "relation_type": "uses",
     "strength": 1
   },
@@ -26239,6 +28689,13 @@
     "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
     "from_class": "RewardManager",
     "to_type": "PendingReward",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
+    "from_class": "RewardManager",
+    "to_type": "Permanent",
     "relation_type": "uses",
     "strength": 1
   },
@@ -26434,6 +28891,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
     "from_class": "RewardManager",
+    "to_type": "Shield",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
+    "from_class": "RewardManager",
     "to_type": "ShieldHp",
     "relation_type": "uses",
     "strength": 1
@@ -26442,6 +28906,13 @@
     "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
     "from_class": "RewardManager",
     "to_type": "ShieldScalingAttack",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
+    "from_class": "RewardManager",
+    "to_type": "Shot",
     "relation_type": "uses",
     "strength": 1
   },
@@ -26547,6 +29018,13 @@
     "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
     "from_class": "RewardManager",
     "to_type": "UnityEngine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
+    "from_class": "RewardManager",
+    "to_type": "Wall",
     "relation_type": "uses",
     "strength": 1
   },
@@ -28828,6 +31306,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Skills/SkillExecutor.cs",
     "from_class": "SkillExecutor",
+    "to_type": "ApplyNextTurnCostGainModifier",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Skills/SkillExecutor.cs",
+    "from_class": "SkillExecutor",
     "to_type": "ApplyPoison",
     "relation_type": "uses",
     "strength": 1
@@ -29626,7 +32111,21 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Skills/SkillSO.cs",
     "from_class": "SkillSO",
+    "to_type": "HasAnySetting",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Skills/SkillSO.cs",
+    "from_class": "SkillSO",
     "to_type": "Heal",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Skills/SkillSO.cs",
+    "from_class": "SkillSO",
+    "to_type": "HideInInspector",
     "relation_type": "uses",
     "strength": 1
   },
@@ -29738,7 +32237,7 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Skills/SkillSO.cs",
     "from_class": "SkillSO",
-    "to_type": "Reusable",
+    "to_type": "ResolveVfxTuning",
     "relation_type": "uses",
     "strength": 1
   },
@@ -29746,6 +32245,13 @@
     "from_file": "Project 2048/Assets/Scripts/Skills/SkillSO.cs",
     "from_class": "SkillSO",
     "to_type": "SacrificeAttack",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Skills/SkillSO.cs",
+    "from_class": "SkillSO",
+    "to_type": "Sanitize",
     "relation_type": "uses",
     "strength": 1
   },
@@ -29823,6 +32329,13 @@
     "from_file": "Project 2048/Assets/Scripts/Skills/SkillSO.cs",
     "from_class": "SkillSO",
     "to_type": "SkillVfxPackageSO",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Skills/SkillSO.cs",
+    "from_class": "SkillSO",
+    "to_type": "SkillVfxTuning",
     "relation_type": "uses",
     "strength": 1
   },
@@ -30067,21 +32580,7 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Skills/SkillVfxPackageSO.cs",
     "from_class": "SkillVfxPackageSO",
-    "to_type": "CreateAssetMenu",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Skills/SkillVfxPackageSO.cs",
-    "from_class": "SkillVfxPackageSO",
     "to_type": "float",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Skills/SkillVfxPackageSO.cs",
-    "from_class": "SkillVfxPackageSO",
-    "to_type": "Game",
     "relation_type": "uses",
     "strength": 1
   },
@@ -30109,7 +32608,7 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Skills/SkillVfxPackageSO.cs",
     "from_class": "SkillVfxPackageSO",
-    "to_type": "Package",
+    "to_type": "ParticleSystem",
     "relation_type": "uses",
     "strength": 1
   },
@@ -30117,13 +32616,6 @@
     "from_file": "Project 2048/Assets/Scripts/Skills/SkillVfxPackageSO.cs",
     "from_class": "SkillVfxPackageSO",
     "to_type": "Project2048",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Skills/SkillVfxPackageSO.cs",
-    "from_class": "SkillVfxPackageSO",
-    "to_type": "Skill",
     "relation_type": "uses",
     "strength": 1
   },
@@ -30163,9 +32655,142 @@
     "strength": 1
   },
   {
-    "from_file": "Project 2048/Assets/Scripts/Skills/SkillVfxPackageSO.cs",
-    "from_class": "SkillVfxPackageSO",
-    "to_type": "VFX",
+    "from_file": "Project 2048/Assets/Scripts/Skills/SkillVfxTuning.cs",
+    "from_class": "SkillVfxTuning",
+    "to_type": "Approximately",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Skills/SkillVfxTuning.cs",
+    "from_class": "SkillVfxTuning",
+    "to_type": "Clamp01",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Skills/SkillVfxTuning.cs",
+    "from_class": "SkillVfxTuning",
+    "to_type": "DefaultLocalOffset",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Skills/SkillVfxTuning.cs",
+    "from_class": "SkillVfxTuning",
+    "to_type": "float",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Skills/SkillVfxTuning.cs",
+    "from_class": "SkillVfxTuning",
+    "to_type": "HasAnySetting",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Skills/SkillVfxTuning.cs",
+    "from_class": "SkillVfxTuning",
+    "to_type": "HasAuthoredVisual",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Skills/SkillVfxTuning.cs",
+    "from_class": "SkillVfxTuning",
+    "to_type": "int",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Skills/SkillVfxTuning.cs",
+    "from_class": "SkillVfxTuning",
+    "to_type": "Material",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Skills/SkillVfxTuning.cs",
+    "from_class": "SkillVfxTuning",
+    "to_type": "Max",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Skills/SkillVfxTuning.cs",
+    "from_class": "SkillVfxTuning",
+    "to_type": "None",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Skills/SkillVfxTuning.cs",
+    "from_class": "SkillVfxTuning",
+    "to_type": "ParticleSystem",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Skills/SkillVfxTuning.cs",
+    "from_class": "SkillVfxTuning",
+    "to_type": "Project2048",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Skills/SkillVfxTuning.cs",
+    "from_class": "SkillVfxTuning",
+    "to_type": "Sanitize",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Skills/SkillVfxTuning.cs",
+    "from_class": "SkillVfxTuning",
+    "to_type": "Serializable",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Skills/SkillVfxTuning.cs",
+    "from_class": "SkillVfxTuning",
+    "to_type": "Skills",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Skills/SkillVfxTuning.cs",
+    "from_class": "SkillVfxTuning",
+    "to_type": "SkillVfxFamily",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Skills/SkillVfxTuning.cs",
+    "from_class": "SkillVfxTuning",
+    "to_type": "Sprite",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Skills/SkillVfxTuning.cs",
+    "from_class": "SkillVfxTuning",
+    "to_type": "System",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Skills/SkillVfxTuning.cs",
+    "from_class": "SkillVfxTuning",
+    "to_type": "UnityEngine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Skills/SkillVfxTuning.cs",
+    "from_class": "SkillVfxTuning",
+    "to_type": "Vector3",
     "relation_type": "uses",
     "strength": 1
   },
@@ -30242,6 +32867,20 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Stage/StageDatabaseSO.cs",
     "from_class": "StageDatabaseSO",
+    "to_type": "LowerStageCount",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Stage/StageDatabaseSO.cs",
+    "from_class": "StageDatabaseSO",
+    "to_type": "MiddleStageCount",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Stage/StageDatabaseSO.cs",
+    "from_class": "StageDatabaseSO",
     "to_type": "OnValidate",
     "relation_type": "uses",
     "strength": 1
@@ -30306,6 +32945,13 @@
     "from_file": "Project 2048/Assets/Scripts/Stage/StageDatabaseSO.cs",
     "from_class": "StageDatabaseSO",
     "to_type": "UnityEngine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Stage/StageDatabaseSO.cs",
+    "from_class": "StageDatabaseSO",
+    "to_type": "UpperStageCount",
     "relation_type": "uses",
     "strength": 1
   },
@@ -35646,6 +38292,13 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
     "from_class": "CombatPresentationEffectTests",
+    "to_type": "AttackEffectShowcaseSlot",
+    "relation_type": "component-access",
+    "strength": 3
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
     "to_type": "AudioSource",
     "relation_type": "component-access",
     "strength": 3
@@ -35681,7 +38334,21 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
     "from_class": "CombatPresentationEffectTests",
+    "to_type": "SkillVfxParticleBurstPrefab",
+    "relation_type": "component-access",
+    "strength": 3
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
     "to_type": "SpriteRenderer",
+    "relation_type": "component-access",
+    "strength": 3
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "VisualEffect",
     "relation_type": "component-access",
     "strength": 3
   },
@@ -35765,6 +38432,13 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
     "from_class": "CombatPresentationEffectTests",
+    "to_type": "TextureImporterSettings",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
     "to_type": "Vector2",
     "relation_type": "creates",
     "strength": 2
@@ -35821,14 +38495,14 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
     "from_class": "CombatPresentationEffectTests",
-    "to_type": "Appear",
+    "to_type": "Animations",
     "relation_type": "uses",
     "strength": 1
   },
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
     "from_class": "CombatPresentationEffectTests",
-    "to_type": "Application",
+    "to_type": "Appear",
     "relation_type": "uses",
     "strength": 1
   },
@@ -35857,13 +38531,6 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
     "from_class": "CombatPresentationEffectTests",
     "to_type": "AssertPopupIsNearButNotCentered",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
-    "from_class": "CombatPresentationEffectTests",
-    "to_type": "AssignedWorldShakeRoot",
     "relation_type": "uses",
     "strength": 1
   },
@@ -36115,20 +38782,6 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
     "from_class": "CombatPresentationEffectTests",
-    "to_type": "CombatWorldSpriteView_EnemyAppear_ShakesForegroundButKeepsBackgroundStill",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
-    "from_class": "CombatPresentationEffectTests",
-    "to_type": "CombatWorldSpriteView_EnemyAppear_UsesAssignedWorldShakeBriefly",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
-    "from_class": "CombatPresentationEffectTests",
     "to_type": "CombatWorldSpriteView_EnemyAppearShake_UsesLongerStrongerTuning",
     "relation_type": "uses",
     "strength": 1
@@ -36220,7 +38873,7 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
     "from_class": "CombatPresentationEffectTests",
-    "to_type": "CreateOwnedVfxPackage",
+    "to_type": "CreateOwnedVfxTuning",
     "relation_type": "uses",
     "strength": 1
   },
@@ -36283,6 +38936,13 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
     "from_class": "CombatPresentationEffectTests",
+    "to_type": "EditorSceneManager",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
     "to_type": "EffectiveMaxPitch",
     "relation_type": "uses",
     "strength": 1
@@ -36304,6 +38964,13 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
     "from_class": "CombatPresentationEffectTests",
+    "to_type": "EmptyScene",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
     "to_type": "Enemy",
     "relation_type": "uses",
     "strength": 1
@@ -36319,20 +38986,6 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
     "from_class": "CombatPresentationEffectTests",
     "to_type": "EnemyAppearIntroDurationSeconds",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
-    "from_class": "CombatPresentationEffectTests",
-    "to_type": "EnemyAppearWorldShakeDurationSeconds",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
-    "from_class": "CombatPresentationEffectTests",
-    "to_type": "EnemyAppearWorldShakeMagnitude",
     "relation_type": "uses",
     "strength": 1
   },
@@ -36473,13 +39126,6 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
     "from_class": "CombatPresentationEffectTests",
     "to_type": "GetMethod",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
-    "from_class": "CombatPresentationEffectTests",
-    "to_type": "GetValue",
     "relation_type": "uses",
     "strength": 1
   },
@@ -36634,6 +39280,27 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
     "from_class": "CombatPresentationEffectTests",
     "to_type": "Movements",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "NewScene",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "NewSceneMode",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "NewSceneSetup",
     "relation_type": "uses",
     "strength": 1
   },
@@ -36934,6 +39601,13 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
     "from_class": "CombatPresentationEffectTests",
+    "to_type": "SetUp",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
     "to_type": "ShaderUtilities",
     "relation_type": "uses",
     "strength": 1
@@ -36962,7 +39636,7 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
     "from_class": "CombatPresentationEffectTests",
-    "to_type": "SkillVfxPackageSO",
+    "to_type": "SkillVfxTuning",
     "relation_type": "uses",
     "strength": 1
   },
@@ -36990,7 +39664,7 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
     "from_class": "CombatPresentationEffectTests",
-    "to_type": "Static",
+    "to_type": "string",
     "relation_type": "uses",
     "strength": 1
   },
@@ -37151,6 +39825,13 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
     "from_class": "CombatPresentationEffectTests",
+    "to_type": "VFX",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
     "to_type": "Victory",
     "relation_type": "uses",
     "strength": 1
@@ -37166,13 +39847,6 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
     "from_class": "CombatPresentationEffectTests",
     "to_type": "Within",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
-    "from_class": "CombatPresentationEffectTests",
-    "to_type": "WorldShake",
     "relation_type": "uses",
     "strength": 1
   },
@@ -45600,6 +48274,27 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
     "from_class": "SkillSOTests",
+    "to_type": "And",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
+    "from_class": "SkillSOTests",
+    "to_type": "Any",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
+    "from_class": "SkillSOTests",
+    "to_type": "Art",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
+    "from_class": "SkillSOTests",
     "to_type": "Assert",
     "relation_type": "uses",
     "strength": 1
@@ -45629,6 +48324,13 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
     "from_class": "SkillSOTests",
     "to_type": "BindingFlags",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
+    "from_class": "SkillSOTests",
+    "to_type": "BleedAttack",
     "relation_type": "uses",
     "strength": 1
   },
@@ -45713,6 +48415,20 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
     "from_class": "SkillSOTests",
     "to_type": "Does",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
+    "from_class": "SkillSOTests",
+    "to_type": "Effects",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
+    "from_class": "SkillSOTests",
+    "to_type": "Empty",
     "relation_type": "uses",
     "strength": 1
   },
@@ -45824,6 +48540,13 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
     "from_class": "SkillSOTests",
+    "to_type": "Key",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
+    "from_class": "SkillSOTests",
     "to_type": "Keys",
     "relation_type": "uses",
     "strength": 1
@@ -45915,6 +48638,13 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
     "from_class": "SkillSOTests",
+    "to_type": "OpenWoundAttack",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
+    "from_class": "SkillSOTests",
     "to_type": "OverburnAttack",
     "relation_type": "uses",
     "strength": 1
@@ -45929,7 +48659,7 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
     "from_class": "SkillSOTests",
-    "to_type": "Prefab",
+    "to_type": "Prefabs",
     "relation_type": "uses",
     "strength": 1
   },
@@ -46048,6 +48778,20 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
     "from_class": "SkillSOTests",
+    "to_type": "SkillVFX",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
+    "from_class": "SkillSOTests",
+    "to_type": "SkillVfx_FireballProjectile",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
+    "from_class": "SkillSOTests",
     "to_type": "SkillVfxFamily",
     "relation_type": "uses",
     "strength": 1
@@ -46118,7 +48862,7 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
     "from_class": "SkillSOTests",
-    "to_type": "VFX",
+    "to_type": "Value",
     "relation_type": "uses",
     "strength": 1
   },
@@ -46342,13 +49086,6 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/SkillStatusEffectTests.cs",
     "from_class": "SkillStatusEffectTests",
-    "to_type": "CaptureCostCarry",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/SkillStatusEffectTests.cs",
-    "from_class": "SkillStatusEffectTests",
     "to_type": "Clear",
     "relation_type": "uses",
     "strength": 1
@@ -46385,13 +49122,6 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/SkillStatusEffectTests.cs",
     "from_class": "SkillStatusEffectTests",
     "to_type": "ConditionalAndCostSkills_AdjustDamageShieldAndCost",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/SkillStatusEffectTests.cs",
-    "from_class": "SkillStatusEffectTests",
-    "to_type": "ConsumeCarriedCost",
     "relation_type": "uses",
     "strength": 1
   },
@@ -46482,7 +49212,21 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/SkillStatusEffectTests.cs",
     "from_class": "SkillStatusEffectTests",
+    "to_type": "CriticalChance",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillStatusEffectTests.cs",
+    "from_class": "SkillStatusEffectTests",
     "to_type": "CriticalStage",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillStatusEffectTests.cs",
+    "from_class": "SkillStatusEffectTests",
+    "to_type": "CriticalStageUp",
     "relation_type": "uses",
     "strength": 1
   },
@@ -46580,6 +49324,20 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/SkillStatusEffectTests.cs",
     "from_class": "SkillStatusEffectTests",
+    "to_type": "Endure",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillStatusEffectTests.cs",
+    "from_class": "SkillStatusEffectTests",
+    "to_type": "EndureTurns",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillStatusEffectTests.cs",
+    "from_class": "SkillStatusEffectTests",
     "to_type": "Enemy",
     "relation_type": "uses",
     "strength": 1
@@ -46616,6 +49374,13 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/SkillStatusEffectTests.cs",
     "from_class": "SkillStatusEffectTests",
     "to_type": "EnemyIntentType",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillStatusEffectTests.cs",
+    "from_class": "SkillStatusEffectTests",
+    "to_type": "EnemyPattern_SkipsHpGatedIntentsAndAppliesCriticalAndEndure",
     "relation_type": "uses",
     "strength": 1
   },
@@ -46763,6 +49528,13 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/SkillStatusEffectTests.cs",
     "from_class": "SkillStatusEffectTests",
     "to_type": "OverburnAttack",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillStatusEffectTests.cs",
+    "from_class": "SkillStatusEffectTests",
+    "to_type": "PatternEnemy",
     "relation_type": "uses",
     "strength": 1
   },
@@ -46923,6 +49695,13 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/SkillStatusEffectTests.cs",
     "from_class": "SkillStatusEffectTests",
+    "to_type": "TakeDamage",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillStatusEffectTests.cs",
+    "from_class": "SkillStatusEffectTests",
     "to_type": "Taunt",
     "relation_type": "uses",
     "strength": 1
@@ -46972,7 +49751,287 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/SkillStatusEffectTests.cs",
     "from_class": "SkillStatusEffectTests",
+    "to_type": "Within",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillStatusEffectTests.cs",
+    "from_class": "SkillStatusEffectTests",
     "to_type": "Zero",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StageDatabaseSOTests.cs",
+    "from_class": "StageDatabaseSOTests",
+    "to_type": "Assert",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StageDatabaseSOTests.cs",
+    "from_class": "StageDatabaseSOTests",
+    "to_type": "AssetDatabase",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StageDatabaseSOTests.cs",
+    "from_class": "StageDatabaseSOTests",
+    "to_type": "Assets",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StageDatabaseSOTests.cs",
+    "from_class": "StageDatabaseSOTests",
+    "to_type": "Count",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StageDatabaseSOTests.cs",
+    "from_class": "StageDatabaseSOTests",
+    "to_type": "Data",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StageDatabaseSOTests.cs",
+    "from_class": "StageDatabaseSOTests",
+    "to_type": "Database",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StageDatabaseSOTests.cs",
+    "from_class": "StageDatabaseSOTests",
+    "to_type": "Enemy",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StageDatabaseSOTests.cs",
+    "from_class": "StageDatabaseSOTests",
+    "to_type": "EnemyCandidates",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StageDatabaseSOTests.cs",
+    "from_class": "StageDatabaseSOTests",
+    "to_type": "EnemyEncounterRank",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StageDatabaseSOTests.cs",
+    "from_class": "StageDatabaseSOTests",
+    "to_type": "EqualTo",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StageDatabaseSOTests.cs",
+    "from_class": "StageDatabaseSOTests",
+    "to_type": "False",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StageDatabaseSOTests.cs",
+    "from_class": "StageDatabaseSOTests",
+    "to_type": "FinalBoss",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StageDatabaseSOTests.cs",
+    "from_class": "StageDatabaseSOTests",
+    "to_type": "Floor",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StageDatabaseSOTests.cs",
+    "from_class": "StageDatabaseSOTests",
+    "to_type": "Framework",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StageDatabaseSOTests.cs",
+    "from_class": "StageDatabaseSOTests",
+    "to_type": "Is",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StageDatabaseSOTests.cs",
+    "from_class": "StageDatabaseSOTests",
+    "to_type": "IsFinalStage",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StageDatabaseSOTests.cs",
+    "from_class": "StageDatabaseSOTests",
+    "to_type": "LoadAssetAtPath",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StageDatabaseSOTests.cs",
+    "from_class": "StageDatabaseSOTests",
+    "to_type": "Lower",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StageDatabaseSOTests.cs",
+    "from_class": "StageDatabaseSOTests",
+    "to_type": "Middle",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StageDatabaseSOTests.cs",
+    "from_class": "StageDatabaseSOTests",
+    "to_type": "Not",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StageDatabaseSOTests.cs",
+    "from_class": "StageDatabaseSOTests",
+    "to_type": "Null",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StageDatabaseSOTests.cs",
+    "from_class": "StageDatabaseSOTests",
+    "to_type": "NUnit",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StageDatabaseSOTests.cs",
+    "from_class": "StageDatabaseSOTests",
+    "to_type": "Project2048",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StageDatabaseSOTests.cs",
+    "from_class": "StageDatabaseSOTests",
+    "to_type": "PrototypeStageDatabase_MapsDesignFloorsToStageRanges",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StageDatabaseSOTests.cs",
+    "from_class": "StageDatabaseSOTests",
+    "to_type": "PrototypeStageDatabase_UsesTwentyStageRunWithFinalBullAtStageTwenty",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StageDatabaseSOTests.cs",
+    "from_class": "StageDatabaseSOTests",
+    "to_type": "SO",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StageDatabaseSOTests.cs",
+    "from_class": "StageDatabaseSOTests",
+    "to_type": "Stage",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StageDatabaseSOTests.cs",
+    "from_class": "StageDatabaseSOTests",
+    "to_type": "StageDatabaseSO",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StageDatabaseSOTests.cs",
+    "from_class": "StageDatabaseSOTests",
+    "to_type": "StageFloor",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StageDatabaseSOTests.cs",
+    "from_class": "StageDatabaseSOTests",
+    "to_type": "StageNumberInFloor",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StageDatabaseSOTests.cs",
+    "from_class": "StageDatabaseSOTests",
+    "to_type": "Test",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StageDatabaseSOTests.cs",
+    "from_class": "StageDatabaseSOTests",
+    "to_type": "Tests",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StageDatabaseSOTests.cs",
+    "from_class": "StageDatabaseSOTests",
+    "to_type": "That",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StageDatabaseSOTests.cs",
+    "from_class": "StageDatabaseSOTests",
+    "to_type": "ToString",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StageDatabaseSOTests.cs",
+    "from_class": "StageDatabaseSOTests",
+    "to_type": "TotalStageCount",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StageDatabaseSOTests.cs",
+    "from_class": "StageDatabaseSOTests",
+    "to_type": "True",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StageDatabaseSOTests.cs",
+    "from_class": "StageDatabaseSOTests",
+    "to_type": "TryGetStage",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StageDatabaseSOTests.cs",
+    "from_class": "StageDatabaseSOTests",
+    "to_type": "UnityEditor",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StageDatabaseSOTests.cs",
+    "from_class": "StageDatabaseSOTests",
+    "to_type": "Upper",
     "relation_type": "uses",
     "strength": 1
   },

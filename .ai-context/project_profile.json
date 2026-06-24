@@ -2,25 +2,25 @@
   "project_name": "unknown",
   "language": "C#",
   "engine_guess": "Unity",
-  "total_cs_files": 129,
-  "mono_behaviour_files": 39,
+  "total_cs_files": 134,
+  "mono_behaviour_files": 40,
   "scriptable_object_files": 13,
   "files_with_update": 7,
   "files_with_fixed_update": 0,
   "files_with_late_update": 2,
   "singleton_candidates": 3,
-  "manager_like_classes": 33,
-  "ui_related_classes": 56,
-  "save_load_related_classes": 47,
+  "manager_like_classes": 32,
+  "ui_related_classes": 57,
+  "save_load_related_classes": 49,
   "role_counts": {
-    "ui": 56,
-    "runtime": 55,
-    "player": 65,
+    "combat": 90,
+    "save-load": 49,
+    "runtime": 59,
+    "ui": 57,
+    "player": 67,
     "scene": 12,
-    "save-load": 47,
-    "manager": 31,
-    "data": 48,
-    "combat": 86,
+    "manager": 30,
+    "data": 50,
     "inventory": 16,
     "network": 1
   },
@@ -28,7 +28,7 @@
     {
       "class_name": "CombatPresentationEffectTests",
       "file_id": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
-      "relation_count": 222,
+      "relation_count": 226,
       "referenced_type_count": 200
     },
     {
@@ -52,7 +52,7 @@
     {
       "class_name": "CombatWorldSpriteView",
       "file_id": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
-      "relation_count": 214,
+      "relation_count": 215,
       "referenced_type_count": 200
     },
     {
@@ -60,6 +60,12 @@
       "file_id": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
       "relation_count": 210,
       "referenced_type_count": 200
+    },
+    {
+      "class_name": "SkillVfxDesignTimeAuthoringBuilder",
+      "file_id": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+      "relation_count": 192,
+      "referenced_type_count": 185
     },
     {
       "class_name": "LayeredExplosionEffect",
@@ -74,16 +80,10 @@
       "referenced_type_count": 161
     },
     {
-      "class_name": "PlayerCombatController",
-      "file_id": "Project 2048/Assets/Scripts/Combat/PlayerCombatController.cs",
-      "relation_count": 155,
-      "referenced_type_count": 153
-    },
-    {
       "class_name": "RewardManager",
       "file_id": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
-      "relation_count": 149,
-      "referenced_type_count": 146
+      "relation_count": 159,
+      "referenced_type_count": 156
     }
   ],
   "high_risk_classes": [

@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &4406122526240550694
+--- !u!1 &7804565663462925810
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,24 +8,24 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 7245850608485070294}
-  - component: {fileID: 7958227786819063798}
-  - component: {fileID: 7282923797637341098}
-  - component: {fileID: 1769025563517631096}
+  - component: {fileID: 2459773369399738014}
+  - component: {fileID: 4668439453302839724}
+  - component: {fileID: 8171794560918841062}
+  - component: {fileID: 6974551375209063817}
   m_Layer: 0
-  m_Name: SkillVfx_BleedingCutBloodFountain
+  m_Name: SkillVfx_FlameBurstFireMist
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &7245850608485070294
+--- !u!4 &2459773369399738014
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4406122526240550694}
+  m_GameObject: {fileID: 7804565663462925810}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
@@ -34,13 +34,13 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7958227786819063798
+--- !u!114 &4668439453302839724
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4406122526240550694}
+  m_GameObject: {fileID: 7804565663462925810}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 81635d78decea114698a07c70b6b0398, type: 3}
@@ -49,17 +49,17 @@ MonoBehaviour:
   lifetimeMultiplier: 1
   burstMultiplier: 1
   speedMultiplier: 1
-  sizeMultiplier: 1.15
-  radiusMultiplier: 0.95
+  sizeMultiplier: 1.35
+  radiusMultiplier: 1.05
   sortingOffset: 2
   preserveAuthoredShape: 0
---- !u!198 &7282923797637341098
+--- !u!198 &8171794560918841062
 ParticleSystem:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4406122526240550694}
+  m_GameObject: {fileID: 7804565663462925810}
   serializedVersion: 8
   lengthInSec: 0.28
   simulationSpeed: 1
@@ -4834,14 +4834,14 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     vectorLabel1_3: W
---- !u!199 &1769025563517631096
+--- !u!199 &6974551375209063817
 ParticleSystemRenderer:
   serializedVersion: 7
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4406122526240550694}
+  m_GameObject: {fileID: 7804565663462925810}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0

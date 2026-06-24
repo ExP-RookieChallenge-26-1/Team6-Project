@@ -3,7 +3,8 @@
   "rootNamespace": "Project2048.Tests",
   "references": [
     "Game.Core",
-    "Unity.TextMeshPro"
+    "Unity.TextMeshPro",
+    "Unity.2D.Animation.Runtime"
   ],
   "optionalUnityReferences": [
     "TestAssemblies"

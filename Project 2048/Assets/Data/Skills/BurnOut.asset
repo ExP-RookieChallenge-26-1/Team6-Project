@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e39edfbbdac2c064e877e5f3f784bab9, type: 3}
-  m_Name: "\uD53C\uC758 \uC774\uBE68"
+  m_Name: BurnOut
   m_EditorClassIdentifier: Game.Core::Project2048.Skills.SkillSO
-  skillId: blood-fang
-  skillName: "\uD53C\uC758 \uC774\uBE68"
+  skillId: burn-out
+  skillName: "\uD654\uC5FC \uC18C\uBAA8"
   skillType: 0
   effectKind: 11
   damageStatSource: 0
@@ -68,7 +68,7 @@ MonoBehaviour:
       particlePrefab: {fileID: 327951452759943371, guid: 3b5aa8b16af23fc44947322efc54c05f, type: 3}
       particleMaterial: {fileID: 2100000, guid: a19a598f9cd9ddb0f7543ff1237ae3cd, type: 2}
       useParticleColor: 1
-      particleColor: {r: 0.286275, g: 0.686275, b: 0.709804, a: 1}
+      particleColor: {r: 1, g: 0.42, b: 0.06, a: 1}
       lifetimeSeconds: 0.82
       burstCount: 55
       startSpeed: 0.548
@@ -80,9 +80,41 @@ MonoBehaviour:
     sfxDelaySeconds: 0
     localOffset: {x: 0, y: 0, z: 0}
     autoDestroySeconds: 1.55
+  vfxDefinition:
+    cues:
+    - trigger: 0
+      prefab: {fileID: 5592946645197749577, guid: e9b54a20e0cab144a95032ef68460208, type: 3}
+      placement:
+        target: 0
+        vertical: 1
+        localOffset: {x: 0.18, y: 0.32, z: 0}
+      delaySeconds: 0
+      scale: 1.05
+      tint: {r: 1, g: 0.42, b: 0.06, a: 1}
+      lifetimeOverride: -1
+    - trigger: 0
+      prefab: {fileID: 8199688406765548039, guid: a44606620703a36458795961c00ca290, type: 3}
+      placement:
+        target: 1
+        vertical: 0
+        localOffset: {x: 0, y: 0.75, z: 0}
+      delaySeconds: 0.48
+      scale: 0.4
+      tint: {r: 1, g: 1, b: 1, a: 1}
+      lifetimeOverride: 1.45
+    - trigger: 0
+      prefab: {fileID: 4498762637842804159, guid: d1c2ef880bde45f29605241ac76f3016, type: 3}
+      placement:
+        target: 1
+        vertical: 1
+        localOffset: {x: -0.08, y: 0.08, z: 0}
+      delaySeconds: 0.48
+      scale: 1.18
+      tint: {r: 0.1, g: 0.85, b: 0.78, a: 1}
+      lifetimeOverride: 1.55
   vfx:
     family: 15
-    primarySprite: {fileID: 21300000, guid: e83fe29d407142ba931d90d518a538a2, type: 3}
+    primarySprite: {fileID: 4075805401734562376, guid: 8706594fbcd1d15458a647aac2cde4cd, type: 3}
     primaryPrefab: {fileID: 1827861628062789563, guid: 11867b2eedd68a545aa83d1f7781b799, type: 3}
     projectilePrefab: {fileID: 5592946645197749577, guid: e9b54a20e0cab144a95032ef68460208, type: 3}
     secondarySprite: {fileID: 0}
@@ -98,9 +130,9 @@ MonoBehaviour:
     rotationDegrees: -8
   vfxPackage: {fileID: 0}
   vfxFamily: 15
-  vfxPrimaryColor: {r: 0.286275, g: 0.686275, b: 0.709804, a: 1}
-  vfxSecondaryColor: {r: 0.078431, g: 0.360784, b: 0.388235, a: 1}
+  vfxPrimaryColor: {r: 1, g: 0.42, b: 0.06, a: 1}
+  vfxSecondaryColor: {r: 0.74, g: 0.12, b: 0.02, a: 1}
   vfxScale: 1.2
   vfxIntensity: 1.45
   vfxRepeatCount: 1
-  description: "Deals 100 power damage. Pays 10% HP, leaving at least 1 HP."
+  description: Deals 100 power damage. Pays 10% HP, leaving at least 1 HP.

@@ -213,7 +213,7 @@ namespace Project2048.Presentation
 
             light.type = LightType.Point;
             light.range = lightRange * scaleMultiplier;
-            light.color = new Color(0.4f, 0.9f, 0.95f, 1f);
+            light.color = new Color(0.12f, 0.85f, 0.8f, 1f);
             light.intensity = 0f;
             light.enabled = false;
             return light;
@@ -244,9 +244,9 @@ namespace Project2048.Presentation
                 new Keyframe(1f, 0f),
             });
             ConfigureColorOverLifetime(system, CreateGradient(
-                new Color(0.96f, 1f, 1f, 1f),
-                new Color(0.62f, 0.94f, 0.96f, 1f),
-                new Color(0.29f, 0.69f, 0.71f, 0f)));
+                new Color(1f, 0.96f, 0.72f, 1f),
+                new Color(1f, 0.58f, 0.08f, 1f),
+                new Color(0.74f, 0.12f, 0.02f, 0f)));
             ConfigureRenderer(system, ResolveAdditiveMaterial(), ParticleSystemRenderMode.Billboard, 5);
         }
 
@@ -269,10 +269,10 @@ namespace Project2048.Presentation
                 new Keyframe(1f, 0f),
             });
             ConfigureColorOverLifetime(system, CreateGradient(
-                new Color(0.97f, 1f, 1f, 1f),
-                new Color(0.58f, 0.93f, 0.96f, 1f),
-                new Color(0.29f, 0.69f, 0.71f, 0.9f),
-                new Color(0.04f, 0.22f, 0.24f, 0.12f)));
+                new Color(1f, 0.98f, 0.78f, 1f),
+                new Color(1f, 0.46f, 0.06f, 1f),
+                new Color(0.82f, 0.12f, 0.02f, 0.9f),
+                new Color(0.22f, 0.035f, 0.012f, 0.12f)));
             ConfigureNoise(system, 0.15f, 0.25f, 0.6f, 0.4f);
             ConfigureRenderer(system, ResolveAdditiveMaterial(), ParticleSystemRenderMode.Billboard, 4);
         }
@@ -296,9 +296,9 @@ namespace Project2048.Presentation
                 new Keyframe(1f, 1.8f),
             });
             ConfigureColorOverLifetime(system, CreateGradient(
-                new Color(0.14f, 0.24f, 0.25f, 0f),
-                new Color(0.12f, 0.22f, 0.23f, 0.42f),
-                new Color(0.05f, 0.08f, 0.08f, 0f)));
+                new Color(0.24f, 0.12f, 0.055f, 0f),
+                new Color(0.18f, 0.09f, 0.04f, 0.42f),
+                new Color(0.07f, 0.035f, 0.02f, 0f)));
             ConfigureVelocityY(system, 0.5f * scaleMultiplier, 1f * scaleMultiplier);
             ConfigureNoise(system, 0.4f, 0.7f, 0.5f, 0.25f);
             ConfigureRenderer(system, ResolveSmokeMaterial(), ParticleSystemRenderMode.Billboard, 2);
@@ -321,9 +321,9 @@ namespace Project2048.Presentation
                 new Keyframe(1f, 0f),
             });
             ConfigureColorOverLifetime(system, CreateGradient(
-                new Color(0.92f, 1f, 1f, 1f),
-                new Color(0.42f, 0.88f, 0.92f, 0.85f),
-                new Color(0.16f, 0.5f, 0.55f, 0f)));
+                new Color(1f, 0.9f, 0.42f, 1f),
+                new Color(1f, 0.42f, 0.04f, 0.85f),
+                new Color(0.76f, 0.12f, 0.02f, 0f)));
             ConfigureSparkTrails(system);
             ConfigureRenderer(system, ResolveAdditiveMaterial(), ParticleSystemRenderMode.Stretch, 7);
         }
@@ -346,9 +346,9 @@ namespace Project2048.Presentation
                 new Keyframe(1f, 5f),
             });
             ConfigureColorOverLifetime(system, CreateGradient(
-                new Color(0.72f, 0.96f, 0.98f, 0.7f),
-                new Color(0.29f, 0.69f, 0.71f, 0.35f),
-                new Color(0.08f, 0.36f, 0.4f, 0f)));
+                new Color(1f, 0.72f, 0.18f, 0.7f),
+                new Color(0.9f, 0.28f, 0.04f, 0.35f),
+                new Color(0.38f, 0.06f, 0.02f, 0f)));
 
             var renderMode = horizontalShockwave
                 ? ParticleSystemRenderMode.HorizontalBillboard
@@ -453,9 +453,9 @@ namespace Project2048.Presentation
                 new Keyframe(0f, 1f),
                 new Keyframe(1f, 0f)));
             trails.colorOverTrail = new ParticleSystem.MinMaxGradient(CreateGradient(
-                new Color(0.9f, 1f, 1f, 1f),
-                new Color(0.32f, 0.82f, 0.88f, 0.65f),
-                new Color(0.12f, 0.42f, 0.46f, 0f)));
+                new Color(1f, 0.9f, 0.42f, 1f),
+                new Color(1f, 0.36f, 0.04f, 0.65f),
+                new Color(0.58f, 0.08f, 0.02f, 0f)));
         }
 
         private void ConfigureRenderer(
@@ -731,12 +731,22 @@ namespace Project2048.Presentation
             for (var index = 0; index < colors.Length; index++)
             {
                 var time = index / (float)maxIndex;
-                colorKeys[index] = new GradientColorKey(colors[index], time);
+                colorKeys[index] = new GradientColorKey(ToTeal(colors[index]), time);
                 alphaKeys[index] = new GradientAlphaKey(colors[index].a, time);
             }
 
             gradient.SetKeys(colorKeys, alphaKeys);
             return gradient;
+        }
+
+        // 화염 폭발 팔레트를 청록 계열로 전환한다(명도/채도 구조는 유지하고 색상만 청록으로).
+        // 청록 색상값(0.49f)만 바꾸면 폭발 전체 톤을 한 번에 조절할 수 있다.
+        private static Color ToTeal(Color c)
+        {
+            Color.RGBToHSV(c, out _, out var saturation, out var value);
+            var rgb = Color.HSVToRGB(0.49f, saturation, value);
+            rgb.a = c.a;
+            return rgb;
         }
 
         private static void SetTextureIfPresent(Material material, string propertyName, Texture texture)

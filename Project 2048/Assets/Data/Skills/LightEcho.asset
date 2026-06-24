@@ -82,11 +82,11 @@ MonoBehaviour:
     autoDestroySeconds: 1.25
   vfx:
     family: 10
-    primarySprite: {fileID: 21300000, guid: e18b788083f586d650f0bcb9e2a927a4, type: 3}
-    primaryPrefab: {fileID: 756328571287768908, guid: d6c612ca12e9ae34d903714e8fc4f81e, type: 3}
+    primarySprite: {fileID: 0}
+    primaryPrefab: {fileID: 0}
     projectilePrefab: {fileID: 0}
-    secondarySprite: {fileID: 21300000, guid: 91b7d11e1f9d4ecf95de8b6a82fa3a87, type: 3}
-    secondaryPrefab: {fileID: 678183688835185469, guid: 4687ea7fc00f3154a9ac6e179a7cda97, type: 3}
+    secondarySprite: {fileID: 0}
+    secondaryPrefab: {fileID: 0}
     particlePrefab: {fileID: 290749096276174948, guid: 26f5d3488c5ffdc4484a71e9d58e6f02, type: 3}
     particleMaterial: {fileID: 2100000, guid: a32cd9ea60338502eb3014d4a7eb295b, type: 2}
     localOffset: {x: 0, y: 0.48, z: 0}
@@ -102,5 +102,5 @@ MonoBehaviour:
   vfxSecondaryColor: {r: 0.981496, g: 0.945496, b: 0.679096, a: 1}
   vfxScale: 1
   vfxIntensity: 1.2
-  vfxRepeatCount: 3
+  vfxRepeatCount: 1
   description: ""

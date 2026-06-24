@@ -28,7 +28,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 5a17abc336c34de48889a4d5fd25487f, type: 2}
   - {fileID: 11400000, guid: cd7501a97bb22e741a43179d1b3771d3, type: 2}
   - {fileID: 11400000, guid: 104fae93c7b64922bbaf09b45b586dc3, type: 2}
-  portrait: {fileID: 21300000, guid: fdb3bec36b17a2b42875f8907b17dc72, type: 3}
+  portrait: {fileID: 21300000, guid: fa492956cfce2564d9ace728be89a86b, type: 3}
   actionEffects:
   - actionId: appear
     effect:

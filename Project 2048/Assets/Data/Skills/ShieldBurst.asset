@@ -82,11 +82,11 @@ MonoBehaviour:
     autoDestroySeconds: 1.25
   vfx:
     family: 3
-    primarySprite: {fileID: -3554453865146640057, guid: 0bd3564bbef8b9b44baf3cd330c01c1b, type: 3}
+    primarySprite: {fileID: -860782897724368489, guid: 95e5ff74759cd494eaeda8a905ac0a61, type: 3}
     primaryPrefab: {fileID: 7427817718329016933, guid: 5455b1b837377fe4fa0a6ec39baceb62, type: 3}
     projectilePrefab: {fileID: 0}
-    secondarySprite: {fileID: 21300000, guid: 8c49f1f430d44e7e8e1abef7d849a339, type: 3}
-    secondaryPrefab: {fileID: 334930548413494215, guid: 2aa76a56c853c054ca191435c455f36e, type: 3}
+    secondarySprite: {fileID: 0}
+    secondaryPrefab: {fileID: 4498762637842804159, guid: d1c2ef880bde45f29605241ac76f3016, type: 3}
     particlePrefab: {fileID: 3967671219066916926, guid: 17358b86df3ec454eb71456748b55093, type: 3}
     particleMaterial: {fileID: 2100000, guid: 65e092e01d9dbe741072906fbc723c04, type: 2}
     localOffset: {x: 0, y: 0.12, z: 0}

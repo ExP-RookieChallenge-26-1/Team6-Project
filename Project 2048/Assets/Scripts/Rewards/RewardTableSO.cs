@@ -40,12 +40,60 @@ namespace Project2048.Rewards
             var selectedRewards = new List<BattleRewardSO>(count);
             while (validRewards.Count > 0 && selectedRewards.Count < count)
             {
-                var index = UnityEngine.Random.Range(0, validRewards.Count);
+                var index = SelectWeightedRewardIndex(validRewards, CountSkillRewards(validRewards));
                 selectedRewards.Add(validRewards[index]);
                 validRewards.RemoveAt(index);
             }
 
             return selectedRewards;
+        }
+
+        private static int SelectWeightedRewardIndex(IReadOnlyList<BattleRewardSO> validRewards, int skillRewardCount)
+        {
+            if (validRewards == null || validRewards.Count == 0)
+            {
+                return -1;
+            }
+
+            var totalWeight = 0f;
+            for (var index = 0; index < validRewards.Count; index++)
+            {
+                totalWeight += ResolveOfferWeight(validRewards[index], skillRewardCount);
+            }
+
+            if (totalWeight <= 0f)
+            {
+                return UnityEngine.Random.Range(0, validRewards.Count);
+            }
+
+            var roll = UnityEngine.Random.Range(0f, totalWeight);
+            for (var index = 0; index < validRewards.Count; index++)
+            {
+                roll -= ResolveOfferWeight(validRewards[index], skillRewardCount);
+                if (roll <= 0f)
+                {
+                    return index;
+                }
+            }
+
+            return validRewards.Count - 1;
+        }
+
+        private static float ResolveOfferWeight(BattleRewardSO reward, int skillRewardCount)
+        {
+            if (reward == null)
+            {
+                return 0f;
+            }
+
+            return reward.IsSkillReward
+                ? Mathf.Clamp01(reward.enemySkillOfferChance) / Mathf.Max(1, skillRewardCount)
+                : 1f;
+        }
+
+        private static int CountSkillRewards(IEnumerable<BattleRewardSO> rewards)
+        {
+            return rewards?.Count(reward => reward != null && reward.IsSkillReward) ?? 0;
         }
 
         private static bool CanOfferReward(BattleRewardSO reward)

@@ -65,7 +65,9 @@ namespace Project2048.Skills
         public SkillAvailability availability = SkillAvailability.Shared;
         public Sprite icon;
         public CombatEffectBinding activationEffect = new();
-        [Header("Skill VFX")]
+        [Header("Skill VFX (new — design-time prefab based)")]
+        public SkillVfxDefinition vfxDefinition = new();
+        [Header("Skill VFX (legacy — kept for fallback during restructure)")]
         public SkillVfxTuning vfx = new();
         [HideInInspector]
         public SkillVfxPackageSO vfxPackage;

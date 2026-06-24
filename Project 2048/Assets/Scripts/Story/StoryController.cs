@@ -54,6 +54,7 @@ namespace Project2048.Story
         {
             currentStory = storyData;
             currentIndex = 0;
+            storyBackgroundView?.ApplyStoryBackgrounds(storyData);
 
             if (storyData == null || storyData.steps.Count == 0)
             {

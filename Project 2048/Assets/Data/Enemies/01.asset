@@ -28,7 +28,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 00966bf157b01874e90775ed704b2b9b, type: 2}
   - {fileID: 11400000, guid: df0e4934c5af4ae3ac415c92684f8787, type: 2}
   - {fileID: 11400000, guid: 4832d2b5a42e555419fe48cad1e68571, type: 2}
-  portrait: {fileID: 21300000, guid: 9b586e4f05c3de942954e470d5a45be7, type: 3}
+  portrait: {fileID: 21300000, guid: fa492956cfce2564d9ace728be89a86b, type: 3}
   actionEffects:
   - actionId: appear
     effect:
@@ -181,7 +181,7 @@ MonoBehaviour:
     shieldPiercePercent: 0
     minSelfHpPercent: 0
     maxSelfHpPercent: 0
-  - skillId: bleeding-cut
+  - skillId: fireball
     displayName: "\uCD9C\uD608 \uBCA0\uAE30"
     skillType: 0
     skillEffectKind: 23

@@ -15,6 +15,7 @@ namespace Project2048.Combat
         public CombatPhase Phase { get; set; }
         public int CurrentCost { get; set; }
         public int RemainingBoardMoves { get; set; }
+        public bool IsSkillPresentationLocked { get; set; }
         public string LastActionDescription { get; set; }
         public CombatVfxCue LastVfxCue { get; set; }
         public int[,] Board { get; set; }

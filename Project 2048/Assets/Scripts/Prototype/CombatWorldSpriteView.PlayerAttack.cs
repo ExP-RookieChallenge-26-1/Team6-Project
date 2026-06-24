@@ -33,6 +33,7 @@ namespace Project2048.Prototype
             CombatEffectBinding effect,
             Transform sourceAnchor,
             Transform targetAnchor,
+            bool playAttackAnimation,
             out float lifetimeSeconds)
         {
             lifetimeSeconds = 0f;
@@ -45,7 +46,11 @@ namespace Project2048.Prototype
             lifetimeSeconds = PlayerCloseRangeAttackTotalSeconds + ResolveCloseRangeImpactLifetimeSeconds(family);
             if (!Application.isPlaying || !isActiveAndEnabled)
             {
-                PlayPlayerAttackAnimation(ResolvePlayerAttackAnimationSpeedMultiplier(skill));
+                if (playAttackAnimation)
+                {
+                    PlayPlayerAttackAnimation(ResolvePlayerAttackAnimationSpeedMultiplier(skill));
+                }
+
                 PlayCloseRangePlayerAttackImpactEffects(skill, effect, sourceAnchor, targetAnchor);
                 return true;
             }
@@ -56,7 +61,8 @@ namespace Project2048.Prototype
                 skill,
                 effect,
                 sourceAnchor,
-                targetAnchor));
+                targetAnchor,
+                playAttackAnimation));
             return true;
         }
 
@@ -64,7 +70,8 @@ namespace Project2048.Prototype
             SkillSO skill,
             CombatEffectBinding effect,
             Transform sourceAnchor,
-            Transform targetAnchor)
+            Transform targetAnchor,
+            bool playAttackAnimation)
         {
             var actor = sourceAnchor;
             CachePlayerCloseRangeAttackRestTransform(actor);
@@ -80,7 +87,11 @@ namespace Project2048.Prototype
                 PlayerCloseRangeAttackAdvanceSeconds,
                 easeOut: true);
 
-            PlayPlayerAttackAnimation(ResolvePlayerAttackAnimationSpeedMultiplier(skill));
+            if (playAttackAnimation)
+            {
+                PlayPlayerAttackAnimation(ResolvePlayerAttackAnimationSpeedMultiplier(skill));
+            }
+
             if (PlayerCloseRangeAttackWindupSeconds > 0f)
             {
                 yield return new WaitForSeconds(PlayerCloseRangeAttackWindupSeconds);
@@ -181,11 +192,13 @@ namespace Project2048.Prototype
             var tuning = ResolveSkillVfxTuning(skill);
             var package = ResolveSkillVfxPackage(skill);
             var designTimeBinding = ResolveSkillVfxDesignTimeBinding(skill);
-            var fallbackSprite = family == SkillVfxFamily.ImpactBurst
+            var usesHitImpactArt = family == SkillVfxFamily.ImpactBurst ||
+                family == SkillVfxFamily.SlashArc;
+            var fallbackSprite = usesHitImpactArt
                 ? ResolveHitEffectSprite()
                 : ResolveAttackEffectSprite();
-            var explicitSprite = family == SkillVfxFamily.ImpactBurst ? hitEffectSprite : attackEffectSprite;
-            var fallbackPrefab = family == SkillVfxFamily.ImpactBurst
+            var explicitSprite = usesHitImpactArt ? hitEffectSprite : attackEffectSprite;
+            var fallbackPrefab = usesHitImpactArt
                 ? ResolveHitEffectPrefab()
                 : ResolveAttackEffectPrefab();
             var localOffset = ResolveCloseRangeImpactLocalOffset(
@@ -199,7 +212,7 @@ namespace Project2048.Prototype
 
             var art = SpawnAttackArtSpriteLayer(
                 targetAnchor,
-                family == SkillVfxFamily.ImpactBurst ? "HitImpactEffectArt" : "AttackEffectArt",
+                usesHitImpactArt ? "HitImpactEffectArt" : "AttackEffectArt",
                 ResolveDesignTimeArtColor(
                     ResolveReusableSkillParticleColor(skill),
                     tuning,
@@ -213,7 +226,7 @@ namespace Project2048.Prototype
                         tuning,
                         package,
                         designTimeBinding,
-                        family == SkillVfxFamily.ImpactBurst
+                        usesHitImpactArt
                             ? 1.08f * HitEffectArtSizeMultiplier
                             : AttackEffectArtSizeMultiplier),
                 ResolveDesignTimeLifetime(tuning, package, designTimeBinding, AttackArtLifetimeSeconds),
@@ -384,10 +397,8 @@ namespace Project2048.Prototype
 
         private static bool UsesCloseRangePlayerLunge(SkillVfxFamily family)
         {
-            return family == SkillVfxFamily.SlashArc ||
-                family == SkillVfxFamily.ImpactBurst ||
-                family == SkillVfxFamily.SpikedBurst ||
-                family == SkillVfxFamily.BloodFountainSlash;
+            return family == SkillVfxFamily.ImpactBurst ||
+                family == SkillVfxFamily.SpikedBurst;
         }
 
         private static float ResolveCloseRangeImpactLifetimeSeconds(SkillVfxFamily family)

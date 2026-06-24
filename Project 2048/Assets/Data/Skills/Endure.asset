@@ -68,7 +68,7 @@ MonoBehaviour:
       particlePrefab: {fileID: 6731020439046879282, guid: fa0cae73e7105c44f806f98cd71e26ff, type: 3}
       particleMaterial: {fileID: 2100000, guid: 2e95984efeaf19d3b5ed8cb1a7f95957, type: 2}
       useParticleColor: 1
-      particleColor: {r: 0.92, g: 0.92, b: 0.9, a: 1}
+      particleColor: {r: 1, g: 1, b: 1, a: 1}
       lifetimeSeconds: 0.75
       burstCount: 28
       startSpeed: 0.35
@@ -80,16 +80,18 @@ MonoBehaviour:
     sfxDelaySeconds: 0
     localOffset: {x: 0, y: 0, z: 0}
     autoDestroySeconds: 1.25
+  vfxDefinition:
+    cues: []
   vfx:
     family: 8
-    primarySprite: {fileID: -3554453865146640057, guid: 0bd3564bbef8b9b44baf3cd330c01c1b, type: 3}
-    primaryPrefab: {fileID: 7427817718329016933, guid: 5455b1b837377fe4fa0a6ec39baceb62, type: 3}
+    primarySprite: {fileID: 0}
+    primaryPrefab: {fileID: 0}
     projectilePrefab: {fileID: 0}
     secondarySprite: {fileID: 0}
-    secondaryPrefab: {fileID: 0}
+    secondaryPrefab: {fileID: 7936256264085202695, guid: f0164d765a6b5f84ebd35cf4d8597a15, type: 3}
     particlePrefab: {fileID: 6731020439046879282, guid: fa0cae73e7105c44f806f98cd71e26ff, type: 3}
     particleMaterial: {fileID: 2100000, guid: 2e95984efeaf19d3b5ed8cb1a7f95957, type: 2}
-    localOffset: {x: 0.76, y: 0.1, z: 0}
+    localOffset: {x: 0, y: 0.3, z: 0}
     radiusMultiplier: 2.36
     lifetimeSeconds: -1
     sortingOffset: 12
@@ -98,8 +100,8 @@ MonoBehaviour:
     rotationDegrees: -10
   vfxPackage: {fileID: 0}
   vfxFamily: 8
-  vfxPrimaryColor: {r: 0.92, g: 0.92, b: 0.9, a: 1}
-  vfxSecondaryColor: {r: 0.55, g: 0.56, b: 0.58, a: 1}
+  vfxPrimaryColor: {r: 1, g: 1, b: 1, a: 1}
+  vfxSecondaryColor: {r: 1, g: 1, b: 1, a: 1}
   vfxScale: 1
   vfxIntensity: 1
   vfxRepeatCount: 1

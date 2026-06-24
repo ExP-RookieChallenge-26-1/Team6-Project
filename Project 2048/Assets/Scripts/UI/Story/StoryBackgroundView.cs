@@ -18,6 +18,30 @@ namespace Project2048.Story
             SetAlpha(nextBackgroundImage, 1f);
         }
 
+        public void ApplyStoryBackgrounds(StoryDataSO storyData)
+        {
+            if (storyData == null)
+            {
+                return;
+            }
+
+            if (storyData.currentBackgroundSprite != null && currentBackgroundImage != null)
+            {
+                currentBackgroundImage.sprite = storyData.currentBackgroundSprite;
+            }
+
+            if (storyData.nextBackgroundSprite != null && nextBackgroundImage != null)
+            {
+                nextBackgroundImage.sprite = storyData.nextBackgroundSprite;
+            }
+
+            hasChangedBackground = false;
+            ResetFilledImage(currentBackgroundImage);
+            ResetFilledImage(nextBackgroundImage);
+            SetAlpha(currentBackgroundImage, 1f);
+            SetAlpha(nextBackgroundImage, 1f);
+        }
+
         public IEnumerator PlayTransition()
         {
             if (hasChangedBackground || currentBackgroundImage == null || nextBackgroundImage == null)
@@ -64,6 +88,17 @@ namespace Project2048.Story
             image.type = Image.Type.Filled;
             image.fillMethod = Image.FillMethod.Horizontal;
             image.fillOrigin = (int)Image.OriginHorizontal.Left;
+            image.fillAmount = 1f;
+        }
+
+        private static void ResetFilledImage(Image image)
+        {
+            if (image == null)
+            {
+                return;
+            }
+
+            image.type = Image.Type.Simple;
             image.fillAmount = 1f;
         }
 

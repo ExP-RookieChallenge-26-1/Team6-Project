@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0a78af296a09024caf241aa0587e358, type: 3}
   m_Name: Learn_Fireball
   m_EditorClassIdentifier: Game.Core::Project2048.Rewards.BattleRewardSO
-  rewardId: learn-bleeding-cut
+  rewardId: learn-fireball
   mothDisplayName: "기술 습득"
   rewardKind: 14
   healPercentOfMaxHp: 0.3

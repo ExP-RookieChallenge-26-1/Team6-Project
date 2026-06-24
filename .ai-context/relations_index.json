@@ -1,5 +1,390 @@
 [
   {
+    "from_file": "Project 2048/Assets/Editor/EnemyVariantTool.cs",
+    "from_class": "EnemyVariantTool",
+    "to_type": "AI",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/EnemyVariantTool.cs",
+    "from_class": "EnemyVariantTool",
+    "to_type": "AssetDatabase",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/EnemyVariantTool.cs",
+    "from_class": "EnemyVariantTool",
+    "to_type": "Assets",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/EnemyVariantTool.cs",
+    "from_class": "EnemyVariantTool",
+    "to_type": "CopyAsset",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/EnemyVariantTool.cs",
+    "from_class": "EnemyVariantTool",
+    "to_type": "Create",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/EnemyVariantTool.cs",
+    "from_class": "EnemyVariantTool",
+    "to_type": "CreateEliteVariant",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/EnemyVariantTool.cs",
+    "from_class": "EnemyVariantTool",
+    "to_type": "CreateEnhancedVariant",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/EnemyVariantTool.cs",
+    "from_class": "EnemyVariantTool",
+    "to_type": "CreateVariant",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/EnemyVariantTool.cs",
+    "from_class": "EnemyVariantTool",
+    "to_type": "EditorGUIUtility",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/EnemyVariantTool.cs",
+    "from_class": "EnemyVariantTool",
+    "to_type": "EditorTools",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/EnemyVariantTool.cs",
+    "from_class": "EnemyVariantTool",
+    "to_type": "EditorUtility",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/EnemyVariantTool.cs",
+    "from_class": "EnemyVariantTool",
+    "to_type": "Elite",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/EnemyVariantTool.cs",
+    "from_class": "EnemyVariantTool",
+    "to_type": "EliteAttackMultiplier",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/EnemyVariantTool.cs",
+    "from_class": "EnemyVariantTool",
+    "to_type": "EliteHpMultiplier",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/EnemyVariantTool.cs",
+    "from_class": "EnemyVariantTool",
+    "to_type": "EliteMenu",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/EnemyVariantTool.cs",
+    "from_class": "EnemyVariantTool",
+    "to_type": "Empty",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/EnemyVariantTool.cs",
+    "from_class": "EnemyVariantTool",
+    "to_type": "EndsWith",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/EnemyVariantTool.cs",
+    "from_class": "EnemyVariantTool",
+    "to_type": "Enemy",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/EnemyVariantTool.cs",
+    "from_class": "EnemyVariantTool",
+    "to_type": "EnemyEncounterRank",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/EnemyVariantTool.cs",
+    "from_class": "EnemyVariantTool",
+    "to_type": "EnemySO",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/EnemyVariantTool.cs",
+    "from_class": "EnemyVariantTool",
+    "to_type": "Enhanced",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/EnemyVariantTool.cs",
+    "from_class": "EnemyVariantTool",
+    "to_type": "EnhancedAttackMultiplier",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/EnemyVariantTool.cs",
+    "from_class": "EnemyVariantTool",
+    "to_type": "EnhancedHpMultiplier",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/EnemyVariantTool.cs",
+    "from_class": "EnemyVariantTool",
+    "to_type": "EnhancedMenu",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/EnemyVariantTool.cs",
+    "from_class": "EnemyVariantTool",
+    "to_type": "float",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/EnemyVariantTool.cs",
+    "from_class": "EnemyVariantTool",
+    "to_type": "GenerateUniqueAssetPath",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/EnemyVariantTool.cs",
+    "from_class": "EnemyVariantTool",
+    "to_type": "GetAssetPath",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/EnemyVariantTool.cs",
+    "from_class": "EnemyVariantTool",
+    "to_type": "GetDirectoryName",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/EnemyVariantTool.cs",
+    "from_class": "EnemyVariantTool",
+    "to_type": "GetFileNameWithoutExtension",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/EnemyVariantTool.cs",
+    "from_class": "EnemyVariantTool",
+    "to_type": "HasValue",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/EnemyVariantTool.cs",
+    "from_class": "EnemyVariantTool",
+    "to_type": "HP",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/EnemyVariantTool.cs",
+    "from_class": "EnemyVariantTool",
+    "to_type": "IO",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/EnemyVariantTool.cs",
+    "from_class": "EnemyVariantTool",
+    "to_type": "IsNullOrEmpty",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/EnemyVariantTool.cs",
+    "from_class": "EnemyVariantTool",
+    "to_type": "LoadAssetAtPath",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/EnemyVariantTool.cs",
+    "from_class": "EnemyVariantTool",
+    "to_type": "Log",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/EnemyVariantTool.cs",
+    "from_class": "EnemyVariantTool",
+    "to_type": "LogError",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/EnemyVariantTool.cs",
+    "from_class": "EnemyVariantTool",
+    "to_type": "Max",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/EnemyVariantTool.cs",
+    "from_class": "EnemyVariantTool",
+    "to_type": "MenuItem",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/EnemyVariantTool.cs",
+    "from_class": "EnemyVariantTool",
+    "to_type": "Path",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/EnemyVariantTool.cs",
+    "from_class": "EnemyVariantTool",
+    "to_type": "PingObject",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/EnemyVariantTool.cs",
+    "from_class": "EnemyVariantTool",
+    "to_type": "Project2048",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/EnemyVariantTool.cs",
+    "from_class": "EnemyVariantTool",
+    "to_type": "Refresh",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/EnemyVariantTool.cs",
+    "from_class": "EnemyVariantTool",
+    "to_type": "RegisterCreatedObjectUndo",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/EnemyVariantTool.cs",
+    "from_class": "EnemyVariantTool",
+    "to_type": "RoundToInt",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/EnemyVariantTool.cs",
+    "from_class": "EnemyVariantTool",
+    "to_type": "SaveAssets",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/EnemyVariantTool.cs",
+    "from_class": "EnemyVariantTool",
+    "to_type": "Selection",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/EnemyVariantTool.cs",
+    "from_class": "EnemyVariantTool",
+    "to_type": "SetDirty",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/EnemyVariantTool.cs",
+    "from_class": "EnemyVariantTool",
+    "to_type": "string",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/EnemyVariantTool.cs",
+    "from_class": "EnemyVariantTool",
+    "to_type": "System",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/EnemyVariantTool.cs",
+    "from_class": "EnemyVariantTool",
+    "to_type": "Undo",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/EnemyVariantTool.cs",
+    "from_class": "EnemyVariantTool",
+    "to_type": "UnityEditor",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/EnemyVariantTool.cs",
+    "from_class": "EnemyVariantTool",
+    "to_type": "UnityEngine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/EnemyVariantTool.cs",
+    "from_class": "EnemyVariantTool",
+    "to_type": "ValidateEnemySelected",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/EnemyVariantTool.cs",
+    "from_class": "EnemyVariantTool",
+    "to_type": "Value",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/EnemyVariantTool.cs",
+    "from_class": "EnemyVariantTool",
+    "to_type": "Variant",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
     "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
     "from_class": "SkillVfxDesignTimeAuthoringBuilder",
     "to_type": "ParticleSystem",
@@ -87,20 +472,6 @@
     "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
     "from_class": "SkillVfxDesignTimeAuthoringBuilder",
     "to_type": "Billboard",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
-    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
-    "to_type": "BleedingCutBloodFountain",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
-    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
-    "to_type": "BleedingCutBloodMist",
     "relation_type": "uses",
     "strength": 1
   },
@@ -395,6 +766,20 @@
     "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
     "from_class": "SkillVfxDesignTimeAuthoringBuilder",
     "to_type": "FlameBurstEmbers",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "FlameBurstFireFountain",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "FlameBurstFireMist",
     "relation_type": "uses",
     "strength": 1
   },
@@ -933,20 +1318,6 @@
   {
     "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
     "from_class": "SkillVfxDesignTimeAuthoringBuilder",
-    "to_type": "SkillVfx_BleedingCutBloodFountain",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
-    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
-    "to_type": "SkillVfx_BleedingCutBloodMist",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
-    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
     "to_type": "SkillVfx_BloodFountainSlash",
     "relation_type": "uses",
     "strength": 1
@@ -1067,6 +1438,20 @@
     "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
     "from_class": "SkillVfxDesignTimeAuthoringBuilder",
     "to_type": "SkillVfx_FlameBurstEmbers",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "SkillVfx_FlameBurstFireFountain",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Editor/SkillVfxDesignTimeAuthoringBuilder.cs",
+    "from_class": "SkillVfxDesignTimeAuthoringBuilder",
+    "to_type": "SkillVfx_FlameBurstFireMist",
     "relation_type": "uses",
     "strength": 1
   },
@@ -4293,7 +4678,7 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "from_class": "CombatManager",
-    "to_type": "ApplyPermanentStatBonuses",
+    "to_type": "ApplyFirstTurnMinimumSkillCost",
     "relation_type": "uses",
     "strength": 1
   },
@@ -4307,21 +4692,7 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "from_class": "CombatManager",
-    "to_type": "ApplyTemporaryCombatRankBuffs",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
-    "from_class": "CombatManager",
     "to_type": "ArgumentNullException",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
-    "from_class": "CombatManager",
-    "to_type": "AttackStageBonus",
     "relation_type": "uses",
     "strength": 1
   },
@@ -4336,6 +4707,13 @@
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "from_class": "CombatManager",
     "to_type": "BeginEnemyTurn",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
+    "from_class": "CombatManager",
+    "to_type": "BeginSkillPresentationLock",
     "relation_type": "uses",
     "strength": 1
   },
@@ -4503,6 +4881,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "from_class": "CombatManager",
+    "to_type": "ClearSkillPresentationLock",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
+    "from_class": "CombatManager",
     "to_type": "ClearSkillSeal",
     "relation_type": "uses",
     "strength": 1
@@ -4601,13 +4986,6 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "from_class": "CombatManager",
-    "to_type": "ConsumeNextCombatBuffs",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
-    "from_class": "CombatManager",
     "to_type": "ConsumeNextTurnBoardMoveCountModifier",
     "relation_type": "uses",
     "strength": 1
@@ -4630,6 +5008,13 @@
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "from_class": "CombatManager",
     "to_type": "ConvertBoardToCost",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
+    "from_class": "CombatManager",
+    "to_type": "Coroutine",
     "relation_type": "uses",
     "strength": 1
   },
@@ -4727,13 +5112,6 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "from_class": "CombatManager",
-    "to_type": "DefenseStageBonus",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
-    "from_class": "CombatManager",
     "to_type": "DelayedResolveEnemyTurn",
     "relation_type": "uses",
     "strength": 1
@@ -4812,13 +5190,6 @@
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "from_class": "CombatManager",
     "to_type": "EnsureRuntimeState",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
-    "from_class": "CombatManager",
-    "to_type": "EquippedSkills",
     "relation_type": "uses",
     "strength": 1
   },
@@ -5049,6 +5420,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "from_class": "CombatManager",
+    "to_type": "IsSkillPresentationLocked",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
+    "from_class": "CombatManager",
     "to_type": "IsSkillSealed",
     "relation_type": "uses",
     "strength": 1
@@ -5085,6 +5463,20 @@
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "from_class": "CombatManager",
     "to_type": "MaxHp",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
+    "from_class": "CombatManager",
+    "to_type": "MaxValue",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
+    "from_class": "CombatManager",
+    "to_type": "Min",
     "relation_type": "uses",
     "strength": 1
   },
@@ -5196,41 +5588,6 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "from_class": "CombatManager",
-    "to_type": "PermanentAttackPowerBonus",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
-    "from_class": "CombatManager",
-    "to_type": "PermanentCriticalChanceBonus",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
-    "from_class": "CombatManager",
-    "to_type": "PermanentCriticalDamageMultiplierBonus",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
-    "from_class": "CombatManager",
-    "to_type": "PermanentDefensePowerBonus",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
-    "from_class": "CombatManager",
-    "to_type": "PermanentMaxHpBonus",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
-    "from_class": "CombatManager",
     "to_type": "Phase",
     "relation_type": "uses",
     "strength": 1
@@ -5308,6 +5665,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "from_class": "CombatManager",
+    "to_type": "ReleaseSkillPresentationLockAfterDelay",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
+    "from_class": "CombatManager",
     "to_type": "RemainingBoardMoves",
     "relation_type": "uses",
     "strength": 1
@@ -5357,7 +5721,21 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "from_class": "CombatManager",
+    "to_type": "ResetSkillPresentationLock",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
+    "from_class": "CombatManager",
     "to_type": "ResolveBoardPhase",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
+    "from_class": "CombatManager",
+    "to_type": "ResolveCheapestUsableSkillCost",
     "relation_type": "uses",
     "strength": 1
   },
@@ -5469,13 +5847,6 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "from_class": "CombatManager",
-    "to_type": "SetSkills",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
-    "from_class": "CombatManager",
     "to_type": "SkillEffectKind",
     "relation_type": "uses",
     "strength": 1
@@ -5553,6 +5924,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "from_class": "CombatManager",
+    "to_type": "StopCoroutine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
+    "from_class": "CombatManager",
     "to_type": "string",
     "relation_type": "uses",
     "strength": 1
@@ -5596,6 +5974,13 @@
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "from_class": "CombatManager",
     "to_type": "TurnController",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
+    "from_class": "CombatManager",
+    "to_type": "TurnCount",
     "relation_type": "uses",
     "strength": 1
   },
@@ -6114,6 +6499,13 @@
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatSnapshot.cs",
     "from_class": "CombatSnapshot",
     "to_type": "IsDead",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/CombatSnapshot.cs",
+    "from_class": "CombatSnapshot",
+    "to_type": "IsSkillPresentationLocked",
     "relation_type": "uses",
     "strength": 1
   },
@@ -11272,6 +11664,20 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Enemy/EnemySO.cs",
     "from_class": "EnemySO",
+    "to_type": "AnimationClip",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Enemy/EnemySO.cs",
+    "from_class": "EnemySO",
+    "to_type": "AnimatorController",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Enemy/EnemySO.cs",
+    "from_class": "EnemySO",
     "to_type": "Application",
     "relation_type": "uses",
     "strength": 1
@@ -11546,6 +11952,13 @@
     "from_file": "Project 2048/Assets/Scripts/Enemy/EnemySO.cs",
     "from_class": "EnemySO",
     "to_type": "Invoke",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Enemy/EnemySO.cs",
+    "from_class": "EnemySO",
+    "to_type": "Loop",
     "relation_type": "uses",
     "strength": 1
   },
@@ -15535,6 +15948,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Presentation/CombatProjectileEffect.cs",
     "from_class": "CombatProjectileEffect",
+    "to_type": "Application",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/CombatProjectileEffect.cs",
+    "from_class": "CombatProjectileEffect",
     "to_type": "BeginLaunch",
     "relation_type": "uses",
     "strength": 1
@@ -15577,6 +15997,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Presentation/CombatProjectileEffect.cs",
     "from_class": "CombatProjectileEffect",
+    "to_type": "GetComponentsInChildren",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/CombatProjectileEffect.cs",
+    "from_class": "CombatProjectileEffect",
     "to_type": "Impact",
     "relation_type": "uses",
     "strength": 1
@@ -15592,6 +16019,13 @@
     "from_file": "Project 2048/Assets/Scripts/Presentation/CombatProjectileEffect.cs",
     "from_class": "CombatProjectileEffect",
     "to_type": "LaunchFromWorldPosition",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/CombatProjectileEffect.cs",
+    "from_class": "CombatProjectileEffect",
+    "to_type": "Length",
     "relation_type": "uses",
     "strength": 1
   },
@@ -15654,6 +16088,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Presentation/CombatProjectileEffect.cs",
     "from_class": "CombatProjectileEffect",
+    "to_type": "PlayVisualEffects",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/CombatProjectileEffect.cs",
+    "from_class": "CombatProjectileEffect",
     "to_type": "Presentation",
     "relation_type": "uses",
     "strength": 1
@@ -15668,6 +16109,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Presentation/CombatProjectileEffect.cs",
     "from_class": "CombatProjectileEffect",
+    "to_type": "Reinit",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/CombatProjectileEffect.cs",
+    "from_class": "CombatProjectileEffect",
     "to_type": "ResolveSourcePosition",
     "relation_type": "uses",
     "strength": 1
@@ -15676,6 +16124,13 @@
     "from_file": "Project 2048/Assets/Scripts/Presentation/CombatProjectileEffect.cs",
     "from_class": "CombatProjectileEffect",
     "to_type": "ResolveTargetPosition",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/CombatProjectileEffect.cs",
+    "from_class": "CombatProjectileEffect",
+    "to_type": "ResolveTravelVisualEffects",
     "relation_type": "uses",
     "strength": 1
   },
@@ -15724,6 +16179,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Presentation/CombatProjectileEffect.cs",
     "from_class": "CombatProjectileEffect",
+    "to_type": "StopVisualEffects",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/CombatProjectileEffect.cs",
+    "from_class": "CombatProjectileEffect",
     "to_type": "TransformVector",
     "relation_type": "uses",
     "strength": 1
@@ -15753,6 +16215,20 @@
     "from_file": "Project 2048/Assets/Scripts/Presentation/CombatProjectileEffect.cs",
     "from_class": "CombatProjectileEffect",
     "to_type": "Vector3",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/CombatProjectileEffect.cs",
+    "from_class": "CombatProjectileEffect",
+    "to_type": "VFX",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/CombatProjectileEffect.cs",
+    "from_class": "CombatProjectileEffect",
+    "to_type": "VisualEffect",
     "relation_type": "uses",
     "strength": 1
   },
@@ -16361,6 +16837,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Presentation/LayeredExplosionEffect.cs",
     "from_class": "LayeredExplosionEffect",
+    "to_type": "HSVToRGB",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/LayeredExplosionEffect.cs",
+    "from_class": "LayeredExplosionEffect",
     "to_type": "int",
     "relation_type": "uses",
     "strength": 1
@@ -16739,6 +17222,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Presentation/LayeredExplosionEffect.cs",
     "from_class": "LayeredExplosionEffect",
+    "to_type": "RGBToHSV",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/LayeredExplosionEffect.cs",
+    "from_class": "LayeredExplosionEffect",
     "to_type": "SetActive",
     "relation_type": "uses",
     "strength": 1
@@ -17012,6 +17502,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Presentation/LayeredExplosionEffect.cs",
     "from_class": "LayeredExplosionEffect",
+    "to_type": "ToTeal",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/LayeredExplosionEffect.cs",
+    "from_class": "LayeredExplosionEffect",
     "to_type": "Transparent",
     "relation_type": "uses",
     "strength": 1
@@ -17146,6 +17643,454 @@
     "from_file": "Project 2048/Assets/Scripts/Presentation/SkillVfxParticleBurstPrefab.cs",
     "from_class": "SkillVfxParticleBurstPrefab",
     "to_type": "UnityEngine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/SkillVfxPlayer.cs",
+    "from_class": "SkillVfxContext",
+    "to_type": "SpriteRenderer",
+    "relation_type": "component-access",
+    "strength": 3
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/SkillVfxPlayer.cs",
+    "from_class": "SkillVfxContext",
+    "to_type": "Vector3",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/SkillVfxPlayer.cs",
+    "from_class": "SkillVfxContext",
+    "to_type": "Vector4",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/SkillVfxPlayer.cs",
+    "from_class": "SkillVfxContext",
+    "to_type": "Add",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/SkillVfxPlayer.cs",
+    "from_class": "SkillVfxContext",
+    "to_type": "AnchorFor",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/SkillVfxPlayer.cs",
+    "from_class": "SkillVfxContext",
+    "to_type": "Application",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/SkillVfxPlayer.cs",
+    "from_class": "SkillVfxContext",
+    "to_type": "ApplyTint",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/SkillVfxPlayer.cs",
+    "from_class": "SkillVfxContext",
+    "to_type": "Approximately",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/SkillVfxPlayer.cs",
+    "from_class": "SkillVfxContext",
+    "to_type": "Base",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/SkillVfxPlayer.cs",
+    "from_class": "SkillVfxContext",
+    "to_type": "BaseColor",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/SkillVfxPlayer.cs",
+    "from_class": "SkillVfxContext",
+    "to_type": "Bounds",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/SkillVfxPlayer.cs",
+    "from_class": "SkillVfxContext",
+    "to_type": "Collections",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/SkillVfxPlayer.cs",
+    "from_class": "SkillVfxContext",
+    "to_type": "Color",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/SkillVfxPlayer.cs",
+    "from_class": "SkillVfxContext",
+    "to_type": "CombatProjectileEffect",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/SkillVfxPlayer.cs",
+    "from_class": "SkillVfxContext",
+    "to_type": "CuesFor",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/SkillVfxPlayer.cs",
+    "from_class": "SkillVfxContext",
+    "to_type": "Destroy",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/SkillVfxPlayer.cs",
+    "from_class": "SkillVfxContext",
+    "to_type": "Edit",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/SkillVfxPlayer.cs",
+    "from_class": "SkillVfxContext",
+    "to_type": "Encapsulate",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/SkillVfxPlayer.cs",
+    "from_class": "SkillVfxContext",
+    "to_type": "Enemy",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/SkillVfxPlayer.cs",
+    "from_class": "SkillVfxContext",
+    "to_type": "Feet",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/SkillVfxPlayer.cs",
+    "from_class": "SkillVfxContext",
+    "to_type": "Generic",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/SkillVfxPlayer.cs",
+    "from_class": "SkillVfxContext",
+    "to_type": "GetComponent",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/SkillVfxPlayer.cs",
+    "from_class": "SkillVfxContext",
+    "to_type": "GetComponentInChildren",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/SkillVfxPlayer.cs",
+    "from_class": "SkillVfxContext",
+    "to_type": "GetComponentsInChildren",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/SkillVfxPlayer.cs",
+    "from_class": "SkillVfxContext",
+    "to_type": "HasPrefab",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/SkillVfxPlayer.cs",
+    "from_class": "SkillVfxContext",
+    "to_type": "HasVector3",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/SkillVfxPlayer.cs",
+    "from_class": "SkillVfxContext",
+    "to_type": "HasVector4",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/SkillVfxPlayer.cs",
+    "from_class": "SkillVfxContext",
+    "to_type": "Head",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/SkillVfxPlayer.cs",
+    "from_class": "SkillVfxContext",
+    "to_type": "Instantiate",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/SkillVfxPlayer.cs",
+    "from_class": "SkillVfxContext",
+    "to_type": "LaunchFromWorldPosition",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/SkillVfxPlayer.cs",
+    "from_class": "SkillVfxContext",
+    "to_type": "MainColor",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/SkillVfxPlayer.cs",
+    "from_class": "SkillVfxContext",
+    "to_type": "Object",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/SkillVfxPlayer.cs",
+    "from_class": "SkillVfxContext",
+    "to_type": "OppositeAnchorFor",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/SkillVfxPlayer.cs",
+    "from_class": "SkillVfxContext",
+    "to_type": "ParticleColor",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/SkillVfxPlayer.cs",
+    "from_class": "SkillVfxContext",
+    "to_type": "ParticleSystem",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/SkillVfxPlayer.cs",
+    "from_class": "SkillVfxContext",
+    "to_type": "Play",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/SkillVfxPlayer.cs",
+    "from_class": "SkillVfxContext",
+    "to_type": "PlayCue",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/SkillVfxPlayer.cs",
+    "from_class": "SkillVfxContext",
+    "to_type": "PlayVisuals",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/SkillVfxPlayer.cs",
+    "from_class": "SkillVfxContext",
+    "to_type": "Presentation",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/SkillVfxPlayer.cs",
+    "from_class": "SkillVfxContext",
+    "to_type": "Project2048",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/SkillVfxPlayer.cs",
+    "from_class": "SkillVfxContext",
+    "to_type": "Quaternion",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/SkillVfxPlayer.cs",
+    "from_class": "SkillVfxContext",
+    "to_type": "Reinit",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/SkillVfxPlayer.cs",
+    "from_class": "SkillVfxContext",
+    "to_type": "ResolvePlacementWorldPosition",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/SkillVfxPlayer.cs",
+    "from_class": "SkillVfxContext",
+    "to_type": "ResolveVerticalWorldPosition",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/SkillVfxPlayer.cs",
+    "from_class": "SkillVfxContext",
+    "to_type": "SetVector3",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/SkillVfxPlayer.cs",
+    "from_class": "SkillVfxContext",
+    "to_type": "SetVector4",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/SkillVfxPlayer.cs",
+    "from_class": "SkillVfxContext",
+    "to_type": "Skills",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/SkillVfxPlayer.cs",
+    "from_class": "SkillVfxContext",
+    "to_type": "SkillVfxCue",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/SkillVfxPlayer.cs",
+    "from_class": "SkillVfxContext",
+    "to_type": "SkillVfxDefinition",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/SkillVfxPlayer.cs",
+    "from_class": "SkillVfxContext",
+    "to_type": "SkillVfxPlacement",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/SkillVfxPlayer.cs",
+    "from_class": "SkillVfxContext",
+    "to_type": "SkillVfxTarget",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/SkillVfxPlayer.cs",
+    "from_class": "SkillVfxContext",
+    "to_type": "SkillVfxTrigger",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/SkillVfxPlayer.cs",
+    "from_class": "SkillVfxContext",
+    "to_type": "SkillVfxVertical",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/SkillVfxPlayer.cs",
+    "from_class": "SkillVfxContext",
+    "to_type": "SpriteRenderer",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/SkillVfxPlayer.cs",
+    "from_class": "SkillVfxContext",
+    "to_type": "System",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/SkillVfxPlayer.cs",
+    "from_class": "SkillVfxContext",
+    "to_type": "Tint",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/SkillVfxPlayer.cs",
+    "from_class": "SkillVfxContext",
+    "to_type": "TransformVector",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/SkillVfxPlayer.cs",
+    "from_class": "SkillVfxContext",
+    "to_type": "TryResolveRendererBounds",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/SkillVfxPlayer.cs",
+    "from_class": "SkillVfxContext",
+    "to_type": "UnityEngine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/SkillVfxPlayer.cs",
+    "from_class": "SkillVfxContext",
+    "to_type": "Vector3",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/SkillVfxPlayer.cs",
+    "from_class": "SkillVfxContext",
+    "to_type": "Vector4",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/SkillVfxPlayer.cs",
+    "from_class": "SkillVfxContext",
+    "to_type": "VFX",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/SkillVfxPlayer.cs",
+    "from_class": "SkillVfxContext",
+    "to_type": "VisualEffect",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Presentation/SkillVfxPlayer.cs",
+    "from_class": "SkillVfxContext",
+    "to_type": "VisualEffectColorPropertyNames",
     "relation_type": "uses",
     "strength": 1
   },
@@ -20225,6 +21170,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
+    "to_type": "SkillVfxContext",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
     "to_type": "Vector3",
     "relation_type": "creates",
     "strength": 2
@@ -20422,6 +21374,20 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
     "to_type": "ClearEnemyDeathFade",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "ClearEnemyDirectAnimation",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "ClearGatherLightPreviewRelease",
     "relation_type": "uses",
     "strength": 1
   },
@@ -20638,6 +21604,20 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
+    "to_type": "Defense",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "DefinitionCueFallbackLifetimeSeconds",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
     "to_type": "DestroyRuntimeParticleMaterials",
     "relation_type": "uses",
     "strength": 1
@@ -20673,7 +21653,7 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
-    "to_type": "EnemyController",
+    "to_type": "EnemyIntentType",
     "relation_type": "uses",
     "strength": 1
   },
@@ -20764,6 +21744,34 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
+    "to_type": "FresnelColor",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "GatherLightPreviewReleaseDelaySeconds",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "GatherLightVerticalBeamColorPropertyNames",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "GatherLightVerticalBeamLifetimeSeconds",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
     "to_type": "Generic",
     "relation_type": "uses",
     "strength": 1
@@ -20813,7 +21821,7 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
-    "to_type": "HasAnyAsset",
+    "to_type": "HeavyStrikeImpactScaleMultiplier",
     "relation_type": "uses",
     "strength": 1
   },
@@ -20876,13 +21884,6 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
-    "to_type": "IsChargeAttackSkill",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
-    "from_class": "CombatWorldSpriteView",
     "to_type": "IsDead",
     "relation_type": "uses",
     "strength": 1
@@ -20898,13 +21899,6 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
     "to_type": "LanternMuzzleLocalY",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
-    "from_class": "CombatWorldSpriteView",
-    "to_type": "LastVfxCue",
     "relation_type": "uses",
     "strength": 1
   },
@@ -20960,13 +21954,6 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
-    "to_type": "None",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
-    "from_class": "CombatWorldSpriteView",
     "to_type": "OnCombatStateChanged",
     "relation_type": "uses",
     "strength": 1
@@ -21009,20 +21996,6 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
-    "to_type": "OpenWoundExplosionLocalOffset",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
-    "from_class": "CombatWorldSpriteView",
-    "to_type": "OpenWoundSkillId",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
-    "from_class": "CombatWorldSpriteView",
     "to_type": "ParticleColor",
     "relation_type": "uses",
     "strength": 1
@@ -21044,27 +22017,6 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
-    "to_type": "PlayChargeAttackStartEffect",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
-    "from_class": "CombatWorldSpriteView",
-    "to_type": "PlayDamageNumberPopupIfNeeded",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
-    "from_class": "CombatWorldSpriteView",
-    "to_type": "PlayEnemyActionEffectIfNeeded",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
-    "from_class": "CombatWorldSpriteView",
     "to_type": "PlayEnemyAppearEffectIfNeeded",
     "relation_type": "uses",
     "strength": 1
@@ -21079,21 +22031,7 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
-    "to_type": "PlayEnemyDeathFadeIfNeeded",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
-    "from_class": "CombatWorldSpriteView",
-    "to_type": "PlayEnemyDebuffCastEffectIfNeeded",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
-    "from_class": "CombatWorldSpriteView",
-    "to_type": "PlayEnemyDefenseEffectIfNeeded",
+    "to_type": "PlayEnemyIdleAnimationIfNeeded",
     "relation_type": "uses",
     "strength": 1
   },
@@ -21149,20 +22087,6 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
-    "to_type": "PlayPlayerActionEffectIfNeeded",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
-    "from_class": "CombatWorldSpriteView",
-    "to_type": "PlayPlayerAttackAnimationIfNeeded",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
-    "from_class": "CombatWorldSpriteView",
     "to_type": "PlayPlayerThornGuardHitPulseIfNeeded",
     "relation_type": "uses",
     "strength": 1
@@ -21177,21 +22101,7 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
-    "to_type": "PlaySkillPresentationEffect",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
-    "from_class": "CombatWorldSpriteView",
     "to_type": "Presentation",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
-    "from_class": "CombatWorldSpriteView",
-    "to_type": "PreviewSkillEffect",
     "relation_type": "uses",
     "strength": 1
   },
@@ -21261,6 +22171,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
+    "to_type": "ResolveEnemyUsedIntent",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
     "to_type": "ResolveMissingReferences",
     "relation_type": "uses",
     "strength": 1
@@ -21276,13 +22193,6 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
     "to_type": "ResolvePlayerHpDamage",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
-    "from_class": "CombatWorldSpriteView",
-    "to_type": "ResolveSkillVfxFamily",
     "relation_type": "uses",
     "strength": 1
   },
@@ -21331,6 +22241,20 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
+    "to_type": "SelfBuffMagicCircleYOffset",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "SelfBuffParticleLift",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
     "to_type": "SetEnemyRendererAlpha",
     "relation_type": "uses",
     "strength": 1
@@ -21352,7 +22276,28 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
+    "to_type": "ShieldArtFrontSortingOffset",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
     "to_type": "ShieldArtImpactLifetimeSeconds",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "ShieldArtLeftLocalOffset",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "ShieldArtLeftOffsetX",
     "relation_type": "uses",
     "strength": 1
   },
@@ -21443,21 +22388,49 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
-    "to_type": "SkillSO",
+    "to_type": "SlashAttackArtScaleMultiplier",
     "relation_type": "uses",
     "strength": 1
   },
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
-    "to_type": "SkillType",
+    "to_type": "SlashBeamDurationSeconds",
     "relation_type": "uses",
     "strength": 1
   },
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
-    "to_type": "SkillVfxFamily",
+    "to_type": "SlashBeamHeightMultiplier",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "SlashBeamSourceLift",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "SlashBeamWidthMultiplier",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "SlashSkillMuzzleLocalX",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "SlashSkillMuzzleLocalY",
     "relation_type": "uses",
     "strength": 1
   },
@@ -21527,28 +22500,7 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "from_class": "CombatWorldSpriteView",
-    "to_type": "TentacleStrikeCupCount",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
-    "from_class": "CombatWorldSpriteView",
-    "to_type": "TentacleStrikeCupSegmentCount",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
-    "from_class": "CombatWorldSpriteView",
     "to_type": "TentacleStrikeDurationSeconds",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
-    "from_class": "CombatWorldSpriteView",
-    "to_type": "TentacleStrikeSegmentCount",
     "relation_type": "uses",
     "strength": 1
   },
@@ -22892,6 +23844,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
     "from_class": "CombatWorldSpriteView",
+    "to_type": "Animator",
+    "relation_type": "component-access",
+    "strength": 3
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
+    "from_class": "CombatWorldSpriteView",
     "to_type": "WorldShake",
     "relation_type": "component-access",
     "strength": 3
@@ -22914,6 +23873,41 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
     "from_class": "CombatWorldSpriteView",
     "to_type": "AddComponent",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "AnimationClip",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "AnimationClipPlayable",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "AnimationPlayableOutput",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "Animations",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "Animator",
     "relation_type": "uses",
     "strength": 1
   },
@@ -23018,6 +24012,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
     "from_class": "CombatWorldSpriteView",
+    "to_type": "ClearEnemyDirectAnimation",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
+    "from_class": "CombatWorldSpriteView",
     "to_type": "ClearWorldShake",
     "relation_type": "uses",
     "strength": 1
@@ -23067,6 +24068,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
     "from_class": "CombatWorldSpriteView",
+    "to_type": "Create",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
+    "from_class": "CombatWorldSpriteView",
     "to_type": "CreateRuntimeEnemyClawSlashEffect",
     "relation_type": "uses",
     "strength": 1
@@ -23081,6 +24089,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
     "from_class": "CombatWorldSpriteView",
+    "to_type": "DestroyEnemyAnimationGraph",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
+    "from_class": "CombatWorldSpriteView",
     "to_type": "DestroyGeneratedShakeRoot",
     "relation_type": "uses",
     "strength": 1
@@ -23089,6 +24104,20 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
     "from_class": "CombatWorldSpriteView",
     "to_type": "DestroyImmediate",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "DirectorUpdateMode",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "Enemies",
     "relation_type": "uses",
     "strength": 1
   },
@@ -23214,7 +24243,21 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
     "from_class": "CombatWorldSpriteView",
+    "to_type": "EnemyDirectAnimation",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
+    "from_class": "CombatWorldSpriteView",
     "to_type": "Euler",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "Evaluate",
     "relation_type": "uses",
     "strength": 1
   },
@@ -23235,6 +24278,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
     "from_class": "CombatWorldSpriteView",
+    "to_type": "FirstOrDefault",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
+    "from_class": "CombatWorldSpriteView",
     "to_type": "float",
     "relation_type": "uses",
     "strength": 1
@@ -23243,6 +24293,13 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
     "from_class": "CombatWorldSpriteView",
     "to_type": "ForegroundShakeRoot",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "GameTime",
     "relation_type": "uses",
     "strength": 1
   },
@@ -23284,6 +24341,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
     "from_class": "CombatWorldSpriteView",
+    "to_type": "IsDead",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
+    "from_class": "CombatWorldSpriteView",
     "to_type": "IsUsableShakeTarget",
     "relation_type": "uses",
     "strength": 1
@@ -23291,7 +24355,28 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
     "from_class": "CombatWorldSpriteView",
+    "to_type": "IsValid",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
+    "from_class": "CombatWorldSpriteView",
     "to_type": "Lerp",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "Linq",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "Manual",
     "relation_type": "uses",
     "strength": 1
   },
@@ -23319,7 +24404,28 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
     "from_class": "CombatWorldSpriteView",
+    "to_type": "PlayableGraph",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "Playables",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
+    "from_class": "CombatWorldSpriteView",
     "to_type": "PlayCombatantActionEffect",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "PlayEnemyAnimationClip",
     "relation_type": "uses",
     "strength": 1
   },
@@ -23369,6 +24475,20 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
     "from_class": "CombatWorldSpriteView",
     "to_type": "PlayEnemyDeathFadeIfNeeded",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "PlayEnemyIdleAnimationIfNeeded",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "PlayEnemyOneShotAnimation",
     "relation_type": "uses",
     "strength": 1
   },
@@ -23431,6 +24551,20 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
     "from_class": "CombatWorldSpriteView",
+    "to_type": "ResolveCurrentEnemyData",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "ResolveEnemyAnimatorForDirectAnimation",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
+    "from_class": "CombatWorldSpriteView",
     "to_type": "ResolveEnemyAttackDirectionSign",
     "relation_type": "uses",
     "strength": 1
@@ -23445,7 +24579,21 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
     "from_class": "CombatWorldSpriteView",
+    "to_type": "ResolveEnemySprite",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
+    "from_class": "CombatWorldSpriteView",
     "to_type": "ResolveForegroundShakeRoot",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "ResolveMissingReferences",
     "relation_type": "uses",
     "strength": 1
   },
@@ -23480,6 +24628,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
     "from_class": "CombatWorldSpriteView",
+    "to_type": "ReturnToEnemyIdleAnimationAfterDelay",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
+    "from_class": "CombatWorldSpriteView",
     "to_type": "Rigidbody2D",
     "relation_type": "uses",
     "strength": 1
@@ -23495,6 +24650,34 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
     "from_class": "CombatWorldSpriteView",
     "to_type": "SetParent",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "SetSourcePlayable",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "SetSpeed",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "SetTime",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "SetTimeUpdateMode",
     "relation_type": "uses",
     "strength": 1
   },
@@ -23544,6 +24727,13 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
     "from_class": "CombatWorldSpriteView",
     "to_type": "StopCoroutine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "StopEnemyAnimationReturnToIdle",
     "relation_type": "uses",
     "strength": 1
   },
@@ -27988,7 +29178,21 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
     "from_class": "RewardManager",
+    "to_type": "AddUniqueAllowedRewards",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
+    "from_class": "RewardManager",
     "to_type": "AddUniqueRewards",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
+    "from_class": "RewardManager",
+    "to_type": "Any",
     "relation_type": "uses",
     "strength": 1
   },
@@ -28066,6 +29270,20 @@
     "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
     "from_class": "RewardManager",
     "to_type": "BuildRuntimeDefaultChoices",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
+    "from_class": "RewardManager",
+    "to_type": "BuildRuntimeDefaultNonSkillChoices",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
+    "from_class": "RewardManager",
+    "to_type": "CanAddRewardChoice",
     "relation_type": "uses",
     "strength": 1
   },
@@ -28331,13 +29549,6 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
     "from_class": "RewardManager",
-    "to_type": "First",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
-    "from_class": "RewardManager",
     "to_type": "FirstOrDefault",
     "relation_type": "uses",
     "strength": 1
@@ -28597,7 +29808,21 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
     "from_class": "RewardManager",
+    "to_type": "MaximumSkillChoicesPerOffer",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
+    "from_class": "RewardManager",
     "to_type": "MinimumOfferedChoiceCategories",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
+    "from_class": "RewardManager",
+    "to_type": "MoveFirstAllowedReward",
     "relation_type": "uses",
     "strength": 1
   },
@@ -29080,6 +30305,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Rewards/RewardTableSO.cs",
     "from_class": "RewardTableSO",
+    "to_type": "Clamp01",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardTableSO.cs",
+    "from_class": "RewardTableSO",
     "to_type": "Collections",
     "relation_type": "uses",
     "strength": 1
@@ -29108,6 +30340,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Rewards/RewardTableSO.cs",
     "from_class": "RewardTableSO",
+    "to_type": "CountSkillRewards",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardTableSO.cs",
+    "from_class": "RewardTableSO",
     "to_type": "CreateAssetMenu",
     "relation_type": "uses",
     "strength": 1
@@ -29123,6 +30362,13 @@
     "from_file": "Project 2048/Assets/Scripts/Rewards/RewardTableSO.cs",
     "from_class": "RewardTableSO",
     "to_type": "Generic",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardTableSO.cs",
+    "from_class": "RewardTableSO",
+    "to_type": "IReadOnlyList",
     "relation_type": "uses",
     "strength": 1
   },
@@ -29164,6 +30410,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Rewards/RewardTableSO.cs",
     "from_class": "RewardTableSO",
+    "to_type": "ResolveOfferWeight",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardTableSO.cs",
+    "from_class": "RewardTableSO",
     "to_type": "Reward",
     "relation_type": "uses",
     "strength": 1
@@ -29186,6 +30439,13 @@
     "from_file": "Project 2048/Assets/Scripts/Rewards/RewardTableSO.cs",
     "from_class": "RewardTableSO",
     "to_type": "SelectRewards",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardTableSO.cs",
+    "from_class": "RewardTableSO",
+    "to_type": "SelectWeightedRewardIndex",
     "relation_type": "uses",
     "strength": 1
   },
@@ -32321,6 +33581,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Skills/SkillSO.cs",
     "from_class": "SkillSO",
+    "to_type": "SkillVfxDefinition",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Skills/SkillSO.cs",
+    "from_class": "SkillSO",
     "to_type": "SkillVfxFamily",
     "relation_type": "uses",
     "strength": 1
@@ -32427,6 +33694,286 @@
     "from_file": "Project 2048/Assets/Scripts/Skills/SkillType.cs",
     "from_class": "SkillType",
     "to_type": "SkillType",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Skills/SkillVfxCue.cs",
+    "from_class": "SkillVfxCue",
+    "to_type": "Color",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Skills/SkillVfxCue.cs",
+    "from_class": "SkillVfxCue",
+    "to_type": "HasPrefab",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Skills/SkillVfxCue.cs",
+    "from_class": "SkillVfxCue",
+    "to_type": "Min",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Skills/SkillVfxCue.cs",
+    "from_class": "SkillVfxCue",
+    "to_type": "Project2048",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Skills/SkillVfxCue.cs",
+    "from_class": "SkillVfxCue",
+    "to_type": "Serializable",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Skills/SkillVfxCue.cs",
+    "from_class": "SkillVfxCue",
+    "to_type": "Skills",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Skills/SkillVfxCue.cs",
+    "from_class": "SkillVfxCue",
+    "to_type": "SkillVfxPlacement",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Skills/SkillVfxCue.cs",
+    "from_class": "SkillVfxCue",
+    "to_type": "SkillVfxTrigger",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Skills/SkillVfxCue.cs",
+    "from_class": "SkillVfxCue",
+    "to_type": "System",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Skills/SkillVfxCue.cs",
+    "from_class": "SkillVfxCue",
+    "to_type": "UnityEngine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Skills/SkillVfxDefinition.cs",
+    "from_class": "SkillVfxDefinition",
+    "to_type": "Any",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Skills/SkillVfxDefinition.cs",
+    "from_class": "SkillVfxDefinition",
+    "to_type": "Array",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Skills/SkillVfxDefinition.cs",
+    "from_class": "SkillVfxDefinition",
+    "to_type": "Collections",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Skills/SkillVfxDefinition.cs",
+    "from_class": "SkillVfxDefinition",
+    "to_type": "CuesFor",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Skills/SkillVfxDefinition.cs",
+    "from_class": "SkillVfxDefinition",
+    "to_type": "Empty",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Skills/SkillVfxDefinition.cs",
+    "from_class": "SkillVfxDefinition",
+    "to_type": "Generic",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Skills/SkillVfxDefinition.cs",
+    "from_class": "SkillVfxDefinition",
+    "to_type": "HasAnyCue",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Skills/SkillVfxDefinition.cs",
+    "from_class": "SkillVfxDefinition",
+    "to_type": "HasPrefab",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Skills/SkillVfxDefinition.cs",
+    "from_class": "SkillVfxDefinition",
+    "to_type": "Linq",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Skills/SkillVfxDefinition.cs",
+    "from_class": "SkillVfxDefinition",
+    "to_type": "Project2048",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Skills/SkillVfxDefinition.cs",
+    "from_class": "SkillVfxDefinition",
+    "to_type": "Serializable",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Skills/SkillVfxDefinition.cs",
+    "from_class": "SkillVfxDefinition",
+    "to_type": "Skills",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Skills/SkillVfxDefinition.cs",
+    "from_class": "SkillVfxDefinition",
+    "to_type": "SkillVfxCue",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Skills/SkillVfxDefinition.cs",
+    "from_class": "SkillVfxDefinition",
+    "to_type": "SkillVfxTrigger",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Skills/SkillVfxDefinition.cs",
+    "from_class": "SkillVfxDefinition",
+    "to_type": "System",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Skills/SkillVfxDefinition.cs",
+    "from_class": "SkillVfxDefinition",
+    "to_type": "UnityEngine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Skills/SkillVfxEnums.cs",
+    "from_class": "SkillVfxEnums",
+    "to_type": "Activate",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Skills/SkillVfxEnums.cs",
+    "from_class": "SkillVfxEnums",
+    "to_type": "Body",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Skills/SkillVfxEnums.cs",
+    "from_class": "SkillVfxEnums",
+    "to_type": "ChargeRelease",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Skills/SkillVfxEnums.cs",
+    "from_class": "SkillVfxEnums",
+    "to_type": "ChargeStart",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Skills/SkillVfxEnums.cs",
+    "from_class": "SkillVfxEnums",
+    "to_type": "Enemy",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Skills/SkillVfxEnums.cs",
+    "from_class": "SkillVfxEnums",
+    "to_type": "Feet",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Skills/SkillVfxEnums.cs",
+    "from_class": "SkillVfxEnums",
+    "to_type": "Head",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Skills/SkillVfxEnums.cs",
+    "from_class": "SkillVfxEnums",
+    "to_type": "Impact",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Skills/SkillVfxEnums.cs",
+    "from_class": "SkillVfxEnums",
+    "to_type": "Player",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Skills/SkillVfxEnums.cs",
+    "from_class": "SkillVfxEnums",
+    "to_type": "Project2048",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Skills/SkillVfxEnums.cs",
+    "from_class": "SkillVfxEnums",
+    "to_type": "Skills",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Skills/SkillVfxEnums.cs",
+    "from_class": "SkillVfxEnums",
+    "to_type": "SkillVfxTarget",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Skills/SkillVfxEnums.cs",
+    "from_class": "SkillVfxEnums",
+    "to_type": "SkillVfxTrigger",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Skills/SkillVfxEnums.cs",
+    "from_class": "SkillVfxEnums",
+    "to_type": "SkillVfxVertical",
     "relation_type": "uses",
     "strength": 1
   },
@@ -32650,6 +34197,62 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Skills/SkillVfxPackageSO.cs",
     "from_class": "SkillVfxPackageSO",
+    "to_type": "Vector3",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Skills/SkillVfxPlacement.cs",
+    "from_class": "SkillVfxPlacement",
+    "to_type": "Project2048",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Skills/SkillVfxPlacement.cs",
+    "from_class": "SkillVfxPlacement",
+    "to_type": "Serializable",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Skills/SkillVfxPlacement.cs",
+    "from_class": "SkillVfxPlacement",
+    "to_type": "Skills",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Skills/SkillVfxPlacement.cs",
+    "from_class": "SkillVfxPlacement",
+    "to_type": "SkillVfxTarget",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Skills/SkillVfxPlacement.cs",
+    "from_class": "SkillVfxPlacement",
+    "to_type": "SkillVfxVertical",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Skills/SkillVfxPlacement.cs",
+    "from_class": "SkillVfxPlacement",
+    "to_type": "System",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Skills/SkillVfxPlacement.cs",
+    "from_class": "SkillVfxPlacement",
+    "to_type": "UnityEngine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Skills/SkillVfxPlacement.cs",
+    "from_class": "SkillVfxPlacement",
     "to_type": "Vector3",
     "relation_type": "uses",
     "strength": 1
@@ -33217,6 +34820,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Story/StoryController.cs",
     "from_class": "StoryController",
+    "to_type": "ApplyStoryBackgrounds",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Story/StoryController.cs",
+    "from_class": "StoryController",
     "to_type": "Awake",
     "relation_type": "uses",
     "strength": 1
@@ -33582,6 +35192,13 @@
     "from_file": "Project 2048/Assets/Scripts/Story/StoryDataSO.cs",
     "from_class": "StoryDataSO",
     "to_type": "Project2048",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Story/StoryDataSO.cs",
+    "from_class": "StoryDataSO",
+    "to_type": "Sprite",
     "relation_type": "uses",
     "strength": 1
   },
@@ -35177,6 +36794,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/UI/Story/StoryBackgroundView.cs",
     "from_class": "StoryBackgroundView",
+    "to_type": "ApplyStoryBackgrounds",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/Story/StoryBackgroundView.cs",
+    "from_class": "StoryBackgroundView",
     "to_type": "Awake",
     "relation_type": "uses",
     "strength": 1
@@ -35296,6 +36920,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/UI/Story/StoryBackgroundView.cs",
     "from_class": "StoryBackgroundView",
+    "to_type": "ResetFilledImage",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/Story/StoryBackgroundView.cs",
+    "from_class": "StoryBackgroundView",
     "to_type": "SetAlpha",
     "relation_type": "uses",
     "strength": 1
@@ -35310,6 +36941,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/UI/Story/StoryBackgroundView.cs",
     "from_class": "StoryBackgroundView",
+    "to_type": "Simple",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/Story/StoryBackgroundView.cs",
+    "from_class": "StoryBackgroundView",
     "to_type": "SmoothStep",
     "relation_type": "uses",
     "strength": 1
@@ -35318,6 +36956,13 @@
     "from_file": "Project 2048/Assets/Scripts/UI/Story/StoryBackgroundView.cs",
     "from_class": "StoryBackgroundView",
     "to_type": "Story",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/Story/StoryBackgroundView.cs",
+    "from_class": "StoryBackgroundView",
+    "to_type": "StoryDataSO",
     "relation_type": "uses",
     "strength": 1
   },
@@ -37270,6 +38915,13 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
     "from_class": "CombatManagerTests",
+    "to_type": "BeginSkillPresentationLock",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
+    "from_class": "CombatManagerTests",
     "to_type": "Block",
     "relation_type": "uses",
     "strength": 1
@@ -37348,6 +39000,13 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
     "from_class": "CombatManagerTests",
     "to_type": "Clear",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
+    "from_class": "CombatManagerTests",
+    "to_type": "ClearSkillPresentationLock",
     "relation_type": "uses",
     "strength": 1
   },
@@ -37739,6 +39398,13 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
     "from_class": "CombatManagerTests",
+    "to_type": "False",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
+    "from_class": "CombatManagerTests",
     "to_type": "Fear",
     "relation_type": "uses",
     "strength": 1
@@ -37824,6 +39490,13 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
     "from_class": "CombatManagerTests",
     "to_type": "Is",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
+    "from_class": "CombatManagerTests",
+    "to_type": "IsSkillPresentationLocked",
     "relation_type": "uses",
     "strength": 1
   },
@@ -38033,6 +39706,13 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
     "from_class": "CombatManagerTests",
+    "to_type": "RequestUseSkill_ReturnsFalseWhilePresentationLocked",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
+    "from_class": "CombatManagerTests",
     "to_type": "RequestUseSkillById",
     "relation_type": "uses",
     "strength": 1
@@ -38048,6 +39728,20 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
     "from_class": "CombatManagerTests",
     "to_type": "ResolveBoardPhase",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
+    "from_class": "CombatManagerTests",
+    "to_type": "ResolveBoardPhase_AfterFirstPlayerTurn_DoesNotFloorLowCost",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
+    "from_class": "CombatManagerTests",
+    "to_type": "ResolveBoardPhase_FirstPlayerTurn_FloorsPositiveCostToCheapestEquippedSkill",
     "relation_type": "uses",
     "strength": 1
   },
@@ -38292,6 +39986,13 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
     "from_class": "CombatPresentationEffectTests",
+    "to_type": "Animator",
+    "relation_type": "component-access",
+    "strength": 3
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
     "to_type": "AttackEffectShowcaseSlot",
     "relation_type": "component-access",
     "strength": 3
@@ -38307,6 +40008,13 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
     "from_class": "CombatPresentationEffectTests",
     "to_type": "CombatUiView",
+    "relation_type": "component-access",
+    "strength": 3
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "Component",
     "relation_type": "component-access",
     "strength": 3
   },
@@ -38390,6 +40098,13 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
     "from_class": "CombatPresentationEffectTests",
+    "to_type": "List",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
     "to_type": "Material",
     "relation_type": "creates",
     "strength": 2
@@ -38419,6 +40134,13 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
     "from_class": "CombatPresentationEffectTests",
     "to_type": "SerializedObject",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
+    "from_class": "CombatPresentationEffectTests",
+    "to_type": "SkillVfxContext",
     "relation_type": "creates",
     "strength": 2
   },
@@ -46587,13 +48309,6 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
     "from_class": "RewardGrowthTests",
-    "to_type": "Add",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
-    "from_class": "RewardGrowthTests",
     "to_type": "AddBoardMoveCount",
     "relation_type": "uses",
     "strength": 1
@@ -46959,13 +48674,6 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
     "from_class": "RewardGrowthTests",
     "to_type": "CreateGameObject",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
-    "from_class": "RewardGrowthTests",
-    "to_type": "CreateInstance",
     "relation_type": "uses",
     "strength": 1
   },
@@ -47385,6 +49093,13 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
     "from_class": "RewardGrowthTests",
+    "to_type": "LessThanOrEqualTo",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
     "to_type": "Linq",
     "relation_type": "uses",
     "strength": 1
@@ -47651,14 +49366,14 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
     "from_class": "RewardGrowthTests",
-    "to_type": "RewardManager_OfferReward_AllowsTwoSkillsButRequiresSecondCategory",
+    "to_type": "RewardManager_OfferReward_FillsThreeRogueliteChoices",
     "relation_type": "uses",
     "strength": 1
   },
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
     "from_class": "RewardGrowthTests",
-    "to_type": "RewardManager_OfferReward_FillsThreeRogueliteChoices",
+    "to_type": "RewardManager_OfferReward_LimitsSkillChoicesAndBackfillsNonSkillDefaults",
     "relation_type": "uses",
     "strength": 1
   },
@@ -47680,6 +49395,13 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
     "from_class": "RewardGrowthTests",
     "to_type": "Rewards",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "RewardTable_SelectRewards_UsesSkillOfferChanceWeight",
     "relation_type": "uses",
     "strength": 1
   },
@@ -47722,6 +49444,13 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
     "from_class": "RewardGrowthTests",
     "to_type": "ScreenSpaceOverlay",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "SelectRewards",
     "relation_type": "uses",
     "strength": 1
   },
@@ -47805,20 +49534,6 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
     "from_class": "RewardGrowthTests",
-    "to_type": "StageFloor",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
-    "from_class": "RewardGrowthTests",
-    "to_type": "StageSO",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
-    "from_class": "RewardGrowthTests",
     "to_type": "StartCombat",
     "relation_type": "uses",
     "strength": 1
@@ -47848,6 +49563,13 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
     "from_class": "RewardGrowthTests",
     "to_type": "TearDown",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "TemporaryAttackPower",
     "relation_type": "uses",
     "strength": 1
   },
@@ -48267,6 +49989,13 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
     "from_class": "SkillSOTests",
+    "to_type": "Activate",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
+    "from_class": "SkillSOTests",
     "to_type": "Add",
     "relation_type": "uses",
     "strength": 1
@@ -48400,6 +50129,13 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
     "from_class": "SkillSOTests",
+    "to_type": "CuesFor",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
+    "from_class": "SkillSOTests",
     "to_type": "Data",
     "relation_type": "uses",
     "strength": 1
@@ -48513,6 +50249,13 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
     "from_class": "SkillSOTests",
     "to_type": "GUIDToAssetPath",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
+    "from_class": "SkillSOTests",
+    "to_type": "HasAnyCue",
     "relation_type": "uses",
     "strength": 1
   },
@@ -48659,6 +50402,13 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
     "from_class": "SkillSOTests",
+    "to_type": "Prefab",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
+    "from_class": "SkillSOTests",
     "to_type": "Prefabs",
     "relation_type": "uses",
     "strength": 1
@@ -48715,6 +50465,20 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
     "from_class": "SkillSOTests",
+    "to_type": "PrototypeSkillAssets_UseTealExplosionInsteadOfRawVfxTestEasyExplosion",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
+    "from_class": "SkillSOTests",
+    "to_type": "RawEasyExplosionPath",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
+    "from_class": "SkillSOTests",
     "to_type": "Reflection",
     "relation_type": "uses",
     "strength": 1
@@ -48757,6 +50521,13 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
     "from_class": "SkillSOTests",
+    "to_type": "Select",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
+    "from_class": "SkillSOTests",
     "to_type": "SkillEffectKind",
     "relation_type": "uses",
     "strength": 1
@@ -48792,7 +50563,28 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
     "from_class": "SkillSOTests",
+    "to_type": "SkillVfx_TealEasyExplosion",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
+    "from_class": "SkillSOTests",
     "to_type": "SkillVfxFamily",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
+    "from_class": "SkillSOTests",
+    "to_type": "SkillVfxTrigger",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
+    "from_class": "SkillSOTests",
+    "to_type": "string",
     "relation_type": "uses",
     "strength": 1
   },
@@ -48820,6 +50612,13 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
     "from_class": "SkillSOTests",
+    "to_type": "TealEasyExplosionPath",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
+    "from_class": "SkillSOTests",
     "to_type": "Test",
     "relation_type": "uses",
     "strength": 1
@@ -48835,6 +50634,13 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
     "from_class": "SkillSOTests",
     "to_type": "That",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
+    "from_class": "SkillSOTests",
+    "to_type": "ToArray",
     "relation_type": "uses",
     "strength": 1
   },
@@ -48863,6 +50669,13 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
     "from_class": "SkillSOTests",
     "to_type": "Value",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
+    "from_class": "SkillSOTests",
+    "to_type": "VFX",
     "relation_type": "uses",
     "strength": 1
   },
@@ -49763,6 +51576,510 @@
     "strength": 1
   },
   {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillVfxPlayerTests.cs",
+    "from_class": "SkillVfxPlayerTests",
+    "to_type": "CombatProjectileEffect",
+    "relation_type": "component-access",
+    "strength": 3
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillVfxPlayerTests.cs",
+    "from_class": "SkillVfxPlayerTests",
+    "to_type": "ParticleSystem",
+    "relation_type": "component-access",
+    "strength": 3
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillVfxPlayerTests.cs",
+    "from_class": "SkillVfxPlayerTests",
+    "to_type": "VisualEffect",
+    "relation_type": "component-access",
+    "strength": 3
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillVfxPlayerTests.cs",
+    "from_class": "SkillVfxPlayerTests",
+    "to_type": "Color",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillVfxPlayerTests.cs",
+    "from_class": "SkillVfxPlayerTests",
+    "to_type": "GameObject",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillVfxPlayerTests.cs",
+    "from_class": "SkillVfxPlayerTests",
+    "to_type": "Rect",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillVfxPlayerTests.cs",
+    "from_class": "SkillVfxPlayerTests",
+    "to_type": "SkillVfxContext",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillVfxPlayerTests.cs",
+    "from_class": "SkillVfxPlayerTests",
+    "to_type": "Texture2D",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillVfxPlayerTests.cs",
+    "from_class": "SkillVfxPlayerTests",
+    "to_type": "Vector2",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillVfxPlayerTests.cs",
+    "from_class": "SkillVfxPlayerTests",
+    "to_type": "Vector3",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillVfxPlayerTests.cs",
+    "from_class": "SkillVfxPlayerTests",
+    "to_type": "Activate",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillVfxPlayerTests.cs",
+    "from_class": "SkillVfxPlayerTests",
+    "to_type": "AddComponent",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillVfxPlayerTests.cs",
+    "from_class": "SkillVfxPlayerTests",
+    "to_type": "Assert",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillVfxPlayerTests.cs",
+    "from_class": "SkillVfxPlayerTests",
+    "to_type": "BeamPrefab",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillVfxPlayerTests.cs",
+    "from_class": "SkillVfxPlayerTests",
+    "to_type": "Body",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillVfxPlayerTests.cs",
+    "from_class": "SkillVfxPlayerTests",
+    "to_type": "ChargeRelease",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillVfxPlayerTests.cs",
+    "from_class": "SkillVfxPlayerTests",
+    "to_type": "Color",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillVfxPlayerTests.cs",
+    "from_class": "SkillVfxPlayerTests",
+    "to_type": "CombatProjectileEffect",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillVfxPlayerTests.cs",
+    "from_class": "SkillVfxPlayerTests",
+    "to_type": "Count",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillVfxPlayerTests.cs",
+    "from_class": "SkillVfxPlayerTests",
+    "to_type": "Create",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillVfxPlayerTests.cs",
+    "from_class": "SkillVfxPlayerTests",
+    "to_type": "DestroyImmediate",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillVfxPlayerTests.cs",
+    "from_class": "SkillVfxPlayerTests",
+    "to_type": "Enemy",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillVfxPlayerTests.cs",
+    "from_class": "SkillVfxPlayerTests",
+    "to_type": "EqualTo",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillVfxPlayerTests.cs",
+    "from_class": "SkillVfxPlayerTests",
+    "to_type": "Feet",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillVfxPlayerTests.cs",
+    "from_class": "SkillVfxPlayerTests",
+    "to_type": "Framework",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillVfxPlayerTests.cs",
+    "from_class": "SkillVfxPlayerTests",
+    "to_type": "Fx",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillVfxPlayerTests.cs",
+    "from_class": "SkillVfxPlayerTests",
+    "to_type": "GetComponent",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillVfxPlayerTests.cs",
+    "from_class": "SkillVfxPlayerTests",
+    "to_type": "Is",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillVfxPlayerTests.cs",
+    "from_class": "SkillVfxPlayerTests",
+    "to_type": "LessThan",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillVfxPlayerTests.cs",
+    "from_class": "SkillVfxPlayerTests",
+    "to_type": "MakeUnitSprite",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillVfxPlayerTests.cs",
+    "from_class": "SkillVfxPlayerTests",
+    "to_type": "Not",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillVfxPlayerTests.cs",
+    "from_class": "SkillVfxPlayerTests",
+    "to_type": "Null",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillVfxPlayerTests.cs",
+    "from_class": "SkillVfxPlayerTests",
+    "to_type": "NUnit",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillVfxPlayerTests.cs",
+    "from_class": "SkillVfxPlayerTests",
+    "to_type": "Object",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillVfxPlayerTests.cs",
+    "from_class": "SkillVfxPlayerTests",
+    "to_type": "ParticleFx",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillVfxPlayerTests.cs",
+    "from_class": "SkillVfxPlayerTests",
+    "to_type": "ParticleFx2",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillVfxPlayerTests.cs",
+    "from_class": "SkillVfxPlayerTests",
+    "to_type": "ParticleSystem",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillVfxPlayerTests.cs",
+    "from_class": "SkillVfxPlayerTests",
+    "to_type": "Play",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillVfxPlayerTests.cs",
+    "from_class": "SkillVfxPlayerTests",
+    "to_type": "Play_ClearTint_LeavesPrefabColor",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillVfxPlayerTests.cs",
+    "from_class": "SkillVfxPlayerTests",
+    "to_type": "Play_ParticleCue_AutoPlaysAndAppliesTint",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillVfxPlayerTests.cs",
+    "from_class": "SkillVfxPlayerTests",
+    "to_type": "Play_ProjectileCueWithVisualEffect_SpawnsPrefab",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillVfxPlayerTests.cs",
+    "from_class": "SkillVfxPlayerTests",
+    "to_type": "Play_StaticCue_SpawnsPrefabAtPlacement",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillVfxPlayerTests.cs",
+    "from_class": "SkillVfxPlayerTests",
+    "to_type": "Play_WrongTrigger_SpawnsNothing",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillVfxPlayerTests.cs",
+    "from_class": "SkillVfxPlayerTests",
+    "to_type": "Player",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillVfxPlayerTests.cs",
+    "from_class": "SkillVfxPlayerTests",
+    "to_type": "Presentation",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillVfxPlayerTests.cs",
+    "from_class": "SkillVfxPlayerTests",
+    "to_type": "Project2048",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillVfxPlayerTests.cs",
+    "from_class": "SkillVfxPlayerTests",
+    "to_type": "Rect",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillVfxPlayerTests.cs",
+    "from_class": "SkillVfxPlayerTests",
+    "to_type": "ResolvePlacement_EnemyFeet_IsBelowEnemyCenter",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillVfxPlayerTests.cs",
+    "from_class": "SkillVfxPlayerTests",
+    "to_type": "ResolvePlacementWorldPosition",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillVfxPlayerTests.cs",
+    "from_class": "SkillVfxPlayerTests",
+    "to_type": "Skills",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillVfxPlayerTests.cs",
+    "from_class": "SkillVfxPlayerTests",
+    "to_type": "SkillVfxContext",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillVfxPlayerTests.cs",
+    "from_class": "SkillVfxPlayerTests",
+    "to_type": "SkillVfxCue",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillVfxPlayerTests.cs",
+    "from_class": "SkillVfxPlayerTests",
+    "to_type": "SkillVfxDefinition",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillVfxPlayerTests.cs",
+    "from_class": "SkillVfxPlayerTests",
+    "to_type": "SkillVfxPlacement",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillVfxPlayerTests.cs",
+    "from_class": "SkillVfxPlayerTests",
+    "to_type": "SkillVfxPlayer",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillVfxPlayerTests.cs",
+    "from_class": "SkillVfxPlayerTests",
+    "to_type": "SkillVfxTarget",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillVfxPlayerTests.cs",
+    "from_class": "SkillVfxPlayerTests",
+    "to_type": "SkillVfxTrigger",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillVfxPlayerTests.cs",
+    "from_class": "SkillVfxPlayerTests",
+    "to_type": "SkillVfxVertical",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillVfxPlayerTests.cs",
+    "from_class": "SkillVfxPlayerTests",
+    "to_type": "Sprite",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillVfxPlayerTests.cs",
+    "from_class": "SkillVfxPlayerTests",
+    "to_type": "SpriteRenderer",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillVfxPlayerTests.cs",
+    "from_class": "SkillVfxPlayerTests",
+    "to_type": "Test",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillVfxPlayerTests.cs",
+    "from_class": "SkillVfxPlayerTests",
+    "to_type": "Tests",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillVfxPlayerTests.cs",
+    "from_class": "SkillVfxPlayerTests",
+    "to_type": "Texture2D",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillVfxPlayerTests.cs",
+    "from_class": "SkillVfxPlayerTests",
+    "to_type": "That",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillVfxPlayerTests.cs",
+    "from_class": "SkillVfxPlayerTests",
+    "to_type": "True",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillVfxPlayerTests.cs",
+    "from_class": "SkillVfxPlayerTests",
+    "to_type": "UnityEngine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillVfxPlayerTests.cs",
+    "from_class": "SkillVfxPlayerTests",
+    "to_type": "Vector2",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillVfxPlayerTests.cs",
+    "from_class": "SkillVfxPlayerTests",
+    "to_type": "Vector3",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillVfxPlayerTests.cs",
+    "from_class": "SkillVfxPlayerTests",
+    "to_type": "VFX",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillVfxPlayerTests.cs",
+    "from_class": "SkillVfxPlayerTests",
+    "to_type": "VfxProjectile",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillVfxPlayerTests.cs",
+    "from_class": "SkillVfxPlayerTests",
+    "to_type": "VisualEffect",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillVfxPlayerTests.cs",
+    "from_class": "SkillVfxPlayerTests",
+    "to_type": "Within",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
     "from_file": "Project 2048/Assets/Tests/EditMode/StageDatabaseSOTests.cs",
     "from_class": "StageDatabaseSOTests",
     "to_type": "Assert",
@@ -50479,6 +52796,454 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/StageDatabaseTests.cs",
     "from_class": "StageDatabaseTests",
+    "to_type": "Vector2",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StoryControllerTests.cs",
+    "from_class": "StoryControllerTests",
+    "to_type": "GameObject",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StoryControllerTests.cs",
+    "from_class": "StoryControllerTests",
+    "to_type": "Rect",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StoryControllerTests.cs",
+    "from_class": "StoryControllerTests",
+    "to_type": "Texture2D",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StoryControllerTests.cs",
+    "from_class": "StoryControllerTests",
+    "to_type": "Vector2",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StoryControllerTests.cs",
+    "from_class": "StoryControllerTests",
+    "to_type": "BindingFlags",
+    "relation_type": "singleton-access",
+    "strength": 4
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StoryControllerTests.cs",
+    "from_class": "StoryControllerTests",
+    "to_type": "AddComponent",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StoryControllerTests.cs",
+    "from_class": "StoryControllerTests",
+    "to_type": "Any",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StoryControllerTests.cs",
+    "from_class": "StoryControllerTests",
+    "to_type": "ApplyStoryBackgrounds",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StoryControllerTests.cs",
+    "from_class": "StoryControllerTests",
+    "to_type": "Art",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StoryControllerTests.cs",
+    "from_class": "StoryControllerTests",
+    "to_type": "Assert",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StoryControllerTests.cs",
+    "from_class": "StoryControllerTests",
+    "to_type": "AssetDatabase",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StoryControllerTests.cs",
+    "from_class": "StoryControllerTests",
+    "to_type": "Assets",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StoryControllerTests.cs",
+    "from_class": "StoryControllerTests",
+    "to_type": "BindingFlags",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StoryControllerTests.cs",
+    "from_class": "StoryControllerTests",
+    "to_type": "Create",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StoryControllerTests.cs",
+    "from_class": "StoryControllerTests",
+    "to_type": "CreateInstance",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StoryControllerTests.cs",
+    "from_class": "StoryControllerTests",
+    "to_type": "CreateSprite",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StoryControllerTests.cs",
+    "from_class": "StoryControllerTests",
+    "to_type": "Current",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StoryControllerTests.cs",
+    "from_class": "StoryControllerTests",
+    "to_type": "CurrentSprite",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StoryControllerTests.cs",
+    "from_class": "StoryControllerTests",
+    "to_type": "Data",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StoryControllerTests.cs",
+    "from_class": "StoryControllerTests",
+    "to_type": "DestroyImmediate",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StoryControllerTests.cs",
+    "from_class": "StoryControllerTests",
+    "to_type": "Empty",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StoryControllerTests.cs",
+    "from_class": "StoryControllerTests",
+    "to_type": "EndingStoryData",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StoryControllerTests.cs",
+    "from_class": "StoryControllerTests",
+    "to_type": "EndingStoryData_UsesEndingBackgroundAndHasDialogue",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StoryControllerTests.cs",
+    "from_class": "StoryControllerTests",
+    "to_type": "EqualTo",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StoryControllerTests.cs",
+    "from_class": "StoryControllerTests",
+    "to_type": "Framework",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StoryControllerTests.cs",
+    "from_class": "StoryControllerTests",
+    "to_type": "GetAssetPath",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StoryControllerTests.cs",
+    "from_class": "StoryControllerTests",
+    "to_type": "GetField",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StoryControllerTests.cs",
+    "from_class": "StoryControllerTests",
+    "to_type": "GetType",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StoryControllerTests.cs",
+    "from_class": "StoryControllerTests",
+    "to_type": "Image",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StoryControllerTests.cs",
+    "from_class": "StoryControllerTests",
+    "to_type": "Instance",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StoryControllerTests.cs",
+    "from_class": "StoryControllerTests",
+    "to_type": "Is",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StoryControllerTests.cs",
+    "from_class": "StoryControllerTests",
+    "to_type": "IsNullOrWhiteSpace",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StoryControllerTests.cs",
+    "from_class": "StoryControllerTests",
+    "to_type": "Linq",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StoryControllerTests.cs",
+    "from_class": "StoryControllerTests",
+    "to_type": "LoadAssetAtPath",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StoryControllerTests.cs",
+    "from_class": "StoryControllerTests",
+    "to_type": "Missing",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StoryControllerTests.cs",
+    "from_class": "StoryControllerTests",
+    "to_type": "Next",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StoryControllerTests.cs",
+    "from_class": "StoryControllerTests",
+    "to_type": "NextSprite",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StoryControllerTests.cs",
+    "from_class": "StoryControllerTests",
+    "to_type": "NonPublic",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StoryControllerTests.cs",
+    "from_class": "StoryControllerTests",
+    "to_type": "Not",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StoryControllerTests.cs",
+    "from_class": "StoryControllerTests",
+    "to_type": "Null",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StoryControllerTests.cs",
+    "from_class": "StoryControllerTests",
+    "to_type": "NUnit",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StoryControllerTests.cs",
+    "from_class": "StoryControllerTests",
+    "to_type": "Object",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StoryControllerTests.cs",
+    "from_class": "StoryControllerTests",
+    "to_type": "Project2048",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StoryControllerTests.cs",
+    "from_class": "StoryControllerTests",
+    "to_type": "Rect",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StoryControllerTests.cs",
+    "from_class": "StoryControllerTests",
+    "to_type": "Reflection",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StoryControllerTests.cs",
+    "from_class": "StoryControllerTests",
+    "to_type": "SetParent",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StoryControllerTests.cs",
+    "from_class": "StoryControllerTests",
+    "to_type": "SetPrivateField",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StoryControllerTests.cs",
+    "from_class": "StoryControllerTests",
+    "to_type": "SetValue",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StoryControllerTests.cs",
+    "from_class": "StoryControllerTests",
+    "to_type": "Source",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StoryControllerTests.cs",
+    "from_class": "StoryControllerTests",
+    "to_type": "Sprite",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StoryControllerTests.cs",
+    "from_class": "StoryControllerTests",
+    "to_type": "Story",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StoryControllerTests.cs",
+    "from_class": "StoryControllerTests",
+    "to_type": "StoryBackgroundView",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StoryControllerTests.cs",
+    "from_class": "StoryControllerTests",
+    "to_type": "StoryBackgroundView_ApplyStoryBackgrounds_ReplacesSceneImages",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StoryControllerTests.cs",
+    "from_class": "StoryControllerTests",
+    "to_type": "StoryDataSO",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StoryControllerTests.cs",
+    "from_class": "StoryControllerTests",
+    "to_type": "System",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StoryControllerTests.cs",
+    "from_class": "StoryControllerTests",
+    "to_type": "Test",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StoryControllerTests.cs",
+    "from_class": "StoryControllerTests",
+    "to_type": "Tests",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StoryControllerTests.cs",
+    "from_class": "StoryControllerTests",
+    "to_type": "Texture2D",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StoryControllerTests.cs",
+    "from_class": "StoryControllerTests",
+    "to_type": "That",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StoryControllerTests.cs",
+    "from_class": "StoryControllerTests",
+    "to_type": "True",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StoryControllerTests.cs",
+    "from_class": "StoryControllerTests",
+    "to_type": "UI",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StoryControllerTests.cs",
+    "from_class": "StoryControllerTests",
+    "to_type": "UnityEditor",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StoryControllerTests.cs",
+    "from_class": "StoryControllerTests",
+    "to_type": "UnityEngine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StoryControllerTests.cs",
+    "from_class": "StoryControllerTests",
     "to_type": "Vector2",
     "relation_type": "uses",
     "strength": 1

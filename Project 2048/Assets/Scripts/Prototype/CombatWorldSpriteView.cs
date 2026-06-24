@@ -6342,7 +6342,7 @@ namespace Project2048.Prototype
                 return;
             }
 
-            var anchorRenderer = anchor.GetComponent<SpriteRenderer>();
+            var anchorRenderer = ResolveAnchorSortingRenderer(anchor);
             if (anchorRenderer == null)
             {
                 return;
@@ -6350,6 +6350,28 @@ namespace Project2048.Prototype
 
             renderer.sortingLayerID = anchorRenderer.sortingLayerID;
             renderer.sortingOrder = anchorRenderer.sortingOrder + sortingOffset;
+        }
+
+        private static SpriteRenderer ResolveAnchorSortingRenderer(Transform anchor)
+        {
+            if (anchor == null)
+            {
+                return null;
+            }
+
+            var anchorRenderer = anchor.GetComponent<SpriteRenderer>();
+            if (anchorRenderer != null)
+            {
+                return anchorRenderer;
+            }
+
+            if (IsLayeredPlayerActorRoot(anchor))
+            {
+                return ResolveLayeredPlayerPrimaryRenderer(anchor);
+            }
+
+            return anchor.GetComponentsInChildren<SpriteRenderer>(includeInactive: true)
+                .FirstOrDefault(childRenderer => childRenderer != null);
         }
 
         private static bool IsShieldGeneratingSkill(SkillSO skill)

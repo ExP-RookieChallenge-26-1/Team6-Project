@@ -2495,11 +2495,15 @@ namespace Project2048.Tests
             const string ControllerPath = "Assets/VFX Test/Effect_촉수_0.controller";
             var viewObject = CreateOwnedGameObject("WorldSpriteView");
             var view = viewObject.AddComponent<CombatWorldSpriteView>();
-            var playerRenderer = CreateOwnedGameObject("PlayerSprite").AddComponent<SpriteRenderer>();
+            var playerRoot = CreateOwnedGameObject("player_all");
+            var playerRenderer = CreateOwnedGameObject("Body").AddComponent<SpriteRenderer>();
             var enemyRenderer = CreateOwnedGameObject("EnemySprite").AddComponent<SpriteRenderer>();
             var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(PrefabPath);
             var tentacle = CreateSkill("tentacle-strike", SkillType.Attack, cost: 0, power: 90);
-            playerRenderer.transform.localPosition = new Vector3(-1f, 0f, 0f);
+            playerRenderer.sprite = CreateOwnedSprite("LayeredPlayerBodySprite");
+            playerRenderer.sortingOrder = 6;
+            playerRoot.transform.localPosition = new Vector3(-1f, 0f, 0f);
+            playerRenderer.transform.SetParent(playerRoot.transform, false);
             enemyRenderer.transform.localPosition = new Vector3(1f, 0f, 0f);
             enemyRenderer.sortingOrder = 4;
             tentacle.vfxFamily = SkillVfxFamily.TentacleWhip;
@@ -2508,6 +2512,7 @@ namespace Project2048.Tests
 
             Assert.That(prefab, Is.Not.Null);
 
+            SetPrivateField(view, "playerActorRoot", playerRoot.transform);
             SetPrivateField(view, "playerRenderer", playerRenderer);
             SetPrivateField(view, "enemyRenderer", enemyRenderer);
 
@@ -2523,6 +2528,9 @@ namespace Project2048.Tests
             Assert.That(renderer, Is.Not.Null);
             Assert.That(renderer.color, Is.EqualTo(prefabRenderer.color));
             Assert.That(whipRoot.position.x, Is.EqualTo(playerRenderer.transform.position.x).Within(0.001f));
+            Assert.That(renderer.bounds.min.x, Is.LessThan(playerRenderer.bounds.center.x));
+            Assert.That(renderer.bounds.max.x, Is.GreaterThan(playerRenderer.bounds.center.x));
+            Assert.That(renderer.sortingOrder, Is.EqualTo(playerRenderer.sortingOrder + 12));
             Assert.That(whipRoot.GetComponent<LineRenderer>(), Is.Null);
             Assert.That(whipRoot.Find("TentacleStrikeHighlight"), Is.Null);
             Assert.That(whipRoot.Cast<Transform>().Any(child => child.name.StartsWith("TentacleSuctionCup")), Is.False);

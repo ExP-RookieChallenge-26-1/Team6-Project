@@ -31,6 +31,8 @@ namespace Project2048.Prototype
         public const float ShieldBurstSkillDurationSeconds = 0.72f;
         public const float DamageNumberPopupDurationSeconds = 0.55f;
         public const float ChargedLightBeamDurationSeconds = 0.65f;
+        public const float GatherLightPreviewReleaseDelaySeconds = 2f;
+        public const float GatherLightVerticalBeamLifetimeSeconds = 0.95f;
         public const float TentacleStrikeDurationSeconds = 0.58f;
         public const float HeavyStrikeSpikedBurstDurationSeconds = 0.62f;
         public const float BloodFountainSlashDurationSeconds = 0.72f;
@@ -53,6 +55,8 @@ namespace Project2048.Prototype
         private const float PersistentShieldArtRadius = 0.86f * ShieldCircleRadiusMultiplier;
         private const float ShieldArtDiameterMultiplier = 2.62f;
         private const float ShieldArtImpactLifetimeSeconds = 0.28f;
+        private const float ShieldArtLeftOffsetX = -0.12f;
+        private const int ShieldArtFrontSortingOffset = 12;
         private const float ThornGuardShieldFollowSharpness = 30f;
         private const int TentacleStrikeSegmentCount = 18;
         private const int TentacleStrikeCupCount = 5;
@@ -82,9 +86,8 @@ namespace Project2048.Prototype
         private const string DefaultWorldVfxProfileResourceName = "PrototypeCombatWorldVfxProfile";
         private const string LayeredPlayerActorRootName = "player_all";
         private const string LayeredPlayerBodyRendererName = "Body";
-        private const string OpenWoundSkillId = "open-wound";
         private static readonly int PlayerAttackStateHash = Animator.StringToHash("Attack");
-        private static readonly Vector3 OpenWoundExplosionLocalOffset = new(0f, 0.18f, 0f);
+        private static readonly Vector3 ShieldArtLeftLocalOffset = new(ShieldArtLeftOffsetX, 0f, 0f);
         private static readonly Vector3 PlayerFrontAttackArtLocalOffset = new(0.68f, 0.16f, 0f);
         private static readonly Vector3 PlayerRightMagicCircleLocalOffset = new(0.76f, 0.1f, 0f);
         private static readonly Vector3 FlameBurstExplosionLocalOffset = new(0f, 0.18f, 0f);
@@ -97,6 +100,16 @@ namespace Project2048.Prototype
             "Tint",
             "TintColor",
             "ParticleColor",
+        };
+        private static readonly string[] GatherLightVerticalBeamColorPropertyNames =
+        {
+            "_Color",
+            "Color",
+            "BaseColor",
+            "Tint",
+            "TintColor",
+            "_FresnelColor",
+            "FresnelColor",
         };
         private static readonly Color ShieldCircleLightTint = new(1f, 0.96f, 0.72f, 0.94f);
         private static readonly Color ThornGuardShadowTint = new(0.025f, 0.035f, 0.03f, 0.96f);
@@ -152,6 +165,7 @@ namespace Project2048.Prototype
         private FollowingShieldVfx activePlayerShieldArtVfx;
         private FollowingShieldVfx activePlayerThornGuardVfx;
         private Coroutine playerAttackAnimationSpeedCoroutine;
+        private Coroutine gatherLightPreviewReleaseCoroutine;
         private float playerAttackAnimationSpeedRestoreValue = 1f;
         private bool hasPlayerAttackAnimationSpeedRestoreValue;
         private readonly System.Collections.Generic.Dictionary<string, Material> runtimeSkillParticleMaterials = new();
@@ -210,6 +224,7 @@ namespace Project2048.Prototype
             ClearEnemyAttackLunge();
             ClearPlayerCloseRangeAttackLunge();
             ClearPlayerAttackAnimationSpeed();
+            ClearGatherLightPreviewRelease();
             ClearWorldShake();
             ClearDamageNumberPopups();
             ClearActivePlayerShieldArtVfx();
@@ -331,10 +346,10 @@ namespace Project2048.Prototype
 
             ResolveMissingReferences();
             ResolveWorldVfxProfile();
-            PlaySkillPresentationEffect(skill, delayEnemyDeathFade: false);
+            PlaySkillPresentationEffect(skill, delayEnemyDeathFade: false, previewChargeRelease: true);
         }
 
-        private void PlaySkillPresentationEffect(SkillSO skill, bool delayEnemyDeathFade)
+        private void PlaySkillPresentationEffect(SkillSO skill, bool delayEnemyDeathFade, bool previewChargeRelease = false)
         {
             var effect = skill.activationEffect;
             var isAttack = skill.skillType == SkillType.Attack;
@@ -348,7 +363,26 @@ namespace Project2048.Prototype
             PlayPlayerAttackAnimationIfNeeded(skill, family);
             if (isChargeAttack)
             {
-                PlayChargeAttackStartEffect(skill, effect, sourceAnchor);
+                if (!TryPlayDefinitionCues(skill, SkillVfxTrigger.ChargeStart))
+                {
+                    PlayChargeAttackStartEffect(skill, effect, sourceAnchor);
+                }
+
+                if (previewChargeRelease)
+                {
+                    PreviewGatherLightReleaseIfNeeded(skill, targetAnchor);
+                }
+
+                return;
+            }
+
+            if (TryPlayDefinitionCues(skill, SkillVfxTrigger.Activate))
+            {
+                if (delayEnemyDeathFade)
+                {
+                    DelayEnemyDeathFadeForSkillEffect(skill, effect);
+                }
+
                 return;
             }
 
@@ -422,6 +456,27 @@ namespace Project2048.Prototype
             {
                 DelayEnemyDeathFadeForSkillEffect(skill, effect);
             }
+        }
+
+        private SkillVfxContext BuildSkillVfxContext(SkillVfxTrigger trigger)
+        {
+            var playerAnchor = ResolvePlayerAnchor() ?? transform;
+            var enemyAnchor = enemyRenderer != null ? enemyRenderer.transform : transform;
+            return new SkillVfxContext(playerAnchor, enemyAnchor, trigger);
+        }
+
+        // 새 데이터 기반 VFX: 해당 트리거의 큐가 하나라도 재생됐으면 true(→ 기존 절차 경로 skip).
+        // vfxDefinition이 비면 false → 기존 경로로 폴백(현재 화면 유지).
+        private bool TryPlayDefinitionCues(SkillSO skill, SkillVfxTrigger trigger)
+        {
+            if (skill == null || skill.vfxDefinition == null || !skill.vfxDefinition.HasAnyCue)
+            {
+                return false;
+            }
+
+            var ctx = BuildSkillVfxContext(trigger);
+            var spawned = SkillVfxPlayer.Play(skill.vfxDefinition, ctx, transform, Application.isPlaying);
+            return spawned.Count > 0;
         }
 
         private bool TryPlayDirectedSkillEffect(
@@ -685,9 +740,14 @@ namespace Project2048.Prototype
         private void HandlePlayerChargedAttackReleased(string skillName, int chargedPower, EnemyController target)
         {
             ResolveMissingReferences();
-            PlayPlayerAttackAnimation();
-            PlayChargedLightBeamEffect(target);
-            DelayEnemyDeathFade(ChargedLightBeamDurationSeconds);
+            var targetTransform = target != null && enemyRenderer != null ? enemyRenderer.transform : transform;
+            var chargedSkill = ResolvePlayerChargedLightSkill(skillName);
+            if (!TryPlayDefinitionCues(chargedSkill, SkillVfxTrigger.ChargeRelease))
+            {
+                PlayGatherLightReleasedAttackEffect(chargedSkill, targetTransform, playAttackAnimation: true);
+            }
+
+            DelayEnemyDeathFade(Mathf.Max(ChargedLightBeamDurationSeconds, GatherLightVerticalBeamLifetimeSeconds));
         }
 
         private void Render(CombatSnapshot currentSnapshot)
@@ -910,7 +970,7 @@ namespace Project2048.Prototype
             }
         }
 
-        private void PlayCombatantActionParticleEffect(CombatEffectBinding effect, Transform anchor)
+        private void PlayCombatantActionParticleEffect(CombatEffectBinding effect, Transform anchor, Vector3 localOffset = default)
         {
             if (effect?.particleEffect?.HasParticleVisual != true)
             {
@@ -928,15 +988,18 @@ namespace Project2048.Prototype
                 fallbackBurstCount: 16,
                 fallbackStartSpeed: 0.6f,
                 fallbackStartSize: 0.12f,
-                swirl: false);
+                swirl: false,
+                localOffset: localOffset);
         }
 
         private void PlayChargeAttackStartEffect(SkillSO skill, CombatEffectBinding effect, Transform sourceAnchor)
         {
             PlayCombatantActionAudioEffect(effect);
+            // 충전 버프 이펙트는 캐릭터 발이 아니라 몸(스프라이트 시각적 중앙)에서 빛이 모이게 한다.
+            var bodyLocalOffset = ResolveVisualCenterLocalOffset(sourceAnchor, Vector3.zero);
             if (effect?.particleEffect?.HasParticleVisual == true)
             {
-                PlayCombatantActionParticleEffect(effect, sourceAnchor);
+                PlayCombatantActionParticleEffect(effect, sourceAnchor, bodyLocalOffset);
                 return;
             }
 
@@ -951,7 +1014,7 @@ namespace Project2048.Prototype
                 0.28f,
                 0.14f,
                 swirl: true,
-                new Vector3(0f, 0.14f, 0f));
+                bodyLocalOffset);
         }
 
         private static bool ShouldPlayReusableFamilyEffectFromSkillSo(SkillSO skill, CombatEffectBinding effect)
@@ -1123,9 +1186,14 @@ namespace Project2048.Prototype
             }
 
             var sourceAnchor = ResolvePlayerAnchor() ?? transform;
+            PlaySupportBuffHealingVisualEffect(skill, sourceAnchor, lifetimeSeconds);
+            if (UsesSupportBuffHealingVisualEffect(skill))
+            {
+                return;
+            }
+
             PlayMagicCircleArtForReusableSkill(skill, sourceAnchor, lifetimeSeconds);
             PlayAttackArtForReusableSkill(skill, anchor, sourceAnchor);
-            PlaySupportBuffHealingVisualEffect(skill, sourceAnchor, lifetimeSeconds);
             if (UsesSpriteOnlyReusableSkillEffect(family))
             {
                 return;
@@ -1265,8 +1333,9 @@ namespace Project2048.Prototype
             var radius = ShieldCircleBaseRadius * Mathf.Clamp(Mathf.Sqrt(scale), 0.72f, 1.35f);
             var lifetime = ShieldBashDurationSeconds;
             var offset = new Vector3(0f, ShieldCircleBaseYOffset, 0f);
-            var startPosition = ResolveAnchorWorldPosition(sourceAnchor, offset);
-            var endPosition = ResolveAnchorWorldPosition(targetAnchor, offset);
+            var shiftedOffset = ResolveShieldArtLocalOffset(offset);
+            var startPosition = ResolveShieldWorldPosition(ResolveAnchorWorldPosition(sourceAnchor, offset));
+            var endPosition = ResolveShieldWorldPosition(ResolveAnchorWorldPosition(targetAnchor, offset));
             var artColor = ResolveShieldArtColor(primary, 0.88f);
 
             var shieldArt = SpawnShieldArtSpriteLayer(
@@ -1305,7 +1374,7 @@ namespace Project2048.Prototype
                 0.52f * Mathf.Sqrt(scale),
                 0.12f,
                 false,
-                offset,
+                shiftedOffset,
                 particles => ConfigureShieldShardBurstParticles(particles, scale, lifetime * 0.72f, heavy: false));
 
             if (Application.isPlaying && isActiveAndEnabled)
@@ -1336,7 +1405,8 @@ namespace Project2048.Prototype
             var radius = ShieldCircleBaseRadius * Mathf.Clamp(Mathf.Sqrt(scale), 0.88f, 1.55f);
             var lifetime = ShieldBurstSkillDurationSeconds;
             var offset = new Vector3(0f, ShieldCircleBaseYOffset, 0f);
-            var sourcePosition = ResolveAnchorWorldPosition(sourceAnchor, offset);
+            var shiftedOffset = ResolveShieldArtLocalOffset(offset);
+            var sourcePosition = ResolveShieldWorldPosition(ResolveAnchorWorldPosition(sourceAnchor, offset));
             var artColor = ResolveShieldArtColor(primary, 0.9f);
 
             var shieldArt = SpawnShieldArtSpriteLayer(
@@ -1369,7 +1439,7 @@ namespace Project2048.Prototype
                 radius * 1.12f,
                 Mathf.Clamp(0.075f * scale, 0.048f, 0.11f),
                 lifetime,
-                offset,
+                shiftedOffset,
                 spiked: false,
                 sortingOffset: 8);
 
@@ -1384,7 +1454,7 @@ namespace Project2048.Prototype
                 1.28f * Mathf.Sqrt(scale),
                 0.16f,
                 false,
-                offset,
+                shiftedOffset,
                 particles => ConfigureShieldShardBurstParticles(particles, scale, lifetime, heavy: true));
 
             if (Application.isPlaying && isActiveAndEnabled)
@@ -1437,6 +1507,7 @@ namespace Project2048.Prototype
         {
             var lifetime = heavy ? 0.56f : 0.42f;
             var offset = new Vector3(0f, ShieldCircleBaseYOffset, 0f);
+            var shiftedOffset = ResolveShieldArtLocalOffset(offset);
             var artColor = ResolveShieldArtColor(heavy ? primary : secondary, heavy ? 0.86f : 0.7f);
 
             SpawnShieldArtSpriteLayer(
@@ -1455,7 +1526,7 @@ namespace Project2048.Prototype
                 radius * (heavy ? 1.18f : 0.82f),
                 Mathf.Clamp((heavy ? 0.078f : 0.052f) * scale, 0.032f, 0.12f),
                 lifetime,
-                offset,
+                shiftedOffset,
                 spiked: heavy,
                 sortingOffset: 9);
 
@@ -1470,7 +1541,7 @@ namespace Project2048.Prototype
                 (heavy ? 1.5f : 0.88f) * Mathf.Sqrt(scale),
                 heavy ? 0.15f : 0.12f,
                 false,
-                offset,
+                shiftedOffset,
                 particles => ConfigureShieldShardBurstParticles(particles, scale, lifetime, heavy));
         }
 
@@ -1910,8 +1981,7 @@ namespace Project2048.Prototype
 
         private static bool UsesPlayerFrontAttackArt(SkillVfxFamily family)
         {
-            return family == SkillVfxFamily.SlashArc ||
-                family == SkillVfxFamily.LightProjectile;
+            return family == SkillVfxFamily.LightProjectile;
         }
 
         private static bool UsesPlayerRightMagicCircle(SkillVfxFamily family)
@@ -1923,7 +1993,18 @@ namespace Project2048.Prototype
         private static bool UsesSupportBuffHealingVisualEffect(SkillVfxFamily family)
         {
             return family == SkillVfxFamily.BuffAura ||
-                family == SkillVfxFamily.CounterReady;
+                family == SkillVfxFamily.CounterReady ||
+                family == SkillVfxFamily.BoardDisturb;
+        }
+
+        private bool UsesSupportBuffHealingVisualEffect(SkillSO skill)
+        {
+            if (skill == null || !UsesSupportBuffHealingVisualEffect(ResolveSkillVfxFamily(skill)))
+            {
+                return false;
+            }
+
+            return ResolveSupportBuffVisualEffectPrefab(skill) != null;
         }
 
         private static SkillVfxPackageSO ResolveSkillVfxPackage(SkillSO skill)
@@ -2336,13 +2417,13 @@ namespace Project2048.Prototype
                 0.34f,
                 0.84f);
 
-            var root = new GameObject("BleedingCutSlashArc");
+            var root = new GameObject("FlameBurstSlashArc");
             root.transform.SetParent(parent, false);
             root.transform.localPosition = impactLocalOffset;
 
             var slash = CreateLocalSkillLine(
                 root.transform,
-                "BleedingCutSlashLine",
+                "FlameBurstSlashLine",
                 primary,
                 Mathf.Clamp(0.092f * scale, 0.056f, 0.15f),
                 Mathf.Clamp(0.026f * scale, 0.016f, 0.06f),
@@ -2355,7 +2436,7 @@ namespace Project2048.Prototype
             edgeColor.a = 0.88f;
             var edge = CreateLocalSkillLine(
                 root.transform,
-                "BleedingCutSlashEdge",
+                "FlameBurstSlashEdge",
                 edgeColor,
                 Mathf.Clamp(0.034f * scale, 0.022f, 0.072f),
                 Mathf.Clamp(0.012f * scale, 0.008f, 0.032f),
@@ -2367,7 +2448,7 @@ namespace Project2048.Prototype
             SpawnParticleBurst(
                 null,
                 parent,
-                "BleedingCutBloodFountain",
+                "FlameBurstFireFountain",
                 primary,
                 null,
                 BloodFountainSlashDurationSeconds,
@@ -2381,7 +2462,7 @@ namespace Project2048.Prototype
             SpawnParticleBurst(
                 null,
                 parent,
-                "BleedingCutBloodMist",
+                "FlameBurstFireMist",
                 secondary,
                 null,
                 0.48f,
@@ -3453,6 +3534,212 @@ namespace Project2048.Prototype
             }
         }
 
+        private void PreviewGatherLightReleaseIfNeeded(SkillSO skill, Transform targetAnchor)
+        {
+            if (!IsGatherLightSkill(skill) || targetAnchor == null)
+            {
+                return;
+            }
+
+            ClearGatherLightPreviewRelease();
+            if (Application.isPlaying && isActiveAndEnabled)
+            {
+                gatherLightPreviewReleaseCoroutine = StartCoroutine(PlayGatherLightPreviewReleaseRoutine(skill, targetAnchor));
+                return;
+            }
+
+            PlayGatherLightReleasedAttackEffect(skill, targetAnchor, playAttackAnimation: true);
+        }
+
+        private IEnumerator PlayGatherLightPreviewReleaseRoutine(SkillSO skill, Transform targetAnchor)
+        {
+            yield return new WaitForSeconds(GatherLightPreviewReleaseDelaySeconds);
+            gatherLightPreviewReleaseCoroutine = null;
+            if (skill == null || targetAnchor == null)
+            {
+                yield break;
+            }
+
+            PlayGatherLightReleasedAttackEffect(skill, targetAnchor, playAttackAnimation: true);
+        }
+
+        private void ClearGatherLightPreviewRelease()
+        {
+            if (gatherLightPreviewReleaseCoroutine == null)
+            {
+                return;
+            }
+
+            StopCoroutine(gatherLightPreviewReleaseCoroutine);
+            gatherLightPreviewReleaseCoroutine = null;
+        }
+
+        private void PlayGatherLightReleasedAttackEffect(SkillSO skill, Transform targetAnchor, bool playAttackAnimation)
+        {
+            if (targetAnchor == null)
+            {
+                return;
+            }
+
+            if (playAttackAnimation)
+            {
+                PlayPlayerAttackAnimation();
+            }
+
+            var sourceAnchor = ResolvePlayerAnchor() ?? transform;
+            // 빛 모으기 릴리즈: 홀리 파이어볼 투사체를 발사하고, 투사체가 적에게 닿는 시점에
+            // 적의 발쪽에서 버티컬 빔이 솟아오른다. 수평 충전 빔/랜턴 발사 트레일은 쓰지 않는다.
+            var firedProjectile = TryPlayProjectileSkillEffect(
+                skill,
+                skill != null ? skill.activationEffect : null,
+                sourceAnchor,
+                targetAnchor,
+                enemyAnimator,
+                out _);
+            var beamDelaySeconds = firedProjectile ? ResolveGatherLightProjectileTravelSeconds(skill) : 0f;
+            PlayGatherLightVerticalBeamAfterDelay(skill, targetAnchor, beamDelaySeconds);
+        }
+
+        private static float ResolveGatherLightProjectileTravelSeconds(SkillSO skill)
+        {
+            var prefab = skill != null && skill.activationEffect != null ? skill.activationEffect.vfxPrefab : null;
+            var projectile = prefab != null ? prefab.GetComponentInChildren<CombatProjectileEffect>(true) : null;
+            return projectile != null ? projectile.TravelSeconds : 0f;
+        }
+
+        private void PlayGatherLightVerticalBeamAfterDelay(SkillSO skill, Transform targetAnchor, float delaySeconds)
+        {
+            if (delaySeconds > 0f && Application.isPlaying && isActiveAndEnabled)
+            {
+                StartCoroutine(PlayGatherLightVerticalBeamAfterDelayRoutine(skill, targetAnchor, delaySeconds));
+                return;
+            }
+
+            PlayGatherLightVerticalBeamEffect(skill, targetAnchor);
+        }
+
+        private IEnumerator PlayGatherLightVerticalBeamAfterDelayRoutine(SkillSO skill, Transform targetAnchor, float delaySeconds)
+        {
+            yield return new WaitForSeconds(delaySeconds);
+            if (targetAnchor == null)
+            {
+                yield break;
+            }
+
+            PlayGatherLightVerticalBeamEffect(skill, targetAnchor);
+        }
+
+        private SkillSO ResolvePlayerChargedLightSkill(string skillName)
+        {
+            var skills = combatManager?.Player?.Skills;
+            if (skills == null)
+            {
+                return null;
+            }
+
+            var gatherLight = skills.FirstOrDefault(IsGatherLightSkill);
+            if (gatherLight != null)
+            {
+                return gatherLight;
+            }
+
+            return skills.FirstOrDefault(skill =>
+                skill != null &&
+                skill.ResolveEffectKind() == SkillEffectKind.ChargeAttack &&
+                ResolveSkillVfxFamily(skill) == SkillVfxFamily.LightBeam &&
+                (string.IsNullOrWhiteSpace(skillName) ||
+                    string.Equals(skill.skillName, skillName, System.StringComparison.Ordinal)));
+        }
+
+        private void PlayGatherLightVerticalBeamEffect(SkillSO skill, Transform targetAnchor)
+        {
+            var prefab = ResolveGatherLightVerticalBeamPrefab(skill);
+            if (prefab == null || targetAnchor == null)
+            {
+                return;
+            }
+
+            // 버티컬 빔은 적의 머리가 아니라 발쪽(스프라이트 하단)에서 솟아오른다.
+            var position = ResolveAnchorVisualBottomWorldPosition(targetAnchor);
+            var instance = Instantiate(prefab, position, Quaternion.identity, transform);
+            instance.name = "GatherLightVerticalBeam";
+            instance.transform.localScale = Vector3.one * Mathf.Clamp(
+                Mathf.Sqrt(Mathf.Max(0.01f, skill != null ? skill.vfxScale : 1f)),
+                0.9f,
+                1.55f);
+
+            foreach (var renderer in instance.GetComponentsInChildren<Renderer>(true))
+            {
+                ApplyAnchorSorting(renderer, targetAnchor, 18);
+            }
+
+            var color = ResolveGatherLightVerticalBeamColor(skill);
+            foreach (var visualEffect in instance.GetComponentsInChildren<VisualEffect>(true))
+            {
+                ApplyGatherLightVerticalBeamColor(visualEffect, color);
+                if (Application.isPlaying)
+                {
+                    visualEffect.Reinit();
+                    visualEffect.Play();
+                }
+            }
+
+            if (Application.isPlaying)
+            {
+                Destroy(instance, GatherLightVerticalBeamLifetimeSeconds + 0.2f);
+            }
+        }
+
+        private static GameObject ResolveGatherLightVerticalBeamPrefab(SkillSO skill)
+        {
+            var tuning = ResolveSkillVfxTuning(skill);
+            if (tuning != null && tuning.secondaryPrefab != null)
+            {
+                return tuning.secondaryPrefab;
+            }
+
+            var package = ResolveSkillVfxPackage(skill);
+            return package != null ? package.secondaryPrefab : null;
+        }
+
+        private static Color ResolveGatherLightVerticalBeamColor(SkillSO skill)
+        {
+            if (skill == null)
+            {
+                return new Color(0.72f, 0.94f, 1f, 0.96f);
+            }
+
+            var primary = ResolveReusableSkillParticleColor(skill);
+            var secondary = ResolveReusableSkillSecondaryParticleColor(skill);
+            var color = Color.Lerp(primary, secondary, 0.22f);
+            color = Color.Lerp(color, new Color(0.72f, 0.94f, 1f, 1f), 0.48f);
+            color.a = Mathf.Max(0.92f, color.a);
+            return color;
+        }
+
+        private static void ApplyGatherLightVerticalBeamColor(VisualEffect visualEffect, Color color)
+        {
+            if (visualEffect == null)
+            {
+                return;
+            }
+
+            var vectorColor = new Vector4(color.r, color.g, color.b, color.a);
+            var vectorRgb = new Vector3(color.r, color.g, color.b);
+            foreach (var propertyName in GatherLightVerticalBeamColorPropertyNames)
+            {
+                if (visualEffect.HasVector4(propertyName))
+                {
+                    visualEffect.SetVector4(propertyName, vectorColor);
+                }
+
+                if (visualEffect.HasVector3(propertyName))
+                {
+                    visualEffect.SetVector3(propertyName, vectorRgb);
+                }
+            }
+        }
+
         private void PlayChargedLightBeamEffect(EnemyController target)
         {
             var targetTransform = target != null && enemyRenderer != null ? enemyRenderer.transform : transform;
@@ -4168,7 +4455,8 @@ namespace Project2048.Prototype
             int fallbackBurstCount,
             float fallbackStartSpeed,
             float fallbackStartSize,
-            bool swirl)
+            bool swirl,
+            Vector3 localOffset = default)
         {
             var prefab = effect?.particlePrefab != null ? effect.particlePrefab : fallbackPrefab;
             var material = effect?.particleMaterial != null ? effect.particleMaterial : fallbackMaterial;
@@ -4191,7 +4479,8 @@ namespace Project2048.Prototype
                 burstCount,
                 startSpeed,
                 startSize,
-                shouldSwirl);
+                shouldSwirl,
+                localOffset);
         }
 
         private ParticleSystem SpawnParticleBurst(
@@ -4486,11 +4775,13 @@ namespace Project2048.Prototype
                 designTimeBinding,
                 0.18f,
                 0.9f);
-            var fallbackSprite = family == SkillVfxFamily.ImpactBurst
+            var usesHitImpactArt = family == SkillVfxFamily.ImpactBurst ||
+                family == SkillVfxFamily.SlashArc;
+            var fallbackSprite = usesHitImpactArt
                 ? ResolveHitEffectSprite()
                 : ResolveAttackEffectSprite();
-            var explicitSprite = family == SkillVfxFamily.ImpactBurst ? hitEffectSprite : attackEffectSprite;
-            var fallbackPrefab = family == SkillVfxFamily.ImpactBurst
+            var explicitSprite = usesHitImpactArt ? hitEffectSprite : attackEffectSprite;
+            var fallbackPrefab = usesHitImpactArt
                 ? ResolveHitEffectPrefab()
                 : ResolveAttackEffectPrefab();
             var anchor = UsesPlayerFrontAttackArt(family) ? sourceAnchor : targetAnchor;
@@ -4509,6 +4800,7 @@ namespace Project2048.Prototype
                 family switch
                 {
                     SkillVfxFamily.ImpactBurst => "HitImpactEffectArt",
+                    SkillVfxFamily.SlashArc => "HitImpactEffectArt",
                     SkillVfxFamily.LightProjectile => "LightProjectileEffectArt",
                     _ => "AttackEffectArt",
                 },
@@ -4519,7 +4811,7 @@ namespace Project2048.Prototype
                         tuning,
                         package,
                         designTimeBinding,
-                        family == SkillVfxFamily.ImpactBurst
+                        usesHitImpactArt
                             ? 1.08f * HitEffectArtSizeMultiplier
                             : AttackEffectArtSizeMultiplier),
                 ResolveDesignTimeLifetime(tuning, package, designTimeBinding, AttackArtLifetimeSeconds),
@@ -4818,13 +5110,13 @@ namespace Project2048.Prototype
 
         private void PlaySupportBuffHealingVisualEffect(SkillSO skill, Transform anchor, float lifetimeSeconds)
         {
-            var family = ResolveSkillVfxFamily(skill);
-            if (!UsesSupportBuffHealingVisualEffect(family))
+            if (!UsesSupportBuffHealingVisualEffect(skill))
             {
                 return;
             }
 
-            var prefab = ResolveSupportBuffVisualEffectPrefab();
+            var family = ResolveSkillVfxFamily(skill);
+            var prefab = ResolveSupportBuffVisualEffectPrefab(skill);
             if (prefab == null)
             {
                 return;
@@ -4968,10 +5260,16 @@ namespace Project2048.Prototype
             return worldVfxProfile != null ? worldVfxProfile.magicCircleEffectPrefab : null;
         }
 
-        private GameObject ResolveSupportBuffVisualEffectPrefab()
+        private static GameObject ResolveSupportBuffVisualEffectPrefab(SkillSO skill)
         {
-            ResolveWorldVfxProfile();
-            return worldVfxProfile != null ? worldVfxProfile.supportBuffVisualEffectPrefab : null;
+            var tuning = ResolveSkillVfxTuning(skill);
+            if (tuning != null && tuning.secondaryPrefab != null)
+            {
+                return tuning.secondaryPrefab;
+            }
+
+            var package = ResolveSkillVfxPackage(skill);
+            return package != null ? package.secondaryPrefab : null;
         }
 
         private Sprite ResolveFlameEffectSprite()
@@ -5056,6 +5354,8 @@ namespace Project2048.Prototype
             Sprite spriteOverride = null,
             GameObject prefabOverride = null)
         {
+            var resolvedLocalOffset = ResolveShieldArtLocalOffset(localOffset);
+            var resolvedSortingOffset = ResolveShieldArtSortingOffset(sortingOffset);
             var sprite = spriteOverride != null ? spriteOverride : ResolveShieldEffectSprite();
             prefabOverride ??= spriteOverride != null && spriteOverride == ResolveThornShieldEffectSprite()
                 ? ResolveThornShieldEffectPrefab()
@@ -5069,8 +5369,8 @@ namespace Project2048.Prototype
                     color,
                     radius,
                     ShieldArtDiameterMultiplier,
-                    localOffset,
-                    sortingOffset,
+                    resolvedLocalOffset,
+                    resolvedSortingOffset,
                     sortingAnchor != null ? sortingAnchor : anchor,
                     sprite,
                     out var authoredRoot);
@@ -5101,14 +5401,14 @@ namespace Project2048.Prototype
             var parent = anchor != null ? anchor : transform;
             var spriteObject = new GameObject(objectName, typeof(SpriteRenderer));
             spriteObject.transform.SetParent(parent, false);
-            spriteObject.transform.localPosition = localOffset;
+            spriteObject.transform.localPosition = resolvedLocalOffset;
 
             var renderer = spriteObject.GetComponent<SpriteRenderer>();
             renderer.sprite = sprite;
             renderer.color = color;
             var baseScale = Vector3.one * ResolveEffectArtScale(sprite, radius, ShieldArtDiameterMultiplier);
             spriteObject.transform.localScale = baseScale;
-            ApplyAnchorSorting(renderer, sortingAnchor != null ? sortingAnchor : parent, sortingOffset);
+            ApplyAnchorSorting(renderer, sortingAnchor != null ? sortingAnchor : parent, resolvedSortingOffset);
 
             if (Application.isPlaying && isActiveAndEnabled && animatePulse)
             {
@@ -5123,6 +5423,21 @@ namespace Project2048.Prototype
             }
 
             return renderer;
+        }
+
+        private static Vector3 ResolveShieldArtLocalOffset(Vector3 localOffset)
+        {
+            return localOffset + ShieldArtLeftLocalOffset;
+        }
+
+        private static Vector3 ResolveShieldWorldPosition(Vector3 worldPosition)
+        {
+            return worldPosition + ShieldArtLeftLocalOffset;
+        }
+
+        private static int ResolveShieldArtSortingOffset(int sortingOffset)
+        {
+            return Mathf.Max(sortingOffset, ShieldArtFrontSortingOffset);
         }
 
         private Sprite ResolveShieldEffectSprite()
@@ -5788,6 +6103,12 @@ namespace Project2048.Prototype
             return skill != null && skill.ResolveEffectKind() == SkillEffectKind.ChargeAttack;
         }
 
+        private static bool IsGatherLightSkill(SkillSO skill)
+        {
+            return skill != null &&
+                string.Equals(skill.skillId, "gather-light", System.StringComparison.OrdinalIgnoreCase);
+        }
+
         private static bool IsShieldAttackSkill(SkillSO skill)
         {
             if (skill == null)
@@ -6131,6 +6452,23 @@ namespace Project2048.Prototype
             }
 
             return anchor.InverseTransformPoint(ResolveAnchorVisualCenterWorldPosition(anchor) + worldOffset);
+        }
+
+        private static Vector3 ResolveAnchorVisualBottomWorldPosition(Transform anchor)
+        {
+            if (anchor == null)
+            {
+                return Vector3.zero;
+            }
+
+            var renderer = anchor.GetComponent<SpriteRenderer>();
+            if (renderer != null && renderer.sprite != null)
+            {
+                var bounds = renderer.bounds;
+                return new Vector3(bounds.center.x, bounds.min.y, bounds.center.z);
+            }
+
+            return anchor.position;
         }
 
         private bool ShouldAssignPlayerRendererSprite()

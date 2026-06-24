@@ -2912,6 +2912,71 @@ namespace Project2048.Tests
         }
 
         [Test]
+        public void AttackEffectShowcaseScene_GroupsSlotsByCurrentVisualCategory()
+        {
+            EditorSceneManager.OpenScene("Assets/Scenes/AttackEffectShowcase.unity");
+
+            var root = GameObject.Find("AttackEffectShowcaseRoot")?.transform;
+            var expectedFamiliesByGroup = new Dictionary<string, SkillVfxFamily[]>
+            {
+                ["Group_10_slash"] = new[] { SkillVfxFamily.SlashArc },
+                ["Group_20_flame"] = new[] { SkillVfxFamily.FlameBurst },
+                ["Group_30_light"] = new[] { SkillVfxFamily.LightProjectile, SkillVfxFamily.LightBeam, SkillVfxFamily.SupportFire },
+                ["Group_40_shield"] = new[] { SkillVfxFamily.ShieldDome },
+                ["Group_50_impact"] = new[] { SkillVfxFamily.ImpactBurst, SkillVfxFamily.SpikedBurst },
+                ["Group_60_buff"] = new[] { SkillVfxFamily.BuffAura },
+                ["Group_65_counter"] = new[] { SkillVfxFamily.CounterReady },
+                ["Group_70_debuff"] = new[] { SkillVfxFamily.DebuffWave },
+                ["Group_80_drain"] = new[] { SkillVfxFamily.DrainTether },
+                ["Group_90_darkness"] = new[] { SkillVfxFamily.BoardDisturb },
+                ["Group_100_tentacle"] = new[] { SkillVfxFamily.TentacleWhip },
+                ["Group_120_chain"] = new[] { SkillVfxFamily.DarkChainBurst },
+            };
+            var slotsByGroup = expectedFamiliesByGroup.Keys.ToDictionary(
+                groupName => groupName,
+                _ => new List<AttackEffectShowcaseSlot>());
+            string currentGroup = null;
+
+            Assert.That(root, Is.Not.Null);
+            foreach (Transform child in root)
+            {
+                if (child.name.StartsWith("Group_", System.StringComparison.Ordinal))
+                {
+                    currentGroup = child.name;
+                    Assert.That(expectedFamiliesByGroup.ContainsKey(currentGroup), Is.True, currentGroup);
+                    continue;
+                }
+
+                var slot = child.GetComponent<AttackEffectShowcaseSlot>();
+                if (slot == null)
+                {
+                    continue;
+                }
+
+                Assert.That(currentGroup, Is.Not.Null, slot.name);
+                Assert.That(slot.Skill, Is.Not.Null, slot.name);
+                var family = slot.Skill.ResolveVfxFamily();
+                Assert.That(expectedFamiliesByGroup[currentGroup], Does.Contain(family), $"{slot.Skill.skillId} in {currentGroup}");
+                slotsByGroup[currentGroup].Add(slot);
+            }
+
+            foreach (var pair in slotsByGroup)
+            {
+                Assert.That(pair.Value, Is.Not.Empty, pair.Key);
+            }
+
+            Assert.That(
+                slotsByGroup["Group_10_slash"].Select(slot => slot.Skill.skillId).ToArray(),
+                Is.EqualTo(new[] { "flow-strike", "quick-stab" }));
+            Assert.That(
+                slotsByGroup["Group_20_flame"].Select(slot => slot.Skill.skillId).ToArray(),
+                Is.EqualTo(new[] { "fireball", "burst-fireball", "burn-out", "overburn", "reckless-blow" }));
+            Assert.That(
+                slotsByGroup["Group_80_drain"].Select(slot => slot.Skill.skillId).ToArray(),
+                Is.EqualTo(new[] { "bioluminescence", "life-drain", "poison-coat" }));
+        }
+
+        [Test]
         public void AttackEffectShowcaseScene_UsesCompactPreviewActorLayout()
         {
             var previewPlayerScale = new Vector3(0.52f, 0.52f, 0.52f);

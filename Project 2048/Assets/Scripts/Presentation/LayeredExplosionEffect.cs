@@ -213,7 +213,7 @@ namespace Project2048.Presentation
 
             light.type = LightType.Point;
             light.range = lightRange * scaleMultiplier;
-            light.color = new Color(1f, 0.46f, 0.08f, 1f);
+            light.color = new Color(0.12f, 0.85f, 0.8f, 1f);
             light.intensity = 0f;
             light.enabled = false;
             return light;
@@ -731,12 +731,22 @@ namespace Project2048.Presentation
             for (var index = 0; index < colors.Length; index++)
             {
                 var time = index / (float)maxIndex;
-                colorKeys[index] = new GradientColorKey(colors[index], time);
+                colorKeys[index] = new GradientColorKey(ToTeal(colors[index]), time);
                 alphaKeys[index] = new GradientAlphaKey(colors[index].a, time);
             }
 
             gradient.SetKeys(colorKeys, alphaKeys);
             return gradient;
+        }
+
+        // 화염 폭발 팔레트를 청록 계열로 전환한다(명도/채도 구조는 유지하고 색상만 청록으로).
+        // 청록 색상값(0.49f)만 바꾸면 폭발 전체 톤을 한 번에 조절할 수 있다.
+        private static Color ToTeal(Color c)
+        {
+            Color.RGBToHSV(c, out _, out var saturation, out var value);
+            var rgb = Color.HSVToRGB(0.49f, saturation, value);
+            rgb.a = c.a;
+            return rgb;
         }
 
         private static void SetTextureIfPresent(Material material, string propertyName, Texture texture)

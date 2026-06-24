@@ -61,11 +61,11 @@ MonoBehaviour:
   icon: {fileID: 0}
   activationEffect:
     sfxClip: {fileID: 8300000, guid: f14a9cc4988c4b30b9835d1967a70b92, type: 3}
-    vfxPrefab: {fileID: 0}
+    vfxPrefab: {fileID: 899824043960030591, guid: 5f8cf79947e4ddf47aee451b2b9de40a, type: 3}
     animationClip: {fileID: 0}
     particleEffect:
       objectName: PoisonCoatSkillParticles
-      particlePrefab: {fileID: 1716627213758565047, guid: e8080ff7393955142bd578c996c8be91, type: 3}
+      particlePrefab: {fileID: 0}
       particleMaterial: {fileID: 2100000, guid: 52db5297964ff1a019f11971b256efa6, type: 2}
       useParticleColor: 1
       particleColor: {r: 0.458119, g: 0.854119, b: 0.386119, a: 1}
@@ -80,6 +80,8 @@ MonoBehaviour:
     sfxDelaySeconds: 0
     localOffset: {x: 0, y: 0, z: 0}
     autoDestroySeconds: 1.25
+  vfxDefinition:
+    cues: []
   vfx:
     family: 7
     primarySprite: {fileID: -6272862024312062455, guid: 0f723c449d8f40c44b1c7d85e4e722e3, type: 3}
@@ -103,4 +105,4 @@ MonoBehaviour:
   vfxScale: 0.8
   vfxIntensity: 0.95
   vfxRepeatCount: 1
-  description: ""
+  description:

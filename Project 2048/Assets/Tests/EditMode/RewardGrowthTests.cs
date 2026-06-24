@@ -154,7 +154,7 @@ namespace Project2048.Tests
         }
 
         [Test]
-        public void RewardManager_OfferReward_AllowsTwoSkillsButRequiresSecondCategory()
+        public void RewardManager_OfferReward_LimitsSkillChoicesAndBackfillsNonSkillDefaults()
         {
             var player = CreateGameObject<PlayerCombatController>("Player");
             var playerData = CreatePlayerData(maxHp: 20, attackPower: 2);
@@ -174,11 +174,31 @@ namespace Project2048.Tests
             rewardManager.OfferReward(new CombatResult(), player);
 
             Assert.That(rewardManager.PendingChoices.Count, Is.EqualTo(3));
-            Assert.That(rewardManager.PendingChoices.Count(reward => reward.rewardKind == RewardChoiceKind.LearnSkill), Is.EqualTo(2));
+            Assert.That(rewardManager.PendingChoices.Count(reward => reward.rewardKind == RewardChoiceKind.LearnSkill), Is.LessThanOrEqualTo(1));
+            Assert.That(rewardManager.PendingChoices.Count(reward => reward.rewardKind != RewardChoiceKind.LearnSkill), Is.GreaterThanOrEqualTo(2));
             Assert.That(rewardManager.PendingChoices.Any(reward => reward.rewardKind == RewardChoiceKind.HealTwo), Is.True);
             Assert.That(
                 rewardManager.PendingChoices.Any(reward => reward.skillToLearn != null && reward.skillToLearn.skillId == "known"),
                 Is.False);
+        }
+
+        [Test]
+        public void RewardTable_SelectRewards_UsesSkillOfferChanceWeight()
+        {
+            var skill = CreateSkill("rare-skill", SkillType.Attack, cost: 1, power: 10);
+            var skillReward = CreateRewardChoice("learn-rare", RewardChoiceKind.LearnSkill, skill);
+            var table = CreateRewardTable(
+                CreateRewardChoice("heal-a", RewardChoiceKind.HealOne),
+                CreateRewardChoice("heal-b", RewardChoiceKind.HealTwo),
+                CreateRewardChoice("next-attack", RewardChoiceKind.TemporaryAttackPower),
+                skillReward);
+
+            skillReward.enemySkillOfferChance = 0f;
+
+            var selectedRewards = table.SelectRewards(new CombatResult(), 3);
+
+            Assert.That(selectedRewards.Count, Is.EqualTo(3));
+            Assert.That(selectedRewards.Any(reward => reward.rewardKind == RewardChoiceKind.LearnSkill), Is.False);
         }
 
         [Test]
@@ -612,6 +632,7 @@ namespace Project2048.Tests
             var reward = CreateReward(healPercentOfMaxHp: 0.3f, extraBoardMoveCount: 1);
             var table = CreateRewardTable(reward);
             var enemyLocalPosition = new Vector3(1.5f, 2.25f, 0f);
+            var rewardSpawnPosition = new Vector3(-0.75f, 1.25f, 0f);
 
             reward.rewardKind = RewardChoiceKind.TemporaryBoardMoveCount;
             reward.temporaryBoardMoveCountBonus = 2;
@@ -632,11 +653,12 @@ namespace Project2048.Tests
 
             rewardManager.Initialize(new RunProgress(), table);
             view.Initialize(bootstrap);
+            enemyRenderer.transform.localPosition = rewardSpawnPosition;
             rewardManager.OfferReward(new CombatResult(), player);
 
             Assert.That(enemyRenderer.sprite, Is.EqualTo(mothSprite));
             Assert.That(enemyRenderer.color.a, Is.EqualTo(1f).Within(0.001f));
-            Assert.That(enemyRenderer.transform.localPosition, Is.EqualTo(enemyLocalPosition));
+            Assert.That(enemyRenderer.transform.localPosition, Is.EqualTo(rewardSpawnPosition));
 
             rewardManager.ChooseReward(0, player);
 

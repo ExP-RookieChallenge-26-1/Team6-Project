@@ -35,6 +35,19 @@ namespace Project2048.Enemy
         public int actionsPerTurn = 1;
         public List<SkillSO> skills = new();
         public Sprite portrait;
+
+        [Header("애니메이션 (클립을 넣으면 전투 중 자동 재생, 비워두면 무시 — AnimatorController 불필요)")]
+        [Tooltip("평상시 반복 재생. 임포트에서 Loop Time을 켠 클립을 권장.")]
+        public AnimationClip idleAnimation;
+        [Tooltip("적이 등장할 때 1회 재생 후 idle로 복귀.")]
+        public AnimationClip appearAnimation;
+        [Tooltip("적이 공격할 때 1회 재생 후 idle(없으면 정적 스프라이트)로 복귀.")]
+        public AnimationClip attackAnimation;
+        [Tooltip("적이 피격될 때 1회 재생 후 idle로 복귀.")]
+        public AnimationClip hitAnimation;
+        [Tooltip("적이 쓰러질 때 1회 재생.")]
+        public AnimationClip deathAnimation;
+
         public List<CombatantActionEffectBinding> actionEffects = new();
 
         // 값이 있으면 AI 브레인보다 이 고정 순서를 우선한다. 보스처럼 정확한 패턴이 필요한 적에게 쓴다.

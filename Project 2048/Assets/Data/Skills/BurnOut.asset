@@ -93,14 +93,14 @@ MonoBehaviour:
       tint: {r: 1, g: 0.42, b: 0.06, a: 1}
       lifetimeOverride: -1
     - trigger: 0
-      prefab: {fileID: 5997275962859508079, guid: 896b69cea0924a64d85efe2863756ea6, type: 3}
+      prefab: {fileID: 8199688406765548039, guid: a44606620703a36458795961c00ca290, type: 3}
       placement:
         target: 1
         vertical: 0
-        localOffset: {x: 0, y: 0.03, z: 0}
-      delaySeconds: 0.42
-      scale: 1.1
-      tint: {r: 1, g: 0.42, b: 0.06, a: 1}
+        localOffset: {x: 0, y: 0.75, z: 0}
+      delaySeconds: 0.48
+      scale: 0.4
+      tint: {r: 1, g: 1, b: 1, a: 1}
       lifetimeOverride: 1.45
     - trigger: 0
       prefab: {fileID: 4498762637842804159, guid: a0fb7f5b26fce7f4aa39fbc40939fd0d, type: 3}
@@ -110,7 +110,7 @@ MonoBehaviour:
         localOffset: {x: -0.08, y: 0.08, z: 0}
       delaySeconds: 0.48
       scale: 1.18
-      tint: {r: 1, g: 0.42, b: 0.06, a: 1}
+      tint: {r: 0.1, g: 0.85, b: 0.78, a: 1}
       lifetimeOverride: 1.55
   vfx:
     family: 15
@@ -135,4 +135,4 @@ MonoBehaviour:
   vfxScale: 1.2
   vfxIntensity: 1.45
   vfxRepeatCount: 1
-  description: "Deals 100 power damage. Pays 10% HP, leaving at least 1 HP."
+  description: Deals 100 power damage. Pays 10% HP, leaving at least 1 HP.

@@ -86,6 +86,11 @@ namespace Project2048.Prototype
         private const int FlameBurstTongueSegmentCount = 12;
         private const float LanternMuzzleLocalX = 0.34f;
         private const float LanternMuzzleLocalY = 0.36f;
+        // 참격류는 머리 높이(LanternMuzzleLocalY)가 아니라 랜턴을 든 손 높이에서 베어나가도록 별도 원점을 쓴다.
+        private const float SlashSkillMuzzleLocalX = 0.34f;
+        private const float SlashSkillMuzzleLocalY = 0.05f;
+        // 버프류 마법진이 너무 낮게 깔려서 플레이어 옆 허리 높이로 올린다.
+        private const float BuffAuraMagicCircleLift = 0.4f;
         private const float CloseRangeAttackAnimationSpeedMultiplier = 1.55f;
         private const float PlayerAttackAnimationSpeedResetSeconds = 0.42f;
         private const string DefaultWorldVfxProfileResourceName = "PrototypeCombatWorldVfxProfile";
@@ -210,6 +215,7 @@ namespace Project2048.Prototype
             delayEnemyDeathFadeUntilRealtime = 0f;
             Render(snapshot);
             UpdatePlayerShieldArtVfx(snapshot?.Player);
+            PlayEnemyIdleAnimationIfNeeded();
             SetEnemyRendererAlpha(lastEnemyWasDead ? 0f : 1f);
         }
 
@@ -229,6 +235,7 @@ namespace Project2048.Prototype
             ClearEnemyAttackLunge();
             ClearPlayerCloseRangeAttackLunge();
             ClearPlayerAttackAnimationSpeed();
+            ClearEnemyDirectAnimation();
             ClearGatherLightPreviewRelease();
             ClearWorldShake();
             ClearDamageNumberPopups();
@@ -313,6 +320,7 @@ namespace Project2048.Prototype
 
             snapshot = nextSnapshot;
             Render(snapshot);
+            PlayEnemyIdleAnimationIfNeeded();
             PlayPlayerThornGuardHitPulseIfNeeded(playerShieldWasHit);
             UpdatePlayerThornGuardVfx(nextSnapshot?.Player);
             PlayEnemyAppearEffectIfNeeded(enemyAppeared);
@@ -968,8 +976,8 @@ namespace Project2048.Prototype
 
             CacheEnemyRendererRestTransform();
             ClearEnemyDeathFade();
-            ClearEnemyAppearIntro(restoreTransform: true);
-            ClearEnemyAttackLunge(restoreTransform: true);
+            ClearEnemyAppearIntro(restoreTransform: false);
+            ClearEnemyAttackLunge(restoreTransform: false);
             delayEnemyDeathFadeUntilRealtime = 0f;
             TryRenderRewardPresenter();
         }
@@ -986,7 +994,7 @@ namespace Project2048.Prototype
                 return false;
             }
 
-            RestoreEnemyRendererTransform();
+            ClearEnemyDirectAnimation(restoreCurrentSprite: false);
             enemyRenderer.sprite = rewardMothSprite;
             SetEnemyRendererAlpha(1f);
             return true;
@@ -1012,7 +1020,9 @@ namespace Project2048.Prototype
                 return;
             }
 
-            PlayEnemyAttackLunge(ResolveCurrentEnemyData()?.FindActionEffect(CombatActionIds.Attack));
+            var enemyData = ResolveCurrentEnemyData();
+            PlayEnemyOneShotAnimation(enemyData?.attackAnimation, returnToIdle: true);
+            PlayEnemyAttackLunge(enemyData?.FindActionEffect(CombatActionIds.Attack));
         }
 
         private void PlayEnemyAppearEffectIfNeeded(bool enemyAppeared)
@@ -1022,7 +1032,9 @@ namespace Project2048.Prototype
                 return;
             }
 
-            PlayEnemyAppearIntro(ResolveCurrentEnemyData()?.FindActionEffect(CombatActionIds.Appear));
+            var enemyData = ResolveCurrentEnemyData();
+            PlayEnemyOneShotAnimation(enemyData?.appearAnimation, returnToIdle: true);
+            PlayEnemyAppearIntro(enemyData?.FindActionEffect(CombatActionIds.Appear));
         }
 
         private void PlayEnemyActionEffectIfNeeded(bool enemyWasHit, bool enemyJustDied)
@@ -1030,6 +1042,8 @@ namespace Project2048.Prototype
             var enemyData = ResolveCurrentEnemyData();
             if (enemyJustDied)
             {
+                var deathAnimationDuration = PlayEnemyOneShotAnimation(enemyData?.deathAnimation, returnToIdle: false);
+                DelayEnemyDeathFade(deathAnimationDuration);
                 PlayCombatantActionEffect(
                     enemyData?.FindActionEffect(CombatActionIds.Death),
                     enemyRenderer != null ? enemyRenderer.transform : transform,
@@ -1042,6 +1056,7 @@ namespace Project2048.Prototype
                 return;
             }
 
+            PlayEnemyOneShotAnimation(enemyData?.hitAnimation, returnToIdle: true);
             PlayCombatantActionEffect(
                 enemyData?.FindActionEffect(CombatActionIds.Hit),
                 enemyRenderer != null ? enemyRenderer.transform : transform,
@@ -1749,17 +1764,18 @@ namespace Project2048.Prototype
             var parent = anchor != null ? anchor : transform;
             var lifetime = Mathf.Max(FlameBurstDurationSeconds, lifetimeSeconds);
             var resolvedScale = Mathf.Clamp(scale, 0.72f, 1.65f);
+            // 절차적 화염도 청록 기반(청록 폴백)으로 통일.
             var primary = ResolveSkillTintedColor(
                 ResolveReusableSkillParticleColor(skill),
-                new Color(1f, 0.42f, 0.06f, 0.96f),
+                new Color(0.12f, 0.85f, 0.78f, 0.96f),
                 0.26f,
                 0.9f);
             var secondary = ResolveSkillTintedColor(
                 ResolveReusableSkillSecondaryParticleColor(skill),
-                new Color(0.58f, 0.035f, 0.012f, 0.86f),
+                new Color(0.02f, 0.42f, 0.45f, 0.86f),
                 0.38f,
                 0.82f);
-            var smoke = Color.Lerp(secondary, new Color(0.06f, 0.045f, 0.04f, 0.54f), 0.68f);
+            var smoke = Color.Lerp(secondary, new Color(0.04f, 0.09f, 0.1f, 0.54f), 0.68f);
             smoke.a = 0.48f;
 
             var tuning = ResolveSkillVfxTuning(skill);
@@ -2428,7 +2444,7 @@ namespace Project2048.Prototype
 
         private void PlaySlashBeamSkillEffect(SkillSO skill, Transform sourceAnchor, Transform targetAnchor)
         {
-            var source = ResolveLanternSkillSourcePosition(sourceAnchor != null ? sourceAnchor : transform, targetAnchor);
+            var source = ResolveSlashSkillSourcePosition(sourceAnchor != null ? sourceAnchor : transform, targetAnchor);
             var target = targetAnchor != null ? ResolveSkillImpactWorldPosition(targetAnchor) : source + Vector3.right;
             if ((target - source).sqrMagnitude <= 0.0001f)
             {
@@ -3570,6 +3586,19 @@ namespace Project2048.Prototype
             var facingSign = ResolveAttackFacingSign(sourceAnchor, targetAnchor);
             return ResolveAnchorVisualCenterWorldPosition(sourceAnchor) +
                 new Vector3(LanternMuzzleLocalX * facingSign, LanternMuzzleLocalY, 0f);
+        }
+
+        // 참격류 전용 발사 원점: 랜턴 머즐보다 낮은 손 높이에서 베어나간다.
+        private static Vector3 ResolveSlashSkillSourcePosition(Transform sourceAnchor, Transform targetAnchor)
+        {
+            if (sourceAnchor == null)
+            {
+                return Vector3.zero;
+            }
+
+            var facingSign = ResolveAttackFacingSign(sourceAnchor, targetAnchor);
+            return ResolveAnchorVisualCenterWorldPosition(sourceAnchor) +
+                new Vector3(SlashSkillMuzzleLocalX * facingSign, SlashSkillMuzzleLocalY, 0f);
         }
 
         private static Vector3 ResolveLanternSkillLocalOffset(Transform sourceAnchor, Transform targetAnchor)
@@ -5314,7 +5343,9 @@ namespace Project2048.Prototype
                     tuning,
                     package,
                     designTimeBinding,
-                    PlayerRightMagicCircleLocalOffset)),
+                    family == SkillVfxFamily.BuffAura
+                        ? PlayerRightMagicCircleLocalOffset + new Vector3(0f, BuffAuraMagicCircleLift, 0f)
+                        : PlayerRightMagicCircleLocalOffset)),
                 sortingOffset: ResolveDesignTimeSortingOffset(tuning, package, designTimeBinding, 6),
                 spriteOverride: sprite,
                 prefabOverride: ResolveDesignTimePrefab(tuning, package, designTimeBinding, ResolveMagicCircleEffectPrefab()));

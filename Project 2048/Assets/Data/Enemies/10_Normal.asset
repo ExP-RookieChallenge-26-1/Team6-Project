@@ -10,29 +10,29 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f6115ca39d511d049965aae02efc3f23, type: 3}
-  m_Name: 11
+  m_Name: 10_Normal
   m_EditorClassIdentifier: Game.Core::Project2048.Enemy.EnemySO
-  enemyName: "\uD669\uC18C"
-  encounterRank: 1
-  maxHp: 650
-  attackPower: 9
+  enemyName: "\uC5FC\uC18C"
+  encounterRank: 0
+  maxHp: 530
+  attackPower: 6
   baseDefensePower: 0
-  defensePower: 5
-  debuffPower: 1
+  defensePower: 8
+  debuffPower: 2
   criticalChance: 0
   criticalDamageMultiplier: 1.5
   aiComplexity: 2
   actionsPerTurn: 3
   skills:
-  - {fileID: 11400000, guid: 5a7d25bf22a4191409d36e7de7128a1c, type: 2}
-  - {fileID: 11400000, guid: ced275c3ac4587d4f9f513c34c461400, type: 2}
-  - {fileID: 11400000, guid: 86594764d38346438a3c7a144303854a, type: 2}
-  - {fileID: 11400000, guid: 27f5295ffd4a4738b40f9d791c06ac4f, type: 2}
+  - {fileID: 11400000, guid: ca3270a0745d7534185428c9b944d28b, type: 2}
+  - {fileID: 11400000, guid: bdb2766095452cd4094c7768ff8b1d0d, type: 2}
+  - {fileID: 11400000, guid: 497dec488fdb44308c0935135004d9c3, type: 2}
+  - {fileID: 11400000, guid: 4832d2b5a42e555419fe48cad1e68571, type: 2}
   portrait: {fileID: 21300000, guid: fa492956cfce2564d9ace728be89a86b, type: 3}
   actionEffects:
   - actionId: appear
     effect:
-      sfxClip: {fileID: 8300000, guid: 33deb699fd95e5e4093d5d0659fd35c6, type: 3}
+      sfxClip: {fileID: 8300000, guid: 1d994d948240c984d8da3bb962630c5b, type: 3}
       vfxPrefab: {fileID: 0}
       animationClip: {fileID: 0}
       particleEffect:
@@ -46,9 +46,9 @@ MonoBehaviour:
         startSpeed: 0.6
         startSize: 0.12
         swirl: 0
-      volumeScale: 0.84
-      minPitch: 0.6
-      maxPitch: 0.74
+      volumeScale: 1
+      minPitch: 1
+      maxPitch: 1
       sfxDelaySeconds: 0
       localOffset: {x: 0, y: 0, z: 0}
       autoDestroySeconds: 1.25
@@ -76,7 +76,7 @@ MonoBehaviour:
       autoDestroySeconds: 1.25
   - actionId: attack
     effect:
-      sfxClip: {fileID: 8300000, guid: 09a62e2529e8423ba4fb4461b5f5ac66, type: 3}
+      sfxClip: {fileID: 8300000, guid: a5303ed809924b9a8681090ed1c503a0, type: 3}
       vfxPrefab: {fileID: 0}
       animationClip: {fileID: 0}
       particleEffect:
@@ -90,15 +90,15 @@ MonoBehaviour:
         startSpeed: 0.6
         startSize: 0.12
         swirl: 0
-      volumeScale: 0.77279997
-      minPitch: 0.6
-      maxPitch: 0.74
+      volumeScale: 0.92
+      minPitch: 1
+      maxPitch: 1
       sfxDelaySeconds: 0
       localOffset: {x: 0, y: 0, z: 0}
       autoDestroySeconds: 1.25
   - actionId: hit
     effect:
-      sfxClip: {fileID: 8300000, guid: 3fc11b267ce226b47809c157cf6ec34c, type: 3}
+      sfxClip: {fileID: 8300000, guid: dd55cc459af1709489c320d44ce68df2, type: 3}
       vfxPrefab: {fileID: 0}
       animationClip: {fileID: 0}
       particleEffect:
@@ -112,110 +112,17 @@ MonoBehaviour:
         startSpeed: 0.6
         startSize: 0.12
         swirl: 0
-      volumeScale: 0.65519994
-      minPitch: 0.6
-      maxPitch: 0.74
+      volumeScale: 0.78
+      minPitch: 1
+      maxPitch: 1
       sfxDelaySeconds: 0
       localOffset: {x: 0, y: 0, z: 0}
       autoDestroySeconds: 1.25
   intentPattern:
-  - skillId: heavy-strike
-    displayName: "\uAC15\uD0C0"
-    skillType: 0
-    skillEffectKind: 1
-    damageStatSource: 0
-    intentType: 0
-    value: 80
-    movePower: 80
-    debuffType: 0
-    isThornGuard: 0
-    retaliationDamage: 0
-    targetAttackModifier: 0
-    targetDefenseModifier: 0
-    selfDefensePowerModifier: 0
-    selfCriticalStageModifier: 0
-    selfEndureTurns: 0
-    lifeStealPercent: 0
-    hpCost: 0
-    hpCostPercent: 0
-    hpCostLeavesOne: 1
-    nextBoardMoveCountModifier: 0
-    nextCostGainModifier: 0
-    nextCostGainMultiplier: 1
-    conditionalPowerBonus: 0
-    conditionalHpThreshold: 0
-    statusDuration: 0
-    statusDamage: 0
-    statusMaxHpDamagePercent: 0
-    shieldPiercePercent: 0
-    minSelfHpPercent: 0
-    maxSelfHpPercent: 0
-  - skillId: burn-out
-    displayName: "\uD53C\uC758 \uC774\uBE68"
-    skillType: 0
-    skillEffectKind: 11
-    damageStatSource: 0
-    intentType: 0
-    value: 100
-    movePower: 100
-    debuffType: 0
-    isThornGuard: 0
-    retaliationDamage: 0
-    targetAttackModifier: 0
-    targetDefenseModifier: 0
-    selfDefensePowerModifier: 0
-    selfCriticalStageModifier: 0
-    selfEndureTurns: 0
-    lifeStealPercent: 0
-    hpCost: 0
-    hpCostPercent: 0.1
-    hpCostLeavesOne: 1
-    nextBoardMoveCountModifier: 0
-    nextCostGainModifier: 0
-    nextCostGainMultiplier: 1
-    conditionalPowerBonus: 0
-    conditionalHpThreshold: 0
-    statusDuration: 0
-    statusDamage: 0
-    statusMaxHpDamagePercent: 0
-    shieldPiercePercent: 0
-    minSelfHpPercent: 0
-    maxSelfHpPercent: 0
-  - skillId: heavy-strike
-    displayName: "\uAC15\uD0C0"
-    skillType: 0
-    skillEffectKind: 1
-    damageStatSource: 0
-    intentType: 0
-    value: 80
-    movePower: 80
-    debuffType: 0
-    isThornGuard: 0
-    retaliationDamage: 0
-    targetAttackModifier: 0
-    targetDefenseModifier: 0
-    selfDefensePowerModifier: 0
-    selfCriticalStageModifier: 0
-    selfEndureTurns: 0
-    lifeStealPercent: 0
-    hpCost: 0
-    hpCostPercent: 0
-    hpCostLeavesOne: 1
-    nextBoardMoveCountModifier: 0
-    nextCostGainModifier: 0
-    nextCostGainMultiplier: 1
-    conditionalPowerBonus: 0
-    conditionalHpThreshold: 0
-    statusDuration: 0
-    statusDamage: 0
-    statusMaxHpDamagePercent: 0
-    shieldPiercePercent: 0
-    minSelfHpPercent: 0
-    maxSelfHpPercent: 0
-  - skillId: endure
-    displayName: "\uC774\uC545\uBB3C\uAE30"
+  - skillId: iron-wall
+    displayName: "\uCCA0\uBCBD"
     skillType: 1
-    skillEffectKind: 9
+    skillEffectKind: 5
     damageStatSource: 0
     intentType: 1
     value: 0
@@ -225,9 +132,9 @@ MonoBehaviour:
     retaliationDamage: 0
     targetAttackModifier: 0
     targetDefenseModifier: 0
-    selfDefensePowerModifier: 0
+    selfDefensePowerModifier: 2
     selfCriticalStageModifier: 0
-    selfEndureTurns: 1
+    selfEndureTurns: 0
     lifeStealPercent: 0
     hpCost: 0
     hpCostPercent: 0
@@ -242,15 +149,46 @@ MonoBehaviour:
     statusMaxHpDamagePercent: 0
     shieldPiercePercent: 0
     minSelfHpPercent: 0
-    maxSelfHpPercent: 0.35
-  - skillId: reckless-blow
-    displayName: "\uBB34\uB9AC\uD55C \uAC15\uD0C0"
-    skillType: 0
-    skillEffectKind: 17
+    maxSelfHpPercent: 0
+  - skillId: thorn-guard
+    displayName: "\uAC00\uC2DC \uBC29\uC5B4"
+    skillType: 1
+    skillEffectKind: 12
     damageStatSource: 0
+    intentType: 1
+    value: 40
+    movePower: 0
+    debuffType: 0
+    isThornGuard: 1
+    retaliationDamage: 40
+    targetAttackModifier: 0
+    targetDefenseModifier: 0
+    selfDefensePowerModifier: 0
+    selfCriticalStageModifier: 0
+    selfEndureTurns: 0
+    lifeStealPercent: 0
+    hpCost: 0
+    hpCostPercent: 0
+    hpCostLeavesOne: 1
+    nextBoardMoveCountModifier: 0
+    nextCostGainModifier: 0
+    nextCostGainMultiplier: 1
+    conditionalPowerBonus: 0
+    conditionalHpThreshold: 0
+    statusDuration: 0
+    statusDamage: 0
+    statusMaxHpDamagePercent: 0
+    shieldPiercePercent: 0
+    minSelfHpPercent: 0
+    maxSelfHpPercent: 0
+  - skillId: body-press
+    displayName: "\uC721\uC911\uD55C \uC555\uBC15"
+    skillType: 0
+    skillEffectKind: 15
+    damageStatSource: 1
     intentType: 0
-    value: 110
-    movePower: 110
+    value: 80
+    movePower: 80
     debuffType: 0
     isThornGuard: 0
     retaliationDamage: 0
@@ -263,7 +201,7 @@ MonoBehaviour:
     hpCost: 0
     hpCostPercent: 0
     hpCostLeavesOne: 1
-    nextBoardMoveCountModifier: -2
+    nextBoardMoveCountModifier: 0
     nextCostGainModifier: 0
     nextCostGainMultiplier: 1
     conditionalPowerBonus: 0
@@ -273,14 +211,45 @@ MonoBehaviour:
     statusMaxHpDamagePercent: 0
     shieldPiercePercent: 0
     minSelfHpPercent: 0
-    maxSelfHpPercent: 0.5
-  aiActionBias: 1
+    maxSelfHpPercent: 0
+  - skillId: howl
+    displayName: "\uC6B8\uBD80\uC9D6\uAE30"
+    skillType: 2
+    skillEffectKind: 4
+    damageStatSource: 0
+    intentType: 2
+    value: 1
+    movePower: 0
+    debuffType: 0
+    isThornGuard: 0
+    retaliationDamage: 0
+    targetAttackModifier: 0
+    targetDefenseModifier: -1
+    selfDefensePowerModifier: 0
+    selfCriticalStageModifier: 0
+    selfEndureTurns: 0
+    lifeStealPercent: 0
+    hpCost: 0
+    hpCostPercent: 0
+    hpCostLeavesOne: 1
+    nextBoardMoveCountModifier: 0
+    nextCostGainModifier: 0
+    nextCostGainMultiplier: 1
+    conditionalPowerBonus: 0
+    conditionalHpThreshold: 0
+    statusDuration: 0
+    statusDamage: 0
+    statusMaxHpDamagePercent: 0
+    shieldPiercePercent: 0
+    minSelfHpPercent: 0
+    maxSelfHpPercent: 0
+  aiActionBias: 2
   aiDebuffPattern: 0
   aiStrength: 1
   aiDebuffInterval: 2
-  canUseThornGuard: 0
+  canUseThornGuard: 1
   thornGuardShieldHp: 4
   thornGuardRetaliationDamage: 2
-  canUseBullRush: 1
+  canUseBullRush: 0
   bullRushInterval: 3
   bullRushBonusDamage: 3

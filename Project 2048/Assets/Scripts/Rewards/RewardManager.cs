@@ -14,6 +14,7 @@ namespace Project2048.Rewards
         public const float HealTierTwoMaxHpPercent = 0.5f;
         public const float HealTierThreeMaxHpPercent = 0.75f;
         private const int MinimumOfferedChoiceCategories = 2;
+        private const int MaximumSkillChoicesPerOffer = 1;
 
         private enum RewardOfferCategory
         {
@@ -255,10 +256,15 @@ namespace Project2048.Rewards
                 AddUniqueRewards(pool, BuildRuntimeDefaultChoices(OfferedChoiceCount, player, pool));
             }
 
+            if (pool.Count(reward => reward != null && !reward.IsSkillReward) < OfferedChoiceCount)
+            {
+                AddUniqueRewards(pool, BuildRuntimeDefaultNonSkillChoices(OfferedChoiceCount, player, pool));
+            }
+
             var choices = SelectDiverseChoices(pool, OfferedChoiceCount);
             if (choices.Count < OfferedChoiceCount)
             {
-                AddUniqueRewards(
+                AddUniqueAllowedRewards(
                     choices,
                     BuildRuntimeDefaultChoices(OfferedChoiceCount - choices.Count, player, choices));
             }
@@ -273,6 +279,22 @@ namespace Project2048.Rewards
         {
             EnsureRuntimeDefaultRewards();
             var pool = runtimeDefaultRewards
+                .Where(reward => CanOfferRewardToPlayer(reward, player))
+                .Where(reward => !ContainsEquivalentReward(excludedRewards, reward))
+                .ToList();
+
+            ShuffleRewards(pool);
+            return SelectDiverseChoices(pool, count);
+        }
+
+        private List<BattleRewardSO> BuildRuntimeDefaultNonSkillChoices(
+            int count,
+            PlayerCombatController player,
+            IEnumerable<BattleRewardSO> excludedRewards = null)
+        {
+            EnsureRuntimeDefaultRewards();
+            var pool = runtimeDefaultRewards
+                .Where(reward => reward != null && !reward.IsSkillReward)
                 .Where(reward => CanOfferRewardToPlayer(reward, player))
                 .Where(reward => !ContainsEquivalentReward(excludedRewards, reward))
                 .ToList();
@@ -410,19 +432,59 @@ namespace Project2048.Rewards
                 }
 
                 MoveFirstCategoryReward(remaining, choices, firstCategory);
-                MoveFirstCategoryReward(
-                    remaining,
-                    choices,
-                    categories.First(category => category != firstCategory));
+                var secondCategory = categories.FirstOrDefault(category =>
+                    category != firstCategory &&
+                    remaining.Any(reward =>
+                        ResolveOfferCategory(reward) == category &&
+                        CanAddRewardChoice(choices, reward)));
+                if (IsPrimaryOfferCategory(secondCategory))
+                {
+                    MoveFirstCategoryReward(remaining, choices, secondCategory);
+                }
             }
 
             while (remaining.Count > 0 && choices.Count < count)
             {
-                choices.Add(remaining[0]);
-                remaining.RemoveAt(0);
+                if (!MoveFirstAllowedReward(remaining, choices))
+                {
+                    break;
+                }
             }
 
             return choices;
+        }
+
+        private static bool MoveFirstAllowedReward(
+            List<BattleRewardSO> remaining,
+            List<BattleRewardSO> choices)
+        {
+            var index = remaining.FindIndex(reward => CanAddRewardChoice(choices, reward));
+            if (index < 0)
+            {
+                return false;
+            }
+
+            choices.Add(remaining[index]);
+            remaining.RemoveAt(index);
+            return true;
+        }
+
+        private static bool CanAddRewardChoice(
+            IEnumerable<BattleRewardSO> choices,
+            BattleRewardSO reward)
+        {
+            if (reward == null)
+            {
+                return false;
+            }
+
+            if (!reward.IsSkillReward)
+            {
+                return true;
+            }
+
+            return choices == null ||
+                   choices.Count(choice => choice != null && choice.IsSkillReward) < MaximumSkillChoicesPerOffer;
         }
 
         private static void MoveFirstCategoryReward(
@@ -430,7 +492,9 @@ namespace Project2048.Rewards
             List<BattleRewardSO> choices,
             RewardOfferCategory category)
         {
-            var index = remaining.FindIndex(reward => ResolveOfferCategory(reward) == category);
+            var index = remaining.FindIndex(reward =>
+                ResolveOfferCategory(reward) == category &&
+                CanAddRewardChoice(choices, reward));
             if (index < 0)
             {
                 return;
@@ -491,6 +555,24 @@ namespace Project2048.Rewards
             foreach (var reward in rewards)
             {
                 if (reward != null && !ContainsEquivalentReward(target, reward))
+                {
+                    target.Add(reward);
+                }
+            }
+        }
+
+        private static void AddUniqueAllowedRewards(List<BattleRewardSO> target, IEnumerable<BattleRewardSO> rewards)
+        {
+            if (target == null || rewards == null)
+            {
+                return;
+            }
+
+            foreach (var reward in rewards)
+            {
+                if (reward != null &&
+                    CanAddRewardChoice(target, reward) &&
+                    !ContainsEquivalentReward(target, reward))
                 {
                     target.Add(reward);
                 }

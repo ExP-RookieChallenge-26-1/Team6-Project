@@ -1,7 +1,10 @@
 using System.Collections;
+using System.Linq;
 using Project2048.Presentation;
 using UnityEngine;
+using UnityEngine.Animations;
 using UnityEngine.EventSystems;
+using UnityEngine.Playables;
 
 namespace Project2048.Prototype
 {
@@ -29,6 +32,10 @@ namespace Project2048.Prototype
         private bool hasEnemyRendererRestTransform;
         private bool lastEnemyWasDead;
         private float delayEnemyDeathFadeUntilRealtime;
+        private Coroutine enemyAnimationReturnToIdleCoroutine;
+        private PlayableGraph enemyAnimationGraph;
+        private AnimationClip currentEnemyDirectAnimationClip;
+        private bool currentEnemyDirectAnimationLoops;
 
         private void PlayEnemyAppearIntro(CombatEffectBinding effect)
         {
@@ -73,6 +80,156 @@ namespace Project2048.Prototype
             }
 
             enemyAttackLungeCoroutine = StartCoroutine(EnemyAttackLungeRoutine(effect));
+        }
+
+        private void PlayEnemyIdleAnimationIfNeeded()
+        {
+            if (showingRewardPresenter || (snapshot?.Enemies?.FirstOrDefault()?.IsDead ?? false))
+            {
+                return;
+            }
+
+            var idleClip = ResolveCurrentEnemyData()?.idleAnimation;
+            if (idleClip == null)
+            {
+                if (currentEnemyDirectAnimationLoops)
+                {
+                    ClearEnemyDirectAnimation(restoreCurrentSprite: true);
+                }
+
+                return;
+            }
+
+            if (currentEnemyDirectAnimationLoops &&
+                currentEnemyDirectAnimationClip == idleClip &&
+                enemyAnimationGraph.IsValid())
+            {
+                return;
+            }
+
+            PlayEnemyAnimationClip(idleClip, loop: true);
+        }
+
+        private float PlayEnemyOneShotAnimation(AnimationClip clip, bool returnToIdle)
+        {
+            if (clip == null)
+            {
+                return 0f;
+            }
+
+            if (!PlayEnemyAnimationClip(clip, loop: false))
+            {
+                return 0f;
+            }
+
+            var duration = Mathf.Max(0f, clip.length);
+            if (returnToIdle && Application.isPlaying && isActiveAndEnabled)
+            {
+                enemyAnimationReturnToIdleCoroutine = StartCoroutine(ReturnToEnemyIdleAnimationAfterDelay(duration));
+            }
+
+            return duration;
+        }
+
+        private bool PlayEnemyAnimationClip(AnimationClip clip, bool loop)
+        {
+            var animator = ResolveEnemyAnimatorForDirectAnimation();
+            if (clip == null || animator == null)
+            {
+                return false;
+            }
+
+            StopEnemyAnimationReturnToIdle();
+            DestroyEnemyAnimationGraph();
+
+            enemyAnimationGraph = PlayableGraph.Create("EnemyDirectAnimation");
+            enemyAnimationGraph.SetTimeUpdateMode(Application.isPlaying
+                ? DirectorUpdateMode.GameTime
+                : DirectorUpdateMode.Manual);
+
+            var clipPlayable = AnimationClipPlayable.Create(enemyAnimationGraph, clip);
+            clipPlayable.SetTime(0d);
+            clipPlayable.SetSpeed(1d);
+
+            var output = AnimationPlayableOutput.Create(enemyAnimationGraph, "EnemyDirectAnimation", animator);
+            output.SetSourcePlayable(clipPlayable);
+
+            currentEnemyDirectAnimationClip = clip;
+            currentEnemyDirectAnimationLoops = loop;
+            enemyAnimationGraph.Play();
+            if (!Application.isPlaying)
+            {
+                enemyAnimationGraph.Evaluate(0f);
+            }
+
+            return true;
+        }
+
+        private Animator ResolveEnemyAnimatorForDirectAnimation()
+        {
+            ResolveMissingReferences();
+            if (enemyAnimator != null)
+            {
+                return enemyAnimator;
+            }
+
+            if (enemyRenderer == null)
+            {
+                return null;
+            }
+
+            enemyAnimator = enemyRenderer.GetComponent<Animator>();
+            if (enemyAnimator == null)
+            {
+                enemyAnimator = enemyRenderer.gameObject.AddComponent<Animator>();
+            }
+
+            return enemyAnimator;
+        }
+
+        private IEnumerator ReturnToEnemyIdleAnimationAfterDelay(float delaySeconds)
+        {
+            yield return new WaitForSecondsRealtime(Mathf.Max(0.01f, delaySeconds));
+            enemyAnimationReturnToIdleCoroutine = null;
+            PlayEnemyIdleAnimationIfNeeded();
+            if (!currentEnemyDirectAnimationLoops)
+            {
+                ClearEnemyDirectAnimation(restoreCurrentSprite: true);
+            }
+        }
+
+        private void ClearEnemyDirectAnimation(bool restoreCurrentSprite = false)
+        {
+            StopEnemyAnimationReturnToIdle();
+            DestroyEnemyAnimationGraph();
+            currentEnemyDirectAnimationClip = null;
+            currentEnemyDirectAnimationLoops = false;
+
+            if (restoreCurrentSprite && enemyRenderer != null && !showingRewardPresenter)
+            {
+                enemyRenderer.sprite = ResolveEnemySprite(snapshot);
+            }
+        }
+
+        private void StopEnemyAnimationReturnToIdle()
+        {
+            if (enemyAnimationReturnToIdleCoroutine == null)
+            {
+                return;
+            }
+
+            StopCoroutine(enemyAnimationReturnToIdleCoroutine);
+            enemyAnimationReturnToIdleCoroutine = null;
+        }
+
+        private void DestroyEnemyAnimationGraph()
+        {
+            if (!enemyAnimationGraph.IsValid())
+            {
+                return;
+            }
+
+            enemyAnimationGraph.Destroy();
         }
 
         private void PlayEnemyAttackImpactEffects(CombatEffectBinding effect)

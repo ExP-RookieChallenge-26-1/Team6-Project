@@ -166,7 +166,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -318,15 +318,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -432,7 +432,7 @@ Animator:
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
-  m_WarningMessage: 
+  m_WarningMessage:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
@@ -455,15 +455,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -569,7 +569,7 @@ Animator:
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
-  m_WarningMessage: 
+  m_WarningMessage:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
@@ -857,7 +857,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -1009,15 +1009,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1123,7 +1123,7 @@ Animator:
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
-  m_WarningMessage: 
+  m_WarningMessage:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
@@ -1175,7 +1175,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a0f5017aa7894a042bbe9413bd9cc8d9, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.AttackEffectShowcaseSlot
   skill: {fileID: 11400000, guid: f4882f31e6dbe5d4a9bb1b51c44e2f03, type: 2}
   worldView: {fileID: 62725580}
@@ -1197,7 +1197,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 85347ab7868a2ac4db804307935a6cc2, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.CombatWorldSpriteView
   bootstrap: {fileID: 0}
   backgroundRenderer: {fileID: 0}
@@ -1285,7 +1285,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -1466,7 +1466,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a0f5017aa7894a042bbe9413bd9cc8d9, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.AttackEffectShowcaseSlot
   skill: {fileID: 11400000, guid: 27f5295ffd4a4738b40f9d791c06ac4f, type: 2}
   worldView: {fileID: 69652114}
@@ -1489,7 +1489,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 85347ab7868a2ac4db804307935a6cc2, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.CombatWorldSpriteView
   bootstrap: {fileID: 0}
   backgroundRenderer: {fileID: 0}
@@ -1548,15 +1548,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1662,7 +1662,7 @@ Animator:
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
-  m_WarningMessage: 
+  m_WarningMessage:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
@@ -1693,8 +1693,8 @@ Transform:
   m_GameObject: {fileID: 85747781}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.12, y: 0.2, z: 4}
-  m_LocalScale: {x: 0.34, y: 0.34, z: 0.34}
+  m_LocalPosition: {x: 1.2499996, y: 0.69000244, z: 4}
+  m_LocalScale: {x: 0.40000004, y: 0.40000004, z: 0.40000004}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1338260352}
@@ -1805,7 +1805,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -1986,7 +1986,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -2146,8 +2146,8 @@ Transform:
   m_GameObject: {fileID: 93623628}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.12, y: 0.2, z: 4}
-  m_LocalScale: {x: 0.34, y: 0.34, z: 0.34}
+  m_LocalPosition: {x: 1.2499998, y: 0.6899996, z: 4}
+  m_LocalScale: {x: 0.40000004, y: 0.40000004, z: 0.40000004}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 865224288}
@@ -2258,7 +2258,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -2479,7 +2479,7 @@ Material:
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
-  m_LockedProperties: 
+  m_LockedProperties:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -2548,7 +2548,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -2729,7 +2729,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -2910,7 +2910,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -3091,7 +3091,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a0f5017aa7894a042bbe9413bd9cc8d9, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.AttackEffectShowcaseSlot
   skill: {fileID: 11400000, guid: ca3270a0745d7534185428c9b944d28b, type: 2}
   worldView: {fileID: 180057979}
@@ -3112,7 +3112,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 85347ab7868a2ac4db804307935a6cc2, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.CombatWorldSpriteView
   bootstrap: {fileID: 0}
   backgroundRenderer: {fileID: 0}
@@ -3200,7 +3200,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a0f5017aa7894a042bbe9413bd9cc8d9, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.AttackEffectShowcaseSlot
   skill: {fileID: 11400000, guid: f76b5e6c27794156890348de21c5aa86, type: 2}
   worldView: {fileID: 181733983}
@@ -3221,7 +3221,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 85347ab7868a2ac4db804307935a6cc2, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.CombatWorldSpriteView
   bootstrap: {fileID: 0}
   backgroundRenderer: {fileID: 0}
@@ -3309,7 +3309,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -3490,7 +3490,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a0f5017aa7894a042bbe9413bd9cc8d9, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.AttackEffectShowcaseSlot
   skill: {fileID: 11400000, guid: 7598901042154ed89bf747d8e39ee11e, type: 2}
   worldView: {fileID: 190624639}
@@ -3513,7 +3513,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 85347ab7868a2ac4db804307935a6cc2, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.CombatWorldSpriteView
   bootstrap: {fileID: 0}
   backgroundRenderer: {fileID: 0}
@@ -3601,7 +3601,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -3782,7 +3782,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a0f5017aa7894a042bbe9413bd9cc8d9, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.AttackEffectShowcaseSlot
   skill: {fileID: 11400000, guid: 20faed357e2347d2a18d106d1b4f028b, type: 2}
   worldView: {fileID: 207056475}
@@ -3807,7 +3807,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 85347ab7868a2ac4db804307935a6cc2, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.CombatWorldSpriteView
   bootstrap: {fileID: 0}
   backgroundRenderer: {fileID: 0}
@@ -3866,15 +3866,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3980,7 +3980,7 @@ Animator:
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
-  m_WarningMessage: 
+  m_WarningMessage:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
@@ -4032,7 +4032,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -4213,7 +4213,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -4394,7 +4394,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a0f5017aa7894a042bbe9413bd9cc8d9, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.AttackEffectShowcaseSlot
   skill: {fileID: 11400000, guid: 18de9d9bdb9d4cbda5a1169eccb44d84, type: 2}
   worldView: {fileID: 223050218}
@@ -4415,7 +4415,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 85347ab7868a2ac4db804307935a6cc2, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.CombatWorldSpriteView
   bootstrap: {fileID: 0}
   backgroundRenderer: {fileID: 0}
@@ -4503,7 +4503,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -4663,8 +4663,8 @@ Transform:
   m_GameObject: {fileID: 234979873}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.12, y: 0.2, z: 4}
-  m_LocalScale: {x: 0.34, y: 0.34, z: 0.34}
+  m_LocalPosition: {x: 1.2499998, y: 0.6899986, z: 4}
+  m_LocalScale: {x: 0.40000004, y: 0.40000004, z: 0.40000004}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 262244227}
@@ -4775,7 +4775,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -4956,7 +4956,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -5137,7 +5137,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a0f5017aa7894a042bbe9413bd9cc8d9, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.AttackEffectShowcaseSlot
   skill: {fileID: 11400000, guid: 98a8d0cce1fbc5e429a506f26be1122e, type: 2}
   worldView: {fileID: 262244229}
@@ -5158,7 +5158,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 85347ab7868a2ac4db804307935a6cc2, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.CombatWorldSpriteView
   bootstrap: {fileID: 0}
   backgroundRenderer: {fileID: 0}
@@ -5246,7 +5246,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -5427,7 +5427,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -5608,7 +5608,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -5760,15 +5760,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -5874,7 +5874,7 @@ Animator:
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
-  m_WarningMessage: 
+  m_WarningMessage:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
@@ -5926,7 +5926,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -6107,7 +6107,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -6267,8 +6267,8 @@ Transform:
   m_GameObject: {fileID: 316497694}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.12, y: 0.2, z: 4}
-  m_LocalScale: {x: 0.34, y: 0.34, z: 0.34}
+  m_LocalPosition: {x: 1.2499999, y: 0.69000244, z: 4}
+  m_LocalScale: {x: 0.40000004, y: 0.40000004, z: 0.40000004}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 787922301}
@@ -6379,7 +6379,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -6560,7 +6560,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -6741,7 +6741,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -6922,7 +6922,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -7082,8 +7082,8 @@ Transform:
   m_GameObject: {fileID: 342787317}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.12, y: 0.2, z: 4}
-  m_LocalScale: {x: 0.34, y: 0.34, z: 0.34}
+  m_LocalPosition: {x: 1.2499999, y: 0.6899986, z: 4}
+  m_LocalScale: {x: 0.40000004, y: 0.40000004, z: 0.40000004}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1094808838}
@@ -7194,7 +7194,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -7375,7 +7375,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -7535,8 +7535,8 @@ Transform:
   m_GameObject: {fileID: 347922388}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.12, y: 0.2, z: 4}
-  m_LocalScale: {x: 0.34, y: 0.34, z: 0.34}
+  m_LocalPosition: {x: 1.2499996, y: 0.6899996, z: 4}
+  m_LocalScale: {x: 0.40000004, y: 0.40000004, z: 0.40000004}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 62725578}
@@ -7626,8 +7626,8 @@ Transform:
   m_GameObject: {fileID: 348801250}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.12, y: 0.04, z: 4}
-  m_LocalScale: {x: 0.34, y: 0.34, z: 0.34}
+  m_LocalPosition: {x: 1.2499999, y: 0.54999995, z: 4}
+  m_LocalScale: {x: 0.40000004, y: 0.40000004, z: 0.40000004}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1147987193}
@@ -7709,15 +7709,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -7823,7 +7823,7 @@ Animator:
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
-  m_WarningMessage: 
+  m_WarningMessage:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
@@ -7875,7 +7875,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a0f5017aa7894a042bbe9413bd9cc8d9, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.AttackEffectShowcaseSlot
   skill: {fileID: 11400000, guid: bdb2766095452cd4094c7768ff8b1d0d, type: 2}
   worldView: {fileID: 376885803}
@@ -7896,7 +7896,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 85347ab7868a2ac4db804307935a6cc2, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.CombatWorldSpriteView
   bootstrap: {fileID: 0}
   backgroundRenderer: {fileID: 0}
@@ -7955,15 +7955,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -8069,7 +8069,7 @@ Animator:
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
-  m_WarningMessage: 
+  m_WarningMessage:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
@@ -8093,7 +8093,7 @@ Material:
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
-  m_LockedProperties: 
+  m_LockedProperties:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -8141,8 +8141,8 @@ Transform:
   m_GameObject: {fileID: 420562081}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.12, y: 0.2, z: 4}
-  m_LocalScale: {x: 0.34, y: 0.34, z: 0.34}
+  m_LocalPosition: {x: 1.2499998, y: 0.69000244, z: 4}
+  m_LocalScale: {x: 0.40000004, y: 0.40000004, z: 0.40000004}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1376449612}
@@ -8232,8 +8232,8 @@ Transform:
   m_GameObject: {fileID: 437313050}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.12, y: 0.2, z: 4}
-  m_LocalScale: {x: 0.34, y: 0.34, z: 0.34}
+  m_LocalPosition: {x: 1.2499999, y: 0.69000244, z: 4}
+  m_LocalScale: {x: 0.40000004, y: 0.40000004, z: 0.40000004}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1291782339}
@@ -8412,7 +8412,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -8593,7 +8593,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -8745,15 +8745,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -8859,7 +8859,7 @@ Animator:
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
-  m_WarningMessage: 
+  m_WarningMessage:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
@@ -8882,15 +8882,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -8996,7 +8996,7 @@ Animator:
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
-  m_WarningMessage: 
+  m_WarningMessage:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
@@ -9048,7 +9048,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a0f5017aa7894a042bbe9413bd9cc8d9, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.AttackEffectShowcaseSlot
   skill: {fileID: 11400000, guid: 0be1b23af379494182d8e10bec231504, type: 2}
   worldView: {fileID: 467013926}
@@ -9069,7 +9069,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 85347ab7868a2ac4db804307935a6cc2, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.CombatWorldSpriteView
   bootstrap: {fileID: 0}
   backgroundRenderer: {fileID: 0}
@@ -9129,7 +9129,7 @@ Material:
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
-  m_LockedProperties: 
+  m_LockedProperties:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -9198,7 +9198,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -9379,7 +9379,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -9539,8 +9539,8 @@ Transform:
   m_GameObject: {fileID: 501001159}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.12, y: 0.2, z: 4}
-  m_LocalScale: {x: 0.34, y: 0.34, z: 0.34}
+  m_LocalPosition: {x: 1.2499996, y: 0.69000053, z: 4}
+  m_LocalScale: {x: 0.40000004, y: 0.40000004, z: 0.40000004}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 69652112}
@@ -9651,7 +9651,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -9811,8 +9811,8 @@ Transform:
   m_GameObject: {fileID: 509658146}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.12, y: 0.2, z: 4}
-  m_LocalScale: {x: 0.34, y: 0.34, z: 0.34}
+  m_LocalPosition: {x: 1.2499996, y: 0.6899986, z: 4}
+  m_LocalScale: {x: 0.40000004, y: 0.40000004, z: 0.40000004}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 180057977}
@@ -9894,15 +9894,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -10008,7 +10008,7 @@ Animator:
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
-  m_WarningMessage: 
+  m_WarningMessage:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
@@ -10032,7 +10032,7 @@ Material:
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
-  m_LockedProperties: 
+  m_LockedProperties:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -10080,8 +10080,8 @@ Transform:
   m_GameObject: {fileID: 525907698}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.12, y: 0.2, z: 4}
-  m_LocalScale: {x: 0.34, y: 0.34, z: 0.34}
+  m_LocalPosition: {x: 1.2499998, y: 0.69000053, z: 4}
+  m_LocalScale: {x: 0.40000004, y: 0.40000004, z: 0.40000004}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 207056473}
@@ -10192,7 +10192,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a0f5017aa7894a042bbe9413bd9cc8d9, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.AttackEffectShowcaseSlot
   skill: {fileID: 11400000, guid: 002a7e7b62e948f09848929ca26569f5, type: 2}
   worldView: {fileID: 531056887}
@@ -10213,7 +10213,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 85347ab7868a2ac4db804307935a6cc2, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.CombatWorldSpriteView
   bootstrap: {fileID: 0}
   backgroundRenderer: {fileID: 0}
@@ -10280,8 +10280,8 @@ Transform:
   m_GameObject: {fileID: 566915124}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.12, y: 0.2, z: 4}
-  m_LocalScale: {x: 0.34, y: 0.34, z: 0.34}
+  m_LocalPosition: {x: 1.2499996, y: 0.6899986, z: 4}
+  m_LocalScale: {x: 0.40000004, y: 0.40000004, z: 0.40000004}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 937388813}
@@ -10363,15 +10363,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -10477,7 +10477,7 @@ Animator:
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
-  m_WarningMessage: 
+  m_WarningMessage:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
@@ -10529,7 +10529,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -10682,7 +10682,7 @@ Material:
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
-  m_LockedProperties: 
+  m_LockedProperties:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -10756,15 +10756,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -10870,7 +10870,7 @@ Animator:
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
-  m_WarningMessage: 
+  m_WarningMessage:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
@@ -10927,15 +10927,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -11041,7 +11041,7 @@ Animator:
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
-  m_WarningMessage: 
+  m_WarningMessage:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
@@ -11093,7 +11093,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -11274,7 +11274,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a0f5017aa7894a042bbe9413bd9cc8d9, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.AttackEffectShowcaseSlot
   skill: {fileID: 11400000, guid: 8f92cdfd72c349cca9e085affee334f2, type: 2}
   worldView: {fileID: 642771869}
@@ -11297,7 +11297,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 85347ab7868a2ac4db804307935a6cc2, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.CombatWorldSpriteView
   bootstrap: {fileID: 0}
   backgroundRenderer: {fileID: 0}
@@ -11385,7 +11385,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a0f5017aa7894a042bbe9413bd9cc8d9, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.AttackEffectShowcaseSlot
   skill: {fileID: 11400000, guid: cd7501a97bb22e741a43179d1b3771d3, type: 2}
   worldView: {fileID: 675487791}
@@ -11406,7 +11406,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 85347ab7868a2ac4db804307935a6cc2, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.CombatWorldSpriteView
   bootstrap: {fileID: 0}
   backgroundRenderer: {fileID: 0}
@@ -11494,7 +11494,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -11826,7 +11826,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -11978,15 +11978,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -12092,7 +12092,7 @@ Animator:
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
-  m_WarningMessage: 
+  m_WarningMessage:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
@@ -12123,8 +12123,8 @@ Transform:
   m_GameObject: {fileID: 719730510}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.12, y: 0.04, z: 4}
-  m_LocalScale: {x: 0.34, y: 0.34, z: 0.34}
+  m_LocalPosition: {x: 1.2499999, y: 0.5500002, z: 4}
+  m_LocalScale: {x: 0.40000004, y: 0.40000004, z: 0.40000004}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1135686420}
@@ -12235,7 +12235,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -12395,8 +12395,8 @@ Transform:
   m_GameObject: {fileID: 728048050}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.12, y: 0.04, z: 4}
-  m_LocalScale: {x: 0.34, y: 0.34, z: 0.34}
+  m_LocalPosition: {x: 1.2499999, y: 0.54999995, z: 4}
+  m_LocalScale: {x: 0.40000004, y: 0.40000004, z: 0.40000004}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2142586499}
@@ -12507,7 +12507,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -12873,7 +12873,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -13054,7 +13054,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -13214,8 +13214,8 @@ Transform:
   m_GameObject: {fileID: 773904120}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.12, y: 0.2, z: 4}
-  m_LocalScale: {x: 0.34, y: 0.34, z: 0.34}
+  m_LocalPosition: {x: 1.2499998, y: 0.69000244, z: 4}
+  m_LocalScale: {x: 0.40000004, y: 0.40000004, z: 0.40000004}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 531056885}
@@ -13326,7 +13326,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -13486,8 +13486,8 @@ Transform:
   m_GameObject: {fileID: 785934006}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.12, y: 0.2, z: 4}
-  m_LocalScale: {x: 0.34, y: 0.34, z: 0.34}
+  m_LocalPosition: {x: 1.2499998, y: 0.6899986, z: 4}
+  m_LocalScale: {x: 0.40000004, y: 0.40000004, z: 0.40000004}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 181733981}
@@ -13598,7 +13598,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a0f5017aa7894a042bbe9413bd9cc8d9, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.AttackEffectShowcaseSlot
   skill: {fileID: 11400000, guid: 2fdf5da52452658439358305b3bde18d, type: 2}
   worldView: {fileID: 786903333}
@@ -13619,7 +13619,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 85347ab7868a2ac4db804307935a6cc2, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.CombatWorldSpriteView
   bootstrap: {fileID: 0}
   backgroundRenderer: {fileID: 0}
@@ -13707,7 +13707,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a0f5017aa7894a042bbe9413bd9cc8d9, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.AttackEffectShowcaseSlot
   skill: {fileID: 11400000, guid: ada3de57ee9e488418214e8f574aa25b, type: 2}
   worldView: {fileID: 787922303}
@@ -13728,7 +13728,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 85347ab7868a2ac4db804307935a6cc2, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.CombatWorldSpriteView
   bootstrap: {fileID: 0}
   backgroundRenderer: {fileID: 0}
@@ -13850,7 +13850,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -14031,7 +14031,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -14183,15 +14183,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -14297,7 +14297,7 @@ Animator:
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
-  m_WarningMessage: 
+  m_WarningMessage:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
@@ -14349,7 +14349,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -14530,7 +14530,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -14690,8 +14690,8 @@ Transform:
   m_GameObject: {fileID: 841691217}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.12, y: 0.2, z: 4}
-  m_LocalScale: {x: 0.34, y: 0.34, z: 0.34}
+  m_LocalPosition: {x: 1.2499998, y: 0.69000053, z: 4}
+  m_LocalScale: {x: 0.40000004, y: 0.40000004, z: 0.40000004}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1193851145}
@@ -14802,7 +14802,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -15017,7 +15017,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a0f5017aa7894a042bbe9413bd9cc8d9, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.AttackEffectShowcaseSlot
   skill: {fileID: 11400000, guid: 552da4ab57732f645b42367a56fa846a, type: 2}
   worldView: {fileID: 865224290}
@@ -15039,7 +15039,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 85347ab7868a2ac4db804307935a6cc2, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.CombatWorldSpriteView
   bootstrap: {fileID: 0}
   backgroundRenderer: {fileID: 0}
@@ -15127,7 +15127,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -15287,8 +15287,8 @@ Transform:
   m_GameObject: {fileID: 901290419}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.12, y: 0.2, z: 4}
-  m_LocalScale: {x: 0.34, y: 0.34, z: 0.34}
+  m_LocalPosition: {x: 1.2499996, y: 0.69000053, z: 4}
+  m_LocalScale: {x: 0.40000004, y: 0.40000004, z: 0.40000004}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1749886522}
@@ -15371,7 +15371,7 @@ Material:
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
-  m_LockedProperties: 
+  m_LockedProperties:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -15591,7 +15591,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a0f5017aa7894a042bbe9413bd9cc8d9, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.AttackEffectShowcaseSlot
   skill: {fileID: 11400000, guid: 0edf80831457439892d5803f916cf1f6, type: 2}
   worldView: {fileID: 937388815}
@@ -15612,7 +15612,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 85347ab7868a2ac4db804307935a6cc2, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.CombatWorldSpriteView
   bootstrap: {fileID: 0}
   backgroundRenderer: {fileID: 0}
@@ -15700,7 +15700,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -15881,7 +15881,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a0f5017aa7894a042bbe9413bd9cc8d9, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.AttackEffectShowcaseSlot
   skill: {fileID: 11400000, guid: f44033ed6e9f46a2b7eaf4ba31e4ca27, type: 2}
   worldView: {fileID: 957365916}
@@ -15902,7 +15902,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 85347ab7868a2ac4db804307935a6cc2, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.CombatWorldSpriteView
   bootstrap: {fileID: 0}
   backgroundRenderer: {fileID: 0}
@@ -15962,7 +15962,7 @@ Material:
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
-  m_LockedProperties: 
+  m_LockedProperties:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -16182,7 +16182,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -16363,7 +16363,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -16544,7 +16544,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -16696,15 +16696,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -16810,7 +16810,7 @@ Animator:
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
-  m_WarningMessage: 
+  m_WarningMessage:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
@@ -16862,7 +16862,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -17043,7 +17043,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -17224,7 +17224,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -17384,8 +17384,8 @@ Transform:
   m_GameObject: {fileID: 1037781491}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.12, y: 0.2, z: 4}
-  m_LocalScale: {x: 0.34, y: 0.34, z: 0.34}
+  m_LocalPosition: {x: 1.2499996, y: 0.69000244, z: 4}
+  m_LocalScale: {x: 0.40000004, y: 0.40000004, z: 0.40000004}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1161747835}
@@ -17496,7 +17496,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -17677,7 +17677,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -17837,8 +17837,8 @@ Transform:
   m_GameObject: {fileID: 1073994110}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.12, y: 0.2, z: 4}
-  m_LocalScale: {x: 0.34, y: 0.34, z: 0.34}
+  m_LocalPosition: {x: 1.2499998, y: 0.6899986, z: 4}
+  m_LocalScale: {x: 0.40000004, y: 0.40000004, z: 0.40000004}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 675487789}
@@ -17920,15 +17920,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -18034,7 +18034,7 @@ Animator:
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
-  m_WarningMessage: 
+  m_WarningMessage:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
@@ -18086,7 +18086,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -18267,7 +18267,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a0f5017aa7894a042bbe9413bd9cc8d9, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.AttackEffectShowcaseSlot
   skill: {fileID: 11400000, guid: 5a7d25bf22a4191409d36e7de7128a1c, type: 2}
   worldView: {fileID: 1094808840}
@@ -18288,7 +18288,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 85347ab7868a2ac4db804307935a6cc2, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.CombatWorldSpriteView
   bootstrap: {fileID: 0}
   backgroundRenderer: {fileID: 0}
@@ -18376,7 +18376,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a0f5017aa7894a042bbe9413bd9cc8d9, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.AttackEffectShowcaseSlot
   skill: {fileID: 11400000, guid: 196a2ff8be3c4184095e9caf8e804177, type: 2}
   worldView: {fileID: 1103681816}
@@ -18398,7 +18398,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 85347ab7868a2ac4db804307935a6cc2, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.CombatWorldSpriteView
   bootstrap: {fileID: 0}
   backgroundRenderer: {fileID: 0}
@@ -18486,7 +18486,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -18667,7 +18667,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -18848,7 +18848,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a0f5017aa7894a042bbe9413bd9cc8d9, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.AttackEffectShowcaseSlot
   skill: {fileID: 11400000, guid: 3f5d0a715916847418ab39e5b398d3eb, type: 2}
   worldView: {fileID: 1135686422}
@@ -18870,7 +18870,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 85347ab7868a2ac4db804307935a6cc2, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.CombatWorldSpriteView
   bootstrap: {fileID: 0}
   backgroundRenderer: {fileID: 0}
@@ -18958,7 +18958,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -19139,7 +19139,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a0f5017aa7894a042bbe9413bd9cc8d9, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.AttackEffectShowcaseSlot
   skill: {fileID: 11400000, guid: 991d8b41bd0c53a4485cb7c4c3088530, type: 2}
   worldView: {fileID: 1147987195}
@@ -19161,7 +19161,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 85347ab7868a2ac4db804307935a6cc2, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.CombatWorldSpriteView
   bootstrap: {fileID: 0}
   backgroundRenderer: {fileID: 0}
@@ -19249,7 +19249,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -19430,7 +19430,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -19590,8 +19590,8 @@ Transform:
   m_GameObject: {fileID: 1153488267}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.12, y: 0.2, z: 4}
-  m_LocalScale: {x: 0.34, y: 0.34, z: 0.34}
+  m_LocalPosition: {x: 1.2499998, y: 0.69000053, z: 4}
+  m_LocalScale: {x: 0.40000004, y: 0.40000004, z: 0.40000004}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 190624637}
@@ -19853,7 +19853,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a0f5017aa7894a042bbe9413bd9cc8d9, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.AttackEffectShowcaseSlot
   skill: {fileID: 11400000, guid: 24e7d5bd671f4a918e6a6e8f9bb27809, type: 2}
   worldView: {fileID: 1161747837}
@@ -19874,7 +19874,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 85347ab7868a2ac4db804307935a6cc2, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.CombatWorldSpriteView
   bootstrap: {fileID: 0}
   backgroundRenderer: {fileID: 0}
@@ -19962,7 +19962,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -20114,15 +20114,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -20228,7 +20228,7 @@ Animator:
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
-  m_WarningMessage: 
+  m_WarningMessage:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
@@ -20280,7 +20280,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -20432,15 +20432,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -20546,7 +20546,7 @@ Animator:
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
-  m_WarningMessage: 
+  m_WarningMessage:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
@@ -20598,7 +20598,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -20779,7 +20779,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a0f5017aa7894a042bbe9413bd9cc8d9, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.AttackEffectShowcaseSlot
   skill: {fileID: 11400000, guid: 2b7d5be3dee84f6d9f19b9a9e2e9c6e1, type: 2}
   worldView: {fileID: 1193851147}
@@ -20802,7 +20802,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 85347ab7868a2ac4db804307935a6cc2, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.CombatWorldSpriteView
   bootstrap: {fileID: 0}
   backgroundRenderer: {fileID: 0}
@@ -20861,15 +20861,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -20975,7 +20975,7 @@ Animator:
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
-  m_WarningMessage: 
+  m_WarningMessage:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
@@ -21027,7 +21027,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -21208,7 +21208,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -21368,8 +21368,8 @@ Transform:
   m_GameObject: {fileID: 1225937034}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.12, y: 0.2, z: 4}
-  m_LocalScale: {x: 0.34, y: 0.34, z: 0.34}
+  m_LocalPosition: {x: 1.2499996, y: 0.6899986, z: 4}
+  m_LocalScale: {x: 0.40000004, y: 0.40000004, z: 0.40000004}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1816400263}
@@ -21480,7 +21480,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -21661,7 +21661,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -21842,7 +21842,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -21994,15 +21994,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -22108,7 +22108,7 @@ Animator:
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
-  m_WarningMessage: 
+  m_WarningMessage:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
@@ -22160,7 +22160,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -22341,7 +22341,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -22522,7 +22522,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -22703,7 +22703,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a0f5017aa7894a042bbe9413bd9cc8d9, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.AttackEffectShowcaseSlot
   skill: {fileID: 11400000, guid: c1744bc96e754468b74f2e389042e23f, type: 2}
   worldView: {fileID: 1291782341}
@@ -22725,7 +22725,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 85347ab7868a2ac4db804307935a6cc2, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.CombatWorldSpriteView
   bootstrap: {fileID: 0}
   backgroundRenderer: {fileID: 0}
@@ -22847,7 +22847,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a0f5017aa7894a042bbe9413bd9cc8d9, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.AttackEffectShowcaseSlot
   skill: {fileID: 11400000, guid: df0e4934c5af4ae3ac415c92684f8787, type: 2}
   worldView: {fileID: 1295573309}
@@ -22872,7 +22872,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 85347ab7868a2ac4db804307935a6cc2, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.CombatWorldSpriteView
   bootstrap: {fileID: 0}
   backgroundRenderer: {fileID: 0}
@@ -22960,7 +22960,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -23141,7 +23141,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -23322,7 +23322,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a0f5017aa7894a042bbe9413bd9cc8d9, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.AttackEffectShowcaseSlot
   skill: {fileID: 11400000, guid: ced275c3ac4587d4f9f513c34c461400, type: 2}
   worldView: {fileID: 1313125639}
@@ -23343,7 +23343,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 85347ab7868a2ac4db804307935a6cc2, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.CombatWorldSpriteView
   bootstrap: {fileID: 0}
   backgroundRenderer: {fileID: 0}
@@ -23403,7 +23403,7 @@ Material:
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
-  m_LockedProperties: 
+  m_LockedProperties:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -23472,7 +23472,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a0f5017aa7894a042bbe9413bd9cc8d9, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.AttackEffectShowcaseSlot
   skill: {fileID: 11400000, guid: c0a0d6e833444cd883b8f769e3b9ea71, type: 2}
   worldView: {fileID: 1338260354}
@@ -23493,7 +23493,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 85347ab7868a2ac4db804307935a6cc2, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.CombatWorldSpriteView
   bootstrap: {fileID: 0}
   backgroundRenderer: {fileID: 0}
@@ -23552,15 +23552,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -23666,7 +23666,7 @@ Animator:
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
-  m_WarningMessage: 
+  m_WarningMessage:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
@@ -23718,7 +23718,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a0f5017aa7894a042bbe9413bd9cc8d9, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.AttackEffectShowcaseSlot
   skill: {fileID: 11400000, guid: d80901184dc15f746930695614dd83f4, type: 2}
   worldView: {fileID: 1350498012}
@@ -23739,7 +23739,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 85347ab7868a2ac4db804307935a6cc2, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.CombatWorldSpriteView
   bootstrap: {fileID: 0}
   backgroundRenderer: {fileID: 0}
@@ -23827,7 +23827,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -23987,8 +23987,8 @@ Transform:
   m_GameObject: {fileID: 1360781043}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.12, y: 0.2, z: 4}
-  m_LocalScale: {x: 0.34, y: 0.34, z: 0.34}
+  m_LocalPosition: {x: 1.2499998, y: 0.69000053, z: 4}
+  m_LocalScale: {x: 0.40000004, y: 0.40000004, z: 0.40000004}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 642771867}
@@ -24078,8 +24078,8 @@ Transform:
   m_GameObject: {fileID: 1374532452}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.12, y: 0.2, z: 4}
-  m_LocalScale: {x: 0.34, y: 0.34, z: 0.34}
+  m_LocalPosition: {x: 1.2499996, y: 0.6899996, z: 4}
+  m_LocalScale: {x: 0.40000004, y: 0.40000004, z: 0.40000004}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1931876188}
@@ -24161,15 +24161,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -24275,7 +24275,7 @@ Animator:
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
-  m_WarningMessage: 
+  m_WarningMessage:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
@@ -24327,7 +24327,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a0f5017aa7894a042bbe9413bd9cc8d9, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.AttackEffectShowcaseSlot
   skill: {fileID: 11400000, guid: c010c31c3f684cd29cd311a15428d48c, type: 2}
   worldView: {fileID: 1376449614}
@@ -24348,7 +24348,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 85347ab7868a2ac4db804307935a6cc2, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.CombatWorldSpriteView
   bootstrap: {fileID: 0}
   backgroundRenderer: {fileID: 0}
@@ -24436,7 +24436,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -24617,7 +24617,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a0f5017aa7894a042bbe9413bd9cc8d9, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.AttackEffectShowcaseSlot
   skill: {fileID: 11400000, guid: 104fae93c7b64922bbaf09b45b586dc3, type: 2}
   worldView: {fileID: 1386909462}
@@ -24638,7 +24638,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 85347ab7868a2ac4db804307935a6cc2, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.CombatWorldSpriteView
   bootstrap: {fileID: 0}
   backgroundRenderer: {fileID: 0}
@@ -24709,7 +24709,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 99cb280a4bae0ed469d73984cc460b48, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.ShowcaseCameraController
   moveSpeed: 8
   fastMoveMultiplier: 1.8
@@ -24800,7 +24800,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalCameraData
   m_RenderShadows: 1
   m_RequiresDepthTextureOption: 2
@@ -24881,7 +24881,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -25062,7 +25062,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -25214,15 +25214,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -25328,7 +25328,7 @@ Animator:
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
-  m_WarningMessage: 
+  m_WarningMessage:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
@@ -25351,15 +25351,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -25465,7 +25465,7 @@ Animator:
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
-  m_WarningMessage: 
+  m_WarningMessage:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
@@ -25488,15 +25488,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -25602,7 +25602,7 @@ Animator:
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
-  m_WarningMessage: 
+  m_WarningMessage:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
@@ -25654,7 +25654,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -25806,15 +25806,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -25920,7 +25920,7 @@ Animator:
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
-  m_WarningMessage: 
+  m_WarningMessage:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
@@ -25943,15 +25943,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -26057,7 +26057,7 @@ Animator:
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
-  m_WarningMessage: 
+  m_WarningMessage:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
@@ -26109,7 +26109,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -26261,15 +26261,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -26375,7 +26375,7 @@ Animator:
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
-  m_WarningMessage: 
+  m_WarningMessage:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
@@ -26427,7 +26427,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -26587,8 +26587,8 @@ Transform:
   m_GameObject: {fileID: 1528139475}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.12, y: 0.2, z: 4}
-  m_LocalScale: {x: 0.34, y: 0.34, z: 0.34}
+  m_LocalPosition: {x: 1.2499998, y: 0.69000053, z: 4}
+  m_LocalScale: {x: 0.40000004, y: 0.40000004, z: 0.40000004}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1773581560}
@@ -26699,7 +26699,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -26851,15 +26851,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -26965,7 +26965,7 @@ Animator:
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
-  m_WarningMessage: 
+  m_WarningMessage:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
@@ -26988,15 +26988,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -27102,7 +27102,7 @@ Animator:
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
-  m_WarningMessage: 
+  m_WarningMessage:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
@@ -27154,7 +27154,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -27335,7 +27335,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -27488,7 +27488,7 @@ Material:
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
-  m_LockedProperties: 
+  m_LockedProperties:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -27557,7 +27557,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -27860,15 +27860,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -27974,7 +27974,7 @@ Animator:
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
-  m_WarningMessage: 
+  m_WarningMessage:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
@@ -28026,7 +28026,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -28207,7 +28207,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -28388,7 +28388,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -28541,7 +28541,7 @@ Material:
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
-  m_LockedProperties: 
+  m_LockedProperties:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -28581,15 +28581,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -28695,7 +28695,7 @@ Animator:
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
-  m_WarningMessage: 
+  m_WarningMessage:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
@@ -28747,7 +28747,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -28907,8 +28907,8 @@ Transform:
   m_GameObject: {fileID: 1658157649}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.12, y: 0.2, z: 4}
-  m_LocalScale: {x: 0.34, y: 0.34, z: 0.34}
+  m_LocalPosition: {x: 1.2499996, y: 0.6899996, z: 4}
+  m_LocalScale: {x: 0.40000004, y: 0.40000004, z: 0.40000004}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1826784606}
@@ -29019,7 +29019,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -29200,7 +29200,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -29360,8 +29360,8 @@ Transform:
   m_GameObject: {fileID: 1698529212}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.12, y: 0.2, z: 4}
-  m_LocalScale: {x: 0.34, y: 0.34, z: 0.34}
+  m_LocalPosition: {x: 1.2499996, y: 0.69000244, z: 4}
+  m_LocalScale: {x: 0.40000004, y: 0.40000004, z: 0.40000004}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 957365914}
@@ -29451,8 +29451,8 @@ Transform:
   m_GameObject: {fileID: 1707196169}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.12, y: 0.2, z: 4}
-  m_LocalScale: {x: 0.34, y: 0.34, z: 0.34}
+  m_LocalPosition: {x: 1.2499996, y: 0.6899986, z: 4}
+  m_LocalScale: {x: 0.40000004, y: 0.40000004, z: 0.40000004}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2091928989}
@@ -29563,7 +29563,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -29716,7 +29716,7 @@ Material:
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
-  m_LockedProperties: 
+  m_LockedProperties:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -29915,8 +29915,8 @@ Transform:
   m_GameObject: {fileID: 1743173991}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.12, y: 0.2, z: 4}
-  m_LocalScale: {x: 0.34, y: 0.34, z: 0.34}
+  m_LocalPosition: {x: 1.2499998, y: 0.6899986, z: 4}
+  m_LocalScale: {x: 0.40000004, y: 0.40000004, z: 0.40000004}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1350498010}
@@ -30027,7 +30027,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a0f5017aa7894a042bbe9413bd9cc8d9, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.AttackEffectShowcaseSlot
   skill: {fileID: 11400000, guid: 86594764d38346438a3c7a144303854a, type: 2}
   worldView: {fileID: 1749886524}
@@ -30052,7 +30052,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 85347ab7868a2ac4db804307935a6cc2, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.CombatWorldSpriteView
   bootstrap: {fileID: 0}
   backgroundRenderer: {fileID: 0}
@@ -30111,15 +30111,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -30225,7 +30225,7 @@ Animator:
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
-  m_WarningMessage: 
+  m_WarningMessage:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
@@ -30256,8 +30256,8 @@ Transform:
   m_GameObject: {fileID: 1769525856}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.12, y: 0.2, z: 4}
-  m_LocalScale: {x: 0.34, y: 0.34, z: 0.34}
+  m_LocalPosition: {x: 1.2499998, y: 0.6899996, z: 4}
+  m_LocalScale: {x: 0.40000004, y: 0.40000004, z: 0.40000004}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1386909460}
@@ -30368,7 +30368,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a0f5017aa7894a042bbe9413bd9cc8d9, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.AttackEffectShowcaseSlot
   skill: {fileID: 11400000, guid: 4fcea860d24808b4d8733ead85540605, type: 2}
   worldView: {fileID: 1773581562}
@@ -30389,7 +30389,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 85347ab7868a2ac4db804307935a6cc2, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.CombatWorldSpriteView
   bootstrap: {fileID: 0}
   backgroundRenderer: {fileID: 0}
@@ -30448,15 +30448,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -30562,7 +30562,7 @@ Animator:
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
-  m_WarningMessage: 
+  m_WarningMessage:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
@@ -30916,7 +30916,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -31097,7 +31097,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a0f5017aa7894a042bbe9413bd9cc8d9, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.AttackEffectShowcaseSlot
   skill: {fileID: 11400000, guid: 5e4548f0126440518f149d423d4efba6, type: 2}
   worldView: {fileID: 1816400265}
@@ -31118,7 +31118,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 85347ab7868a2ac4db804307935a6cc2, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.CombatWorldSpriteView
   bootstrap: {fileID: 0}
   backgroundRenderer: {fileID: 0}
@@ -31206,7 +31206,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a0f5017aa7894a042bbe9413bd9cc8d9, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.AttackEffectShowcaseSlot
   skill: {fileID: 11400000, guid: 497dec488fdb44308c0935135004d9c3, type: 2}
   worldView: {fileID: 1826784608}
@@ -31227,7 +31227,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 85347ab7868a2ac4db804307935a6cc2, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.CombatWorldSpriteView
   bootstrap: {fileID: 0}
   backgroundRenderer: {fileID: 0}
@@ -31294,8 +31294,8 @@ Transform:
   m_GameObject: {fileID: 1836653743}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.12, y: 0.2, z: 4}
-  m_LocalScale: {x: 0.34, y: 0.34, z: 0.34}
+  m_LocalPosition: {x: 1.2499996, y: 0.69000053, z: 4}
+  m_LocalScale: {x: 0.40000004, y: 0.40000004, z: 0.40000004}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 786903331}
@@ -31385,8 +31385,8 @@ Transform:
   m_GameObject: {fileID: 1841359358}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.12, y: 0.2, z: 4}
-  m_LocalScale: {x: 0.34, y: 0.34, z: 0.34}
+  m_LocalPosition: {x: 1.2499996, y: 0.6899986, z: 4}
+  m_LocalScale: {x: 0.40000004, y: 0.40000004, z: 0.40000004}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1874547103}
@@ -31497,7 +31497,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -31678,7 +31678,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -31838,8 +31838,8 @@ Transform:
   m_GameObject: {fileID: 1849996948}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.12, y: 0.2, z: 4}
-  m_LocalScale: {x: 0.34, y: 0.34, z: 0.34}
+  m_LocalPosition: {x: 1.2499996, y: 0.6899986, z: 4}
+  m_LocalScale: {x: 0.40000004, y: 0.40000004, z: 0.40000004}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 223050216}
@@ -31921,15 +31921,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -32035,7 +32035,7 @@ Animator:
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
-  m_WarningMessage: 
+  m_WarningMessage:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
@@ -32058,15 +32058,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -32172,7 +32172,7 @@ Animator:
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
-  m_WarningMessage: 
+  m_WarningMessage:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
@@ -32224,7 +32224,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a0f5017aa7894a042bbe9413bd9cc8d9, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.AttackEffectShowcaseSlot
   skill: {fileID: 11400000, guid: 5a17abc336c34de48889a4d5fd25487f, type: 2}
   worldView: {fileID: 1874547105}
@@ -32245,7 +32245,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 85347ab7868a2ac4db804307935a6cc2, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.CombatWorldSpriteView
   bootstrap: {fileID: 0}
   backgroundRenderer: {fileID: 0}
@@ -32312,8 +32312,8 @@ Transform:
   m_GameObject: {fileID: 1884537768}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.12, y: 0.04, z: 4}
-  m_LocalScale: {x: 0.34, y: 0.34, z: 0.34}
+  m_LocalPosition: {x: 1.2499999, y: 0.5500002, z: 4}
+  m_LocalScale: {x: 0.40000004, y: 0.40000004, z: 0.40000004}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1103681814}
@@ -32403,8 +32403,8 @@ Transform:
   m_GameObject: {fileID: 1885215354}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.12, y: 0.2, z: 4}
-  m_LocalScale: {x: 0.34, y: 0.34, z: 0.34}
+  m_LocalPosition: {x: 1.2499996, y: 0.69000053, z: 4}
+  m_LocalScale: {x: 0.40000004, y: 0.40000004, z: 0.40000004}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1295573307}
@@ -32494,8 +32494,8 @@ Transform:
   m_GameObject: {fileID: 1897874788}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.12, y: 0.2, z: 4}
-  m_LocalScale: {x: 0.34, y: 0.34, z: 0.34}
+  m_LocalPosition: {x: 1.2499996, y: 0.69000053, z: 4}
+  m_LocalScale: {x: 0.40000004, y: 0.40000004, z: 0.40000004}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 376885801}
@@ -32606,7 +32606,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a0f5017aa7894a042bbe9413bd9cc8d9, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.AttackEffectShowcaseSlot
   skill: {fileID: 11400000, guid: 7c077de753167ea4ab34296eb4c8ea3f, type: 2}
   worldView: {fileID: 1902286266}
@@ -32627,7 +32627,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 85347ab7868a2ac4db804307935a6cc2, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.CombatWorldSpriteView
   bootstrap: {fileID: 0}
   backgroundRenderer: {fileID: 0}
@@ -32715,7 +32715,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a0f5017aa7894a042bbe9413bd9cc8d9, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.AttackEffectShowcaseSlot
   skill: {fileID: 11400000, guid: 4832d2b5a42e555419fe48cad1e68571, type: 2}
   worldView: {fileID: 1902466562}
@@ -32737,7 +32737,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 85347ab7868a2ac4db804307935a6cc2, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.CombatWorldSpriteView
   bootstrap: {fileID: 0}
   backgroundRenderer: {fileID: 0}
@@ -32804,8 +32804,8 @@ Transform:
   m_GameObject: {fileID: 1906552982}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.12, y: 0.04, z: 4}
-  m_LocalScale: {x: 0.34, y: 0.34, z: 0.34}
+  m_LocalPosition: {x: 1.2499999, y: 0.5500002, z: 4}
+  m_LocalScale: {x: 0.40000004, y: 0.40000004, z: 0.40000004}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1902466560}
@@ -33067,7 +33067,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -33248,7 +33248,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -33429,7 +33429,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a0f5017aa7894a042bbe9413bd9cc8d9, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.AttackEffectShowcaseSlot
   skill: {fileID: 11400000, guid: 6f55ddd9fa46a12499ebd68dc42ee6bc, type: 2}
   worldView: {fileID: 1931876190}
@@ -33452,7 +33452,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 85347ab7868a2ac4db804307935a6cc2, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.CombatWorldSpriteView
   bootstrap: {fileID: 0}
   backgroundRenderer: {fileID: 0}
@@ -33540,7 +33540,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -33721,7 +33721,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -33902,7 +33902,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -34054,15 +34054,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -34168,7 +34168,7 @@ Animator:
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
-  m_WarningMessage: 
+  m_WarningMessage:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
@@ -34220,7 +34220,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -34380,8 +34380,8 @@ Transform:
   m_GameObject: {fileID: 2018708694}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.12, y: 0.2, z: 4}
-  m_LocalScale: {x: 0.34, y: 0.34, z: 0.34}
+  m_LocalPosition: {x: 1.2499996, y: 0.69000053, z: 4}
+  m_LocalScale: {x: 0.40000004, y: 0.40000004, z: 0.40000004}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 467013924}
@@ -34471,8 +34471,8 @@ Transform:
   m_GameObject: {fileID: 2021260054}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.12, y: 0.2, z: 4}
-  m_LocalScale: {x: 0.34, y: 0.34, z: 0.34}
+  m_LocalPosition: {x: 1.2499998, y: 0.6899986, z: 4}
+  m_LocalScale: {x: 0.40000004, y: 0.40000004, z: 0.40000004}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1902286264}
@@ -34583,7 +34583,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -34764,7 +34764,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -34951,7 +34951,7 @@ Material:
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
-  m_LockedProperties: 
+  m_LockedProperties:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -35020,7 +35020,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a0f5017aa7894a042bbe9413bd9cc8d9, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.AttackEffectShowcaseSlot
   skill: {fileID: 11400000, guid: 0fc0e5eb0ebeeed49adfe12070fe768f, type: 2}
   worldView: {fileID: 2091928991}
@@ -35041,7 +35041,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 85347ab7868a2ac4db804307935a6cc2, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.CombatWorldSpriteView
   bootstrap: {fileID: 0}
   backgroundRenderer: {fileID: 0}
@@ -35163,7 +35163,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -35344,7 +35344,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -35525,7 +35525,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -35685,8 +35685,8 @@ Transform:
   m_GameObject: {fileID: 2103144433}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.12, y: 0.2, z: 4}
-  m_LocalScale: {x: 0.34, y: 0.34, z: 0.34}
+  m_LocalPosition: {x: 1.2499996, y: 0.69000053, z: 4}
+  m_LocalScale: {x: 0.40000004, y: 0.40000004, z: 0.40000004}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1313125637}
@@ -35768,15 +35768,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -35882,7 +35882,7 @@ Animator:
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
-  m_WarningMessage: 
+  m_WarningMessage:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
@@ -35905,15 +35905,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.52
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df8b2fc64a7342244b4d8831cad6deb1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -36019,7 +36019,7 @@ Animator:
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
-  m_WarningMessage: 
+  m_WarningMessage:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
@@ -36222,7 +36222,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a0f5017aa7894a042bbe9413bd9cc8d9, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.AttackEffectShowcaseSlot
   skill: {fileID: 11400000, guid: 00966bf157b01874e90775ed704b2b9b, type: 2}
   worldView: {fileID: 2142586501}
@@ -36244,7 +36244,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 85347ab7868a2ac4db804307935a6cc2, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.CombatWorldSpriteView
   bootstrap: {fileID: 0}
   backgroundRenderer: {fileID: 0}

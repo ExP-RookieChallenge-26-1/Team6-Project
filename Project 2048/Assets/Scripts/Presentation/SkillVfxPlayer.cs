@@ -26,6 +26,16 @@ namespace Project2048.Presentation
 
     public static class SkillVfxPlayer
     {
+        private static readonly string[] VisualEffectColorPropertyNames =
+        {
+            "Color",
+            "Tint",
+            "BaseColor",
+            "Base Color",
+            "MainColor",
+            "ParticleColor",
+        };
+
         public static Vector3 ResolvePlacementWorldPosition(SkillVfxPlacement placement, SkillVfxContext ctx)
         {
             var anchor = ctx.AnchorFor(placement.target);
@@ -40,20 +50,55 @@ namespace Project2048.Presentation
 
         private static Vector3 ResolveVerticalWorldPosition(Transform anchor, SkillVfxVertical vertical)
         {
-            var renderer = anchor.GetComponent<SpriteRenderer>();
-            if (renderer == null || renderer.sprite == null)
+            if (!TryResolveRendererBounds(anchor, out var bounds))
             {
                 return anchor.position;
             }
 
-            var b = renderer.bounds;
             var y = vertical switch
             {
-                SkillVfxVertical.Feet => b.min.y,
-                SkillVfxVertical.Head => b.max.y,
-                _ => b.center.y,
+                SkillVfxVertical.Feet => bounds.min.y,
+                SkillVfxVertical.Head => bounds.max.y,
+                _ => bounds.center.y,
             };
-            return new Vector3(b.center.x, y, b.center.z);
+            return new Vector3(bounds.center.x, y, bounds.center.z);
+        }
+
+        private static bool TryResolveRendererBounds(Transform anchor, out Bounds bounds)
+        {
+            bounds = default;
+            if (anchor == null)
+            {
+                return false;
+            }
+
+            var renderer = anchor.GetComponent<SpriteRenderer>();
+            if (renderer != null && renderer.sprite != null)
+            {
+                bounds = renderer.bounds;
+                return true;
+            }
+
+            var hasBounds = false;
+            foreach (var childRenderer in anchor.GetComponentsInChildren<SpriteRenderer>(true))
+            {
+                if (childRenderer == null || childRenderer.sprite == null)
+                {
+                    continue;
+                }
+
+                if (!hasBounds)
+                {
+                    bounds = childRenderer.bounds;
+                    hasBounds = true;
+                }
+                else
+                {
+                    bounds.Encapsulate(childRenderer.bounds);
+                }
+            }
+
+            return hasBounds;
         }
 
         public static System.Collections.Generic.List<GameObject> Play(
@@ -112,9 +157,9 @@ namespace Project2048.Presentation
             return instance;
         }
 
-        private static void ApplyTint(GameObject instance, Color tint)
+        public static void ApplyTint(GameObject instance, Color tint)
         {
-            if (tint.a <= 0f) return; // Color.clear = leave the prefab's authored colors
+            if (instance == null || tint.a <= 0f) return; // Color.clear = leave the prefab's authored colors
 
             foreach (var sr in instance.GetComponentsInChildren<SpriteRenderer>(true))
             {
@@ -125,6 +170,27 @@ namespace Project2048.Presentation
             {
                 var main = ps.main;
                 main.startColor = tint;
+            }
+
+            var vectorColor = new Vector4(tint.r, tint.g, tint.b, tint.a);
+            foreach (var vfx in instance.GetComponentsInChildren<VisualEffect>(true))
+            {
+                if (vfx == null)
+                {
+                    continue;
+                }
+
+                foreach (var propertyName in VisualEffectColorPropertyNames)
+                {
+                    if (vfx.HasVector4(propertyName))
+                    {
+                        vfx.SetVector4(propertyName, vectorColor);
+                    }
+                    else if (vfx.HasVector3(propertyName))
+                    {
+                        vfx.SetVector3(propertyName, new Vector3(tint.r, tint.g, tint.b));
+                    }
+                }
             }
         }
 

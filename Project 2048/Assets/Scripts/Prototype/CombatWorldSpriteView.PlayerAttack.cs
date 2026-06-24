@@ -386,10 +386,8 @@ namespace Project2048.Prototype
 
         private static bool UsesCloseRangePlayerLunge(SkillVfxFamily family)
         {
-            return family == SkillVfxFamily.SlashArc ||
-                family == SkillVfxFamily.ImpactBurst ||
-                family == SkillVfxFamily.SpikedBurst ||
-                family == SkillVfxFamily.BloodFountainSlash;
+            return family == SkillVfxFamily.ImpactBurst ||
+                family == SkillVfxFamily.SpikedBurst;
         }
 
         private static float ResolveCloseRangeImpactLifetimeSeconds(SkillVfxFamily family)

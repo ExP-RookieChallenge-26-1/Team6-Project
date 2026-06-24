@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac6d36361b9c44f38b64b0318e34a9a2, type: 3}
   m_Name: PrototypeCombatWorldVfxProfile
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.CombatWorldVfxProfileSO
-  attackEffectSprite: {fileID: 21300000, guid: e18b788083f586d650f0bcb9e2a927a4, type: 3}
+  attackEffectSprite: {fileID: -5841461961332769897, guid: c526ac82a64380a43b5831f2189e6477, type: 3}
   hitEffectSprite: {fileID: 21300000, guid: 9b5fc44167244de7b10fa372b672de89, type: 3}
-  shieldEffectSprite: {fileID: -3554453865146640057, guid: 0bd3564bbef8b9b44baf3cd330c01c1b, type: 3}
+  shieldEffectSprite: {fileID: -860782897724368489, guid: 95e5ff74759cd494eaeda8a905ac0a61, type: 3}
   thornShieldEffectSprite: {fileID: 21300000, guid: 8c49f1f430d44e7e8e1abef7d849a339, type: 3}
   magicCircleEffectSprite: {fileID: 21300000, guid: 91b7d11e1f9d4ecf95de8b6a82fa3a87, type: 3}
-  flameEffectSprite: {fileID: 21300000, guid: e83fe29d407142ba931d90d518a538a2, type: 3}
+  flameEffectSprite: {fileID: 4075805401734562376, guid: 8706594fbcd1d15458a647aac2cde4cd, type: 3}
   chainAttackEffectSprite: {fileID: -6272862024312062455, guid: 0f723c449d8f40c44b1c7d85e4e722e3, type: 3}
   boundChainsEffectSprite: {fileID: 3792518726696312516, guid: 113d8d29d9fcd594f8971aa5316799b6, type: 3}
   attackEffectPrefab: {fileID: 756328571287768908, guid: d6c612ca12e9ae34d903714e8fc4f81e, type: 3}
@@ -71,8 +71,8 @@ MonoBehaviour:
     prefab: {fileID: 7577564455647303022, guid: 10ea2257a0fbfa2479306c1026a74ba9, type: 3}
   designTimeBindings:
   - family: 1
-    sprite: {fileID: 21300000, guid: 9b5fc44167244de7b10fa372b672de89, type: 3}
-    prefab: {fileID: 8614566233561317893, guid: 06a9b239017d8e44bb20c48fca385733, type: 3}
+    sprite: {fileID: -5841461961332769897, guid: c526ac82a64380a43b5831f2189e6477, type: 3}
+    prefab: {fileID: 756328571287768908, guid: d6c612ca12e9ae34d903714e8fc4f81e, type: 3}
     localOffset: {x: 0, y: 0.16, z: 0}
     radiusMultiplier: 3.24
     lifetimeSeconds: -1
@@ -91,7 +91,7 @@ MonoBehaviour:
     alpha: 0.9
     rotationDegrees: -8
   - family: 3
-    sprite: {fileID: -3554453865146640057, guid: 0bd3564bbef8b9b44baf3cd330c01c1b, type: 3}
+    sprite: {fileID: -860782897724368489, guid: 95e5ff74759cd494eaeda8a905ac0a61, type: 3}
     prefab: {fileID: 7427817718329016933, guid: 5455b1b837377fe4fa0a6ec39baceb62, type: 3}
     localOffset: {x: 0, y: 0.12, z: 0}
     radiusMultiplier: 1
@@ -161,7 +161,7 @@ MonoBehaviour:
     alpha: 1
     rotationDegrees: -4
   - family: 10
-    sprite: {fileID: 21300000, guid: e18b788083f586d650f0bcb9e2a927a4, type: 3}
+    sprite: {fileID: -5841461961332769897, guid: c526ac82a64380a43b5831f2189e6477, type: 3}
     prefab: {fileID: 756328571287768908, guid: d6c612ca12e9ae34d903714e8fc4f81e, type: 3}
     localOffset: {x: 0, y: 0.48, z: 0}
     radiusMultiplier: 2.46
@@ -171,7 +171,7 @@ MonoBehaviour:
     alpha: 0.86
     rotationDegrees: -6
   - family: 11
-    sprite: {fileID: 21300000, guid: e18b788083f586d650f0bcb9e2a927a4, type: 3}
+    sprite: {fileID: -5841461961332769897, guid: c526ac82a64380a43b5831f2189e6477, type: 3}
     prefab: {fileID: 756328571287768908, guid: d6c612ca12e9ae34d903714e8fc4f81e, type: 3}
     localOffset: {x: 0.68, y: 0.14, z: 0}
     radiusMultiplier: 3.54
@@ -201,7 +201,7 @@ MonoBehaviour:
     alpha: 0.9
     rotationDegrees: 0
   - family: 14
-    sprite: {fileID: 21300000, guid: e18b788083f586d650f0bcb9e2a927a4, type: 3}
+    sprite: {fileID: -5841461961332769897, guid: c526ac82a64380a43b5831f2189e6477, type: 3}
     prefab: {fileID: 756328571287768908, guid: d6c612ca12e9ae34d903714e8fc4f81e, type: 3}
     localOffset: {x: 0, y: 0.14, z: 0}
     radiusMultiplier: 3.24
@@ -211,7 +211,7 @@ MonoBehaviour:
     alpha: 0.9
     rotationDegrees: -16
   - family: 15
-    sprite: {fileID: 21300000, guid: e83fe29d407142ba931d90d518a538a2, type: 3}
+    sprite: {fileID: 4075805401734562376, guid: 8706594fbcd1d15458a647aac2cde4cd, type: 3}
     prefab: {fileID: 1827861628062789563, guid: 11867b2eedd68a545aa83d1f7781b799, type: 3}
     localOffset: {x: 0, y: -0.42, z: 0}
     radiusMultiplier: 1.1

@@ -130,7 +130,7 @@ namespace Project2048.Tests
             foreach (var fireballSkill in new[] { fireball, burstFireball, burnOut })
             {
                 Assert.That(fireballSkill.ResolveVfxFamily(), Is.EqualTo(SkillVfxFamily.FlameBurst), fireballSkill.skillId);
-                Assert.That(fireballSkill.vfxPrimaryColor, Is.EqualTo(new Color(0.286275f, 0.686275f, 0.709804f, 1f)), fireballSkill.skillId);
+                Assert.That(fireballSkill.vfxPrimaryColor, Is.EqualTo(new Color(1f, 0.42f, 0.06f, 1f)), fireballSkill.skillId);
                 Assert.That(fireballSkill.vfxDefinition.HasAnyCue, Is.True, fireballSkill.skillId);
                 var cuePaths = fireballSkill.vfxDefinition
                     .CuesFor(SkillVfxTrigger.Activate)

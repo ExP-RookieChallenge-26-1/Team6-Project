@@ -82,8 +82,8 @@ MonoBehaviour:
     autoDestroySeconds: 1.25
   vfx:
     family: 1
-    primarySprite: {fileID: 21300000, guid: 9b5fc44167244de7b10fa372b672de89, type: 3}
-    primaryPrefab: {fileID: 8614566233561317893, guid: 06a9b239017d8e44bb20c48fca385733, type: 3}
+    primarySprite: {fileID: -5841461961332769897, guid: c526ac82a64380a43b5831f2189e6477, type: 3}
+    primaryPrefab: {fileID: 756328571287768908, guid: d6c612ca12e9ae34d903714e8fc4f81e, type: 3}
     projectilePrefab: {fileID: 0}
     secondarySprite: {fileID: 0}
     secondaryPrefab: {fileID: 0}

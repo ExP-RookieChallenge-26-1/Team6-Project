@@ -35,6 +35,7 @@ namespace Project2048.Prototype
         public const float GatherLightVerticalBeamLifetimeSeconds = 0.95f;
         public const float TentacleStrikeDurationSeconds = 0.58f;
         public const float HeavyStrikeSpikedBurstDurationSeconds = 0.62f;
+        public const float SlashBeamDurationSeconds = 0.62f;
         public const float BloodFountainSlashDurationSeconds = 0.72f;
         public const float FlameBurstDurationSeconds = 0.82f;
         public const float DarkShackleChainDurationSeconds = 0.84f;
@@ -65,6 +66,9 @@ namespace Project2048.Prototype
         private const int HeavyStrikeStarSegmentCount = 28;
         private const int HeavyStrikeSpikeRayCount = 12;
         private const int BloodSlashSegmentCount = 18;
+        private const float SlashBeamWidthMultiplier = 1.14f;
+        private const float SlashBeamHeightMultiplier = 0.46f;
+        private const float SlashBeamSourceLift = 0.12f;
         private const int DarkShackleChainSegmentCount = 16;
         private const int DarkShackleMinChainLinkCount = 8;
         private const int DarkShackleMaxChainLinkCount = 24;
@@ -602,10 +606,7 @@ namespace Project2048.Prototype
 
                     PlayCombatantActionAudioEffect(effect);
                     PlayShieldAttackSkillEffect(skill, sourceAnchor, targetAnchor);
-                    PlayCombatantActionParticleEffect(effect, targetAnchor);
-                    lifetimeSeconds = IsShieldBurstSkill(skill)
-                        ? ShieldBurstSkillDurationSeconds
-                        : ShieldBashDurationSeconds;
+                    lifetimeSeconds = ResolveShieldAttackSkillDurationSeconds(skill);
                     return true;
                 case SkillVfxFamily.LightBeam:
                     PlayCombatantActionAudioEffect(effect);
@@ -619,6 +620,11 @@ namespace Project2048.Prototype
                     PlayCombatantActionParticleEffect(effect, targetAnchor);
                     lifetimeSeconds = TentacleStrikeDurationSeconds;
                     return true;
+                case SkillVfxFamily.SlashArc:
+                    PlayCombatantActionAudioEffect(effect);
+                    PlaySlashBeamSkillEffect(skill, sourceAnchor, targetAnchor);
+                    lifetimeSeconds = SlashBeamDurationSeconds;
+                    return true;
                 case SkillVfxFamily.SpikedBurst:
                     PlayCombatantActionAudioEffect(effect);
                     PlaySpecializedSkillArtLayer(skill, targetAnchor, sourceAnchor);
@@ -628,10 +634,8 @@ namespace Project2048.Prototype
                     return true;
                 case SkillVfxFamily.BloodFountainSlash:
                     PlayCombatantActionAudioEffect(effect);
-                    PlaySpecializedSkillArtLayer(skill, targetAnchor, sourceAnchor);
-                    PlayBloodFountainSlashSkillEffect(skill, sourceAnchor, targetAnchor);
-                    PlayCombatantActionParticleEffect(effect, targetAnchor);
-                    lifetimeSeconds = BloodFountainSlashDurationSeconds;
+                    PlaySlashBeamSkillEffect(skill, sourceAnchor, targetAnchor);
+                    lifetimeSeconds = SlashBeamDurationSeconds;
                     return true;
                 case SkillVfxFamily.DarkChainBurst:
                     PlayDarkShackleSkillEffect(skill, effect, sourceAnchor, targetAnchor);
@@ -812,6 +816,78 @@ namespace Project2048.Prototype
             {
                 Destroy(instance, explosion.EstimatedLifetimeSeconds + 0.25f);
             }
+        }
+
+        private GameObject SpawnSkillPrefabVisualAtAnchor(
+            GameObject prefab,
+            Transform anchor,
+            string objectName,
+            Color tint,
+            float scale,
+            float lifetimeSeconds,
+            Vector3 localOffset,
+            int sortingOffset)
+        {
+            if (prefab == null || anchor == null)
+            {
+                return null;
+            }
+
+            var worldPosition = ResolveAnchorVisualCenterWorldPosition(anchor) + anchor.TransformVector(localOffset);
+            var instance = Instantiate(prefab, worldPosition, Quaternion.identity, transform);
+            instance.name = objectName;
+            if (scale > 0f && !Mathf.Approximately(scale, 1f))
+            {
+                instance.transform.localScale *= scale;
+            }
+
+            SkillVfxPlayer.ApplyTint(instance, tint);
+
+            var layeredExplosions = instance.GetComponentsInChildren<LayeredExplosionEffect>(true);
+            if (layeredExplosions.Length > 0)
+            {
+                var sortingReference = anchor.GetComponent<SpriteRenderer>();
+                foreach (var explosion in layeredExplosions)
+                {
+                    if (explosion == null)
+                    {
+                        continue;
+                    }
+
+                    explosion.ApplySorting(sortingReference, sortingOffset);
+                    explosion.PlayAt(worldPosition);
+                    lifetimeSeconds = Mathf.Max(lifetimeSeconds, explosion.EstimatedLifetimeSeconds + 0.25f);
+                }
+            }
+            else
+            {
+                foreach (var renderer in instance.GetComponentsInChildren<Renderer>(true))
+                {
+                    ApplyAnchorSorting(renderer, anchor, sortingOffset);
+                }
+
+                foreach (var particles in instance.GetComponentsInChildren<ParticleSystem>(true))
+                {
+                    particles.Play(true);
+                }
+
+                foreach (var visualEffect in instance.GetComponentsInChildren<VisualEffect>(true))
+                {
+                    if (Application.isPlaying)
+                    {
+                        visualEffect.Reinit();
+                    }
+
+                    visualEffect.Play();
+                }
+            }
+
+            if (Application.isPlaying && lifetimeSeconds > 0f)
+            {
+                Destroy(instance, lifetimeSeconds + 0.15f);
+            }
+
+            return instance;
         }
 
         private void DelayEnemyDeathFadeForSkillEffect(SkillSO skill, CombatEffectBinding effect)
@@ -1426,16 +1502,16 @@ namespace Project2048.Prototype
         private void PlayShieldBashSkillEffect(SkillSO skill, Transform sourceAnchor, Transform targetAnchor)
         {
             var primary = ResolveShieldCircleLightColor(ResolveReusableSkillParticleColor(skill));
-            var secondary = ResolveShieldCircleLightColor(ResolveReusableSkillSecondaryParticleColor(skill));
             var scale = Mathf.Max(0.01f, skill != null ? skill.vfxScale : 1f);
-            var intensity = Mathf.Max(0.1f, skill != null ? skill.vfxIntensity : 1f);
             var radius = ShieldCircleBaseRadius * Mathf.Clamp(Mathf.Sqrt(scale), 0.72f, 1.35f);
             var lifetime = ShieldBashDurationSeconds;
             var offset = new Vector3(0f, ShieldCircleBaseYOffset, 0f);
-            var shiftedOffset = ResolveShieldArtLocalOffset(offset);
             var startPosition = ResolveShieldWorldPosition(ResolveAnchorWorldPosition(sourceAnchor, offset));
             var endPosition = ResolveShieldWorldPosition(ResolveAnchorWorldPosition(targetAnchor, offset));
             var artColor = ResolveShieldArtColor(primary, 0.88f);
+            var tuning = ResolveSkillVfxTuning(skill);
+            var package = ResolveSkillVfxPackage(skill);
+            var designTimeBinding = ResolveSkillVfxDesignTimeBinding(skill);
 
             var shieldArt = SpawnShieldArtSpriteLayer(
                 transform,
@@ -1446,6 +1522,8 @@ namespace Project2048.Prototype
                 Vector3.zero,
                 sortingOffset: 9,
                 sortingAnchor: targetAnchor,
+                spriteOverride: ResolveDesignTimeSprite(tuning, package, designTimeBinding, shieldEffectSprite, ResolveShieldEffectSprite()),
+                prefabOverride: ResolveDesignTimePrefab(tuning, package, designTimeBinding, ResolveShieldEffectPrefab()),
                 animatePulse: false);
             if (shieldArt != null)
             {
@@ -1462,51 +1540,22 @@ namespace Project2048.Prototype
                 }
             }
 
-            SpawnParticleBurst(
-                null,
-                sourceAnchor,
-                "ShieldBashLaunchParticles",
-                secondary,
-                null,
-                lifetime * 0.72f,
-                Mathf.RoundToInt(18 * intensity),
-                0.52f * Mathf.Sqrt(scale),
-                0.12f,
-                false,
-                shiftedOffset,
-                particles => ConfigureShieldShardBurstParticles(particles, scale, lifetime * 0.72f, heavy: false));
-
-            if (Application.isPlaying && isActiveAndEnabled)
-            {
-                StartCoroutine(PlayShieldAttackImpactAfterDelayRoutine(
-                    targetAnchor,
-                    "ShieldBashImpact",
-                    primary,
-                    secondary,
-                    radius,
-                    scale,
-                    intensity,
-                    0.28f,
-                    heavy: false));
-            }
-            else
-            {
-                SpawnShieldAttackImpact(targetAnchor, "ShieldBashImpact", primary, secondary, radius, scale, intensity, false);
-            }
+            PlayShieldAttackExplosion(skill, targetAnchor, "ShieldBashEasyExplosion", primary, scale, 0.28f);
         }
 
         private void PlayShieldBurstSkillEffect(SkillSO skill, Transform sourceAnchor, Transform targetAnchor)
         {
             var primary = ResolveShieldCircleLightColor(ResolveReusableSkillParticleColor(skill));
-            var secondary = ResolveShieldCircleLightColor(ResolveReusableSkillSecondaryParticleColor(skill));
             var scale = Mathf.Max(0.01f, skill != null ? skill.vfxScale : 1f);
-            var intensity = Mathf.Max(0.1f, skill != null ? skill.vfxIntensity : 1f);
             var radius = ShieldCircleBaseRadius * Mathf.Clamp(Mathf.Sqrt(scale), 0.88f, 1.55f);
             var lifetime = ShieldBurstSkillDurationSeconds;
             var offset = new Vector3(0f, ShieldCircleBaseYOffset, 0f);
-            var shiftedOffset = ResolveShieldArtLocalOffset(offset);
             var sourcePosition = ResolveShieldWorldPosition(ResolveAnchorWorldPosition(sourceAnchor, offset));
+            var endPosition = ResolveShieldWorldPosition(ResolveAnchorWorldPosition(targetAnchor, offset));
             var artColor = ResolveShieldArtColor(primary, 0.9f);
+            var tuning = ResolveSkillVfxTuning(skill);
+            var package = ResolveSkillVfxPackage(skill);
+            var designTimeBinding = ResolveSkillVfxDesignTimeBinding(skill);
 
             var shieldArt = SpawnShieldArtSpriteLayer(
                 transform,
@@ -1516,132 +1565,109 @@ namespace Project2048.Prototype
                 lifetime,
                 Vector3.zero,
                 sortingOffset: 9,
-                sortingAnchor: sourceAnchor,
+                sortingAnchor: targetAnchor,
+                spriteOverride: ResolveDesignTimeSprite(tuning, package, designTimeBinding, shieldEffectSprite, ResolveShieldEffectSprite()),
+                prefabOverride: ResolveDesignTimePrefab(tuning, package, designTimeBinding, ResolveShieldEffectPrefab()),
                 animatePulse: false);
             if (shieldArt != null)
             {
                 shieldArt.transform.position = sourcePosition;
                 if (Application.isPlaying && isActiveAndEnabled)
                 {
-                    StartCoroutine(AnimateShieldBurstArtRoutine(
+                    StartCoroutine(AnimateShieldBashArtRoutine(
                         shieldArt,
+                        sourcePosition,
+                        endPosition,
                         shieldArt.transform.localScale,
                         artColor,
                         lifetime));
                 }
             }
 
-            SpawnShieldCircleLine(
-                sourceAnchor,
-                "ShieldBurstExpansionRing",
-                primary,
-                radius * 1.12f,
-                Mathf.Clamp(0.075f * scale, 0.048f, 0.11f),
-                lifetime,
-                shiftedOffset,
-                spiked: false,
-                sortingOffset: 8);
+            PlayShieldAttackExplosion(skill, targetAnchor, "ShieldBurstEasyExplosion", primary, scale, 0.24f);
+        }
 
-            SpawnParticleBurst(
-                null,
-                sourceAnchor,
-                "ShieldBurstShardParticles",
-                primary,
-                null,
-                lifetime,
-                Mathf.RoundToInt(42 * intensity),
-                1.28f * Mathf.Sqrt(scale),
-                0.16f,
-                false,
-                shiftedOffset,
-                particles => ConfigureShieldShardBurstParticles(particles, scale, lifetime, heavy: true));
-
-            if (Application.isPlaying && isActiveAndEnabled)
+        private void PlayShieldAttackExplosion(
+            SkillSO skill,
+            Transform targetAnchor,
+            string objectName,
+            Color tint,
+            float scale,
+            float delaySeconds)
+        {
+            var explosionPrefab = ResolveShieldAttackExplosionPrefab(skill);
+            if (explosionPrefab == null || targetAnchor == null)
             {
-                StartCoroutine(PlayShieldAttackImpactAfterDelayRoutine(
+                return;
+            }
+
+            if (Application.isPlaying && isActiveAndEnabled && delaySeconds > 0f)
+            {
+                StartCoroutine(PlayShieldAttackExplosionAfterDelayRoutine(
+                    explosionPrefab,
                     targetAnchor,
-                    "ShieldBurstImpact",
-                    primary,
-                    secondary,
-                    radius,
+                    objectName,
+                    tint,
                     scale,
-                    intensity,
-                    0.2f,
-                    heavy: true));
+                    delaySeconds));
+                return;
             }
-            else
-            {
-                SpawnShieldAttackImpact(targetAnchor, "ShieldBurstImpact", primary, secondary, radius, scale, intensity, true);
-            }
+
+            SpawnSkillPrefabVisualAtAnchor(
+                explosionPrefab,
+                targetAnchor,
+                objectName,
+                tint,
+                Mathf.Clamp(scale, 0.8f, 1.55f),
+                ResolvePrefabVisualDurationSeconds(explosionPrefab, 0.9f),
+                new Vector3(0f, ShieldCircleBaseYOffset + 0.1f, 0f),
+                sortingOffset: 16);
         }
 
-        private IEnumerator PlayShieldAttackImpactAfterDelayRoutine(
-            Transform anchor,
-            string objectNamePrefix,
-            Color primary,
-            Color secondary,
-            float radius,
+        private IEnumerator PlayShieldAttackExplosionAfterDelayRoutine(
+            GameObject explosionPrefab,
+            Transform targetAnchor,
+            string objectName,
+            Color tint,
             float scale,
-            float intensity,
-            float delaySeconds,
-            bool heavy)
+            float delaySeconds)
         {
-            if (delaySeconds > 0f)
-            {
-                yield return new WaitForSeconds(delaySeconds);
-            }
-
-            SpawnShieldAttackImpact(anchor, objectNamePrefix, primary, secondary, radius, scale, intensity, heavy);
+            yield return new WaitForSeconds(Mathf.Max(0f, delaySeconds));
+            SpawnSkillPrefabVisualAtAnchor(
+                explosionPrefab,
+                targetAnchor,
+                objectName,
+                tint,
+                Mathf.Clamp(scale, 0.8f, 1.55f),
+                ResolvePrefabVisualDurationSeconds(explosionPrefab, 0.9f),
+                new Vector3(0f, ShieldCircleBaseYOffset + 0.1f, 0f),
+                sortingOffset: 16);
         }
 
-        private void SpawnShieldAttackImpact(
-            Transform anchor,
-            string objectNamePrefix,
-            Color primary,
-            Color secondary,
-            float radius,
-            float scale,
-            float intensity,
-            bool heavy)
+        private static GameObject ResolveShieldAttackExplosionPrefab(SkillSO skill)
         {
-            var lifetime = heavy ? 0.56f : 0.42f;
-            var offset = new Vector3(0f, ShieldCircleBaseYOffset, 0f);
-            var shiftedOffset = ResolveShieldArtLocalOffset(offset);
-            var artColor = ResolveShieldArtColor(heavy ? primary : secondary, heavy ? 0.86f : 0.7f);
+            var tuning = ResolveSkillVfxTuning(skill);
+            if (tuning != null && tuning.secondaryPrefab != null)
+            {
+                return tuning.secondaryPrefab;
+            }
 
-            SpawnShieldArtSpriteLayer(
-                anchor,
-                $"{objectNamePrefix}Art",
-                artColor,
-                radius * (heavy ? 1.06f : 0.82f),
-                lifetime,
-                offset,
-                sortingOffset: 10);
+            var package = ResolveSkillVfxPackage(skill);
+            return package != null ? package.secondaryPrefab : null;
+        }
 
-            SpawnShieldCircleLine(
-                anchor,
-                $"{objectNamePrefix}Ring",
-                secondary,
-                radius * (heavy ? 1.18f : 0.82f),
-                Mathf.Clamp((heavy ? 0.078f : 0.052f) * scale, 0.032f, 0.12f),
-                lifetime,
-                shiftedOffset,
-                spiked: heavy,
-                sortingOffset: 9);
+        private static float ResolveShieldAttackSkillDurationSeconds(SkillSO skill)
+        {
+            var baseDuration = IsShieldBurstSkill(skill)
+                ? ShieldBurstSkillDurationSeconds
+                : ShieldBashDurationSeconds;
+            var explosionPrefab = ResolveShieldAttackExplosionPrefab(skill);
+            if (explosionPrefab == null)
+            {
+                return baseDuration;
+            }
 
-            SpawnParticleBurst(
-                null,
-                anchor,
-                $"{objectNamePrefix}Particles",
-                heavy ? primary : secondary,
-                null,
-                lifetime,
-                Mathf.RoundToInt((heavy ? 52 : 28) * intensity),
-                (heavy ? 1.5f : 0.88f) * Mathf.Sqrt(scale),
-                heavy ? 0.15f : 0.12f,
-                false,
-                shiftedOffset,
-                particles => ConfigureShieldShardBurstParticles(particles, scale, lifetime, heavy));
+            return Mathf.Max(baseDuration, 0.28f + ResolvePrefabVisualDurationSeconds(explosionPrefab, 0.9f));
         }
 
         private void PlayShieldImpactArtPulse(Transform anchor)
@@ -2400,6 +2426,113 @@ namespace Project2048.Prototype
             return color;
         }
 
+        private void PlaySlashBeamSkillEffect(SkillSO skill, Transform sourceAnchor, Transform targetAnchor)
+        {
+            var source = ResolveLanternSkillSourcePosition(sourceAnchor != null ? sourceAnchor : transform, targetAnchor);
+            var target = targetAnchor != null ? ResolveSkillImpactWorldPosition(targetAnchor) : source + Vector3.right;
+            if ((target - source).sqrMagnitude <= 0.0001f)
+            {
+                target = source + Vector3.right;
+            }
+
+            SpawnSlashBeamArt(skill, sourceAnchor, targetAnchor, source, target);
+            PlaySlashHeavyImpactArt(skill, sourceAnchor, targetAnchor);
+            PlaySpikedBurstSkillEffect(skill, targetAnchor, sourceAnchor);
+        }
+
+        private void PlaySlashHeavyImpactArt(SkillSO skill, Transform sourceAnchor, Transform targetAnchor)
+        {
+            var parent = targetAnchor != null ? targetAnchor : transform;
+            var scale = Mathf.Max(0.01f, skill != null ? skill.vfxScale : 1f);
+            var color = ResolveSkillTintedColor(
+                skill != null ? ResolveReusableSkillSecondaryParticleColor(skill) : Color.clear,
+                new Color(1f, 0.72f, 0.08f, 0.94f),
+                0.24f,
+                0.86f);
+            var localOffset = ResolveCloseRangeImpactLocalOffset(parent, sourceAnchor, new Vector3(0f, 0.18f, 0f));
+
+            SpawnAttackArtSpriteLayer(
+                parent,
+                "HeavyStrikeSpikedBurstArt",
+                color,
+                AttackArtBaseRadius *
+                    Mathf.Clamp(Mathf.Sqrt(scale), 0.78f, 1.5f) *
+                    1.12f *
+                    HitEffectArtSizeMultiplier,
+                HeavyStrikeSpikedBurstDurationSeconds,
+                localOffset,
+                sortingOffset: 14,
+                spriteOverride: hitEffectSprite != null ? hitEffectSprite : ResolveHitEffectSprite(),
+                prefabOverride: ResolveHitEffectPrefab());
+        }
+
+        private void SpawnSlashBeamArt(
+            SkillSO skill,
+            Transform sourceAnchor,
+            Transform targetAnchor,
+            Vector3 sourceWorldPosition,
+            Vector3 targetWorldPosition)
+        {
+            var tuning = ResolveSkillVfxTuning(skill);
+            var package = ResolveSkillVfxPackage(skill);
+            var designTimeBinding = ResolveSkillVfxDesignTimeBinding(skill);
+            var sprite = ResolveDesignTimeSprite(
+                tuning,
+                package,
+                designTimeBinding,
+                attackEffectSprite,
+                ResolveAttackEffectSprite());
+            if (sprite == null)
+            {
+                return;
+            }
+
+            var direction = targetWorldPosition - sourceWorldPosition;
+            direction.z = 0f;
+            var distance = direction.magnitude;
+            if (distance <= 0.001f)
+            {
+                return;
+            }
+
+            var family = ResolveSkillVfxFamily(skill);
+            var scale = Mathf.Clamp(Mathf.Max(0.01f, skill != null ? skill.vfxScale : 1f), 0.72f, 1.65f);
+            var color = ResolveDesignTimeArtColor(
+                skill != null ? ResolveReusableSkillParticleColor(skill) : Color.white,
+                tuning,
+                package,
+                designTimeBinding,
+                0.08f,
+                0.88f);
+            var objectName = family == SkillVfxFamily.BloodFountainSlash
+                ? "BloodFountainSlashAttackBeamArt"
+                : "SlashArcAttackBeamArt";
+            var beamObject = new GameObject(objectName, typeof(SpriteRenderer));
+            beamObject.transform.SetParent(transform, false);
+            beamObject.transform.position = sourceWorldPosition + new Vector3(0f, SlashBeamSourceLift * scale, 0f);
+            beamObject.transform.rotation = Quaternion.FromToRotation(Vector3.right, direction.normalized);
+
+            var spriteSize = sprite.bounds.size;
+            var width = Mathf.Max(0.01f, spriteSize.x);
+            var height = Mathf.Max(0.01f, spriteSize.y);
+            var baseScale = new Vector3(
+                distance / width * SlashBeamWidthMultiplier,
+                SlashBeamHeightMultiplier * scale / height,
+                1f);
+            beamObject.transform.localScale = baseScale;
+
+            var renderer = beamObject.GetComponent<SpriteRenderer>();
+            renderer.sprite = sprite;
+            renderer.color = color;
+            ApplyAnchorSorting(renderer, targetAnchor != null ? targetAnchor : sourceAnchor, 14);
+
+            if (Application.isPlaying && isActiveAndEnabled)
+            {
+                StartCoroutine(AnimateAttackArtPulseRoutine(renderer, SlashBeamDurationSeconds, baseScale, color));
+                Destroy(beamObject, SlashBeamDurationSeconds + 0.15f);
+            }
+        }
+
         private void PlaySpikedBurstSkillEffect(SkillSO skill, Transform targetAnchor, Transform sourceAnchor = null)
         {
             var parent = targetAnchor != null ? targetAnchor : transform;
@@ -2500,85 +2633,7 @@ namespace Project2048.Prototype
 
         private void PlayBloodFountainSlashSkillEffect(SkillSO skill, Transform sourceAnchor, Transform targetAnchor)
         {
-            var parent = targetAnchor != null ? targetAnchor : transform;
-            var scale = Mathf.Clamp(Mathf.Max(0.01f, skill != null ? skill.vfxScale : 1f), 0.78f, 1.75f);
-            var intensity = Mathf.Max(0.1f, skill != null ? skill.vfxIntensity : 1f);
-            var facingSign = ResolveAttackFacingSign(sourceAnchor, parent);
-            var impactLocalOffset = ResolveCloseRangeImpactLocalOffset(parent, sourceAnchor, new Vector3(0f, 0.18f, 0f));
-            var primary = ResolveSkillTintedColor(
-                skill != null ? ResolveReusableSkillParticleColor(skill) : Color.clear,
-                new Color(0.94f, 0.015f, 0.035f, 0.96f),
-                0.22f,
-                0.92f);
-            var secondary = ResolveSkillTintedColor(
-                skill != null ? ResolveReusableSkillSecondaryParticleColor(skill) : Color.clear,
-                new Color(0.28f, 0f, 0.012f, 0.92f),
-                0.34f,
-                0.84f);
-
-            var root = new GameObject("FlameBurstSlashArc");
-            root.transform.SetParent(parent, false);
-            root.transform.localPosition = impactLocalOffset;
-
-            var slash = CreateLocalSkillLine(
-                root.transform,
-                "FlameBurstSlashLine",
-                primary,
-                Mathf.Clamp(0.092f * scale, 0.056f, 0.15f),
-                Mathf.Clamp(0.026f * scale, 0.016f, 0.06f),
-                BloodSlashSegmentCount + 1,
-                parent,
-                12);
-            SetBloodSlashGeometry(slash, scale, facingSign, 0f);
-
-            var edgeColor = Color.Lerp(Color.white, primary, 0.32f);
-            edgeColor.a = 0.88f;
-            var edge = CreateLocalSkillLine(
-                root.transform,
-                "FlameBurstSlashEdge",
-                edgeColor,
-                Mathf.Clamp(0.034f * scale, 0.022f, 0.072f),
-                Mathf.Clamp(0.012f * scale, 0.008f, 0.032f),
-                BloodSlashSegmentCount + 1,
-                parent,
-                13);
-            SetBloodSlashGeometry(edge, scale * 0.9f, facingSign, 0.055f);
-
-            SpawnParticleBurst(
-                null,
-                parent,
-                "FlameBurstFireFountain",
-                primary,
-                null,
-                BloodFountainSlashDurationSeconds,
-                Mathf.RoundToInt(58 * intensity),
-                0.28f,
-                Mathf.Clamp(0.066f * scale, 0.04f, 0.095f),
-                false,
-                impactLocalOffset + new Vector3(0.04f * facingSign, 0f, 0f),
-                particles => ConfigureBloodFountainParticles(particles, scale, BloodFountainSlashDurationSeconds));
-
-            SpawnParticleBurst(
-                null,
-                parent,
-                "FlameBurstFireMist",
-                secondary,
-                null,
-                0.48f,
-                Mathf.RoundToInt(22 * intensity),
-                0.42f,
-                Mathf.Clamp(0.09f * scale, 0.055f, 0.16f),
-                false,
-                impactLocalOffset + new Vector3(0.08f * facingSign, 0.08f, 0f),
-                particles => ConfigureBloodMistParticles(particles, scale, facingSign));
-
-            if (Application.isPlaying && isActiveAndEnabled)
-            {
-                StartCoroutine(FadeSkillLineRootRoutine(
-                    root,
-                    BloodFountainSlashDurationSeconds,
-                    root.GetComponentsInChildren<LineRenderer>()));
-            }
+            PlaySlashBeamSkillEffect(skill, sourceAnchor, targetAnchor);
         }
 
         private void PlayDarkShackleSkillEffect(
@@ -6107,57 +6162,6 @@ namespace Project2048.Prototype
             size.size = new ParticleSystem.MinMaxCurve(1f, new AnimationCurve(
                 new Keyframe(0f, 0.35f),
                 new Keyframe(Mathf.Clamp01(0.2f / Mathf.Max(0.05f, lifetimeSeconds)), 1.1f),
-                new Keyframe(1f, 0f)));
-        }
-
-        private static void ConfigureShieldShardBurstParticles(
-            ParticleSystem particles,
-            float scale,
-            float lifetimeSeconds,
-            bool heavy)
-        {
-            if (particles == null)
-            {
-                return;
-            }
-
-            scale = Mathf.Max(0.01f, scale);
-            var main = particles.main;
-            main.startLifetime = new ParticleSystem.MinMaxCurve(lifetimeSeconds * 0.32f, lifetimeSeconds);
-            main.startSpeed = new ParticleSystem.MinMaxCurve(
-                (heavy ? 0.82f : 0.46f) * scale,
-                (heavy ? 2.25f : 1.18f) * scale);
-            main.startSize = new ParticleSystem.MinMaxCurve(
-                (heavy ? 0.045f : 0.032f) * scale,
-                (heavy ? 0.16f : 0.105f) * scale);
-            main.gravityModifier = 0f;
-            main.simulationSpace = ParticleSystemSimulationSpace.Local;
-
-            var shape = particles.shape;
-            shape.enabled = true;
-            shape.shapeType = ParticleSystemShapeType.Circle;
-            shape.radius = (heavy ? 0.18f : 0.1f) * scale;
-            shape.radiusThickness = heavy ? 0.16f : 0.28f;
-            shape.arc = 360f;
-
-            var velocity = particles.velocityOverLifetime;
-            velocity.enabled = true;
-            velocity.space = ParticleSystemSimulationSpace.Local;
-            velocity.x = new ParticleSystem.MinMaxCurve(-0.28f * scale, 0.28f * scale);
-            velocity.y = new ParticleSystem.MinMaxCurve(-0.12f * scale, 0.42f * scale);
-            velocity.z = new ParticleSystem.MinMaxCurve(0f, 0f);
-
-            var rotation = particles.rotationOverLifetime;
-            rotation.enabled = true;
-            rotation.separateAxes = true;
-            rotation.z = new ParticleSystem.MinMaxCurve(-Mathf.PI * 4f, Mathf.PI * 4f);
-
-            var size = particles.sizeOverLifetime;
-            size.enabled = true;
-            size.size = new ParticleSystem.MinMaxCurve(1f, new AnimationCurve(
-                new Keyframe(0f, heavy ? 0.22f : 0.32f),
-                new Keyframe(0.16f, heavy ? 1.45f : 1.18f),
-                new Keyframe(0.62f, 0.7f),
                 new Keyframe(1f, 0f)));
         }
 

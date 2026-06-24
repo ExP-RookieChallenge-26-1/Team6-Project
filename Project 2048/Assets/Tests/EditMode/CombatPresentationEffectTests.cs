@@ -1801,6 +1801,7 @@ namespace Project2048.Tests
             AssertColorApproximately(impactArt.color, Color.white);
             Assert.That(impactArt.bounds.center.x, Is.EqualTo(enemyRenderer.transform.position.x).Within(0.001f));
             Assert.That(impactArt.transform.localScale.x, Is.EqualTo(impactArt.transform.localScale.y).Within(0.001f));
+            Assert.That(beam.transform.localScale.x, Is.LessThan(impactArt.transform.localScale.x * 0.5f));
             Assert.That(enemyRenderer.transform.Find("HeavyStrikeSpikedBurstArt"), Is.Null);
             Assert.That(enemyRenderer.transform.Find("HeavyStrikeSpikedBurst"), Is.Null);
             Assert.That(enemyRenderer.transform.Find("SlashArcSkillParticles"), Is.Null);
@@ -2515,6 +2516,7 @@ namespace Project2048.Tests
             Assert.That(impactArt, Is.Not.Null);
             Assert.That(impactArt.sprite, Is.EqualTo(hitSprite));
             Assert.That(impactArt.transform.localPosition.x, Is.LessThan(0f));
+            Assert.That(impactArt.transform.localScale.x, Is.LessThan(3f));
             var burst = enemyRenderer.transform.Find("HeavyStrikeSpikedBurst");
             Assert.That(burst, Is.Not.Null);
             Assert.That(burst.localPosition.x, Is.LessThan(0f));
@@ -2522,6 +2524,7 @@ namespace Project2048.Tests
             Assert.That(star, Is.Not.Null);
             Assert.That(star.positionCount, Is.GreaterThan(16));
             Assert.That(star.sortingOrder, Is.GreaterThan(enemyRenderer.sortingOrder));
+            Assert.That(star.GetPosition(1).magnitude, Is.LessThan(0.36f));
             Assert.That(burst.Cast<Transform>().Count(child => child.name.StartsWith("HeavyStrikeSpikeRay")), Is.GreaterThanOrEqualTo(8));
             Assert.That(enemyRenderer.transform.Find("HeavyStrikeSpikedExplosionParticles")?.GetComponent<ParticleSystem>(), Is.Not.Null);
         }
@@ -2725,7 +2728,8 @@ namespace Project2048.Tests
             Assert.That(boundChainsArt.sprite, Is.EqualTo(boundChainsSprite));
             AssertColorApproximately(boundChainsArt.color, Color.white);
             Assert.That(boundChainsArt.transform.localScale.x, Is.GreaterThan(chainAttackArt.transform.localScale.x));
-            Assert.That(boundChainsArt.transform.localScale.x, Is.GreaterThan(7.2f));
+            Assert.That(boundChainsArt.transform.localScale.x, Is.GreaterThan(2.2f));
+            Assert.That(boundChainsArt.transform.localScale.x, Is.LessThan(3f));
             Assert.That(enemyRenderer.transform.Find("DarkShackleBoundChainsArt/SharedBoundChainsPrefabMarker"), Is.Not.Null);
         }
 

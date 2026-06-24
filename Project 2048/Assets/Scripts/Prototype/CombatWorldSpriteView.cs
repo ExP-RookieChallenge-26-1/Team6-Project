@@ -62,9 +62,11 @@ namespace Project2048.Prototype
         private const float ThornGuardShieldFollowSharpness = 30f;
         private const int HeavyStrikeStarSegmentCount = 28;
         private const int HeavyStrikeSpikeRayCount = 12;
+        private const float HeavyStrikeImpactScaleMultiplier = 0.4f;
         private const int BloodSlashSegmentCount = 18;
         private const float SlashBeamWidthMultiplier = 1.14f;
         private const float SlashBeamHeightMultiplier = 0.46f;
+        private const float SlashAttackArtScaleMultiplier = 0.5f;
         private const float SlashBeamSourceLift = 0.12f;
         private const int DarkShackleChainSegmentCount = 16;
         private const int DarkShackleMinChainLinkCount = 8;
@@ -77,7 +79,7 @@ namespace Project2048.Prototype
         private const float DarkShackleInitialExtension = 0.1f;
         private const float DarkShackleImpactDustLifetimeSeconds = 0.34f;
         private const float DarkShackleLinkSpacing = 0.18f;
-        private const float DarkShackleBoundChainsRadiusMultiplier = 4.8f;
+        private const float DarkShackleBoundChainsRadiusMultiplier = 1.536f;
         private static readonly Vector3 DarkShackleBoundChainsLocalOffset = new(0f, 0.08f, 0f);
         private const int FlameBurstTongueCount = 5;
         private const int FlameBurstTongueSegmentCount = 12;
@@ -2162,7 +2164,8 @@ namespace Project2048.Prototype
                         tuning,
                         package,
                         designTimeBinding,
-                        1.12f * HitEffectArtSizeMultiplier);
+                        1.12f * HitEffectArtSizeMultiplier) *
+                        HeavyStrikeImpactScaleMultiplier;
                     lifetime = HeavyStrikeSpikedBurstDurationSeconds;
                     sortingOffset = 14;
                     rotationDegrees = 0f;
@@ -2656,7 +2659,8 @@ namespace Project2048.Prototype
                 Color.white,
                 AttackArtBaseRadius *
                     Mathf.Clamp(Mathf.Sqrt(scale), 0.7f, 1.42f) *
-                    ResolveDesignTimeRadiusMultiplier(tuning, package, designTimeBinding, 1f),
+                    ResolveDesignTimeRadiusMultiplier(tuning, package, designTimeBinding, 1f) *
+                    SlashAttackArtScaleMultiplier,
                 ResolveDesignTimeLifetime(tuning, package, designTimeBinding, SlashBeamDurationSeconds),
                 transform.InverseTransformPoint(center),
                 sortingOffset: ResolveDesignTimeSortingOffset(tuning, package, designTimeBinding, 14),
@@ -2742,7 +2746,8 @@ namespace Project2048.Prototype
                 AttackArtBaseRadius *
                     Mathf.Clamp(Mathf.Sqrt(scale), 0.78f, 1.5f) *
                     1.12f *
-                    HitEffectArtSizeMultiplier,
+                    HitEffectArtSizeMultiplier *
+                    HeavyStrikeImpactScaleMultiplier,
                 HeavyStrikeSpikedBurstDurationSeconds,
                 localOffset,
                 sortingOffset: 14,
@@ -2800,8 +2805,8 @@ namespace Project2048.Prototype
             var width = Mathf.Max(0.01f, spriteSize.x);
             var height = Mathf.Max(0.01f, spriteSize.y);
             var baseScale = new Vector3(
-                distance / width * SlashBeamWidthMultiplier,
-                SlashBeamHeightMultiplier * scale / height,
+                distance / width * SlashBeamWidthMultiplier * SlashAttackArtScaleMultiplier,
+                SlashBeamHeightMultiplier * scale / height * SlashAttackArtScaleMultiplier,
                 1f);
             beamObject.transform.localScale = baseScale;
 
@@ -2822,6 +2827,7 @@ namespace Project2048.Prototype
             var parent = targetAnchor != null ? targetAnchor : transform;
             var impactLocalOffset = ResolveCloseRangeImpactLocalOffset(parent, sourceAnchor, new Vector3(0f, 0.18f, 0f));
             var scale = Mathf.Clamp(Mathf.Max(0.01f, skill != null ? skill.vfxScale : 1f), 0.78f, 1.85f);
+            var visualScale = scale * HeavyStrikeImpactScaleMultiplier;
             var intensity = Mathf.Max(0.1f, skill != null ? skill.vfxIntensity : 1f);
             var primary = ResolveSkillTintedColor(
                 skill != null ? ResolveReusableSkillParticleColor(skill) : Color.clear,
@@ -2842,23 +2848,23 @@ namespace Project2048.Prototype
                 root.transform,
                 "HeavyStrikeSpikedBurstStar",
                 primary,
-                Mathf.Clamp(0.064f * scale, 0.04f, 0.12f),
-                Mathf.Clamp(0.036f * scale, 0.022f, 0.078f),
+                Mathf.Clamp(0.064f * visualScale, 0.026f, 0.12f),
+                Mathf.Clamp(0.036f * visualScale, 0.014f, 0.078f),
                 HeavyStrikeStarSegmentCount + 1,
                 parent,
                 11);
-            SetSpikedBurstStarGeometry(star, 0.22f * scale, 0.62f * scale, 0.08f);
+            SetSpikedBurstStarGeometry(star, 0.22f * visualScale, 0.62f * visualScale, 0.08f);
 
             var shock = CreateLocalSkillLine(
                 root.transform,
                 "HeavyStrikeSpikedShockRing",
                 secondary,
-                Mathf.Clamp(0.034f * scale, 0.022f, 0.07f),
-                Mathf.Clamp(0.02f * scale, 0.012f, 0.05f),
+                Mathf.Clamp(0.034f * visualScale, 0.014f, 0.07f),
+                Mathf.Clamp(0.02f * visualScale, 0.008f, 0.05f),
                 HeavyStrikeStarSegmentCount + 1,
                 parent,
                 10);
-            SetSpikedBurstStarGeometry(shock, 0.36f * scale, 0.78f * scale, 0.17f);
+            SetSpikedBurstStarGeometry(shock, 0.36f * visualScale, 0.78f * visualScale, 0.17f);
 
             for (var i = 0; i < HeavyStrikeSpikeRayCount; i++)
             {
@@ -2867,15 +2873,15 @@ namespace Project2048.Prototype
                     root.transform,
                     $"HeavyStrikeSpikeRay{i + 1}",
                     color,
-                    Mathf.Clamp(0.055f * scale, 0.032f, 0.095f),
-                    Mathf.Clamp(0.012f * scale, 0.008f, 0.032f),
+                    Mathf.Clamp(0.055f * visualScale, 0.02f, 0.095f),
+                    Mathf.Clamp(0.012f * visualScale, 0.005f, 0.032f),
                     2,
                     parent,
                     12);
                 var angle = Mathf.PI * 2f * i / HeavyStrikeSpikeRayCount + (i % 3) * 0.07f;
                 var direction = new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0f);
-                ray.SetPosition(0, direction * (0.12f * scale));
-                ray.SetPosition(1, direction * Mathf.Lerp(0.72f, 0.98f, i % 4 / 3f) * scale);
+                ray.SetPosition(0, direction * (0.12f * visualScale));
+                ray.SetPosition(1, direction * Mathf.Lerp(0.72f, 0.98f, i % 4 / 3f) * visualScale);
             }
 
             SpawnParticleBurst(
@@ -2886,11 +2892,11 @@ namespace Project2048.Prototype
                 null,
                 HeavyStrikeSpikedBurstDurationSeconds,
                 Mathf.RoundToInt(40 * intensity),
-                1.25f * Mathf.Sqrt(scale),
-                Mathf.Clamp(0.16f * scale, 0.11f, 0.24f),
+                1.25f * Mathf.Sqrt(visualScale),
+                Mathf.Clamp(0.16f * visualScale, 0.052f, 0.24f),
                 false,
                 impactLocalOffset,
-                particles => ConfigureSpikedBurstParticles(particles, scale, HeavyStrikeSpikedBurstDurationSeconds));
+                particles => ConfigureSpikedBurstParticles(particles, visualScale, HeavyStrikeSpikedBurstDurationSeconds));
 
             SpawnParticleBurst(
                 null,
@@ -2900,11 +2906,11 @@ namespace Project2048.Prototype
                 null,
                 0.44f,
                 Mathf.RoundToInt(24 * intensity),
-                1.7f * Mathf.Sqrt(scale),
-                Mathf.Clamp(0.09f * scale, 0.06f, 0.15f),
+                1.7f * Mathf.Sqrt(visualScale),
+                Mathf.Clamp(0.09f * visualScale, 0.03f, 0.15f),
                 false,
                 impactLocalOffset,
-                particles => ConfigureSpikedBurstParticles(particles, scale * 0.82f, 0.44f));
+                particles => ConfigureSpikedBurstParticles(particles, visualScale * 0.82f, 0.44f));
 
             if (Application.isPlaying && isActiveAndEnabled)
             {

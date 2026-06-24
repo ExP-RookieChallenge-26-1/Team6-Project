@@ -36,3 +36,5 @@ mono_crash.*
 *.aab
 *.unitypackage
 *.unitypackage.meta
+
+.claude/

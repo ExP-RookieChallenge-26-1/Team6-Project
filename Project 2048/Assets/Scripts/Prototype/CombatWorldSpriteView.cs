@@ -13,6 +13,7 @@ using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.EventSystems;
 using UnityEngine.Rendering;
+using UnityEngine.VFX;
 
 namespace Project2048.Prototype
 {
@@ -41,13 +42,15 @@ namespace Project2048.Prototype
         private const int ShieldCircleRingSegmentCount = 72;
         private const float ShieldCircleBaseRadius = 0.78f;
         private const float ShieldCircleBaseYOffset = 0.08f;
+        private const float ShieldCircleRadiusMultiplier = 1.2f;
+        private const float ThornGuardShieldRadiusMultiplier = 0.82f;
         private const float AttackArtBaseRadius = 0.62f;
         private const float AttackArtDiameterMultiplier = 2.45f;
         private const float AttackArtLifetimeSeconds = 0.34f;
         private const float AttackEffectArtSizeMultiplier = 3f;
         private const float HitEffectArtSizeMultiplier = 3f;
         private const float MagicCircleArtSizeMultiplier = 2f;
-        private const float PersistentShieldArtRadius = 0.86f;
+        private const float PersistentShieldArtRadius = 0.86f * ShieldCircleRadiusMultiplier;
         private const float ShieldArtDiameterMultiplier = 2.62f;
         private const float ShieldArtImpactLifetimeSeconds = 0.28f;
         private const float ThornGuardShieldFollowSharpness = 30f;
@@ -65,6 +68,8 @@ namespace Project2048.Prototype
         private const float DarkShackleMaxFlySeconds = 0.26f;
         private const float DarkShackleLatchSeconds = 0.42f;
         private const float DarkShackleFadeSeconds = 0.16f;
+        private const float DarkShackleInitialExtension = 0.1f;
+        private const float DarkShackleImpactDustLifetimeSeconds = 0.34f;
         private const float DarkShackleLinkSpacing = 0.18f;
         private const float DarkShackleBoundChainsRadiusMultiplier = 4.8f;
         private static readonly Vector3 DarkShackleBoundChainsLocalOffset = new(0f, 0.08f, 0f);
@@ -72,6 +77,8 @@ namespace Project2048.Prototype
         private const int FlameBurstTongueSegmentCount = 12;
         private const float LanternMuzzleLocalX = 0.34f;
         private const float LanternMuzzleLocalY = 0.36f;
+        private const float CloseRangeAttackAnimationSpeedMultiplier = 1.55f;
+        private const float PlayerAttackAnimationSpeedResetSeconds = 0.42f;
         private const string DefaultWorldVfxProfileResourceName = "PrototypeCombatWorldVfxProfile";
         private const string LayeredPlayerActorRootName = "player_all";
         private const string LayeredPlayerBodyRendererName = "Body";
@@ -81,6 +88,16 @@ namespace Project2048.Prototype
         private static readonly Vector3 PlayerFrontAttackArtLocalOffset = new(0.68f, 0.16f, 0f);
         private static readonly Vector3 PlayerRightMagicCircleLocalOffset = new(0.76f, 0.1f, 0f);
         private static readonly Vector3 FlameBurstExplosionLocalOffset = new(0f, 0.18f, 0f);
+        private static readonly Vector3 SupportBuffHealingVisualEffectLocalOffset = new(0f, 0.08f, 0f);
+        private static readonly string[] SupportBuffVisualEffectColorPropertyNames =
+        {
+            "_Color",
+            "Color",
+            "BaseColor",
+            "Tint",
+            "TintColor",
+            "ParticleColor",
+        };
         private static readonly Color ShieldCircleLightTint = new(1f, 0.96f, 0.72f, 0.94f);
         private static readonly Color ThornGuardShadowTint = new(0.025f, 0.035f, 0.03f, 0.96f);
         private static readonly Color ThornGuardBloodTint = new(0.44f, 0.07f, 0.08f, 0.9f);
@@ -121,7 +138,7 @@ namespace Project2048.Prototype
         [SerializeField] private Material darknessDebuffParticleMaterial;
         [SerializeField] private CombatClawSlash2DEffect enemyClawSlashEffectPrefab;
         [SerializeField] private bool playEnemyClawSlashEffect = true;
-        [SerializeField] private Vector3 enemyClawSlashLocalOffset = new(0.28f, 0.2f, 0f);
+        [SerializeField] private Vector3 enemyClawSlashLocalOffset = new(0.72f, 0.62f, 0f);
         [SerializeField] private Vector3 enemyClawSlashLocalEulerAngles = new(0f, 0f, 90f);
         [SerializeField, Min(0.01f)] private float enemyClawSlashScale = 1f;
 
@@ -134,6 +151,9 @@ namespace Project2048.Prototype
         private Material runtimeChargedLightBeamMaterial;
         private FollowingShieldVfx activePlayerShieldArtVfx;
         private FollowingShieldVfx activePlayerThornGuardVfx;
+        private Coroutine playerAttackAnimationSpeedCoroutine;
+        private float playerAttackAnimationSpeedRestoreValue = 1f;
+        private bool hasPlayerAttackAnimationSpeedRestoreValue;
         private readonly System.Collections.Generic.Dictionary<string, Material> runtimeSkillParticleMaterials = new();
 
         public void Initialize(PrototypeCombatBootstrap owner)
@@ -188,6 +208,8 @@ namespace Project2048.Prototype
             ClearEnemyDeathFade();
             ClearEnemyAppearIntro();
             ClearEnemyAttackLunge();
+            ClearPlayerCloseRangeAttackLunge();
+            ClearPlayerAttackAnimationSpeed();
             ClearWorldShake();
             ClearDamageNumberPopups();
             ClearActivePlayerShieldArtVfx();
@@ -296,7 +318,6 @@ namespace Project2048.Prototype
             }
 
             ResolveMissingReferences();
-            PlayPlayerAttackAnimationIfNeeded(skill);
             ResolveWorldVfxProfile();
             PlaySkillPresentationEffect(skill, delayEnemyDeathFade: true);
         }
@@ -323,15 +344,31 @@ namespace Project2048.Prototype
                 ? enemyRenderer.transform
                 : sourceAnchor;
             var animator = isAttack ? enemyAnimator : playerAnimator;
+            var family = ResolveSkillVfxFamily(skill);
+            PlayPlayerAttackAnimationIfNeeded(skill, family);
             if (isChargeAttack)
             {
                 PlayChargeAttackStartEffect(skill, effect, sourceAnchor);
                 return;
             }
 
-            var family = ResolveSkillVfxFamily(skill);
             if ((effect == null || !effect.HasAnyAsset) && family == SkillVfxFamily.None)
             {
+                return;
+            }
+
+            if (isAttack && TryPlayCloseRangePlayerAttackSkillEffect(
+                skill,
+                effect,
+                sourceAnchor,
+                targetAnchor,
+                out var closeRangeLifetimeSeconds))
+            {
+                if (delayEnemyDeathFade)
+                {
+                    DelayEnemyDeathFade(closeRangeLifetimeSeconds);
+                }
+
                 return;
             }
 
@@ -431,7 +468,7 @@ namespace Project2048.Prototype
                 case SkillVfxFamily.SpikedBurst:
                     PlayCombatantActionAudioEffect(effect);
                     PlaySpecializedSkillArtLayer(skill, targetAnchor, sourceAnchor);
-                    PlaySpikedBurstSkillEffect(skill, targetAnchor);
+                    PlaySpikedBurstSkillEffect(skill, targetAnchor, sourceAnchor);
                     PlayCombatantActionParticleEffect(effect, targetAnchor);
                     lifetimeSeconds = HeavyStrikeSpikedBurstDurationSeconds;
                     return true;
@@ -443,9 +480,7 @@ namespace Project2048.Prototype
                     lifetimeSeconds = BloodFountainSlashDurationSeconds;
                     return true;
                 case SkillVfxFamily.DarkChainBurst:
-                    PlayCombatantActionAudioEffect(effect);
-                    PlayDarkShackleSkillEffect(skill, sourceAnchor, targetAnchor);
-                    PlayCombatantActionParticleEffect(effect, targetAnchor);
+                    PlayDarkShackleSkillEffect(skill, effect, sourceAnchor, targetAnchor);
                     lifetimeSeconds = DarkShackleChainDurationSeconds;
                     return true;
                 default:
@@ -573,6 +608,12 @@ namespace Project2048.Prototype
 
         private static GameObject ResolveFlameBurstExplosionPrefab(SkillSO skill)
         {
+            var tuning = ResolveSkillVfxTuning(skill);
+            if (tuning != null && tuning.secondaryPrefab != null)
+            {
+                return tuning.secondaryPrefab;
+            }
+
             var package = ResolveSkillVfxPackage(skill);
             return package != null ? package.secondaryPrefab : null;
         }
@@ -847,7 +888,7 @@ namespace Project2048.Prototype
                 var instance = Instantiate(effect.vfxPrefab, parent.position, Quaternion.identity, parent);
                 instance.transform.localPosition += effect.localOffset;
                 var lifetime = effect.EffectiveAutoDestroySeconds;
-                if (lifetime > 0f)
+                if (lifetime > 0f && Application.isPlaying)
                 {
                     Destroy(instance, lifetime);
                 }
@@ -1013,7 +1054,7 @@ namespace Project2048.Prototype
 
             if (family == SkillVfxFamily.SpikedBurst)
             {
-                PlaySpikedBurstSkillEffect(skill, anchor);
+                PlaySpikedBurstSkillEffect(skill, anchor, ResolvePlayerAnchor() ?? transform);
                 return;
             }
 
@@ -1045,6 +1086,7 @@ namespace Project2048.Prototype
             {
                 PlayDarkShackleSkillEffect(
                     skill,
+                    null,
                     ResolvePlayerAnchor() ?? transform,
                     anchor);
                 return;
@@ -1083,6 +1125,7 @@ namespace Project2048.Prototype
             var sourceAnchor = ResolvePlayerAnchor() ?? transform;
             PlayMagicCircleArtForReusableSkill(skill, sourceAnchor, lifetimeSeconds);
             PlayAttackArtForReusableSkill(skill, anchor, sourceAnchor);
+            PlaySupportBuffHealingVisualEffect(skill, sourceAnchor, lifetimeSeconds);
             if (UsesSpriteOnlyReusableSkillEffect(family))
             {
                 return;
@@ -1129,27 +1172,29 @@ namespace Project2048.Prototype
             }
 
             var primary = ResolveShieldCircleLightColor(ResolveReusableSkillParticleColor(skill));
+            var tuning = ResolveSkillVfxTuning(skill);
             var package = ResolveSkillVfxPackage(skill);
             var designTimeBinding = ResolveSkillVfxDesignTimeBinding(skill);
             var radius = ShieldCircleBaseRadius *
-                ResolveDesignTimeRadiusMultiplier(package, designTimeBinding, 1f) *
+                ShieldCircleRadiusMultiplier *
+                ResolveDesignTimeRadiusMultiplier(tuning, package, designTimeBinding, 1f) *
                 Mathf.Clamp(Mathf.Sqrt(scale), 0.72f, 1.35f);
-            var lifetime = ResolveDesignTimeLifetime(package, designTimeBinding, Mathf.Max(0.45f, lifetimeSeconds));
-            var localOffset = ResolveDesignTimeLocalOffset(
-                package,
-                designTimeBinding,
+            var lifetime = ResolveDesignTimeLifetime(tuning, package, designTimeBinding, Mathf.Max(0.45f, lifetimeSeconds));
+            var localOffset = ResolveVisualCenterLocalOffset(
+                anchor,
+                ResolveDesignTimeLocalOffset(tuning, package, designTimeBinding, Vector3.zero) +
                 new Vector3(0f, ShieldCircleBaseYOffset, 0f));
 
             SpawnShieldArtSpriteLayer(
                 anchor,
                 "ShieldGuardArt",
-                ResolveDesignTimeArtColor(primary, package, designTimeBinding, 0.12f, primary.a),
+                ResolveDesignTimeArtColor(primary, tuning, package, designTimeBinding, 0.12f, primary.a),
                 radius,
                 lifetime,
                 localOffset,
-                sortingOffset: ResolveDesignTimeSortingOffset(package, designTimeBinding, 5),
-                spriteOverride: ResolveDesignTimeSprite(package, designTimeBinding, shieldEffectSprite, ResolveShieldEffectSprite()),
-                prefabOverride: ResolveDesignTimePrefab(package, designTimeBinding, ResolveShieldEffectPrefab()));
+                sortingOffset: ResolveDesignTimeSortingOffset(tuning, package, designTimeBinding, 5),
+                spriteOverride: ResolveDesignTimeSprite(tuning, package, designTimeBinding, shieldEffectSprite, ResolveShieldEffectSprite()),
+                prefabOverride: ResolveDesignTimePrefab(tuning, package, designTimeBinding, ResolveShieldEffectPrefab()));
         }
 
         private void PlayThornGuardCircleSkillParticleEffect(
@@ -1165,9 +1210,12 @@ namespace Project2048.Prototype
         {
             var primary = ResolveThornGuardDarkColor(ResolveReusableSkillParticleColor(skill), ThornGuardShadowTint, 0.68f);
             var secondary = ResolveThornGuardDarkColor(ResolveReusableSkillSecondaryParticleColor(skill), ThornGuardBloodTint, 0.74f);
-            var radius = ShieldCircleBaseRadius * Mathf.Clamp(Mathf.Sqrt(scale), 0.78f, 1.42f);
+            var radius = ShieldCircleBaseRadius *
+                ThornGuardShieldRadiusMultiplier *
+                Mathf.Clamp(Mathf.Sqrt(scale), 0.78f, 1.42f);
             var lifetime = Mathf.Max(0.5f, lifetimeSeconds * 1.08f);
             var shieldRoot = CreateThornGuardShieldVfxRoot(anchor, skill);
+            var tuning = ResolveSkillVfxTuning(skill);
             var package = ResolveSkillVfxPackage(skill);
 
             var thornArtColor = Color.Lerp(secondary, Color.white, 0.18f);
@@ -1184,10 +1232,12 @@ namespace Project2048.Prototype
                 autoDestroy: false,
                 persistentPulse: true,
                 spriteOverride: ResolveDesignTimeSecondarySprite(
+                    tuning,
                     package,
                     thornShieldEffectSprite,
                     ResolveThornShieldEffectSprite()),
                 prefabOverride: ResolveDesignTimeSecondaryPrefab(
+                    tuning,
                     package,
                     ResolveThornShieldEffectPrefab()));
 
@@ -1432,7 +1482,7 @@ namespace Project2048.Prototype
                 ResolveShieldArtColor(shieldImpactParticleColor, 0.58f),
                 ShieldCircleBaseRadius * 0.86f,
                 ShieldArtImpactLifetimeSeconds,
-                new Vector3(0f, ShieldCircleBaseYOffset, 0f),
+                ResolveVisualCenterLocalOffset(anchor, new Vector3(0f, ShieldCircleBaseYOffset, 0f)),
                 sortingOffset: 8);
         }
 
@@ -1516,11 +1566,12 @@ namespace Project2048.Prototype
             var smoke = Color.Lerp(secondary, new Color(0.06f, 0.045f, 0.04f, 0.54f), 0.68f);
             smoke.a = 0.48f;
 
+            var tuning = ResolveSkillVfxTuning(skill);
             var package = ResolveSkillVfxPackage(skill);
             var designTimeBinding = ResolveSkillVfxDesignTimeBinding(skill);
             var footLocalOffset = ResolveFootEffectLocalOffset(
                 parent,
-                ResolveDesignTimeLocalOffset(package, designTimeBinding, new Vector3(0f, -0.42f, 0f)));
+                ResolveDesignTimeLocalOffset(tuning, package, designTimeBinding, new Vector3(0f, -0.42f, 0f)));
             var flameArtLocalOffset = footLocalOffset + new Vector3(0f, 0.16f, 0f);
 
             var root = new GameObject("FlameBurstFlameTongues");
@@ -1530,15 +1581,15 @@ namespace Project2048.Prototype
             SpawnAttackArtSpriteLayer(
                 parent,
                 "FlameBurstArt",
-                ResolveDesignTimeArtColor(primary, package, designTimeBinding, 0.16f, 0.84f),
+                ResolveDesignTimeArtColor(primary, tuning, package, designTimeBinding, 0.16f, 0.84f),
                 AttackArtBaseRadius *
-                    ResolveDesignTimeRadiusMultiplier(package, designTimeBinding, 1.1f) *
+                    ResolveDesignTimeRadiusMultiplier(tuning, package, designTimeBinding, 1.1f) *
                     Mathf.Clamp(Mathf.Sqrt(resolvedScale), 0.85f, 1.45f),
-                ResolveDesignTimeLifetime(package, designTimeBinding, lifetime * 0.82f),
+                ResolveDesignTimeLifetime(tuning, package, designTimeBinding, lifetime * 0.82f),
                 flameArtLocalOffset,
-                sortingOffset: ResolveDesignTimeSortingOffset(package, designTimeBinding, 11),
-                spriteOverride: ResolveDesignTimeSprite(package, designTimeBinding, flameEffectSprite, ResolveFlameEffectSprite()),
-                prefabOverride: ResolveDesignTimePrefab(package, designTimeBinding, ResolveFlameEffectPrefab()));
+                sortingOffset: ResolveDesignTimeSortingOffset(tuning, package, designTimeBinding, 11),
+                spriteOverride: ResolveDesignTimeSprite(tuning, package, designTimeBinding, flameEffectSprite, ResolveFlameEffectSprite()),
+                prefabOverride: ResolveDesignTimePrefab(tuning, package, designTimeBinding, ResolveFlameEffectPrefab()));
 
             for (var i = 0; i < FlameBurstTongueCount; i++)
             {
@@ -1659,8 +1710,10 @@ namespace Project2048.Prototype
 
         private void PlaySupportBuffMagicCircleArt(SkillSO skill, Transform anchor, float lifetimeSeconds)
         {
+            var tuning = ResolveSkillVfxTuning(skill);
             var package = ResolveSkillVfxPackage(skill);
             var sprite = ResolveDesignTimeSecondarySprite(
+                tuning,
                 package,
                 magicCircleEffectSprite,
                 ResolveMagicCircleEffectSprite());
@@ -1685,7 +1738,7 @@ namespace Project2048.Prototype
                 ResolvePlayerRightLocalOffset(new Vector3(0f, 0.08f, 0f)),
                 sortingOffset: 6,
                 spriteOverride: sprite,
-                prefabOverride: ResolveDesignTimeSecondaryPrefab(package, ResolveMagicCircleEffectPrefab()));
+                prefabOverride: ResolveDesignTimeSecondaryPrefab(tuning, package, ResolveMagicCircleEffectPrefab()));
             if (art != null)
             {
                 art.transform.localRotation = Quaternion.Euler(0f, 0f, -8f);
@@ -1704,22 +1757,25 @@ namespace Project2048.Prototype
 
             var scale = Mathf.Max(0.01f, skill.vfxScale);
             var family = ResolveSkillVfxFamily(skill);
+            var tuning = ResolveSkillVfxTuning(skill);
             var package = ResolveSkillVfxPackage(skill);
             var designTimeBinding = ResolveSkillVfxDesignTimeBinding(skill);
             var color = ResolveDesignTimeArtColor(
                 ResolveReusableSkillParticleColor(skill),
+                tuning,
                 package,
                 designTimeBinding,
                 0.2f,
                 0.86f);
             var objectName = "SpecializedSkillArt";
             var sprite = ResolveDesignTimeSprite(
+                tuning,
                 package,
                 designTimeBinding,
-                null,
-                attackEffectSprite != null ? attackEffectSprite : ResolveAttackEffectSprite());
-            var prefab = ResolveDesignTimePrefab(package, designTimeBinding, ResolveAttackEffectPrefab());
-            var radiusMultiplier = ResolveDesignTimeRadiusMultiplier(package, designTimeBinding, 1f);
+                package == null ? attackEffectSprite : null,
+                ResolveAttackEffectSprite());
+            var prefab = ResolveDesignTimePrefab(tuning, package, designTimeBinding, ResolveAttackEffectPrefab());
+            var radiusMultiplier = ResolveDesignTimeRadiusMultiplier(tuning, package, designTimeBinding, 1f);
             var lifetime = AttackArtLifetimeSeconds;
             var localOffset = new Vector3(0f, 0.14f, 0f);
             var sortingOffset = 13;
@@ -1729,10 +1785,11 @@ namespace Project2048.Prototype
             {
                 case SkillVfxFamily.TentacleWhip:
                     objectName = "TentacleStrikeImpactArt";
-                    radiusMultiplier = ResolveDesignTimeRadiusMultiplier(package, designTimeBinding, 0.92f);
+                    radiusMultiplier = ResolveDesignTimeRadiusMultiplier(tuning, package, designTimeBinding, 0.92f);
                     lifetime = TentacleStrikeDurationSeconds;
                     color = ResolveDesignTimeArtColor(
                         ResolveReusableSkillSecondaryParticleColor(skill),
+                        tuning,
                         package,
                         designTimeBinding,
                         0.18f,
@@ -1740,9 +1797,10 @@ namespace Project2048.Prototype
                     break;
                 case SkillVfxFamily.SpikedBurst:
                     objectName = "HeavyStrikeSpikedBurstArt";
-                    sprite = ResolveDesignTimeSprite(package, designTimeBinding, hitEffectSprite, ResolveHitEffectSprite());
-                    prefab = ResolveDesignTimePrefab(package, designTimeBinding, ResolveHitEffectPrefab());
+                    sprite = ResolveDesignTimeSprite(tuning, package, designTimeBinding, hitEffectSprite, ResolveHitEffectSprite());
+                    prefab = ResolveDesignTimePrefab(tuning, package, designTimeBinding, ResolveHitEffectPrefab());
                     radiusMultiplier = ResolveDesignTimeRadiusMultiplier(
+                        tuning,
                         package,
                         designTimeBinding,
                         1.12f * HitEffectArtSizeMultiplier);
@@ -1753,12 +1811,14 @@ namespace Project2048.Prototype
                 case SkillVfxFamily.BloodFountainSlash:
                     objectName = "BloodFountainSlashArt";
                     radiusMultiplier = ResolveDesignTimeRadiusMultiplier(
+                        tuning,
                         package,
                         designTimeBinding,
                         1.08f * AttackEffectArtSizeMultiplier);
                     lifetime = BloodFountainSlashDurationSeconds;
                     color = ResolveDesignTimeArtColor(
                         ResolveReusableSkillParticleColor(skill),
+                        tuning,
                         package,
                         designTimeBinding,
                         0.12f,
@@ -1768,6 +1828,7 @@ namespace Project2048.Prototype
                 case SkillVfxFamily.SupportFire:
                     objectName = "SupportFireImpactArt";
                     radiusMultiplier = ResolveDesignTimeRadiusMultiplier(
+                        tuning,
                         package,
                         designTimeBinding,
                         0.82f * AttackEffectArtSizeMultiplier);
@@ -1780,14 +1841,23 @@ namespace Project2048.Prototype
                     return null;
             }
 
+            var resolvedLocalOffset = ResolveDesignTimeLocalOffset(tuning, package, designTimeBinding, localOffset);
+            if (family == SkillVfxFamily.SpikedBurst || family == SkillVfxFamily.BloodFountainSlash)
+            {
+                resolvedLocalOffset = ResolveCloseRangeImpactLocalOffset(
+                    anchor != null ? anchor : transform,
+                    sourceAnchor,
+                    resolvedLocalOffset);
+            }
+
             var art = SpawnAttackArtSpriteLayer(
                 anchor,
                 objectName,
                 color,
                 AttackArtBaseRadius * radiusMultiplier * Mathf.Clamp(Mathf.Sqrt(scale), 0.74f, 1.48f),
-                ResolveDesignTimeLifetime(package, designTimeBinding, lifetime),
-                ResolveDesignTimeLocalOffset(package, designTimeBinding, localOffset),
-                ResolveDesignTimeSortingOffset(package, designTimeBinding, sortingOffset),
+                ResolveDesignTimeLifetime(tuning, package, designTimeBinding, lifetime),
+                resolvedLocalOffset,
+                ResolveDesignTimeSortingOffset(tuning, package, designTimeBinding, sortingOffset),
                 spriteOverride: sprite,
                 prefabOverride: prefab);
             if (art == null)
@@ -1804,7 +1874,7 @@ namespace Project2048.Prototype
             art.transform.localRotation = Quaternion.Euler(
                 0f,
                 facingSign >= 0f ? 0f : 180f,
-                ResolveDesignTimeRotationDegrees(package, designTimeBinding, rotationDegrees) * facingSign);
+                ResolveDesignTimeRotationDegrees(tuning, package, designTimeBinding, rotationDegrees) * facingSign);
             return art;
         }
 
@@ -1850,9 +1920,20 @@ namespace Project2048.Prototype
                 family == SkillVfxFamily.CounterReady;
         }
 
+        private static bool UsesSupportBuffHealingVisualEffect(SkillVfxFamily family)
+        {
+            return family == SkillVfxFamily.BuffAura ||
+                family == SkillVfxFamily.CounterReady;
+        }
+
         private static SkillVfxPackageSO ResolveSkillVfxPackage(SkillSO skill)
         {
             return skill != null ? skill.vfxPackage : null;
+        }
+
+        private static SkillVfxTuning ResolveSkillVfxTuning(SkillSO skill)
+        {
+            return skill != null ? skill.ResolveVfxTuning() : null;
         }
 
         private SkillVfxDesignTimeBinding ResolveSkillVfxDesignTimeBinding(SkillSO skill)
@@ -1867,6 +1948,7 @@ namespace Project2048.Prototype
         }
 
         private static Sprite ResolveDesignTimeSprite(
+            SkillVfxTuning tuning,
             SkillVfxPackageSO package,
             SkillVfxDesignTimeBinding binding,
             Sprite explicitOverride,
@@ -1875,6 +1957,11 @@ namespace Project2048.Prototype
             if (explicitOverride != null)
             {
                 return explicitOverride;
+            }
+
+            if (tuning != null && tuning.primarySprite != null)
+            {
+                return tuning.primarySprite;
             }
 
             if (package != null && package.primarySprite != null)
@@ -1899,6 +1986,7 @@ namespace Project2048.Prototype
         }
 
         private static Sprite ResolveDesignTimeSecondarySprite(
+            SkillVfxTuning tuning,
             SkillVfxPackageSO package,
             Sprite explicitOverride,
             Sprite fallback)
@@ -1906,6 +1994,11 @@ namespace Project2048.Prototype
             if (explicitOverride != null)
             {
                 return explicitOverride;
+            }
+
+            if (tuning != null && tuning.secondarySprite != null)
+            {
+                return tuning.secondarySprite;
             }
 
             if (package != null && package.secondarySprite != null)
@@ -1917,10 +2010,16 @@ namespace Project2048.Prototype
         }
 
         private static GameObject ResolveDesignTimePrefab(
+            SkillVfxTuning tuning,
             SkillVfxPackageSO package,
             SkillVfxDesignTimeBinding binding,
             GameObject fallback)
         {
+            if (tuning != null && tuning.primaryPrefab != null)
+            {
+                return tuning.primaryPrefab;
+            }
+
             if (package != null && package.primaryPrefab != null)
             {
                 return package.primaryPrefab;
@@ -1930,9 +2029,15 @@ namespace Project2048.Prototype
         }
 
         private static GameObject ResolveDesignTimeSecondaryPrefab(
+            SkillVfxTuning tuning,
             SkillVfxPackageSO package,
             GameObject fallback)
         {
+            if (tuning != null && tuning.secondaryPrefab != null)
+            {
+                return tuning.secondaryPrefab;
+            }
+
             if (package != null && package.secondaryPrefab != null)
             {
                 return package.secondaryPrefab;
@@ -1949,10 +2054,16 @@ namespace Project2048.Prototype
         }
 
         private static Vector3 ResolveDesignTimeLocalOffset(
+            SkillVfxTuning tuning,
             SkillVfxPackageSO package,
             SkillVfxDesignTimeBinding binding,
             Vector3 fallback)
         {
+            if (tuning != null)
+            {
+                return tuning.localOffset;
+            }
+
             return package != null
                 ? package.localOffset
                 : binding != null
@@ -1988,10 +2099,16 @@ namespace Project2048.Prototype
         }
 
         private static float ResolveDesignTimeRadiusMultiplier(
+            SkillVfxTuning tuning,
             SkillVfxPackageSO package,
             SkillVfxDesignTimeBinding binding,
             float fallback)
         {
+            if (tuning != null && tuning.radiusMultiplier > 0f)
+            {
+                return tuning.radiusMultiplier;
+            }
+
             if (package != null && package.radiusMultiplier > 0f)
             {
                 return package.radiusMultiplier;
@@ -2008,10 +2125,16 @@ namespace Project2048.Prototype
         }
 
         private static float ResolveDesignTimeLifetime(
+            SkillVfxTuning tuning,
             SkillVfxPackageSO package,
             SkillVfxDesignTimeBinding binding,
             float fallback)
         {
+            if (tuning != null && tuning.lifetimeSeconds > 0f)
+            {
+                return tuning.lifetimeSeconds;
+            }
+
             if (package != null && package.lifetimeSeconds > 0f)
             {
                 return package.lifetimeSeconds;
@@ -2028,10 +2151,16 @@ namespace Project2048.Prototype
         }
 
         private static int ResolveDesignTimeSortingOffset(
+            SkillVfxTuning tuning,
             SkillVfxPackageSO package,
             SkillVfxDesignTimeBinding binding,
             int fallback)
         {
+            if (tuning != null)
+            {
+                return tuning.sortingOffset;
+            }
+
             return package != null ? package.sortingOffset : binding != null ? binding.sortingOffset : fallback;
         }
 
@@ -2043,10 +2172,16 @@ namespace Project2048.Prototype
         }
 
         private static float ResolveDesignTimeRotationDegrees(
+            SkillVfxTuning tuning,
             SkillVfxPackageSO package,
             SkillVfxDesignTimeBinding binding,
             float fallback)
         {
+            if (tuning != null)
+            {
+                return tuning.rotationDegrees;
+            }
+
             return package != null ? package.rotationDegrees : binding != null ? binding.rotationDegrees : fallback;
         }
 
@@ -2059,13 +2194,14 @@ namespace Project2048.Prototype
 
         private static Color ResolveDesignTimeArtColor(
             Color source,
+            SkillVfxTuning tuning,
             SkillVfxPackageSO package,
             SkillVfxDesignTimeBinding binding,
             float fallbackTintWhiteBlend,
             float fallbackAlpha)
         {
-            var tintWhiteBlend = package != null ? package.tintWhiteBlend : binding != null ? binding.tintWhiteBlend : fallbackTintWhiteBlend;
-            var alpha = package != null ? package.alpha : binding != null ? binding.alpha : fallbackAlpha;
+            var tintWhiteBlend = tuning != null ? tuning.tintWhiteBlend : package != null ? package.tintWhiteBlend : binding != null ? binding.tintWhiteBlend : fallbackTintWhiteBlend;
+            var alpha = tuning != null ? tuning.alpha : package != null ? package.alpha : binding != null ? binding.alpha : fallbackAlpha;
             var color = ResolveSkillTintedColor(source, Color.white, tintWhiteBlend, alpha);
             color.a = Mathf.Clamp01(alpha);
             return color;
@@ -2084,9 +2220,10 @@ namespace Project2048.Prototype
             return color;
         }
 
-        private void PlaySpikedBurstSkillEffect(SkillSO skill, Transform targetAnchor)
+        private void PlaySpikedBurstSkillEffect(SkillSO skill, Transform targetAnchor, Transform sourceAnchor = null)
         {
             var parent = targetAnchor != null ? targetAnchor : transform;
+            var impactLocalOffset = ResolveCloseRangeImpactLocalOffset(parent, sourceAnchor, new Vector3(0f, 0.18f, 0f));
             var scale = Mathf.Clamp(Mathf.Max(0.01f, skill != null ? skill.vfxScale : 1f), 0.78f, 1.85f);
             var intensity = Mathf.Max(0.1f, skill != null ? skill.vfxIntensity : 1f);
             var primary = ResolveSkillTintedColor(
@@ -2102,7 +2239,7 @@ namespace Project2048.Prototype
 
             var root = new GameObject("HeavyStrikeSpikedBurst");
             root.transform.SetParent(parent, false);
-            root.transform.localPosition = new Vector3(0f, 0.18f, 0f);
+            root.transform.localPosition = impactLocalOffset;
 
             var star = CreateLocalSkillLine(
                 root.transform,
@@ -2155,7 +2292,7 @@ namespace Project2048.Prototype
                 1.25f * Mathf.Sqrt(scale),
                 Mathf.Clamp(0.16f * scale, 0.11f, 0.24f),
                 false,
-                new Vector3(0f, 0.18f, 0f),
+                impactLocalOffset,
                 particles => ConfigureSpikedBurstParticles(particles, scale, HeavyStrikeSpikedBurstDurationSeconds));
 
             SpawnParticleBurst(
@@ -2169,7 +2306,7 @@ namespace Project2048.Prototype
                 1.7f * Mathf.Sqrt(scale),
                 Mathf.Clamp(0.09f * scale, 0.06f, 0.15f),
                 false,
-                new Vector3(0f, 0.18f, 0f),
+                impactLocalOffset,
                 particles => ConfigureSpikedBurstParticles(particles, scale * 0.82f, 0.44f));
 
             if (Application.isPlaying && isActiveAndEnabled)
@@ -2187,6 +2324,7 @@ namespace Project2048.Prototype
             var scale = Mathf.Clamp(Mathf.Max(0.01f, skill != null ? skill.vfxScale : 1f), 0.78f, 1.75f);
             var intensity = Mathf.Max(0.1f, skill != null ? skill.vfxIntensity : 1f);
             var facingSign = ResolveAttackFacingSign(sourceAnchor, parent);
+            var impactLocalOffset = ResolveCloseRangeImpactLocalOffset(parent, sourceAnchor, new Vector3(0f, 0.18f, 0f));
             var primary = ResolveSkillTintedColor(
                 skill != null ? ResolveReusableSkillParticleColor(skill) : Color.clear,
                 new Color(0.94f, 0.015f, 0.035f, 0.96f),
@@ -2200,7 +2338,7 @@ namespace Project2048.Prototype
 
             var root = new GameObject("BleedingCutSlashArc");
             root.transform.SetParent(parent, false);
-            root.transform.localPosition = new Vector3(0f, 0.18f, 0f);
+            root.transform.localPosition = impactLocalOffset;
 
             var slash = CreateLocalSkillLine(
                 root.transform,
@@ -2237,7 +2375,7 @@ namespace Project2048.Prototype
                 0.28f,
                 Mathf.Clamp(0.066f * scale, 0.04f, 0.095f),
                 false,
-                new Vector3(0.04f * facingSign, 0.18f, 0f),
+                impactLocalOffset + new Vector3(0.04f * facingSign, 0f, 0f),
                 particles => ConfigureBloodFountainParticles(particles, scale, BloodFountainSlashDurationSeconds));
 
             SpawnParticleBurst(
@@ -2251,7 +2389,7 @@ namespace Project2048.Prototype
                 0.42f,
                 Mathf.Clamp(0.09f * scale, 0.055f, 0.16f),
                 false,
-                new Vector3(0.08f * facingSign, 0.26f, 0f),
+                impactLocalOffset + new Vector3(0.08f * facingSign, 0.08f, 0f),
                 particles => ConfigureBloodMistParticles(particles, scale, facingSign));
 
             if (Application.isPlaying && isActiveAndEnabled)
@@ -2263,11 +2401,14 @@ namespace Project2048.Prototype
             }
         }
 
-        private void PlayDarkShackleSkillEffect(SkillSO skill, Transform sourceAnchor, Transform targetAnchor)
+        private void PlayDarkShackleSkillEffect(
+            SkillSO skill,
+            CombatEffectBinding effect,
+            Transform sourceAnchor,
+            Transform targetAnchor)
         {
             var parent = targetAnchor != null ? targetAnchor : transform;
             var scale = Mathf.Clamp(Mathf.Max(0.01f, skill != null ? skill.vfxScale : 1f), 0.78f, 1.7f);
-            var intensity = Mathf.Max(0.1f, skill != null ? skill.vfxIntensity : 1f);
             var source = ResolveLanternSkillSourcePosition(sourceAnchor != null ? sourceAnchor : transform, targetAnchor);
             var impact = targetAnchor != null ? ResolveSkillImpactWorldPosition(targetAnchor) : source + Vector3.right;
             if ((impact - source).sqrMagnitude <= 0.0001f)
@@ -2275,110 +2416,242 @@ namespace Project2048.Prototype
                 impact = source + Vector3.right;
             }
 
-            var primary = ResolveSkillTintedColor(
-                skill != null ? ResolveReusableSkillParticleColor(skill) : Color.clear,
-                new Color(0.015f, 0.012f, 0.025f, 0.96f),
-                0.42f,
-                0.9f);
-            var secondary = ResolveSkillTintedColor(
-                skill != null ? ResolveReusableSkillSecondaryParticleColor(skill) : Color.clear,
-                new Color(0.54f, 0.035f, 0.18f, 0.88f),
-                0.28f,
-                0.78f);
+            var tuning = ResolveSkillVfxTuning(skill);
             var package = ResolveSkillVfxPackage(skill);
             var designTimeBinding = ResolveSkillVfxDesignTimeBinding(skill);
-            var chainAttackArtColor = ResolveDesignTimeArtColor(secondary, package, designTimeBinding, 0.14f, 0.78f);
-            var chainAttackRotation = ResolveDesignTimeRotationDegrees(package, designTimeBinding, -4f);
+            var root = new GameObject("DarkShackleChainLaunch");
+            root.transform.SetParent(transform, false);
+            root.transform.localPosition = Vector3.zero;
+            root.transform.localRotation = Quaternion.identity;
+            root.transform.localScale = Vector3.one;
 
-            var root = CreateDarkShackleLaunchRoot(package);
-            var chain = ResolveAuthoredWorldSkillLine(
-                root,
-                "DarkShackleChainLine",
-                primary,
-                Mathf.Clamp(0.05f * scale, 0.032f, 0.09f),
-                Mathf.Clamp(0.075f * scale, 0.046f, 0.12f),
-                DarkShackleChainSegmentCount + 1,
-                parent,
-                12);
-            var head = ResolveAuthoredWorldSkillLine(
-                root,
-                "DarkShackleChainHead",
-                secondary,
-                Mathf.Clamp(0.024f * scale, 0.014f, 0.042f),
-                Mathf.Clamp(0.024f * scale, 0.014f, 0.042f),
-                7,
-                parent,
-                14);
-            SetDarkShackleChainGeometry(chain, source, source, scale, 0f, 0f);
-            SetDarkShackleHeadGeometry(head, source, source, scale);
-
-            var links = ResolveAuthoredDarkShackleLinks(
-                root,
-                ResolveDarkShackleLinkCount(source, impact, scale),
-                secondary,
-                Mathf.Clamp(0.009f * scale, 0.006f, 0.016f),
-                parent,
-                13);
-
-            SetDarkShackleLinkGeometry(links, source, source, scale, 0f, 0f);
-
-            var chainAttackProjectile = SpawnDarkShackleChainAttackProjectile(
+            var chainAttackProjectile = SpawnDarkShackleChainProjectileVfx(
                 root.transform,
                 source,
                 impact,
-                chainAttackArtColor,
                 scale,
                 parent,
+                tuning,
                 package,
                 designTimeBinding);
 
-            SpawnParticleBurst(
-                null,
-                sourceAnchor != null ? sourceAnchor : transform,
-                "DarkShackleMuzzleParticles",
-                secondary,
-                null,
-                0.34f,
-                Mathf.RoundToInt(16 * intensity),
-                0.38f,
-                Mathf.Clamp(0.07f * scale, 0.045f, 0.11f),
-                swirl: true,
-                sourceAnchor != null ? ResolveLanternSkillLocalOffset(sourceAnchor, targetAnchor) : Vector3.zero);
-
             if (Application.isPlaying && isActiveAndEnabled)
             {
-                StartCoroutine(AnimateDarkShackleChainRoutine(
+                StartCoroutine(AnimateDarkShackleVfxChainRoutine(
                     root,
-                    chain,
-                    head,
-                    links,
                     chainAttackProjectile,
                     sourceAnchor != null ? sourceAnchor : transform,
                     targetAnchor,
                     source,
                     impact,
                     scale,
-                    intensity,
-                    primary,
-                    secondary,
-                    chainAttackArtColor,
-                    package,
-                    chainAttackRotation));
+                    effect,
+                    tuning,
+                    package));
                 return;
             }
 
-            SetDarkShackleChainGeometry(chain, source, impact, scale, 1f, 1f);
-            SetDarkShackleLinkGeometry(links, source, impact, scale, 1f, 1f);
-            SetDarkShackleHeadGeometry(head, source, impact, scale);
-            UpdateDarkShackleChainAttackProjectile(
+            UpdateDarkShackleChainProjectileVfx(
                 chainAttackProjectile,
                 source,
                 impact,
-                impact,
-                chainAttackArtColor,
                 1f,
-                chainAttackRotation);
-            SpawnDarkShackleImpactEffects(parent, impact, primary, scale, package);
+                scale);
+            SpawnDarkShackleImpactDust(parent, impact, scale);
+            SpawnDarkShackleImpactEffects(parent, impact, scale, tuning, package);
+        }
+
+        private GameObject SpawnDarkShackleChainProjectileVfx(
+            Transform parent,
+            Vector3 source,
+            Vector3 impact,
+            float scale,
+            Transform sortingAnchor,
+            SkillVfxTuning tuning,
+            SkillVfxPackageSO package,
+            SkillVfxDesignTimeBinding designTimeBinding)
+        {
+            var prefab = ResolveDesignTimePrefab(tuning, package, designTimeBinding, ResolveChainAttackEffectPrefab());
+            var projectile = prefab != null
+                ? Instantiate(prefab, parent != null ? parent : transform)
+                : CreateDarkShackleChainProjectileSprite(parent, tuning, package, designTimeBinding);
+            if (projectile == null)
+            {
+                return null;
+            }
+
+            projectile.name = "DarkShackleChainProjectileVfx";
+            projectile.transform.SetParent(parent != null ? parent : transform, true);
+            projectile.transform.localPosition = Vector3.zero;
+            projectile.transform.localRotation = Quaternion.identity;
+            projectile.transform.localScale = Vector3.one;
+
+            foreach (var renderer in projectile.GetComponentsInChildren<Renderer>(true))
+            {
+                ApplyAnchorSorting(renderer, sortingAnchor, ResolveDesignTimeSortingOffset(tuning, package, designTimeBinding, 15));
+            }
+
+            var sprite = ResolveDesignTimeSprite(tuning, package, designTimeBinding, chainAttackEffectSprite, ResolveChainAttackEffectSprite());
+            foreach (var renderer in projectile.GetComponentsInChildren<SpriteRenderer>(true))
+            {
+                if (sprite != null)
+                {
+                    renderer.sprite = sprite;
+                }
+
+                renderer.color = Color.white;
+            }
+
+            var visualEffect = projectile.GetComponentInChildren<VisualEffect>(true);
+            if (visualEffect != null && Application.isPlaying)
+            {
+                visualEffect.Reinit();
+                visualEffect.Play();
+            }
+
+            UpdateDarkShackleChainProjectileVfx(projectile, source, impact, 0f, scale);
+            return projectile;
+        }
+
+        private GameObject CreateDarkShackleChainProjectileSprite(
+            Transform parent,
+            SkillVfxTuning tuning,
+            SkillVfxPackageSO package,
+            SkillVfxDesignTimeBinding designTimeBinding)
+        {
+            var sprite = ResolveDesignTimeSprite(tuning, package, designTimeBinding, chainAttackEffectSprite, ResolveChainAttackEffectSprite());
+            if (sprite == null)
+            {
+                return null;
+            }
+
+            var spriteObject = new GameObject("DarkShackleChainProjectileVfx", typeof(SpriteRenderer));
+            spriteObject.transform.SetParent(parent != null ? parent : transform, false);
+            var renderer = spriteObject.GetComponent<SpriteRenderer>();
+            renderer.sprite = sprite;
+            renderer.color = Color.white;
+            return spriteObject;
+        }
+
+        private IEnumerator AnimateDarkShackleVfxChainRoutine(
+            GameObject root,
+            GameObject chainProjectile,
+            Transform sourceAnchor,
+            Transform targetAnchor,
+            Vector3 fallbackSource,
+            Vector3 fallbackImpact,
+            float scale,
+            CombatEffectBinding effect,
+            SkillVfxTuning tuning,
+            SkillVfxPackageSO package)
+        {
+            var elapsed = 0f;
+            var source = fallbackSource;
+            var target = fallbackImpact;
+            while (root != null && elapsed < DarkShackleMaxFlySeconds)
+            {
+                var deltaTime = Time.unscaledDeltaTime;
+                elapsed += deltaTime;
+                source = ResolveDarkShackleSourcePosition(sourceAnchor, targetAnchor, fallbackSource);
+                target = ResolveDarkShackleTargetPosition(targetAnchor, fallbackImpact);
+                var progress = Mathf.Clamp01(elapsed / DarkShackleMaxFlySeconds);
+                UpdateDarkShackleChainProjectileVfx(chainProjectile, source, target, progress, scale);
+                yield return null;
+            }
+
+            if (root == null)
+            {
+                yield break;
+            }
+
+            source = ResolveDarkShackleSourcePosition(sourceAnchor, targetAnchor, fallbackSource);
+            target = ResolveDarkShackleTargetPosition(targetAnchor, fallbackImpact);
+            UpdateDarkShackleChainProjectileVfx(chainProjectile, source, target, 1f, scale);
+            PlayCombatantActionAudioEffect(effect);
+            SpawnDarkShackleImpactDust(targetAnchor != null ? targetAnchor : transform, target, scale);
+            var boundChains = SpawnDarkShackleImpactEffects(targetAnchor != null ? targetAnchor : transform, target, scale, tuning, package);
+
+            var holdSeconds = DarkShackleLatchSeconds + DarkShackleFadeSeconds;
+            while (root != null && holdSeconds > 0f)
+            {
+                holdSeconds -= Time.unscaledDeltaTime;
+                yield return null;
+            }
+
+            if (boundChains != null)
+            {
+                Destroy(boundChains.gameObject);
+            }
+
+            if (root != null)
+            {
+                Destroy(root);
+            }
+        }
+
+        private static void UpdateDarkShackleChainProjectileVfx(
+            GameObject projectile,
+            Vector3 source,
+            Vector3 impact,
+            float progress,
+            float scale)
+        {
+            if (projectile == null)
+            {
+                return;
+            }
+
+            var direction = impact - source;
+            direction.z = 0f;
+            var distance = direction.magnitude;
+            if (distance <= 0.0001f)
+            {
+                direction = Vector3.right;
+                distance = 1f;
+            }
+
+            var axis = direction / distance;
+            var extension = Mathf.Lerp(
+                DarkShackleInitialExtension,
+                1f,
+                Mathf.SmoothStep(0f, 1f, Mathf.Clamp01(progress)));
+            var visibleLength = Mathf.Max(0.01f, distance * extension);
+            projectile.transform.position = source + axis * (visibleLength * 0.5f);
+            projectile.transform.rotation = Quaternion.Euler(0f, 0f, Mathf.Atan2(axis.y, axis.x) * Mathf.Rad2Deg);
+
+            var height = Mathf.Clamp(0.46f * Mathf.Max(0.01f, scale), 0.32f, 0.72f);
+            if (projectile.GetComponentInChildren<VisualEffect>(true) != null)
+            {
+                projectile.transform.localScale = new Vector3(Mathf.Max(0.01f, distance), height, 1f);
+                return;
+            }
+
+            projectile.transform.localScale = Vector3.one;
+            foreach (var renderer in projectile.GetComponentsInChildren<SpriteRenderer>(true))
+            {
+                var spriteSize = renderer.sprite != null ? renderer.sprite.bounds.size : Vector3.one;
+                var width = Mathf.Max(0.01f, spriteSize.x);
+                var spriteHeight = Mathf.Max(0.01f, spriteSize.y);
+                renderer.transform.localScale = new Vector3(visibleLength / width, height / spriteHeight, 1f);
+            }
+        }
+
+        private void SpawnDarkShackleImpactDust(Transform targetAnchor, Vector3 impact, float scale)
+        {
+            var parent = targetAnchor != null ? targetAnchor : transform;
+            SpawnParticleBurst(
+                null,
+                parent,
+                "DarkShackleImpactDust",
+                Color.white,
+                null,
+                DarkShackleImpactDustLifetimeSeconds,
+                Mathf.RoundToInt(18 * Mathf.Clamp(scale, 0.75f, 1.8f)),
+                Mathf.Clamp(0.45f * scale, 0.28f, 0.72f),
+                Mathf.Clamp(0.055f * scale, 0.035f, 0.085f),
+                swirl: false,
+                localOffset: parent.InverseTransformPoint(impact),
+                sortingAnchor: parent);
         }
 
         private SpriteRenderer SpawnDarkShackleChainAttackProjectile(
@@ -2388,6 +2661,7 @@ namespace Project2048.Prototype
             Color color,
             float scale,
             Transform sortingAnchor,
+            SkillVfxTuning tuning,
             SkillVfxPackageSO package,
             SkillVfxDesignTimeBinding designTimeBinding)
         {
@@ -2396,17 +2670,18 @@ namespace Project2048.Prototype
                 "DarkShackleChainAttackArt",
                 color,
                 AttackArtBaseRadius *
-                    ResolveDesignTimeRadiusMultiplier(package, designTimeBinding, 1f) *
+                    ResolveDesignTimeRadiusMultiplier(tuning, package, designTimeBinding, 1f) *
                     Mathf.Clamp(Mathf.Sqrt(scale), 0.8f, 1.38f),
                 0f,
                 Vector3.zero,
-                sortingOffset: ResolveDesignTimeSortingOffset(package, designTimeBinding, 15),
+                sortingOffset: ResolveDesignTimeSortingOffset(tuning, package, designTimeBinding, 15),
                 spriteOverride: ResolveDesignTimeSprite(
+                    tuning,
                     package,
                     designTimeBinding,
                     chainAttackEffectSprite,
                     ResolveChainAttackEffectSprite()),
-                prefabOverride: ResolveDesignTimePrefab(package, designTimeBinding, ResolveChainAttackEffectPrefab()),
+                prefabOverride: ResolveDesignTimePrefab(tuning, package, designTimeBinding, ResolveChainAttackEffectPrefab()),
                 autoDestroy: false,
                 animatePulse: false);
             if (art == null)
@@ -2414,7 +2689,7 @@ namespace Project2048.Prototype
                 return null;
             }
 
-            ApplyAnchorSorting(art, sortingAnchor, ResolveDesignTimeSortingOffset(package, designTimeBinding, 15));
+            ApplyAnchorSorting(art, sortingAnchor, ResolveDesignTimeSortingOffset(tuning, package, designTimeBinding, 15));
             UpdateDarkShackleChainAttackProjectile(
                 art,
                 source,
@@ -2422,13 +2697,13 @@ namespace Project2048.Prototype
                 source,
                 color,
                 1f,
-                ResolveDesignTimeRotationDegrees(package, designTimeBinding, -4f));
+                ResolveDesignTimeRotationDegrees(tuning, package, designTimeBinding, -4f));
             return art;
         }
 
-        private GameObject CreateDarkShackleLaunchRoot(SkillVfxPackageSO package)
+        private GameObject CreateDarkShackleLaunchRoot(SkillVfxTuning tuning, SkillVfxPackageSO package)
         {
-            var prefab = ResolveDarkChainLaunchPrefab(package);
+            var prefab = ResolveDarkChainLaunchPrefab(tuning, package);
             var root = prefab != null
                 ? Instantiate(prefab, transform)
                 : new GameObject("DarkShackleChainLaunch");
@@ -2605,21 +2880,31 @@ namespace Project2048.Prototype
             return targetAnchor != null ? ResolveSkillImpactWorldPosition(targetAnchor) : fallbackImpact;
         }
 
-        private void SpawnDarkShackleImpactEffects(
+        private SpriteRenderer SpawnDarkShackleImpactEffects(
             Transform targetAnchor,
             Vector3 impact,
             Color primary,
             float scale,
+            SkillVfxTuning tuning,
+            SkillVfxPackageSO package)
+        {
+            return SpawnDarkShackleImpactEffects(targetAnchor, impact, scale, tuning, package);
+        }
+
+        private SpriteRenderer SpawnDarkShackleImpactEffects(
+            Transform targetAnchor,
+            Vector3 impact,
+            float scale,
+            SkillVfxTuning tuning,
             SkillVfxPackageSO package)
         {
             var parent = targetAnchor != null ? targetAnchor : transform;
             var localImpact = parent.InverseTransformPoint(impact);
             DestroyChildrenNamed(parent, "DarkShackleBoundChainsArt");
 
-            var boundArtColor = Color.Lerp(primary, Color.white, 0.08f);
-            boundArtColor.a = 0.82f;
+            var boundArtColor = Color.white;
             var sizeScale = Mathf.Clamp(Mathf.Sqrt(Mathf.Max(0.01f, scale)), 0.88f, 1.55f);
-            SpawnAttackArtSpriteLayer(
+            return SpawnAttackArtSpriteLayer(
                 parent,
                 "DarkShackleBoundChainsArt",
                 boundArtColor,
@@ -2628,12 +2913,16 @@ namespace Project2048.Prototype
                 localImpact + DarkShackleBoundChainsLocalOffset,
                 sortingOffset: 16,
                 spriteOverride: ResolveDesignTimeSecondarySprite(
+                    tuning,
                     package,
                     boundChainsEffectSprite,
                     ResolveBoundChainsEffectSprite()),
                 prefabOverride: ResolveDesignTimeSecondaryPrefab(
+                    tuning,
                     package,
-                    ResolveBoundChainsEffectPrefab()));
+                    ResolveBoundChainsEffectPrefab()),
+                autoDestroy: false,
+                animatePulse: false);
         }
 
         private IEnumerator AnimateDarkShackleChainRoutine(
@@ -2651,6 +2940,7 @@ namespace Project2048.Prototype
             Color primary,
             Color secondary,
             Color chainAttackArtColor,
+            SkillVfxTuning tuning,
             SkillVfxPackageSO package,
             float chainAttackRotationDegrees)
         {
@@ -2689,6 +2979,7 @@ namespace Project2048.Prototype
                                 target,
                                 primary,
                                 scale,
+                                tuning,
                                 package);
                             if (chainAttackProjectile != null)
                             {
@@ -2759,6 +3050,7 @@ namespace Project2048.Prototype
                     target,
                     primary,
                     scale,
+                    tuning,
                     package);
             }
 
@@ -3239,6 +3531,7 @@ namespace Project2048.Prototype
 
         private void SpawnChargedLightAttackArt(SkillSO skill, Transform sourceTransform)
         {
+            var tuning = ResolveSkillVfxTuning(skill);
             var package = ResolveSkillVfxPackage(skill);
             var designTimeBinding = ResolveSkillVfxFamily(skill) == SkillVfxFamily.LightBeam
                 ? ResolveSkillVfxDesignTimeBinding(skill)
@@ -3246,19 +3539,21 @@ namespace Project2048.Prototype
             var art = SpawnAttackArtSpriteLayer(
                 sourceTransform,
                 "ChargedLightAttackArt",
-                ResolveDesignTimeArtColor(Color.white, package, designTimeBinding, 0.18f, 0.92f),
+                ResolveDesignTimeArtColor(Color.white, tuning, package, designTimeBinding, 0.18f, 0.92f),
                 AttackArtBaseRadius * ResolveDesignTimeRadiusMultiplier(
+                    tuning,
                     package,
                     designTimeBinding,
                     1.18f * AttackEffectArtSizeMultiplier),
-                ResolveDesignTimeLifetime(package, designTimeBinding, ChargedLightBeamDurationSeconds),
+                ResolveDesignTimeLifetime(tuning, package, designTimeBinding, ChargedLightBeamDurationSeconds),
                 ResolvePlayerFrontLocalOffset(ResolveDesignTimeLocalOffset(
+                    tuning,
                     package,
                     designTimeBinding,
                     PlayerFrontAttackArtLocalOffset)),
-                sortingOffset: ResolveDesignTimeSortingOffset(package, designTimeBinding, 13),
-                spriteOverride: ResolveDesignTimeSprite(package, designTimeBinding, attackEffectSprite, ResolveAttackEffectSprite()),
-                prefabOverride: ResolveDesignTimePrefab(package, designTimeBinding, ResolveAttackEffectPrefab()));
+                sortingOffset: ResolveDesignTimeSortingOffset(tuning, package, designTimeBinding, 13),
+                spriteOverride: ResolveDesignTimeSprite(tuning, package, designTimeBinding, attackEffectSprite, ResolveAttackEffectSprite()),
+                prefabOverride: ResolveDesignTimePrefab(tuning, package, designTimeBinding, ResolveAttackEffectPrefab()));
             if (art == null)
             {
                 return;
@@ -3267,7 +3562,7 @@ namespace Project2048.Prototype
             art.transform.localRotation = Quaternion.Euler(
                 0f,
                 0f,
-                ResolveDesignTimeRotationDegrees(package, designTimeBinding, -10f));
+                ResolveDesignTimeRotationDegrees(tuning, package, designTimeBinding, -10f));
         }
 
         private LineRenderer SpawnChargedLightBeamLine(
@@ -3915,8 +4210,11 @@ namespace Project2048.Prototype
             Transform sortingAnchor = null)
         {
             var parent = anchor != null ? anchor : transform;
-            var particles = prefab != null
-                ? Instantiate(prefab, parent.position, Quaternion.identity, parent)
+            var resolvedPrefab = prefab != null
+                ? prefab
+                : ResolveDesignTimeParticlePrefab(objectName, swirl);
+            var particles = resolvedPrefab != null
+                ? Instantiate(resolvedPrefab, parent.position, Quaternion.identity, parent)
                 : CreateFallbackParticleSystem(parent, objectName);
             if (particles == null)
             {
@@ -3951,6 +4249,12 @@ namespace Project2048.Prototype
             return particles;
         }
 
+        private ParticleSystem ResolveDesignTimeParticlePrefab(string objectName, bool swirl)
+        {
+            ResolveWorldVfxProfile();
+            return worldVfxProfile != null ? worldVfxProfile.ResolveParticlePrefab(objectName, swirl) : null;
+        }
+
         private ParticleSystem CreateFallbackParticleSystem(Transform parent, string objectName)
         {
             var particleObject = new GameObject(objectName, typeof(ParticleSystem));
@@ -3969,15 +4273,23 @@ namespace Project2048.Prototype
             Transform anchor,
             bool swirl)
         {
+            var authoring = particles.GetComponentInParent<SkillVfxParticleBurstPrefab>();
+            var burstMultiplier = authoring != null ? authoring.EffectiveBurstMultiplier : 1f;
+            var lifetimeMultiplier = authoring != null ? authoring.EffectiveLifetimeMultiplier : 1f;
+            var speedMultiplier = authoring != null ? authoring.EffectiveSpeedMultiplier : 1f;
+            var sizeMultiplier = authoring != null ? authoring.EffectiveSizeMultiplier : 1f;
+            var radiusMultiplier = authoring != null ? authoring.EffectiveRadiusMultiplier : 1f;
+            var resolvedLifetimeSeconds = Mathf.Max(0.05f, lifetimeSeconds);
+
             particles.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
             particles.Clear(true);
 
             var main = particles.main;
-            main.duration = Mathf.Max(0.05f, lifetimeSeconds * 0.35f);
+            main.duration = Mathf.Max(0.05f, resolvedLifetimeSeconds * 0.35f * lifetimeMultiplier);
             main.loop = false;
-            main.startLifetime = Mathf.Max(0.05f, lifetimeSeconds);
-            main.startSpeed = Mathf.Max(0f, startSpeed);
-            main.startSize = Mathf.Max(0.01f, startSize);
+            main.startLifetime = Mathf.Max(0.05f, resolvedLifetimeSeconds * lifetimeMultiplier);
+            main.startSpeed = Mathf.Max(0f, startSpeed * speedMultiplier);
+            main.startSize = Mathf.Max(0.01f, startSize * sizeMultiplier);
             main.startColor = color;
             main.simulationSpace = ParticleSystemSimulationSpace.Local;
 
@@ -3985,17 +4297,25 @@ namespace Project2048.Prototype
             emission.rateOverTime = 0f;
             emission.SetBursts(new[]
             {
-                new ParticleSystem.Burst(0f, (short)Mathf.Clamp(burstCount, 1, short.MaxValue)),
+                new ParticleSystem.Burst(0f, (short)Mathf.Clamp(Mathf.RoundToInt(burstCount * burstMultiplier), 1, short.MaxValue)),
             });
 
             var shape = particles.shape;
             shape.enabled = true;
-            shape.shapeType = ParticleSystemShapeType.Sphere;
-            shape.radius = 0.36f;
+            if (authoring == null || !authoring.preserveAuthoredShape)
+            {
+                shape.shapeType = ParticleSystemShapeType.Sphere;
+            }
+
+            shape.radius = 0.36f * radiusMultiplier;
 
             if (swirl)
             {
-                ConfigureSwirlBurst(particles, lifetimeSeconds);
+                ConfigureSwirlBurst(
+                    particles,
+                    resolvedLifetimeSeconds,
+                    radiusMultiplier,
+                    authoring != null && authoring.preserveAuthoredShape);
             }
             else
             {
@@ -4020,16 +4340,23 @@ namespace Project2048.Prototype
             }
 
             renderer.sortingLayerID = anchorRenderer.sortingLayerID;
-            renderer.sortingOrder = anchorRenderer.sortingOrder + 2;
+            renderer.sortingOrder = anchorRenderer.sortingOrder + (authoring != null ? authoring.sortingOffset : 2);
         }
 
-        private static void ConfigureSwirlBurst(ParticleSystem particles, float lifetimeSeconds)
+        private static void ConfigureSwirlBurst(
+            ParticleSystem particles,
+            float lifetimeSeconds,
+            float radiusMultiplier,
+            bool preserveAuthoredShape)
         {
-            var shape = particles.shape;
-            shape.shapeType = ParticleSystemShapeType.Circle;
-            shape.radius = 0.54f;
-            shape.radiusThickness = 0.32f;
-            shape.arc = 360f;
+            if (!preserveAuthoredShape)
+            {
+                var shape = particles.shape;
+                shape.shapeType = ParticleSystemShapeType.Circle;
+                shape.radius = 0.54f * Mathf.Max(0.01f, radiusMultiplier);
+                shape.radiusThickness = 0.32f;
+                shape.arc = 360f;
+            }
 
             var velocity = particles.velocityOverLifetime;
             velocity.enabled = false;
@@ -4149,10 +4476,12 @@ namespace Project2048.Prototype
             }
 
             var scale = Mathf.Max(0.01f, skill.vfxScale);
+            var tuning = ResolveSkillVfxTuning(skill);
             var package = ResolveSkillVfxPackage(skill);
             var designTimeBinding = ResolveSkillVfxDesignTimeBinding(skill);
             var color = ResolveDesignTimeArtColor(
                 ResolveReusableSkillParticleColor(skill),
+                tuning,
                 package,
                 designTimeBinding,
                 0.18f,
@@ -4166,6 +4495,7 @@ namespace Project2048.Prototype
                 : ResolveAttackEffectPrefab();
             var anchor = UsesPlayerFrontAttackArt(family) ? sourceAnchor : targetAnchor;
             var localOffset = ResolveDesignTimeLocalOffset(
+                tuning,
                 package,
                 designTimeBinding,
                 UsesPlayerFrontAttackArt(family) ? PlayerFrontAttackArtLocalOffset : new Vector3(0f, 0.16f, 0f));
@@ -4186,20 +4516,22 @@ namespace Project2048.Prototype
                 AttackArtBaseRadius *
                     Mathf.Clamp(Mathf.Sqrt(scale), 0.7f, 1.42f) *
                     ResolveDesignTimeRadiusMultiplier(
+                        tuning,
                         package,
                         designTimeBinding,
                         family == SkillVfxFamily.ImpactBurst
                             ? 1.08f * HitEffectArtSizeMultiplier
                             : AttackEffectArtSizeMultiplier),
-                ResolveDesignTimeLifetime(package, designTimeBinding, AttackArtLifetimeSeconds),
+                ResolveDesignTimeLifetime(tuning, package, designTimeBinding, AttackArtLifetimeSeconds),
                 localOffset,
-                sortingOffset: ResolveDesignTimeSortingOffset(package, designTimeBinding, 12),
+                sortingOffset: ResolveDesignTimeSortingOffset(tuning, package, designTimeBinding, 12),
                 spriteOverride: ResolveDesignTimeSprite(
+                    tuning,
                     package,
                     designTimeBinding,
                     null,
                     explicitSprite != null ? explicitSprite : fallbackSprite),
-                prefabOverride: ResolveDesignTimePrefab(package, designTimeBinding, fallbackPrefab));
+                prefabOverride: ResolveDesignTimePrefab(tuning, package, designTimeBinding, fallbackPrefab));
             if (art == null)
             {
                 return;
@@ -4211,7 +4543,7 @@ namespace Project2048.Prototype
             art.transform.localRotation = Quaternion.Euler(
                 0f,
                 facingSign >= 0f ? 0f : 180f,
-                ResolveDesignTimeRotationDegrees(package, designTimeBinding, -12f) * facingSign);
+                ResolveDesignTimeRotationDegrees(tuning, package, designTimeBinding, -12f) * facingSign);
         }
 
         private SpriteRenderer SpawnAttackArtSpriteLayer(
@@ -4345,7 +4677,10 @@ namespace Project2048.Prototype
             }
 
             renderer.color = color;
-            renderer.transform.localScale = Vector3.one * ResolveEffectArtScale(sprite, radius, diameterMultiplier);
+            var authoredScale = renderer.transform.localScale;
+            renderer.transform.localScale = Vector3.Scale(
+                authoredScale,
+                Vector3.one * ResolveEffectArtScale(sprite, radius, diameterMultiplier));
             var resolvedSortingAnchor = sortingAnchor != null ? sortingAnchor : parent;
             ApplyAnchorSorting(renderer, resolvedSortingAnchor, sortingOffset);
             ApplyAuthoredChildRendererSorting(rootObject, renderer, resolvedSortingAnchor, sortingOffset + 1);
@@ -4421,9 +4756,11 @@ namespace Project2048.Prototype
                 return;
             }
 
+            var tuning = ResolveSkillVfxTuning(skill);
             var package = ResolveSkillVfxPackage(skill);
             var designTimeBinding = ResolveSkillVfxDesignTimeBinding(skill);
             var sprite = ResolveDesignTimeSprite(
+                tuning,
                 package,
                 designTimeBinding,
                 null,
@@ -4436,6 +4773,7 @@ namespace Project2048.Prototype
             var scale = Mathf.Max(0.01f, skill.vfxScale);
             var color = ResolveDesignTimeArtColor(
                 ResolveReusableSkillParticleColor(skill),
+                tuning,
                 package,
                 designTimeBinding,
                 0.32f,
@@ -4455,24 +4793,123 @@ namespace Project2048.Prototype
                 color,
                 AttackArtBaseRadius *
                     ResolveDesignTimeRadiusMultiplier(
+                        tuning,
                         package,
                         designTimeBinding,
                         MagicCircleArtSizeMultiplier) *
                     Mathf.Clamp(Mathf.Sqrt(scale), 0.84f, 1.5f),
-                ResolveDesignTimeLifetime(package, designTimeBinding, Mathf.Clamp(lifetimeSeconds, 0.38f, 0.9f)),
+                ResolveDesignTimeLifetime(tuning, package, designTimeBinding, Mathf.Clamp(lifetimeSeconds, 0.38f, 0.9f)),
                 ResolvePlayerRightLocalOffset(ResolveDesignTimeLocalOffset(
+                    tuning,
                     package,
                     designTimeBinding,
                     PlayerRightMagicCircleLocalOffset)),
-                sortingOffset: ResolveDesignTimeSortingOffset(package, designTimeBinding, 6),
+                sortingOffset: ResolveDesignTimeSortingOffset(tuning, package, designTimeBinding, 6),
                 spriteOverride: sprite,
-                prefabOverride: ResolveDesignTimePrefab(package, designTimeBinding, ResolveMagicCircleEffectPrefab()));
+                prefabOverride: ResolveDesignTimePrefab(tuning, package, designTimeBinding, ResolveMagicCircleEffectPrefab()));
             if (art != null)
             {
                 art.transform.localRotation = Quaternion.Euler(
                     0f,
                     0f,
-                    ResolveDesignTimeRotationDegrees(package, designTimeBinding, -8f));
+                    ResolveDesignTimeRotationDegrees(tuning, package, designTimeBinding, -8f));
+            }
+        }
+
+        private void PlaySupportBuffHealingVisualEffect(SkillSO skill, Transform anchor, float lifetimeSeconds)
+        {
+            var family = ResolveSkillVfxFamily(skill);
+            if (!UsesSupportBuffHealingVisualEffect(family))
+            {
+                return;
+            }
+
+            var prefab = ResolveSupportBuffVisualEffectPrefab();
+            if (prefab == null)
+            {
+                return;
+            }
+
+            var parent = anchor != null ? anchor : transform;
+            var instance = Instantiate(prefab, parent);
+            instance.name = $"{family}HealingVisualEffect";
+            instance.transform.localPosition = SupportBuffHealingVisualEffectLocalOffset;
+            instance.transform.localRotation = Quaternion.identity;
+            instance.transform.localScale = Vector3.one * Mathf.Clamp(
+                Mathf.Max(0.01f, skill != null ? skill.vfxScale : 1f),
+                0.72f,
+                1.28f);
+
+            var color = ResolveSupportBuffHealingVisualEffectColor(skill);
+            foreach (var renderer in instance.GetComponentsInChildren<Renderer>(true))
+            {
+                ApplyAnchorSorting(renderer, parent, 11);
+            }
+
+            foreach (var particles in instance.GetComponentsInChildren<ParticleSystem>(true))
+            {
+                ApplySupportBuffHealingParticleColor(particles, color);
+                if (Application.isPlaying)
+                {
+                    particles.Play(true);
+                }
+            }
+
+            foreach (var visualEffect in instance.GetComponentsInChildren<VisualEffect>(true))
+            {
+                ApplySupportBuffVisualEffectColor(visualEffect, color);
+                if (Application.isPlaying)
+                {
+                    visualEffect.Reinit();
+                    visualEffect.Play();
+                }
+            }
+
+            if (lifetimeSeconds > 0f && Application.isPlaying)
+            {
+                Destroy(instance, Mathf.Max(0.45f, lifetimeSeconds) + 0.35f);
+            }
+        }
+
+        private static Color ResolveSupportBuffHealingVisualEffectColor(SkillSO skill)
+        {
+            var primary = ResolveReusableSkillParticleColor(skill);
+            var secondary = ResolveReusableSkillSecondaryParticleColor(skill);
+            var color = Color.Lerp(primary, secondary, 0.32f);
+            if (color.maxColorComponent < 0.42f)
+            {
+                color = Color.Lerp(color, Color.white, 0.36f);
+            }
+
+            color.a = Mathf.Max(0.86f, color.a);
+            return color;
+        }
+
+        private static void ApplySupportBuffHealingParticleColor(ParticleSystem particles, Color color)
+        {
+            if (particles == null)
+            {
+                return;
+            }
+
+            var main = particles.main;
+            main.startColor = color;
+        }
+
+        private static void ApplySupportBuffVisualEffectColor(VisualEffect visualEffect, Color color)
+        {
+            if (visualEffect == null)
+            {
+                return;
+            }
+
+            var vectorColor = new Vector4(color.r, color.g, color.b, color.a);
+            foreach (var propertyName in SupportBuffVisualEffectColorPropertyNames)
+            {
+                if (visualEffect.HasVector4(propertyName))
+                {
+                    visualEffect.SetVector4(propertyName, vectorColor);
+                }
             }
         }
 
@@ -4531,6 +4968,12 @@ namespace Project2048.Prototype
             return worldVfxProfile != null ? worldVfxProfile.magicCircleEffectPrefab : null;
         }
 
+        private GameObject ResolveSupportBuffVisualEffectPrefab()
+        {
+            ResolveWorldVfxProfile();
+            return worldVfxProfile != null ? worldVfxProfile.supportBuffVisualEffectPrefab : null;
+        }
+
         private Sprite ResolveFlameEffectSprite()
         {
             if (flameEffectSprite != null)
@@ -4548,8 +4991,13 @@ namespace Project2048.Prototype
             return worldVfxProfile != null ? worldVfxProfile.flameEffectPrefab : null;
         }
 
-        private GameObject ResolveDarkChainLaunchPrefab(SkillVfxPackageSO package)
+        private GameObject ResolveDarkChainLaunchPrefab(SkillVfxTuning tuning, SkillVfxPackageSO package)
         {
+            if (tuning != null && tuning.projectilePrefab != null)
+            {
+                return tuning.projectilePrefab;
+            }
+
             if (package != null && package.projectilePrefab != null)
             {
                 return package.projectilePrefab;
@@ -5702,17 +6150,22 @@ namespace Project2048.Prototype
                 actorRoot.GetComponentsInChildren<SpriteRenderer>(includeInactive: true).Length > 1;
         }
 
-        private void PlayPlayerAttackAnimationIfNeeded(SkillSO skill)
+        private void PlayPlayerAttackAnimationIfNeeded(SkillSO skill, SkillVfxFamily family)
         {
-            if (skill == null || skill.skillType != SkillType.Attack)
+            if (skill == null)
             {
                 return;
             }
 
-            PlayPlayerAttackAnimation();
+            if (skill.skillType == SkillType.Attack && UsesCloseRangePlayerLunge(family))
+            {
+                return;
+            }
+
+            PlayPlayerAttackAnimation(ResolvePlayerAttackAnimationSpeedMultiplier(skill));
         }
 
-        private void PlayPlayerAttackAnimation()
+        private void PlayPlayerAttackAnimation(float speedMultiplier = 1f)
         {
             if (playerAnimator == null)
             {
@@ -5725,7 +6178,73 @@ namespace Project2048.Prototype
                 return;
             }
 
+            ApplyPlayerAttackAnimationSpeed(speedMultiplier);
             playerAnimator.Play(PlayerAttackStateHash, 0, 0f);
+        }
+
+        private void ApplyPlayerAttackAnimationSpeed(float speedMultiplier)
+        {
+            if (playerAnimator == null ||
+                !Application.isPlaying ||
+                !isActiveAndEnabled)
+            {
+                return;
+            }
+
+            speedMultiplier = Mathf.Max(0.01f, speedMultiplier);
+            if (playerAttackAnimationSpeedCoroutine != null)
+            {
+                StopCoroutine(playerAttackAnimationSpeedCoroutine);
+                playerAttackAnimationSpeedCoroutine = null;
+            }
+
+            if (!hasPlayerAttackAnimationSpeedRestoreValue)
+            {
+                playerAttackAnimationSpeedRestoreValue = playerAnimator.speed;
+                hasPlayerAttackAnimationSpeedRestoreValue = true;
+            }
+
+            playerAnimator.speed = playerAttackAnimationSpeedRestoreValue * speedMultiplier;
+            playerAttackAnimationSpeedCoroutine = StartCoroutine(
+                RestorePlayerAttackAnimationSpeedRoutine(PlayerAttackAnimationSpeedResetSeconds / speedMultiplier));
+        }
+
+        private IEnumerator RestorePlayerAttackAnimationSpeedRoutine(float delaySeconds)
+        {
+            yield return new WaitForSeconds(Mathf.Max(0.01f, delaySeconds));
+            playerAttackAnimationSpeedCoroutine = null;
+            RestorePlayerAttackAnimationSpeed();
+        }
+
+        private void ClearPlayerAttackAnimationSpeed()
+        {
+            if (playerAttackAnimationSpeedCoroutine != null)
+            {
+                StopCoroutine(playerAttackAnimationSpeedCoroutine);
+                playerAttackAnimationSpeedCoroutine = null;
+            }
+
+            RestorePlayerAttackAnimationSpeed();
+        }
+
+        private void RestorePlayerAttackAnimationSpeed()
+        {
+            if (hasPlayerAttackAnimationSpeedRestoreValue && playerAnimator != null)
+            {
+                playerAnimator.speed = playerAttackAnimationSpeedRestoreValue;
+            }
+
+            hasPlayerAttackAnimationSpeedRestoreValue = false;
+            playerAttackAnimationSpeedRestoreValue = 1f;
+        }
+
+        private static float ResolvePlayerAttackAnimationSpeedMultiplier(SkillSO skill)
+        {
+            return skill != null &&
+                skill.skillType == SkillType.Attack &&
+                UsesCloseRangePlayerLunge(ResolveSkillVfxFamily(skill))
+                    ? CloseRangeAttackAnimationSpeedMultiplier
+                    : 1f;
         }
 
         private static bool PlayerWasHit(CombatSnapshot previous, CombatSnapshot next)
@@ -5944,7 +6463,7 @@ namespace Project2048.Prototype
                 followSharpness = Mathf.Max(0.01f, sharpness);
                 if (target != null)
                 {
-                    transform.position = target.position + worldOffset;
+                    transform.position = ResolveAnchorVisualCenterWorldPosition(target) + worldOffset;
                 }
             }
 
@@ -5981,7 +6500,7 @@ namespace Project2048.Prototype
                     return;
                 }
 
-                var desiredPosition = target.position + worldOffset;
+                var desiredPosition = ResolveAnchorVisualCenterWorldPosition(target) + worldOffset;
                 var followT = 1f - Mathf.Exp(-followSharpness * Time.deltaTime);
                 transform.position = Vector3.Lerp(transform.position, desiredPosition, followT);
                 transform.rotation = Quaternion.identity;

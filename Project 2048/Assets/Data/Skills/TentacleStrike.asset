@@ -89,18 +89,18 @@ MonoBehaviour:
     secondaryPrefab: {fileID: 0}
     particlePrefab: {fileID: 1417355208796124838, guid: 6da77e6d022857645883533802b8dc19, type: 3}
     particleMaterial: {fileID: 2100000, guid: cdd4a6c863c168dad3585f126e4f2b2f, type: 2}
-    localOffset: {x: 0, y: 0.14, z: 0}
+    localOffset: {x: -0.34, y: 0.46, z: 0}
     radiusMultiplier: 0.92
     lifetimeSeconds: -1
     sortingOffset: 12
-    tintWhiteBlend: 0.18
-    alpha: 0.9
+    tintWhiteBlend: 0
+    alpha: 1
     rotationDegrees: -8
   vfxPackage: {fileID: 0}
   vfxFamily: 12
   vfxPrimaryColor: {r: 0.169576, g: 0.054376, b: 0.227176, a: 1}
   vfxSecondaryColor: {r: 0.479342, g: 0.212942, b: 0.601742, a: 1}
-  vfxScale: 1.1
+  vfxScale: 1
   vfxIntensity: 1.1
   vfxRepeatCount: 1
   description: ""

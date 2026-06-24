@@ -4435,13 +4435,17 @@ namespace Project2048.Prototype
             }
 
             var source = ResolveAnchorVisualCenterWorldPosition(sourceAnchor != null ? sourceAnchor : transform);
+            var localOffset = ResolveDesignTimeLocalOffset(tuning, package, designTimeBinding, Vector3.zero);
             var target = targetAnchor != null ? ResolveSkillImpactWorldPosition(targetAnchor) : source + Vector3.right;
             if ((target - source).sqrMagnitude <= 0.0001f)
             {
                 target = source + Vector3.right;
             }
 
-            var root = Instantiate(prefab, source, Quaternion.identity, transform);
+            var spawnPosition = source + (sourceAnchor != null
+                ? sourceAnchor.TransformVector(localOffset)
+                : localOffset);
+            var root = Instantiate(prefab, spawnPosition, Quaternion.identity, transform);
             root.name = "TentacleStrikeWhip";
             root.transform.localRotation = Quaternion.identity;
 
@@ -4453,9 +4457,13 @@ namespace Project2048.Prototype
                 return false;
             }
 
-            var scale = Mathf.Clamp(Mathf.Max(0.01f, skill != null ? skill.vfxScale : 1f), 0.72f, 1.8f);
+            var scale = Mathf.Clamp(Mathf.Max(0.01f, skill != null ? skill.vfxScale : 1f), 0.01f, 1.8f);
             var facingSign = target.x >= source.x ? 1f : -1f;
-            root.transform.localScale = new Vector3(Mathf.Abs(scale) * facingSign, Mathf.Abs(scale), 1f);
+            var authoredScale = root.transform.localScale;
+            root.transform.localScale = new Vector3(
+                Mathf.Abs(authoredScale.x) * scale * facingSign,
+                Mathf.Abs(authoredScale.y) * scale,
+                authoredScale.z);
 
             var sortingAnchor = sourceAnchor != null ? sourceAnchor : targetAnchor;
             ApplyAnchorSorting(renderer, sortingAnchor, 12);

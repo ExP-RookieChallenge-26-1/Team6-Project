@@ -172,7 +172,7 @@ namespace Project2048.Audio
             audioSource.loop = false;
             audioSource.volume = 1f;
             audioSource.mute = false;
-            audioSettings?.ApplyOutputGroup(audioSource, Project2048AudioChannel.UI);
+            audioSettings?.ApplyOutputGroup(audioSource, Project2048AudioChannel.SFX);
         }
     }
 }

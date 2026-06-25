@@ -17,9 +17,6 @@ MonoBehaviour:
   masterMixer: {fileID: 24100000, guid: 58cd19cfac3d48d999c2ab295b98b222, type: 2}
   bgmGroup: {fileID: 1001000001, guid: 58cd19cfac3d48d999c2ab295b98b222, type: 2}
   sfxGroup: {fileID: 1001000002, guid: 58cd19cfac3d48d999c2ab295b98b222, type: 2}
-  uiGroup: {fileID: 1001000003, guid: 58cd19cfac3d48d999c2ab295b98b222, type: 2}
-  ambienceGroup: {fileID: 1001000004, guid: 58cd19cfac3d48d999c2ab295b98b222, type: 2}
+  masterVolumeParameter: MasterVolume
   bgmVolumeParameter: BGMVolume
   sfxVolumeParameter: SFXVolume
-  uiVolumeParameter: UIVolume
-  ambienceVolumeParameter: AmbienceVolume

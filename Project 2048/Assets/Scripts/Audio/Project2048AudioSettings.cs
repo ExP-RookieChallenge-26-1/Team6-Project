@@ -7,10 +7,9 @@ namespace Project2048.Audio
     public class Project2048AudioSettings : ScriptableObject
     {
         public const string ResourcePath = "Audio/Project2048AudioSettings";
+        public const string MasterVolumeParameterName = "MasterVolume";
         public const string BgmVolumeParameterName = "BGMVolume";
         public const string SfxVolumeParameterName = "SFXVolume";
-        public const string UiVolumeParameterName = "UIVolume";
-        public const string AmbienceVolumeParameterName = "AmbienceVolume";
         public const float DefaultBgmVolumeDb = -14f;
         public const float MinVolumeDb = -80f;
         public const float MaxVolumeDb = 0f;
@@ -20,26 +19,18 @@ namespace Project2048.Audio
         [SerializeField] private AudioMixer masterMixer;
         [SerializeField] private AudioMixerGroup bgmGroup;
         [SerializeField] private AudioMixerGroup sfxGroup;
-        [SerializeField] private AudioMixerGroup uiGroup;
-        [SerializeField] private AudioMixerGroup ambienceGroup;
+        [SerializeField] private string masterVolumeParameter = MasterVolumeParameterName;
         [SerializeField] private string bgmVolumeParameter = BgmVolumeParameterName;
         [SerializeField] private string sfxVolumeParameter = SfxVolumeParameterName;
-        [SerializeField] private string uiVolumeParameter = UiVolumeParameterName;
-        [SerializeField] private string ambienceVolumeParameter = AmbienceVolumeParameterName;
 
         public AudioClip MainThemeClip => mainThemeClip;
         public AudioClip ButtonClickClip => buttonClickClip;
         public AudioMixer MasterMixer => masterMixer;
         public AudioMixerGroup BgmGroup => bgmGroup;
         public AudioMixerGroup SfxGroup => sfxGroup;
-        public AudioMixerGroup UiGroup => uiGroup;
-        public AudioMixerGroup AmbienceGroup => ambienceGroup;
+        public string MasterVolumeParameter => ResolveParameterName(masterVolumeParameter, MasterVolumeParameterName);
         public string BgmVolumeParameter => ResolveParameterName(bgmVolumeParameter, BgmVolumeParameterName);
         public string SfxVolumeParameter => ResolveParameterName(sfxVolumeParameter, SfxVolumeParameterName);
-        public string UiVolumeParameter => ResolveParameterName(uiVolumeParameter, UiVolumeParameterName);
-        public string AmbienceVolumeParameter => ResolveParameterName(
-            ambienceVolumeParameter,
-            AmbienceVolumeParameterName);
 
         public static Project2048AudioSettings LoadDefault()
         {
@@ -52,8 +43,6 @@ namespace Project2048.Audio
             {
                 Project2048AudioChannel.BGM => bgmGroup,
                 Project2048AudioChannel.SFX => sfxGroup,
-                Project2048AudioChannel.UI => uiGroup,
-                Project2048AudioChannel.Ambience => ambienceGroup,
                 _ => null,
             };
         }
@@ -62,10 +51,9 @@ namespace Project2048.Audio
         {
             return channel switch
             {
+                Project2048AudioChannel.Master => MasterVolumeParameter,
                 Project2048AudioChannel.BGM => BgmVolumeParameter,
                 Project2048AudioChannel.SFX => SfxVolumeParameter,
-                Project2048AudioChannel.UI => UiVolumeParameter,
-                Project2048AudioChannel.Ambience => AmbienceVolumeParameter,
                 _ => string.Empty,
             };
         }
@@ -108,11 +96,17 @@ namespace Project2048.Audio
     {
         public const float DefaultNormalizedVolume = 1f;
 
-        private const string KeyPrefix = "Project2048.Audio.Volume.";
+        private const string VolumeKeyPrefix = "Project2048.Audio.Volume.";
+        private const string MutedKeyPrefix = "Project2048.Audio.Muted.";
 
         public static float GetNormalizedVolume(Project2048AudioChannel channel)
         {
             return Mathf.Clamp01(PlayerPrefs.GetFloat(GetVolumeKey(channel), DefaultNormalizedVolume));
+        }
+
+        public static bool IsMuted(Project2048AudioChannel channel)
+        {
+            return PlayerPrefs.GetInt(GetMutedKey(channel), 0) != 0;
         }
 
         public static void SetNormalizedVolume(
@@ -124,6 +118,21 @@ namespace Project2048.Audio
             var clampedVolume = Mathf.Clamp01(normalizedVolume);
             PlayerPrefs.SetFloat(GetVolumeKey(channel), clampedVolume);
             ApplyVolume(settings, channel, clampedVolume);
+
+            if (saveImmediately)
+            {
+                PlayerPrefs.Save();
+            }
+        }
+
+        public static void SetMuted(
+            Project2048AudioSettings settings,
+            Project2048AudioChannel channel,
+            bool isMuted,
+            bool saveImmediately = true)
+        {
+            PlayerPrefs.SetInt(GetMutedKey(channel), isMuted ? 1 : 0);
+            ApplyVolume(settings, channel, GetNormalizedVolume(channel));
 
             if (saveImmediately)
             {
@@ -149,7 +158,13 @@ namespace Project2048.Audio
             foreach (Project2048AudioChannel channel in System.Enum.GetValues(typeof(Project2048AudioChannel)))
             {
                 PlayerPrefs.DeleteKey(GetVolumeKey(channel));
+                PlayerPrefs.DeleteKey(GetMutedKey(channel));
             }
+        }
+
+        public static float GetEffectiveVolumeDb(Project2048AudioChannel channel)
+        {
+            return VolumeToDb(channel, IsMuted(channel) ? 0f : GetNormalizedVolume(channel));
         }
 
         public static float VolumeToDb(Project2048AudioChannel channel, float normalizedVolume)
@@ -207,12 +222,18 @@ namespace Project2048.Audio
                 return;
             }
 
-            settings.TrySetVolume(channel, VolumeToDb(channel, normalizedVolume));
+            var effectiveVolume = IsMuted(channel) ? 0f : normalizedVolume;
+            settings.TrySetVolume(channel, VolumeToDb(channel, effectiveVolume));
         }
 
         private static string GetVolumeKey(Project2048AudioChannel channel)
         {
-            return KeyPrefix + channel;
+            return VolumeKeyPrefix + channel;
+        }
+
+        private static string GetMutedKey(Project2048AudioChannel channel)
+        {
+            return MutedKeyPrefix + channel;
         }
     }
 }

@@ -12665,13 +12665,6 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Flow/FlowController.cs",
     "from_class": "FlowController",
-    "to_type": "Ending",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Flow/FlowController.cs",
-    "from_class": "FlowController",
     "to_type": "FadeOnly",
     "relation_type": "uses",
     "strength": 1
@@ -12855,13 +12848,6 @@
     "from_file": "Project 2048/Assets/Scripts/Flow/FlowController.cs",
     "from_class": "FlowController",
     "to_type": "OnBattleSceneLoadRequested",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Flow/FlowController.cs",
-    "from_class": "FlowController",
-    "to_type": "OnEndingSceneLoadRequested",
     "relation_type": "uses",
     "strength": 1
   },
@@ -13253,13 +13239,6 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Flow/SceneFlowManager.cs",
     "from_class": "SceneFlowManager",
-    "to_type": "EndingSceneName",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Flow/SceneFlowManager.cs",
-    "from_class": "SceneFlowManager",
     "to_type": "Flow",
     "relation_type": "uses",
     "strength": 1
@@ -13310,13 +13289,6 @@
     "from_file": "Project 2048/Assets/Scripts/Flow/SceneFlowManager.cs",
     "from_class": "SceneFlowManager",
     "to_type": "LoadBattle",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Flow/SceneFlowManager.cs",
-    "from_class": "SceneFlowManager",
-    "to_type": "LoadEnding",
     "relation_type": "uses",
     "strength": 1
   },
@@ -13394,13 +13366,6 @@
     "from_file": "Project 2048/Assets/Scripts/Flow/SceneFlowManager.cs",
     "from_class": "SceneFlowManager",
     "to_type": "OnEnable",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Flow/SceneFlowManager.cs",
-    "from_class": "SceneFlowManager",
-    "to_type": "OnEndingSceneLoadRequested",
     "relation_type": "uses",
     "strength": 1
   },
@@ -31047,6 +31012,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/SaveLoad/GameSaveData.cs",
     "from_class": "GameSaveData",
+    "to_type": "HasActiveRun",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/GameSaveData.cs",
+    "from_class": "GameSaveData",
     "to_type": "HasCurrentHp",
     "relation_type": "uses",
     "strength": 1
@@ -31201,6 +31173,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/SaveLoad/GameSaveData.cs",
     "from_class": "GameSaveData",
+    "to_type": "SavedAtUtc",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/GameSaveData.cs",
+    "from_class": "GameSaveData",
     "to_type": "Select",
     "relation_type": "uses",
     "strength": 1
@@ -31237,6 +31216,13 @@
     "from_file": "Project 2048/Assets/Scripts/SaveLoad/GameSaveData.cs",
     "from_class": "GameSaveData",
     "to_type": "SkillSO",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/GameSaveData.cs",
+    "from_class": "GameSaveData",
+    "to_type": "StageIndex",
     "relation_type": "uses",
     "strength": 1
   },
@@ -31530,6 +31516,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/SaveLoad/SaveLoadManager.cs",
     "from_class": "SaveLoadManager",
+    "to_type": "SaveGameSummary",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/SaveLoadManager.cs",
+    "from_class": "SaveLoadManager",
     "to_type": "MonoBehaviour",
     "relation_type": "inherits",
     "strength": 4
@@ -31552,6 +31545,20 @@
     "from_file": "Project 2048/Assets/Scripts/SaveLoad/SaveLoadManager.cs",
     "from_class": "SaveLoadManager",
     "to_type": "Core",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/SaveLoadManager.cs",
+    "from_class": "SaveLoadManager",
+    "to_type": "CultureInfo",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/SaveLoadManager.cs",
+    "from_class": "SaveLoadManager",
+    "to_type": "DateTimeStyles",
     "relation_type": "uses",
     "strength": 1
   },
@@ -31614,6 +31621,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/SaveLoad/SaveLoadManager.cs",
     "from_class": "SaveLoadManager",
+    "to_type": "Globalization",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/SaveLoadManager.cs",
+    "from_class": "SaveLoadManager",
     "to_type": "HasLoadedRunProgress",
     "relation_type": "uses",
     "strength": 1
@@ -31629,6 +31643,13 @@
     "from_file": "Project 2048/Assets/Scripts/SaveLoad/SaveLoadManager.cs",
     "from_class": "SaveLoadManager",
     "to_type": "Initialize",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/SaveLoadManager.cs",
+    "from_class": "SaveLoadManager",
+    "to_type": "InvariantCulture",
     "relation_type": "uses",
     "strength": 1
   },
@@ -31677,6 +31698,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/SaveLoad/SaveLoadManager.cs",
     "from_class": "SaveLoadManager",
+    "to_type": "RoundtripKind",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/SaveLoadManager.cs",
+    "from_class": "SaveLoadManager",
     "to_type": "RunProgress",
     "relation_type": "uses",
     "strength": 1
@@ -31685,6 +31713,13 @@
     "from_file": "Project 2048/Assets/Scripts/SaveLoad/SaveLoadManager.cs",
     "from_class": "SaveLoadManager",
     "to_type": "Save",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/SaveLoadManager.cs",
+    "from_class": "SaveLoadManager",
+    "to_type": "SaveGameSummary",
     "relation_type": "uses",
     "strength": 1
   },
@@ -31733,6 +31768,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/SaveLoad/SaveLoadManager.cs",
     "from_class": "SaveLoadManager",
+    "to_type": "ToUniversalTime",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/SaveLoadManager.cs",
+    "from_class": "SaveLoadManager",
     "to_type": "TryApplyLoadedRunProgress",
     "relation_type": "uses",
     "strength": 1
@@ -31740,7 +31782,21 @@
   {
     "from_file": "Project 2048/Assets/Scripts/SaveLoad/SaveLoadManager.cs",
     "from_class": "SaveLoadManager",
+    "to_type": "TryGetSaveSummary",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/SaveLoadManager.cs",
+    "from_class": "SaveLoadManager",
     "to_type": "TryLoadGameContext",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/SaveLoad/SaveLoadManager.cs",
+    "from_class": "SaveLoadManager",
+    "to_type": "TryParse",
     "relation_type": "uses",
     "strength": 1
   },
@@ -34470,7 +34526,21 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Stage/StageDatabaseSO.cs",
     "from_class": "StageDatabaseSO",
+    "to_type": "Lower",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Stage/StageDatabaseSO.cs",
+    "from_class": "StageDatabaseSO",
     "to_type": "LowerStageCount",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Stage/StageDatabaseSO.cs",
+    "from_class": "StageDatabaseSO",
+    "to_type": "Middle",
     "relation_type": "uses",
     "strength": 1
   },
@@ -34512,6 +34582,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Stage/StageDatabaseSO.cs",
     "from_class": "StageDatabaseSO",
+    "to_type": "StageFloor",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Stage/StageDatabaseSO.cs",
+    "from_class": "StageDatabaseSO",
     "to_type": "StageSO",
     "relation_type": "uses",
     "strength": 1
@@ -34547,7 +34624,21 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Stage/StageDatabaseSO.cs",
     "from_class": "StageDatabaseSO",
+    "to_type": "TryResolveStagePosition",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Stage/StageDatabaseSO.cs",
+    "from_class": "StageDatabaseSO",
     "to_type": "UnityEngine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Stage/StageDatabaseSO.cs",
+    "from_class": "StageDatabaseSO",
+    "to_type": "Upper",
     "relation_type": "uses",
     "strength": 1
   },
@@ -35296,6 +35387,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/UI/ConfirmPopup.cs",
     "from_class": "ConfirmPopup",
+    "to_type": "bool",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/ConfirmPopup.cs",
+    "from_class": "ConfirmPopup",
     "to_type": "Button",
     "relation_type": "uses",
     "strength": 1
@@ -35304,6 +35402,13 @@
     "from_file": "Project 2048/Assets/Scripts/UI/ConfirmPopup.cs",
     "from_class": "ConfirmPopup",
     "to_type": "CheckMessage",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/ConfirmPopup.cs",
+    "from_class": "ConfirmPopup",
+    "to_type": "InitializeIfNeeded",
     "relation_type": "uses",
     "strength": 1
   },
@@ -35870,6 +35975,20 @@
   {
     "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
     "from_class": "MainMenuController",
+    "to_type": "BuildLoadGameConfirmationMessage",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "from_class": "MainMenuController",
+    "to_type": "BuildStageText",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "from_class": "MainMenuController",
     "to_type": "Button",
     "relation_type": "uses",
     "strength": 1
@@ -35891,7 +36010,21 @@
   {
     "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
     "from_class": "MainMenuController",
+    "to_type": "ContinueSavedGame",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "from_class": "MainMenuController",
     "to_type": "Core",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "from_class": "MainMenuController",
+    "to_type": "CurrentHp",
     "relation_type": "uses",
     "strength": 1
   },
@@ -35954,7 +36087,35 @@
   {
     "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
     "from_class": "MainMenuController",
+    "to_type": "HasActiveRun",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "from_class": "MainMenuController",
+    "to_type": "HasCurrentHp",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "from_class": "MainMenuController",
     "to_type": "HasSave",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "from_class": "MainMenuController",
+    "to_type": "HH",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "from_class": "MainMenuController",
+    "to_type": "HP",
     "relation_type": "uses",
     "strength": 1
   },
@@ -35975,7 +36136,14 @@
   {
     "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
     "from_class": "MainMenuController",
-    "to_type": "LogError",
+    "to_type": "LogWarning",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "from_class": "MainMenuController",
+    "to_type": "Lower",
     "relation_type": "uses",
     "strength": 1
   },
@@ -35983,6 +36151,20 @@
     "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
     "from_class": "MainMenuController",
     "to_type": "Main",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "from_class": "MainMenuController",
+    "to_type": "Middle",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "from_class": "MainMenuController",
+    "to_type": "MM",
     "relation_type": "uses",
     "strength": 1
   },
@@ -36080,6 +36262,27 @@
   {
     "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
     "from_class": "MainMenuController",
+    "to_type": "Save",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "from_class": "MainMenuController",
+    "to_type": "SavedAtUtc",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "from_class": "MainMenuController",
+    "to_type": "SaveGameSummary",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "from_class": "MainMenuController",
     "to_type": "SaveLoadManager",
     "relation_type": "uses",
     "strength": 1
@@ -36129,6 +36332,34 @@
   {
     "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
     "from_class": "MainMenuController",
+    "to_type": "Stage",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "from_class": "MainMenuController",
+    "to_type": "StageDatabaseSO",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "from_class": "MainMenuController",
+    "to_type": "StageFloor",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "from_class": "MainMenuController",
+    "to_type": "StageIndex",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "from_class": "MainMenuController",
     "to_type": "Start",
     "relation_type": "uses",
     "strength": 1
@@ -36157,6 +36388,34 @@
   {
     "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
     "from_class": "MainMenuController",
+    "to_type": "ToLocalTime",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "from_class": "MainMenuController",
+    "to_type": "ToString",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "from_class": "MainMenuController",
+    "to_type": "TryGetSaveSummary",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "from_class": "MainMenuController",
+    "to_type": "TryResolveStagePosition",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "from_class": "MainMenuController",
     "to_type": "UI",
     "relation_type": "uses",
     "strength": 1
@@ -36179,6 +36438,13 @@
     "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
     "from_class": "MainMenuController",
     "to_type": "UnityEngine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
+    "from_class": "MainMenuController",
+    "to_type": "Upper",
     "relation_type": "uses",
     "strength": 1
   },
@@ -45488,6 +45754,20 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/FlowControllerTests.cs",
     "from_class": "FlowControllerTests",
+    "to_type": "TrackingSaveRepository",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/FlowControllerTests.cs",
+    "from_class": "TrackingSaveRepository",
+    "to_type": "ISaveRepository",
+    "relation_type": "implements",
+    "strength": 4
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/FlowControllerTests.cs",
+    "from_class": "FlowControllerTests",
     "to_type": "BindingFlags",
     "relation_type": "singleton-access",
     "strength": 4
@@ -45510,6 +45790,13 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/FlowControllerTests.cs",
     "from_class": "FlowControllerTests",
     "to_type": "BindingFlags",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/FlowControllerTests.cs",
+    "from_class": "FlowControllerTests",
+    "to_type": "bool",
     "relation_type": "uses",
     "strength": 1
   },
@@ -45544,6 +45831,13 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/FlowControllerTests.cs",
     "from_class": "FlowControllerTests",
+    "to_type": "Delete",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/FlowControllerTests.cs",
+    "from_class": "FlowControllerTests",
     "to_type": "DestroyImmediate",
     "relation_type": "uses",
     "strength": 1
@@ -45551,14 +45845,14 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/FlowControllerTests.cs",
     "from_class": "FlowControllerTests",
-    "to_type": "Ending",
+    "to_type": "EqualTo",
     "relation_type": "uses",
     "strength": 1
   },
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/FlowControllerTests.cs",
     "from_class": "FlowControllerTests",
-    "to_type": "EqualTo",
+    "to_type": "Exists",
     "relation_type": "uses",
     "strength": 1
   },
@@ -45600,6 +45894,13 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/FlowControllerTests.cs",
     "from_class": "FlowControllerTests",
+    "to_type": "GameSaveData",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/FlowControllerTests.cs",
+    "from_class": "FlowControllerTests",
     "to_type": "GameState",
     "relation_type": "uses",
     "strength": 1
@@ -45628,7 +45929,14 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/FlowControllerTests.cs",
     "from_class": "FlowControllerTests",
-    "to_type": "HandleStageCompleted_RunCompleted_RequestsEndingScene",
+    "to_type": "HandleStageCompleted_RunCompleted_DeletesSaveAndRequestsMainMenu",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/FlowControllerTests.cs",
+    "from_class": "FlowControllerTests",
+    "to_type": "Initialize",
     "relation_type": "uses",
     "strength": 1
   },
@@ -45670,7 +45978,28 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/FlowControllerTests.cs",
     "from_class": "FlowControllerTests",
+    "to_type": "ISaveRepository",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/FlowControllerTests.cs",
+    "from_class": "FlowControllerTests",
     "to_type": "IsRunActive",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/FlowControllerTests.cs",
+    "from_class": "FlowControllerTests",
+    "to_type": "Load",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/FlowControllerTests.cs",
+    "from_class": "FlowControllerTests",
+    "to_type": "Loading",
     "relation_type": "uses",
     "strength": 1
   },
@@ -45705,14 +46034,14 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/FlowControllerTests.cs",
     "from_class": "FlowControllerTests",
-    "to_type": "OnEndingSceneLoadRequested",
+    "to_type": "OnLoadingStarted",
     "relation_type": "uses",
     "strength": 1
   },
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/FlowControllerTests.cs",
     "from_class": "FlowControllerTests",
-    "to_type": "OnLoadingStarted",
+    "to_type": "OnMainMenuSceneLoadRequested",
     "relation_type": "uses",
     "strength": 1
   },
@@ -45727,6 +46056,20 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/FlowControllerTests.cs",
     "from_class": "FlowControllerTests",
     "to_type": "Reflection",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/FlowControllerTests.cs",
+    "from_class": "FlowControllerTests",
+    "to_type": "Save",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/FlowControllerTests.cs",
+    "from_class": "FlowControllerTests",
+    "to_type": "SaveLoadManager",
     "relation_type": "uses",
     "strength": 1
   },
@@ -45797,6 +46140,13 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/FlowControllerTests.cs",
     "from_class": "FlowControllerTests",
     "to_type": "UnityEngine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/FlowControllerTests.cs",
+    "from_class": "FlowControllerTests",
+    "to_type": "WasDeleted",
     "relation_type": "uses",
     "strength": 1
   },
@@ -52299,6 +52649,13 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/StageDatabaseSOTests.cs",
     "from_class": "StageDatabaseSOTests",
+    "to_type": "TestCase",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StageDatabaseSOTests.cs",
+    "from_class": "StageDatabaseSOTests",
     "to_type": "Tests",
     "relation_type": "uses",
     "strength": 1
@@ -52335,6 +52692,27 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/StageDatabaseSOTests.cs",
     "from_class": "StageDatabaseSOTests",
     "to_type": "TryGetStage",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StageDatabaseSOTests.cs",
+    "from_class": "StageDatabaseSOTests",
+    "to_type": "TryResolveStagePosition",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StageDatabaseSOTests.cs",
+    "from_class": "StageDatabaseSOTests",
+    "to_type": "TryResolveStagePosition_MapsGlobalIndexToFloorPosition",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StageDatabaseSOTests.cs",
+    "from_class": "StageDatabaseSOTests",
+    "to_type": "TryResolveStagePosition_RejectsOutOfRangeIndex",
     "relation_type": "uses",
     "strength": 1
   },

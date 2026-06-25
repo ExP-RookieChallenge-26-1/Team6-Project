@@ -7533,9 +7533,9 @@
     "file_id": "Project 2048/Assets/Scripts/Flow/FlowController.cs",
     "path": "Project 2048/Assets/Scripts/Flow/FlowController.cs",
     "file_name": "FlowController.cs",
-    "content_hash": "ff41212c1e4e20de40b862e6ef0579dd2105bc49",
-    "size": 8243,
-    "line_count": 268,
+    "content_hash": "bf118b6d99f96b2bd687ce11e63a463634934924",
+    "size": 8033,
+    "line_count": 265,
     "namespace": "Project2048.Flow",
     "using_list": [
       "System",
@@ -7651,7 +7651,6 @@
       "OnMainMenuSceneLoadRequested",
       "OnStorySceneLoadRequested",
       "OnBattleSceneLoadRequested",
-      "OnEndingSceneLoadRequested",
       "OnGameStarted",
       "GameState",
       "CurrentGameState",
@@ -7706,9 +7705,8 @@
       "HandleStageFailed",
       "StageResult",
       "RunCompleted",
-      "Ending",
-      "SaveCurrentRun",
       "AdvanceStage",
+      "SaveCurrentRun",
       "StopCoroutine",
       "StartCoroutine",
       "RestartStageNextFrame",
@@ -7794,9 +7792,9 @@
     "file_id": "Project 2048/Assets/Scripts/Flow/SceneFlowManager.cs",
     "path": "Project 2048/Assets/Scripts/Flow/SceneFlowManager.cs",
     "file_name": "SceneFlowManager.cs",
-    "content_hash": "25764be7e03856ae06abee901e79a7f534cf93e7",
-    "size": 3716,
-    "line_count": 125,
+    "content_hash": "1cf2f5a2358727a512b4b1c89bf24c708e44595c",
+    "size": 3421,
+    "line_count": 117,
     "namespace": "Project2048.Flow",
     "using_list": [
       "System",
@@ -7828,7 +7826,6 @@
       "LoadMainMenu",
       "LoadStory",
       "LoadBattle",
-      "LoadEnding",
       "LoadScene",
       "LoadSceneAsync",
       "WaitForSecondsRealtime"
@@ -7850,13 +7847,6 @@
       },
       {
         "name": "BattleSceneName",
-        "type": "string",
-        "access": "private",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "EndingSceneName",
         "type": "string",
         "access": "private",
         "serialized": false,
@@ -7928,7 +7918,6 @@
       "StoryScene",
       "BattleSceneName",
       "BattleScene",
-      "EndingSceneName",
       "FlowController",
       "LoadingUI",
       "OnLoadProgressChanged",
@@ -7943,8 +7932,6 @@
       "LoadStory",
       "OnBattleSceneLoadRequested",
       "LoadBattle",
-      "OnEndingSceneLoadRequested",
-      "LoadEnding",
       "OnDisable",
       "LoadScene",
       "IsNullOrWhiteSpace",
@@ -19956,9 +19943,9 @@
     "file_id": "Project 2048/Assets/Scripts/SaveLoad/GameSaveData.cs",
     "path": "Project 2048/Assets/Scripts/SaveLoad/GameSaveData.cs",
     "file_name": "GameSaveData.cs",
-    "content_hash": "a765136559b9461ee547c4cb142e6be45d0b09b1",
-    "size": 4876,
-    "line_count": 131,
+    "content_hash": "f39e5700b6c2398154118f1be78cf87a298c345f",
+    "size": 5531,
+    "line_count": 154,
     "namespace": "Project2048.Save",
     "using_list": [
       "System",
@@ -19978,6 +19965,16 @@
         "attributes": [],
         "is_partial": false,
         "is_generic": false
+      },
+      {
+        "name": "SaveGameSummary",
+        "kind": "struct",
+        "access": "internal",
+        "base_types": [],
+        "interfaces": [],
+        "attributes": [],
+        "is_partial": false,
+        "is_generic": false
       }
     ],
     "main_class_name": "GameSaveData",
@@ -19987,7 +19984,8 @@
       "RunProgress",
       "ApplyTo",
       "ExtractEquippedSkillIds",
-      "ResolveEquippedSkills"
+      "ResolveEquippedSkills",
+      "SaveGameSummary"
     ],
     "fields": [
       {
@@ -20096,7 +20094,33 @@
         "is_static": false
       }
     ],
-    "properties": [],
+    "properties": [
+      {
+        "access": "public",
+        "type": "DateTime",
+        "name": "SavedAtUtc"
+      },
+      {
+        "access": "public",
+        "type": "int",
+        "name": "StageIndex"
+      },
+      {
+        "access": "public",
+        "type": "bool",
+        "name": "HasCurrentHp"
+      },
+      {
+        "access": "public",
+        "type": "int",
+        "name": "CurrentHp"
+      },
+      {
+        "access": "public",
+        "type": "bool",
+        "name": "HasActiveRun"
+      }
+    ],
     "events": [],
     "unity_messages": [],
     "has_update": false,
@@ -20171,7 +20195,10 @@
       "StringComparer",
       "Ordinal",
       "Add",
-      "TryGetValue"
+      "TryGetValue",
+      "SavedAtUtc",
+      "StageIndex",
+      "HasActiveRun"
     ],
     "component_access_types": [],
     "created_types": [
@@ -20377,12 +20404,14 @@
     "file_id": "Project 2048/Assets/Scripts/SaveLoad/SaveLoadManager.cs",
     "path": "Project 2048/Assets/Scripts/SaveLoad/SaveLoadManager.cs",
     "file_name": "SaveLoadManager.cs",
-    "content_hash": "d1afca9973c1d65906d1c8124710dc297bdd19f8",
-    "size": 2206,
-    "line_count": 82,
+    "content_hash": "ca78b883d24b8905b97a9f446710933e71a3a03d",
+    "size": 3253,
+    "line_count": 119,
     "namespace": "Project2048.Save",
     "using_list": [
+      "System",
       "System.Collections.Generic",
+      "System.Globalization",
       "Project2048.Core",
       "Project2048.Rewards",
       "Project2048.Skills",
@@ -20410,6 +20439,8 @@
       "SaveRun",
       "SaveInitialRun",
       "RunProgress",
+      "TryGetSaveSummary",
+      "SaveGameSummary",
       "TryLoadGameContext",
       "TryApplyLoadedRunProgress",
       "DeleteSave"
@@ -20451,7 +20482,7 @@
     "public_field_count": 0,
     "get_component_count": 0,
     "find_call_count": 0,
-    "new_keyword_count": 2,
+    "new_keyword_count": 3,
     "coroutine_count": 0,
     "singleton_candidate": false,
     "dont_destroy_on_load": false,
@@ -20462,6 +20493,7 @@
       "System",
       "Collections",
       "Generic",
+      "Globalization",
       "Project2048",
       "Core",
       "Rewards",
@@ -20480,8 +20512,16 @@
       "LogError",
       "From",
       "SaveInitialRun",
-      "TryLoadGameContext",
+      "TryGetSaveSummary",
+      "SaveGameSummary",
       "Load",
+      "TryParse",
+      "CultureInfo",
+      "InvariantCulture",
+      "DateTimeStyles",
+      "RoundtripKind",
+      "ToUniversalTime",
+      "TryLoadGameContext",
       "ApplyTo",
       "TryApplyLoadedRunProgress",
       "SkillSO",
@@ -20491,7 +20531,8 @@
     "component_access_types": [],
     "created_types": [
       "JsonFileSaveRepository",
-      "RunProgress"
+      "RunProgress",
+      "SaveGameSummary"
     ],
     "singleton_access_types": [],
     "string_literals": [
@@ -20502,10 +20543,12 @@
       "save-load",
       "manager",
       "data",
+      "combat",
       "runtime"
     ],
     "summary_signals": [
       "런타임 컴포넌트",
+      "전투 계열 로직 포함",
       "저장/불러오기 관련 로직 포함"
     ]
   },
@@ -22433,9 +22476,9 @@
     "file_id": "Project 2048/Assets/Scripts/Stage/StageDatabaseSO.cs",
     "path": "Project 2048/Assets/Scripts/Stage/StageDatabaseSO.cs",
     "file_name": "StageDatabaseSO.cs",
-    "content_hash": "c5a28e4d0d9b588f58b92618f07e79b0e814a02e",
-    "size": 2131,
-    "line_count": 68,
+    "content_hash": "48725ee53481d1fef5e2d3475d8e0c6d7563fb7b",
+    "size": 3165,
+    "line_count": 103,
     "namespace": "Project2048.Stage",
     "using_list": [
       "System.Collections.Generic",
@@ -22460,6 +22503,7 @@
     "methods": [
       "TryGetStage",
       "IsFinalStage",
+      "TryResolveStagePosition",
       "ResolveStages",
       "OnValidate"
     ],
@@ -22539,6 +22583,11 @@
       "ResolveStages",
       "Count",
       "IsFinalStage",
+      "TryResolveStagePosition",
+      "StageFloor",
+      "Upper",
+      "Middle",
+      "Lower",
       "OnValidate"
     ],
     "component_access_types": [],
@@ -23084,9 +23133,9 @@
     "file_id": "Project 2048/Assets/Scripts/UI/ConfirmPopup.cs",
     "path": "Project 2048/Assets/Scripts/UI/ConfirmPopup.cs",
     "file_name": "ConfirmPopup.cs",
-    "content_hash": "b0d89fc87c9c4c77e91f6e3be2a3411460dc20f8",
-    "size": 1252,
-    "line_count": 51,
+    "content_hash": "fa55296f3c16c7f2ccafac28e65f14c4bc26e28b",
+    "size": 1709,
+    "line_count": 79,
     "namespace": "",
     "using_list": [
       "System",
@@ -23113,6 +23162,7 @@
     "methods": [
       "Awake",
       "Show",
+      "InitializeIfNeeded",
       "OnYesClicked",
       "OnNoClicked"
     ],
@@ -23127,6 +23177,20 @@
       {
         "name": "onNoAction",
         "type": "Action",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "_isInitialized",
+        "type": "bool",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "_wantsOpen",
+        "type": "bool",
         "access": "private",
         "serialized": false,
         "is_static": false
@@ -23153,6 +23217,7 @@
     "singleton_candidate": false,
     "dont_destroy_on_load": false,
     "referenced_types": [
+      "bool",
       "System",
       "UnityEngine",
       "UI",
@@ -23161,11 +23226,12 @@
       "CheckMessage",
       "Button",
       "Awake",
+      "InitializeIfNeeded",
+      "SetActive",
+      "Show",
       "AddListener",
       "OnYesClicked",
       "OnNoClicked",
-      "SetActive",
-      "Show",
       "Invoke"
     ],
     "component_access_types": [],
@@ -23522,11 +23588,13 @@
     "file_id": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
     "path": "Project 2048/Assets/Scripts/UI/MainMenuController.cs",
     "file_name": "MainMenuController.cs",
-    "content_hash": "8ba574d0814049e877b34eebd107b9da613f6458",
-    "size": 4093,
-    "line_count": 176,
+    "content_hash": "050e707ae55028c82f6983674971b44bed282ef0",
+    "size": 5774,
+    "line_count": 226,
     "namespace": "",
     "using_list": [
+      "Project2048.Save",
+      "Project2048.Stage",
       "Project2048.Core",
       "UnityEngine",
       "UnityEngine.EventSystems",
@@ -23559,6 +23627,9 @@
       "OnNewGameClicked",
       "StartNewGame",
       "OnLoadGameClicked",
+      "ContinueSavedGame",
+      "BuildLoadGameConfirmationMessage",
+      "BuildStageText",
       "RefreshLoadGameButton",
       "OnSettingClicked",
       "OnQuitClicked",
@@ -23570,6 +23641,13 @@
         "name": "GameSceneName",
         "type": "string",
         "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "saveLoadManager",
+        "type": "var",
+        "access": "internal",
         "serialized": false,
         "is_static": false
       }
@@ -23600,6 +23678,8 @@
     "referenced_types": [
       "string",
       "Project2048",
+      "Save",
+      "Stage",
       "Core",
       "UnityEngine",
       "EventSystems",
@@ -23633,9 +23713,30 @@
       "FadeOut",
       "GameManager",
       "Instance",
-      "LogError",
-      "StartSaveGame",
       "SaveLoadManager",
+      "TryGetSaveSummary",
+      "HasActiveRun",
+      "LogWarning",
+      "BuildLoadGameConfirmationMessage",
+      "ContinueSavedGame",
+      "StartSaveGame",
+      "SaveGameSummary",
+      "SavedAtUtc",
+      "ToLocalTime",
+      "ToString",
+      "MM",
+      "HH",
+      "HasCurrentHp",
+      "CurrentHp",
+      "BuildStageText",
+      "StageIndex",
+      "HP",
+      "StageDatabaseSO",
+      "TryResolveStagePosition",
+      "StageFloor",
+      "Upper",
+      "Middle",
+      "Lower",
       "HasSave",
       "Open",
       "QuitGame",
@@ -23659,8 +23760,20 @@
       "Start Buttons",
       "Popups",
       "BattleScene",
-      "새 게임을 시작하면 기존 저장 데이터가 삭제됩니다.\\n계속하시겠습니까?",
-      "GameManager is not present.",
+      "새 게임을 시작하면\\n기존 저장 데이터가 삭제됩니다.\\n계속하시겠습니까?",
+      "이어할 수 있는 저장 데이터가 없습니다.",
+      "알 수 없음",
+      "yyyy-MM-dd HH:mm",
+      "기록 없음",
+      "저장된 게임 정보\\n",
+      "마지막 플레이 시간: {lastPlayedAtText}\\n",
+      "진행 스테이지: {BuildStageText(summary.StageIndex)}\\n",
+      "현재 HP: {currentHpText}\\n",
+      "이어서 진행하시겠습니까?",
+      "상층",
+      "중층",
+      "하층",
+      "{floorText} {stageNumberInFloor}스테이지",
       "종료하시겠습니까?"
     ],
     "numeric_literals": [],
@@ -23669,7 +23782,7 @@
       "save-load",
       "ui",
       "manager",
-      "scene"
+      "data"
     ],
     "summary_signals": [
       "런타임 컴포넌트",
@@ -27270,9 +27383,9 @@
     "file_id": "Project 2048/Assets/Tests/EditMode/FlowControllerTests.cs",
     "path": "Project 2048/Assets/Tests/EditMode/FlowControllerTests.cs",
     "file_name": "FlowControllerTests.cs",
-    "content_hash": "0086925e1d14c2ba0aeebabba2638296c7535281",
-    "size": 1895,
-    "line_count": 61,
+    "content_hash": "f3745782c189410cb78e7a59d36cab46d91f7673",
+    "size": 2728,
+    "line_count": 90,
     "namespace": "Project2048.Tests",
     "using_list": [
       "System.Reflection",
@@ -27280,6 +27393,7 @@
       "Project2048.Combat",
       "Project2048.Core",
       "Project2048.Flow",
+      "Project2048.Save",
       "UnityEngine"
     ],
     "classes": [
@@ -27292,17 +27406,36 @@
         "attributes": [],
         "is_partial": false,
         "is_generic": false
+      },
+      {
+        "name": "TrackingSaveRepository",
+        "kind": "class",
+        "access": "internal",
+        "base_types": [
+          "ISaveRepository"
+        ],
+        "interfaces": [
+          "ISaveRepository"
+        ],
+        "attributes": [],
+        "is_partial": false,
+        "is_generic": false
       }
     ],
     "main_class_name": "FlowControllerTests",
     "unity_type": "None",
     "methods": [
       "TearDown",
-      "HandleStageCompleted_RunCompleted_RequestsEndingScene",
+      "HandleStageCompleted_RunCompleted_DeletesSaveAndRequestsMainMenu",
       "GameObject",
       "GameContext",
+      "TrackingSaveRepository",
       "StageResult",
-      "InvokePrivateMethod"
+      "InvokePrivateMethod",
+      "Exists",
+      "Save",
+      "Load",
+      "Delete"
     ],
     "fields": [
       {
@@ -27313,7 +27446,7 @@
         "is_static": false
       },
       {
-        "name": "didRequestEnding",
+        "name": "didRequestMainMenu",
         "type": "var",
         "access": "internal",
         "serialized": false,
@@ -27327,7 +27460,13 @@
         "is_static": false
       }
     ],
-    "properties": [],
+    "properties": [
+      {
+        "access": "public",
+        "type": "bool",
+        "name": "WasDeleted"
+      }
+    ],
     "events": [],
     "unity_messages": [],
     "has_update": false,
@@ -27341,11 +27480,12 @@
     "public_field_count": 0,
     "get_component_count": 0,
     "find_call_count": 0,
-    "new_keyword_count": 4,
+    "new_keyword_count": 5,
     "coroutine_count": 0,
     "singleton_candidate": false,
     "dont_destroy_on_load": false,
     "referenced_types": [
+      "bool",
       "System",
       "Reflection",
       "NUnit",
@@ -27354,19 +27494,22 @@
       "Combat",
       "Core",
       "Flow",
+      "Save",
       "UnityEngine",
       "Tests",
       "TearDown",
       "Object",
       "DestroyImmediate",
       "Test",
-      "HandleStageCompleted_RunCompleted_RequestsEndingScene",
+      "HandleStageCompleted_RunCompleted_DeletesSaveAndRequestsMainMenu",
       "FlowController",
       "AddComponent",
+      "SaveLoadManager",
       "GameContext",
       "SetRunActive",
+      "Initialize",
       "Initialized",
-      "OnEndingSceneLoadRequested",
+      "OnMainMenuSceneLoadRequested",
       "OnLoadingStarted",
       "InvokePrivateMethod",
       "HandleStageCompleted",
@@ -27382,19 +27525,26 @@
       "CurrentGameState",
       "EqualTo",
       "GameState",
-      "Ending",
+      "Loading",
+      "WasDeleted",
       "True",
       "GetType",
       "GetMethod",
       "BindingFlags",
       "Instance",
       "NonPublic",
-      "Invoke"
+      "Invoke",
+      "ISaveRepository",
+      "Exists",
+      "GameSaveData",
+      "Load",
+      "Delete"
     ],
     "component_access_types": [],
     "created_types": [
       "GameObject",
       "GameContext",
+      "TrackingSaveRepository",
       "StageResult",
       "CombatResult"
     ],
@@ -27409,11 +27559,11 @@
       30
     ],
     "guessed_roles": [
-      "combat",
       "save-load",
       "manager",
+      "combat",
       "scene",
-      "runtime"
+      "data"
     ],
     "summary_signals": [
       "전투 계열 로직 포함",
@@ -29552,9 +29702,9 @@
     "file_id": "Project 2048/Assets/Tests/EditMode/StageDatabaseSOTests.cs",
     "path": "Project 2048/Assets/Tests/EditMode/StageDatabaseSOTests.cs",
     "file_name": "StageDatabaseSOTests.cs",
-    "content_hash": "6859a932b0fac31c865abfe39bef2509f78f1006",
-    "size": 2366,
-    "line_count": 53,
+    "content_hash": "803db5c275674a91e9c333dfe6d10aaf5a455dbf",
+    "size": 3449,
+    "line_count": 83,
     "namespace": "Project2048.Tests",
     "using_list": [
       "Project2048.Enemy",
@@ -29578,7 +29728,9 @@
     "unity_type": "None",
     "methods": [
       "PrototypeStageDatabase_UsesTwentyStageRunWithFinalBullAtStageTwenty",
-      "PrototypeStageDatabase_MapsDesignFloorsToStageRanges"
+      "PrototypeStageDatabase_MapsDesignFloorsToStageRanges",
+      "TryResolveStagePosition_MapsGlobalIndexToFloorPosition",
+      "TryResolveStagePosition_RejectsOutOfRangeIndex"
     ],
     "fields": [
       {
@@ -29646,7 +29798,11 @@
       "False",
       "PrototypeStageDatabase_MapsDesignFloorsToStageRanges",
       "Upper",
-      "Middle"
+      "Middle",
+      "TestCase",
+      "TryResolveStagePosition_MapsGlobalIndexToFloorPosition",
+      "TryResolveStagePosition",
+      "TryResolveStagePosition_RejectsOutOfRangeIndex"
     ],
     "component_access_types": [],
     "created_types": [],
@@ -29660,7 +29816,9 @@
       6,
       21,
       7,
-      15
+      15,
+      14,
+      8
     ],
     "guessed_roles": [
       "combat",

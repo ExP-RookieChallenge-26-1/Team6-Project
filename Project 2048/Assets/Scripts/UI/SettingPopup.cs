@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class SettingPopup : MonoBehaviour
 {
-    private const int AudioChannelCount = 4;
+    private const int AudioChannelCount = 3;
     private static readonly Color SliderFillColor = new(0.286f, 0.686f, 0.710f, 1f);
     private static readonly Color SliderTrackColor = new(0.18f, 0.18f, 0.18f, 0.85f);
 
@@ -17,16 +17,20 @@ public class SettingPopup : MonoBehaviour
     [SerializeField] private bool createMissingVolumeControls = true;
 
     [Header("Volume Sliders")]
+    [SerializeField] private Slider masterVolumeSlider;
     [SerializeField] private Slider bgmVolumeSlider;
     [SerializeField] private Slider sfxVolumeSlider;
-    [SerializeField] private Slider uiVolumeSlider;
-    [SerializeField] private Slider ambienceVolumeSlider;
+    [SerializeField] private TextMeshProUGUI masterVolumeValueText;
     [SerializeField] private TextMeshProUGUI bgmVolumeValueText;
     [SerializeField] private TextMeshProUGUI sfxVolumeValueText;
-    [SerializeField] private TextMeshProUGUI uiVolumeValueText;
-    [SerializeField] private TextMeshProUGUI ambienceVolumeValueText;
+
+    [Header("Mute Toggles")]
+    [SerializeField] private Toggle masterMuteToggle;
+    [SerializeField] private Toggle bgmMuteToggle;
+    [SerializeField] private Toggle sfxMuteToggle;
 
     private readonly Slider[] volumeSliders = new Slider[AudioChannelCount];
+    private readonly Toggle[] muteToggles = new Toggle[AudioChannelCount];
     private readonly TextMeshProUGUI[] volumeValueTexts = new TextMeshProUGUI[AudioChannelCount];
     private bool initialized;
     private bool wantsOpen;
@@ -98,19 +102,22 @@ public class SettingPopup : MonoBehaviour
             CreateMissingVolumeControls();
         }
 
-        BindVolumeSlider(Project2048AudioChannel.BGM, bgmVolumeSlider, bgmVolumeValueText);
-        BindVolumeSlider(Project2048AudioChannel.SFX, sfxVolumeSlider, sfxVolumeValueText);
-        BindVolumeSlider(Project2048AudioChannel.UI, uiVolumeSlider, uiVolumeValueText);
-        BindVolumeSlider(Project2048AudioChannel.Ambience, ambienceVolumeSlider, ambienceVolumeValueText);
+        HideLegacyVolumeControls();
+        SortVisibleVolumeControls();
+        BindVolumeControl(Project2048AudioChannel.Master, masterVolumeSlider, masterMuteToggle, masterVolumeValueText);
+        BindVolumeControl(Project2048AudioChannel.BGM, bgmVolumeSlider, bgmMuteToggle, bgmVolumeValueText);
+        BindVolumeControl(Project2048AudioChannel.SFX, sfxVolumeSlider, sfxMuteToggle, sfxVolumeValueText);
         Project2048AudioPreferences.ApplySavedVolumes(audioSettings);
     }
 
     private void ResolveSceneVolumeControls()
     {
+        masterVolumeSlider = masterVolumeSlider != null ? masterVolumeSlider : FindSlider("MasterVolumeSlider");
         bgmVolumeSlider = bgmVolumeSlider != null ? bgmVolumeSlider : FindSlider("BGMVolumeSlider");
         sfxVolumeSlider = sfxVolumeSlider != null ? sfxVolumeSlider : FindSlider("SFXVolumeSlider");
-        uiVolumeSlider = uiVolumeSlider != null ? uiVolumeSlider : FindSlider("UIVolumeSlider");
-        ambienceVolumeSlider = ambienceVolumeSlider != null ? ambienceVolumeSlider : FindSlider("AmbienceVolumeSlider");
+        masterMuteToggle = masterMuteToggle != null ? masterMuteToggle : FindToggle("MasterMuteToggle");
+        bgmMuteToggle = bgmMuteToggle != null ? bgmMuteToggle : FindToggle("BGMMuteToggle");
+        sfxMuteToggle = sfxMuteToggle != null ? sfxMuteToggle : FindToggle("SFXMuteToggle");
     }
 
     private Slider FindSlider(string objectName)
@@ -131,9 +138,28 @@ public class SettingPopup : MonoBehaviour
         return null;
     }
 
-    private void BindVolumeSlider(
+    private Toggle FindToggle(string objectName)
+    {
+        if (popupRoot == null)
+        {
+            return null;
+        }
+
+        foreach (var toggle in popupRoot.GetComponentsInChildren<Toggle>(true))
+        {
+            if (toggle != null && toggle.gameObject.name == objectName)
+            {
+                return toggle;
+            }
+        }
+
+        return null;
+    }
+
+    private void BindVolumeControl(
         Project2048AudioChannel channel,
         Slider slider,
+        Toggle muteToggle,
         TextMeshProUGUI valueText)
     {
         if (slider == null)
@@ -143,37 +169,63 @@ public class SettingPopup : MonoBehaviour
 
         var channelIndex = (int)channel;
         volumeSliders[channelIndex] = slider;
+        muteToggles[channelIndex] = muteToggle;
         volumeValueTexts[channelIndex] = valueText;
         slider.minValue = 0f;
         slider.maxValue = 1f;
         slider.wholeNumbers = false;
 
         var savedVolume = Project2048AudioPreferences.GetNormalizedVolume(channel);
+        var isMuted = Project2048AudioPreferences.IsMuted(channel);
         slider.SetValueWithoutNotify(savedVolume);
         UpdateVolumeValueText(channel, savedVolume);
         slider.onValueChanged.AddListener(value => HandleVolumeSliderChanged(channel, value));
+
+        if (muteToggle != null)
+        {
+            muteToggle.SetIsOnWithoutNotify(isMuted);
+            muteToggle.onValueChanged.AddListener(value => HandleMuteToggleChanged(channel, value));
+        }
     }
 
     private void HandleVolumeSliderChanged(Project2048AudioChannel channel, float value)
     {
         var normalizedVolume = Mathf.Clamp01(value);
-        Project2048AudioPreferences.SetNormalizedVolume(audioSettings, channel, normalizedVolume);
+        Project2048AudioPreferences.SetNormalizedVolume(audioSettings, channel, normalizedVolume, false);
+        PlayerPrefs.Save();
         UpdateVolumeValueText(channel, normalizedVolume);
+    }
+
+    private void HandleMuteToggleChanged(Project2048AudioChannel channel, bool isMuted)
+    {
+        Project2048AudioPreferences.SetMuted(audioSettings, channel, isMuted, false);
+        PlayerPrefs.Save();
     }
 
     private void RefreshVolumeSliders()
     {
-        foreach (Project2048AudioChannel channel in System.Enum.GetValues(typeof(Project2048AudioChannel)))
-        {
-            var slider = volumeSliders[(int)channel];
-            if (slider == null)
-            {
-                continue;
-            }
+        RefreshVolumeControl(Project2048AudioChannel.Master);
+        RefreshVolumeControl(Project2048AudioChannel.BGM);
+        RefreshVolumeControl(Project2048AudioChannel.SFX);
+    }
 
-            var savedVolume = Project2048AudioPreferences.GetNormalizedVolume(channel);
-            slider.SetValueWithoutNotify(savedVolume);
-            UpdateVolumeValueText(channel, savedVolume);
+    private void RefreshVolumeControl(Project2048AudioChannel channel)
+    {
+        var channelIndex = (int)channel;
+        var slider = volumeSliders[channelIndex];
+        if (slider == null)
+        {
+            return;
+        }
+
+        var savedVolume = Project2048AudioPreferences.GetNormalizedVolume(channel);
+        slider.SetValueWithoutNotify(savedVolume);
+        UpdateVolumeValueText(channel, savedVolume);
+
+        var muteToggle = muteToggles[channelIndex];
+        if (muteToggle != null)
+        {
+            muteToggle.SetIsOnWithoutNotify(Project2048AudioPreferences.IsMuted(channel));
         }
     }
 
@@ -182,7 +234,7 @@ public class SettingPopup : MonoBehaviour
         var valueText = volumeValueTexts[(int)channel];
         if (valueText != null)
         {
-            valueText.text = $"{Mathf.RoundToInt(Mathf.Clamp01(normalizedVolume) * 100f)}%";
+            valueText.text = Mathf.RoundToInt(Mathf.Clamp01(normalizedVolume) * 100f).ToString();
         }
     }
 
@@ -194,29 +246,95 @@ public class SettingPopup : MonoBehaviour
             return;
         }
 
+        if (masterVolumeSlider == null)
+        {
+            masterVolumeSlider = CreateVolumeRow(
+                container,
+                "MasterVolumeSlider",
+                "Master",
+                "MasterMuteToggle",
+                out masterMuteToggle,
+                out masterVolumeValueText);
+        }
+        else if (masterMuteToggle == null)
+        {
+            masterMuteToggle = CreateMuteToggleForExistingRow(masterVolumeSlider, "MasterMuteToggle");
+        }
+
         if (bgmVolumeSlider == null)
         {
-            bgmVolumeSlider = CreateVolumeRow(container, "BGMVolumeSlider", "BGM", out bgmVolumeValueText);
+            bgmVolumeSlider = CreateVolumeRow(
+                container,
+                "BGMVolumeSlider",
+                "BGM",
+                "BGMMuteToggle",
+                out bgmMuteToggle,
+                out bgmVolumeValueText);
+        }
+        else if (bgmMuteToggle == null)
+        {
+            bgmMuteToggle = CreateMuteToggleForExistingRow(bgmVolumeSlider, "BGMMuteToggle");
         }
 
         if (sfxVolumeSlider == null)
         {
-            sfxVolumeSlider = CreateVolumeRow(container, "SFXVolumeSlider", "SFX", out sfxVolumeValueText);
-        }
-
-        if (uiVolumeSlider == null)
-        {
-            uiVolumeSlider = CreateVolumeRow(container, "UIVolumeSlider", "UI", out uiVolumeValueText);
-        }
-
-        if (ambienceVolumeSlider == null)
-        {
-            ambienceVolumeSlider = CreateVolumeRow(
+            sfxVolumeSlider = CreateVolumeRow(
                 container,
-                "AmbienceVolumeSlider",
-                "Ambience",
-                out ambienceVolumeValueText);
+                "SFXVolumeSlider",
+                "SFX",
+                "SFXMuteToggle",
+                out sfxMuteToggle,
+                out sfxVolumeValueText);
         }
+        else if (sfxMuteToggle == null)
+        {
+            sfxMuteToggle = CreateMuteToggleForExistingRow(sfxVolumeSlider, "SFXMuteToggle");
+        }
+    }
+
+    private void HideLegacyVolumeControls()
+    {
+        SetVolumeRowActive(FindSlider("UIVolumeSlider"), false);
+        SetVolumeRowActive(FindSlider("AmbienceVolumeSlider"), false);
+    }
+
+    private void SortVisibleVolumeControls()
+    {
+        SetVolumeRowSibling(masterVolumeSlider, 0);
+        SetVolumeRowSibling(bgmVolumeSlider, 1);
+        SetVolumeRowSibling(sfxVolumeSlider, 2);
+    }
+
+    private static void SetVolumeRowActive(Slider slider, bool isActive)
+    {
+        if (slider == null)
+        {
+            return;
+        }
+
+        var row = slider.transform.parent != null ? slider.transform.parent.gameObject : slider.gameObject;
+        row.SetActive(isActive);
+    }
+
+    private static void SetVolumeRowSibling(Slider slider, int siblingIndex)
+    {
+        if (slider == null || slider.transform.parent == null)
+        {
+            return;
+        }
+
+        slider.transform.parent.SetSiblingIndex(siblingIndex);
+    }
+
+    private Toggle CreateMuteToggleForExistingRow(Slider slider, string toggleName)
+    {
+        if (slider == null)
+        {
+            return null;
+        }
+
+        var row = slider.transform.parent != null ? slider.transform.parent : slider.transform;
+        return CreateMuteToggle(row, toggleName);
     }
 
     private Transform GetOrCreateVolumeControlsContainer()
@@ -268,7 +386,13 @@ public class SettingPopup : MonoBehaviour
         return panel != null ? panel : popupRoot.transform;
     }
 
-    private Slider CreateVolumeRow(Transform parent, string sliderName, string label, out TextMeshProUGUI valueText)
+    private Slider CreateVolumeRow(
+        Transform parent,
+        string sliderName,
+        string label,
+        string toggleName,
+        out Toggle muteToggle,
+        out TextMeshProUGUI valueText)
     {
         var row = CreateRectObject(sliderName + "Row", parent);
         var rowRect = row.GetComponent<RectTransform>();
@@ -287,7 +411,8 @@ public class SettingPopup : MonoBehaviour
 
         CreateLabel(row.transform, label, 110f, TextAlignmentOptions.Left);
         var slider = CreateSlider(row.transform, sliderName);
-        valueText = CreateLabel(row.transform, "100%", 64f, TextAlignmentOptions.Right);
+        valueText = CreateLabel(row.transform, "100", 64f, TextAlignmentOptions.Right);
+        muteToggle = CreateMuteToggle(row.transform, toggleName);
         return slider;
     }
 
@@ -346,6 +471,30 @@ public class SettingPopup : MonoBehaviour
         slider.maxValue = 1f;
         slider.value = 1f;
         return slider;
+    }
+
+    private Toggle CreateMuteToggle(Transform parent, string name)
+    {
+        var toggleObject = CreateRectObject(name, parent);
+        var toggleElement = toggleObject.AddComponent<LayoutElement>();
+        toggleElement.preferredWidth = 36f;
+        toggleElement.preferredHeight = 36f;
+
+        var background = CreateSliderImage("Background", toggleObject.transform, SliderTrackColor);
+        background.rectTransform.anchorMin = new Vector2(0.5f, 0.5f);
+        background.rectTransform.anchorMax = new Vector2(0.5f, 0.5f);
+        background.rectTransform.sizeDelta = new Vector2(26f, 26f);
+
+        var checkmark = CreateSliderImage("Checkmark", background.transform, SliderFillColor);
+        checkmark.rectTransform.anchorMin = new Vector2(0.5f, 0.5f);
+        checkmark.rectTransform.anchorMax = new Vector2(0.5f, 0.5f);
+        checkmark.rectTransform.sizeDelta = new Vector2(16f, 16f);
+
+        var toggle = toggleObject.AddComponent<Toggle>();
+        toggle.targetGraphic = background;
+        toggle.graphic = checkmark;
+        toggle.isOn = false;
+        return toggle;
     }
 
     private static GameObject CreateRectObject(string name, Transform parent)

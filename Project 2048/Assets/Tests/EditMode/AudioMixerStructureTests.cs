@@ -62,8 +62,7 @@ namespace Project2048.Tests
             Assert.That(serializedSettings.FindProperty("buttonClickClip").objectReferenceValue, Is.Not.Null);
             Assert.That(settings.BgmGroup?.name, Is.EqualTo("BGM"));
             Assert.That(settings.SfxGroup?.name, Is.EqualTo("SFX"));
-            Assert.That(settings.UiGroup?.name, Is.EqualTo("UI"));
-            Assert.That(settings.AmbienceGroup?.name, Is.EqualTo("Ambience"));
+            Assert.That(settings.MasterVolumeParameter, Is.EqualTo(Project2048AudioSettings.MasterVolumeParameterName));
             Assert.That(settings.BgmVolumeParameter, Is.EqualTo(Project2048AudioSettings.BgmVolumeParameterName));
         }
 
@@ -98,7 +97,7 @@ namespace Project2048.Tests
         }
 
         [Test]
-        public void ButtonClickAudioRouter_AttachesEmitterToSceneButtonsAndRoutesToUiGroup()
+        public void ButtonClickAudioRouter_AttachesEmitterToSceneButtonsAndRoutesToSfxGroup()
         {
             var settings = LoadAudioSettings();
             var routerType = System.Type.GetType("Project2048.Audio.ButtonClickAudioRouter, Game.Core");
@@ -115,7 +114,7 @@ namespace Project2048.Tests
             routerType.GetMethod("Initialize")?.Invoke(router, new object[] { settings });
             routerType.GetMethod("RefreshButtons")?.Invoke(router, null);
 
-            Assert.That(source.outputAudioMixerGroup, Is.SameAs(settings.UiGroup));
+            Assert.That(source.outputAudioMixerGroup, Is.SameAs(settings.SfxGroup));
             Assert.That(buttonObject.GetComponent(emitterType), Is.Not.Null);
         }
 
@@ -223,6 +222,9 @@ namespace Project2048.Tests
         public void Project2048AudioPreferences_ConvertsNormalizedVolumeWithChannelDefaults()
         {
             Assert.That(
+                Project2048AudioPreferences.VolumeToDb(Project2048AudioChannel.Master, 1f),
+                Is.EqualTo(0f).Within(0.001f));
+            Assert.That(
                 Project2048AudioPreferences.VolumeToDb(Project2048AudioChannel.BGM, 1f),
                 Is.EqualTo(-14f).Within(0.001f));
             Assert.That(
@@ -232,7 +234,7 @@ namespace Project2048.Tests
                 Project2048AudioPreferences.VolumeToDb(Project2048AudioChannel.SFX, 0.5f),
                 Is.EqualTo(-6.0206f).Within(0.001f));
             Assert.That(
-                Project2048AudioPreferences.VolumeToDb(Project2048AudioChannel.UI, 0f),
+                Project2048AudioPreferences.VolumeToDb(Project2048AudioChannel.Master, 0f),
                 Is.EqualTo(Project2048AudioSettings.MinVolumeDb).Within(0.001f));
             Assert.That(
                 Project2048AudioPreferences.OffsetDb(Project2048AudioSettings.MinVolumeDb, -6f),
@@ -256,6 +258,27 @@ namespace Project2048.Tests
                 Is.EqualTo(normalizedVolume).Within(0.001f));
             Assert.That(settings.MasterMixer.GetFloat(settings.SfxVolumeParameter, out var sfxVolumeDb), Is.True);
             Assert.That(sfxVolumeDb, Is.EqualTo(-12.0412f).Within(0.001f));
+        }
+
+        [Test]
+        public void Project2048AudioPreferences_MasterMutePersistsAndAppliesMixer()
+        {
+            var settings = LoadAudioSettings();
+
+            Project2048AudioPreferences.SetNormalizedVolume(
+                settings,
+                Project2048AudioChannel.Master,
+                1f,
+                saveImmediately: false);
+            Project2048AudioPreferences.SetMuted(
+                settings,
+                Project2048AudioChannel.Master,
+                true,
+                saveImmediately: false);
+
+            Assert.That(Project2048AudioPreferences.IsMuted(Project2048AudioChannel.Master), Is.True);
+            Assert.That(settings.MasterMixer.GetFloat(settings.MasterVolumeParameter, out var masterVolumeDb), Is.True);
+            Assert.That(masterVolumeDb, Is.EqualTo(Project2048AudioSettings.MinVolumeDb).Within(0.001f));
         }
 
         [Test]

@@ -219,6 +219,31 @@ namespace Project2048.Tests
         }
 
         [Test]
+        public void PersistentBgmPlayer_PlayAppliesSavedVolumeBeforePlayback()
+        {
+            var settings = LoadAudioSettings();
+            const float normalizedVolume = 0.25f;
+            Project2048AudioPreferences.SetNormalizedVolume(
+                settings,
+                Project2048AudioChannel.BGM,
+                normalizedVolume,
+                saveImmediately: false);
+
+            var root = CreateOwnedGameObject("BgmPlayer");
+            var player = root.AddComponent<PersistentBgmPlayer>();
+            player.Initialize(settings);
+            settings.TrySetVolume(Project2048AudioChannel.BGM, Project2048AudioSettings.MaxVolumeDb);
+
+            player.Play();
+
+            Assert.That(settings.MasterMixer.GetFloat(settings.BgmVolumeParameter, out var bgmVolumeDb), Is.True);
+            Assert.That(
+                bgmVolumeDb,
+                Is.EqualTo(Project2048AudioPreferences.VolumeToDb(Project2048AudioChannel.BGM, normalizedVolume))
+                    .Within(0.001f));
+        }
+
+        [Test]
         public void Project2048AudioPreferences_ConvertsNormalizedVolumeWithChannelDefaults()
         {
             Assert.That(

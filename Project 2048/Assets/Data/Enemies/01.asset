@@ -28,8 +28,13 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 00966bf157b01874e90775ed704b2b9b, type: 2}
   - {fileID: 11400000, guid: df0e4934c5af4ae3ac415c92684f8787, type: 2}
   - {fileID: 11400000, guid: 4832d2b5a42e555419fe48cad1e68571, type: 2}
-  portrait: {fileID: 21300000, guid: fa492956cfce2564d9ace728be89a86b, type: 3}
-  battlePrefab: {fileID: 0}
+  portrait: {fileID: 0}
+  battlePrefab: {fileID: -8653719598885068355, guid: a379836d38e0825438ac76ff5f5b9655, type: 3}
+  idleAnimation: {fileID: 7400000, guid: 00880961ebc4f324d909c730b59e1ac5, type: 2}
+  appearAnimation: {fileID: 0}
+  attackAnimation: {fileID: 7400000, guid: 5e61e934c8f16a1479563d37494a7b07, type: 2}
+  hitAnimation: {fileID: 7400000, guid: 196cd34401a3d1c47853b1c4a3a33c90, type: 2}
+  deathAnimation: {fileID: 0}
   actionEffects:
   - actionId: appear
     effect:
@@ -37,7 +42,7 @@ MonoBehaviour:
       vfxPrefab: {fileID: 0}
       animationClip: {fileID: 0}
       particleEffect:
-        objectName:
+        objectName: 
         particlePrefab: {fileID: 0}
         particleMaterial: {fileID: 0}
         useParticleColor: 0
@@ -59,7 +64,7 @@ MonoBehaviour:
       vfxPrefab: {fileID: 0}
       animationClip: {fileID: 0}
       particleEffect:
-        objectName:
+        objectName: 
         particlePrefab: {fileID: 0}
         particleMaterial: {fileID: 0}
         useParticleColor: 0
@@ -81,7 +86,7 @@ MonoBehaviour:
       vfxPrefab: {fileID: 0}
       animationClip: {fileID: 0}
       particleEffect:
-        objectName:
+        objectName: 
         particlePrefab: {fileID: 0}
         particleMaterial: {fileID: 0}
         useParticleColor: 0
@@ -103,7 +108,7 @@ MonoBehaviour:
       vfxPrefab: {fileID: 0}
       animationClip: {fileID: 0}
       particleEffect:
-        objectName:
+        objectName: 
         particlePrefab: {fileID: 0}
         particleMaterial: {fileID: 0}
         useParticleColor: 0

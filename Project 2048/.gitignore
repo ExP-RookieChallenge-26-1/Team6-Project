@@ -13,6 +13,7 @@
 *.csproj
 *.unityproj
 *.sln
+*.slnx
 *.suo
 *.tmp
 *.user
@@ -38,3 +39,4 @@ mono_crash.*
 *.unitypackage.meta
 
 .claude/
+.codex-backups/

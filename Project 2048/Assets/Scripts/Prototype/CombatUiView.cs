@@ -4,6 +4,7 @@ using System.Linq;
 using Project2048.Audio;
 using Project2048.Board2048;
 using Project2048.Combat;
+using Project2048.Core;
 using Project2048.Enemy;
 using Project2048.Presentation;
 using Project2048.Rewards;
@@ -11,6 +12,7 @@ using Project2048.Skills;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -93,8 +95,14 @@ namespace Project2048.Prototype
         [SerializeField] private GameObject resultOverlay;
         [SerializeField] private TMP_Text resultTitleText;
         [SerializeField] private TMP_Text resultDescriptionText;
+        [SerializeField] private Button pauseButton;
         [SerializeField] private Button restartButton;
         [SerializeField] private Button reloadSceneButton;
+
+        [Header("Settings")]
+        [SerializeField] private Button settingButton;
+        [SerializeField] private SettingPopup settingPopup;
+        [SerializeField] private ConfirmPopup confirmPopup;
 
         [Header("Reward overlay")]
         [SerializeField] private RewardManager rewardManager;
@@ -167,6 +175,9 @@ namespace Project2048.Prototype
 
         private void Awake()
         {
+            ResolveMissingReferences();
+            WireButtons();
+
             if (Application.isPlaying)
             {
                 HideRuntimeOverlays();
@@ -301,6 +312,9 @@ namespace Project2048.Prototype
 
             BindButton(restartButton, () => bootstrap?.RestartCombat());
             BindButton(reloadSceneButton, () => SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex));
+            BindButton(settingButton, OpenSettingPopup);
+            BindButton(pauseButton, OpenPauseConfirmPopup);
+            BindPauseButtonEventTrigger();
         }
 
         private void BindButton(Button button, System.Action handler)
@@ -310,6 +324,7 @@ namespace Project2048.Prototype
                 return;
             }
 
+            EnsureButtonRaycastable(button);
             button.onClick.RemoveAllListeners();
             var clickEmitter = button.GetComponent<ButtonClickAudioEmitter>();
             if (clickEmitter == null)
@@ -327,6 +342,44 @@ namespace Project2048.Prototype
                 }
                 Render();
             });
+        }
+
+        private static void EnsureButtonRaycastable(Button button)
+        {
+            if (button == null)
+            {
+                return;
+            }
+
+            button.interactable = true;
+            if (button.targetGraphic == null)
+            {
+                button.targetGraphic = button.GetComponent<Graphic>();
+            }
+
+            if (button.targetGraphic != null)
+            {
+                button.targetGraphic.raycastTarget = true;
+            }
+        }
+
+        private void BindPauseButtonEventTrigger()
+        {
+            if (pauseButton == null)
+            {
+                return;
+            }
+
+            var trigger = pauseButton.GetComponent<EventTrigger>();
+            if (trigger == null)
+            {
+                trigger = pauseButton.gameObject.AddComponent<EventTrigger>();
+            }
+
+            trigger.triggers.RemoveAll(entry => entry.eventID == EventTriggerType.PointerClick);
+            var clickEntry = new EventTrigger.Entry { eventID = EventTriggerType.PointerClick };
+            clickEntry.callback.AddListener(_ => OpenPauseConfirmPopup());
+            trigger.triggers.Add(clickEntry);
         }
 
         private void OnSkillSlotClicked(int slotIndex)
@@ -864,17 +917,12 @@ namespace Project2048.Prototype
                 return GetObstacleCellColor();
             }
 
-            if (value == 0)
-            {
-                return emptyCellColor;
-            }
-
-            return value >= 64 ? highlightCellColor : filledCellColor;
+            return value == 0 ? new Color(26f / 255f, 26f / 255f, 26f / 255f, 1f) : Color.black;
         }
 
         private static Color GetCellTextColor(int value)
         {
-            return value >= 64 ? Color.black : Color.white;
+            return Color.white;
         }
 
         private void ClearBoardAnimationOverlay(bool stopRoutine = true)
@@ -1181,6 +1229,63 @@ namespace Project2048.Prototype
             skillsEndTurnButton ??= FindComponentInChildrenByName<Button>("TurnEndButton");
             actionDescriptionText ??= FindComponentInChildrenByName<TMP_Text>("ActionDescriptionText");
             enemyTurnText ??= FindComponentInChildrenByName<TMP_Text>("EnemyTurnText");
+            pauseButton ??= FindOrCreateButtonByName("pauseButton") ?? FindOrCreateButtonByName("PauseButton");
+            settingButton ??= FindOrCreateButtonByName("SettingButton");
+            settingPopup ??= FindAnyObjectByType<SettingPopup>(FindObjectsInactive.Include);
+            confirmPopup ??= FindAnyObjectByType<ConfirmPopup>(FindObjectsInactive.Include);
+        }
+
+        private Button FindOrCreateButtonByName(string childName)
+        {
+            var child = FindChildByName(childName);
+            if (child == null)
+            {
+                return null;
+            }
+
+            var button = child.GetComponent<Button>();
+            if (button != null)
+            {
+                return button;
+            }
+
+            button = child.gameObject.AddComponent<Button>();
+            button.targetGraphic = child.GetComponent<Graphic>();
+            return button;
+        }
+
+        private void OpenSettingPopup()
+        {
+            if (settingPopup == null)
+            {
+                var canvas = GetComponentInParent<Canvas>();
+                settingPopup = SettingPopup.CreateRuntime(canvas != null ? canvas.transform : transform.root);
+            }
+
+            settingPopup.Open();
+        }
+
+        private void OpenPauseConfirmPopup()
+        {
+            Debug.Log("Pause button clicked. Opening pause confirm popup.");
+            if (confirmPopup == null)
+            {
+                var canvas = GetComponentInParent<Canvas>();
+                confirmPopup = ConfirmPopup.CreateRuntime(canvas != null ? canvas.transform : transform.root);
+            }
+
+            confirmPopup.Show("종료하시겠습니까?", ReturnToMainMenu, null);
+        }
+
+        private static void ReturnToMainMenu()
+        {
+            if (GameManager.Instance != null && GameManager.Instance.FlowController != null)
+            {
+                GameManager.Instance.FlowController.RequestMainMenu();
+                return;
+            }
+
+            SceneManager.LoadScene("MainMenu");
         }
 
         private void ResolveEnemyHpRoot()

@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6115ca39d511d049965aae02efc3f23, type: 3}
   m_Name: 12
   m_EditorClassIdentifier: Game.Core::Project2048.Enemy.EnemySO
-  enemyName: "\uD669\uC18C"
+  enemyName: BOSS
   encounterRank: 3
   maxHp: 1100
   attackPower: 11
   baseDefensePower: 0
-  defensePower: 6
+  defensePower: 4
   debuffPower: 2
   criticalChance: 0
   criticalDamageMultiplier: 1.5
@@ -25,10 +25,16 @@ MonoBehaviour:
   actionsPerTurn: 3
   skills:
   - {fileID: 11400000, guid: 5a7d25bf22a4191409d36e7de7128a1c, type: 2}
-  - {fileID: 11400000, guid: ced275c3ac4587d4f9f513c34c461400, type: 2}
-  - {fileID: 11400000, guid: 86594764d38346438a3c7a144303854a, type: 2}
+  - {fileID: 11400000, guid: c010c31c3f684cd29cd311a15428d48c, type: 2}
+  - {fileID: 11400000, guid: c1744bc96e754468b74f2e389042e23f, type: 2}
   - {fileID: 11400000, guid: 27f5295ffd4a4738b40f9d791c06ac4f, type: 2}
-  portrait: {fileID: 21300000, guid: fa492956cfce2564d9ace728be89a86b, type: 3}
+  portrait: {fileID: 0}
+  battlePrefab: {fileID: -8653719598885068355, guid: 280e161887d896e4cac20a8b44c34543, type: 3}
+  idleAnimation: {fileID: 7400000, guid: 2c8daf70a2d69284dbaf13c6131a352f, type: 2}
+  appearAnimation: {fileID: 0}
+  attackAnimation: {fileID: 7400000, guid: b8072c8ddbe66b84fab35eb76682a569, type: 2}
+  hitAnimation: {fileID: 7400000, guid: c1287e5d93c3d25499d3a42e9857c85a, type: 2}
+  deathAnimation: {fileID: 0}
   actionEffects:
   - actionId: appear
     effect:
@@ -36,7 +42,7 @@ MonoBehaviour:
       vfxPrefab: {fileID: 0}
       animationClip: {fileID: 0}
       particleEffect:
-        objectName:
+        objectName: 
         particlePrefab: {fileID: 0}
         particleMaterial: {fileID: 0}
         useParticleColor: 0
@@ -58,7 +64,7 @@ MonoBehaviour:
       vfxPrefab: {fileID: 0}
       animationClip: {fileID: 0}
       particleEffect:
-        objectName:
+        objectName: 
         particlePrefab: {fileID: 0}
         particleMaterial: {fileID: 0}
         useParticleColor: 0
@@ -80,7 +86,7 @@ MonoBehaviour:
       vfxPrefab: {fileID: 0}
       animationClip: {fileID: 0}
       particleEffect:
-        objectName:
+        objectName: 
         particlePrefab: {fileID: 0}
         particleMaterial: {fileID: 0}
         useParticleColor: 0
@@ -102,7 +108,7 @@ MonoBehaviour:
       vfxPrefab: {fileID: 0}
       animationClip: {fileID: 0}
       particleEffect:
-        objectName:
+        objectName: 
         particlePrefab: {fileID: 0}
         particleMaterial: {fileID: 0}
         useParticleColor: 0

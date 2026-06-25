@@ -34,12 +34,12 @@ namespace Project2048.Audio
 
             var ducker = root.AddComponent<SimpleBgmDucker>();
             ducker.Initialize(settings);
+            Project2048AudioPreferences.ApplySavedVolumes(settings);
 
             var bgmPlayer = root.AddComponent<PersistentBgmPlayer>();
             bgmPlayer.Initialize(settings);
 
             EnsureButtonClickRouter(root, settings);
-            Project2048AudioPreferences.ApplySavedVolumes(settings);
 
             return root;
         }

@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Linq;
 using NUnit.Framework;
 using Project2048.Audio;
 using Project2048.Board2048;
@@ -70,6 +71,100 @@ namespace Project2048.Tests
         public void CombatVfxDuration_KeepsTemporaryDebuffFeedbackShort()
         {
             Assert.That(CombatUiView.CombatVfxDurationSeconds, Is.InRange(0.45f, 0.9f));
+        }
+
+        [Test]
+        public void BoardCellView_ShowsEdgeOnlyForNumberAndKeepsBlackCellWhiteValue()
+        {
+            var emptyCellColor = new Color(26f / 255f, 26f / 255f, 26f / 255f, 1f);
+            var cellObject = CreateOwnedGameObject("Cell");
+            var background = cellObject.AddComponent<Image>();
+            var edge = CreateOwnedGameObject("Edge");
+            edge.transform.SetParent(cellObject.transform, false);
+            var valueObject = CreateOwnedGameObject("Value");
+            valueObject.transform.SetParent(cellObject.transform, false);
+            var valueText = valueObject.AddComponent<TMPro.TextMeshProUGUI>();
+            var cell = cellObject.AddComponent<BoardCellView>();
+            SetPrivateField(cell, "background", background);
+            SetPrivateField(cell, "valueText", valueText);
+
+            cell.SetValue(0, Color.red, Color.green, Color.blue, Color.yellow);
+
+            Assert.That(background.color, Is.EqualTo(emptyCellColor));
+            Assert.That(valueText.text, Is.Empty);
+            Assert.That(valueText.color, Is.EqualTo(Color.white));
+            Assert.That(edge.activeSelf, Is.False);
+
+            cell.SetValue(128, Color.red, Color.green, Color.blue, Color.yellow);
+
+            Assert.That(background.color, Is.EqualTo(Color.black));
+            Assert.That(valueText.text, Is.EqualTo("128"));
+            Assert.That(valueText.color, Is.EqualTo(Color.white));
+            Assert.That(edge.activeSelf, Is.True);
+
+            cell.SetValue(Board2048Manager.ObstacleValue, Color.red, Color.green, Color.blue, Color.yellow);
+
+            Assert.That(background.color, Is.EqualTo(Color.yellow));
+            Assert.That(valueText.text, Is.Empty);
+            Assert.That(valueText.color, Is.EqualTo(Color.white));
+            Assert.That(edge.activeSelf, Is.False);
+        }
+
+        [Test]
+        public void SettingButton_ClickOpensRuntimeSettingPopup()
+        {
+            var canvasObject = CreateOwnedGameObject("Canvas");
+            canvasObject.AddComponent<Canvas>();
+            var view = canvasObject.AddComponent<CombatUiView>();
+            var settingImage = CreateImageChild(canvasObject.transform, "SettingButton");
+
+            Assert.That(settingImage.GetComponent<Button>(), Is.Null);
+
+            view.Initialize(null);
+            var settingButton = settingImage.GetComponent<Button>();
+            Assert.That(settingButton, Is.Not.Null);
+
+            settingButton.onClick.Invoke();
+
+            var popup = canvasObject.GetComponentInChildren<global::SettingPopup>(true);
+            Assert.That(popup, Is.Not.Null);
+            Assert.That(popup.gameObject.activeSelf, Is.True);
+
+            var volumeSliders = popup
+                .GetComponentsInChildren<Slider>(true)
+                .Where(slider => slider.gameObject.name.EndsWith("VolumeSlider"))
+                .Select(slider => slider.gameObject.name)
+                .ToArray();
+            Assert.That(volumeSliders, Is.EquivalentTo(new[]
+            {
+                "MasterVolumeSlider",
+                "BGMVolumeSlider",
+                "SFXVolumeSlider",
+            }));
+        }
+
+        [Test]
+        public void PauseButton_ClickOpensRuntimeConfirmPopup()
+        {
+            var canvasObject = CreateOwnedGameObject("Canvas");
+            canvasObject.AddComponent<Canvas>();
+            var view = canvasObject.AddComponent<CombatUiView>();
+            var pauseImage = CreateImageChild(canvasObject.transform, "pauseButton");
+
+            Assert.That(pauseImage.GetComponent<Button>(), Is.Null);
+
+            view.Initialize(null);
+            var pauseButton = pauseImage.GetComponent<Button>();
+            Assert.That(pauseButton, Is.Not.Null);
+
+            pauseButton.onClick.Invoke();
+
+            var popup = canvasObject.GetComponentInChildren<global::ConfirmPopup>(true);
+            Assert.That(popup, Is.Not.Null);
+            Assert.That(popup.gameObject.activeSelf, Is.True);
+            Assert.That(
+                popup.GetComponentsInChildren<TMPro.TextMeshProUGUI>(true).Select(text => text.text),
+                Does.Contain("종료하시겠습니까?"));
         }
 
         [Test]
@@ -753,7 +848,7 @@ namespace Project2048.Tests
         }
 
         [Test]
-        public void ObstacleCellColor_UsesDarknessDebuffColor()
+        public void CellColor_UsesObstacleColorForObstacleValue()
         {
             var viewObject = CreateOwnedGameObject("CombatView");
             var view = viewObject.AddComponent<CombatUiView>();

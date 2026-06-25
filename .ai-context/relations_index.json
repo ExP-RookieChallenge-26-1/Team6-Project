@@ -2270,6 +2270,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioRouter.cs",
     "from_class": "ButtonClickAudioRouter",
+    "to_type": "SFX",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/ButtonClickAudioRouter.cs",
+    "from_class": "ButtonClickAudioRouter",
     "to_type": "Source",
     "relation_type": "uses",
     "strength": 1
@@ -2690,13 +2697,6 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioChannel.cs",
     "from_class": "Project2048AudioChannel",
-    "to_type": "Ambience",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioChannel.cs",
-    "from_class": "Project2048AudioChannel",
     "to_type": "Audio",
     "relation_type": "uses",
     "strength": 1
@@ -2705,6 +2705,13 @@
     "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioChannel.cs",
     "from_class": "Project2048AudioChannel",
     "to_type": "BGM",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioChannel.cs",
+    "from_class": "Project2048AudioChannel",
+    "to_type": "Master",
     "relation_type": "uses",
     "strength": 1
   },
@@ -2730,13 +2737,6 @@
     "strength": 1
   },
   {
-    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioChannel.cs",
-    "from_class": "Project2048AudioChannel",
-    "to_type": "UI",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
     "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
     "from_class": "Project2048AudioSettings",
     "to_type": "ScriptableObject",
@@ -2747,41 +2747,6 @@
     "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
     "from_class": "Project2048AudioSettings",
     "to_type": "Active",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
-    "from_class": "Project2048AudioSettings",
-    "to_type": "Ambience",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
-    "from_class": "Project2048AudioSettings",
-    "to_type": "AmbienceGroup",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
-    "from_class": "Project2048AudioSettings",
-    "to_type": "AmbienceVolume",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
-    "from_class": "Project2048AudioSettings",
-    "to_type": "AmbienceVolumeParameter",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
-    "from_class": "Project2048AudioSettings",
-    "to_type": "AmbienceVolumeParameterName",
     "relation_type": "uses",
     "strength": 1
   },
@@ -2970,6 +2935,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
     "from_class": "Project2048AudioSettings",
+    "to_type": "GetEffectiveVolumeDb",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
+    "from_class": "Project2048AudioSettings",
     "to_type": "GetFloat",
     "relation_type": "uses",
     "strength": 1
@@ -2978,6 +2950,20 @@
     "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
     "from_class": "Project2048AudioSettings",
     "to_type": "GetGroup",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
+    "from_class": "Project2048AudioSettings",
+    "to_type": "GetInt",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
+    "from_class": "Project2048AudioSettings",
+    "to_type": "GetMutedKey",
     "relation_type": "uses",
     "strength": 1
   },
@@ -3012,14 +2998,14 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
     "from_class": "Project2048AudioSettings",
-    "to_type": "IsNullOrWhiteSpace",
+    "to_type": "IsMuted",
     "relation_type": "uses",
     "strength": 1
   },
   {
     "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
     "from_class": "Project2048AudioSettings",
-    "to_type": "KeyPrefix",
+    "to_type": "IsNullOrWhiteSpace",
     "relation_type": "uses",
     "strength": 1
   },
@@ -3054,7 +3040,35 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
     "from_class": "Project2048AudioSettings",
+    "to_type": "Master",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
+    "from_class": "Project2048AudioSettings",
     "to_type": "MasterMixer",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
+    "from_class": "Project2048AudioSettings",
+    "to_type": "MasterVolume",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
+    "from_class": "Project2048AudioSettings",
+    "to_type": "MasterVolumeParameter",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
+    "from_class": "Project2048AudioSettings",
+    "to_type": "MasterVolumeParameterName",
     "relation_type": "uses",
     "strength": 1
   },
@@ -3069,6 +3083,20 @@
     "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
     "from_class": "Project2048AudioSettings",
     "to_type": "MinVolumeDb",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
+    "from_class": "Project2048AudioSettings",
+    "to_type": "Muted",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
+    "from_class": "Project2048AudioSettings",
+    "to_type": "MutedKeyPrefix",
     "relation_type": "uses",
     "strength": 1
   },
@@ -3139,6 +3167,20 @@
     "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
     "from_class": "Project2048AudioSettings",
     "to_type": "SetFloat",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
+    "from_class": "Project2048AudioSettings",
+    "to_type": "SetInt",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
+    "from_class": "Project2048AudioSettings",
+    "to_type": "SetMuted",
     "relation_type": "uses",
     "strength": 1
   },
@@ -3222,41 +3264,6 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
     "from_class": "Project2048AudioSettings",
-    "to_type": "UI",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
-    "from_class": "Project2048AudioSettings",
-    "to_type": "UiGroup",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
-    "from_class": "Project2048AudioSettings",
-    "to_type": "UIVolume",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
-    "from_class": "Project2048AudioSettings",
-    "to_type": "UiVolumeParameter",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
-    "from_class": "Project2048AudioSettings",
-    "to_type": "UiVolumeParameterName",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
-    "from_class": "Project2048AudioSettings",
     "to_type": "UnityEngine",
     "relation_type": "uses",
     "strength": 1
@@ -3265,6 +3272,13 @@
     "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
     "from_class": "Project2048AudioSettings",
     "to_type": "Volume",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
+    "from_class": "Project2048AudioSettings",
+    "to_type": "VolumeKeyPrefix",
     "relation_type": "uses",
     "strength": 1
   },
@@ -3467,7 +3481,7 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Audio/SimpleBgmDucker.cs",
     "from_class": "SimpleBgmDucker",
-    "to_type": "GetNormalizedVolume",
+    "to_type": "GetEffectiveVolumeDb",
     "relation_type": "uses",
     "strength": 1
   },
@@ -3629,13 +3643,6 @@
     "from_file": "Project 2048/Assets/Scripts/Audio/SimpleBgmDucker.cs",
     "from_class": "SimpleBgmDucker",
     "to_type": "UnityEngine",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Audio/SimpleBgmDucker.cs",
-    "from_class": "SimpleBgmDucker",
-    "to_type": "VolumeToDb",
     "relation_type": "uses",
     "strength": 1
   },
@@ -37373,6 +37380,167 @@
     "strength": 1
   },
   {
+    "from_file": "Project 2048/Assets/Scripts/UI/PausePopup.cs",
+    "from_class": "PausePopup",
+    "to_type": "MonoBehaviour",
+    "relation_type": "inherits",
+    "strength": 4
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/PausePopup.cs",
+    "from_class": "PausePopup",
+    "to_type": "GameManager",
+    "relation_type": "singleton-access",
+    "strength": 4
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/PausePopup.cs",
+    "from_class": "PausePopup",
+    "to_type": "AddListener",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/PausePopup.cs",
+    "from_class": "PausePopup",
+    "to_type": "Awake",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/PausePopup.cs",
+    "from_class": "PausePopup",
+    "to_type": "bool",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/PausePopup.cs",
+    "from_class": "PausePopup",
+    "to_type": "Button",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/PausePopup.cs",
+    "from_class": "PausePopup",
+    "to_type": "Close",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/PausePopup.cs",
+    "from_class": "PausePopup",
+    "to_type": "CloseBackToMainMenu",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/PausePopup.cs",
+    "from_class": "PausePopup",
+    "to_type": "Core",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/PausePopup.cs",
+    "from_class": "PausePopup",
+    "to_type": "FlowController",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/PausePopup.cs",
+    "from_class": "PausePopup",
+    "to_type": "GameManager",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/PausePopup.cs",
+    "from_class": "PausePopup",
+    "to_type": "InitializeIfNeeded",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/PausePopup.cs",
+    "from_class": "PausePopup",
+    "to_type": "Instance",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/PausePopup.cs",
+    "from_class": "PausePopup",
+    "to_type": "LogError",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/PausePopup.cs",
+    "from_class": "PausePopup",
+    "to_type": "Open",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/PausePopup.cs",
+    "from_class": "PausePopup",
+    "to_type": "OpenBackToMainMenuPopup",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/PausePopup.cs",
+    "from_class": "PausePopup",
+    "to_type": "PopupQuitButton",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/PausePopup.cs",
+    "from_class": "PausePopup",
+    "to_type": "Project2048",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/PausePopup.cs",
+    "from_class": "PausePopup",
+    "to_type": "RequestMainMenu",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/PausePopup.cs",
+    "from_class": "PausePopup",
+    "to_type": "ReturnToMainMenu",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/PausePopup.cs",
+    "from_class": "PausePopup",
+    "to_type": "SetActive",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/PausePopup.cs",
+    "from_class": "PausePopup",
+    "to_type": "UI",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/PausePopup.cs",
+    "from_class": "PausePopup",
+    "to_type": "UnityEngine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
     "from_file": "Project 2048/Assets/Scripts/UI/SettingPopup.cs",
     "from_class": "SettingPopup",
     "to_type": "RectTransform",
@@ -37411,13 +37579,6 @@
     "from_file": "Project 2048/Assets/Scripts/UI/SettingPopup.cs",
     "from_class": "SettingPopup",
     "to_type": "AddListener",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/UI/SettingPopup.cs",
-    "from_class": "SettingPopup",
-    "to_type": "Ambience",
     "relation_type": "uses",
     "strength": 1
   },
@@ -37480,6 +37641,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/UI/SettingPopup.cs",
     "from_class": "SettingPopup",
+    "to_type": "BGMMuteToggle",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/SettingPopup.cs",
+    "from_class": "SettingPopup",
     "to_type": "BGMVolumeSlider",
     "relation_type": "uses",
     "strength": 1
@@ -37487,7 +37655,7 @@
   {
     "from_file": "Project 2048/Assets/Scripts/UI/SettingPopup.cs",
     "from_class": "SettingPopup",
-    "to_type": "BindVolumeSlider",
+    "to_type": "BindVolumeControl",
     "relation_type": "uses",
     "strength": 1
   },
@@ -37502,6 +37670,13 @@
     "from_file": "Project 2048/Assets/Scripts/UI/SettingPopup.cs",
     "from_class": "SettingPopup",
     "to_type": "Button",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/SettingPopup.cs",
+    "from_class": "SettingPopup",
+    "to_type": "Checkmark",
     "relation_type": "uses",
     "strength": 1
   },
@@ -37543,6 +37718,20 @@
   {
     "from_file": "Project 2048/Assets/Scripts/UI/SettingPopup.cs",
     "from_class": "SettingPopup",
+    "to_type": "CreateMuteToggle",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/SettingPopup.cs",
+    "from_class": "SettingPopup",
+    "to_type": "CreateMuteToggleForExistingRow",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/SettingPopup.cs",
+    "from_class": "SettingPopup",
     "to_type": "CreateRectObject",
     "relation_type": "uses",
     "strength": 1
@@ -37571,13 +37760,6 @@
   {
     "from_file": "Project 2048/Assets/Scripts/UI/SettingPopup.cs",
     "from_class": "SettingPopup",
-    "to_type": "Enum",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/UI/SettingPopup.cs",
-    "from_class": "SettingPopup",
     "to_type": "Fill",
     "relation_type": "uses",
     "strength": 1
@@ -37593,6 +37775,13 @@
     "from_file": "Project 2048/Assets/Scripts/UI/SettingPopup.cs",
     "from_class": "SettingPopup",
     "to_type": "FindSlider",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/SettingPopup.cs",
+    "from_class": "SettingPopup",
+    "to_type": "FindToggle",
     "relation_type": "uses",
     "strength": 1
   },
@@ -37627,13 +37816,6 @@
   {
     "from_file": "Project 2048/Assets/Scripts/UI/SettingPopup.cs",
     "from_class": "SettingPopup",
-    "to_type": "GetValues",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/UI/SettingPopup.cs",
-    "from_class": "SettingPopup",
     "to_type": "Handle",
     "relation_type": "uses",
     "strength": 1
@@ -37641,7 +37823,21 @@
   {
     "from_file": "Project 2048/Assets/Scripts/UI/SettingPopup.cs",
     "from_class": "SettingPopup",
+    "to_type": "HandleMuteToggleChanged",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/SettingPopup.cs",
+    "from_class": "SettingPopup",
     "to_type": "HandleVolumeSliderChanged",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/SettingPopup.cs",
+    "from_class": "SettingPopup",
+    "to_type": "HideLegacyVolumeControls",
     "relation_type": "uses",
     "strength": 1
   },
@@ -37676,6 +37872,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/UI/SettingPopup.cs",
     "from_class": "SettingPopup",
+    "to_type": "IsMuted",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/SettingPopup.cs",
+    "from_class": "SettingPopup",
     "to_type": "Label",
     "relation_type": "uses",
     "strength": 1
@@ -37704,7 +37907,35 @@
   {
     "from_file": "Project 2048/Assets/Scripts/UI/SettingPopup.cs",
     "from_class": "SettingPopup",
+    "to_type": "Master",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/SettingPopup.cs",
+    "from_class": "SettingPopup",
+    "to_type": "MasterMuteToggle",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/SettingPopup.cs",
+    "from_class": "SettingPopup",
+    "to_type": "MasterVolumeSlider",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/SettingPopup.cs",
+    "from_class": "SettingPopup",
     "to_type": "MiddleCenter",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/SettingPopup.cs",
+    "from_class": "SettingPopup",
+    "to_type": "Mute",
     "relation_type": "uses",
     "strength": 1
   },
@@ -37719,6 +37950,13 @@
     "from_file": "Project 2048/Assets/Scripts/UI/SettingPopup.cs",
     "from_class": "SettingPopup",
     "to_type": "Panel",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/SettingPopup.cs",
+    "from_class": "SettingPopup",
+    "to_type": "PlayerPrefs",
     "relation_type": "uses",
     "strength": 1
   },
@@ -37754,6 +37992,13 @@
     "from_file": "Project 2048/Assets/Scripts/UI/SettingPopup.cs",
     "from_class": "SettingPopup",
     "to_type": "RectTransform",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/SettingPopup.cs",
+    "from_class": "SettingPopup",
+    "to_type": "RefreshVolumeControl",
     "relation_type": "uses",
     "strength": 1
   },
@@ -37802,7 +38047,28 @@
   {
     "from_file": "Project 2048/Assets/Scripts/UI/SettingPopup.cs",
     "from_class": "SettingPopup",
+    "to_type": "Save",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/SettingPopup.cs",
+    "from_class": "SettingPopup",
     "to_type": "SetActive",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/SettingPopup.cs",
+    "from_class": "SettingPopup",
+    "to_type": "SetIsOnWithoutNotify",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/SettingPopup.cs",
+    "from_class": "SettingPopup",
+    "to_type": "SetMuted",
     "relation_type": "uses",
     "strength": 1
   },
@@ -37823,6 +38089,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/UI/SettingPopup.cs",
     "from_class": "SettingPopup",
+    "to_type": "SetSiblingIndex",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/SettingPopup.cs",
+    "from_class": "SettingPopup",
     "to_type": "SetStretch",
     "relation_type": "uses",
     "strength": 1
@@ -37837,7 +38110,28 @@
   {
     "from_file": "Project 2048/Assets/Scripts/UI/SettingPopup.cs",
     "from_class": "SettingPopup",
+    "to_type": "SetVolumeRowActive",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/SettingPopup.cs",
+    "from_class": "SettingPopup",
+    "to_type": "SetVolumeRowSibling",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/SettingPopup.cs",
+    "from_class": "SettingPopup",
     "to_type": "SFX",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/SettingPopup.cs",
+    "from_class": "SettingPopup",
+    "to_type": "SFXMuteToggle",
     "relation_type": "uses",
     "strength": 1
   },
@@ -37886,7 +38180,7 @@
   {
     "from_file": "Project 2048/Assets/Scripts/UI/SettingPopup.cs",
     "from_class": "SettingPopup",
-    "to_type": "System",
+    "to_type": "SortVisibleVolumeControls",
     "relation_type": "uses",
     "strength": 1
   },
@@ -37915,6 +38209,27 @@
     "from_file": "Project 2048/Assets/Scripts/UI/SettingPopup.cs",
     "from_class": "SettingPopup",
     "to_type": "TMPro",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/SettingPopup.cs",
+    "from_class": "SettingPopup",
+    "to_type": "Toggle",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/SettingPopup.cs",
+    "from_class": "SettingPopup",
+    "to_type": "Toggles",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/SettingPopup.cs",
+    "from_class": "SettingPopup",
+    "to_type": "ToString",
     "relation_type": "uses",
     "strength": 1
   },
@@ -38423,6 +38738,111 @@
     "strength": 1
   },
   {
+    "from_file": "Project 2048/Assets/Scripts/UI/TopBarButtonsController.cs",
+    "from_class": "TopBarButtonsController",
+    "to_type": "PausePopup",
+    "relation_type": "component-access",
+    "strength": 3
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/TopBarButtonsController.cs",
+    "from_class": "TopBarButtonsController",
+    "to_type": "SettingPopup",
+    "relation_type": "component-access",
+    "strength": 3
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/TopBarButtonsController.cs",
+    "from_class": "TopBarButtonsController",
+    "to_type": "MonoBehaviour",
+    "relation_type": "inherits",
+    "strength": 4
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/TopBarButtonsController.cs",
+    "from_class": "TopBarButtonsController",
+    "to_type": "AddListener",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/TopBarButtonsController.cs",
+    "from_class": "TopBarButtonsController",
+    "to_type": "Awake",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/TopBarButtonsController.cs",
+    "from_class": "TopBarButtonsController",
+    "to_type": "Button",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/TopBarButtonsController.cs",
+    "from_class": "TopBarButtonsController",
+    "to_type": "GetComponent",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/TopBarButtonsController.cs",
+    "from_class": "TopBarButtonsController",
+    "to_type": "OnClickPause",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/TopBarButtonsController.cs",
+    "from_class": "TopBarButtonsController",
+    "to_type": "OnClickSettings",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/TopBarButtonsController.cs",
+    "from_class": "TopBarButtonsController",
+    "to_type": "Open",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/TopBarButtonsController.cs",
+    "from_class": "TopBarButtonsController",
+    "to_type": "PausePopup",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/TopBarButtonsController.cs",
+    "from_class": "TopBarButtonsController",
+    "to_type": "Project2048",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/TopBarButtonsController.cs",
+    "from_class": "TopBarButtonsController",
+    "to_type": "SettingPopup",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/TopBarButtonsController.cs",
+    "from_class": "TopBarButtonsController",
+    "to_type": "UI",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/UI/TopBarButtonsController.cs",
+    "from_class": "TopBarButtonsController",
+    "to_type": "UnityEngine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
     "from_file": "Project 2048/Assets/Tests/EditMode/ActionCostWalletTests.cs",
     "from_class": "ActionCostWalletTests",
     "to_type": "ActionCostWallet",
@@ -38600,20 +39020,6 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
     "from_class": "AudioMixerStructureTests",
-    "to_type": "Ambience",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
-    "from_class": "AudioMixerStructureTests",
-    "to_type": "AmbienceGroup",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
-    "from_class": "AudioMixerStructureTests",
     "to_type": "ApplySavedVolumes",
     "relation_type": "uses",
     "strength": 1
@@ -38740,7 +39146,7 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
     "from_class": "AudioMixerStructureTests",
-    "to_type": "ButtonClickAudioRouter_AttachesEmitterToSceneButtonsAndRoutesToUiGroup",
+    "to_type": "ButtonClickAudioRouter_AttachesEmitterToSceneButtonsAndRoutesToSfxGroup",
     "relation_type": "uses",
     "strength": 1
   },
@@ -39048,6 +39454,13 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
     "from_class": "AudioMixerStructureTests",
+    "to_type": "IsMuted",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
     "to_type": "LoadAssetAtPath",
     "relation_type": "uses",
     "strength": 1
@@ -39069,7 +39482,28 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
     "from_class": "AudioMixerStructureTests",
+    "to_type": "Master",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
     "to_type": "MasterMixer",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "MasterVolumeParameter",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "MasterVolumeParameterName",
     "relation_type": "uses",
     "strength": 1
   },
@@ -39175,6 +39609,13 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
     "from_class": "AudioMixerStructureTests",
     "to_type": "Project2048AudioPreferences_ConvertsNormalizedVolumeWithChannelDefaults",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
+    "to_type": "Project2048AudioPreferences_MasterMutePersistsAndAppliesMixer",
     "relation_type": "uses",
     "strength": 1
   },
@@ -39307,6 +39748,13 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
     "from_class": "AudioMixerStructureTests",
+    "to_type": "SetMuted",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
+    "from_class": "AudioMixerStructureTests",
     "to_type": "SetNormalizedVolume",
     "relation_type": "uses",
     "strength": 1
@@ -39420,13 +39868,6 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
     "from_class": "AudioMixerStructureTests",
     "to_type": "UI",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/AudioMixerStructureTests.cs",
-    "from_class": "AudioMixerStructureTests",
-    "to_type": "UiGroup",
     "relation_type": "uses",
     "strength": 1
   },
@@ -47119,13 +47560,6 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
     "from_class": "MainMenuControllerTests",
-    "to_type": "AmbienceVolumeSlider",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
-    "from_class": "MainMenuControllerTests",
     "to_type": "Art",
     "relation_type": "uses",
     "strength": 1
@@ -47176,6 +47610,13 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
     "from_class": "MainMenuControllerTests",
     "to_type": "Backgrounds",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
+    "to_type": "BGMMuteToggle",
     "relation_type": "uses",
     "strength": 1
   },
@@ -47469,6 +47910,27 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
     "from_class": "MainMenuControllerTests",
+    "to_type": "MasterMuteToggle",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
+    "to_type": "MasterVolumeSlider",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
+    "to_type": "MuteToggle",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
     "to_type": "NewGameSceneName_IsEnabledInBuildSettings",
     "relation_type": "uses",
     "strength": 1
@@ -47644,6 +48106,13 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
     "from_class": "MainMenuControllerTests",
+    "to_type": "SFXMuteToggle",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
     "to_type": "SFXVolumeSlider",
     "relation_type": "uses",
     "strength": 1
@@ -47763,6 +48232,13 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
     "from_class": "MainMenuControllerTests",
+    "to_type": "Toggle",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
+    "from_class": "MainMenuControllerTests",
     "to_type": "True",
     "relation_type": "uses",
     "strength": 1
@@ -47771,13 +48247,6 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
     "from_class": "MainMenuControllerTests",
     "to_type": "UI",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/MainMenuControllerTests.cs",
-    "from_class": "MainMenuControllerTests",
-    "to_type": "UIVolumeSlider",
     "relation_type": "uses",
     "strength": 1
   },

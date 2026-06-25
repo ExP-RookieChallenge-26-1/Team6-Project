@@ -15,7 +15,7 @@ MonoBehaviour:
   maxHp: 240
   attackPower: 10
   baseDefensePower: 2
-  initialBoardMoveCount: 12
+  initialBoardMoveCount: 16
   boardMoveCountBonus: 0
   criticalChance: 0.1
   criticalDamageMultiplier: 1.5

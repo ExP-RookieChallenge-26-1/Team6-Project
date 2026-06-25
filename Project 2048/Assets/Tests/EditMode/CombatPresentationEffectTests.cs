@@ -1808,6 +1808,36 @@ namespace Project2048.Tests
         }
 
         [Test]
+        public void CombatWorldSpriteView_SlashArcSource_UsesAuthoredPlayerFrontOffset()
+        {
+            var viewObject = CreateOwnedGameObject("WorldSpriteView");
+            var view = viewObject.AddComponent<CombatWorldSpriteView>();
+            var source = CreateOwnedGameObject("Source").transform;
+            var target = CreateOwnedGameObject("Target").transform;
+            var slash = CreateSkill("quick-stab", SkillType.Attack, cost: 0, power: 40);
+            source.position = new Vector3(-1f, 0f, 0f);
+            target.position = new Vector3(1f, 0f, 0f);
+            slash.vfx = CreateOwnedVfxTuning(SkillVfxFamily.SlashArc);
+            slash.vfx.localOffset = new Vector3(0f, 0.22f, 0f);
+
+            var method = typeof(CombatWorldSpriteView).GetMethod(
+                "ResolveSlashSkillSourcePosition",
+                System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+
+            Assert.That(method, Is.Not.Null);
+            var playerCast = (Vector3)method.Invoke(view, new object[] { slash, source, target });
+            Assert.That(playerCast.x, Is.EqualTo(source.position.x + 0.68f).Within(0.001f));
+            Assert.That(playerCast.y, Is.EqualTo(source.position.y + 0.22f).Within(0.001f));
+
+            source.position = new Vector3(1f, 0f, 0f);
+            target.position = new Vector3(-1f, 0f, 0f);
+
+            var enemyCast = (Vector3)method.Invoke(view, new object[] { slash, source, target });
+            Assert.That(enemyCast.x, Is.EqualTo(source.position.x - 0.68f).Within(0.001f));
+            Assert.That(enemyCast.y, Is.EqualTo(source.position.y + 0.22f).Within(0.001f));
+        }
+
+        [Test]
         public void CombatWorldSpriteView_LightProjectilePreview_UsesProfileDesignTimeArt()
         {
             var viewObject = CreateOwnedGameObject("WorldSpriteView");
@@ -2428,7 +2458,7 @@ namespace Project2048.Tests
                     {
                         trigger = SkillVfxTrigger.Activate,
                         prefab = cuePrefab,
-                        placement = new SkillVfxPlacement { target = SkillVfxTarget.Enemy, vertical = SkillVfxVertical.Body },
+                        spawnAt = new VfxEndpoint { actor = VfxActorRef.PrimaryTarget, socket = VfxSocket.Body },
                     },
                 },
             };
@@ -2461,13 +2491,13 @@ namespace Project2048.Tests
                     {
                         trigger = SkillVfxTrigger.Activate,
                         prefab = casterCuePrefab,
-                        placement = new SkillVfxPlacement { target = SkillVfxTarget.Player, vertical = SkillVfxVertical.Body },
+                        spawnAt = new VfxEndpoint { actor = VfxActorRef.Caster, socket = VfxSocket.Body },
                     },
                     new SkillVfxCue
                     {
                         trigger = SkillVfxTrigger.Activate,
                         prefab = targetCuePrefab,
-                        placement = new SkillVfxPlacement { target = SkillVfxTarget.Enemy, vertical = SkillVfxVertical.Body },
+                        spawnAt = new VfxEndpoint { actor = VfxActorRef.PrimaryTarget, socket = VfxSocket.Body },
                     },
                 },
             };
@@ -2671,14 +2701,14 @@ namespace Project2048.Tests
             body.transform.SetParent(playerRoot.transform, false);
             body.transform.localPosition = new Vector3(0f, 1f, 0f);
 
-            var placement = new SkillVfxPlacement
+            var endpoint = new VfxEndpoint
             {
-                target = SkillVfxTarget.Player,
-                vertical = SkillVfxVertical.Body,
+                actor = VfxActorRef.Caster,
+                socket = VfxSocket.Body,
                 localOffset = new Vector3(0.18f, 0.32f, 0f),
             };
-            var position = SkillVfxPlayer.ResolvePlacementWorldPosition(
-                placement,
+            var position = SkillVfxPlayer.ResolveEndpointWorldPosition(
+                endpoint,
                 new SkillVfxContext(playerRoot.transform, null, SkillVfxTrigger.Activate));
 
             Assert.That(position.y, Is.EqualTo(1.32f).Within(0.001f));

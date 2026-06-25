@@ -85,9 +85,6 @@ namespace Project2048.Prototype
         private const int FlameBurstTongueSegmentCount = 12;
         private const float LanternMuzzleLocalX = 0.34f;
         private const float LanternMuzzleLocalY = 0.36f;
-        // 참격류는 머리 높이(LanternMuzzleLocalY)가 아니라 랜턴을 든 손 높이에서 베어나가도록 별도 원점을 쓴다.
-        private const float SlashSkillMuzzleLocalX = 0.34f;
-        private const float SlashSkillMuzzleLocalY = 0.05f;
         // 버프류 마법진이 너무 낮게 깔려서 플레이어 옆 허리 높이로 올린다.
         private const float SelfBuffMagicCircleYOffset = 0.18f;
         private const float SelfBuffParticleLift = 0.18f;
@@ -532,9 +529,10 @@ namespace Project2048.Prototype
 
         private SkillVfxContext BuildSkillVfxContext(SkillVfxTrigger trigger)
         {
-            var playerAnchor = ResolvePlayerAnchor() ?? transform;
-            var enemyAnchor = enemyRenderer != null ? enemyRenderer.transform : transform;
-            return new SkillVfxContext(playerAnchor, enemyAnchor, trigger);
+            // 플레이어 시전 컨텍스트: caster=플레이어, primaryTarget=적.
+            var caster = ResolvePlayerAnchor() ?? transform;
+            var primaryTarget = enemyRenderer != null ? enemyRenderer.transform : transform;
+            return new SkillVfxContext(caster, primaryTarget, trigger);
         }
 
         private static SkillVfxContext BuildSkillVfxContext(
@@ -563,39 +561,28 @@ namespace Project2048.Prototype
             return TryPlayDefinitionCues(skill, trigger, ctx);
         }
 
+        private SkillVfxRunner skillVfxRunner;
+
+        private SkillVfxRunner EnsureSkillVfxRunner()
+        {
+            if (skillVfxRunner == null)
+            {
+                skillVfxRunner = gameObject.GetComponent<SkillVfxRunner>()
+                    ?? gameObject.AddComponent<SkillVfxRunner>();
+            }
+
+            return skillVfxRunner;
+        }
+
         private bool TryPlayDefinitionCues(SkillSO skill, SkillVfxTrigger trigger, SkillVfxContext ctx)
         {
-            if (skill == null || skill.vfxDefinition == null || !skill.vfxDefinition.HasAnyCue)
+            if (skill == null)
             {
                 return false;
             }
 
-            var playedAnyCue = false;
-            foreach (var cue in skill.vfxDefinition.CuesFor(trigger))
-            {
-                if (cue == null || !cue.HasPrefab)
-                {
-                    continue;
-                }
-
-                playedAnyCue = true;
-                if (Application.isPlaying && cue.delaySeconds > 0f)
-                {
-                    StartCoroutine(PlayDefinitionCueAfterDelay(cue, ctx, cue.delaySeconds));
-                }
-                else
-                {
-                    SkillVfxPlayer.PlayCue(cue, ctx, transform, Application.isPlaying);
-                }
-            }
-
-            return playedAnyCue;
-        }
-
-        private IEnumerator PlayDefinitionCueAfterDelay(SkillVfxCue cue, SkillVfxContext ctx, float delaySeconds)
-        {
-            yield return new WaitForSeconds(Mathf.Max(0f, delaySeconds));
-            SkillVfxPlayer.PlayCue(cue, ctx, transform, Application.isPlaying);
+            // 큐 순회·지연·스폰·수명은 SkillVfxRunner가 전담한다. 뷰는 위임만 한다.
+            return EnsureSkillVfxRunner().Play(skill.vfxDefinition, ctx, transform);
         }
 
         private static float ResolveDefinitionCueDurationSeconds(SkillSO skill, SkillVfxTrigger trigger)
@@ -2614,7 +2601,7 @@ namespace Project2048.Prototype
 
         private void PlaySlashBeamSkillEffect(SkillSO skill, Transform sourceAnchor, Transform targetAnchor)
         {
-            var source = ResolveSlashSkillSourcePosition(sourceAnchor != null ? sourceAnchor : transform, targetAnchor);
+            var source = ResolveSlashSkillSourcePosition(skill, sourceAnchor != null ? sourceAnchor : transform, targetAnchor);
             var target = targetAnchor != null ? ResolveSkillImpactWorldPosition(targetAnchor) : source + Vector3.right;
             if ((target - source).sqrMagnitude <= 0.0001f)
             {
@@ -3882,8 +3869,8 @@ namespace Project2048.Prototype
                 new Vector3(LanternMuzzleLocalX * facingSign, LanternMuzzleLocalY, 0f);
         }
 
-        // 참격류 전용 발사 원점: 랜턴 머즐보다 낮은 손 높이에서 베어나간다.
-        private static Vector3 ResolveSlashSkillSourcePosition(Transform sourceAnchor, Transform targetAnchor)
+        // Slash arcs spawn from the authored player-front offset and mirror toward the target.
+        private Vector3 ResolveSlashSkillSourcePosition(SkillSO skill, Transform sourceAnchor, Transform targetAnchor)
         {
             if (sourceAnchor == null)
             {
@@ -3891,8 +3878,13 @@ namespace Project2048.Prototype
             }
 
             var facingSign = ResolveAttackFacingSign(sourceAnchor, targetAnchor);
-            return ResolveAnchorVisualCenterWorldPosition(sourceAnchor) +
-                new Vector3(SlashSkillMuzzleLocalX * facingSign, SlashSkillMuzzleLocalY, 0f);
+            var localOffset = ResolvePlayerFrontLocalOffset(ResolveDesignTimeLocalOffset(
+                ResolveSkillVfxTuning(skill),
+                ResolveSkillVfxPackage(skill),
+                ResolveSkillVfxDesignTimeBinding(skill),
+                PlayerFrontAttackArtLocalOffset));
+            localOffset.x = Mathf.Abs(localOffset.x) * facingSign;
+            return ResolveAnchorVisualCenterWorldPosition(sourceAnchor) + localOffset;
         }
 
         private static Vector3 ResolveLanternSkillLocalOffset(Transform sourceAnchor, Transform targetAnchor)

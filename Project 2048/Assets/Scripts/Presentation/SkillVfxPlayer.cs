@@ -4,24 +4,23 @@ using UnityEngine.VFX;
 
 namespace Project2048.Presentation
 {
+    // 같은 SkillSO를 누가 쓰든 컨텍스트만 뒤집힌다.
+    // 플레이어 시전: caster=플레이어, primaryTarget=적 / 적 시전: 그 역. 데이터(SkillSO)는 복제하지 않는다.
     public readonly struct SkillVfxContext
     {
-        public readonly Transform playerAnchor;
-        public readonly Transform enemyAnchor;
+        public readonly Transform caster;
+        public readonly Transform primaryTarget;
         public readonly SkillVfxTrigger trigger;
 
-        public SkillVfxContext(Transform playerAnchor, Transform enemyAnchor, SkillVfxTrigger trigger)
+        public SkillVfxContext(Transform caster, Transform primaryTarget, SkillVfxTrigger trigger)
         {
-            this.playerAnchor = playerAnchor;
-            this.enemyAnchor = enemyAnchor;
+            this.caster = caster;
+            this.primaryTarget = primaryTarget;
             this.trigger = trigger;
         }
 
-        public Transform AnchorFor(SkillVfxTarget target) =>
-            target == SkillVfxTarget.Enemy ? enemyAnchor : playerAnchor;
-
-        public Transform OppositeAnchorFor(SkillVfxTarget target) =>
-            target == SkillVfxTarget.Enemy ? playerAnchor : enemyAnchor;
+        public Transform ResolveActor(VfxActorRef actor) =>
+            actor == VfxActorRef.PrimaryTarget ? primaryTarget : caster;
     }
 
     public static class SkillVfxPlayer
@@ -36,32 +35,137 @@ namespace Project2048.Presentation
             "ParticleColor",
         };
 
-        public static Vector3 ResolvePlacementWorldPosition(SkillVfxPlacement placement, SkillVfxContext ctx)
+        public static VfxActorRef OppositeActor(VfxActorRef actor) =>
+            actor == VfxActorRef.Caster ? VfxActorRef.PrimaryTarget : VfxActorRef.Caster;
+
+        // 랜턴 머즐 기본 오프셋(앵커 비주얼 센터 기준, facing 반영).
+        // CombatWorldSpriteView의 LanternMuzzleLocalX/Y와 동일값 — 프로바이더 castPoint 미지정 시 폴백.
+        private const float DefaultCastPointLocalX = 0.34f;
+        private const float DefaultCastPointLocalY = 0.36f;
+
+        public static Vector3 ResolveEndpointWorldPosition(VfxEndpoint endpoint, SkillVfxContext ctx)
         {
-            var anchor = ctx.AnchorFor(placement.target);
+            var anchor = ctx.ResolveActor(endpoint.actor);
+            var localOffset = ResolveEndpointLocalOffset(endpoint, ctx);
             if (anchor == null)
             {
-                return placement.localOffset;
+                return localOffset;
             }
 
-            var basePos = ResolveVerticalWorldPosition(anchor, placement.vertical);
-            return basePos + anchor.TransformVector(placement.localOffset);
+            // 발사 방향 기준이 되는 상대 액터(시전자의 머즐은 주대상 쪽을 향한다).
+            var facingTarget = ctx.ResolveActor(OppositeActor(endpoint.actor));
+            var basePos = ResolveSocketWorldPosition(anchor, endpoint.socket, facingTarget);
+            return basePos + anchor.TransformVector(localOffset);
         }
 
-        private static Vector3 ResolveVerticalWorldPosition(Transform anchor, SkillVfxVertical vertical)
+        private static Vector3 ResolveEndpointLocalOffset(VfxEndpoint endpoint, SkillVfxContext ctx)
         {
-            if (!TryResolveRendererBounds(anchor, out var bounds))
+            var localOffset = endpoint.localOffset;
+            if (endpoint.mirrorOffsetXWithCastDirection)
+            {
+                localOffset.x *= ResolveCastDirectionSign(ctx);
+            }
+
+            return localOffset;
+        }
+
+        private static Vector3 ResolveSocketWorldPosition(Transform anchor, VfxSocket socket, Transform facingTarget)
+        {
+            // 1) 캐릭터에 명시 소켓(손/입/무기 머즐)이 있으면 최우선.
+            var provider = anchor.GetComponentInParent<CombatVfxAnchorProvider>();
+            if (provider != null && provider.TryGetSocket(socket, out var socketTransform))
+            {
+                return socketTransform.position;
+            }
+
+            var hasBounds = TryResolveRendererBounds(anchor, out var bounds);
+            var center = hasBounds ? bounds.center : anchor.position;
+
+            // 2) CastPoint = 랜턴 머즐: 비주얼 센터에서 타깃 쪽으로 facing 반영한 오프셋.
+            if (socket == VfxSocket.CastPoint)
+            {
+                var facingSign = ResolveFacingSign(anchor, facingTarget);
+                return center + new Vector3(DefaultCastPointLocalX * facingSign, DefaultCastPointLocalY, 0f);
+            }
+
+            // 3) Root는 앵커 원점, 그 외는 bounds 기반(Feet/Body/Head, HitPoint는 몸통 중심).
+            if (socket == VfxSocket.Root || !hasBounds)
             {
                 return anchor.position;
             }
 
-            var y = vertical switch
+            var y = socket switch
             {
-                SkillVfxVertical.Feet => bounds.min.y,
-                SkillVfxVertical.Head => bounds.max.y,
-                _ => bounds.center.y,
+                VfxSocket.Feet => bounds.min.y,
+                VfxSocket.Head => bounds.max.y,
+                _ => bounds.center.y, // Body / HitPoint
             };
             return new Vector3(bounds.center.x, y, bounds.center.z);
+        }
+
+        // 시전자가 타깃을 바라보는 방향(+1 오른쪽 / -1 왼쪽). CombatWorldSpriteView.ResolveAttackFacingSign과 동일 규칙.
+        private static float ResolveFacingSign(Transform anchor, Transform facingTarget)
+        {
+            if (anchor == null || facingTarget == null)
+            {
+                return 1f;
+            }
+
+            return anchor.position.x <= facingTarget.position.x ? 1f : -1f;
+        }
+
+        private static float ResolveCastDirectionSign(SkillVfxContext ctx)
+        {
+            if (ctx.caster == null || ctx.primaryTarget == null)
+            {
+                return 1f;
+            }
+
+            var deltaX = ctx.primaryTarget.position.x - ctx.caster.position.x;
+            if (Mathf.Abs(deltaX) <= 0.0001f)
+            {
+                return 1f;
+            }
+
+            return deltaX > 0f ? 1f : -1f;
+        }
+
+        private static float ResolveCueDirectionSign(
+            SkillVfxCue cue,
+            SkillVfxContext ctx,
+            Vector3 spawnPos,
+            Vector3? destinationPos)
+        {
+            if (cue == null)
+            {
+                return 1f;
+            }
+
+            if (cue.flipMode == VfxFlipMode.SpawnToDestination && destinationPos.HasValue)
+            {
+                var deltaX = destinationPos.Value.x - spawnPos.x;
+                if (Mathf.Abs(deltaX) > 0.0001f)
+                {
+                    return deltaX > 0f ? 1f : -1f;
+                }
+            }
+
+            return ResolveCastDirectionSign(ctx);
+        }
+
+        // 슬래시/빔류: 출발·도착 두 점의 중점에 놓고 +X축을 출발→도착 방향으로 회전.
+        // 레거시 PlaySlashArcAttackArt(center=Lerp(src,dst,0.5), rotation=FromToRotation(right,dir))와 동일.
+        private static void PlaceAsBeam(Transform t, Vector3 spawnPos, Vector3 destinationPos)
+        {
+            var direction = destinationPos - spawnPos;
+            direction.z = 0f;
+            if (direction.sqrMagnitude <= 0.0001f)
+            {
+                direction = Vector3.right;
+            }
+
+            t.position = Vector3.Lerp(spawnPos, destinationPos, 0.5f);
+            t.rotation = Quaternion.FromToRotation(Vector3.right, direction.normalized);
         }
 
         private static bool TryResolveRendererBounds(Transform anchor, out Bounds bounds)
@@ -113,7 +217,7 @@ namespace Project2048.Presentation
             foreach (var cue in definition.CuesFor(ctx.trigger))
             {
                 // Edit mode / tests: ignore delay, spawn synchronously. Play-mode delay is handled
-                // by the caller (the view) via a coroutine.
+                // by the caller (the view / runner) via a coroutine.
                 var go = PlayCue(cue, ctx, parent, isPlaying);
                 if (go != null) spawned.Add(go);
             }
@@ -125,7 +229,7 @@ namespace Project2048.Presentation
         {
             if (cue == null || !cue.HasPrefab) return null;
 
-            var pos = ResolvePlacementWorldPosition(cue.placement, ctx);
+            var pos = ResolveEndpointWorldPosition(cue.spawnAt, ctx);
             var instance = Object.Instantiate(cue.prefab, pos, Quaternion.identity, parent);
             instance.name = cue.prefab.name;
 
@@ -136,12 +240,36 @@ namespace Project2048.Presentation
 
             ApplyTint(instance, cue.tint);
 
+            Vector3? destinationPos = null;
+            if (cue.useDestination)
+            {
+                destinationPos = ResolveEndpointWorldPosition(cue.destination, ctx);
+            }
+
+            ApplyVisualFlip(instance, cue, ctx, pos, destinationPos);
+            ApplyAttachMode(instance, cue, ctx);
+
             var projectile = instance.GetComponentInChildren<CombatProjectileEffect>(true);
             if (projectile != null)
             {
                 // 프로젝타일은 스스로 이동/임팩트 파티클을 재생한다.
-                var targetAnchor = ctx.OppositeAnchorFor(cue.placement.target);
-                projectile.LaunchFromWorldPosition(pos, targetAnchor, Vector3.zero);
+                if (destinationPos.HasValue)
+                {
+                    // 도착점이 명시됨 → 그 월드 좌표로 직행.
+                    projectile.LaunchBetweenWorldPositions(pos, destinationPos.Value);
+                }
+                else
+                {
+                    // 미지정 → 반대 액터로 폴백(프리팹 자체 targetLocalOffset 유지).
+                    var targetAnchor = ctx.ResolveActor(OppositeActor(cue.spawnAt.actor));
+                    projectile.LaunchFromWorldPosition(pos, targetAnchor, Vector3.zero);
+                }
+            }
+            else if (destinationPos.HasValue)
+            {
+                // 이동하지 않는 빔/스팬(슬래시류): 두 점의 중점에 놓고 출발→도착 방향으로 회전.
+                PlaceAsBeam(instance.transform, pos, destinationPos.Value);
+                PlayVisuals(instance);
             }
             else
             {
@@ -155,6 +283,58 @@ namespace Project2048.Presentation
             }
 
             return instance;
+        }
+
+        private static void ApplyAttachMode(GameObject instance, SkillVfxCue cue, SkillVfxContext ctx)
+        {
+            if (instance == null || cue == null || cue.attachMode != VfxAttachMode.FollowSpawnActor)
+            {
+                return;
+            }
+
+            var spawnActor = ctx.ResolveActor(cue.spawnAt.actor);
+            if (spawnActor != null)
+            {
+                instance.transform.SetParent(spawnActor, true);
+            }
+        }
+
+        private static void ApplyVisualFlip(
+            GameObject instance,
+            SkillVfxCue cue,
+            SkillVfxContext ctx,
+            Vector3 spawnPos,
+            Vector3? destinationPos)
+        {
+            if (instance == null || cue == null || cue.flipMode == VfxFlipMode.None)
+            {
+                return;
+            }
+
+            var directionSign = ResolveCueDirectionSign(cue, ctx, spawnPos, destinationPos);
+            var authoredSign = cue.authoredFacing == VfxAuthoredFacing.Left ? -1f : 1f;
+            var targetSign = directionSign * authoredSign;
+            var visual = ResolveVisualTransform(instance);
+            var scale = visual.localScale;
+            var magnitude = Mathf.Abs(scale.x);
+            if (magnitude <= 0.0001f)
+            {
+                magnitude = 1f;
+            }
+
+            scale.x = magnitude * targetSign;
+            visual.localScale = scale;
+        }
+
+        private static Transform ResolveVisualTransform(GameObject instance)
+        {
+            var visualRoot = instance.GetComponentInChildren<SkillVfxVisualRoot>(true);
+            if (visualRoot != null)
+            {
+                return visualRoot.VisualTransform;
+            }
+
+            return instance.transform;
         }
 
         public static void ApplyTint(GameObject instance, Color tint)

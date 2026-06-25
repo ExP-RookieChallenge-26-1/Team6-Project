@@ -102,6 +102,21 @@ namespace Project2048.Presentation
             return anchor.position.x <= facingTarget.position.x ? 1f : -1f;
         }
 
+        // 슬래시/빔류: 출발·도착 두 점의 중점에 놓고 +X축을 출발→도착 방향으로 회전.
+        // 레거시 PlaySlashArcAttackArt(center=Lerp(src,dst,0.5), rotation=FromToRotation(right,dir))와 동일.
+        private static void PlaceAsBeam(Transform t, Vector3 spawnPos, Vector3 destinationPos)
+        {
+            var direction = destinationPos - spawnPos;
+            direction.z = 0f;
+            if (direction.sqrMagnitude <= 0.0001f)
+            {
+                direction = Vector3.right;
+            }
+
+            t.position = Vector3.Lerp(spawnPos, destinationPos, 0.5f);
+            t.rotation = Quaternion.FromToRotation(Vector3.right, direction.normalized);
+        }
+
         private static bool TryResolveRendererBounds(Transform anchor, out Bounds bounds)
         {
             bounds = default;
@@ -190,6 +205,13 @@ namespace Project2048.Presentation
                     var targetAnchor = ctx.ResolveActor(OppositeActor(cue.spawnAt.actor));
                     projectile.LaunchFromWorldPosition(pos, targetAnchor, Vector3.zero);
                 }
+            }
+            else if (cue.useDestination)
+            {
+                // 이동하지 않는 빔/스팬(슬래시류): 두 점의 중점에 놓고 출발→도착 방향으로 회전.
+                var destinationPos = ResolveEndpointWorldPosition(cue.destination, ctx);
+                PlaceAsBeam(instance.transform, pos, destinationPos);
+                PlayVisuals(instance);
             }
             else
             {

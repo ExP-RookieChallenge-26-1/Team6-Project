@@ -314,6 +314,49 @@ namespace Project2048.Tests
             Object.DestroyImmediate(right.gameObject);
         }
 
+        // 빔/슬래시류: 출발·도착 중점에 배치 + 방향 회전. 적이 같은 스킬을 쓰면 방향이 반대로 미러링.
+        [Test]
+        public void BeamCue_PlacesAtMidpoint_AndMirrorsDirectionOnEnemyCast()
+        {
+            var left = MakeUnitSprite("L", new Vector3(-2, 0, 0));
+            var right = MakeUnitSprite("R", new Vector3(2, 0, 0));
+            var prefab = new GameObject("BeamFx");
+            var def = new SkillVfxDefinition
+            {
+                cues = new[]
+                {
+                    new SkillVfxCue
+                    {
+                        trigger = SkillVfxTrigger.Activate,
+                        prefab = prefab,
+                        spawnAt = new VfxEndpoint { actor = VfxActorRef.Caster, socket = VfxSocket.Body },
+                        useDestination = true,
+                        destination = new VfxEndpoint { actor = VfxActorRef.PrimaryTarget, socket = VfxSocket.Body },
+                    },
+                },
+            };
+
+            var asPlayer = SkillVfxPlayer.Play(
+                def, new SkillVfxContext(left.transform, right.transform, SkillVfxTrigger.Activate), null, false);
+            var asEnemy = SkillVfxPlayer.Play(
+                def, new SkillVfxContext(right.transform, left.transform, SkillVfxTrigger.Activate), null, false);
+
+            // 두 경우 모두 중점(x≈0)에 위치.
+            Assert.That(asPlayer[0].transform.position.x, Is.EqualTo(0f).Within(0.001f));
+            Assert.That(asEnemy[0].transform.position.x, Is.EqualTo(0f).Within(0.001f));
+            // 방향은 정확히 반대(180°) → 좌우 미러링.
+            var deltaZ = Mathf.Abs(Mathf.DeltaAngle(
+                asPlayer[0].transform.rotation.eulerAngles.z,
+                asEnemy[0].transform.rotation.eulerAngles.z));
+            Assert.That(deltaZ, Is.EqualTo(180f).Within(0.5f));
+
+            foreach (var go in asPlayer) Object.DestroyImmediate(go);
+            foreach (var go in asEnemy) Object.DestroyImmediate(go);
+            Object.DestroyImmediate(prefab);
+            Object.DestroyImmediate(left.gameObject);
+            Object.DestroyImmediate(right.gameObject);
+        }
+
         [Test]
         public void AnchorProvider_CastPointTransform_OverridesMuzzleFallback()
         {

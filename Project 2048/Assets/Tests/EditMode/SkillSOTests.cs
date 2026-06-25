@@ -266,6 +266,7 @@ namespace Project2048.Tests
             {
                 "light-shot",
                 "low-stance",
+                "gather-light",
             }));
         }
 

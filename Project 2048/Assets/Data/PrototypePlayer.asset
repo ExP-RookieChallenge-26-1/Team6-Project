@@ -23,6 +23,7 @@ MonoBehaviour:
   startingSkills:
   - {fileID: 11400000, guid: f4882f31e6dbe5d4a9bb1b51c44e2f03, type: 2}
   - {fileID: 11400000, guid: 00966bf157b01874e90775ed704b2b9b, type: 2}
+  - {fileID: 11400000, guid: 6f55ddd9fa46a12499ebd68dc42ee6bc, type: 2}
   actionEffects:
   - actionId: hit
     effect:

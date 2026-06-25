@@ -2415,9 +2415,9 @@
     "file_id": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "path": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "file_name": "CombatManager.cs",
-    "content_hash": "6b411eb548e54532eb96cf19b0ef390d9cd425d0",
-    "size": 44108,
-    "line_count": 1241,
+    "content_hash": "d43f362e92e4b634787fc4cd78ebdedd7386b54d",
+    "size": 44392,
+    "line_count": 1252,
     "namespace": "Project2048.Combat",
     "using_list": [
       "System",
@@ -2864,6 +2864,7 @@
       "Execute",
       "SkillExecutionContext",
       "RecordUsedSkill",
+      "CheckDefeat",
       "CheckVictory",
       "ResolveEffectKind",
       "SkillEffectKind",
@@ -2892,7 +2893,6 @@
       "EditMode",
       "ClearFear",
       "ResolveEndOfTurnStatuses",
-      "CheckDefeat",
       "CaptureCostCarry",
       "ClearSkillSeal",
       "BeginEnemyTurn",
@@ -3246,9 +3246,9 @@
     "file_id": "Project 2048/Assets/Scripts/Combat/CombatSnapshot.cs",
     "path": "Project 2048/Assets/Scripts/Combat/CombatSnapshot.cs",
     "file_name": "CombatSnapshot.cs",
-    "content_hash": "b68bad62346d069ad7f4f845e59947f327cf9b03",
-    "size": 3803,
-    "line_count": 109,
+    "content_hash": "c88217b9cd53c4f2f0dd9196afc0beba4141fb86",
+    "size": 3856,
+    "line_count": 110,
     "namespace": "Project2048.Combat",
     "using_list": [
       "System",
@@ -3599,6 +3599,11 @@
         "access": "public",
         "type": "bool",
         "name": "RequiresEnemyTarget"
+      },
+      {
+        "access": "public",
+        "type": "bool",
+        "name": "CanExecute"
       }
     ],
     "events": [],
@@ -3681,7 +3686,8 @@
       "SkillId",
       "Cost",
       "Power",
-      "RequiresEnemyTarget"
+      "RequiresEnemyTarget",
+      "CanExecute"
     ],
     "component_access_types": [],
     "created_types": [],
@@ -3855,9 +3861,9 @@
     "file_id": "Project 2048/Assets/Scripts/Combat/PlayerCombatController.cs",
     "path": "Project 2048/Assets/Scripts/Combat/PlayerCombatController.cs",
     "file_name": "PlayerCombatController.cs",
-    "content_hash": "5090dcef9e18d2235f776f29b7bf7f9087e86b29",
-    "size": 29824,
-    "line_count": 953,
+    "content_hash": "3ff374c574e3dcaa9c788df5540ac7876f0d4290",
+    "size": 30836,
+    "line_count": 977,
     "namespace": "Project2048.Combat",
     "using_list": [
       "System",
@@ -3938,6 +3944,7 @@
       "ApplyFear",
       "ClearFear",
       "ClearBlock",
+      "ReduceThornRetaliationShield",
       "ResolveStageModifiedStat",
       "IsBasicSkill",
       "BindDataValidation",
@@ -4177,6 +4184,11 @@
       {
         "access": "public",
         "type": "int",
+        "name": "ThornRetaliationShieldHp"
+      },
+      {
+        "access": "public",
+        "type": "int",
         "name": "DefenseBonus"
       },
       {
@@ -4362,6 +4374,7 @@
       "Block",
       "ShieldHp",
       "ThornRetaliationDamage",
+      "ThornRetaliationShieldHp",
       "DefenseBonus",
       "FearStacks",
       "BoardMoveCountBonus",
@@ -4427,6 +4440,8 @@
       "ApplyDefensePowerModifier",
       "TakeDamage",
       "CeilToInt",
+      "Min",
+      "ReduceThornRetaliationShield",
       "TakeStatusDamage",
       "RestoreHp",
       "RestoreHpByMaxHpPercent",
@@ -5718,9 +5733,9 @@
     "file_id": "Project 2048/Assets/Scripts/Enemy/EnemyController.cs",
     "path": "Project 2048/Assets/Scripts/Enemy/EnemyController.cs",
     "file_name": "EnemyController.cs",
-    "content_hash": "c9cbfdcc91bb87b4450b2b3af3ed5cd76c06ed67",
-    "size": 16471,
-    "line_count": 537,
+    "content_hash": "64e457595c635b7db1b630c915de757103858723",
+    "size": 17407,
+    "line_count": 559,
     "namespace": "Project2048.Enemy",
     "using_list": [
       "System",
@@ -5758,6 +5773,7 @@
       "ApplyEndure",
       "ApplyCriticalStageModifier",
       "ClearBlock",
+      "ReduceThornRetaliationShield",
       "SetIntent",
       "SetIntents",
       "ApplyAttackModifier",
@@ -5952,6 +5968,11 @@
       {
         "access": "public",
         "type": "int",
+        "name": "ThornRetaliationShieldHp"
+      },
+      {
+        "access": "public",
+        "type": "int",
         "name": "AttackModifier"
       },
       {
@@ -6093,6 +6114,7 @@
       "Block",
       "ShieldHp",
       "ThornRetaliationDamage",
+      "ThornRetaliationShieldHp",
       "CriticalStage",
       "CriticalChance",
       "Clamp01",
@@ -6136,6 +6158,8 @@
       "RefreshIntentPreview",
       "TakeDamage",
       "CeilToInt",
+      "Min",
+      "ReduceThornRetaliationShield",
       "TakeStatusDamage",
       "RestoreHp",
       "SpendHp",
@@ -6551,8 +6575,8 @@
     "file_id": "Project 2048/Assets/Scripts/Enemy/EnemyIntentSystem.cs",
     "path": "Project 2048/Assets/Scripts/Enemy/EnemyIntentSystem.cs",
     "file_name": "EnemyIntentSystem.cs",
-    "content_hash": "db6fefb6e89c6adcc66d42c8611ea12d1b303561",
-    "size": 13624,
+    "content_hash": "1f287e160701273b1b76e760af8a31a3f55fac9b",
+    "size": 13655,
     "line_count": 368,
     "namespace": "Project2048.Enemy",
     "using_list": [
@@ -6619,7 +6643,7 @@
         "is_static": false
       },
       {
-        "name": "shieldBeforeHit",
+        "name": "thornShieldBeforeHit",
         "type": "var",
         "access": "internal",
         "serialized": false,
@@ -6707,7 +6731,7 @@
       "Clamp01",
       "ResolveEffectiveAttackIntent",
       "CalculateEnemyDamage",
-      "ShieldHp",
+      "ThornRetaliationShieldHp",
       "ThornRetaliationDamage",
       "TakeDamage",
       "TriggerOnAttackedStatusDamage",
@@ -11822,8 +11846,8 @@
     "file_id": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "path": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "file_name": "CombatUiView.cs",
-    "content_hash": "a6f6aa751d30d910e5a1f9fcf271dcfca993d817",
-    "size": 115092,
+    "content_hash": "9ee83dad61ae4bf7019597765d0bad3df982f62d",
+    "size": 115123,
     "line_count": 3203,
     "namespace": "Project2048.Prototype",
     "using_list": [
@@ -13508,9 +13532,9 @@
     "file_id": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "path": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "file_name": "CombatWorldSpriteView.cs",
-    "content_hash": "9fb8b949b43637cff1b2121f99c70d8c3f3da1e8",
-    "size": 285143,
-    "line_count": 7389,
+    "content_hash": "ccd8d3c05c5ac7bcd94e3b78740124ea30122772",
+    "size": 287681,
+    "line_count": 7466,
     "namespace": "Project2048.Prototype",
     "using_list": [
       "System.Collections",
@@ -13671,6 +13695,9 @@
       "ResolveDesignTimeSecondaryPrefab",
       "ResolvePlayerFrontLocalOffset",
       "ResolvePlayerRightLocalOffset",
+      "MirrorLocalOffsetXByFacing",
+      "ResolveFacingMirroredLocalRotation",
+      "NormalizeFacingSign",
       "ResolveDesignTimeRadiusMultiplier",
       "ResolveDesignTimeLifetime",
       "ResolveDesignTimeArtColor",
@@ -13755,10 +13782,7 @@
       "ConfigureParticleBurst",
       "ConfigureSwirlBurst",
       "AnimationCurve",
-      "Keyframe",
-      "SwirlParticleTransformRoutine",
-      "DisableSwirlBurst",
-      "SpawnShieldCircleLine"
+      "Keyframe"
     ],
     "fields": [
       {
@@ -14336,6 +14360,13 @@
         "is_static": false
       },
       {
+        "name": "targetAnchor",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
         "name": "sourceAnchor",
         "type": "var",
         "access": "internal",
@@ -14463,6 +14494,13 @@
       },
       {
         "name": "duration",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "resolvedFacingTargetAnchor",
         "type": "var",
         "access": "internal",
         "serialized": false,
@@ -15799,7 +15837,7 @@
         "is_static": false
       },
       {
-        "name": "bounds",
+        "name": "hasBounds",
         "type": "var",
         "access": "internal",
         "serialized": false,
@@ -21397,8 +21435,8 @@
     "file_id": "Project 2048/Assets/Scripts/Skills/SkillAttackExecutor.cs",
     "path": "Project 2048/Assets/Scripts/Skills/SkillAttackExecutor.cs",
     "file_name": "SkillAttackExecutor.cs",
-    "content_hash": "44073d4a118e06098530e5aeabe9d3599296b0c4",
-    "size": 6814,
+    "content_hash": "661daf0a35b80880f77f58600a687720b4b3d144",
+    "size": 6862,
     "line_count": 190,
     "namespace": "Project2048.Skills",
     "using_list": [
@@ -21447,7 +21485,7 @@
         "is_static": false
       },
       {
-        "name": "targetShieldBeforeHit",
+        "name": "targetThornShieldBeforeHit",
         "type": "var",
         "access": "internal",
         "serialized": false,
@@ -21531,7 +21569,7 @@
       "TryConsumeNextAttackModifiers",
       "Max",
       "RoundToInt",
-      "ShieldHp",
+      "ThornRetaliationShieldHp",
       "ThornRetaliationDamage",
       "CalculatePlayerSkillDamageFromStat",
       "CriticalChance",
@@ -21560,6 +21598,7 @@
       "CurrentCost",
       "Spend",
       "DefensePower",
+      "ShieldHp",
       "EffectiveAttackPower"
     ],
     "component_access_types": [],
@@ -21692,9 +21731,9 @@
     "file_id": "Project 2048/Assets/Scripts/Skills/SkillExecutor.cs",
     "path": "Project 2048/Assets/Scripts/Skills/SkillExecutor.cs",
     "file_name": "SkillExecutor.cs",
-    "content_hash": "b16fc4da3d9345088355233e3c991bc53d3b38db",
-    "size": 13452,
-    "line_count": 316,
+    "content_hash": "bd1807cc2779a30d6c51fdbf2805ae4c202bb0f0",
+    "size": 13533,
+    "line_count": 317,
     "namespace": "Project2048.Skills",
     "using_list": [
       "Project2048.Combat",
@@ -21867,6 +21906,7 @@
       "ExecuteChargedAttack",
       "AttackPower",
       "CanExecute",
+      "HasPendingChargedAttack",
       "CeilToInt",
       "MaxHp",
       "Clamp01",
@@ -26242,9 +26282,9 @@
     "file_id": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
     "path": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
     "file_name": "CombatManagerTests.cs",
-    "content_hash": "deb218bb4bc48196b7c4929491ffaeb13994523c",
-    "size": 43333,
-    "line_count": 1033,
+    "content_hash": "650658a3586f4e739ff3c38e55762a9719cdd4c5",
+    "size": 52679,
+    "line_count": 1226,
     "namespace": "Project2048.Tests",
     "using_list": [
       "System.Collections.Generic",
@@ -26278,6 +26318,10 @@
       "DamageCalculator",
       "ThornGuard_RetaliatesOnlyWhileShieldHpExists",
       "SkillExecutor",
+      "RequestUseSkill_PlayerKilledByEnemyThornGuard_RaisesDefeat",
+      "ThornGuard_RetaliationDoesNotScaleWithStackedShield",
+      "ThornGuard_PlayerRetaliationDoesNotScaleWithStackedShield",
+      "EnemyIntentSystem",
       "DefenseSkill_GainsFixedShieldWithoutDefensePowerBonus",
       "RequestEndPlayerTurn_ClearsPlayerBlock_WhenNextPlayerTurnStarts",
       "RequestEndPlayerTurn_ClearsEnemyBlock_WhenThatEnemyStartsNextOwnTurn",
@@ -26291,11 +26335,12 @@
       "ShieldBurstAttack_UsesShieldAsAttackStatThenConsumesAllShield",
       "DefenseScalingAttack_UsesStageModifiedDefenseAsAttackStat",
       "CounterAndEndure_RetaliateAndKeepPlayerAtOneHp",
-      "EnemyIntentSystem",
       "BoardMovePenaltyAttack_ReducesNextPlayerTurnMoveCount",
       "EnemyCostGainDebuff_ReducesNextBoardPhaseCostOnce",
       "CostConverter",
       "ChargeAttack_FiresAtNextPlayerTurnStart",
+      "ChargeAttack_PlayerKilledByEnemyThornGuard_RaisesDefeat",
+      "ChargeAttack_CannotBeQueuedAgainWhilePending",
       "RequestEndPlayerTurn_EnemyWithThreeActions_ExecutesInPreviewOrder",
       "EnemySkillIntent_CanApplyPlayerDebuffAndSkillNameSnapshot",
       "ResolveBoardPhase_FirstPlayerTurn_FloorsPositiveCostToCheapestEquippedSkill",
@@ -26318,8 +26363,99 @@
         "is_static": false
       },
       {
+        "name": "hpAfterFirstHit",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "defeatRaised",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "victoryRaised",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "singleHpBefore",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "singleRetaliationDamage",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "stackedHpBefore",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "stackedRetaliationDamage",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "singleHpBefore",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "singleRetaliationDamage",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "stackedHpBefore",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "stackedRetaliationDamage",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
         "name": "refreshedSnapshot",
         "type": "CombatSnapshot",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "defeatRaised",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "victoryRaised",
+        "type": "var",
         "access": "internal",
         "serialized": false,
         "is_static": false
@@ -26339,7 +26475,7 @@
     "public_field_count": 0,
     "get_component_count": 0,
     "find_call_count": 0,
-    "new_keyword_count": 96,
+    "new_keyword_count": 117,
     "coroutine_count": 0,
     "singleton_candidate": false,
     "dont_destroy_on_load": false,
@@ -26415,14 +26551,30 @@
       "SkillExecutor",
       "Execute",
       "ShieldHp",
+      "RequestUseSkill_PlayerKilledByEnemyThornGuard_RaisesDefeat",
+      "OnCombatDefeat",
+      "IsDead",
+      "False",
+      "Defeat",
+      "ThornGuard_RetaliationDoesNotScaleWithStackedShield",
+      "SinglePlayer",
+      "SingleEnemy",
+      "StackedPlayer",
+      "StackedEnemy",
+      "AddBlock",
+      "ThornRetaliationShieldHp",
+      "LessThanOrEqualTo",
+      "ThornGuard_PlayerRetaliationDoesNotScaleWithStackedShield",
+      "EnemyIntent",
+      "EnemyIntentType",
+      "EnemyIntentSystem",
+      "ExecuteIntent",
       "DefenseSkill_GainsFixedShieldWithoutDefensePowerBonus",
       "Defense",
       "Block",
       "DefenseBonus",
       "RequestEndPlayerTurn_ClearsPlayerBlock_WhenNextPlayerTurnStarts",
       "RequestEndPlayerTurn_ClearsEnemyBlock_WhenThatEnemyStartsNextOwnTurn",
-      "EnemyIntent",
-      "EnemyIntentType",
       "RequestEndPlayerTurn_EnemyWithTwoActions_ExecutesBothPreviewedActions",
       "SetEnemyActionsPerTurn",
       "RefreshCombatantDataFromScriptableObjects_ReappliesChangedSoStatsDuringCombat",
@@ -26450,11 +26602,9 @@
       "AttackModifier",
       "LifeStealSkill_RestoresHpFromActualHpDamage",
       "LifeStealAttack",
-      "LessThanOrEqualTo",
       "ShieldScalingAttack_UsesCurrentShieldAsAttackStatWithoutConsumingIt",
       "ShieldScalingAttack",
       "DamageStatSource",
-      "AddBlock",
       "ShieldBurstAttack_UsesShieldAsAttackStatThenConsumesAllShield",
       "ShieldBurstAttack",
       "DefenseScalingAttack_UsesStageModifiedDefenseAsAttackStat",
@@ -26464,8 +26614,6 @@
       "CounterAndEndure_RetaliateAndKeepPlayerAtOneHp",
       "ApplyEndure",
       "ApplyCounter",
-      "EnemyIntentSystem",
-      "ExecuteIntent",
       "BoardMovePenaltyAttack_ReducesNextPlayerTurnMoveCount",
       "BoardMovePenaltyAttack",
       "EnemyCostGainDebuff_ReducesNextBoardPhaseCostOnce",
@@ -26474,6 +26622,11 @@
       "ConvertBoardToCost",
       "ChargeAttack_FiresAtNextPlayerTurnStart",
       "ChargeAttack",
+      "ChargeAttack_PlayerKilledByEnemyThornGuard_RaisesDefeat",
+      "ThornGuard",
+      "ChargeAttack_CannotBeQueuedAgainWhilePending",
+      "HasPendingChargedAttack",
+      "CanExecute",
       "RequestEndPlayerTurn_EnemyWithThreeActions_ExecutesInPreviewOrder",
       "EnemyAiComplexity",
       "Complex",
@@ -26492,7 +26645,6 @@
       "AttackPowerModifier",
       "ResolveBoardPhase_FirstPlayerTurn_FloorsPositiveCostToCheapestEquippedSkill",
       "ResolveBoardPhase_AfterFirstPlayerTurn_DoesNotFloorLowCost",
-      "False",
       "RequestUseSkill_ReturnsFalseWhilePresentationLocked",
       "BeginSkillPresentationLock",
       "IsSkillPresentationLocked",
@@ -26531,6 +26683,10 @@
       "SecondEnemy",
       "targeted-strike",
       "strike",
+      "SinglePlayer",
+      "SingleEnemy",
+      "StackedPlayer",
+      "StackedEnemy",
       "def-1",
       "def-2",
       "basic-defense",
@@ -26538,11 +26694,7 @@
       "flash-strike",
       "life-drain",
       "shield-bash",
-      "shield-burst",
-      "iron-wall",
-      "body-press",
-      "tentacle-strike",
-      "gather-light"
+      "shield-burst"
     ],
     "numeric_literals": [
       5,
@@ -26559,12 +26711,12 @@
       200,
       13,
       15,
-      17,
+      1000,
+      500,
       40,
+      120,
       128,
-      70,
-      3,
-      12
+      70
     ],
     "guessed_roles": [
       "combat",
@@ -26582,9 +26734,9 @@
     "file_id": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
     "path": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
     "file_name": "CombatPresentationEffectTests.cs",
-    "content_hash": "c110364a740f6208113d81e61ab2d26cccec983a",
-    "size": 207675,
-    "line_count": 3837,
+    "content_hash": "38ceb2ab50d9b9fb9f4530d8910ec01984c1d243",
+    "size": 211207,
+    "line_count": 3891,
     "namespace": "Project2048.Tests",
     "using_list": [
       "System.Collections",
@@ -26707,6 +26859,7 @@
       "CombatWorldSpriteView_EmptyVfxDefinition_FallsBackToProceduralPath",
       "CombatWorldSpriteView_VfxDefinitionActivateCue_SpawnsAuthoredPrefab",
       "CombatWorldSpriteView_EnemySkillPresentation_MirrorsCasterAndTargetPlacements",
+      "CombatWorldSpriteView_EnemyBuffAuraMagicCircle_MirrorsTowardPlayer",
       "CombatWorldSpriteView_TentacleStrikePreview_SpawnsAnimatorWhipAtCasterThenImpactAtTarget",
       "SkillVfxTentacleWhipPrefab_UsesExpAnimatorTentacle",
       "CombatWorldSpriteView_HeavyStrikePreview_SpawnsSpikedBurst",
@@ -26921,9 +27074,9 @@
     "has_on_disable": false,
     "serialize_field_count": 0,
     "public_field_count": 0,
-    "get_component_count": 58,
+    "get_component_count": 59,
     "find_call_count": 10,
-    "new_keyword_count": 241,
+    "new_keyword_count": 244,
     "coroutine_count": 11,
     "singleton_candidate": false,
     "dont_destroy_on_load": false,
@@ -27520,9 +27673,9 @@
     "file_id": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "path": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "file_name": "CombatUiViewTests.cs",
-    "content_hash": "3e849e0f9941c70c24df801a1c3613490c2454c2",
-    "size": 90319,
-    "line_count": 1728,
+    "content_hash": "4534635a69c282f030eea920eadbf3285382daf2",
+    "size": 93873,
+    "line_count": 1799,
     "namespace": "Project2048.Tests",
     "using_list": [
       "System.Collections",
@@ -27577,6 +27730,7 @@
       "RunProgress",
       "CombatResult",
       "ActionPhase_DisablesUnaffordableAuthoredSkillButtons",
+      "ActionPhase_DisablesChargeSkillButtonWhileChargeIsPending",
       "CostFormulaHelpIcon_ShowsBoardCostFormulaOnLongPress",
       "Initialize_WithMissingSerializedBattleReferences_WiresEnemyHpAndIntentByName",
       "EnemyDeath_HidesEnemyHpRoot",
@@ -27736,7 +27890,7 @@
     "public_field_count": 0,
     "get_component_count": 61,
     "find_call_count": 6,
-    "new_keyword_count": 124,
+    "new_keyword_count": 128,
     "coroutine_count": 6,
     "singleton_candidate": false,
     "dont_destroy_on_load": false,
@@ -27936,11 +28090,11 @@
       "OfferReward",
       "CombatResult",
       "ActionPhase_DisablesUnaffordableAuthoredSkillButtons",
-      "CostFormulaHelpIcon_ShowsBoardCostFormulaOnLongPress",
-      "CreateOwnedRectTransformObject",
-      "CostFormulaHelpIcon",
-      "BoardCostFormulaHelpIcon",
-      "InvokePrivate"
+      "BoardManager",
+      "SetBoardState",
+      "ActionPhase_DisablesChargeSkillButtonWhileChargeIsPending",
+      "Gather",
+      "Light"
     ],
     "component_access_types": [
       "Button",
@@ -29654,7 +29808,7 @@
     "file_id": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
     "path": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
     "file_name": "RewardGrowthTests.cs",
-    "content_hash": "3e9cd96284283311b5cd019878f5b7cca0110876",
+    "content_hash": "0f4877677f6fbe7009b4c92c8ad2159d4fea563f",
     "size": 49653,
     "line_count": 1011,
     "namespace": "Project2048.Tests",
@@ -30029,12 +30183,12 @@
       220,
       3,
       0,
-      30,
       5,
       50,
       99,
       9,
-      0.001
+      0.001,
+      14
     ],
     "guessed_roles": [
       "ui",
@@ -30178,9 +30332,9 @@
     "file_id": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
     "path": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
     "file_name": "SkillSOTests.cs",
-    "content_hash": "06d0b7807d3505b43ccb95e5784f6b6854d8fa38",
-    "size": 13553,
-    "line_count": 312,
+    "content_hash": "24c3f3e09e9d74e8cafb7ee46d24889cf8a2ef23",
+    "size": 15615,
+    "line_count": 346,
     "namespace": "Project2048.Tests",
     "using_list": [
       "System.Linq",
@@ -30212,7 +30366,7 @@
       "OnValidate_ClampsReusableVfxParameters",
       "PrototypeSkillAssets_MatchCurrentBalancePool",
       "Color",
-      "PrototypeSkillAssets_UseTealExplosionInsteadOfRawVfxTestEasyExplosion",
+      "PrototypeSkillAssets_UseExpectedImpactPrefabsInsteadOfRawVfxTestPrefabs",
       "PrototypePlayerAsset_UsesRequestedStartingSkills",
       "PrototypeEnemyAssets_EquipCurrentSharedStatusSkills",
       "LoadPrototypeSkills"
@@ -30247,6 +30401,13 @@
         "is_static": false
       },
       {
+        "name": "recklessBlow",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
         "name": "afterglowSave",
         "type": "var",
         "access": "internal",
@@ -30268,6 +30429,55 @@
         "is_static": false
       },
       {
+        "name": "lightShot",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "lowStance",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "lightGuard",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "ExpFlameSpritePath",
+        "type": "string",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "FlameBurstPrefabPath",
+        "type": "string",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "FlameImagePrefabPath",
+        "type": "string",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "RawVfxTestFirePath",
+        "type": "string",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
         "name": "RawEasyExplosionPath",
         "type": "string",
         "access": "internal",
@@ -30276,6 +30486,20 @@
       },
       {
         "name": "TealEasyExplosionPath",
+        "type": "string",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "RawVfxTestFirePath",
+        "type": "string",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "FlameImagePrefabPath",
         "type": "string",
         "access": "internal",
         "serialized": false,
@@ -30346,34 +30570,43 @@
       "Generic",
       "Key",
       "Value",
+      "ExpFlameSpritePath",
+      "Assets",
+      "Art",
+      "Source",
+      "ExP",
+      "Effects",
+      "Effect_Flame",
+      "FlameBurstPrefabPath",
+      "SkillVFX",
+      "Prefabs",
+      "SkillVfx_FlameBurst",
+      "FlameImagePrefabPath",
+      "SkillVfx_FlameImage",
+      "RawVfxTestFirePath",
+      "VFX",
+      "Prefab",
       "ResolveVfxFamily",
       "SkillVfxFamily",
       "FlameBurst",
-      "Color",
       "HasAnyCue",
       "True",
-      "CuesFor",
-      "SkillVfxTrigger",
-      "Activate",
-      "Select",
       "AssetDatabase",
       "GetAssetPath",
+      "Select",
       "ToArray",
       "Does",
       "Contain",
-      "Assets",
-      "VFX",
-      "Prefab",
-      "Art",
-      "Effects",
-      "SkillVFX",
-      "Prefabs",
-      "SkillVfx_TealEasyExplosion",
       "Not",
+      "Color",
+      "SkillVfx_TealEasyExplosion",
       "Null",
       "SkillVfx_FireballProjectile",
       "GetComponentInChildren",
       "CombatProjectileEffect",
+      "CuesFor",
+      "SkillVfxTrigger",
+      "Activate",
       "LoadAssetAtPath",
       "RewardTableSO",
       "Data",
@@ -30382,7 +30615,7 @@
       "CanAppearAsReward",
       "Keys",
       "SupersetOf",
-      "PrototypeSkillAssets_UseTealExplosionInsteadOfRawVfxTestEasyExplosion",
+      "PrototypeSkillAssets_UseExpectedImpactPrefabsInsteadOfRawVfxTestPrefabs",
       "RawEasyExplosionPath",
       "TealEasyExplosionPath",
       "PrototypePlayerAsset_UsesRequestedStartingSkills",
@@ -30416,9 +30649,13 @@
       "burst-fireball",
       "burn-out",
       "overburn",
+      "reckless-blow",
       "afterglow-save",
       "cleanse-hand",
       "black-corrosion",
+      "light-shot",
+      "low-stance",
+      "light-guard",
       "\\uD654\\uC5FC\\uAD6C",
       "\\uD3ED\\uBC1C \\uD654\\uC5FC\\uAD6C",
       "\\uD654\\uC5FC \\uC18C\\uBAA8",
@@ -30426,11 +30663,7 @@
       "flash",
       "howl",
       "taunt",
-      "low-stance",
-      "focus-breath",
-      "light-shot",
-      "poison-coat",
-      "execute"
+      "focus-breath"
     ],
     "numeric_literals": [
       0,
@@ -30444,6 +30677,8 @@
       100,
       40,
       10,
+      15,
+      60,
       0.42,
       0.06,
       12
@@ -30451,9 +30686,9 @@
     "guessed_roles": [
       "combat",
       "data",
+      "ui",
       "inventory",
-      "save-load",
-      "ui"
+      "save-load"
     ],
     "summary_signals": [
       "UI 관련 로직 포함",
@@ -30466,7 +30701,7 @@
     "file_id": "Project 2048/Assets/Tests/EditMode/SkillStatusEffectTests.cs",
     "path": "Project 2048/Assets/Tests/EditMode/SkillStatusEffectTests.cs",
     "file_name": "SkillStatusEffectTests.cs",
-    "content_hash": "92b6b6071452909a4e6245fae79a18706e430251",
+    "content_hash": "81c606ebe0fe033f9461e42053ecd9d309cb6fa6",
     "size": 16152,
     "line_count": 376,
     "namespace": "Project2048.Tests",
@@ -30709,11 +30944,11 @@
       95,
       0.3,
       25,
+      15,
       7,
-      27,
+      22,
       0,
-      0.5,
-      0.4
+      0.5
     ],
     "guessed_roles": [
       "combat",
@@ -30987,15 +31222,16 @@
     "file_id": "Project 2048/Assets/Tests/EditMode/StageDatabaseSOTests.cs",
     "path": "Project 2048/Assets/Tests/EditMode/StageDatabaseSOTests.cs",
     "file_name": "StageDatabaseSOTests.cs",
-    "content_hash": "803db5c275674a91e9c333dfe6d10aaf5a455dbf",
-    "size": 3449,
-    "line_count": 83,
+    "content_hash": "ac703668302df128a681d3e9f0378784743c8851",
+    "size": 4775,
+    "line_count": 110,
     "namespace": "Project2048.Tests",
     "using_list": [
       "Project2048.Enemy",
       "Project2048.Stage",
       "NUnit.Framework",
-      "UnityEditor"
+      "UnityEditor",
+      "UnityEngine"
     ],
     "classes": [
       {
@@ -31014,12 +31250,22 @@
     "methods": [
       "PrototypeStageDatabase_UsesTwentyStageRunWithFinalBullAtStageTwenty",
       "PrototypeStageDatabase_MapsDesignFloorsToStageRanges",
+      "PrototypeStageBackgroundSprites_KeepConsistentWorldSizeAcrossFloors",
       "TryResolveStagePosition_MapsGlobalIndexToFloorPosition",
-      "TryResolveStagePosition_RejectsOutOfRangeIndex"
+      "TryResolveStagePosition_RejectsOutOfRangeIndex",
+      "ResolveBackgroundWorldSize",
+      "Vector2"
     ],
     "fields": [
       {
         "name": "finalEnemy",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "size",
         "type": "var",
         "access": "internal",
         "serialized": false,
@@ -31040,7 +31286,7 @@
     "public_field_count": 0,
     "get_component_count": 0,
     "find_call_count": 0,
-    "new_keyword_count": 0,
+    "new_keyword_count": 1,
     "coroutine_count": 0,
     "singleton_candidate": false,
     "dont_destroy_on_load": false,
@@ -31051,6 +31297,7 @@
       "NUnit",
       "Framework",
       "UnityEditor",
+      "UnityEngine",
       "Tests",
       "Test",
       "PrototypeStageDatabase_UsesTwentyStageRunWithFinalBullAtStageTwenty",
@@ -31084,13 +31331,21 @@
       "PrototypeStageDatabase_MapsDesignFloorsToStageRanges",
       "Upper",
       "Middle",
+      "PrototypeStageBackgroundSprites_KeepConsistentWorldSizeAcrossFloors",
+      "ResolveBackgroundWorldSize",
+      "Within",
       "TestCase",
       "TryResolveStagePosition_MapsGlobalIndexToFloorPosition",
       "TryResolveStagePosition",
-      "TryResolveStagePosition_RejectsOutOfRangeIndex"
+      "TryResolveStagePosition_RejectsOutOfRangeIndex",
+      "Vector2",
+      "StageSO",
+      "PresentationBackgroundSprite"
     ],
     "component_access_types": [],
-    "created_types": [],
+    "created_types": [
+      "Vector2"
+    ],
     "singleton_access_types": [],
     "string_literals": [
       "Assets/Data/Stage/Stage Database SO.asset",
@@ -31102,6 +31357,7 @@
       21,
       7,
       15,
+      0.001,
       14,
       8
     ],

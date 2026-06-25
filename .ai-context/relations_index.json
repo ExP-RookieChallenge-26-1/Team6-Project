@@ -6295,6 +6295,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatSnapshot.cs",
     "from_class": "CombatSnapshot",
+    "to_type": "CanExecute",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/CombatSnapshot.cs",
+    "from_class": "CombatSnapshot",
     "to_type": "Clone",
     "relation_type": "uses",
     "strength": 1
@@ -7709,6 +7716,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Combat/PlayerCombatController.cs",
     "from_class": "PlayerCombatController",
+    "to_type": "Min",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/PlayerCombatController.cs",
+    "from_class": "PlayerCombatController",
     "to_type": "MinStatStage",
     "relation_type": "uses",
     "strength": 1
@@ -7850,6 +7864,13 @@
     "from_file": "Project 2048/Assets/Scripts/Combat/PlayerCombatController.cs",
     "from_class": "PlayerCombatController",
     "to_type": "RecordUsedSkill",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/PlayerCombatController.cs",
+    "from_class": "PlayerCombatController",
+    "to_type": "ReduceThornRetaliationShield",
     "relation_type": "uses",
     "strength": 1
   },
@@ -8011,6 +8032,13 @@
     "from_file": "Project 2048/Assets/Scripts/Combat/PlayerCombatController.cs",
     "from_class": "PlayerCombatController",
     "to_type": "ThornRetaliationDamage",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/PlayerCombatController.cs",
+    "from_class": "PlayerCombatController",
+    "to_type": "ThornRetaliationShieldHp",
     "relation_type": "uses",
     "strength": 1
   },
@@ -10495,6 +10523,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyController.cs",
     "from_class": "EnemyController",
+    "to_type": "Min",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyController.cs",
+    "from_class": "EnemyController",
     "to_type": "OnBlockChanged",
     "relation_type": "uses",
     "strength": 1
@@ -10566,6 +10601,13 @@
     "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyController.cs",
     "from_class": "EnemyController",
     "to_type": "RecordUsedIntent",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyController.cs",
+    "from_class": "EnemyController",
+    "to_type": "ReduceThornRetaliationShield",
     "relation_type": "uses",
     "strength": 1
   },
@@ -10713,6 +10755,13 @@
     "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyController.cs",
     "from_class": "EnemyController",
     "to_type": "ThornRetaliationDamage",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyController.cs",
+    "from_class": "EnemyController",
+    "to_type": "ThornRetaliationShieldHp",
     "relation_type": "uses",
     "strength": 1
   },
@@ -11545,13 +11594,6 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyIntentSystem.cs",
     "from_class": "EnemyIntentSystem",
-    "to_type": "ShieldHp",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyIntentSystem.cs",
-    "from_class": "EnemyIntentSystem",
     "to_type": "SkillEffectKind",
     "relation_type": "uses",
     "strength": 1
@@ -11588,6 +11630,13 @@
     "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyIntentSystem.cs",
     "from_class": "EnemyIntentSystem",
     "to_type": "ThornRetaliationDamage",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyIntentSystem.cs",
+    "from_class": "EnemyIntentSystem",
+    "to_type": "ThornRetaliationShieldHp",
     "relation_type": "uses",
     "strength": 1
   },
@@ -33392,6 +33441,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Skills/SkillAttackExecutor.cs",
     "from_class": "SkillAttackExecutor",
+    "to_type": "ThornRetaliationShieldHp",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Skills/SkillAttackExecutor.cs",
+    "from_class": "SkillAttackExecutor",
     "to_type": "TriggerOnAttackedStatusDamage",
     "relation_type": "uses",
     "strength": 1
@@ -34086,6 +34142,13 @@
     "from_file": "Project 2048/Assets/Scripts/Skills/SkillExecutor.cs",
     "from_class": "SkillExecutor",
     "to_type": "GetSkillDisplayName",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Skills/SkillExecutor.cs",
+    "from_class": "SkillExecutor",
+    "to_type": "HasPendingChargedAttack",
     "relation_type": "uses",
     "strength": 1
   },
@@ -41309,6 +41372,13 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
     "from_class": "CombatManagerTests",
+    "to_type": "CanExecute",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
+    "from_class": "CombatManagerTests",
     "to_type": "ChargeAttack",
     "relation_type": "uses",
     "strength": 1
@@ -41316,7 +41386,21 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
     "from_class": "CombatManagerTests",
+    "to_type": "ChargeAttack_CannotBeQueuedAgainWhilePending",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
+    "from_class": "CombatManagerTests",
     "to_type": "ChargeAttack_FiresAtNextPlayerTurnStart",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
+    "from_class": "CombatManagerTests",
+    "to_type": "ChargeAttack_PlayerKilledByEnemyThornGuard_RaisesDefeat",
     "relation_type": "uses",
     "strength": 1
   },
@@ -41520,6 +41604,13 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
     "from_class": "CombatManagerTests",
     "to_type": "DebuffType",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
+    "from_class": "CombatManagerTests",
+    "to_type": "Defeat",
     "relation_type": "uses",
     "strength": 1
   },
@@ -41792,6 +41883,13 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
     "from_class": "CombatManagerTests",
+    "to_type": "HasPendingChargedAttack",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
+    "from_class": "CombatManagerTests",
     "to_type": "Init",
     "relation_type": "uses",
     "strength": 1
@@ -41814,6 +41912,13 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
     "from_class": "CombatManagerTests",
     "to_type": "Is",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
+    "from_class": "CombatManagerTests",
+    "to_type": "IsDead",
     "relation_type": "uses",
     "strength": 1
   },
@@ -41905,6 +42010,13 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
     "from_class": "CombatManagerTests",
     "to_type": "Object",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
+    "from_class": "CombatManagerTests",
+    "to_type": "OnCombatDefeat",
     "relation_type": "uses",
     "strength": 1
   },
@@ -42024,6 +42136,13 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
     "from_class": "CombatManagerTests",
     "to_type": "RequestUseSkill_KillingLastEnemy_RaisesVictory",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
+    "from_class": "CombatManagerTests",
+    "to_type": "RequestUseSkill_PlayerKilledByEnemyThornGuard_RaisesDefeat",
     "relation_type": "uses",
     "strength": 1
   },
@@ -42163,6 +42282,20 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
     "from_class": "CombatManagerTests",
+    "to_type": "SingleEnemy",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
+    "from_class": "CombatManagerTests",
+    "to_type": "SinglePlayer",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
+    "from_class": "CombatManagerTests",
     "to_type": "SkillAvailability",
     "relation_type": "uses",
     "strength": 1
@@ -42206,6 +42339,20 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
     "from_class": "CombatManagerTests",
     "to_type": "SplitAndEcho_ModifyFutureAttackDamage",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
+    "from_class": "CombatManagerTests",
+    "to_type": "StackedEnemy",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
+    "from_class": "CombatManagerTests",
+    "to_type": "StackedPlayer",
     "relation_type": "uses",
     "strength": 1
   },
@@ -42268,7 +42415,35 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
     "from_class": "CombatManagerTests",
+    "to_type": "ThornGuard",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
+    "from_class": "CombatManagerTests",
+    "to_type": "ThornGuard_PlayerRetaliationDoesNotScaleWithStackedShield",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
+    "from_class": "CombatManagerTests",
     "to_type": "ThornGuard_RetaliatesOnlyWhileShieldHpExists",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
+    "from_class": "CombatManagerTests",
+    "to_type": "ThornGuard_RetaliationDoesNotScaleWithStackedShield",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
+    "from_class": "CombatManagerTests",
+    "to_type": "ThornRetaliationShieldHp",
     "relation_type": "uses",
     "strength": 1
   },
@@ -44907,6 +45082,13 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
+    "to_type": "ActionPhase_DisablesChargeSkillButtonWhileChargeIsPending",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
+    "from_class": "CombatUiViewTests",
     "to_type": "ActionPhase_DisablesUnaffordableAuthoredSkillButtons",
     "relation_type": "uses",
     "strength": 1
@@ -45019,7 +45201,7 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
-    "to_type": "BoardCostFormulaHelpIcon",
+    "to_type": "BoardManager",
     "relation_type": "uses",
     "strength": 1
   },
@@ -45243,20 +45425,6 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
-    "to_type": "CostFormulaHelpIcon",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
-    "from_class": "CombatUiViewTests",
-    "to_type": "CostFormulaHelpIcon_ShowsBoardCostFormulaOnLongPress",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
-    "from_class": "CombatUiViewTests",
     "to_type": "CostText",
     "relation_type": "uses",
     "strength": 1
@@ -45300,13 +45468,6 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
     "to_type": "CreateOwnedGameObject",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
-    "from_class": "CombatUiViewTests",
-    "to_type": "CreateOwnedRectTransformObject",
     "relation_type": "uses",
     "strength": 1
   },
@@ -45516,6 +45677,13 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
+    "to_type": "Gather",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
+    "from_class": "CombatUiViewTests",
     "to_type": "Generic",
     "relation_type": "uses",
     "strength": 1
@@ -45621,13 +45789,6 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
-    "to_type": "InvokePrivate",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
-    "from_class": "CombatUiViewTests",
     "to_type": "IPointerDownHandler",
     "relation_type": "uses",
     "strength": 1
@@ -45678,6 +45839,13 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
     "to_type": "LessThan",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
+    "from_class": "CombatUiViewTests",
+    "to_type": "Light",
     "relation_type": "uses",
     "strength": 1
   },
@@ -45951,6 +46119,13 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
     "to_type": "Select",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
+    "from_class": "CombatUiViewTests",
+    "to_type": "SetBoardState",
     "relation_type": "uses",
     "strength": 1
   },
@@ -52614,6 +52789,13 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
     "from_class": "SkillSOTests",
+    "to_type": "Effect_Flame",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
+    "from_class": "SkillSOTests",
     "to_type": "Effects",
     "relation_type": "uses",
     "strength": 1
@@ -52656,6 +52838,20 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
     "from_class": "SkillSOTests",
+    "to_type": "ExP",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
+    "from_class": "SkillSOTests",
+    "to_type": "ExpFlameSpritePath",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
+    "from_class": "SkillSOTests",
     "to_type": "FindAssets",
     "relation_type": "uses",
     "strength": 1
@@ -52664,6 +52860,20 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
     "from_class": "SkillSOTests",
     "to_type": "FlameBurst",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
+    "from_class": "SkillSOTests",
+    "to_type": "FlameBurstPrefabPath",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
+    "from_class": "SkillSOTests",
+    "to_type": "FlameImagePrefabPath",
     "relation_type": "uses",
     "strength": 1
   },
@@ -52922,7 +53132,7 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
     "from_class": "SkillSOTests",
-    "to_type": "PrototypeSkillAssets_UseTealExplosionInsteadOfRawVfxTestEasyExplosion",
+    "to_type": "PrototypeSkillAssets_UseExpectedImpactPrefabsInsteadOfRawVfxTestPrefabs",
     "relation_type": "uses",
     "strength": 1
   },
@@ -52930,6 +53140,13 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
     "from_class": "SkillSOTests",
     "to_type": "RawEasyExplosionPath",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
+    "from_class": "SkillSOTests",
+    "to_type": "RawVfxTestFirePath",
     "relation_type": "uses",
     "strength": 1
   },
@@ -53020,6 +53237,20 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
     "from_class": "SkillSOTests",
+    "to_type": "SkillVfx_FlameBurst",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
+    "from_class": "SkillSOTests",
+    "to_type": "SkillVfx_FlameImage",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
+    "from_class": "SkillSOTests",
     "to_type": "SkillVfx_TealEasyExplosion",
     "relation_type": "uses",
     "strength": 1
@@ -53035,6 +53266,13 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
     "from_class": "SkillSOTests",
     "to_type": "SkillVfxTrigger",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/SkillSOTests.cs",
+    "from_class": "SkillSOTests",
+    "to_type": "Source",
     "relation_type": "uses",
     "strength": 1
   },
@@ -54805,6 +55043,13 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/StageDatabaseSOTests.cs",
     "from_class": "StageDatabaseSOTests",
+    "to_type": "Vector2",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StageDatabaseSOTests.cs",
+    "from_class": "StageDatabaseSOTests",
     "to_type": "Assert",
     "relation_type": "uses",
     "strength": 1
@@ -54959,7 +55204,21 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/StageDatabaseSOTests.cs",
     "from_class": "StageDatabaseSOTests",
+    "to_type": "PresentationBackgroundSprite",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StageDatabaseSOTests.cs",
+    "from_class": "StageDatabaseSOTests",
     "to_type": "Project2048",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StageDatabaseSOTests.cs",
+    "from_class": "StageDatabaseSOTests",
+    "to_type": "PrototypeStageBackgroundSprites_KeepConsistentWorldSizeAcrossFloors",
     "relation_type": "uses",
     "strength": 1
   },
@@ -54974,6 +55233,13 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/StageDatabaseSOTests.cs",
     "from_class": "StageDatabaseSOTests",
     "to_type": "PrototypeStageDatabase_UsesTwentyStageRunWithFinalBullAtStageTwenty",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StageDatabaseSOTests.cs",
+    "from_class": "StageDatabaseSOTests",
+    "to_type": "ResolveBackgroundWorldSize",
     "relation_type": "uses",
     "strength": 1
   },
@@ -55009,6 +55275,13 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/StageDatabaseSOTests.cs",
     "from_class": "StageDatabaseSOTests",
     "to_type": "StageNumberInFloor",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StageDatabaseSOTests.cs",
+    "from_class": "StageDatabaseSOTests",
+    "to_type": "StageSO",
     "relation_type": "uses",
     "strength": 1
   },
@@ -55099,7 +55372,28 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/StageDatabaseSOTests.cs",
     "from_class": "StageDatabaseSOTests",
+    "to_type": "UnityEngine",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StageDatabaseSOTests.cs",
+    "from_class": "StageDatabaseSOTests",
     "to_type": "Upper",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StageDatabaseSOTests.cs",
+    "from_class": "StageDatabaseSOTests",
+    "to_type": "Vector2",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/StageDatabaseSOTests.cs",
+    "from_class": "StageDatabaseSOTests",
+    "to_type": "Within",
     "relation_type": "uses",
     "strength": 1
   },

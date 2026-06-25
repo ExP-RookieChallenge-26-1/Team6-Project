@@ -12567,6 +12567,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Flow/Binder/StoryFlowBinder.cs",
     "from_class": "StoryFlowBinder",
+    "to_type": "RequestMainMenu",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Flow/Binder/StoryFlowBinder.cs",
+    "from_class": "StoryFlowBinder",
     "to_type": "Story",
     "relation_type": "uses",
     "strength": 1
@@ -12666,6 +12673,13 @@
     "from_file": "Project 2048/Assets/Scripts/Flow/FlowController.cs",
     "from_class": "FlowController",
     "to_type": "DeleteSave",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Flow/FlowController.cs",
+    "from_class": "FlowController",
+    "to_type": "Ending",
     "relation_type": "uses",
     "strength": 1
   },
@@ -12855,6 +12869,13 @@
     "from_file": "Project 2048/Assets/Scripts/Flow/FlowController.cs",
     "from_class": "FlowController",
     "to_type": "OnBattleSceneLoadRequested",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Flow/FlowController.cs",
+    "from_class": "FlowController",
+    "to_type": "OnEndingSceneLoadRequested",
     "relation_type": "uses",
     "strength": 1
   },
@@ -13373,6 +13394,13 @@
     "from_file": "Project 2048/Assets/Scripts/Flow/SceneFlowManager.cs",
     "from_class": "SceneFlowManager",
     "to_type": "OnEnable",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Flow/SceneFlowManager.cs",
+    "from_class": "SceneFlowManager",
+    "to_type": "OnEndingSceneLoadRequested",
     "relation_type": "uses",
     "strength": 1
   },
@@ -47210,6 +47238,13 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/FlowControllerTests.cs",
     "from_class": "FlowControllerTests",
+    "to_type": "Ending",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/FlowControllerTests.cs",
+    "from_class": "FlowControllerTests",
     "to_type": "EqualTo",
     "relation_type": "uses",
     "strength": 1
@@ -47294,7 +47329,7 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/FlowControllerTests.cs",
     "from_class": "FlowControllerTests",
-    "to_type": "HandleStageCompleted_RunCompleted_DeletesSaveAndRequestsMainMenu",
+    "to_type": "HandleStageCompleted_RunCompleted_SavesEndedRunAndRequestsEndingStory",
     "relation_type": "uses",
     "strength": 1
   },
@@ -47364,13 +47399,6 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/FlowControllerTests.cs",
     "from_class": "FlowControllerTests",
-    "to_type": "Loading",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/FlowControllerTests.cs",
-    "from_class": "FlowControllerTests",
     "to_type": "NonPublic",
     "relation_type": "uses",
     "strength": 1
@@ -47379,6 +47407,20 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/FlowControllerTests.cs",
     "from_class": "FlowControllerTests",
     "to_type": "Normal",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/FlowControllerTests.cs",
+    "from_class": "FlowControllerTests",
+    "to_type": "Not",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/FlowControllerTests.cs",
+    "from_class": "FlowControllerTests",
+    "to_type": "Null",
     "relation_type": "uses",
     "strength": 1
   },
@@ -47399,7 +47441,7 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/FlowControllerTests.cs",
     "from_class": "FlowControllerTests",
-    "to_type": "OnLoadingStarted",
+    "to_type": "OnEndingSceneLoadRequested",
     "relation_type": "uses",
     "strength": 1
   },
@@ -47428,6 +47470,13 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/FlowControllerTests.cs",
     "from_class": "FlowControllerTests",
     "to_type": "Save",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/FlowControllerTests.cs",
+    "from_class": "FlowControllerTests",
+    "to_type": "SavedData",
     "relation_type": "uses",
     "strength": 1
   },

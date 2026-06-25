@@ -2428,7 +2428,7 @@ namespace Project2048.Tests
                     {
                         trigger = SkillVfxTrigger.Activate,
                         prefab = cuePrefab,
-                        placement = new SkillVfxPlacement { target = SkillVfxTarget.Enemy, vertical = SkillVfxVertical.Body },
+                        spawnAt = new VfxEndpoint { actor = VfxActorRef.PrimaryTarget, socket = VfxSocket.Body },
                     },
                 },
             };
@@ -2461,13 +2461,13 @@ namespace Project2048.Tests
                     {
                         trigger = SkillVfxTrigger.Activate,
                         prefab = casterCuePrefab,
-                        placement = new SkillVfxPlacement { target = SkillVfxTarget.Player, vertical = SkillVfxVertical.Body },
+                        spawnAt = new VfxEndpoint { actor = VfxActorRef.Caster, socket = VfxSocket.Body },
                     },
                     new SkillVfxCue
                     {
                         trigger = SkillVfxTrigger.Activate,
                         prefab = targetCuePrefab,
-                        placement = new SkillVfxPlacement { target = SkillVfxTarget.Enemy, vertical = SkillVfxVertical.Body },
+                        spawnAt = new VfxEndpoint { actor = VfxActorRef.PrimaryTarget, socket = VfxSocket.Body },
                     },
                 },
             };
@@ -2671,14 +2671,14 @@ namespace Project2048.Tests
             body.transform.SetParent(playerRoot.transform, false);
             body.transform.localPosition = new Vector3(0f, 1f, 0f);
 
-            var placement = new SkillVfxPlacement
+            var endpoint = new VfxEndpoint
             {
-                target = SkillVfxTarget.Player,
-                vertical = SkillVfxVertical.Body,
+                actor = VfxActorRef.Caster,
+                socket = VfxSocket.Body,
                 localOffset = new Vector3(0.18f, 0.32f, 0f),
             };
-            var position = SkillVfxPlayer.ResolvePlacementWorldPosition(
-                placement,
+            var position = SkillVfxPlayer.ResolveEndpointWorldPosition(
+                endpoint,
                 new SkillVfxContext(playerRoot.transform, null, SkillVfxTrigger.Activate));
 
             Assert.That(position.y, Is.EqualTo(1.32f).Within(0.001f));

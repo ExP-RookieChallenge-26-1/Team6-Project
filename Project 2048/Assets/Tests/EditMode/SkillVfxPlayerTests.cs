@@ -24,9 +24,9 @@ namespace Project2048.Tests
             var player = MakeUnitSprite("P", new Vector3(-1, 0, 0));
             var enemy = MakeUnitSprite("E", new Vector3(1, 0, 0));
             var ctx = new SkillVfxContext(player.transform, enemy.transform, SkillVfxTrigger.ChargeRelease);
-            var placement = new SkillVfxPlacement { target = SkillVfxTarget.Enemy, vertical = SkillVfxVertical.Feet };
+            var endpoint = new VfxEndpoint { actor = VfxActorRef.PrimaryTarget, socket = VfxSocket.Feet };
 
-            var pos = SkillVfxPlayer.ResolvePlacementWorldPosition(placement, ctx);
+            var pos = SkillVfxPlayer.ResolveEndpointWorldPosition(endpoint, ctx);
 
             Assert.That(pos.y, Is.LessThan(enemy.bounds.center.y - 0.1f)); // feet below center
             Assert.That(pos.x, Is.EqualTo(1f).Within(0.001f));
@@ -49,7 +49,7 @@ namespace Project2048.Tests
                     {
                         trigger = SkillVfxTrigger.ChargeRelease,
                         prefab = prefab,
-                        placement = new SkillVfxPlacement { target = SkillVfxTarget.Enemy, vertical = SkillVfxVertical.Feet },
+                        spawnAt = new VfxEndpoint { actor = VfxActorRef.PrimaryTarget, socket = VfxSocket.Feet },
                     },
                 },
             };
@@ -106,7 +106,7 @@ namespace Project2048.Tests
                     {
                         trigger = SkillVfxTrigger.Activate,
                         prefab = prefab,
-                        placement = new SkillVfxPlacement { target = SkillVfxTarget.Player, vertical = SkillVfxVertical.Body },
+                        spawnAt = new VfxEndpoint { actor = VfxActorRef.Caster, socket = VfxSocket.Body },
                         tint = tint,
                     },
                 },
@@ -144,7 +144,7 @@ namespace Project2048.Tests
                     {
                         trigger = SkillVfxTrigger.Activate,
                         prefab = prefab,
-                        placement = new SkillVfxPlacement { target = SkillVfxTarget.Player, vertical = SkillVfxVertical.Body },
+                        spawnAt = new VfxEndpoint { actor = VfxActorRef.Caster, socket = VfxSocket.Body },
                         tint = Color.clear,
                     },
                 },
@@ -178,7 +178,7 @@ namespace Project2048.Tests
                     {
                         trigger = SkillVfxTrigger.Activate,
                         prefab = prefab,
-                        placement = new SkillVfxPlacement { target = SkillVfxTarget.Player, vertical = SkillVfxVertical.Body },
+                        spawnAt = new VfxEndpoint { actor = VfxActorRef.Caster, socket = VfxSocket.Body },
                     },
                 },
             };
@@ -194,6 +194,101 @@ namespace Project2048.Tests
             Object.DestroyImmediate(prefab);
             Object.DestroyImmediate(player.gameObject);
             Object.DestroyImmediate(enemy.gameObject);
+        }
+
+        // 같은 SkillSO(정의)를 플레이어/적이 공유: 컨텍스트만 반전되면 스폰도 좌우로 미러링된다.
+        [Test]
+        public void SameDefinition_CasterSpawn_MirrorsWhenCasterAndTargetSwap()
+        {
+            var left = MakeUnitSprite("Left", new Vector3(-2, 0, 0));
+            var right = MakeUnitSprite("Right", new Vector3(2, 0, 0));
+            var prefab = new GameObject("CasterFx");
+            var def = new SkillVfxDefinition
+            {
+                cues = new[]
+                {
+                    new SkillVfxCue
+                    {
+                        trigger = SkillVfxTrigger.Activate,
+                        prefab = prefab,
+                        spawnAt = new VfxEndpoint { actor = VfxActorRef.Caster, socket = VfxSocket.Body },
+                    },
+                },
+            };
+
+            // 플레이어 시전: caster=left, target=right → 스폰은 left 쪽.
+            var asPlayer = SkillVfxPlayer.Play(
+                def, new SkillVfxContext(left.transform, right.transform, SkillVfxTrigger.Activate), null, false);
+            // 적 시전: caster=right, target=left → 데이터 동일, 컨텍스트만 반전 → 스폰은 right 쪽.
+            var asEnemy = SkillVfxPlayer.Play(
+                def, new SkillVfxContext(right.transform, left.transform, SkillVfxTrigger.Activate), null, false);
+
+            Assert.That(asPlayer.Count, Is.EqualTo(1));
+            Assert.That(asEnemy.Count, Is.EqualTo(1));
+            Assert.That(asPlayer[0].transform.position.x, Is.EqualTo(left.bounds.center.x).Within(0.001f));
+            Assert.That(asEnemy[0].transform.position.x, Is.EqualTo(right.bounds.center.x).Within(0.001f));
+
+            foreach (var go in asPlayer) Object.DestroyImmediate(go);
+            foreach (var go in asEnemy) Object.DestroyImmediate(go);
+            Object.DestroyImmediate(prefab);
+            Object.DestroyImmediate(left.gameObject);
+            Object.DestroyImmediate(right.gameObject);
+        }
+
+        [Test]
+        public void SkillVfxRunner_DelayedCue_SpawnsSynchronouslyInEditMode_AndReportsPlayed()
+        {
+            var caster = MakeUnitSprite("C", Vector3.zero);
+            var targetUnit = MakeUnitSprite("T", new Vector3(2, 0, 0));
+            var prefab = new GameObject("RunnerFx");
+            var def = new SkillVfxDefinition
+            {
+                cues = new[]
+                {
+                    new SkillVfxCue
+                    {
+                        trigger = SkillVfxTrigger.Activate,
+                        prefab = prefab,
+                        spawnAt = new VfxEndpoint { actor = VfxActorRef.Caster, socket = VfxSocket.Body },
+                        delaySeconds = 0.5f, // 에디트 모드면 지연 무시 → 즉시 스폰
+                    },
+                },
+            };
+            var runnerGo = new GameObject("Runner");
+            var runner = runnerGo.AddComponent<SkillVfxRunner>();
+
+            var played = runner.Play(
+                def, new SkillVfxContext(caster.transform, targetUnit.transform, SkillVfxTrigger.Activate), runnerGo.transform);
+
+            Assert.That(played, Is.True);
+            Assert.That(runnerGo.transform.Find("RunnerFx"), Is.Not.Null);
+
+            Object.DestroyImmediate(prefab);
+            Object.DestroyImmediate(runnerGo);
+            Object.DestroyImmediate(caster.gameObject);
+            Object.DestroyImmediate(targetUnit.gameObject);
+        }
+
+        [Test]
+        public void SkillVfxRunner_WrongTrigger_ReportsNotPlayed()
+        {
+            var caster = MakeUnitSprite("C", Vector3.zero);
+            var prefab = new GameObject("RunnerFx2");
+            var def = new SkillVfxDefinition
+            {
+                cues = new[] { new SkillVfxCue { trigger = SkillVfxTrigger.Activate, prefab = prefab } },
+            };
+            var runnerGo = new GameObject("Runner");
+            var runner = runnerGo.AddComponent<SkillVfxRunner>();
+
+            var played = runner.Play(
+                def, new SkillVfxContext(caster.transform, null, SkillVfxTrigger.ChargeRelease), runnerGo.transform);
+
+            Assert.That(played, Is.False);
+
+            Object.DestroyImmediate(prefab);
+            Object.DestroyImmediate(runnerGo);
+            Object.DestroyImmediate(caster.gameObject);
         }
     }
 }

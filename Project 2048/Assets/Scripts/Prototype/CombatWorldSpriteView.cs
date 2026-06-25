@@ -532,9 +532,10 @@ namespace Project2048.Prototype
 
         private SkillVfxContext BuildSkillVfxContext(SkillVfxTrigger trigger)
         {
-            var playerAnchor = ResolvePlayerAnchor() ?? transform;
-            var enemyAnchor = enemyRenderer != null ? enemyRenderer.transform : transform;
-            return new SkillVfxContext(playerAnchor, enemyAnchor, trigger);
+            // 플레이어 시전 컨텍스트: caster=플레이어, primaryTarget=적.
+            var caster = ResolvePlayerAnchor() ?? transform;
+            var primaryTarget = enemyRenderer != null ? enemyRenderer.transform : transform;
+            return new SkillVfxContext(caster, primaryTarget, trigger);
         }
 
         private static SkillVfxContext BuildSkillVfxContext(
@@ -563,39 +564,28 @@ namespace Project2048.Prototype
             return TryPlayDefinitionCues(skill, trigger, ctx);
         }
 
+        private SkillVfxRunner skillVfxRunner;
+
+        private SkillVfxRunner EnsureSkillVfxRunner()
+        {
+            if (skillVfxRunner == null)
+            {
+                skillVfxRunner = gameObject.GetComponent<SkillVfxRunner>()
+                    ?? gameObject.AddComponent<SkillVfxRunner>();
+            }
+
+            return skillVfxRunner;
+        }
+
         private bool TryPlayDefinitionCues(SkillSO skill, SkillVfxTrigger trigger, SkillVfxContext ctx)
         {
-            if (skill == null || skill.vfxDefinition == null || !skill.vfxDefinition.HasAnyCue)
+            if (skill == null)
             {
                 return false;
             }
 
-            var playedAnyCue = false;
-            foreach (var cue in skill.vfxDefinition.CuesFor(trigger))
-            {
-                if (cue == null || !cue.HasPrefab)
-                {
-                    continue;
-                }
-
-                playedAnyCue = true;
-                if (Application.isPlaying && cue.delaySeconds > 0f)
-                {
-                    StartCoroutine(PlayDefinitionCueAfterDelay(cue, ctx, cue.delaySeconds));
-                }
-                else
-                {
-                    SkillVfxPlayer.PlayCue(cue, ctx, transform, Application.isPlaying);
-                }
-            }
-
-            return playedAnyCue;
-        }
-
-        private IEnumerator PlayDefinitionCueAfterDelay(SkillVfxCue cue, SkillVfxContext ctx, float delaySeconds)
-        {
-            yield return new WaitForSeconds(Mathf.Max(0f, delaySeconds));
-            SkillVfxPlayer.PlayCue(cue, ctx, transform, Application.isPlaying);
+            // 큐 순회·지연·스폰·수명은 SkillVfxRunner가 전담한다. 뷰는 위임만 한다.
+            return EnsureSkillVfxRunner().Play(skill.vfxDefinition, ctx, transform);
         }
 
         private static float ResolveDefinitionCueDurationSeconds(SkillSO skill, SkillVfxTrigger trigger)

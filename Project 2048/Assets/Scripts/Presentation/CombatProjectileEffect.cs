@@ -46,6 +46,18 @@ namespace Project2048.Presentation
             BeginLaunch();
         }
 
+        // 도착점이 명시된 큐(useDestination)용: 시작·도착을 모두 월드 좌표로 고정.
+        // 액터 Transform을 따라가지 않으므로 프리팹의 targetLocalOffset도 적용하지 않는다.
+        public void LaunchBetweenWorldPositions(Vector3 sourceWorldPosition, Vector3 destinationWorldPosition)
+        {
+            source = null;
+            target = null;
+            activeTargetOffset = Vector3.zero;
+            startPosition = sourceWorldPosition;
+            endPosition = destinationWorldPosition;
+            BeginLaunch();
+        }
+
         private void BeginLaunch()
         {
             endPosition = ResolveTargetPosition();

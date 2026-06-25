@@ -4,24 +4,23 @@ using UnityEngine.VFX;
 
 namespace Project2048.Presentation
 {
+    // 같은 SkillSO를 누가 쓰든 컨텍스트만 뒤집힌다.
+    // 플레이어 시전: caster=플레이어, primaryTarget=적 / 적 시전: 그 역. 데이터(SkillSO)는 복제하지 않는다.
     public readonly struct SkillVfxContext
     {
-        public readonly Transform playerAnchor;
-        public readonly Transform enemyAnchor;
+        public readonly Transform caster;
+        public readonly Transform primaryTarget;
         public readonly SkillVfxTrigger trigger;
 
-        public SkillVfxContext(Transform playerAnchor, Transform enemyAnchor, SkillVfxTrigger trigger)
+        public SkillVfxContext(Transform caster, Transform primaryTarget, SkillVfxTrigger trigger)
         {
-            this.playerAnchor = playerAnchor;
-            this.enemyAnchor = enemyAnchor;
+            this.caster = caster;
+            this.primaryTarget = primaryTarget;
             this.trigger = trigger;
         }
 
-        public Transform AnchorFor(SkillVfxTarget target) =>
-            target == SkillVfxTarget.Enemy ? enemyAnchor : playerAnchor;
-
-        public Transform OppositeAnchorFor(SkillVfxTarget target) =>
-            target == SkillVfxTarget.Enemy ? playerAnchor : enemyAnchor;
+        public Transform ResolveActor(VfxActorRef actor) =>
+            actor == VfxActorRef.PrimaryTarget ? primaryTarget : caster;
     }
 
     public static class SkillVfxPlayer
@@ -36,29 +35,34 @@ namespace Project2048.Presentation
             "ParticleColor",
         };
 
-        public static Vector3 ResolvePlacementWorldPosition(SkillVfxPlacement placement, SkillVfxContext ctx)
+        public static VfxActorRef OppositeActor(VfxActorRef actor) =>
+            actor == VfxActorRef.Caster ? VfxActorRef.PrimaryTarget : VfxActorRef.Caster;
+
+        public static Vector3 ResolveEndpointWorldPosition(VfxEndpoint endpoint, SkillVfxContext ctx)
         {
-            var anchor = ctx.AnchorFor(placement.target);
+            var anchor = ctx.ResolveActor(endpoint.actor);
             if (anchor == null)
             {
-                return placement.localOffset;
+                return endpoint.localOffset;
             }
 
-            var basePos = ResolveVerticalWorldPosition(anchor, placement.vertical);
-            return basePos + anchor.TransformVector(placement.localOffset);
+            var basePos = ResolveSocketWorldPosition(anchor, endpoint.socket);
+            return basePos + anchor.TransformVector(endpoint.localOffset);
         }
 
-        private static Vector3 ResolveVerticalWorldPosition(Transform anchor, SkillVfxVertical vertical)
+        private static Vector3 ResolveSocketWorldPosition(Transform anchor, VfxSocket socket)
         {
-            if (!TryResolveRendererBounds(anchor, out var bounds))
+            // Step 5에서 CombatVfxAnchorProvider가 명시 소켓을 우선 제공한다. 여기서는 스프라이트 bounds 폴백.
+            if (socket == VfxSocket.Root || !TryResolveRendererBounds(anchor, out var bounds))
             {
                 return anchor.position;
             }
 
-            var y = vertical switch
+            var y = socket switch
             {
-                SkillVfxVertical.Feet => bounds.min.y,
-                SkillVfxVertical.Head => bounds.max.y,
+                VfxSocket.Feet => bounds.min.y,
+                VfxSocket.Head => bounds.max.y,
+                // Body / CastPoint / HitPoint 는 소켓 미설정 시 몸통 중심으로 폴백.
                 _ => bounds.center.y,
             };
             return new Vector3(bounds.center.x, y, bounds.center.z);
@@ -113,7 +117,7 @@ namespace Project2048.Presentation
             foreach (var cue in definition.CuesFor(ctx.trigger))
             {
                 // Edit mode / tests: ignore delay, spawn synchronously. Play-mode delay is handled
-                // by the caller (the view) via a coroutine.
+                // by the caller (the view / runner) via a coroutine.
                 var go = PlayCue(cue, ctx, parent, isPlaying);
                 if (go != null) spawned.Add(go);
             }
@@ -125,7 +129,7 @@ namespace Project2048.Presentation
         {
             if (cue == null || !cue.HasPrefab) return null;
 
-            var pos = ResolvePlacementWorldPosition(cue.placement, ctx);
+            var pos = ResolveEndpointWorldPosition(cue.spawnAt, ctx);
             var instance = Object.Instantiate(cue.prefab, pos, Quaternion.identity, parent);
             instance.name = cue.prefab.name;
 
@@ -140,8 +144,18 @@ namespace Project2048.Presentation
             if (projectile != null)
             {
                 // 프로젝타일은 스스로 이동/임팩트 파티클을 재생한다.
-                var targetAnchor = ctx.OppositeAnchorFor(cue.placement.target);
-                projectile.LaunchFromWorldPosition(pos, targetAnchor, Vector3.zero);
+                if (cue.useDestination)
+                {
+                    // 도착점이 명시됨 → 그 월드 좌표로 직행.
+                    var destinationPos = ResolveEndpointWorldPosition(cue.destination, ctx);
+                    projectile.LaunchBetweenWorldPositions(pos, destinationPos);
+                }
+                else
+                {
+                    // 미지정 → 반대 액터로 폴백(프리팹 자체 targetLocalOffset 유지).
+                    var targetAnchor = ctx.ResolveActor(OppositeActor(cue.spawnAt.actor));
+                    projectile.LaunchFromWorldPosition(pos, targetAnchor, Vector3.zero);
+                }
             }
             else
             {

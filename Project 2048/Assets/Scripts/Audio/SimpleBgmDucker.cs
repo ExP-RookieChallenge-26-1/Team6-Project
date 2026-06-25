@@ -201,9 +201,7 @@ namespace Project2048.Audio
 
         private float ResolveUserBaseVolumeDb()
         {
-            return Project2048AudioPreferences.VolumeToDb(
-                Project2048AudioChannel.BGM,
-                Project2048AudioPreferences.GetNormalizedVolume(Project2048AudioChannel.BGM));
+            return Project2048AudioPreferences.GetEffectiveVolumeDb(Project2048AudioChannel.BGM);
         }
 
         private float ResolveUserDuckedVolumeDb()

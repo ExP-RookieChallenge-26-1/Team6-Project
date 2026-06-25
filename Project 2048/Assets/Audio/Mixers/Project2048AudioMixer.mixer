@@ -86,6 +86,8 @@ AudioMixerController:
   m_EnableSuspend: 1
   m_UpdateMode: 0
   m_ExposedParameters:
+  - guid: 38082202138945edbd05611f462c9410
+    name: MasterVolume
   - guid: ab158494de324390ac7a10d938dc32b4
     name: BGMVolume
   - guid: 89733947b00e4e55869e7d5f2b566dfa
@@ -213,6 +215,7 @@ AudioMixerSnapshotController:
   m_AudioMixer: {fileID: 24100000}
   m_SnapshotID: c9b9332bf3624bdaa3888caec3f4a580
   m_FloatValues:
+    38082202138945edbd05611f462c9410: 0
     ab158494de324390ac7a10d938dc32b4: -14
     89733947b00e4e55869e7d5f2b566dfa: 0
     8428cde46cec42b6968cea46570a823b: 0

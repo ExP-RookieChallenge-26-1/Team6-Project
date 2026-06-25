@@ -102,14 +102,26 @@ namespace Project2048.Tests
             popup.Open();
             var volumeSliders = settingPopup
                 .GetComponentsInChildren<Slider>(true)
+                .Where(slider => slider.gameObject.activeInHierarchy)
                 .Where(slider => slider.gameObject.name.EndsWith("VolumeSlider"))
                 .ToArray();
             Assert.That(volumeSliders.Select(slider => slider.gameObject.name), Is.EquivalentTo(new[]
             {
+                "MasterVolumeSlider",
                 "BGMVolumeSlider",
                 "SFXVolumeSlider",
-                "UIVolumeSlider",
-                "AmbienceVolumeSlider",
+            }));
+
+            var muteToggles = settingPopup
+                .GetComponentsInChildren<Toggle>(true)
+                .Where(toggle => toggle.gameObject.activeInHierarchy)
+                .Where(toggle => toggle.gameObject.name.EndsWith("MuteToggle"))
+                .ToArray();
+            Assert.That(muteToggles.Select(toggle => toggle.gameObject.name), Is.EquivalentTo(new[]
+            {
+                "MasterMuteToggle",
+                "BGMMuteToggle",
+                "SFXMuteToggle",
             }));
             popup.Close();
         }

@@ -2,27 +2,27 @@
   "project_name": "unknown",
   "language": "C#",
   "engine_guess": "Unity",
-  "total_cs_files": 142,
-  "mono_behaviour_files": 40,
+  "total_cs_files": 145,
+  "mono_behaviour_files": 43,
   "scriptable_object_files": 13,
   "files_with_update": 7,
   "files_with_fixed_update": 0,
   "files_with_late_update": 2,
   "singleton_candidates": 3,
-  "manager_like_classes": 33,
+  "manager_like_classes": 34,
   "ui_related_classes": 60,
-  "save_load_related_classes": 51,
+  "save_load_related_classes": 53,
   "role_counts": {
-    "combat": 96,
-    "save-load": 51,
+    "combat": 98,
+    "save-load": 53,
     "ui": 60,
     "inventory": 17,
     "data": 56,
-    "runtime": 60,
-    "player": 70,
+    "runtime": 63,
+    "player": 72,
     "scene": 12,
-    "manager": 31,
-    "network": 2
+    "manager": 32,
+    "network": 6
   },
   "high_coupling_classes": [
     {
@@ -44,15 +44,15 @@
       "referenced_type_count": 200
     },
     {
-      "class_name": "RewardGrowthTests",
-      "file_id": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+      "class_name": "CombatWorldSpriteView",
+      "file_id": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
       "relation_count": 217,
       "referenced_type_count": 200
     },
     {
-      "class_name": "CombatWorldSpriteView",
-      "file_id": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
-      "relation_count": 216,
+      "class_name": "RewardGrowthTests",
+      "file_id": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+      "relation_count": 217,
       "referenced_type_count": 200
     },
     {

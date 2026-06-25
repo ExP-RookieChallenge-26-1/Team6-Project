@@ -739,6 +739,25 @@
     "risk_score": 61
   },
   {
+    "file_id": "Project 2048/Assets/Tests/EditMode/SkillVfxPlayerTests.cs",
+    "class_name": "SkillVfxPlayerTests",
+    "risk_flags": [
+      "high-coupling",
+      "getcomponent-heavy",
+      "magic-number-heavy",
+      "large-class",
+      "state-owner"
+    ],
+    "risk_reasons": [
+      "참조 타입 또는 관계 수가 많음",
+      "GetComponent/TryGetComponent 호출이 많음",
+      "숫자 리터럴이 많아 의미 파악이 어려울 수 있음",
+      "파일/메서드/필드 수가 많아 책임이 커질 가능성",
+      "상태 중심 또는 관리 중심 클래스일 가능성"
+    ],
+    "risk_score": 61
+  },
+  {
     "file_id": "Project 2048/Assets/Scripts/Combat/PlayerCombatController.cs",
     "class_name": "PlayerCombatController",
     "risk_flags": [
@@ -791,6 +810,25 @@
       "숫자 리터럴이 많아 의미 파악이 어려울 수 있음",
       "파일/메서드/필드 수가 많아 책임이 커질 가능성",
       "UI와 런타임 책임이 한 파일에 섞였을 가능성",
+      "상태 중심 또는 관리 중심 클래스일 가능성"
+    ],
+    "risk_score": 59
+  },
+  {
+    "file_id": "Project 2048/Assets/Scripts/Presentation/SkillVfxPlayer.cs",
+    "class_name": "SkillVfxContext",
+    "risk_flags": [
+      "high-coupling",
+      "public-field-heavy",
+      "magic-number-heavy",
+      "large-class",
+      "state-owner"
+    ],
+    "risk_reasons": [
+      "참조 타입 또는 관계 수가 많음",
+      "public 필드 노출 수가 많음",
+      "숫자 리터럴이 많아 의미 파악이 어려울 수 있음",
+      "파일/메서드/필드 수가 많아 책임이 커질 가능성",
       "상태 중심 또는 관리 중심 클래스일 가능성"
     ],
     "risk_score": 59
@@ -1268,23 +1306,6 @@
     "risk_score": 48
   },
   {
-    "file_id": "Project 2048/Assets/Tests/EditMode/SkillVfxPlayerTests.cs",
-    "class_name": "SkillVfxPlayerTests",
-    "risk_flags": [
-      "high-coupling",
-      "getcomponent-heavy",
-      "magic-number-heavy",
-      "state-owner"
-    ],
-    "risk_reasons": [
-      "참조 타입 또는 관계 수가 많음",
-      "GetComponent/TryGetComponent 호출이 많음",
-      "숫자 리터럴이 많아 의미 파악이 어려울 수 있음",
-      "상태 중심 또는 관리 중심 클래스일 가능성"
-    ],
-    "risk_score": 46
-  },
-  {
     "file_id": "Project 2048/Assets/Tests/EditMode/StageDatabaseSOTests.cs",
     "class_name": "StageDatabaseSOTests",
     "risk_flags": [
@@ -1575,21 +1596,6 @@
     "risk_score": 36
   },
   {
-    "file_id": "Project 2048/Assets/Scripts/Presentation/SkillVfxPlayer.cs",
-    "class_name": "SkillVfxContext",
-    "risk_flags": [
-      "high-coupling",
-      "public-field-heavy",
-      "state-owner"
-    ],
-    "risk_reasons": [
-      "참조 타입 또는 관계 수가 많음",
-      "public 필드 노출 수가 많음",
-      "상태 중심 또는 관리 중심 클래스일 가능성"
-    ],
-    "risk_score": 36
-  },
-  {
     "file_id": "Project 2048/Assets/Scripts/Prototype/BoardSwipeHandler.cs",
     "class_name": "BoardSwipeHandler",
     "risk_flags": [
@@ -1785,6 +1791,36 @@
     "risk_score": 33
   },
   {
+    "file_id": "Project 2048/Assets/Scripts/Skills/SkillVfxCue.cs",
+    "class_name": "SkillVfxCue",
+    "risk_flags": [
+      "public-field-heavy",
+      "save-load-sensitive",
+      "state-owner"
+    ],
+    "risk_reasons": [
+      "public 필드 노출 수가 많음",
+      "저장/불러오기 관련 로직 포함",
+      "상태 중심 또는 관리 중심 클래스일 가능성"
+    ],
+    "risk_score": 30
+  },
+  {
+    "file_id": "Project 2048/Assets/Scripts/Skills/VfxEndpoint.cs",
+    "class_name": "VfxEndpoint",
+    "risk_flags": [
+      "public-field-heavy",
+      "save-load-sensitive",
+      "state-owner"
+    ],
+    "risk_reasons": [
+      "public 필드 노출 수가 많음",
+      "저장/불러오기 관련 로직 포함",
+      "상태 중심 또는 관리 중심 클래스일 가능성"
+    ],
+    "risk_score": 30
+  },
+  {
     "file_id": "Project 2048/Assets/Scripts/UI/Story/StoryLayoutView.cs",
     "class_name": "StoryLayoutView",
     "risk_flags": [
@@ -1839,6 +1875,19 @@
     "risk_score": 26
   },
   {
+    "file_id": "Project 2048/Assets/Scripts/Presentation/SkillVfxRunner.cs",
+    "class_name": "SkillVfxRunner",
+    "risk_flags": [
+      "high-coupling",
+      "state-owner"
+    ],
+    "risk_reasons": [
+      "참조 타입 또는 관계 수가 많음",
+      "상태 중심 또는 관리 중심 클래스일 가능성"
+    ],
+    "risk_score": 26
+  },
+  {
     "file_id": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Debuff.cs",
     "class_name": "CombatWorldSpriteView",
     "risk_flags": [
@@ -1854,6 +1903,19 @@
   {
     "file_id": "Project 2048/Assets/Scripts/Rewards/RewardTableSO.cs",
     "class_name": "RewardTableSO",
+    "risk_flags": [
+      "high-coupling",
+      "state-owner"
+    ],
+    "risk_reasons": [
+      "참조 타입 또는 관계 수가 많음",
+      "상태 중심 또는 관리 중심 클래스일 가능성"
+    ],
+    "risk_score": 26
+  },
+  {
+    "file_id": "Project 2048/Assets/Scripts/Skills/SkillVfxEnums.cs",
+    "class_name": "SkillVfxEnums",
     "risk_flags": [
       "high-coupling",
       "state-owner"
@@ -1958,6 +2020,19 @@
     "risk_score": 18
   },
   {
+    "file_id": "Project 2048/Assets/Scripts/Presentation/CombatVfxAnchorProvider.cs",
+    "class_name": "CombatVfxAnchorProvider",
+    "risk_flags": [
+      "public-field-heavy",
+      "state-owner"
+    ],
+    "risk_reasons": [
+      "public 필드 노출 수가 많음",
+      "상태 중심 또는 관리 중심 클래스일 가능성"
+    ],
+    "risk_score": 18
+  },
+  {
     "file_id": "Project 2048/Assets/Scripts/Rewards/RewardChoiceResult.cs",
     "class_name": "RewardChoiceResult",
     "risk_flags": [
@@ -1995,28 +2070,6 @@
   {
     "file_id": "Project 2048/Assets/Scripts/Presentation/CombatActionIds.cs",
     "class_name": "CombatActionIds",
-    "risk_flags": [
-      "public-field-heavy"
-    ],
-    "risk_reasons": [
-      "public 필드 노출 수가 많음"
-    ],
-    "risk_score": 10
-  },
-  {
-    "file_id": "Project 2048/Assets/Scripts/Skills/SkillVfxCue.cs",
-    "class_name": "SkillVfxCue",
-    "risk_flags": [
-      "public-field-heavy"
-    ],
-    "risk_reasons": [
-      "public 필드 노출 수가 많음"
-    ],
-    "risk_score": 10
-  },
-  {
-    "file_id": "Project 2048/Assets/Scripts/Skills/SkillVfxPlacement.cs",
-    "class_name": "SkillVfxPlacement",
     "risk_flags": [
       "public-field-heavy"
     ],
@@ -2136,17 +2189,6 @@
     "risk_score": 8
   },
   {
-    "file_id": "Project 2048/Assets/Scripts/Skills/SkillVfxEnums.cs",
-    "class_name": "SkillVfxEnums",
-    "risk_flags": [
-      "state-owner"
-    ],
-    "risk_reasons": [
-      "상태 중심 또는 관리 중심 클래스일 가능성"
-    ],
-    "risk_score": 8
-  },
-  {
     "file_id": "Project 2048/Assets/Scripts/Story/StoryDataSO.cs",
     "class_name": "StoryDataSO",
     "risk_flags": [
@@ -2248,6 +2290,13 @@
   {
     "file_id": "Project 2048/Assets/Scripts/Flow/StageFlowState.cs",
     "class_name": "StageFlowState",
+    "risk_flags": [],
+    "risk_reasons": [],
+    "risk_score": 0
+  },
+  {
+    "file_id": "Project 2048/Assets/Scripts/Presentation/SkillVfxVisualRoot.cs",
+    "class_name": "SkillVfxVisualRoot",
     "risk_flags": [],
     "risk_reasons": [],
     "risk_score": 0

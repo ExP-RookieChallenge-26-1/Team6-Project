@@ -9588,9 +9588,9 @@
     "file_id": "Project 2048/Assets/Scripts/Presentation/CombatProjectileEffect.cs",
     "path": "Project 2048/Assets/Scripts/Presentation/CombatProjectileEffect.cs",
     "file_name": "CombatProjectileEffect.cs",
-    "content_hash": "84798e29898fd3cab8c719fba4f2c56a0e6b89b9",
-    "size": 6449,
-    "line_count": 204,
+    "content_hash": "dee05c3bfa150a284f5c3b4bc59d01cc5a3ed653",
+    "size": 7244,
+    "line_count": 221,
     "namespace": "Project2048.Presentation",
     "using_list": [
       "UnityEngine",
@@ -9616,6 +9616,7 @@
       "Min",
       "Launch",
       "LaunchFromWorldPosition",
+      "LaunchBetweenWorldPositions",
       "BeginLaunch",
       "Update",
       "ResolveTargetPosition",
@@ -9716,6 +9717,10 @@
       "Min",
       "ParticleSystem",
       "VisualEffect",
+      "Runner",
+      "Impact",
+      "System",
+      "Impacted",
       "TravelSeconds",
       "Max",
       "EstimatedLifetimeSeconds",
@@ -9723,6 +9728,7 @@
       "ResolveSourcePosition",
       "BeginLaunch",
       "LaunchFromWorldPosition",
+      "LaunchBetweenWorldPositions",
       "ResolveTargetPosition",
       "SetParent",
       "PlayParticles",
@@ -9737,9 +9743,9 @@
       "Lerp",
       "Sin",
       "PI",
-      "Impact",
       "TransformVector",
       "StopEmitting",
+      "Invoke",
       "Destroy",
       "Length",
       "GetComponentsInChildren",
@@ -9774,6 +9780,117 @@
       "Update 기반 처리 존재",
       "전투 계열 로직 포함",
       "저장/불러오기 관련 로직 포함"
+    ]
+  },
+  {
+    "file_id": "Project 2048/Assets/Scripts/Presentation/CombatVfxAnchorProvider.cs",
+    "path": "Project 2048/Assets/Scripts/Presentation/CombatVfxAnchorProvider.cs",
+    "file_name": "CombatVfxAnchorProvider.cs",
+    "content_hash": "bb9fd5b07cd9a994f20906e99531a846b1668df7",
+    "size": 1168,
+    "line_count": 33,
+    "namespace": "Project2048.Presentation",
+    "using_list": [
+      "Project2048.Skills",
+      "UnityEngine"
+    ],
+    "classes": [
+      {
+        "name": "CombatVfxAnchorProvider",
+        "kind": "class",
+        "access": "internal",
+        "base_types": [
+          "MonoBehaviour"
+        ],
+        "interfaces": [],
+        "attributes": [],
+        "is_partial": false,
+        "is_generic": false
+      }
+    ],
+    "main_class_name": "CombatVfxAnchorProvider",
+    "unity_type": "MonoBehaviour",
+    "methods": [
+      "TryGetSocket"
+    ],
+    "fields": [
+      {
+        "name": "root",
+        "type": "Transform",
+        "access": "public",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "feet",
+        "type": "Transform",
+        "access": "public",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "body",
+        "type": "Transform",
+        "access": "public",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "head",
+        "type": "Transform",
+        "access": "public",
+        "serialized": false,
+        "is_static": false
+      }
+    ],
+    "properties": [],
+    "events": [],
+    "unity_messages": [],
+    "has_update": false,
+    "has_fixed_update": false,
+    "has_late_update": false,
+    "has_awake": false,
+    "has_start": false,
+    "has_on_enable": false,
+    "has_on_disable": false,
+    "serialize_field_count": 0,
+    "public_field_count": 4,
+    "get_component_count": 0,
+    "find_call_count": 0,
+    "new_keyword_count": 0,
+    "coroutine_count": 0,
+    "singleton_candidate": false,
+    "dont_destroy_on_load": false,
+    "referenced_types": [
+      "Project2048",
+      "Skills",
+      "UnityEngine",
+      "Presentation",
+      "VFX",
+      "SkillVfxPlayer",
+      "CastPoint",
+      "TryGetSocket",
+      "VfxSocket",
+      "Root",
+      "Feet",
+      "Body",
+      "Head",
+      "HitPoint"
+    ],
+    "component_access_types": [],
+    "created_types": [],
+    "singleton_access_types": [],
+    "string_literals": [],
+    "numeric_literals": [],
+    "guessed_roles": [
+      "combat",
+      "player",
+      "network",
+      "runtime"
+    ],
+    "summary_signals": [
+      "런타임 컴포넌트",
+      "전투 계열 로직 포함"
     ]
   },
   {
@@ -10510,9 +10627,9 @@
     "file_id": "Project 2048/Assets/Scripts/Presentation/SkillVfxPlayer.cs",
     "path": "Project 2048/Assets/Scripts/Presentation/SkillVfxPlayer.cs",
     "file_name": "SkillVfxPlayer.cs",
-    "content_hash": "38fee31f95e846cd8b28f1896c182deaafcffb0f",
-    "size": 7081,
-    "line_count": 216,
+    "content_hash": "ca7c08936f232876c284bb5cdcc162659267741f",
+    "size": 14285,
+    "line_count": 396,
     "namespace": "Project2048.Presentation",
     "using_list": [
       "Project2048.Skills",
@@ -10545,29 +10662,37 @@
     "unity_type": "None",
     "methods": [
       "SkillVfxContext",
-      "AnchorFor",
-      "OppositeAnchorFor",
-      "ResolvePlacementWorldPosition",
-      "ResolveVerticalWorldPosition",
+      "ResolveActor",
+      "OppositeActor",
+      "ResolveEndpointWorldPosition",
+      "ResolveEndpointLocalOffset",
+      "ResolveSocketWorldPosition",
       "Vector3",
+      "ResolveFacingSign",
+      "ResolveCastDirectionSign",
+      "ResolveCueDirectionSign",
+      "PlaceAsBeam",
       "TryResolveRendererBounds",
       "Play",
       "caller",
       "PlayCue",
+      "ApplyAttachMode",
+      "ApplyVisualFlip",
+      "ResolveVisualTransform",
       "ApplyTint",
       "Vector4",
       "PlayVisuals"
     ],
     "fields": [
       {
-        "name": "playerAnchor",
+        "name": "caster",
         "type": "Transform",
         "access": "public",
         "serialized": false,
         "is_static": false
       },
       {
-        "name": "enemyAnchor",
+        "name": "primaryTarget",
         "type": "Transform",
         "access": "public",
         "serialized": false,
@@ -10581,6 +10706,55 @@
         "is_static": false
       },
       {
+        "name": "DefaultCastPointLocalX",
+        "type": "float",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "DefaultCastPointLocalY",
+        "type": "float",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "localOffset",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "center",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "deltaX",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "deltaX",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "direction",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
         "name": "hasBounds",
         "type": "var",
         "access": "internal",
@@ -10588,7 +10762,35 @@
         "is_static": false
       },
       {
+        "name": "destinationPos",
+        "type": "Vector3?",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
         "name": "lifetime",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "authoredSign",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "targetSign",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "scale",
         "type": "var",
         "access": "internal",
         "serialized": false,
@@ -10616,21 +10818,23 @@
     "public_field_count": 3,
     "get_component_count": 1,
     "find_call_count": 0,
-    "new_keyword_count": 4,
+    "new_keyword_count": 5,
     "coroutine_count": 0,
     "singleton_candidate": false,
     "dont_destroy_on_load": false,
     "referenced_types": [
       "SkillVfxTrigger",
+      "float",
+      "Vector3?",
       "Project2048",
       "Skills",
       "UnityEngine",
       "VFX",
       "Presentation",
-      "AnchorFor",
-      "SkillVfxTarget",
-      "Enemy",
-      "OppositeAnchorFor",
+      "SkillSO",
+      "ResolveActor",
+      "VfxActorRef",
+      "PrimaryTarget",
       "VisualEffectColorPropertyNames",
       "Color",
       "Tint",
@@ -10638,15 +10842,44 @@
       "Base",
       "MainColor",
       "ParticleColor",
+      "OppositeActor",
+      "Caster",
+      "CombatWorldSpriteView",
+      "LanternMuzzleLocalX",
+      "DefaultCastPointLocalX",
+      "DefaultCastPointLocalY",
       "Vector3",
-      "ResolvePlacementWorldPosition",
-      "SkillVfxPlacement",
-      "ResolveVerticalWorldPosition",
+      "ResolveEndpointWorldPosition",
+      "VfxEndpoint",
+      "ResolveEndpointLocalOffset",
+      "ResolveSocketWorldPosition",
       "TransformVector",
-      "SkillVfxVertical",
+      "ResolveCastDirectionSign",
+      "VfxSocket",
+      "GetComponentInParent",
+      "CombatVfxAnchorProvider",
+      "TryGetSocket",
       "TryResolveRendererBounds",
+      "CastPoint",
+      "ResolveFacingSign",
+      "Root",
       "Feet",
+      "Body",
       "Head",
+      "HitPoint",
+      "ResolveAttackFacingSign",
+      "Abs",
+      "ResolveCueDirectionSign",
+      "SkillVfxCue",
+      "VfxFlipMode",
+      "SpawnToDestination",
+      "HasValue",
+      "Value",
+      "PlaySlashArcAttackArt",
+      "Lerp",
+      "FromToRotation",
+      "PlaceAsBeam",
+      "Quaternion",
       "Bounds",
       "GetComponent",
       "SpriteRenderer",
@@ -10661,18 +10894,28 @@
       "Edit",
       "PlayCue",
       "Add",
-      "SkillVfxCue",
       "HasPrefab",
       "Object",
       "Instantiate",
-      "Quaternion",
       "Approximately",
       "ApplyTint",
+      "ApplyVisualFlip",
+      "ApplyAttachMode",
       "GetComponentInChildren",
       "CombatProjectileEffect",
+      "LaunchBetweenWorldPositions",
       "LaunchFromWorldPosition",
       "PlayVisuals",
       "Destroy",
+      "VfxAttachMode",
+      "FollowSpawnActor",
+      "SetParent",
+      "None",
+      "VfxAuthoredFacing",
+      "Left",
+      "ResolveVisualTransform",
+      "SkillVfxVisualRoot",
+      "VisualTransform",
       "ParticleSystem",
       "Vector4",
       "VisualEffect",
@@ -10700,19 +10943,220 @@
       "ParticleColor"
     ],
     "numeric_literals": [
+      0.34,
+      0.36,
+      2,
       0,
-      1
+      3,
+      1,
+      0.0001,
+      0.5,
+      0.5
     ],
     "guessed_roles": [
       "combat",
+      "network",
       "player",
       "manager",
-      "network",
       "runtime"
     ],
     "summary_signals": [
       "전투 계열 로직 포함",
       "컴포넌트 조회 사용"
+    ]
+  },
+  {
+    "file_id": "Project 2048/Assets/Scripts/Presentation/SkillVfxRunner.cs",
+    "path": "Project 2048/Assets/Scripts/Presentation/SkillVfxRunner.cs",
+    "file_name": "SkillVfxRunner.cs",
+    "content_hash": "63eb81118072faaf22b74b24435e03c95eb8465b",
+    "size": 4424,
+    "line_count": 113,
+    "namespace": "Project2048.Presentation",
+    "using_list": [
+      "System.Collections",
+      "Project2048.Skills",
+      "UnityEngine"
+    ],
+    "classes": [
+      {
+        "name": "SkillVfxRunner",
+        "kind": "class",
+        "access": "internal",
+        "base_types": [
+          "MonoBehaviour"
+        ],
+        "interfaces": [],
+        "attributes": [],
+        "is_partial": false,
+        "is_generic": false
+      }
+    ],
+    "main_class_name": "SkillVfxRunner",
+    "unity_type": "MonoBehaviour",
+    "methods": [
+      "Play",
+      "SpawnCueAfterDelay",
+      "WaitForSeconds",
+      "SpawnCue",
+      "SkillVfxContext",
+      "PlayImpactCues",
+      "PlayCueAfterDelay"
+    ],
+    "fields": [
+      {
+        "name": "playedAny",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      }
+    ],
+    "properties": [],
+    "events": [],
+    "unity_messages": [],
+    "has_update": false,
+    "has_fixed_update": false,
+    "has_late_update": false,
+    "has_awake": false,
+    "has_start": false,
+    "has_on_enable": false,
+    "has_on_disable": false,
+    "serialize_field_count": 0,
+    "public_field_count": 0,
+    "get_component_count": 0,
+    "find_call_count": 0,
+    "new_keyword_count": 3,
+    "coroutine_count": 4,
+    "singleton_candidate": false,
+    "dont_destroy_on_load": false,
+    "referenced_types": [
+      "System",
+      "Collections",
+      "Project2048",
+      "Skills",
+      "UnityEngine",
+      "Presentation",
+      "CombatWorldSpriteView",
+      "Play",
+      "Impact",
+      "SkillVfxDefinition",
+      "SkillVfxContext",
+      "HasAnyCue",
+      "CuesFor",
+      "HasPrefab",
+      "Application",
+      "StartCoroutine",
+      "SpawnCueAfterDelay",
+      "SpawnCue",
+      "SkillVfxCue",
+      "WaitForSeconds",
+      "Max",
+      "SkillVfxPlayer",
+      "PlayCue",
+      "HasCuesFor",
+      "SkillVfxTrigger",
+      "GetComponentInChildren",
+      "CombatProjectileEffect",
+      "Impacted",
+      "PlayImpactCues",
+      "Update",
+      "PlayCueAfterDelay"
+    ],
+    "component_access_types": [],
+    "created_types": [
+      "WaitForSeconds",
+      "SkillVfxContext"
+    ],
+    "singleton_access_types": [],
+    "string_literals": [
+      "실제로 도착"
+    ],
+    "numeric_literals": [
+      0
+    ],
+    "guessed_roles": [
+      "runtime",
+      "combat",
+      "player",
+      "manager"
+    ],
+    "summary_signals": [
+      "런타임 컴포넌트",
+      "전투 계열 로직 포함"
+    ]
+  },
+  {
+    "file_id": "Project 2048/Assets/Scripts/Presentation/SkillVfxVisualRoot.cs",
+    "path": "Project 2048/Assets/Scripts/Presentation/SkillVfxVisualRoot.cs",
+    "file_name": "SkillVfxVisualRoot.cs",
+    "content_hash": "3c53f05d60c8af714a31a52bae526737c73bdee0",
+    "size": 257,
+    "line_count": 12,
+    "namespace": "Project2048.Presentation",
+    "using_list": [
+      "UnityEngine"
+    ],
+    "classes": [
+      {
+        "name": "SkillVfxVisualRoot",
+        "kind": "class",
+        "access": "internal",
+        "base_types": [
+          "MonoBehaviour"
+        ],
+        "interfaces": [],
+        "attributes": [],
+        "is_partial": false,
+        "is_generic": false
+      }
+    ],
+    "main_class_name": "SkillVfxVisualRoot",
+    "unity_type": "MonoBehaviour",
+    "methods": [],
+    "fields": [
+      {
+        "name": "visualRoot",
+        "type": "Transform",
+        "access": "public",
+        "serialized": false,
+        "is_static": false
+      }
+    ],
+    "properties": [],
+    "events": [],
+    "unity_messages": [],
+    "has_update": false,
+    "has_fixed_update": false,
+    "has_late_update": false,
+    "has_awake": false,
+    "has_start": false,
+    "has_on_enable": false,
+    "has_on_disable": false,
+    "serialize_field_count": 0,
+    "public_field_count": 1,
+    "get_component_count": 0,
+    "find_call_count": 0,
+    "new_keyword_count": 0,
+    "coroutine_count": 0,
+    "singleton_candidate": false,
+    "dont_destroy_on_load": false,
+    "referenced_types": [
+      "UnityEngine",
+      "Project2048",
+      "Presentation",
+      "VisualTransform"
+    ],
+    "component_access_types": [],
+    "created_types": [],
+    "singleton_access_types": [],
+    "string_literals": [],
+    "numeric_literals": [],
+    "guessed_roles": [
+      "runtime"
+    ],
+    "summary_signals": [
+      "런타임 컴포넌트"
     ]
   },
   {
@@ -12946,9 +13390,9 @@
     "file_id": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "path": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "file_name": "CombatWorldSpriteView.cs",
-    "content_hash": "2979095b4418a752ea2752fc9b1b776c054ca222",
-    "size": 280341,
-    "line_count": 7253,
+    "content_hash": "b4c687c0aec60d86b6042927e4ca10690a559346",
+    "size": 279981,
+    "line_count": 7245,
     "namespace": "Project2048.Prototype",
     "using_list": [
       "System.Collections",
@@ -13015,8 +13459,7 @@
       "BuildSkillVfxContext",
       "SkillVfxContext",
       "TryPlayDefinitionCues",
-      "PlayDefinitionCueAfterDelay",
-      "WaitForSeconds",
+      "EnsureSkillVfxRunner",
       "ResolveDefinitionCueDurationSeconds",
       "ResolvePrefabVisualDurationSeconds",
       "TryPlayDirectedSkillEffect",
@@ -13026,6 +13469,7 @@
       "ResolveFlameBurstExplosionPrefab",
       "ResolveFlameBurstExplosionLifetimeSeconds",
       "PlayFlameBurstImpactExplosionAfterDelay",
+      "WaitForSeconds",
       "PlayFlameBurstImpactExplosion",
       "SpawnSkillPrefabVisualAtAnchor",
       "DelayEnemyDeathFadeForSkillEffect",
@@ -13599,20 +14043,6 @@
         "is_static": false
       },
       {
-        "name": "SlashSkillMuzzleLocalX",
-        "type": "float",
-        "access": "private",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "SlashSkillMuzzleLocalY",
-        "type": "float",
-        "access": "private",
-        "serialized": false,
-        "is_static": false
-      },
-      {
         "name": "SelfBuffMagicCircleYOffset",
         "type": "float",
         "access": "private",
@@ -13795,16 +14225,16 @@
         "is_static": false
       },
       {
-        "name": "enemyAnchor",
+        "name": "primaryTarget",
         "type": "var",
         "access": "internal",
         "serialized": false,
         "is_static": false
       },
       {
-        "name": "playedAnyCue",
-        "type": "var",
-        "access": "internal",
+        "name": "skillVfxRunner",
+        "type": "SkillVfxRunner",
+        "access": "private",
         "serialized": false,
         "is_static": false
       },
@@ -15286,10 +15716,10 @@
     "has_on_disable": false,
     "serialize_field_count": 0,
     "public_field_count": 13,
-    "get_component_count": 24,
+    "get_component_count": 25,
     "find_call_count": 3,
-    "new_keyword_count": 190,
-    "coroutine_count": 40,
+    "new_keyword_count": 188,
+    "coroutine_count": 38,
     "singleton_candidate": false,
     "dont_destroy_on_load": false,
     "referenced_types": [
@@ -15303,6 +15733,7 @@
       "bool",
       "Material",
       "Coroutine",
+      "SkillVfxRunner",
       "Vector3",
       "System",
       "Collections",
@@ -15384,8 +15815,6 @@
       "FlameBurstTongueSegmentCount",
       "LanternMuzzleLocalX",
       "LanternMuzzleLocalY",
-      "SlashSkillMuzzleLocalX",
-      "SlashSkillMuzzleLocalY",
       "SelfBuffMagicCircleYOffset",
       "SelfBuffParticleLift",
       "CloseRangeAttackAnimationSpeedMultiplier",
@@ -15492,9 +15921,11 @@
       "PlayEnemyAppearEffectIfNeeded",
       "PlayEnemyAttackEffectIfNeeded",
       "PlayShieldImpactEffectIfNeeded",
-      "ResolvePlayerAnchor"
+      "ResolvePlayerAnchor",
+      "PlayPlayerActionEffectIfNeeded"
     ],
     "component_access_types": [
+      "SkillVfxRunner",
       "SpriteRenderer",
       "LineRenderer",
       "ParticleSystem",
@@ -21721,12 +22152,13 @@
     "file_id": "Project 2048/Assets/Scripts/Skills/SkillVfxCue.cs",
     "path": "Project 2048/Assets/Scripts/Skills/SkillVfxCue.cs",
     "file_name": "SkillVfxCue.cs",
-    "content_hash": "eeb6196787e385aad0d3918bfb6ede74c3654352",
-    "size": 578,
-    "line_count": 19,
+    "content_hash": "8f6ccf10c1015202538c452736a9c8c4c3692d39",
+    "size": 1212,
+    "line_count": 33,
     "namespace": "Project2048.Skills",
     "using_list": [
-      "UnityEngine"
+      "UnityEngine",
+      "UnityEngine.Serialization"
     ],
     "classes": [
       {
@@ -21759,8 +22191,43 @@
         "is_static": false
       },
       {
-        "name": "placement",
-        "type": "SkillVfxPlacement",
+        "name": "spawnAt",
+        "type": "VfxEndpoint",
+        "access": "public",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "useDestination",
+        "type": "bool",
+        "access": "public",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "destination",
+        "type": "VfxEndpoint",
+        "access": "public",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "flipMode",
+        "type": "VfxFlipMode",
+        "access": "public",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "authoredFacing",
+        "type": "VfxAuthoredFacing",
+        "access": "public",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "attachMode",
+        "type": "VfxAttachMode",
         "access": "public",
         "serialized": false,
         "is_static": false
@@ -21777,7 +22244,7 @@
     "has_on_enable": false,
     "has_on_disable": false,
     "serialize_field_count": 0,
-    "public_field_count": 3,
+    "public_field_count": 8,
     "get_component_count": 0,
     "find_call_count": 0,
     "new_keyword_count": 0,
@@ -21786,34 +22253,49 @@
     "dont_destroy_on_load": false,
     "referenced_types": [
       "SkillVfxTrigger",
-      "SkillVfxPlacement",
+      "VfxEndpoint",
+      "bool",
+      "VfxFlipMode",
+      "VfxAuthoredFacing",
+      "VfxAttachMode",
       "UnityEngine",
+      "Serialization",
       "Project2048",
       "Skills",
       "System",
       "Serializable",
+      "VFX",
+      "FormerlySerializedAs",
       "Min",
+      "Impact",
       "Color",
       "HasPrefab"
     ],
     "component_access_types": [],
     "created_types": [],
     "singleton_access_types": [],
-    "string_literals": [],
+    "string_literals": [
+      "placement",
+      "이동하는"
+    ],
     "numeric_literals": [
       0,
       1
     ],
-    "guessed_roles": [],
-    "summary_signals": []
+    "guessed_roles": [
+      "save-load"
+    ],
+    "summary_signals": [
+      "저장/불러오기 관련 로직 포함"
+    ]
   },
   {
     "file_id": "Project 2048/Assets/Scripts/Skills/SkillVfxDefinition.cs",
     "path": "Project 2048/Assets/Scripts/Skills/SkillVfxDefinition.cs",
     "file_name": "SkillVfxDefinition.cs",
-    "content_hash": "81ee9a37724677456763958bddbbc595cc66a76b",
-    "size": 695,
-    "line_count": 26,
+    "content_hash": "64a30c30e9ff50cd50622b1eda17bfe5cc2e38be",
+    "size": 848,
+    "line_count": 29,
     "namespace": "Project2048.Skills",
     "using_list": [
       "System.Linq",
@@ -21834,6 +22316,7 @@
     "main_class_name": "SkillVfxDefinition",
     "unity_type": "None",
     "methods": [
+      "HasCuesFor",
       "CuesFor"
     ],
     "fields": [],
@@ -21868,10 +22351,11 @@
       "HasAnyCue",
       "Any",
       "HasPrefab",
+      "HasCuesFor",
+      "SkillVfxTrigger",
       "Collections",
       "Generic",
-      "CuesFor",
-      "SkillVfxTrigger"
+      "CuesFor"
     ],
     "component_access_types": [],
     "created_types": [],
@@ -21885,9 +22369,9 @@
     "file_id": "Project 2048/Assets/Scripts/Skills/SkillVfxEnums.cs",
     "path": "Project 2048/Assets/Scripts/Skills/SkillVfxEnums.cs",
     "file_name": "SkillVfxEnums.cs",
-    "content_hash": "74bdb61153541480ca56c2f1a2fa067f07108875",
-    "size": 219,
-    "line_count": 9,
+    "content_hash": "28b4a8b3dafc0960513e3c93de23e7b9eb4b42e9",
+    "size": 846,
+    "line_count": 18,
     "namespace": "Project2048.Skills",
     "using_list": [],
     "classes": [],
@@ -21921,22 +22405,46 @@
       "ChargeStart",
       "ChargeRelease",
       "Impact",
+      "SkillSO",
       "SkillVfxTarget",
       "Player",
       "Enemy",
+      "VfxActorRef",
+      "Caster",
+      "PrimaryTarget",
       "SkillVfxVertical",
       "Feet",
       "Body",
-      "Head"
+      "Head",
+      "VfxSocket",
+      "Root",
+      "CastPoint",
+      "HitPoint",
+      "VfxFlipMode",
+      "None",
+      "CasterToTarget",
+      "SpawnToDestination",
+      "VfxAuthoredFacing",
+      "Right",
+      "Left",
+      "VfxAttachMode",
+      "World",
+      "FollowSpawnActor"
     ],
     "component_access_types": [],
     "created_types": [],
     "singleton_access_types": [],
     "string_literals": [],
-    "numeric_literals": [],
+    "numeric_literals": [
+      2,
+      3,
+      4,
+      5
+    ],
     "guessed_roles": [
-      "player",
       "combat",
+      "player",
+      "network",
       "runtime"
     ],
     "summary_signals": [
@@ -22191,91 +22699,6 @@
     ]
   },
   {
-    "file_id": "Project 2048/Assets/Scripts/Skills/SkillVfxPlacement.cs",
-    "path": "Project 2048/Assets/Scripts/Skills/SkillVfxPlacement.cs",
-    "file_name": "SkillVfxPlacement.cs",
-    "content_hash": "096179ba9385cc484756d8ecff38e417cfd71394",
-    "size": 243,
-    "line_count": 13,
-    "namespace": "Project2048.Skills",
-    "using_list": [
-      "UnityEngine"
-    ],
-    "classes": [
-      {
-        "name": "SkillVfxPlacement",
-        "kind": "struct",
-        "access": "public",
-        "base_types": [],
-        "interfaces": [],
-        "attributes": [],
-        "is_partial": false,
-        "is_generic": false
-      }
-    ],
-    "main_class_name": "SkillVfxPlacement",
-    "unity_type": "None",
-    "methods": [],
-    "fields": [
-      {
-        "name": "target",
-        "type": "SkillVfxTarget",
-        "access": "public",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "vertical",
-        "type": "SkillVfxVertical",
-        "access": "public",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "localOffset",
-        "type": "Vector3",
-        "access": "public",
-        "serialized": false,
-        "is_static": false
-      }
-    ],
-    "properties": [],
-    "events": [],
-    "unity_messages": [],
-    "has_update": false,
-    "has_fixed_update": false,
-    "has_late_update": false,
-    "has_awake": false,
-    "has_start": false,
-    "has_on_enable": false,
-    "has_on_disable": false,
-    "serialize_field_count": 0,
-    "public_field_count": 3,
-    "get_component_count": 0,
-    "find_call_count": 0,
-    "new_keyword_count": 0,
-    "coroutine_count": 0,
-    "singleton_candidate": false,
-    "dont_destroy_on_load": false,
-    "referenced_types": [
-      "SkillVfxTarget",
-      "SkillVfxVertical",
-      "Vector3",
-      "UnityEngine",
-      "Project2048",
-      "Skills",
-      "System",
-      "Serializable"
-    ],
-    "component_access_types": [],
-    "created_types": [],
-    "singleton_access_types": [],
-    "string_literals": [],
-    "numeric_literals": [],
-    "guessed_roles": [],
-    "summary_signals": []
-  },
-  {
     "file_id": "Project 2048/Assets/Scripts/Skills/SkillVfxTuning.cs",
     "path": "Project 2048/Assets/Scripts/Skills/SkillVfxTuning.cs",
     "file_name": "SkillVfxTuning.cs",
@@ -22470,6 +22893,111 @@
     ],
     "summary_signals": [
       "전투 계열 로직 포함"
+    ]
+  },
+  {
+    "file_id": "Project 2048/Assets/Scripts/Skills/VfxEndpoint.cs",
+    "path": "Project 2048/Assets/Scripts/Skills/VfxEndpoint.cs",
+    "file_name": "VfxEndpoint.cs",
+    "content_hash": "4af32238488e12547b9bad067c3e1eed2a1c0ae8",
+    "size": 613,
+    "line_count": 22,
+    "namespace": "Project2048.Skills",
+    "using_list": [
+      "UnityEngine",
+      "UnityEngine.Serialization"
+    ],
+    "classes": [
+      {
+        "name": "VfxEndpoint",
+        "kind": "struct",
+        "access": "public",
+        "base_types": [],
+        "interfaces": [],
+        "attributes": [],
+        "is_partial": false,
+        "is_generic": false
+      }
+    ],
+    "main_class_name": "VfxEndpoint",
+    "unity_type": "None",
+    "methods": [],
+    "fields": [
+      {
+        "name": "actor",
+        "type": "VfxActorRef",
+        "access": "public",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "socket",
+        "type": "VfxSocket",
+        "access": "public",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "localOffset",
+        "type": "Vector3",
+        "access": "public",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "mirrorOffsetXWithCastDirection",
+        "type": "bool",
+        "access": "public",
+        "serialized": false,
+        "is_static": false
+      }
+    ],
+    "properties": [],
+    "events": [],
+    "unity_messages": [],
+    "has_update": false,
+    "has_fixed_update": false,
+    "has_late_update": false,
+    "has_awake": false,
+    "has_start": false,
+    "has_on_enable": false,
+    "has_on_disable": false,
+    "serialize_field_count": 0,
+    "public_field_count": 4,
+    "get_component_count": 0,
+    "find_call_count": 0,
+    "new_keyword_count": 0,
+    "coroutine_count": 0,
+    "singleton_candidate": false,
+    "dont_destroy_on_load": false,
+    "referenced_types": [
+      "VfxActorRef",
+      "VfxSocket",
+      "Vector3",
+      "bool",
+      "UnityEngine",
+      "Serialization",
+      "Project2048",
+      "Skills",
+      "VFX",
+      "System",
+      "Serializable",
+      "FormerlySerializedAs"
+    ],
+    "component_access_types": [],
+    "created_types": [],
+    "singleton_access_types": [],
+    "string_literals": [
+      "target",
+      "vertical"
+    ],
+    "numeric_literals": [],
+    "guessed_roles": [
+      "save-load",
+      "network"
+    ],
+    "summary_signals": [
+      "저장/불러오기 관련 로직 포함"
     ]
   },
   {
@@ -25385,9 +25913,9 @@
     "file_id": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
     "path": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
     "file_name": "CombatPresentationEffectTests.cs",
-    "content_hash": "06ffd8de0596dac04dc9d33093c4faf09ef5296e",
-    "size": 206058,
-    "line_count": 3807,
+    "content_hash": "c110364a740f6208113d81e61ab2d26cccec983a",
+    "size": 207675,
+    "line_count": 3837,
     "namespace": "Project2048.Tests",
     "using_list": [
       "System.Collections",
@@ -25496,6 +26024,7 @@
       "Material",
       "CombatWorldSpriteView_ImpactBurstPreview_UsesHitImpactArt",
       "CombatWorldSpriteView_SlashArcPreview_UsesExpAttackBetweenCombatantsAndHitOnEnemy",
+      "CombatWorldSpriteView_SlashArcSource_UsesAuthoredPlayerFrontOffset",
       "CombatWorldSpriteView_LightProjectilePreview_UsesProfileDesignTimeArt",
       "CombatWorldSpriteView_ThornGuardPreview_UsesThornShieldArt",
       "CombatWorldSpriteView_SupportFirePreview_UsesMagicCircleAndAttackImpactArt",
@@ -25725,7 +26254,7 @@
     "public_field_count": 0,
     "get_component_count": 58,
     "find_call_count": 10,
-    "new_keyword_count": 236,
+    "new_keyword_count": 241,
     "coroutine_count": 11,
     "singleton_candidate": false,
     "dont_destroy_on_load": false,
@@ -29516,9 +30045,9 @@
     "file_id": "Project 2048/Assets/Tests/EditMode/SkillVfxPlayerTests.cs",
     "path": "Project 2048/Assets/Tests/EditMode/SkillVfxPlayerTests.cs",
     "file_name": "SkillVfxPlayerTests.cs",
-    "content_hash": "4ca1f4a5357ba8df79762573e9063698de463aff",
-    "size": 8402,
-    "line_count": 200,
+    "content_hash": "a7c382807c74affecdea038dc5f8ad09c9f9db48",
+    "size": 23187,
+    "line_count": 510,
     "namespace": "Project2048.Tests",
     "using_list": [
       "NUnit.Framework",
@@ -29555,7 +30084,17 @@
       "Play_ParticleCue_AutoPlaysAndAppliesTint",
       "Color",
       "Play_ClearTint_LeavesPrefabColor",
-      "Play_ProjectileCueWithVisualEffect_SpawnsPrefab"
+      "Play_ProjectileCueWithVisualEffect_SpawnsPrefab",
+      "SameDefinition_CasterSpawn_MirrorsWhenCasterAndTargetSwap",
+      "ResolveEndpoint_MirrorsLocalOffsetXWithCastDirection",
+      "ResolveEndpoint_MissingActor_FallsBackToLocalOffset",
+      "Play_VisualFlip_UsesVisualRootAndLeavesSpawnRootScale",
+      "Play_FollowSpawnActor_AttachesSpawnedCueToSpawnActor",
+      "SkillVfxRunner_DelayedCue_SpawnsSynchronouslyInEditMode_AndReportsPlayed",
+      "SkillVfxRunner_WrongTrigger_ReportsNotPlayed",
+      "CastPointSocket_FiresFromLanternMuzzle_FacingTarget",
+      "BeamCue_PlacesAtMidpoint_AndMirrorsDirectionOnEnemyCast",
+      "AnchorProvider_CastPointTransform_OverridesMuzzleFallback"
     ],
     "fields": [
       {
@@ -29587,7 +30126,7 @@
     "public_field_count": 0,
     "get_component_count": 4,
     "find_call_count": 0,
-    "new_keyword_count": 39,
+    "new_keyword_count": 104,
     "coroutine_count": 0,
     "singleton_candidate": false,
     "dont_destroy_on_load": false,
@@ -29614,13 +30153,13 @@
       "SkillVfxContext",
       "SkillVfxTrigger",
       "ChargeRelease",
-      "SkillVfxPlacement",
-      "SkillVfxTarget",
-      "Enemy",
-      "SkillVfxVertical",
+      "VfxEndpoint",
+      "VfxActorRef",
+      "PrimaryTarget",
+      "VfxSocket",
       "Feet",
       "SkillVfxPlayer",
-      "ResolvePlacementWorldPosition",
+      "ResolveEndpointWorldPosition",
       "Assert",
       "That",
       "Is",
@@ -29642,7 +30181,7 @@
       "ParticleFx",
       "ParticleSystem",
       "Color",
-      "Player",
+      "Caster",
       "Body",
       "GetComponent",
       "True",
@@ -29653,7 +30192,45 @@
       "VisualEffect",
       "CombatProjectileEffect",
       "Not",
-      "Null"
+      "Null",
+      "SkillSO",
+      "SameDefinition_CasterSpawn_MirrorsWhenCasterAndTargetSwap",
+      "Left",
+      "Right",
+      "CasterFx",
+      "ResolveEndpoint_MirrorsLocalOffsetXWithCastDirection",
+      "ResolveEndpoint_MissingActor_FallsBackToLocalOffset",
+      "Play_VisualFlip_UsesVisualRootAndLeavesSpawnRootScale",
+      "FlipFx",
+      "Visual",
+      "SetParent",
+      "SkillVfxVisualRoot",
+      "VfxFlipMode",
+      "CasterToTarget",
+      "VfxAuthoredFacing",
+      "Find",
+      "Play_FollowSpawnActor_AttachesSpawnedCueToSpawnActor",
+      "Target",
+      "AttachedFx",
+      "WorldVfxParent",
+      "VfxAttachMode",
+      "FollowSpawnActor",
+      "SkillVfxRunner_DelayedCue_SpawnsSynchronouslyInEditMode_AndReportsPlayed",
+      "RunnerFx",
+      "Runner",
+      "SkillVfxRunner",
+      "SkillVfxRunner_WrongTrigger_ReportsNotPlayed",
+      "RunnerFx2",
+      "False",
+      "CastPoint",
+      "CastPointSocket_FiresFromLanternMuzzle_FacingTarget",
+      "BeamCue_PlacesAtMidpoint_AndMirrorsDirectionOnEnemyCast",
+      "BeamFx",
+      "Abs",
+      "DeltaAngle",
+      "AnchorProvider_CastPointTransform_OverridesMuzzleFallback",
+      "CombatVfxAnchorProvider",
+      "Muzzle"
     ],
     "component_access_types": [
       "ParticleSystem",
@@ -29677,7 +30254,20 @@
       "Fx",
       "ParticleFx",
       "ParticleFx2",
-      "VfxProjectile"
+      "VfxProjectile",
+      "Left",
+      "Right",
+      "CasterFx",
+      "Caster",
+      "FlipFx",
+      "Visual",
+      "Target",
+      "AttachedFx",
+      "WorldVfxParent",
+      "C",
+      "T",
+      "RunnerFx",
+      "Runner"
     ],
     "numeric_literals": [
       8,
@@ -29686,10 +30276,19 @@
       0.1,
       1,
       0.001,
-      0
+      0,
+      2,
+      0.25,
+      0.34,
+      0.34,
+      0.36,
+      180,
+      180,
+      1.5
     ],
     "guessed_roles": [
       "combat",
+      "network",
       "runtime",
       "player"
     ],

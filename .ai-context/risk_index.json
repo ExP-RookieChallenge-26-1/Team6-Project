@@ -296,6 +296,29 @@
     "risk_score": 83
   },
   {
+    "file_id": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
+    "class_name": "Project2048AudioSettings",
+    "risk_flags": [
+      "high-coupling",
+      "public-field-heavy",
+      "magic-number-heavy",
+      "large-class",
+      "save-load-sensitive",
+      "ui-runtime-mixed",
+      "state-owner"
+    ],
+    "risk_reasons": [
+      "참조 타입 또는 관계 수가 많음",
+      "public 필드 노출 수가 많음",
+      "숫자 리터럴이 많아 의미 파악이 어려울 수 있음",
+      "파일/메서드/필드 수가 많아 책임이 커질 가능성",
+      "저장/불러오기 관련 로직 포함",
+      "UI와 런타임 책임이 한 파일에 섞였을 가능성",
+      "상태 중심 또는 관리 중심 클래스일 가능성"
+    ],
+    "risk_score": 81
+  },
+  {
     "file_id": "Project 2048/Assets/Scripts/Enemy/EnemySO.cs",
     "class_name": "EnemySO",
     "risk_flags": [
@@ -661,27 +684,6 @@
     "risk_score": 69
   },
   {
-    "file_id": "Project 2048/Assets/Scripts/Audio/Project2048AudioSettings.cs",
-    "class_name": "Project2048AudioSettings",
-    "risk_flags": [
-      "high-coupling",
-      "public-field-heavy",
-      "magic-number-heavy",
-      "save-load-sensitive",
-      "ui-runtime-mixed",
-      "state-owner"
-    ],
-    "risk_reasons": [
-      "참조 타입 또는 관계 수가 많음",
-      "public 필드 노출 수가 많음",
-      "숫자 리터럴이 많아 의미 파악이 어려울 수 있음",
-      "저장/불러오기 관련 로직 포함",
-      "UI와 런타임 책임이 한 파일에 섞였을 가능성",
-      "상태 중심 또는 관리 중심 클래스일 가능성"
-    ],
-    "risk_score": 66
-  },
-  {
     "file_id": "Project 2048/Assets/Scripts/Core/GameManager.cs",
     "class_name": "GameManager",
     "risk_flags": [
@@ -969,6 +971,25 @@
   {
     "file_id": "Project 2048/Assets/Scripts/Story/StoryController.cs",
     "class_name": "StoryController",
+    "risk_flags": [
+      "high-coupling",
+      "init-order-sensitive",
+      "save-load-sensitive",
+      "ui-runtime-mixed",
+      "state-owner"
+    ],
+    "risk_reasons": [
+      "참조 타입 또는 관계 수가 많음",
+      "초기화 순서에 민감할 가능성",
+      "저장/불러오기 관련 로직 포함",
+      "UI와 런타임 책임이 한 파일에 섞였을 가능성",
+      "상태 중심 또는 관리 중심 클래스일 가능성"
+    ],
+    "risk_score": 58
+  },
+  {
+    "file_id": "Project 2048/Assets/Scripts/UI/PausePopup.cs",
+    "class_name": "PausePopup",
     "risk_flags": [
       "high-coupling",
       "init-order-sensitive",
@@ -1476,6 +1497,23 @@
   {
     "file_id": "Project 2048/Assets/Scripts/UI/Story/StoryTextView.cs",
     "class_name": "StoryTextView",
+    "risk_flags": [
+      "init-order-sensitive",
+      "save-load-sensitive",
+      "ui-runtime-mixed",
+      "state-owner"
+    ],
+    "risk_reasons": [
+      "초기화 순서에 민감할 가능성",
+      "저장/불러오기 관련 로직 포함",
+      "UI와 런타임 책임이 한 파일에 섞였을 가능성",
+      "상태 중심 또는 관리 중심 클래스일 가능성"
+    ],
+    "risk_score": 40
+  },
+  {
+    "file_id": "Project 2048/Assets/Scripts/UI/TopBarButtonsController.cs",
+    "class_name": "TopBarButtonsController",
     "risk_flags": [
       "init-order-sensitive",
       "save-load-sensitive",

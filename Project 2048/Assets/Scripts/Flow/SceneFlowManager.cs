@@ -34,6 +34,7 @@ namespace Project2048.Flow
 
             flowController.OnMainMenuSceneLoadRequested += LoadMainMenu;
             flowController.OnStorySceneLoadRequested += LoadStory;
+            flowController.OnEndingSceneLoadRequested += LoadStory;
             flowController.OnBattleSceneLoadRequested += LoadBattle;
         }
 
@@ -46,6 +47,7 @@ namespace Project2048.Flow
 
             flowController.OnMainMenuSceneLoadRequested -= LoadMainMenu;
             flowController.OnStorySceneLoadRequested -= LoadStory;
+            flowController.OnEndingSceneLoadRequested -= LoadStory;
             flowController.OnBattleSceneLoadRequested -= LoadBattle;
         }
 

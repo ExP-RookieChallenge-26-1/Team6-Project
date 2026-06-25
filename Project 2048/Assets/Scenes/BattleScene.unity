@@ -1560,24 +1560,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.BoardCellView
   background: {fileID: 160459127}
   valueText: {fileID: 1554297056}
-  valueEchoText: {fileID: 0}
   obstacleMarker: {fileID: 0}
-  edge: {fileID: 0}
-  minTileValue: 2
-  maxTileValue: 2048
-  brightestTileCode: 255
-  darkestTileCode: 0
-  blackNumberMaxValue: 16
-  faceHdrStartValue: 32
-  minFaceIntensity: 1
-  maxFaceIntensity: 3
-  minFaceAlpha: 0.9
-  maxFaceAlpha: 1
-  echoStartValue: 32
-  minEchoAlpha: 0
-  maxEchoAlpha: 0
-  echoScale: 1.16
-  echoIntensity: 2.2
 --- !u!1 &162667108
 GameObject:
   m_ObjectHideFlags: 0
@@ -3081,24 +3064,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.BoardCellView
   background: {fileID: 326993029}
   valueText: {fileID: 387142886}
-  valueEchoText: {fileID: 0}
   obstacleMarker: {fileID: 0}
-  edge: {fileID: 0}
-  minTileValue: 2
-  maxTileValue: 2048
-  brightestTileCode: 255
-  darkestTileCode: 0
-  blackNumberMaxValue: 16
-  faceHdrStartValue: 32
-  minFaceIntensity: 1
-  maxFaceIntensity: 3
-  minFaceAlpha: 0.9
-  maxFaceAlpha: 1
-  echoStartValue: 32
-  minEchoAlpha: 0
-  maxEchoAlpha: 0
-  echoScale: 1.16
-  echoIntensity: 2.2
 --- !u!1 &336344055
 GameObject:
   m_ObjectHideFlags: 0
@@ -5185,24 +5151,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.BoardCellView
   background: {fileID: 526200645}
   valueText: {fileID: 275758837}
-  valueEchoText: {fileID: 0}
   obstacleMarker: {fileID: 0}
-  edge: {fileID: 0}
-  minTileValue: 2
-  maxTileValue: 2048
-  brightestTileCode: 255
-  darkestTileCode: 0
-  blackNumberMaxValue: 16
-  faceHdrStartValue: 32
-  minFaceIntensity: 1
-  maxFaceIntensity: 3
-  minFaceAlpha: 0.9
-  maxFaceAlpha: 1
-  echoStartValue: 32
-  minEchoAlpha: 0
-  maxEchoAlpha: 0
-  echoScale: 1.16
-  echoIntensity: 2.2
 --- !u!1 &528044812
 GameObject:
   m_ObjectHideFlags: 0
@@ -5295,24 +5244,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.BoardCellView
   background: {fileID: 528044814}
   valueText: {fileID: 1616878106}
-  valueEchoText: {fileID: 0}
   obstacleMarker: {fileID: 0}
-  edge: {fileID: 0}
-  minTileValue: 2
-  maxTileValue: 2048
-  brightestTileCode: 255
-  darkestTileCode: 0
-  blackNumberMaxValue: 16
-  faceHdrStartValue: 32
-  minFaceIntensity: 1
-  maxFaceIntensity: 3
-  minFaceAlpha: 0.9
-  maxFaceAlpha: 1
-  echoStartValue: 32
-  minEchoAlpha: 0
-  maxEchoAlpha: 0
-  echoScale: 1.16
-  echoIntensity: 2.2
 --- !u!1 &532137663
 GameObject:
   m_ObjectHideFlags: 0
@@ -5757,24 +5689,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.BoardCellView
   background: {fileID: 546951272}
   valueText: {fileID: 709418909}
-  valueEchoText: {fileID: 0}
   obstacleMarker: {fileID: 0}
-  edge: {fileID: 0}
-  minTileValue: 2
-  maxTileValue: 2048
-  brightestTileCode: 255
-  darkestTileCode: 0
-  blackNumberMaxValue: 16
-  faceHdrStartValue: 32
-  minFaceIntensity: 1
-  maxFaceIntensity: 3
-  minFaceAlpha: 0.9
-  maxFaceAlpha: 1
-  echoStartValue: 32
-  minEchoAlpha: 0
-  maxEchoAlpha: 0
-  echoScale: 1.16
-  echoIntensity: 2.2
 --- !u!1 &552439973
 GameObject:
   m_ObjectHideFlags: 0
@@ -6079,24 +5994,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.BoardCellView
   background: {fileID: 566513395}
   valueText: {fileID: 489116415}
-  valueEchoText: {fileID: 0}
   obstacleMarker: {fileID: 0}
-  edge: {fileID: 0}
-  minTileValue: 2
-  maxTileValue: 2048
-  brightestTileCode: 255
-  darkestTileCode: 0
-  blackNumberMaxValue: 16
-  faceHdrStartValue: 32
-  minFaceIntensity: 1
-  maxFaceIntensity: 3
-  minFaceAlpha: 0.9
-  maxFaceAlpha: 1
-  echoStartValue: 32
-  minEchoAlpha: 0
-  maxEchoAlpha: 0
-  echoScale: 1.16
-  echoIntensity: 2.2
 --- !u!1 &587818080
 GameObject:
   m_ObjectHideFlags: 0
@@ -11583,24 +11481,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.BoardCellView
   background: {fileID: 1085767052}
   valueText: {fileID: 532137665}
-  valueEchoText: {fileID: 0}
   obstacleMarker: {fileID: 0}
-  edge: {fileID: 0}
-  minTileValue: 2
-  maxTileValue: 2048
-  brightestTileCode: 255
-  darkestTileCode: 0
-  blackNumberMaxValue: 16
-  faceHdrStartValue: 32
-  minFaceIntensity: 1
-  maxFaceIntensity: 3
-  minFaceAlpha: 0.9
-  maxFaceAlpha: 1
-  echoStartValue: 32
-  minEchoAlpha: 0
-  maxEchoAlpha: 0
-  echoScale: 1.16
-  echoIntensity: 2.2
 --- !u!1 &1089451521
 GameObject:
   m_ObjectHideFlags: 0
@@ -11738,24 +11619,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.BoardCellView
   background: {fileID: 1095725860}
   valueText: {fileID: 924743095}
-  valueEchoText: {fileID: 0}
   obstacleMarker: {fileID: 0}
-  edge: {fileID: 0}
-  minTileValue: 2
-  maxTileValue: 2048
-  brightestTileCode: 255
-  darkestTileCode: 0
-  blackNumberMaxValue: 16
-  faceHdrStartValue: 32
-  minFaceIntensity: 1
-  maxFaceIntensity: 3
-  minFaceAlpha: 0.9
-  maxFaceAlpha: 1
-  echoStartValue: 32
-  minEchoAlpha: 0
-  maxEchoAlpha: 0
-  echoScale: 1.16
-  echoIntensity: 2.2
 --- !u!1 &1111871086
 GameObject:
   m_ObjectHideFlags: 0
@@ -13120,24 +12984,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.BoardCellView
   background: {fileID: 1255698128}
   valueText: {fileID: 1858422301}
-  valueEchoText: {fileID: 0}
   obstacleMarker: {fileID: 0}
-  edge: {fileID: 0}
-  minTileValue: 2
-  maxTileValue: 2048
-  brightestTileCode: 255
-  darkestTileCode: 0
-  blackNumberMaxValue: 16
-  faceHdrStartValue: 32
-  minFaceIntensity: 1
-  maxFaceIntensity: 3
-  minFaceAlpha: 0.9
-  maxFaceAlpha: 1
-  echoStartValue: 32
-  minEchoAlpha: 0
-  maxEchoAlpha: 0
-  echoScale: 1.16
-  echoIntensity: 2.2
 --- !u!1 &1255967853
 GameObject:
   m_ObjectHideFlags: 0
@@ -13655,24 +13502,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.BoardCellView
   background: {fileID: 1287581589}
   valueText: {fileID: 1326351175}
-  valueEchoText: {fileID: 0}
   obstacleMarker: {fileID: 0}
-  edge: {fileID: 0}
-  minTileValue: 2
-  maxTileValue: 2048
-  brightestTileCode: 255
-  darkestTileCode: 0
-  blackNumberMaxValue: 16
-  faceHdrStartValue: 32
-  minFaceIntensity: 1
-  maxFaceIntensity: 3
-  minFaceAlpha: 0.9
-  maxFaceAlpha: 1
-  echoStartValue: 32
-  minEchoAlpha: 0
-  maxEchoAlpha: 0
-  echoScale: 1.16
-  echoIntensity: 2.2
 --- !u!1 &1303013645
 GameObject:
   m_ObjectHideFlags: 0
@@ -14910,24 +14740,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.BoardCellView
   background: {fileID: 1393796969}
   valueText: {fileID: 674481352}
-  valueEchoText: {fileID: 0}
   obstacleMarker: {fileID: 0}
-  edge: {fileID: 0}
-  minTileValue: 2
-  maxTileValue: 2048
-  brightestTileCode: 255
-  darkestTileCode: 0
-  blackNumberMaxValue: 16
-  faceHdrStartValue: 32
-  minFaceIntensity: 1
-  maxFaceIntensity: 3
-  minFaceAlpha: 0.9
-  maxFaceAlpha: 1
-  echoStartValue: 32
-  minEchoAlpha: 0
-  maxEchoAlpha: 0
-  echoScale: 1.16
-  echoIntensity: 2.2
 --- !u!1 &1404590045
 GameObject:
   m_ObjectHideFlags: 0
@@ -15649,24 +15462,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.BoardCellView
   background: {fileID: 1490845802}
   valueText: {fileID: 381297993}
-  valueEchoText: {fileID: 0}
   obstacleMarker: {fileID: 0}
-  edge: {fileID: 0}
-  minTileValue: 2
-  maxTileValue: 2048
-  brightestTileCode: 255
-  darkestTileCode: 0
-  blackNumberMaxValue: 16
-  faceHdrStartValue: 32
-  minFaceIntensity: 1
-  maxFaceIntensity: 3
-  minFaceAlpha: 0.9
-  maxFaceAlpha: 1
-  echoStartValue: 32
-  minEchoAlpha: 0
-  maxEchoAlpha: 0
-  echoScale: 1.16
-  echoIntensity: 2.2
 --- !u!1 &1494109875
 GameObject:
   m_ObjectHideFlags: 0
@@ -15902,6 +15698,7 @@ MonoBehaviour:
   enemyControllers:
   - {fileID: 1999228549}
   rewardManager: {fileID: 1327107009}
+  combatWorldSpriteView: {fileID: 0}
   stageDatabase: {fileID: 11400000, guid: 7ff0a5e7d7cefc640b3a27c0596fda57, type: 2}
   playerData: {fileID: 11400000, guid: 032b4bdf9c2ffc847bd27ec8e3af0335, type: 2}
   rewardTable: {fileID: 11400000, guid: e82aa82acecfe504ab3cc5e0b5d7248c, type: 2}
@@ -16150,24 +15947,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.BoardCellView
   background: {fileID: 1517010991}
   valueText: {fileID: 1898243548}
-  valueEchoText: {fileID: 0}
   obstacleMarker: {fileID: 0}
-  edge: {fileID: 0}
-  minTileValue: 2
-  maxTileValue: 2048
-  brightestTileCode: 255
-  darkestTileCode: 0
-  blackNumberMaxValue: 16
-  faceHdrStartValue: 32
-  minFaceIntensity: 1
-  maxFaceIntensity: 3
-  minFaceAlpha: 0.9
-  maxFaceAlpha: 1
-  echoStartValue: 32
-  minEchoAlpha: 0
-  maxEchoAlpha: 0
-  echoScale: 1.16
-  echoIntensity: 2.2
 --- !u!1 &1520538824
 GameObject:
   m_ObjectHideFlags: 0
@@ -16203,6 +15983,18 @@ MonoBehaviour:
   playerRenderer: {fileID: 713791490}
   enemyRenderer: {fileID: 1629219948}
   defaultBackgroundSprite: {fileID: 7288489148436055206, guid: ac20f033bdceb3149b44f3a942308b67, type: 3}
+  upperStageBackgroundSprite: {fileID: 7288489148436055206, guid: ac20f033bdceb3149b44f3a942308b67, type: 3}
+  middleStageBackgroundSprite: {fileID: -6790826067759457387, guid: 9e1ad007a13410142a6da69e5c00074e, type: 3}
+  lowerStageBackgroundSprite: {fileID: 2225577315691504454, guid: 1fb74fbbb05439b46826312757f9664a, type: 3}
+  rewardMothSprite: {fileID: -7020765519427222693, guid: 1b1b8bc2583af9349b6cc5fb6673e155, type: 3}
+  attackEffectSprite: {fileID: 0}
+  hitEffectSprite: {fileID: 0}
+  shieldEffectSprite: {fileID: 0}
+  thornShieldEffectSprite: {fileID: 0}
+  magicCircleEffectSprite: {fileID: 0}
+  flameEffectSprite: {fileID: 0}
+  chainAttackEffectSprite: {fileID: 0}
+  boundChainsEffectSprite: {fileID: 0}
   audioSource: {fileID: 0}
   sfxMixerGroup: {fileID: 0}
   bgmDucker: {fileID: 0}
@@ -16219,8 +16011,8 @@ MonoBehaviour:
   shieldImpactParticleMaterial: {fileID: 0}
   fearDebuffParticleMaterial: {fileID: 0}
   darknessDebuffParticleMaterial: {fileID: 0}
-  playEnemyClawSlashEffect: 1
   enemyClawSlashEffectPrefab: {fileID: 0}
+  playEnemyClawSlashEffect: 1
   enemyClawSlashLocalOffset: {x: 0.28, y: 0.2, z: 0}
   enemyClawSlashLocalEulerAngles: {x: 0, y: 0, z: 90}
   enemyClawSlashScale: 1
@@ -16335,24 +16127,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.BoardCellView
   background: {fileID: 1525732603}
   valueText: {fileID: 881076465}
-  valueEchoText: {fileID: 0}
   obstacleMarker: {fileID: 0}
-  edge: {fileID: 0}
-  minTileValue: 2
-  maxTileValue: 2048
-  brightestTileCode: 255
-  darkestTileCode: 0
-  blackNumberMaxValue: 16
-  faceHdrStartValue: 32
-  minFaceIntensity: 1
-  maxFaceIntensity: 3
-  minFaceAlpha: 0.9
-  maxFaceAlpha: 1
-  echoStartValue: 32
-  minEchoAlpha: 0
-  maxEchoAlpha: 0
-  echoScale: 1.16
-  echoIntensity: 2.2
 --- !u!1 &1541844540
 GameObject:
   m_ObjectHideFlags: 0
@@ -18702,24 +18477,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.BoardCellView
   background: {fileID: 1754895379}
   valueText: {fileID: 873650552}
-  valueEchoText: {fileID: 0}
   obstacleMarker: {fileID: 0}
-  edge: {fileID: 0}
-  minTileValue: 2
-  maxTileValue: 2048
-  brightestTileCode: 255
-  darkestTileCode: 0
-  blackNumberMaxValue: 16
-  faceHdrStartValue: 32
-  minFaceIntensity: 1
-  maxFaceIntensity: 3
-  minFaceAlpha: 0.9
-  maxFaceAlpha: 1
-  echoStartValue: 32
-  minEchoAlpha: 0
-  maxEchoAlpha: 0
-  echoScale: 1.16
-  echoIntensity: 2.2
 --- !u!1 &1786826292
 GameObject:
   m_ObjectHideFlags: 0
@@ -19298,24 +19056,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Game.Core::Project2048.Prototype.BoardCellView
   background: {fileID: 1843812150}
   valueText: {fileID: 1468725382}
-  valueEchoText: {fileID: 0}
   obstacleMarker: {fileID: 0}
-  edge: {fileID: 0}
-  minTileValue: 2
-  maxTileValue: 2048
-  brightestTileCode: 255
-  darkestTileCode: 0
-  blackNumberMaxValue: 16
-  faceHdrStartValue: 32
-  minFaceIntensity: 1
-  maxFaceIntensity: 3
-  minFaceAlpha: 0.9
-  maxFaceAlpha: 1
-  echoStartValue: 32
-  minEchoAlpha: 0
-  maxEchoAlpha: 0
-  echoScale: 1.16
-  echoIntensity: 2.2
 --- !u!1 &1847111580
 GameObject:
   m_ObjectHideFlags: 0

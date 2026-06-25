@@ -205,7 +205,10 @@ namespace Project2048.Prototype
             currentEnemyDirectAnimationClip = null;
             currentEnemyDirectAnimationLoops = false;
 
-            if (restoreCurrentSprite && enemyRenderer != null && !showingRewardPresenter)
+            if (restoreCurrentSprite &&
+                enemyRenderer != null &&
+                activeEnemyBattleActor == null &&
+                !showingRewardPresenter)
             {
                 enemyRenderer.sprite = ResolveEnemySprite(snapshot);
             }
@@ -727,6 +730,7 @@ namespace Project2048.Prototype
 
         private void SetEnemyRendererAlpha(float alpha)
         {
+            SetEnemyBattleActorAlpha(alpha);
             if (enemyRenderer == null)
             {
                 return;
@@ -735,6 +739,28 @@ namespace Project2048.Prototype
             var color = enemyRenderer.color;
             color.a = Mathf.Clamp01(alpha);
             enemyRenderer.color = color;
+        }
+
+        private void SetEnemyBattleActorAlpha(float alpha)
+        {
+            if (activeEnemyBattleActor == null)
+            {
+                return;
+            }
+
+            var renderers = activeEnemyBattleActor.GetComponentsInChildren<SpriteRenderer>(includeInactive: true);
+            for (var index = 0; index < renderers.Length; index++)
+            {
+                var renderer = renderers[index];
+                if (renderer == null)
+                {
+                    continue;
+                }
+
+                var color = renderer.color;
+                color.a = Mathf.Clamp01(alpha);
+                renderer.color = color;
+            }
         }
     }
 }

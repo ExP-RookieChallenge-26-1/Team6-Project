@@ -44,6 +44,7 @@ namespace Project2048.Story
         {
             if (flowController.CurrentGameState == GameContext.GameState.Ending)
             {
+                flowController.RequestMainMenu();
                 return;
             }
 

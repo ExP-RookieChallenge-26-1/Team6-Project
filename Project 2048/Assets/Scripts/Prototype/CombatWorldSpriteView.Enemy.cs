@@ -31,6 +31,9 @@ namespace Project2048.Prototype
         private Vector3 enemyRendererRestLocalScale = Vector3.one;
         private bool hasEnemyRendererRestTransform;
         private Transform lastGroundedEnemyActor;
+
+        // 적 발이 EnemyHp 바 상단보다 몇 픽셀 위에 오게 할지. 인스펙터에서 미세조정.
+        [SerializeField] private float enemyFeetAboveHpBarPixels = 0f;
         private bool lastEnemyWasDead;
         private float delayEnemyDeathFadeUntilRealtime;
         private Coroutine enemyAnimationReturnToIdleCoroutine;
@@ -718,7 +721,7 @@ namespace Project2048.Prototype
             hasEnemyRendererRestTransform = true;
         }
 
-        // 현재 활성화된 적 액터(몬스터 종류 무관)의 발 높이를 플레이어 발 높이에 맞춘다.
+        // 현재 활성화된 적 액터(몬스터 종류 무관)의 발 높이를 EnemyHp 바 기준선에 맞춘다.
         // 적이 바뀔 때마다 한 번만 보정하므로 idle 애니메이션 흔들림과 충돌하지 않는다.
         private void AlignActiveEnemyFeetToGround()
         {
@@ -734,7 +737,7 @@ namespace Project2048.Prototype
                 return;
             }
 
-            var groundWorldY = ResolvePlayerFeetWorldY();
+            var groundWorldY = ResolveEnemyGroundWorldY(actor);
             var enemyFeetWorldY = ResolveActorFeetWorldY(actor);
             if (!groundWorldY.HasValue || !enemyFeetWorldY.HasValue)
             {
@@ -815,29 +818,45 @@ namespace Project2048.Prototype
             return bounds.min.y;
         }
 
-        private float? ResolvePlayerFeetWorldY()
+        // EnemyHp 바 상단보다 enemyFeetAboveHpBarPixels 만큼 위인 지점의 월드 Y를 구한다.
+        // HP바는 Canvas(스크린 공간), 적은 월드 공간이므로 카메라로 스크린↔월드 변환한다.
+        private float? ResolveEnemyGroundWorldY(Transform actor)
         {
-            var anchor = ResolvePlayerAnchor();
-            if (anchor == null)
+            if (actor == null)
             {
                 return null;
             }
 
-            var childRenderers = anchor.GetComponentsInChildren<SpriteRenderer>(includeInactive: true)
-                .Where(childRenderer => childRenderer != null && childRenderer.sprite != null)
-                .ToArray();
-            if (childRenderers.Length == 0)
+            var camera = Camera.main;
+            var hpBar = FindTransformByName("EnemyHp") as RectTransform;
+            if (camera == null || hpBar == null)
             {
                 return null;
             }
 
-            var bounds = childRenderers[0].bounds;
-            for (var i = 1; i < childRenderers.Length; i++)
+            var canvas = hpBar.GetComponentInParent<Canvas>();
+            var uiCamera = canvas != null && canvas.renderMode != RenderMode.ScreenSpaceOverlay
+                ? canvas.worldCamera
+                : null;
+
+            var corners = new Vector3[4];
+            hpBar.GetWorldCorners(corners);
+            var topScreenY = float.MinValue;
+            for (var i = 0; i < corners.Length; i++)
             {
-                bounds.Encapsulate(childRenderers[i].bounds);
+                var screenPoint = RectTransformUtility.WorldToScreenPoint(uiCamera, corners[i]);
+                if (screenPoint.y > topScreenY)
+                {
+                    topScreenY = screenPoint.y;
+                }
             }
 
-            return bounds.min.y;
+            var targetScreenY = topScreenY + enemyFeetAboveHpBarPixels;
+
+            // 적의 화면상 X / 카메라 깊이는 유지하고 목표 Y만 월드로 변환.
+            var actorScreen = camera.WorldToScreenPoint(actor.position);
+            var worldPoint = camera.ScreenToWorldPoint(new Vector3(actorScreen.x, targetScreenY, actorScreen.z));
+            return worldPoint.y;
         }
 
         private void RestoreEnemyRendererTransform()

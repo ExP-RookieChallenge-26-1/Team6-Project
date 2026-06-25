@@ -133,6 +133,7 @@ namespace Project2048.Prototype
         [SerializeField] private Sprite middleStageBackgroundSprite;
         [SerializeField] private Sprite lowerStageBackgroundSprite;
         [SerializeField] private Sprite rewardMothSprite;
+        [SerializeField, Min(0.01f)] private float rewardMothScaleMultiplier = 0.45f;
         [SerializeField] private Sprite attackEffectSprite;
         [SerializeField] private Sprite hitEffectSprite;
         [SerializeField] private Sprite shieldEffectSprite;
@@ -168,6 +169,7 @@ namespace Project2048.Prototype
         private StageSO currentStage;
         private CombatSnapshot snapshot;
         private bool showingRewardPresenter;
+        private Coroutine rewardPresenterDelayCoroutine;
         private GameObject activeEnemyBattleActor;
         private EnemySO activeEnemyBattleActorData;
         private Material runtimeShieldImpactParticleMaterial;
@@ -1039,6 +1041,49 @@ namespace Project2048.Prototype
             }
 
             ResolveMissingReferences();
+            if (ShouldDelayRewardPresenterUntilEnemyHidden())
+            {
+                if (rewardPresenterDelayCoroutine != null)
+                {
+                    StopCoroutine(rewardPresenterDelayCoroutine);
+                }
+
+                rewardPresenterDelayCoroutine = StartCoroutine(ShowRewardPresenterAfterEnemyHiddenRoutine());
+                return;
+            }
+
+            ShowRewardPresenterNow();
+        }
+
+        private bool ShouldDelayRewardPresenterUntilEnemyHidden()
+        {
+            return Application.isPlaying &&
+                   isActiveAndEnabled &&
+                   enemyRenderer != null &&
+                   (snapshot?.Enemies?.FirstOrDefault()?.IsDead ?? false) &&
+                   enemyRenderer.color.a > 0.001f;
+        }
+
+        private IEnumerator ShowRewardPresenterAfterEnemyHiddenRoutine()
+        {
+            while (enemyDeathFadeDelayCoroutine != null || enemyDeathFadeCoroutine != null)
+            {
+                yield return null;
+            }
+
+            rewardPresenterDelayCoroutine = null;
+            if (rewardMothSprite == null ||
+                rewardManager?.HasUnclaimedReward != true ||
+                !(snapshot?.Enemies?.FirstOrDefault()?.IsDead ?? false))
+            {
+                yield break;
+            }
+
+            ShowRewardPresenterNow();
+        }
+
+        private void ShowRewardPresenterNow()
+        {
             showingRewardPresenter = true;
             if (enemyRenderer == null)
             {
@@ -1056,7 +1101,14 @@ namespace Project2048.Prototype
 
         private void HideRewardPresenter()
         {
+            if (rewardPresenterDelayCoroutine != null)
+            {
+                StopCoroutine(rewardPresenterDelayCoroutine);
+                rewardPresenterDelayCoroutine = null;
+            }
+
             showingRewardPresenter = false;
+            RestoreEnemyRendererTransform();
         }
 
         private bool TryRenderRewardPresenter()
@@ -1069,6 +1121,7 @@ namespace Project2048.Prototype
             ClearEnemyDirectAnimation(restoreCurrentSprite: false);
             ClearActiveEnemyBattleActor();
             enemyRenderer.enabled = true;
+            enemyRenderer.transform.localScale = enemyRendererRestLocalScale * Mathf.Max(0.01f, rewardMothScaleMultiplier);
             enemyRenderer.sprite = rewardMothSprite;
             SetEnemyRendererAlpha(1f);
             return true;

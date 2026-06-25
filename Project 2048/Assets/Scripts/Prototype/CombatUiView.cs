@@ -155,6 +155,8 @@ namespace Project2048.Prototype
         private readonly PrototypeCombatUiState uiState = new();
         private readonly PrototypeCombatAudioRouter audioRouter = new();
         private readonly List<SkillSnapshot> visibleSkills = new();
+        private readonly List<Image> intentIconSlots = new();
+        private RectTransform intentIconRow;
         private BoardTransition pendingBoardTransition;
         private Coroutine boardAnimationCoroutine;
         private Coroutine combatVfxCoroutine;
@@ -531,17 +533,11 @@ namespace Project2048.Prototype
             var enemyIsAlive = enemy != null && !enemy.IsDead;
             if (enemyNameText != null)
             {
-                var enemyStatusFallback = enemyHpText == null && enemy != null
-                    ? PrototypeCombatText.FormatEnemyHp(enemy.CurrentHp, enemy.MaxHp, enemy.Block)
-                    : null;
                 enemyNameText.enableAutoSizing = true;
                 enemyNameText.fontSizeMin = 18f;
                 enemyNameText.fontSizeMax = 32f;
                 enemyNameText.textWrappingMode = TextWrappingModes.Normal;
-                enemyNameText.text = PrototypeCombatText.FormatEnemyHeader(
-                    enemy?.DisplayName,
-                    enemy?.AiProfileLabel,
-                    enemyStatusFallback);
+                enemyNameText.text = enemy?.DisplayName ?? string.Empty;
             }
 
             if (intentBubble != null)
@@ -551,20 +547,42 @@ namespace Project2048.Prototype
                 var hasIntent = visibleIntents.Count > 0 && enemyIsAlive;
                 intentBubble.SetActive(hasIntent);
                 var primaryIntent = hasIntent ? visibleIntents[0] : null;
-                var intentIcon = ResolveIntentIcon(primaryIntent);
-                if (hasIntent && intentBubbleText != null)
-                {
-                    intentBubbleText.text = intentIcon != null
-                        ? string.Empty
-                        : PrototypeCombatText.FormatIntents(visibleIntents);
-                }
+                var useIcons = hasIntent && ResolveIntentIcon(primaryIntent) != null;
+                intentBubble.TryGetComponent<Image>(out var intentBubbleImage);
 
-                if (hasIntent && intentBubble.TryGetComponent<Image>(out var intentBubbleImage))
+                if (useIcons)
                 {
-                    intentBubbleImage.sprite = intentIcon;
-                    intentBubbleImage.preserveAspect = intentIcon != null;
-                    intentBubbleImage.type = Image.Type.Simple;
-                    intentBubbleImage.color = intentIcon != null ? Color.white : GetIntentBubbleColor(primaryIntent);
+                    // 인텐트가 여러 개면 아이콘을 가로로 나열해서 2번째 이후도 전부 보여준다.
+                    if (intentBubbleText != null)
+                    {
+                        intentBubbleText.text = string.Empty;
+                    }
+
+                    RenderIntentIcons(visibleIntents);
+
+                    if (intentBubbleImage != null)
+                    {
+                        // 아이콘은 row가 그리므로 버블 자체 이미지는 투명 배경으로 둔다.
+                        intentBubbleImage.sprite = null;
+                        intentBubbleImage.color = new Color(1f, 1f, 1f, 0f);
+                    }
+                }
+                else
+                {
+                    ClearIntentIcons();
+
+                    if (hasIntent && intentBubbleText != null)
+                    {
+                        intentBubbleText.text = PrototypeCombatText.FormatIntents(visibleIntents);
+                    }
+
+                    if (hasIntent && intentBubbleImage != null)
+                    {
+                        intentBubbleImage.sprite = null;
+                        intentBubbleImage.preserveAspect = false;
+                        intentBubbleImage.type = Image.Type.Simple;
+                        intentBubbleImage.color = GetIntentBubbleColor(primaryIntent);
+                    }
                 }
             }
 
@@ -1347,6 +1365,107 @@ namespace Project2048.Prototype
             }
 
             textRect.anchoredPosition = Vector2.zero;
+        }
+
+        // 인텐트 아이콘을 버블 안에 가로로 깐다. 슬롯은 풀링해서 재사용한다.
+        private void RenderIntentIcons(List<EnemyIntent> intents)
+        {
+            EnsureIntentIconRow();
+            if (intentIconRow == null)
+            {
+                return;
+            }
+
+            intentIconRow.gameObject.SetActive(true);
+
+            var shown = 0;
+            if (intents != null)
+            {
+                for (var i = 0; i < intents.Count && shown < EnemySO.MaximumActionsPerTurn; i++)
+                {
+                    var icon = ResolveIntentIcon(intents[i]);
+                    if (icon == null)
+                    {
+                        continue;
+                    }
+
+                    var slot = GetOrCreateIntentIconSlot(shown);
+                    slot.sprite = icon;
+                    slot.preserveAspect = true;
+                    slot.color = Color.white;
+                    slot.gameObject.SetActive(true);
+                    shown++;
+                }
+            }
+
+            for (var i = shown; i < intentIconSlots.Count; i++)
+            {
+                if (intentIconSlots[i] != null)
+                {
+                    intentIconSlots[i].gameObject.SetActive(false);
+                }
+            }
+        }
+
+        private void ClearIntentIcons()
+        {
+            if (intentIconRow != null)
+            {
+                intentIconRow.gameObject.SetActive(false);
+            }
+
+            foreach (var slot in intentIconSlots)
+            {
+                if (slot != null)
+                {
+                    slot.gameObject.SetActive(false);
+                }
+            }
+        }
+
+        private void EnsureIntentIconRow()
+        {
+            if (intentIconRow != null || intentBubble == null)
+            {
+                return;
+            }
+
+            if (intentBubble.transform.Find("IntentIconRow") is RectTransform existing)
+            {
+                intentIconRow = existing;
+                return;
+            }
+
+            var rowObject = new GameObject("IntentIconRow");
+            intentIconRow = rowObject.AddComponent<RectTransform>();
+            intentIconRow.SetParent(intentBubble.transform, false);
+            intentIconRow.anchorMin = Vector2.zero;
+            intentIconRow.anchorMax = Vector2.one;
+            intentIconRow.offsetMin = Vector2.zero;
+            intentIconRow.offsetMax = Vector2.zero;
+
+            var layout = rowObject.AddComponent<HorizontalLayoutGroup>();
+            layout.childAlignment = TextAnchor.MiddleCenter;
+            layout.spacing = 4f;
+            layout.childControlWidth = true;
+            layout.childControlHeight = true;
+            layout.childForceExpandWidth = true;
+            layout.childForceExpandHeight = true;
+        }
+
+        private Image GetOrCreateIntentIconSlot(int index)
+        {
+            while (intentIconSlots.Count <= index)
+            {
+                var iconObject = new GameObject($"IntentIcon_{intentIconSlots.Count}");
+                var iconRect = iconObject.AddComponent<RectTransform>();
+                iconRect.SetParent(intentIconRow, false);
+                var iconImage = iconObject.AddComponent<Image>();
+                iconImage.raycastTarget = false;
+                intentIconSlots.Add(iconImage);
+            }
+
+            return intentIconSlots[index];
         }
 
         private void SetEnemyHpVisible(bool visible)

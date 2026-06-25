@@ -8,8 +8,8 @@ namespace Project2048.Stage
     {
         public const int StagesPerFloor = 10;
         public const int UpperStageCount = 6;
-        public const int MiddleStageCount = 8;
-        public const int LowerStageCount = 6;
+        public const int MiddleStageCount = 7;
+        public const int LowerStageCount = 7;
         public const int TotalStageCount = UpperStageCount + MiddleStageCount + LowerStageCount;
 
         [SerializeField] private List<StageSO> upperStages = new();

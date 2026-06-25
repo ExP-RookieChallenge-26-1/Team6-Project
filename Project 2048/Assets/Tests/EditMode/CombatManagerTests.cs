@@ -651,7 +651,7 @@ namespace Project2048.Tests
                 { 0, 0, 0, 0 },
                 { 0, 0, 0, 0 },
             };
-            var fullCost = new CostConverter().ConvertBoardToCost(board);
+            var fullCost = new CostConverter().ConvertBoardToCost(board) * 10;
 
             manager.SetCombatants(player, new[] { enemy });
             manager.StartCombat(new CombatSetup

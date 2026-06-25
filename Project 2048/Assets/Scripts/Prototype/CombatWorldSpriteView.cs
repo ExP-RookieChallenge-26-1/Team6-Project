@@ -1022,6 +1022,8 @@ namespace Project2048.Prototype
                 enemyRenderer.sprite = ResolveEnemySprite(currentSnapshot);
             }
 
+            AlignActiveEnemyFeetToGround();
+
             var enemyIsAlive = !(currentSnapshot?.Enemies?.FirstOrDefault()?.IsDead ?? false);
             if (enemyIsAlive && enemyDeathFadeCoroutine == null && enemyAppearIntroCoroutine == null)
             {

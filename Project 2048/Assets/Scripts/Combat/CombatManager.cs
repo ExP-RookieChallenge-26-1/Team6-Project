@@ -17,6 +17,8 @@ namespace Project2048.Combat
     /// </summary>
     public class CombatManager : MonoBehaviour
     {
+        private const int BoardCostGainMultiplier = 10;
+
         [SerializeField] private PlayerCombatController player;
         [SerializeField] private List<EnemyController> enemies = new();
         [SerializeField] private float enemyTurnDelaySeconds;
@@ -163,7 +165,7 @@ namespace Project2048.Combat
                 return CostWallet.CurrentCost;
             }
 
-            var rawCost = costConverter.ConvertBoardToCost(BoardManager.GetBoardSnapshot());
+            var rawCost = costConverter.ConvertBoardToCost(BoardManager.GetBoardSnapshot()) * BoardCostGainMultiplier;
             var cost = player != null
                 ? player.ApplyAndConsumeNextTurnCostGainModifiers(rawCost)
                 : rawCost;

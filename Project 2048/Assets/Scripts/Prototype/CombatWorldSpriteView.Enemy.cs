@@ -30,6 +30,7 @@ namespace Project2048.Prototype
         private Vector3 enemyRendererRestLocalPosition;
         private Vector3 enemyRendererRestLocalScale = Vector3.one;
         private bool hasEnemyRendererRestTransform;
+        private Transform lastGroundedEnemyActor;
         private bool lastEnemyWasDead;
         private float delayEnemyDeathFadeUntilRealtime;
         private Coroutine enemyAnimationReturnToIdleCoroutine;
@@ -715,6 +716,128 @@ namespace Project2048.Prototype
             enemyRendererRestLocalPosition = enemyRenderer.transform.localPosition;
             enemyRendererRestLocalScale = enemyRenderer.transform.localScale;
             hasEnemyRendererRestTransform = true;
+        }
+
+        // 현재 활성화된 적 액터(몬스터 종류 무관)의 발 높이를 플레이어 발 높이에 맞춘다.
+        // 적이 바뀔 때마다 한 번만 보정하므로 idle 애니메이션 흔들림과 충돌하지 않는다.
+        private void AlignActiveEnemyFeetToGround()
+        {
+            var actor = ResolveActiveEnemyActor();
+            if (actor == null)
+            {
+                lastGroundedEnemyActor = null;
+                return;
+            }
+
+            if (actor == lastGroundedEnemyActor)
+            {
+                return;
+            }
+
+            var groundWorldY = ResolvePlayerFeetWorldY();
+            var enemyFeetWorldY = ResolveActorFeetWorldY(actor);
+            if (!groundWorldY.HasValue || !enemyFeetWorldY.HasValue)
+            {
+                return;
+            }
+
+            var deltaWorldY = groundWorldY.Value - enemyFeetWorldY.Value;
+            var localDeltaY = actor.parent != null
+                ? actor.parent.InverseTransformVector(new Vector3(0f, deltaWorldY, 0f)).y
+                : deltaWorldY;
+
+            var localPosition = actor.localPosition;
+            localPosition.y += localDeltaY;
+            actor.localPosition = localPosition;
+            lastGroundedEnemyActor = actor;
+        }
+
+        // EnemySprite 아래에서 활성화돼 있고 보이는 스프라이트를 가진, player_all이 아닌 자식을 찾는다.
+        private Transform ResolveActiveEnemyActor()
+        {
+            if (activeEnemyBattleActor != null && activeEnemyBattleActor.activeInHierarchy)
+            {
+                return activeEnemyBattleActor.transform;
+            }
+
+            if (enemyRenderer == null)
+            {
+                return null;
+            }
+
+            var parent = enemyRenderer.transform;
+            for (var i = 0; i < parent.childCount; i++)
+            {
+                var child = parent.GetChild(i);
+                if (!child.gameObject.activeInHierarchy)
+                {
+                    continue;
+                }
+
+                if (string.Equals(child.name, LayeredPlayerActorRootName, System.StringComparison.Ordinal))
+                {
+                    continue;
+                }
+
+                var hasVisibleSprite = child
+                    .GetComponentsInChildren<SpriteRenderer>(includeInactive: false)
+                    .Any(childRenderer => childRenderer != null && childRenderer.sprite != null && childRenderer.enabled);
+                if (hasVisibleSprite)
+                {
+                    return child;
+                }
+            }
+
+            return null;
+        }
+
+        private float? ResolveActorFeetWorldY(Transform actor)
+        {
+            if (actor == null)
+            {
+                return null;
+            }
+
+            var renderers = actor.GetComponentsInChildren<SpriteRenderer>(includeInactive: false)
+                .Where(childRenderer => childRenderer != null && childRenderer.sprite != null && childRenderer.enabled)
+                .ToArray();
+            if (renderers.Length == 0)
+            {
+                return null;
+            }
+
+            var bounds = renderers[0].bounds;
+            for (var i = 1; i < renderers.Length; i++)
+            {
+                bounds.Encapsulate(renderers[i].bounds);
+            }
+
+            return bounds.min.y;
+        }
+
+        private float? ResolvePlayerFeetWorldY()
+        {
+            var anchor = ResolvePlayerAnchor();
+            if (anchor == null)
+            {
+                return null;
+            }
+
+            var childRenderers = anchor.GetComponentsInChildren<SpriteRenderer>(includeInactive: true)
+                .Where(childRenderer => childRenderer != null && childRenderer.sprite != null)
+                .ToArray();
+            if (childRenderers.Length == 0)
+            {
+                return null;
+            }
+
+            var bounds = childRenderers[0].bounds;
+            for (var i = 1; i < childRenderers.Length; i++)
+            {
+                bounds.Encapsulate(childRenderers[i].bounds);
+            }
+
+            return bounds.min.y;
         }
 
         private void RestoreEnemyRendererTransform()

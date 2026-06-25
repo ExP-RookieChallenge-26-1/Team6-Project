@@ -33,7 +33,7 @@ MonoBehaviour:
   idleAnimation: {fileID: 7400000, guid: 00880961ebc4f324d909c730b59e1ac5, type: 2}
   appearAnimation: {fileID: 0}
   attackAnimation: {fileID: 7400000, guid: 78b8a6de2a4a2974f9a5855a6b1d18de, type: 2}
-  hitAnimation: {fileID: 0}
+  hitAnimation: {fileID: 7400000, guid: ba630b869a3d05644802637943e9aaa7, type: 2}
   deathAnimation: {fileID: 0}
   actionEffects:
   - actionId: appear

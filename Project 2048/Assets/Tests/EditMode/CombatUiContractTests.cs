@@ -90,7 +90,7 @@ namespace Project2048.Tests
 
             Assert.That(moved, Is.True);
             Assert.That(snapshot.Phase, Is.EqualTo(CombatPhase.ActionPhase));
-            Assert.That(snapshot.CurrentCost, Is.InRange(14, 15));
+            Assert.That(snapshot.CurrentCost, Is.InRange(140, 150));
             Assert.That(snapshot.RemainingBoardMoves, Is.EqualTo(0));
         }
 

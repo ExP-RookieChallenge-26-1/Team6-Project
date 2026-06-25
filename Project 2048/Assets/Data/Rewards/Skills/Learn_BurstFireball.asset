@@ -28,4 +28,4 @@ MonoBehaviour:
   permanentCriticalDamageMultiplierBonus: 0
   skillToLearn: {fileID: 11400000, guid: 20faed357e2347d2a18d106d1b4f028b, type: 2}
   enemySkillOfferChance: 0.1
-  encounterText: "폭렬 기술을 배웁니다."
+  encounterText: "폭발 화염구 기술을 배웁니다."

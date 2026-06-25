@@ -2,6 +2,7 @@ using Project2048.Enemy;
 using Project2048.Stage;
 using NUnit.Framework;
 using UnityEditor;
+using UnityEngine;
 
 namespace Project2048.Tests
 {
@@ -49,6 +50,25 @@ namespace Project2048.Tests
             Assert.That(lowerStage.StageNumberInFloor, Is.EqualTo(1));
         }
 
+        [Test]
+        public void PrototypeStageBackgroundSprites_KeepConsistentWorldSizeAcrossFloors()
+        {
+            var database = AssetDatabase.LoadAssetAtPath<StageDatabaseSO>("Assets/Data/Stage/Stage Database SO.asset");
+
+            Assert.That(database.TryGetStage(1, out var upperStage), Is.True);
+            Assert.That(database.TryGetStage(7, out var middleStage), Is.True);
+            Assert.That(database.TryGetStage(15, out var lowerStage), Is.True);
+
+            var upperSize = ResolveBackgroundWorldSize(upperStage);
+            var middleSize = ResolveBackgroundWorldSize(middleStage);
+            var lowerSize = ResolveBackgroundWorldSize(lowerStage);
+
+            Assert.That(middleSize.x, Is.EqualTo(upperSize.x).Within(0.001f));
+            Assert.That(middleSize.y, Is.EqualTo(upperSize.y).Within(0.001f));
+            Assert.That(lowerSize.x, Is.EqualTo(upperSize.x).Within(0.001f));
+            Assert.That(lowerSize.y, Is.EqualTo(upperSize.y).Within(0.001f));
+        }
+
         [TestCase(1, StageFloor.Upper, 1)]
         [TestCase(6, StageFloor.Upper, 6)]
         [TestCase(7, StageFloor.Middle, 1)]
@@ -77,6 +97,13 @@ namespace Project2048.Tests
             Assert.That(
                 StageDatabaseSO.TryResolveStagePosition(stageIndex, out _, out _),
                 Is.False);
+        }
+
+        private static Vector2 ResolveBackgroundWorldSize(StageSO stage)
+        {
+            Assert.That(stage.PresentationBackgroundSprite, Is.Not.Null, stage.name);
+            var size = stage.PresentationBackgroundSprite.bounds.size;
+            return new Vector2(size.x, size.y);
         }
     }
 }

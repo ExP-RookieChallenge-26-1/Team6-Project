@@ -1004,7 +1004,7 @@ namespace Project2048.Prototype
                 var isSlot = i < PlayerCombatController.MaxEquippedSkillSlots;
                 var hasSkill = isSlot && i < visibleSkills.Count && visibleSkills[i] != null;
                 var canAfford = hasSkill && snapshot != null && visibleSkills[i].Cost <= snapshot.CurrentCost;
-                var canUseSkill = canAfford && snapshot?.IsSkillPresentationLocked != true;
+                var canUseSkill = canAfford && visibleSkills[i].CanExecute && snapshot?.IsSkillPresentationLocked != true;
                 var button = skillTierButtons[i];
                 if (button != null)
                 {

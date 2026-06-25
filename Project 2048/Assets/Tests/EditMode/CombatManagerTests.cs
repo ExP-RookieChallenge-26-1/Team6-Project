@@ -173,12 +173,121 @@ namespace Project2048.Tests
 
             new SkillExecutor().Execute(skill, playerObject, enemyObject, new DamageCalculator(new System.Random(1)));
 
-            Assert.That(playerObject.CurrentHp, Is.EqualTo(17));
+            var hpAfterFirstHit = playerObject.CurrentHp;
+            Assert.That(hpAfterFirstHit, Is.LessThan(playerObject.MaxHp));
             Assert.That(enemyObject.ShieldHp, Is.EqualTo(0));
 
             new SkillExecutor().Execute(skill, playerObject, enemyObject, new DamageCalculator(new System.Random(1)));
 
-            Assert.That(playerObject.CurrentHp, Is.EqualTo(17));
+            Assert.That(playerObject.CurrentHp, Is.EqualTo(hpAfterFirstHit));
+        }
+
+        [Test]
+        public void RequestUseSkill_PlayerKilledByEnemyThornGuard_RaisesDefeat()
+        {
+            var manager = CreateGameObject<CombatManager>("CombatManager");
+            var player = CreateGameObject<PlayerCombatController>("Player");
+            var enemy = CreateGameObject<EnemyController>("Enemy");
+            var attackSkill = CreateSkill("strike", SkillType.Attack, cost: 0, power: 10);
+            var playerData = CreatePlayerData(maxHp: 20, attackPower: 1);
+            var enemyData = CreateEnemyData(maxHp: 1000, attackValue: 0);
+
+            manager.SetCombatants(player, new[] { enemy });
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new List<EnemySO> { enemyData },
+                boardMoveCount = 1,
+            });
+            enemy.ApplyThornGuard(shieldHp: 10, retaliationDamage: 100);
+            manager.ResolveBoardPhase();
+
+            var defeatRaised = false;
+            var victoryRaised = false;
+            manager.OnCombatDefeat += () => defeatRaised = true;
+            manager.OnCombatVictory += _ => victoryRaised = true;
+
+            Assert.That(manager.RequestUseSkill(attackSkill, enemy), Is.True);
+
+            Assert.That(player.IsDead, Is.True);
+            Assert.That(defeatRaised, Is.True);
+            Assert.That(victoryRaised, Is.False);
+            Assert.That(manager.CurrentPhase, Is.EqualTo(CombatPhase.Defeat));
+        }
+
+        [Test]
+        public void ThornGuard_RetaliationDoesNotScaleWithStackedShield()
+        {
+            var singlePlayer = CreateGameObject<PlayerCombatController>("SinglePlayer");
+            var singleEnemy = CreateGameObject<EnemyController>("SingleEnemy");
+            var stackedPlayer = CreateGameObject<PlayerCombatController>("StackedPlayer");
+            var stackedEnemy = CreateGameObject<EnemyController>("StackedEnemy");
+            var playerData = CreatePlayerData(maxHp: 500, attackPower: 2);
+            var enemyData = CreateEnemyData(maxHp: 500, attackValue: 0);
+            var skill = CreateSkill("strike", SkillType.Attack, cost: 0, power: 10);
+
+            playerData.baseDefensePower = 20;
+            enemyData.baseDefensePower = 20;
+            singlePlayer.Init(playerData);
+            singleEnemy.Init(enemyData);
+            stackedPlayer.Init(playerData);
+            stackedEnemy.Init(enemyData);
+
+            singleEnemy.ApplyThornGuard(shieldHp: 40, retaliationDamage: 40);
+            stackedEnemy.AddBlock(120);
+            stackedEnemy.ApplyThornGuard(shieldHp: 40, retaliationDamage: 40);
+            stackedEnemy.ApplyThornGuard(shieldHp: 40, retaliationDamage: 40);
+
+            var singleHpBefore = singlePlayer.CurrentHp;
+            new SkillExecutor().Execute(skill, singlePlayer, singleEnemy, new DamageCalculator(new System.Random(1)));
+            var singleRetaliationDamage = singleHpBefore - singlePlayer.CurrentHp;
+
+            var stackedHpBefore = stackedPlayer.CurrentHp;
+            new SkillExecutor().Execute(skill, stackedPlayer, stackedEnemy, new DamageCalculator(new System.Random(1)));
+            var stackedRetaliationDamage = stackedHpBefore - stackedPlayer.CurrentHp;
+
+            Assert.That(stackedRetaliationDamage, Is.EqualTo(singleRetaliationDamage));
+            Assert.That(stackedEnemy.ThornRetaliationShieldHp, Is.LessThanOrEqualTo(40));
+        }
+
+        [Test]
+        public void ThornGuard_PlayerRetaliationDoesNotScaleWithStackedShield()
+        {
+            var singlePlayer = CreateGameObject<PlayerCombatController>("SinglePlayer");
+            var singleEnemy = CreateGameObject<EnemyController>("SingleEnemy");
+            var stackedPlayer = CreateGameObject<PlayerCombatController>("StackedPlayer");
+            var stackedEnemy = CreateGameObject<EnemyController>("StackedEnemy");
+            var playerData = CreatePlayerData(maxHp: 500, attackPower: 2);
+            var enemyData = CreateEnemyData(maxHp: 500, attackValue: 10);
+            var intent = new EnemyIntent
+            {
+                intentType = EnemyIntentType.Attack,
+                movePower = 10,
+            };
+            var intentSystem = new EnemyIntentSystem();
+
+            playerData.baseDefensePower = 20;
+            enemyData.baseDefensePower = 20;
+            singlePlayer.Init(playerData);
+            singleEnemy.Init(enemyData);
+            stackedPlayer.Init(playerData);
+            stackedEnemy.Init(enemyData);
+
+            singlePlayer.ApplyThornGuard(shieldHp: 40, retaliationDamage: 40);
+            stackedPlayer.AddBlock(120);
+            stackedPlayer.ApplyThornGuard(shieldHp: 40, retaliationDamage: 40);
+            stackedPlayer.ApplyThornGuard(shieldHp: 40, retaliationDamage: 40);
+
+            var singleHpBefore = singleEnemy.CurrentHp;
+            intentSystem.ExecuteIntent(singleEnemy, intent, singlePlayer, new DamageCalculator(new System.Random(1)));
+            var singleRetaliationDamage = singleHpBefore - singleEnemy.CurrentHp;
+
+            var stackedHpBefore = stackedEnemy.CurrentHp;
+            intentSystem.ExecuteIntent(stackedEnemy, intent, stackedPlayer, new DamageCalculator(new System.Random(1)));
+            var stackedRetaliationDamage = stackedHpBefore - stackedEnemy.CurrentHp;
+
+            Assert.That(stackedRetaliationDamage, Is.EqualTo(singleRetaliationDamage));
+            Assert.That(stackedPlayer.ThornRetaliationShieldHp, Is.LessThanOrEqualTo(40));
         }
 
         [Test]
@@ -702,6 +811,90 @@ namespace Project2048.Tests
 
             Assert.That(enemy.CurrentHp, Is.LessThan(50));
             Assert.That(manager.CurrentPhase, Is.EqualTo(CombatPhase.BoardPhase));
+        }
+
+        [Test]
+        public void ChargeAttack_PlayerKilledByEnemyThornGuard_RaisesDefeat()
+        {
+            var manager = CreateGameObject<CombatManager>("CombatManager");
+            var player = CreateGameObject<PlayerCombatController>("Player");
+            var enemy = CreateGameObject<EnemyController>("Enemy");
+            var charge = CreateSkill("gather-light", SkillType.Attack, cost: 0, power: 0);
+            charge.effectKind = SkillEffectKind.ChargeAttack;
+            charge.chargedPower = 10;
+            var playerData = CreatePlayerData(maxHp: 20, attackPower: 1);
+            playerData.startingSkills = new List<SkillSO> { charge };
+            var enemyData = CreateEnemyData(maxHp: 1000, attackValue: 0);
+            enemyData.intentPattern = new List<EnemyIntent>
+            {
+                new()
+                {
+                    intentType = EnemyIntentType.Defense,
+                    skillEffectKind = SkillEffectKind.ThornGuard,
+                    isThornGuard = true,
+                    value = 10,
+                    retaliationDamage = 100,
+                },
+            };
+
+            manager.SetCombatants(player, new[] { enemy });
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new List<EnemySO> { enemyData },
+                boardMoveCount = 1,
+            });
+            manager.ResolveBoardPhase();
+
+            var defeatRaised = false;
+            var victoryRaised = false;
+            manager.OnCombatDefeat += () => defeatRaised = true;
+            manager.OnCombatVictory += _ => victoryRaised = true;
+
+            Assert.That(manager.RequestUseSkillById("gather-light"), Is.True);
+            manager.RequestEndPlayerTurn();
+
+            Assert.That(player.IsDead, Is.True);
+            Assert.That(defeatRaised, Is.True);
+            Assert.That(victoryRaised, Is.False);
+            Assert.That(manager.CurrentPhase, Is.EqualTo(CombatPhase.Defeat));
+        }
+
+        [Test]
+        public void ChargeAttack_CannotBeQueuedAgainWhilePending()
+        {
+            var manager = CreateGameObject<CombatManager>("CombatManager");
+            var player = CreateGameObject<PlayerCombatController>("Player");
+            var enemy = CreateGameObject<EnemyController>("Enemy");
+            var charge = CreateSkill("gather-light", SkillType.Attack, cost: 0, power: 0);
+            charge.effectKind = SkillEffectKind.ChargeAttack;
+            charge.chargedPower = 40;
+            var playerData = CreatePlayerData(maxHp: 20, attackPower: 2);
+            playerData.startingSkills = new List<SkillSO> { charge };
+            var enemyData = CreateEnemyData(maxHp: 100, attackValue: 0);
+
+            manager.SetCombatants(player, new[] { enemy });
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new List<EnemySO> { enemyData },
+                boardMoveCount = 1,
+            });
+            manager.ResolveBoardPhase();
+
+            Assert.That(manager.RequestUseSkillById("gather-light"), Is.True);
+            Assert.That(player.HasPendingChargedAttack, Is.True);
+            Assert.That(manager.GetSnapshot().Skills[0].CanExecute, Is.False);
+
+            Assert.That(manager.RequestUseSkillById("gather-light"), Is.False);
+            Assert.That(player.HasPendingChargedAttack, Is.True);
+            Assert.That(enemy.CurrentHp, Is.EqualTo(enemy.MaxHp));
+
+            manager.RequestEndPlayerTurn();
+
+            Assert.That(player.HasPendingChargedAttack, Is.False);
+            Assert.That(manager.CurrentPhase, Is.EqualTo(CombatPhase.BoardPhase));
+            Assert.That(manager.GetSnapshot().Skills[0].CanExecute, Is.True);
         }
 
         [Test]

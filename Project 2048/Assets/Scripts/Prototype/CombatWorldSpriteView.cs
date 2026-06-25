@@ -374,9 +374,7 @@ namespace Project2048.Prototype
         private float PlaySkillPresentationEffect(SkillSO skill, bool delayEnemyDeathFade, bool previewChargeRelease = false)
         {
             var sourceAnchor = ResolvePlayerAnchor() ?? transform;
-            var targetAnchor = skill != null && skill.skillType == SkillType.Attack && enemyRenderer != null
-                ? enemyRenderer.transform
-                : sourceAnchor;
+            var targetAnchor = enemyRenderer != null ? enemyRenderer.transform : sourceAnchor;
             return PlaySkillPresentationEffect(
                 skill,
                 delayEnemyDeathFade,
@@ -394,7 +392,7 @@ namespace Project2048.Prototype
             }
 
             var sourceAnchor = enemyRenderer != null ? enemyRenderer.transform : transform;
-            var targetAnchor = isAttack ? ResolvePlayerAnchor() ?? transform : sourceAnchor;
+            var targetAnchor = ResolvePlayerAnchor() ?? transform;
             return PlaySkillPresentationEffect(
                 skill,
                 delayEnemyDeathFade: false,
@@ -522,7 +520,7 @@ namespace Project2048.Prototype
 
             if (playReusableFamilyEffect || effect?.HasAuthoredVisual != true)
             {
-                PlayReusableSkillParticleEffect(skill, anchor, sourceAnchor);
+                PlayReusableSkillParticleEffect(skill, anchor, sourceAnchor, targetAnchor);
             }
 
             if (delayEnemyDeathFade)
@@ -1506,7 +1504,11 @@ namespace Project2048.Prototype
             return duration;
         }
 
-        private void PlayReusableSkillParticleEffect(SkillSO skill, Transform anchor, Transform sourceAnchor = null)
+        private void PlayReusableSkillParticleEffect(
+            SkillSO skill,
+            Transform anchor,
+            Transform sourceAnchor = null,
+            Transform facingTargetAnchor = null)
         {
             var family = ResolveSkillVfxFamily(skill);
             if (family == SkillVfxFamily.None)
@@ -1527,6 +1529,7 @@ namespace Project2048.Prototype
             var repeatCount = Mathf.Max(1, skill.vfxRepeatCount);
             var scaledStartSize = Mathf.Min(startSize * scale, ReusableSkillParticleMaxStartSize);
             var resolvedSourceAnchor = sourceAnchor != null ? sourceAnchor : ResolvePlayerAnchor() ?? transform;
+            var resolvedFacingTargetAnchor = facingTargetAnchor != null ? facingTargetAnchor : anchor != null ? anchor : resolvedSourceAnchor;
             if (family == SkillVfxFamily.LightBeam)
             {
                 PlayChargedLightBeamEffect(skill, anchor);
@@ -1594,7 +1597,8 @@ namespace Project2048.Prototype
                     scale,
                     intensity,
                     repeatCount,
-                    resolvedSourceAnchor);
+                    resolvedSourceAnchor,
+                    resolvedFacingTargetAnchor);
                 return;
             }
 
@@ -1619,7 +1623,7 @@ namespace Project2048.Prototype
                 return;
             }
 
-            PlayMagicCircleArtForReusableSkill(skill, resolvedSourceAnchor, lifetimeSeconds);
+            PlayMagicCircleArtForReusableSkill(skill, resolvedSourceAnchor, resolvedFacingTargetAnchor, lifetimeSeconds);
             PlayAttackArtForReusableSkill(skill, anchor, resolvedSourceAnchor);
             if (UsesSpriteOnlyReusableSkillEffect(family))
             {
@@ -2142,7 +2146,8 @@ namespace Project2048.Prototype
             float scale,
             float intensity,
             int repeatCount,
-            Transform sourceAnchor)
+            Transform sourceAnchor,
+            Transform facingTargetAnchor)
         {
             if (IsLightEchoSkill(skill))
             {
@@ -2162,7 +2167,11 @@ namespace Project2048.Prototype
                 new Vector3(0.18f, 0.54f, 0f),
             };
 
-            PlaySupportBuffMagicCircleArt(skill, sourceAnchor != null ? sourceAnchor : transform, lifetimeSeconds);
+            PlaySupportBuffMagicCircleArt(
+                skill,
+                sourceAnchor != null ? sourceAnchor : transform,
+                facingTargetAnchor,
+                lifetimeSeconds);
             PlaySpecializedSkillArtLayer(
                 skill,
                 anchor,
@@ -2212,7 +2221,11 @@ namespace Project2048.Prototype
                 localOffset);
         }
 
-        private void PlaySupportBuffMagicCircleArt(SkillSO skill, Transform anchor, float lifetimeSeconds)
+        private void PlaySupportBuffMagicCircleArt(
+            SkillSO skill,
+            Transform anchor,
+            Transform facingTargetAnchor,
+            float lifetimeSeconds)
         {
             var tuning = ResolveSkillVfxTuning(skill);
             var package = ResolveSkillVfxPackage(skill);
@@ -2231,7 +2244,10 @@ namespace Project2048.Prototype
                 Color.white,
                 0.32f,
                 0.72f);
-            var magicCircleLocalOffset = ResolvePlayerRightLocalOffset(new Vector3(0f, 0.08f, 0f));
+            var facingSign = ResolveAttackFacingSign(anchor, facingTargetAnchor);
+            var magicCircleLocalOffset = MirrorLocalOffsetXByFacing(
+                ResolvePlayerRightLocalOffset(new Vector3(0f, 0.08f, 0f)),
+                facingSign);
             magicCircleLocalOffset.y += SelfBuffMagicCircleYOffset;
 
             var art = SpawnAttackArtSpriteLayer(
@@ -2248,7 +2264,7 @@ namespace Project2048.Prototype
                 prefabOverride: ResolveDesignTimeSecondaryPrefab(tuning, package, ResolveMagicCircleEffectPrefab()));
             if (art != null)
             {
-                art.transform.localRotation = Quaternion.Euler(0f, 0f, -8f);
+                art.transform.localRotation = ResolveFacingMirroredLocalRotation(-8f, facingSign);
             }
         }
 
@@ -2614,6 +2630,26 @@ namespace Project2048.Prototype
             }
 
             return offset;
+        }
+
+        private static Vector3 MirrorLocalOffsetXByFacing(Vector3 offset, float facingSign)
+        {
+            offset.x = Mathf.Abs(offset.x) * NormalizeFacingSign(facingSign);
+            return offset;
+        }
+
+        private static Quaternion ResolveFacingMirroredLocalRotation(float rotationDegrees, float facingSign)
+        {
+            var normalizedSign = NormalizeFacingSign(facingSign);
+            return Quaternion.Euler(
+                0f,
+                normalizedSign >= 0f ? 0f : 180f,
+                rotationDegrees * normalizedSign);
+        }
+
+        private static float NormalizeFacingSign(float facingSign)
+        {
+            return facingSign >= 0f ? 1f : -1f;
         }
 
         private static float ResolveDesignTimeRadiusMultiplier(
@@ -5490,7 +5526,11 @@ namespace Project2048.Prototype
             }
         }
 
-        private void PlayMagicCircleArtForReusableSkill(SkillSO skill, Transform anchor, float lifetimeSeconds)
+        private void PlayMagicCircleArtForReusableSkill(
+            SkillSO skill,
+            Transform anchor,
+            Transform facingTargetAnchor,
+            float lifetimeSeconds)
         {
             if (skill == null)
             {
@@ -5525,11 +5565,14 @@ namespace Project2048.Prototype
                 designTimeBinding,
                 0.32f,
                 0.72f);
-            var magicCircleLocalOffset = ResolvePlayerRightLocalOffset(ResolveDesignTimeLocalOffset(
-                tuning,
-                package,
-                designTimeBinding,
-                PlayerRightMagicCircleLocalOffset));
+            var facingSign = ResolveAttackFacingSign(anchor, facingTargetAnchor);
+            var magicCircleLocalOffset = MirrorLocalOffsetXByFacing(
+                ResolvePlayerRightLocalOffset(ResolveDesignTimeLocalOffset(
+                    tuning,
+                    package,
+                    designTimeBinding,
+                    PlayerRightMagicCircleLocalOffset)),
+                facingSign);
             if (IsSelfBuffPresentationSkill(skill))
             {
                 magicCircleLocalOffset.y += SelfBuffMagicCircleYOffset;
@@ -5562,10 +5605,9 @@ namespace Project2048.Prototype
                 prefabOverride: ResolveDesignTimePrefab(tuning, package, designTimeBinding, ResolveMagicCircleEffectPrefab()));
             if (art != null)
             {
-                art.transform.localRotation = Quaternion.Euler(
-                    0f,
-                    0f,
-                    ResolveDesignTimeRotationDegrees(tuning, package, designTimeBinding, -8f));
+                art.transform.localRotation = ResolveFacingMirroredLocalRotation(
+                    ResolveDesignTimeRotationDegrees(tuning, package, designTimeBinding, -8f),
+                    facingSign);
             }
         }
 
@@ -6914,14 +6956,49 @@ namespace Project2048.Prototype
                 return Vector3.zero;
             }
 
-            var renderer = anchor.GetComponent<SpriteRenderer>();
-            if (renderer != null && renderer.sprite != null)
+            if (TryResolveAnchorRendererBounds(anchor, out var bounds))
             {
-                var bounds = renderer.bounds;
                 return new Vector3(bounds.center.x, bounds.min.y, bounds.center.z);
             }
 
             return anchor.position;
+        }
+
+        private static bool TryResolveAnchorRendererBounds(Transform anchor, out Bounds bounds)
+        {
+            bounds = default;
+            if (anchor == null)
+            {
+                return false;
+            }
+
+            var renderer = anchor.GetComponent<SpriteRenderer>();
+            if (renderer != null && renderer.sprite != null)
+            {
+                bounds = renderer.bounds;
+                return true;
+            }
+
+            var hasBounds = false;
+            foreach (var childRenderer in anchor.GetComponentsInChildren<SpriteRenderer>(includeInactive: true))
+            {
+                if (childRenderer == null || childRenderer.sprite == null)
+                {
+                    continue;
+                }
+
+                if (!hasBounds)
+                {
+                    bounds = childRenderer.bounds;
+                    hasBounds = true;
+                }
+                else
+                {
+                    bounds.Encapsulate(childRenderer.bounds);
+                }
+            }
+
+            return hasBounds;
         }
 
         private bool ShouldAssignPlayerRendererSprite()

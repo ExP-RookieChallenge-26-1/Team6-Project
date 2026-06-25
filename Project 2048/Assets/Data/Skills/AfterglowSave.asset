@@ -40,7 +40,7 @@ MonoBehaviour:
   hpCostPercent: 0
   hpCostLeavesOne: 1
   nextBoardMoveCountModifier: 0
-  nextCostGainModifier: 20
+  nextCostGainModifier: 15
   nextCostGainMultiplier: 1
   conditionalPowerBonus: 0
   conditionalHpThreshold: 0
@@ -103,4 +103,4 @@ MonoBehaviour:
   vfxScale: 0.8
   vfxIntensity: 1
   vfxRepeatCount: 1
-  description: "Next turn starts with +20 cost."
+  description: "\uB2E4\uC74C \uD134 \uC2DC\uC791 \uCF54\uC2A4\uD2B8\uAC00 15 \uC99D\uAC00\uD55C\uB2E4."

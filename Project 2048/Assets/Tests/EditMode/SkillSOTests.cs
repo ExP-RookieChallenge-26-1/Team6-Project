@@ -46,9 +46,13 @@ namespace Project2048.Tests
             var burstFireball = skills["burst-fireball"];
             var burnOut = skills["burn-out"];
             var overburn = skills["overburn"];
+            var recklessBlow = skills["reckless-blow"];
             var afterglowSave = skills["afterglow-save"];
             var cleanseHand = skills["cleanse-hand"];
             var blackCorrosion = skills["black-corrosion"];
+            var lightShot = skills["light-shot"];
+            var lowStance = skills["low-stance"];
+            var lightGuard = skills["light-guard"];
 
             Assert.That(fireball.skillName, Is.EqualTo("\uD654\uC5FC\uAD6C"));
             Assert.That(fireball.cost, Is.EqualTo(20));
@@ -69,14 +73,17 @@ namespace Project2048.Tests
 
             Assert.That(overburn.cost, Is.EqualTo(40));
             Assert.That(overburn.ResolveEffectKind(), Is.EqualTo(SkillEffectKind.OverburnAttack));
-            Assert.That(overburn.extraPowerPerConsumedCost, Is.EqualTo(10));
+            Assert.That(overburn.extraPowerPerConsumedCost, Is.EqualTo(1));
             Assert.That(afterglowSave.cost, Is.EqualTo(10));
-            Assert.That(afterglowSave.nextCostGainModifier, Is.EqualTo(20));
+            Assert.That(afterglowSave.nextCostGainModifier, Is.EqualTo(15));
             Assert.That(afterglowSave.maxCostCarry, Is.Zero);
             Assert.That(cleanseHand.cost, Is.EqualTo(10));
             Assert.That(cleanseHand.costRefund, Is.EqualTo(10));
             Assert.That(blackCorrosion.cost, Is.EqualTo(20));
             Assert.That(blackCorrosion.nextCostGainModifier, Is.EqualTo(-10));
+            Assert.That(lightShot.power, Is.EqualTo(60));
+            Assert.That(lowStance.power, Is.EqualTo(20));
+            Assert.That(lightGuard.power, Is.EqualTo(40));
 
             var expectedCosts = new System.Collections.Generic.Dictionary<string, int>
             {
@@ -127,16 +134,33 @@ namespace Project2048.Tests
                 Assert.That(skills[expectedCost.Key].cost, Is.EqualTo(expectedCost.Value), expectedCost.Key);
             }
 
-            foreach (var fireballSkill in new[] { fireball, burstFireball, burnOut })
+            const string ExpFlameSpritePath = "Assets/Art/Source/ExP/Effects/Effect_Flame.png";
+            const string FlameBurstPrefabPath = "Assets/Art/Effects/SkillVFX/Prefabs/SkillVfx_FlameBurst.prefab";
+            const string FlameImagePrefabPath = "Assets/Art/Effects/SkillVFX/Prefabs/SkillVfx_FlameImage.prefab";
+            const string RawVfxTestFirePath = "Assets/VFX Test/Prefab/vfx_Fire.prefab";
+
+            foreach (var flameSkill in new[] { fireball, burstFireball, burnOut, overburn, recklessBlow })
             {
-                Assert.That(fireballSkill.ResolveVfxFamily(), Is.EqualTo(SkillVfxFamily.FlameBurst), fireballSkill.skillId);
-                Assert.That(fireballSkill.vfxPrimaryColor, Is.EqualTo(new Color(1f, 0.42f, 0.06f, 1f)), fireballSkill.skillId);
-                Assert.That(fireballSkill.vfxDefinition.HasAnyCue, Is.True, fireballSkill.skillId);
-                var cuePaths = fireballSkill.vfxDefinition
-                    .CuesFor(SkillVfxTrigger.Activate)
+                Assert.That(flameSkill.ResolveVfxFamily(), Is.EqualTo(SkillVfxFamily.FlameBurst), flameSkill.skillId);
+                Assert.That(flameSkill.vfxDefinition.HasAnyCue, Is.True, flameSkill.skillId);
+                Assert.That(AssetDatabase.GetAssetPath(flameSkill.vfx.primarySprite), Is.EqualTo(ExpFlameSpritePath), flameSkill.skillId);
+                Assert.That(AssetDatabase.GetAssetPath(flameSkill.vfx.primaryPrefab), Is.EqualTo(FlameBurstPrefabPath), flameSkill.skillId);
+
+                var cuePaths = flameSkill.vfxDefinition
+                    .cues
                     .Select(cue => AssetDatabase.GetAssetPath(cue.prefab))
                     .ToArray();
-                Assert.That(cuePaths, Does.Contain("Assets/VFX Test/Prefab/vfx_Fire.prefab"), fireballSkill.skillId);
+                Assert.That(cuePaths, Does.Contain(FlameImagePrefabPath), flameSkill.skillId);
+                Assert.That(cuePaths, Does.Not.Contain(RawVfxTestFirePath), flameSkill.skillId);
+            }
+
+            foreach (var fireballSkill in new[] { fireball, burstFireball, burnOut })
+            {
+                Assert.That(fireballSkill.vfxPrimaryColor, Is.EqualTo(new Color(1f, 0.42f, 0.06f, 1f)), fireballSkill.skillId);
+                var cuePaths = fireballSkill.vfxDefinition
+                    .cues
+                    .Select(cue => AssetDatabase.GetAssetPath(cue.prefab))
+                    .ToArray();
                 Assert.That(
                     cuePaths,
                     Does.Contain("Assets/Art/Effects/SkillVFX/Prefabs/SkillVfx_TealEasyExplosion.prefab"),
@@ -195,20 +219,32 @@ namespace Project2048.Tests
         }
 
         [Test]
-        public void PrototypeSkillAssets_UseTealExplosionInsteadOfRawVfxTestEasyExplosion()
+        public void PrototypeSkillAssets_UseExpectedImpactPrefabsInsteadOfRawVfxTestPrefabs()
         {
             var skills = LoadPrototypeSkills();
             const string RawEasyExplosionPath = "Assets/VFX Test/Prefab/vfx_EasyExplosion.prefab";
             const string TealEasyExplosionPath = "Assets/Art/Effects/SkillVFX/Prefabs/SkillVfx_TealEasyExplosion.prefab";
+            const string RawVfxTestFirePath = "Assets/VFX Test/Prefab/vfx_Fire.prefab";
+            const string FlameImagePrefabPath = "Assets/Art/Effects/SkillVFX/Prefabs/SkillVfx_FlameImage.prefab";
 
             foreach (var skillId in new[] { "fireball", "burst-fireball", "burn-out" })
             {
                 var cuePaths = skills[skillId].vfxDefinition
-                    .CuesFor(SkillVfxTrigger.Activate)
+                    .cues
                     .Select(cue => AssetDatabase.GetAssetPath(cue.prefab))
                     .ToArray();
                 Assert.That(cuePaths, Does.Contain(TealEasyExplosionPath), skillId);
                 Assert.That(cuePaths, Does.Not.Contain(RawEasyExplosionPath), skillId);
+            }
+
+            foreach (var skillId in new[] { "fireball", "burst-fireball", "burn-out", "overburn", "reckless-blow" })
+            {
+                var cuePaths = skills[skillId].vfxDefinition
+                    .cues
+                    .Select(cue => AssetDatabase.GetAssetPath(cue.prefab))
+                    .ToArray();
+                Assert.That(cuePaths, Does.Contain(FlameImagePrefabPath), skillId);
+                Assert.That(cuePaths, Does.Not.Contain(RawVfxTestFirePath), skillId);
             }
 
             foreach (var skillId in new[] { "shield-bash", "shield-burst" })
@@ -230,8 +266,6 @@ namespace Project2048.Tests
             {
                 "light-shot",
                 "low-stance",
-                "flash",
-                "gather-light",
             }));
         }
 

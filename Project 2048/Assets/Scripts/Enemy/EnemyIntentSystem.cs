@@ -169,8 +169,8 @@ namespace Project2048.Enemy
 
                     var effectiveIntent = ResolveEffectiveAttackIntent(intent, player);
                     var damage = damageCalculator.CalculateEnemyDamage(enemy, effectiveIntent, player);
-                    var shieldBeforeHit = player.ShieldHp;
-                    var shouldRetaliate = shieldBeforeHit > 0 && player.ThornRetaliationDamage > 0;
+                    var thornShieldBeforeHit = player.ThornRetaliationShieldHp;
+                    var shouldRetaliate = thornShieldBeforeHit > 0 && player.ThornRetaliationDamage > 0;
                     var retaliationPower = player.ThornRetaliationDamage;
                     var hpDamage = player.TakeDamage(damage, effectiveIntent.shieldPiercePercent / 100f);
                     player.TriggerOnAttackedStatusDamage();
@@ -190,7 +190,7 @@ namespace Project2048.Enemy
                     if (shouldRetaliate && retaliationPower > 0)
                     {
                         var retaliationDamage = damageCalculator.CalculatePlayerSkillDamageFromStat(
-                            shieldBeforeHit,
+                            thornShieldBeforeHit,
                             retaliationPower,
                             enemy,
                             player.CriticalChance,

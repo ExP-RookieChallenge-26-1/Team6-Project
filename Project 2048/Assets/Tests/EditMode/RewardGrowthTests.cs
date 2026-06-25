@@ -265,7 +265,7 @@ namespace Project2048.Tests
             var playerData = CreatePlayerData(maxHp: 20, attackPower: 2);
             var enemyData = CreateEnemyData(maxHp: 10, attackValue: 0);
             var lightShot = CreateSkill("light-shot", SkillType.Attack, cost: 6, power: 60);
-            var lowStance = CreateSkill("low-stance", SkillType.Defense, cost: 4, power: 30);
+            var lowStance = CreateSkill("low-stance", SkillType.Defense, cost: 4, power: 20);
             var flash = CreateSkill("flash", SkillType.Debuff, cost: 5, power: 0);
             var learnedSkill = CreateSkill("fireball", SkillType.Attack, cost: 6, power: 50);
             var reward = CreateReward(healPercentOfMaxHp: 0.3f, extraBoardMoveCount: 1);

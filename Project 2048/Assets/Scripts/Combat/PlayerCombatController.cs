@@ -30,6 +30,7 @@ namespace Project2048.Combat
         public int Block { get; private set; }
         public int ShieldHp => Block;
         public int ThornRetaliationDamage { get; private set; }
+        public int ThornRetaliationShieldHp { get; private set; }
         public int DefenseBonus { get; private set; }
         public int FearStacks { get; private set; }
         public int BoardMoveCountBonus { get; private set; }
@@ -100,6 +101,7 @@ namespace Project2048.Combat
             CriticalDamageMultiplier = Mathf.Max(1f, data.criticalDamageMultiplier);
             Block = 0;
             ThornRetaliationDamage = 0;
+            ThornRetaliationShieldHp = 0;
             DefenseBonus = 0;
             DefenseStage = 0;
             FearStacks = 0;
@@ -263,11 +265,9 @@ namespace Project2048.Combat
             var piercingDamage = Mathf.CeilToInt(damage * Mathf.Clamp01(shieldPiercePercent));
             var blockableDamage = Mathf.Max(0, damage - piercingDamage);
             var remainingDamage = piercingDamage + Mathf.Max(0, blockableDamage - Block);
+            var shieldDamage = Mathf.Min(Block, blockableDamage);
             Block = Mathf.Max(0, Block - blockableDamage);
-            if (Block == 0)
-            {
-                ThornRetaliationDamage = 0;
-            }
+            ReduceThornRetaliationShield(shieldDamage);
 
             var hpBefore = CurrentHp;
             var minimumHp = EndureTurns > 0 && CurrentHp > 0 ? 1 : 0;
@@ -335,7 +335,8 @@ namespace Project2048.Combat
             }
 
             Block += shieldHp;
-            ThornRetaliationDamage = Mathf.Max(0, retaliationDamage);
+            ThornRetaliationShieldHp = Mathf.Max(ThornRetaliationShieldHp, shieldHp);
+            ThornRetaliationDamage = Mathf.Max(ThornRetaliationDamage, retaliationDamage);
             OnBlockChanged?.Invoke(Block);
             OnStatusEffectsChanged?.Invoke();
         }
@@ -785,23 +786,24 @@ namespace Project2048.Combat
             return before - CurrentHp;
         }
 
-        public void QueueChargedAttack(string displayName, int attackPower)
+        public bool QueueChargedAttack(string displayName, int attackPower)
         {
-            QueueChargedAttack(displayName, attackPower, DamageStatSource.AttackPower);
+            return QueueChargedAttack(displayName, attackPower, DamageStatSource.AttackPower);
         }
 
-        public void QueueChargedAttack(string displayName, int attackPower, DamageStatSource statSource)
+        public bool QueueChargedAttack(string displayName, int attackPower, DamageStatSource statSource)
         {
             attackPower = Mathf.Max(0, attackPower);
-            if (attackPower <= 0)
+            if (attackPower <= 0 || HasPendingChargedAttack)
             {
-                return;
+                return false;
             }
 
             pendingChargedAttackName = displayName;
             pendingChargedAttackPower = attackPower;
             pendingChargedAttackStatSource = statSource;
             OnStatusEffectsChanged?.Invoke();
+            return true;
         }
 
         public bool TryConsumePendingChargedAttack(out string displayName, out int attackPower)
@@ -840,6 +842,7 @@ namespace Project2048.Combat
             var consumed = Block;
             Block = 0;
             ThornRetaliationDamage = 0;
+            ThornRetaliationShieldHp = 0;
             OnBlockChanged?.Invoke(Block);
             OnStatusEffectsChanged?.Invoke();
             return consumed;
@@ -892,15 +895,36 @@ namespace Project2048.Combat
 
         public void ClearBlock()
         {
-            if (Block == 0 && ThornRetaliationDamage == 0)
+            if (Block == 0 && ThornRetaliationDamage == 0 && ThornRetaliationShieldHp == 0)
             {
                 return;
             }
 
             Block = 0;
             ThornRetaliationDamage = 0;
+            ThornRetaliationShieldHp = 0;
             OnBlockChanged?.Invoke(Block);
             OnStatusEffectsChanged?.Invoke();
+        }
+
+        private void ReduceThornRetaliationShield(int shieldDamage)
+        {
+            if (ThornRetaliationShieldHp <= 0)
+            {
+                if (Block == 0)
+                {
+                    ThornRetaliationDamage = 0;
+                }
+
+                return;
+            }
+
+            ThornRetaliationShieldHp = Mathf.Max(0, ThornRetaliationShieldHp - Mathf.Max(0, shieldDamage));
+            if (Block == 0 || ThornRetaliationShieldHp == 0)
+            {
+                ThornRetaliationDamage = 0;
+                ThornRetaliationShieldHp = 0;
+            }
         }
 
         public static int ResolveStageModifiedStat(int baseStat, int stage)

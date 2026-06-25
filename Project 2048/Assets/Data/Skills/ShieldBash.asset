@@ -86,7 +86,7 @@ MonoBehaviour:
     primaryPrefab: {fileID: 7427817718329016933, guid: 5455b1b837377fe4fa0a6ec39baceb62, type: 3}
     projectilePrefab: {fileID: 0}
     secondarySprite: {fileID: 0}
-    secondaryPrefab: {fileID: 4498762637842804159, guid: a0fb7f5b26fce7f4aa39fbc40939fd0d, type: 3}
+    secondaryPrefab: {fileID: 4498762637842804159, guid: d1c2ef880bde45f29605241ac76f3016, type: 3}
     particlePrefab: {fileID: 3967671219066916926, guid: 17358b86df3ec454eb71456748b55093, type: 3}
     particleMaterial: {fileID: 2100000, guid: 65e092e01d9dbe741072906fbc723c04, type: 2}
     localOffset: {x: 0, y: 0.12, z: 0}

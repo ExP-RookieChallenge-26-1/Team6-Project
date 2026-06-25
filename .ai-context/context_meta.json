@@ -1,17 +1,15 @@
 {
   "version": 1,
-  "generated_at": "2026-06-24T05:11:15.849Z",
+  "generated_at": "2026-06-25T04:13:48.512Z",
   "generator": "ai-context-builder-v1",
   "source_branch": "main",
-  "source_commit_sha": "e018320b713eb5b1d9628a2de1804a2546296032",
+  "source_commit_sha": "5862c809a3588f7686f902deffe32038bbbec3e5",
   "build_mode_requested": "auto",
-  "build_mode_used": "full",
-  "rebuild_reasons": [
-    "변경된 C# 파일 수가 임계치 이상 (24)"
-  ],
-  "total_cs_files": 134,
-  "changed_cs_files": 24,
-  "added_cs_files": 5,
-  "deleted_cs_files": 0,
+  "build_mode_used": "incremental",
+  "rebuild_reasons": [],
+  "total_cs_files": 145,
+  "changed_cs_files": 13,
+  "added_cs_files": 4,
+  "deleted_cs_files": 1,
   "index_status": "ready"
 }

@@ -1,3 +1,5 @@
+using Project2048.Save;
+using Project2048.Stage;
 using Project2048.Core;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -112,7 +114,7 @@ public class MainMenuController : MonoBehaviour
 
     private void OnNewGameClicked()
     {
-        confirmPopup.Show("새 게임을 시작하면 기존 저장 데이터가 삭제됩니다.\n계속하시겠습니까?", StartNewGame, null);
+        confirmPopup.Show("새 게임을 시작하면\n기존 저장 데이터가 삭제됩니다.\n계속하시겠습니까?", StartNewGame, null);
     }
 
     private void StartNewGame()
@@ -122,13 +124,61 @@ public class MainMenuController : MonoBehaviour
 
     private void OnLoadGameClicked()
     {
-        if (GameManager.Instance == null)
+        var saveLoadManager = GameManager.Instance?.SaveLoadManager;
+        if (saveLoadManager == null ||
+            !saveLoadManager.TryGetSaveSummary(out var summary) ||
+            !summary.HasActiveRun)
         {
-            Debug.LogError("GameManager is not present.");
+            Debug.LogWarning("이어할 수 있는 저장 데이터가 없습니다.");
+            RefreshLoadGameButton();
             return;
         }
 
+        confirmPopup.Show(BuildLoadGameConfirmationMessage(summary), ContinueSavedGame);
+    }
+
+    private void ContinueSavedGame()
+    {
         fadeController.FadeOut(() => GameManager.Instance.StartSaveGame());
+    }
+
+    private static string BuildLoadGameConfirmationMessage(SaveGameSummary summary)
+    {
+        var lastPlayedAtText = summary.SavedAtUtc == default
+            ? "알 수 없음"
+            : summary.SavedAtUtc.ToLocalTime().ToString("yyyy-MM-dd HH:mm");
+
+        var currentHpText = summary.HasCurrentHp
+            ? summary.CurrentHp.ToString()
+            : "기록 없음";
+
+        return
+            "저장된 게임 정보\n" +
+            $"마지막 플레이 시간: {lastPlayedAtText}\n" +
+            $"진행 스테이지: {BuildStageText(summary.StageIndex)}\n" +
+            $"현재 HP: {currentHpText}\n" +
+            "이어서 진행하시겠습니까?";
+    }
+
+    private static string BuildStageText(int stageIndex)
+    {
+        if (!StageDatabaseSO.TryResolveStagePosition(
+                stageIndex,
+                out var floor,
+                out var stageNumberInFloor))
+        {
+            return "알 수 없음";
+        }
+
+        var floorText = floor switch
+        {
+            StageFloor.Upper => "상층",
+            StageFloor.Middle => "중층",
+            StageFloor.Lower => "하층",
+            _ => "알 수 없음"
+        };
+
+        return $"{floorText} {stageNumberInFloor}스테이지";
     }
 
     private void RefreshLoadGameButton()

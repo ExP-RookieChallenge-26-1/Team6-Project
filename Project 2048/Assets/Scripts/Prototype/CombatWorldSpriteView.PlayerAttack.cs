@@ -33,6 +33,7 @@ namespace Project2048.Prototype
             CombatEffectBinding effect,
             Transform sourceAnchor,
             Transform targetAnchor,
+            bool playAttackAnimation,
             out float lifetimeSeconds)
         {
             lifetimeSeconds = 0f;
@@ -45,7 +46,11 @@ namespace Project2048.Prototype
             lifetimeSeconds = PlayerCloseRangeAttackTotalSeconds + ResolveCloseRangeImpactLifetimeSeconds(family);
             if (!Application.isPlaying || !isActiveAndEnabled)
             {
-                PlayPlayerAttackAnimation(ResolvePlayerAttackAnimationSpeedMultiplier(skill));
+                if (playAttackAnimation)
+                {
+                    PlayPlayerAttackAnimation(ResolvePlayerAttackAnimationSpeedMultiplier(skill));
+                }
+
                 PlayCloseRangePlayerAttackImpactEffects(skill, effect, sourceAnchor, targetAnchor);
                 return true;
             }
@@ -56,7 +61,8 @@ namespace Project2048.Prototype
                 skill,
                 effect,
                 sourceAnchor,
-                targetAnchor));
+                targetAnchor,
+                playAttackAnimation));
             return true;
         }
 
@@ -64,7 +70,8 @@ namespace Project2048.Prototype
             SkillSO skill,
             CombatEffectBinding effect,
             Transform sourceAnchor,
-            Transform targetAnchor)
+            Transform targetAnchor,
+            bool playAttackAnimation)
         {
             var actor = sourceAnchor;
             CachePlayerCloseRangeAttackRestTransform(actor);
@@ -80,7 +87,11 @@ namespace Project2048.Prototype
                 PlayerCloseRangeAttackAdvanceSeconds,
                 easeOut: true);
 
-            PlayPlayerAttackAnimation(ResolvePlayerAttackAnimationSpeedMultiplier(skill));
+            if (playAttackAnimation)
+            {
+                PlayPlayerAttackAnimation(ResolvePlayerAttackAnimationSpeedMultiplier(skill));
+            }
+
             if (PlayerCloseRangeAttackWindupSeconds > 0f)
             {
                 yield return new WaitForSeconds(PlayerCloseRangeAttackWindupSeconds);

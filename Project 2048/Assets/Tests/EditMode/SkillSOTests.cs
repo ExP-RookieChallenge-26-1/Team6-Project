@@ -137,7 +137,11 @@ namespace Project2048.Tests
                     .Select(cue => AssetDatabase.GetAssetPath(cue.prefab))
                     .ToArray();
                 Assert.That(cuePaths, Does.Contain("Assets/VFX Test/Prefab/vfx_Fire.prefab"), fireballSkill.skillId);
-                Assert.That(cuePaths, Does.Contain("Assets/VFX Test/Prefab/vfx_EasyExplosion.prefab"), fireballSkill.skillId);
+                Assert.That(
+                    cuePaths,
+                    Does.Contain("Assets/Art/Effects/SkillVFX/Prefabs/SkillVfx_TealEasyExplosion.prefab"),
+                    fireballSkill.skillId);
+                Assert.That(cuePaths, Does.Not.Contain("Assets/VFX Test/Prefab/vfx_EasyExplosion.prefab"), fireballSkill.skillId);
                 Assert.That(fireballSkill.activationEffect?.vfxPrefab, Is.Not.Null, fireballSkill.skillId);
                 Assert.That(
                     AssetDatabase.GetAssetPath(fireballSkill.activationEffect.vfxPrefab),
@@ -188,6 +192,32 @@ namespace Project2048.Tests
             Assert.That(rewardSkillIds, Does.Contain("fireball"));
             Assert.That(rewardSkillIds, Does.Contain("cleanse-hand"));
             Assert.That(rewardSkillIds, Does.Not.Contain("black-corrosion"));
+        }
+
+        [Test]
+        public void PrototypeSkillAssets_UseTealExplosionInsteadOfRawVfxTestEasyExplosion()
+        {
+            var skills = LoadPrototypeSkills();
+            const string RawEasyExplosionPath = "Assets/VFX Test/Prefab/vfx_EasyExplosion.prefab";
+            const string TealEasyExplosionPath = "Assets/Art/Effects/SkillVFX/Prefabs/SkillVfx_TealEasyExplosion.prefab";
+
+            foreach (var skillId in new[] { "fireball", "burst-fireball", "burn-out" })
+            {
+                var cuePaths = skills[skillId].vfxDefinition
+                    .CuesFor(SkillVfxTrigger.Activate)
+                    .Select(cue => AssetDatabase.GetAssetPath(cue.prefab))
+                    .ToArray();
+                Assert.That(cuePaths, Does.Contain(TealEasyExplosionPath), skillId);
+                Assert.That(cuePaths, Does.Not.Contain(RawEasyExplosionPath), skillId);
+            }
+
+            foreach (var skillId in new[] { "shield-bash", "shield-burst" })
+            {
+                Assert.That(
+                    AssetDatabase.GetAssetPath(skills[skillId].vfx.secondaryPrefab),
+                    Is.EqualTo(TealEasyExplosionPath),
+                    skillId);
+            }
         }
 
         [Test]

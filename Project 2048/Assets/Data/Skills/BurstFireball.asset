@@ -84,31 +84,46 @@ MonoBehaviour:
     cues:
     - trigger: 0
       prefab: {fileID: 5592946645197749577, guid: e9b54a20e0cab144a95032ef68460208, type: 3}
-      placement:
-        target: 0
-        vertical: 1
-        localOffset: {x: 0.18, y: 0.32, z: 0}
+      spawnAt:
+        actor: 0
+        socket: 4
+        localOffset: {x: 0, y: 0, z: 0}
+      useDestination: 0
+      destination:
+        actor: 0
+        socket: 0
+        localOffset: {x: 0, y: 0, z: 0}
       delaySeconds: 0
       scale: 1.08
       tint: {r: 1, g: 0.42, b: 0.06, a: 1}
       lifetimeOverride: -1
-    - trigger: 0
+    - trigger: 3
       prefab: {fileID: 8199688406765548039, guid: a44606620703a36458795961c00ca290, type: 3}
-      placement:
-        target: 1
-        vertical: 0
+      spawnAt:
+        actor: 1
+        socket: 0
         localOffset: {x: 0, y: 0.75, z: 0}
-      delaySeconds: 0.48
+      useDestination: 0
+      destination:
+        actor: 0
+        socket: 0
+        localOffset: {x: 0, y: 0, z: 0}
+      delaySeconds: 0
       scale: 0.4
       tint: {r: 1, g: 1, b: 1, a: 1}
       lifetimeOverride: 1.45
-    - trigger: 0
-      prefab: {fileID: 4498762637842804159, guid: a0fb7f5b26fce7f4aa39fbc40939fd0d, type: 3}
-      placement:
-        target: 1
-        vertical: 1
+    - trigger: 3
+      prefab: {fileID: 4498762637842804159, guid: d1c2ef880bde45f29605241ac76f3016, type: 3}
+      spawnAt:
+        actor: 1
+        socket: 1
         localOffset: {x: -0.08, y: 0.08, z: 0}
-      delaySeconds: 0.48
+      useDestination: 0
+      destination:
+        actor: 0
+        socket: 0
+        localOffset: {x: 0, y: 0, z: 0}
+      delaySeconds: 0
       scale: 1.22
       tint: {r: 0.1, g: 0.85, b: 0.78, a: 1}
       lifetimeOverride: 1.55

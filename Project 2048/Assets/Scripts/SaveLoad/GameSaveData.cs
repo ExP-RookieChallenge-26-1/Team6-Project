@@ -127,4 +127,27 @@ namespace Project2048.Save
             return resolvedSkills;
         }
     }
+
+    public readonly struct SaveGameSummary
+    {
+        public SaveGameSummary(
+            DateTime savedAtUtc,
+            int stageIndex,
+            bool hasCurrentHp,
+            int currentHp,
+            bool hasActiveRun)
+        {
+            SavedAtUtc = savedAtUtc;
+            StageIndex = stageIndex;
+            HasCurrentHp = hasCurrentHp;
+            CurrentHp = currentHp;
+            HasActiveRun = hasActiveRun;
+        }
+
+        public DateTime SavedAtUtc { get; }
+        public int StageIndex { get; }
+        public bool HasCurrentHp { get; }
+        public int CurrentHp { get; }
+        public bool HasActiveRun { get; }
+    }
 }

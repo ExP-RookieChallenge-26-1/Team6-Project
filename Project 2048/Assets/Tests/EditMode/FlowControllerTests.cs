@@ -3,6 +3,7 @@ using NUnit.Framework;
 using Project2048.Combat;
 using Project2048.Core;
 using Project2048.Flow;
+using Project2048.Save;
 using UnityEngine;
 
 namespace Project2048.Tests
@@ -21,17 +22,20 @@ namespace Project2048.Tests
         }
 
         [Test]
-        public void HandleStageCompleted_RunCompleted_RequestsEndingScene()
+        public void HandleStageCompleted_RunCompleted_DeletesSaveAndRequestsMainMenu()
         {
             owner = new GameObject("FlowController");
             var flowController = owner.AddComponent<FlowController>();
+            var saveLoadManager = owner.AddComponent<SaveLoadManager>();
             var context = new GameContext();
-            var didRequestEnding = false;
+            var saveRepository = new TrackingSaveRepository();
+            var didRequestMainMenu = false;
             var didStartLoading = false;
 
             context.SetRunActive(true);
-            flowController.Initialized(context);
-            flowController.OnEndingSceneLoadRequested += () => didRequestEnding = true;
+            saveLoadManager.Initialize(context, saveRepository);
+            flowController.Initialized(context, saveLoadManager);
+            flowController.OnMainMenuSceneLoadRequested += () => didRequestMainMenu = true;
             flowController.OnLoadingStarted += _ => didStartLoading = true;
 
             InvokePrivateMethod(
@@ -45,9 +49,10 @@ namespace Project2048.Tests
                     default));
 
             Assert.That(context.IsRunActive, Is.False);
-            Assert.That(context.CurrentGameState, Is.EqualTo(GameContext.GameState.Ending));
+            Assert.That(context.CurrentGameState, Is.EqualTo(GameContext.GameState.Loading));
+            Assert.That(saveRepository.WasDeleted, Is.True);
             Assert.That(didStartLoading, Is.True);
-            Assert.That(didRequestEnding, Is.True);
+            Assert.That(didRequestMainMenu, Is.True);
         }
 
         private static void InvokePrivateMethod(object target, string methodName, params object[] args)
@@ -55,6 +60,30 @@ namespace Project2048.Tests
             target.GetType()
                 .GetMethod(methodName, BindingFlags.Instance | BindingFlags.NonPublic)
                 ?.Invoke(target, args);
+        }
+
+        private sealed class TrackingSaveRepository : ISaveRepository
+        {
+            public bool WasDeleted { get; private set; }
+
+            public bool Exists()
+            {
+                return true;
+            }
+
+            public void Save(GameSaveData data)
+            {
+            }
+
+            public GameSaveData Load()
+            {
+                return null;
+            }
+
+            public void Delete()
+            {
+                WasDeleted = true;
+            }
         }
     }
 }

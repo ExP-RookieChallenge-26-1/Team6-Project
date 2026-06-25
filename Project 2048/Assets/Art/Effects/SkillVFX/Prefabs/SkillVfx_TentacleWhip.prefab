@@ -24,11 +24,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 77669806184179969}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: -0.30586755, w: 0.9520741}
-  m_LocalPosition: {x: 0.0061957715, y: -3.8636108e-10, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: -0.37021592, w: 0.9289458}
+  m_LocalPosition: {x: 0.7481932, y: 0.00000008193823, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 2441914863920168958}
   m_Father: {fileID: 3033560229761038722}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1727591161569021224
@@ -55,8 +56,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1727591161569021224}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: -0.46367773, w: 0.8860039}
-  m_LocalPosition: {x: 0.0093947705, y: -9.274267e-10, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: -0.46919224, w: 0.8830961}
+  m_LocalPosition: {x: 0.6617904, y: -0.000000122916, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -87,8 +88,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2145220047529377972}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0.28025746, w: 0.9599249}
-  m_LocalPosition: {x: 0.010235058, y: -1.8368855e-10, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0.21807063, w: 0.975933}
+  m_LocalPosition: {x: 1.1695002, y: -0.00000015524685, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -119,8 +120,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3470667821820046002}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0.050061934, w: 0.99874616}
-  m_LocalPosition: {x: 0.01217957, y: -5.4589167e-10, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0.110396385, w: 0.99388766}
+  m_LocalPosition: {x: 0.8661897, y: -0.00000024208293, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -151,8 +152,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4038533212238381428}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: -0.26476243, w: 0.9643137}
-  m_LocalPosition: {x: 0.008658657, y: -0.0000000013326938, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: -0.044093244, w: 0.99902743}
+  m_LocalPosition: {x: 1.000396, y: 0.00000023274711, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -170,6 +171,7 @@ GameObject:
   - component: {fileID: 5427612327660515501}
   - component: {fileID: 651667283663833256}
   - component: {fileID: 6963254439295324869}
+  - component: {fileID: 5754280198336852816}
   - component: {fileID: 630085814369324221}
   m_Layer: 0
   m_Name: SkillVfx_TentacleWhip
@@ -187,8 +189,8 @@ Transform:
   m_GameObject: {fileID: 4661553209743665296}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -0.262, y: -2.015, z: 0}
+  m_LocalScale: {x: 0.3234, y: 0.3234, z: 0.3234}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2618639828442390780}
@@ -220,7 +222,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: cdd4a6c863c168dad3585f126e4f2b2f, type: 2}
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -243,8 +245,8 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 7476130574374191492, guid: 9dfe0de0ae74cef4f823903c72761b0a, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.96}
+  m_Sprite: {fileID: -8102625141210905371, guid: e5308ee8d535c0a4ba7735d890b64975, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -274,31 +276,51 @@ MonoBehaviour:
   - {fileID: 1154215088384641543}
   - {fileID: 3033560229761038722}
   - {fileID: 1724781793037875249}
+  - {fileID: 2441914863920168958}
   m_Bounds:
-    m_Center: {x: 0, y: 0, z: 0}
-    m_Extent: {x: 0, y: 0, z: 0}
+    m_Center: {x: -0.2623347, y: -1.9931045, z: 0}
+    m_Extent: {x: 0.5622648, y: 1.0825152, z: 0}
   m_AlwaysUpdate: 1
-  m_AutoRebind: 1
+  m_AutoRebind: 0
   m_BoundsMode: 0
---- !u!114 &630085814369324221
-MonoBehaviour:
+--- !u!111 &5754280198336852816
+Animation:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4661553209743665296}
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4d2a9bde899375a49a5e2182f8e7800e, type: 3}
-  m_Name:
-  m_EditorClassIdentifier: Game.Core::Project2048.Presentation.TentacleBoneStrikeEffect
-  spriteRenderer: {fileID: 651667283663833256}
-  spriteSkin: {fileID: 6963254439295324869}
-  defaultDurationSeconds: 0.58
-  widthScale: 0.64
-  arcHeight: 0.82
-  recoilDegrees: 34
-  strikeDegrees: 48
+  serializedVersion: 4
+  m_Animation: {fileID: 0}
+  m_Animations: []
+  m_WrapMode: 0
+  m_PlayAutomatically: 1
+  m_AnimatePhysics: 0
+  m_UpdateMode: 0
+  m_CullingType: 0
+--- !u!95 &630085814369324221
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4661553209743665296}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 9df784f0bd427dd43b139ebc7462a127, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage:
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &5208162596546340300
 GameObject:
   m_ObjectHideFlags: 0
@@ -323,8 +345,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5208162596546340300}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0.6154121, w: 0.7882055}
-  m_LocalPosition: {x: -1.8597172, y: -3.4671102, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0.5625094, w: 0.82679087}
+  m_LocalPosition: {x: 0.049392395, y: -2.2491245, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -355,11 +377,42 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6195682650696309280}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0.16307735, w: 0.9866133}
-  m_LocalPosition: {x: 0.010529866, y: 0.0000000020331337, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0.20744349, w: 0.97824705}
+  m_LocalPosition: {x: 1.093621, y: -0.0000001281823, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1154215088384641543}
   m_Father: {fileID: 701788531019423214}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &6860891131586499838
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2441914863920168958}
+  m_Layer: 0
+  m_Name: bone_8
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2441914863920168958
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6860891131586499838}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: -0.18164895, w: 0.9833635}
+  m_LocalPosition: {x: 0.70647234, y: 0.0000000010343775, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1724781793037875249}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

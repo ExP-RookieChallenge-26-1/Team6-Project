@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Globalization;
 using Project2048.Core;
 using Project2048.Rewards;
 using Project2048.Skills;
@@ -35,6 +37,41 @@ namespace Project2048.Save
         public void SaveInitialRun()
         {
             SaveRun(new RunProgress());
+        }
+
+        public bool TryGetSaveSummary(out SaveGameSummary summary)
+        {
+            summary = default;
+
+            if (saveRepository == null || !saveRepository.Exists())
+            {
+                return false;
+            }
+
+            var saveData = saveRepository.Load();
+            if (saveData == null)
+            {
+                return false;
+            }
+
+            var savedAtUtc = default(DateTime);
+            if (DateTime.TryParse(
+                    saveData.savedAtUtc,
+                    CultureInfo.InvariantCulture,
+                    DateTimeStyles.RoundtripKind,
+                    out var parsedSavedAt))
+            {
+                savedAtUtc = parsedSavedAt.ToUniversalTime();
+            }
+
+            summary = new SaveGameSummary(
+                savedAtUtc,
+                saveData.currentStageIndex,
+                saveData.hasCurrentHp,
+                saveData.currentHp,
+                saveData.hasActiveRun);
+
+            return true;
         }
 
         public bool TryLoadGameContext()

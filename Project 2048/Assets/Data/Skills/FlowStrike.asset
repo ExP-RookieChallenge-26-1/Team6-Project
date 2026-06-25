@@ -68,11 +68,11 @@ MonoBehaviour:
       particlePrefab: {fileID: 2479667755594776677, guid: a7eee696b46a1a04dbeee1a0474b2d5b, type: 3}
       particleMaterial: {fileID: 2100000, guid: fa4eba04624f2cd09c5b181876c24239, type: 2}
       useParticleColor: 1
-      particleColor: {r: 0.351272, g: 0.660872, b: 0.891272, a: 1}
+      particleColor: {r: 1, g: 1, b: 1, a: 1}
       lifetimeSeconds: 0.55
-      burstCount: 22
-      startSpeed: 0.8
-      startSize: 0.16
+      burstCount: 18
+      startSpeed: 0.669
+      startSize: 0.112
       swirl: 0
     volumeScale: 1
     minPitch: 1
@@ -93,14 +93,14 @@ MonoBehaviour:
     radiusMultiplier: 3.24
     lifetimeSeconds: -1
     sortingOffset: 12
-    tintWhiteBlend: 0.18
-    alpha: 0.62
+    tintWhiteBlend: 0
+    alpha: 1
     rotationDegrees: 0
   vfxPackage: {fileID: 0}
   vfxFamily: 1
-  vfxPrimaryColor: {r: 0.351272, g: 0.660872, b: 0.891272, a: 1}
-  vfxSecondaryColor: {r: 0.818491, g: 0.940891, b: 0.976891, a: 1}
-  vfxScale: 1
-  vfxIntensity: 1
+  vfxPrimaryColor: {r: 1, g: 1, b: 1, a: 1}
+  vfxSecondaryColor: {r: 1, g: 1, b: 1, a: 1}
+  vfxScale: 0.7
+  vfxIntensity: 0.8
   vfxRepeatCount: 1
   description: ""

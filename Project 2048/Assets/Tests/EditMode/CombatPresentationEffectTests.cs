@@ -3796,6 +3796,18 @@ namespace Project2048.Tests
         private static void AssertFlameBurstTuningHasImpactExplosion(SkillSO skill, string context)
         {
             Assert.That(skill.vfx, Is.Not.Null, context);
+            Assert.That(
+                AssetDatabase.GetAssetPath(skill.vfx.primarySprite),
+                Is.EqualTo("Assets/Art/Source/ExP/Effects/Effect_Flame.png"),
+                context);
+            Assert.That(
+                AssetDatabase.GetAssetPath(skill.vfx.primaryPrefab),
+                Is.EqualTo("Assets/Art/Effects/SkillVFX/Prefabs/SkillVfx_FlameBurst.prefab"),
+                context);
+            Assert.That(
+                skill.vfxDefinition.cues.Select(cue => AssetDatabase.GetAssetPath(cue.prefab)).ToArray(),
+                Does.Contain("Assets/Art/Effects/SkillVFX/Prefabs/SkillVfx_FlameImage.prefab"),
+                context);
             Assert.That(skill.vfx.secondaryPrefab, Is.Not.Null, context);
             Assert.That(
                 skill.vfx.secondaryPrefab.GetComponentInChildren<LayeredExplosionEffect>(true),

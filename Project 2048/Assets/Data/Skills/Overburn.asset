@@ -81,7 +81,22 @@ MonoBehaviour:
     localOffset: {x: 0, y: 0, z: 0}
     autoDestroySeconds: 1.25
   vfxDefinition:
-    cues: []
+    cues:
+    - trigger: 0
+      prefab: {fileID: 8199688406765548039, guid: a44606620703a36458795961c00ca290, type: 3}
+      spawnAt:
+        actor: 1
+        socket: 0
+        localOffset: {x: 0, y: 0.75, z: 0}
+      useDestination: 0
+      destination:
+        actor: 0
+        socket: 0
+        localOffset: {x: 0, y: 0, z: 0}
+      delaySeconds: 0
+      scale: 0.4
+      tint: {r: 1, g: 1, b: 1, a: 1}
+      lifetimeOverride: 1.35
   vfx:
     family: 15
     primarySprite: {fileID: 4075805401734562376, guid: 8706594fbcd1d15458a647aac2cde4cd, type: 3}

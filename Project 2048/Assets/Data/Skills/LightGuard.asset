@@ -18,7 +18,7 @@ MonoBehaviour:
   effectKind: 2
   damageStatSource: 0
   cost: 20
-  power: 60
+  power: 40
   targetAttackStageModifier: 0
   targetDefenseStageModifier: 0
   selfDefenseStageModifier: 0

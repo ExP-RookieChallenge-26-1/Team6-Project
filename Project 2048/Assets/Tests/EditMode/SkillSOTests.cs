@@ -50,6 +50,9 @@ namespace Project2048.Tests
             var afterglowSave = skills["afterglow-save"];
             var cleanseHand = skills["cleanse-hand"];
             var blackCorrosion = skills["black-corrosion"];
+            var lightShot = skills["light-shot"];
+            var lowStance = skills["low-stance"];
+            var lightGuard = skills["light-guard"];
 
             Assert.That(fireball.skillName, Is.EqualTo("\uD654\uC5FC\uAD6C"));
             Assert.That(fireball.cost, Is.EqualTo(20));
@@ -72,12 +75,15 @@ namespace Project2048.Tests
             Assert.That(overburn.ResolveEffectKind(), Is.EqualTo(SkillEffectKind.OverburnAttack));
             Assert.That(overburn.extraPowerPerConsumedCost, Is.EqualTo(1));
             Assert.That(afterglowSave.cost, Is.EqualTo(10));
-            Assert.That(afterglowSave.nextCostGainModifier, Is.EqualTo(20));
+            Assert.That(afterglowSave.nextCostGainModifier, Is.EqualTo(15));
             Assert.That(afterglowSave.maxCostCarry, Is.Zero);
             Assert.That(cleanseHand.cost, Is.EqualTo(10));
             Assert.That(cleanseHand.costRefund, Is.EqualTo(10));
             Assert.That(blackCorrosion.cost, Is.EqualTo(20));
             Assert.That(blackCorrosion.nextCostGainModifier, Is.EqualTo(-10));
+            Assert.That(lightShot.power, Is.EqualTo(60));
+            Assert.That(lowStance.power, Is.EqualTo(20));
+            Assert.That(lightGuard.power, Is.EqualTo(40));
 
             var expectedCosts = new System.Collections.Generic.Dictionary<string, int>
             {
@@ -260,8 +266,6 @@ namespace Project2048.Tests
             {
                 "light-shot",
                 "low-stance",
-                "flash",
-                "gather-light",
             }));
         }
 

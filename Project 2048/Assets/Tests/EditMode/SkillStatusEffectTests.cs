@@ -106,8 +106,8 @@ namespace Project2048.Tests
             Assert.That(enemy.IsTaunted, Is.True);
             Assert.That(enemy.AttackModifier, Is.EqualTo(2));
 
-            executor.Execute(CreateSkill("afterglow-save", SkillType.Defense, SkillEffectKind.CostCarry, nextCostGainModifier: 20), player, enemy, new DamageCalculator(new System.Random(1)));
-            Assert.That(player.ApplyAndConsumeNextTurnCostGainModifiers(7), Is.EqualTo(27));
+            executor.Execute(CreateSkill("afterglow-save", SkillType.Defense, SkillEffectKind.CostCarry, nextCostGainModifier: 15), player, enemy, new DamageCalculator(new System.Random(1)));
+            Assert.That(player.ApplyAndConsumeNextTurnCostGainModifiers(7), Is.EqualTo(22));
 
             var board = new Board2048Manager();
             board.SetBoardState(

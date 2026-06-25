@@ -70,9 +70,9 @@ MonoBehaviour:
       useParticleColor: 1
       particleColor: {r: 1, g: 1, b: 1, a: 1}
       lifetimeSeconds: 0.55
-      burstCount: 22
-      startSpeed: 0.8
-      startSize: 0.16
+      burstCount: 18
+      startSpeed: 0.669
+      startSize: 0.112
       swirl: 0
     volumeScale: 1
     minPitch: 1
@@ -80,38 +80,6 @@ MonoBehaviour:
     sfxDelaySeconds: 0
     localOffset: {x: 0, y: 0, z: 0}
     autoDestroySeconds: 1.25
-  vfxDefinition:
-    cues:
-    - trigger: 0
-      prefab: {fileID: 756328571287768908, guid: d6c612ca12e9ae34d903714e8fc4f81e, type: 3}
-      spawnAt:
-        actor: 0
-        socket: 4
-        localOffset: {x: 0, y: -0.31, z: 0}
-      useDestination: 1
-      destination:
-        actor: 1
-        socket: 1
-        localOffset: {x: 0, y: 0.18, z: 0}
-      delaySeconds: 0
-      scale: 0.5050505
-      tint: {r: 0, g: 0, b: 0, a: 0}
-      lifetimeOverride: 0.62
-    - trigger: 0
-      prefab: {fileID: 7161162770210762178, guid: a7eee696b46a1a04dbeee1a0474b2d5b, type: 3}
-      spawnAt:
-        actor: 0
-        socket: 4
-        localOffset: {x: 0, y: -0.31, z: 0}
-      useDestination: 0
-      destination:
-        actor: 0
-        socket: 0
-        localOffset: {x: 0, y: 0, z: 0}
-      delaySeconds: 0
-      scale: 1
-      tint: {r: 0, g: 0, b: 0, a: 0}
-      lifetimeOverride: 0.55
   vfx:
     family: 1
     primarySprite: {fileID: -5841461961332769897, guid: c526ac82a64380a43b5831f2189e6477, type: 3}
@@ -132,7 +100,7 @@ MonoBehaviour:
   vfxFamily: 1
   vfxPrimaryColor: {r: 1, g: 1, b: 1, a: 1}
   vfxSecondaryColor: {r: 1, g: 1, b: 1, a: 1}
-  vfxScale: 1
-  vfxIntensity: 1
+  vfxScale: 0.7
+  vfxIntensity: 0.8
   vfxRepeatCount: 1
-  description: 
+  description: ""

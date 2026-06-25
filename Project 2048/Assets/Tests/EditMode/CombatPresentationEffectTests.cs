@@ -1808,6 +1808,36 @@ namespace Project2048.Tests
         }
 
         [Test]
+        public void CombatWorldSpriteView_SlashArcSource_UsesAuthoredPlayerFrontOffset()
+        {
+            var viewObject = CreateOwnedGameObject("WorldSpriteView");
+            var view = viewObject.AddComponent<CombatWorldSpriteView>();
+            var source = CreateOwnedGameObject("Source").transform;
+            var target = CreateOwnedGameObject("Target").transform;
+            var slash = CreateSkill("quick-stab", SkillType.Attack, cost: 0, power: 40);
+            source.position = new Vector3(-1f, 0f, 0f);
+            target.position = new Vector3(1f, 0f, 0f);
+            slash.vfx = CreateOwnedVfxTuning(SkillVfxFamily.SlashArc);
+            slash.vfx.localOffset = new Vector3(0f, 0.22f, 0f);
+
+            var method = typeof(CombatWorldSpriteView).GetMethod(
+                "ResolveSlashSkillSourcePosition",
+                System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+
+            Assert.That(method, Is.Not.Null);
+            var playerCast = (Vector3)method.Invoke(view, new object[] { slash, source, target });
+            Assert.That(playerCast.x, Is.EqualTo(source.position.x + 0.68f).Within(0.001f));
+            Assert.That(playerCast.y, Is.EqualTo(source.position.y + 0.22f).Within(0.001f));
+
+            source.position = new Vector3(1f, 0f, 0f);
+            target.position = new Vector3(-1f, 0f, 0f);
+
+            var enemyCast = (Vector3)method.Invoke(view, new object[] { slash, source, target });
+            Assert.That(enemyCast.x, Is.EqualTo(source.position.x - 0.68f).Within(0.001f));
+            Assert.That(enemyCast.y, Is.EqualTo(source.position.y + 0.22f).Within(0.001f));
+        }
+
+        [Test]
         public void CombatWorldSpriteView_LightProjectilePreview_UsesProfileDesignTimeArt()
         {
             var viewObject = CreateOwnedGameObject("WorldSpriteView");

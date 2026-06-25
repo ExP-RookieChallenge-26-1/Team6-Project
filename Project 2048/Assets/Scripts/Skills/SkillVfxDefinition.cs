@@ -10,6 +10,9 @@ namespace Project2048.Skills
 
         public bool HasAnyCue => cues != null && cues.Any(c => c != null && c.HasPrefab);
 
+        public bool HasCuesFor(SkillVfxTrigger trigger) =>
+            cues != null && cues.Any(c => c != null && c.HasPrefab && c.trigger == trigger);
+
         public System.Collections.Generic.IEnumerable<SkillVfxCue> CuesFor(SkillVfxTrigger trigger)
         {
             if (cues == null) yield break;

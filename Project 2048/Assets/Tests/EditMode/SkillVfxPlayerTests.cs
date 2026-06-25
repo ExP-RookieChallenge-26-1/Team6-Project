@@ -290,5 +290,52 @@ namespace Project2048.Tests
             Object.DestroyImmediate(runnerGo);
             Object.DestroyImmediate(caster.gameObject);
         }
+
+        // CastPoint = 랜턴 머즐. 비주얼 센터에서 타깃 쪽으로 facing 반영 → 적이 같은 스킬을 써도 자동 좌우 반전.
+        [Test]
+        public void CastPointSocket_FiresFromLanternMuzzle_FacingTarget()
+        {
+            var left = MakeUnitSprite("L", new Vector3(-2, 0, 0));
+            var right = MakeUnitSprite("R", new Vector3(2, 0, 0));
+            var endpoint = new VfxEndpoint { actor = VfxActorRef.Caster, socket = VfxSocket.CastPoint };
+
+            // caster=left, target=right → 머즐이 오른쪽(+0.34)으로.
+            var fromLeft = SkillVfxPlayer.ResolveEndpointWorldPosition(
+                endpoint, new SkillVfxContext(left.transform, right.transform, SkillVfxTrigger.Activate));
+            // caster=right, target=left → 같은 데이터, 머즐이 왼쪽(-0.34)으로 미러링.
+            var fromRight = SkillVfxPlayer.ResolveEndpointWorldPosition(
+                endpoint, new SkillVfxContext(right.transform, left.transform, SkillVfxTrigger.Activate));
+
+            Assert.That(fromLeft.x, Is.EqualTo(left.bounds.center.x + 0.34f).Within(0.001f));
+            Assert.That(fromLeft.y, Is.EqualTo(left.bounds.center.y + 0.36f).Within(0.001f));
+            Assert.That(fromRight.x, Is.EqualTo(right.bounds.center.x - 0.34f).Within(0.001f));
+
+            Object.DestroyImmediate(left.gameObject);
+            Object.DestroyImmediate(right.gameObject);
+        }
+
+        [Test]
+        public void AnchorProvider_CastPointTransform_OverridesMuzzleFallback()
+        {
+            var caster = MakeUnitSprite("C", new Vector3(-2, 0, 0));
+            var target = MakeUnitSprite("T", new Vector3(2, 0, 0));
+            var provider = caster.gameObject.AddComponent<CombatVfxAnchorProvider>();
+            var muzzle = new GameObject("Muzzle").transform;
+            muzzle.SetParent(caster.transform, false);
+            muzzle.position = new Vector3(-1.5f, 0.5f, 0f);
+            provider.castPoint = muzzle;
+
+            var endpoint = new VfxEndpoint { actor = VfxActorRef.Caster, socket = VfxSocket.CastPoint };
+            var pos = SkillVfxPlayer.ResolveEndpointWorldPosition(
+                endpoint, new SkillVfxContext(caster.transform, target.transform, SkillVfxTrigger.Activate));
+
+            // 명시 소켓 우선 → 머즐 폴백 대신 castPoint Transform 위치 사용.
+            Assert.That(pos.x, Is.EqualTo(muzzle.position.x).Within(0.001f));
+            Assert.That(pos.y, Is.EqualTo(muzzle.position.y).Within(0.001f));
+
+            Object.DestroyImmediate(muzzle.gameObject);
+            Object.DestroyImmediate(caster.gameObject);
+            Object.DestroyImmediate(target.gameObject);
+        }
     }
 }

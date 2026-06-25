@@ -38,6 +38,11 @@ namespace Project2048.Presentation
         public static VfxActorRef OppositeActor(VfxActorRef actor) =>
             actor == VfxActorRef.Caster ? VfxActorRef.PrimaryTarget : VfxActorRef.Caster;
 
+        // 랜턴 머즐 기본 오프셋(앵커 비주얼 센터 기준, facing 반영).
+        // CombatWorldSpriteView의 LanternMuzzleLocalX/Y와 동일값 — 프로바이더 castPoint 미지정 시 폴백.
+        private const float DefaultCastPointLocalX = 0.34f;
+        private const float DefaultCastPointLocalY = 0.36f;
+
         public static Vector3 ResolveEndpointWorldPosition(VfxEndpoint endpoint, SkillVfxContext ctx)
         {
             var anchor = ctx.ResolveActor(endpoint.actor);
@@ -46,14 +51,33 @@ namespace Project2048.Presentation
                 return endpoint.localOffset;
             }
 
-            var basePos = ResolveSocketWorldPosition(anchor, endpoint.socket);
+            // 발사 방향 기준이 되는 상대 액터(시전자의 머즐은 주대상 쪽을 향한다).
+            var facingTarget = ctx.ResolveActor(OppositeActor(endpoint.actor));
+            var basePos = ResolveSocketWorldPosition(anchor, endpoint.socket, facingTarget);
             return basePos + anchor.TransformVector(endpoint.localOffset);
         }
 
-        private static Vector3 ResolveSocketWorldPosition(Transform anchor, VfxSocket socket)
+        private static Vector3 ResolveSocketWorldPosition(Transform anchor, VfxSocket socket, Transform facingTarget)
         {
-            // Step 5에서 CombatVfxAnchorProvider가 명시 소켓을 우선 제공한다. 여기서는 스프라이트 bounds 폴백.
-            if (socket == VfxSocket.Root || !TryResolveRendererBounds(anchor, out var bounds))
+            // 1) 캐릭터에 명시 소켓(손/입/무기 머즐)이 있으면 최우선.
+            var provider = anchor.GetComponentInParent<CombatVfxAnchorProvider>();
+            if (provider != null && provider.TryGetSocket(socket, out var socketTransform))
+            {
+                return socketTransform.position;
+            }
+
+            var hasBounds = TryResolveRendererBounds(anchor, out var bounds);
+            var center = hasBounds ? bounds.center : anchor.position;
+
+            // 2) CastPoint = 랜턴 머즐: 비주얼 센터에서 타깃 쪽으로 facing 반영한 오프셋.
+            if (socket == VfxSocket.CastPoint)
+            {
+                var facingSign = ResolveFacingSign(anchor, facingTarget);
+                return center + new Vector3(DefaultCastPointLocalX * facingSign, DefaultCastPointLocalY, 0f);
+            }
+
+            // 3) Root는 앵커 원점, 그 외는 bounds 기반(Feet/Body/Head, HitPoint는 몸통 중심).
+            if (socket == VfxSocket.Root || !hasBounds)
             {
                 return anchor.position;
             }
@@ -62,10 +86,20 @@ namespace Project2048.Presentation
             {
                 VfxSocket.Feet => bounds.min.y,
                 VfxSocket.Head => bounds.max.y,
-                // Body / CastPoint / HitPoint 는 소켓 미설정 시 몸통 중심으로 폴백.
-                _ => bounds.center.y,
+                _ => bounds.center.y, // Body / HitPoint
             };
             return new Vector3(bounds.center.x, y, bounds.center.z);
+        }
+
+        // 시전자가 타깃을 바라보는 방향(+1 오른쪽 / -1 왼쪽). CombatWorldSpriteView.ResolveAttackFacingSign과 동일 규칙.
+        private static float ResolveFacingSign(Transform anchor, Transform facingTarget)
+        {
+            if (anchor == null || facingTarget == null)
+            {
+                return 1f;
+            }
+
+            return anchor.position.x <= facingTarget.position.x ? 1f : -1f;
         }
 
         private static bool TryResolveRendererBounds(Transform anchor, out Bounds bounds)

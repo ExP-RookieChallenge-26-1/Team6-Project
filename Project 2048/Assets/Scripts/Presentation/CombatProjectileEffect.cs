@@ -24,6 +24,9 @@ namespace Project2048.Presentation
         private bool launched;
         private bool impacted;
 
+        // 투사체가 실제로 도착(임팩트)한 순간 발생. Runner가 이 시점에 Impact 트리거 큐를 재생한다.
+        public event System.Action Impacted;
+
         public float TravelSeconds => Mathf.Max(0.05f, travelSeconds);
 
         public float EstimatedLifetimeSeconds => TravelSeconds + Mathf.Max(0f, impactLifetimeSeconds);
@@ -121,6 +124,8 @@ namespace Project2048.Presentation
             PlayParticles(impactParticles);
             StopVisualEffects(ResolveTravelVisualEffects());
             PlayVisualEffects(impactVisualEffects);
+
+            Impacted?.Invoke();
 
             if (impactLifetimeSeconds > 0f)
             {

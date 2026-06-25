@@ -236,6 +236,131 @@ namespace Project2048.Tests
         }
 
         [Test]
+        public void ResolveEndpoint_MirrorsLocalOffsetXWithCastDirection()
+        {
+            var left = MakeUnitSprite("Left", new Vector3(-2, 0, 0));
+            var right = MakeUnitSprite("Right", new Vector3(2, 0, 0));
+            var endpoint = new VfxEndpoint
+            {
+                actor = VfxActorRef.Caster,
+                socket = VfxSocket.Body,
+                localOffset = new Vector3(0.5f, 0f, 0f),
+                mirrorOffsetXWithCastDirection = true,
+            };
+
+            var fromLeft = SkillVfxPlayer.ResolveEndpointWorldPosition(
+                endpoint, new SkillVfxContext(left.transform, right.transform, SkillVfxTrigger.Activate));
+            var fromRight = SkillVfxPlayer.ResolveEndpointWorldPosition(
+                endpoint, new SkillVfxContext(right.transform, left.transform, SkillVfxTrigger.Activate));
+
+            Assert.That(fromLeft.x, Is.EqualTo(left.bounds.center.x + 0.5f).Within(0.001f));
+            Assert.That(fromRight.x, Is.EqualTo(right.bounds.center.x - 0.5f).Within(0.001f));
+
+            Object.DestroyImmediate(left.gameObject);
+            Object.DestroyImmediate(right.gameObject);
+        }
+
+        [Test]
+        public void ResolveEndpoint_MissingActor_FallsBackToLocalOffset()
+        {
+            var caster = MakeUnitSprite("Caster", Vector3.zero);
+            var endpoint = new VfxEndpoint
+            {
+                actor = VfxActorRef.PrimaryTarget,
+                socket = VfxSocket.Body,
+                localOffset = new Vector3(0.25f, 0.5f, 0f),
+                mirrorOffsetXWithCastDirection = true,
+            };
+
+            var pos = SkillVfxPlayer.ResolveEndpointWorldPosition(
+                endpoint, new SkillVfxContext(caster.transform, null, SkillVfxTrigger.Activate));
+
+            Assert.That(pos.x, Is.EqualTo(0.25f).Within(0.001f));
+            Assert.That(pos.y, Is.EqualTo(0.5f).Within(0.001f));
+
+            Object.DestroyImmediate(caster.gameObject);
+        }
+
+        [Test]
+        public void Play_VisualFlip_UsesVisualRootAndLeavesSpawnRootScale()
+        {
+            var left = MakeUnitSprite("Left", new Vector3(-2, 0, 0));
+            var right = MakeUnitSprite("Right", new Vector3(2, 0, 0));
+            var prefab = new GameObject("FlipFx");
+            var visual = new GameObject("Visual");
+            visual.transform.SetParent(prefab.transform, false);
+            var visualRoot = prefab.AddComponent<SkillVfxVisualRoot>();
+            visualRoot.visualRoot = visual.transform;
+            var def = new SkillVfxDefinition
+            {
+                cues = new[]
+                {
+                    new SkillVfxCue
+                    {
+                        trigger = SkillVfxTrigger.Activate,
+                        prefab = prefab,
+                        spawnAt = new VfxEndpoint { actor = VfxActorRef.Caster, socket = VfxSocket.Body },
+                        flipMode = VfxFlipMode.CasterToTarget,
+                        authoredFacing = VfxAuthoredFacing.Right,
+                    },
+                },
+            };
+
+            var asPlayer = SkillVfxPlayer.Play(
+                def, new SkillVfxContext(left.transform, right.transform, SkillVfxTrigger.Activate), null, false);
+            var asEnemy = SkillVfxPlayer.Play(
+                def, new SkillVfxContext(right.transform, left.transform, SkillVfxTrigger.Activate), null, false);
+
+            Assert.That(asPlayer[0].transform.localScale.x, Is.EqualTo(1f).Within(0.001f));
+            Assert.That(asEnemy[0].transform.localScale.x, Is.EqualTo(1f).Within(0.001f));
+            Assert.That(asPlayer[0].transform.Find("Visual").localScale.x, Is.EqualTo(1f).Within(0.001f));
+            Assert.That(asEnemy[0].transform.Find("Visual").localScale.x, Is.EqualTo(-1f).Within(0.001f));
+
+            foreach (var go in asPlayer) Object.DestroyImmediate(go);
+            foreach (var go in asEnemy) Object.DestroyImmediate(go);
+            Object.DestroyImmediate(prefab);
+            Object.DestroyImmediate(left.gameObject);
+            Object.DestroyImmediate(right.gameObject);
+        }
+
+        [Test]
+        public void Play_FollowSpawnActor_AttachesSpawnedCueToSpawnActor()
+        {
+            var caster = MakeUnitSprite("Caster", Vector3.zero);
+            var targetUnit = MakeUnitSprite("Target", new Vector3(2, 0, 0));
+            var prefab = new GameObject("AttachedFx");
+            var parent = new GameObject("WorldVfxParent");
+            var def = new SkillVfxDefinition
+            {
+                cues = new[]
+                {
+                    new SkillVfxCue
+                    {
+                        trigger = SkillVfxTrigger.Activate,
+                        prefab = prefab,
+                        spawnAt = new VfxEndpoint { actor = VfxActorRef.Caster, socket = VfxSocket.Body },
+                        attachMode = VfxAttachMode.FollowSpawnActor,
+                    },
+                },
+            };
+
+            var spawned = SkillVfxPlayer.Play(
+                def,
+                new SkillVfxContext(caster.transform, targetUnit.transform, SkillVfxTrigger.Activate),
+                parent.transform,
+                false);
+
+            Assert.That(spawned.Count, Is.EqualTo(1));
+            Assert.That(spawned[0].transform.parent, Is.EqualTo(caster.transform));
+
+            foreach (var go in spawned) Object.DestroyImmediate(go);
+            Object.DestroyImmediate(parent);
+            Object.DestroyImmediate(prefab);
+            Object.DestroyImmediate(caster.gameObject);
+            Object.DestroyImmediate(targetUnit.gameObject);
+        }
+
+        [Test]
         public void SkillVfxRunner_DelayedCue_SpawnsSynchronouslyInEditMode_AndReportsPlayed()
         {
             var caster = MakeUnitSprite("C", Vector3.zero);

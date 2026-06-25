@@ -15,5 +15,7 @@ namespace Project2048.Skills
         public VfxSocket socket;
 
         public Vector3 localOffset;
+
+        public bool mirrorOffsetXWithCastDirection;
     }
 }

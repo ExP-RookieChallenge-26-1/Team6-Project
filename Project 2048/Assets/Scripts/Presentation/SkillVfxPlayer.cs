@@ -46,15 +46,27 @@ namespace Project2048.Presentation
         public static Vector3 ResolveEndpointWorldPosition(VfxEndpoint endpoint, SkillVfxContext ctx)
         {
             var anchor = ctx.ResolveActor(endpoint.actor);
+            var localOffset = ResolveEndpointLocalOffset(endpoint, ctx);
             if (anchor == null)
             {
-                return endpoint.localOffset;
+                return localOffset;
             }
 
             // 발사 방향 기준이 되는 상대 액터(시전자의 머즐은 주대상 쪽을 향한다).
             var facingTarget = ctx.ResolveActor(OppositeActor(endpoint.actor));
             var basePos = ResolveSocketWorldPosition(anchor, endpoint.socket, facingTarget);
-            return basePos + anchor.TransformVector(endpoint.localOffset);
+            return basePos + anchor.TransformVector(localOffset);
+        }
+
+        private static Vector3 ResolveEndpointLocalOffset(VfxEndpoint endpoint, SkillVfxContext ctx)
+        {
+            var localOffset = endpoint.localOffset;
+            if (endpoint.mirrorOffsetXWithCastDirection)
+            {
+                localOffset.x *= ResolveCastDirectionSign(ctx);
+            }
+
+            return localOffset;
         }
 
         private static Vector3 ResolveSocketWorldPosition(Transform anchor, VfxSocket socket, Transform facingTarget)
@@ -100,6 +112,45 @@ namespace Project2048.Presentation
             }
 
             return anchor.position.x <= facingTarget.position.x ? 1f : -1f;
+        }
+
+        private static float ResolveCastDirectionSign(SkillVfxContext ctx)
+        {
+            if (ctx.caster == null || ctx.primaryTarget == null)
+            {
+                return 1f;
+            }
+
+            var deltaX = ctx.primaryTarget.position.x - ctx.caster.position.x;
+            if (Mathf.Abs(deltaX) <= 0.0001f)
+            {
+                return 1f;
+            }
+
+            return deltaX > 0f ? 1f : -1f;
+        }
+
+        private static float ResolveCueDirectionSign(
+            SkillVfxCue cue,
+            SkillVfxContext ctx,
+            Vector3 spawnPos,
+            Vector3? destinationPos)
+        {
+            if (cue == null)
+            {
+                return 1f;
+            }
+
+            if (cue.flipMode == VfxFlipMode.SpawnToDestination && destinationPos.HasValue)
+            {
+                var deltaX = destinationPos.Value.x - spawnPos.x;
+                if (Mathf.Abs(deltaX) > 0.0001f)
+                {
+                    return deltaX > 0f ? 1f : -1f;
+                }
+            }
+
+            return ResolveCastDirectionSign(ctx);
         }
 
         // 슬래시/빔류: 출발·도착 두 점의 중점에 놓고 +X축을 출발→도착 방향으로 회전.
@@ -189,15 +240,23 @@ namespace Project2048.Presentation
 
             ApplyTint(instance, cue.tint);
 
+            Vector3? destinationPos = null;
+            if (cue.useDestination)
+            {
+                destinationPos = ResolveEndpointWorldPosition(cue.destination, ctx);
+            }
+
+            ApplyVisualFlip(instance, cue, ctx, pos, destinationPos);
+            ApplyAttachMode(instance, cue, ctx);
+
             var projectile = instance.GetComponentInChildren<CombatProjectileEffect>(true);
             if (projectile != null)
             {
                 // 프로젝타일은 스스로 이동/임팩트 파티클을 재생한다.
-                if (cue.useDestination)
+                if (destinationPos.HasValue)
                 {
                     // 도착점이 명시됨 → 그 월드 좌표로 직행.
-                    var destinationPos = ResolveEndpointWorldPosition(cue.destination, ctx);
-                    projectile.LaunchBetweenWorldPositions(pos, destinationPos);
+                    projectile.LaunchBetweenWorldPositions(pos, destinationPos.Value);
                 }
                 else
                 {
@@ -206,11 +265,10 @@ namespace Project2048.Presentation
                     projectile.LaunchFromWorldPosition(pos, targetAnchor, Vector3.zero);
                 }
             }
-            else if (cue.useDestination)
+            else if (destinationPos.HasValue)
             {
                 // 이동하지 않는 빔/스팬(슬래시류): 두 점의 중점에 놓고 출발→도착 방향으로 회전.
-                var destinationPos = ResolveEndpointWorldPosition(cue.destination, ctx);
-                PlaceAsBeam(instance.transform, pos, destinationPos);
+                PlaceAsBeam(instance.transform, pos, destinationPos.Value);
                 PlayVisuals(instance);
             }
             else
@@ -225,6 +283,58 @@ namespace Project2048.Presentation
             }
 
             return instance;
+        }
+
+        private static void ApplyAttachMode(GameObject instance, SkillVfxCue cue, SkillVfxContext ctx)
+        {
+            if (instance == null || cue == null || cue.attachMode != VfxAttachMode.FollowSpawnActor)
+            {
+                return;
+            }
+
+            var spawnActor = ctx.ResolveActor(cue.spawnAt.actor);
+            if (spawnActor != null)
+            {
+                instance.transform.SetParent(spawnActor, true);
+            }
+        }
+
+        private static void ApplyVisualFlip(
+            GameObject instance,
+            SkillVfxCue cue,
+            SkillVfxContext ctx,
+            Vector3 spawnPos,
+            Vector3? destinationPos)
+        {
+            if (instance == null || cue == null || cue.flipMode == VfxFlipMode.None)
+            {
+                return;
+            }
+
+            var directionSign = ResolveCueDirectionSign(cue, ctx, spawnPos, destinationPos);
+            var authoredSign = cue.authoredFacing == VfxAuthoredFacing.Left ? -1f : 1f;
+            var targetSign = directionSign * authoredSign;
+            var visual = ResolveVisualTransform(instance);
+            var scale = visual.localScale;
+            var magnitude = Mathf.Abs(scale.x);
+            if (magnitude <= 0.0001f)
+            {
+                magnitude = 1f;
+            }
+
+            scale.x = magnitude * targetSign;
+            visual.localScale = scale;
+        }
+
+        private static Transform ResolveVisualTransform(GameObject instance)
+        {
+            var visualRoot = instance.GetComponentInChildren<SkillVfxVisualRoot>(true);
+            if (visualRoot != null)
+            {
+                return visualRoot.VisualTransform;
+            }
+
+            return instance.transform;
         }
 
         public static void ApplyTint(GameObject instance, Color tint)

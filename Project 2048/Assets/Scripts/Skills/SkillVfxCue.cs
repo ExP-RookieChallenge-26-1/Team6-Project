@@ -18,6 +18,10 @@ namespace Project2048.Skills
         public bool useDestination;
         public VfxEndpoint destination;
 
+        public VfxFlipMode flipMode;
+        public VfxAuthoredFacing authoredFacing;
+        public VfxAttachMode attachMode;
+
         [Min(0f)] public float delaySeconds;        // 연출 잔상용만. 판정 동기화에는 쓰지 말 것(→ Impact 트리거 사용).
         [Min(0f)] public float scale = 1f;           // 1 = use prefab as-is
         public Color tint = Color.clear;             // clear = use prefab as-is

@@ -62,8 +62,8 @@ namespace Project2048.Skills
             var totalHpDamage = 0;
             for (var hitIndex = 0; hitIndex < hitCount; hitIndex++)
             {
-                var targetShieldBeforeHit = target.ShieldHp;
-                var shouldRetaliate = targetShieldBeforeHit > 0 && target.ThornRetaliationDamage > 0;
+                var targetThornShieldBeforeHit = target.ThornRetaliationShieldHp;
+                var shouldRetaliate = targetThornShieldBeforeHit > 0 && target.ThornRetaliationDamage > 0;
                 var retaliationDamage = target.ThornRetaliationDamage;
                 var damage = damageCalculator.CalculatePlayerSkillDamageFromStat(
                     attackStat,
@@ -76,14 +76,14 @@ namespace Project2048.Skills
                 if (shouldRetaliate && retaliationDamage > 0)
                 {
                     player.TakeDamage(damageCalculator.CalculateMoveDamage(
-                        targetShieldBeforeHit,
+                        targetThornShieldBeforeHit,
                         retaliationDamage,
                         player.EffectiveDefensePower,
                         target.CriticalChance,
                         target.CriticalDamageMultiplier));
                 }
 
-                if (target.IsDead)
+                if (player.IsDead || target.IsDead)
                 {
                     break;
                 }

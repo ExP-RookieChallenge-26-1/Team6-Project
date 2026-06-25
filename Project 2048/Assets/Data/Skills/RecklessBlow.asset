@@ -105,4 +105,4 @@ MonoBehaviour:
   vfxScale: 0.95
   vfxIntensity: 1.1
   vfxRepeatCount: 1
-  description:
+  description: 몸을 사리지 않고 불꽃을 두른 강타로 적에게 위력 110 피해를 준다. 반동으로 다음 플레이어 턴의 보드 이동 횟수가 2 감소한다.

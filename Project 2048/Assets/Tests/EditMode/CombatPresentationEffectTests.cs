@@ -2332,6 +2332,7 @@ namespace Project2048.Tests
             var verticalBeamPrefab = CreateOwnedGameObject("GatherLightVerticalBeamPrefab");
             var attackSprite = CreateOwnedSprite("SkillVfx_AttackImpact");
             var bottomPivotPlayerSprite = CreateOwnedSprite("BottomPivotPlayerSprite", Vector2.zero);
+            var centerPivotEnemySprite = CreateOwnedSprite("CenterPivotEnemySprite");
             projectilePrefab.AddComponent<CombatProjectileEffect>();
             charge.effectKind = SkillEffectKind.ChargeAttack;
             charge.chargedPower = 120;
@@ -2344,6 +2345,7 @@ namespace Project2048.Tests
             };
             playerData.startingSkills = new List<SkillSO> { charge };
             playerRenderer.sprite = bottomPivotPlayerSprite;
+            enemyRenderer.sprite = centerPivotEnemySprite;
             playerRenderer.transform.localPosition = new Vector3(-1f, 0f, 0f);
             enemyRenderer.transform.localPosition = new Vector3(1f, 0f, 0f);
             enemyRenderer.sortingOrder = 5;
@@ -2383,7 +2385,10 @@ namespace Project2048.Tests
             // 랜턴 발사 트레일도 제거되고, 화면에 남는 빔은 버티컬 빔뿐이다.
             Assert.That(viewObject.transform.Find("LightBeamLanternLaunchTrail"), Is.Null);
             Assert.That(GameObject.Find("GatherLightProjectilePrefab(Clone)"), Is.Not.Null);
-            Assert.That(viewObject.transform.Find("GatherLightVerticalBeam"), Is.Not.Null);
+            var verticalBeam = viewObject.transform.Find("GatherLightVerticalBeam");
+            Assert.That(verticalBeam, Is.Not.Null);
+            Assert.That(verticalBeam.position.x, Is.EqualTo(enemyRenderer.bounds.center.x).Within(0.001f));
+            Assert.That(verticalBeam.position.y, Is.EqualTo(enemyRenderer.bounds.min.y).Within(0.001f));
         }
 
         [Test]
@@ -2396,7 +2401,9 @@ namespace Project2048.Tests
             var projectilePrefab = CreateOwnedGameObject("GatherLightProjectilePrefab");
             var verticalBeamPrefab = CreateOwnedGameObject("GatherLightVerticalBeamPrefab");
             var gatherLight = CreateSkill("gather-light", SkillType.Attack, cost: 0, power: 0);
+            var centerPivotEnemySprite = CreateOwnedSprite("PreviewCenterPivotEnemySprite");
             projectilePrefab.AddComponent<CombatProjectileEffect>();
+            enemyRenderer.sprite = centerPivotEnemySprite;
             playerRenderer.transform.localPosition = new Vector3(-1f, 0f, 0f);
             enemyRenderer.transform.localPosition = new Vector3(1f, 0f, 0f);
             enemyRenderer.sortingOrder = 4;
@@ -2420,7 +2427,10 @@ namespace Project2048.Tests
             // 수평 빔/랜턴 트레일 대신 홀리 파이어볼 투사체를 발사하고, 버티컬 빔이 남는다.
             Assert.That(viewObject.transform.Find("LightBeamLanternLaunchTrail"), Is.Null);
             Assert.That(GameObject.Find("GatherLightProjectilePrefab(Clone)"), Is.Not.Null);
-            Assert.That(viewObject.transform.Find("GatherLightVerticalBeam"), Is.Not.Null);
+            var verticalBeam = viewObject.transform.Find("GatherLightVerticalBeam");
+            Assert.That(verticalBeam, Is.Not.Null);
+            Assert.That(verticalBeam.position.x, Is.EqualTo(enemyRenderer.bounds.center.x).Within(0.001f));
+            Assert.That(verticalBeam.position.y, Is.EqualTo(enemyRenderer.bounds.min.y).Within(0.001f));
             Assert.That(playerRenderer.transform.Find("GatherLightBuffParticles"), Is.Not.Null);
         }
 
@@ -2516,6 +2526,38 @@ namespace Project2048.Tests
             Assert.That(targetCue, Is.Not.Null);
             Assert.That(casterCue.position.x, Is.EqualTo(enemyRenderer.transform.position.x).Within(0.001f));
             Assert.That(targetCue.position.x, Is.EqualTo(playerRenderer.transform.position.x).Within(0.001f));
+        }
+
+        [Test]
+        public void CombatWorldSpriteView_EnemyBuffAuraMagicCircle_MirrorsTowardPlayer()
+        {
+            var viewObject = CreateOwnedGameObject("WorldSpriteView");
+            var view = viewObject.AddComponent<CombatWorldSpriteView>();
+            var playerRenderer = CreateOwnedGameObject("PlayerSprite").AddComponent<SpriteRenderer>();
+            var enemyRenderer = CreateOwnedGameObject("EnemySprite").AddComponent<SpriteRenderer>();
+            var magicCircleSprite = CreateOwnedSprite("EnemyBuffMagicCircleSprite");
+            var buff = CreateSkill("enemy-buff", SkillType.Defense, cost: 0, power: 0);
+            playerRenderer.transform.position = new Vector3(-1.5f, 0f, 0f);
+            enemyRenderer.transform.position = new Vector3(1.25f, 0f, 0f);
+            buff.vfxFamily = SkillVfxFamily.BuffAura;
+            buff.vfxPrimaryColor = new Color(0.45f, 0.55f, 0.67f, 1f);
+
+            SetPrivateField(view, "playerRenderer", playerRenderer);
+            SetPrivateField(view, "enemyRenderer", enemyRenderer);
+            SetPrivateField(view, "magicCircleEffectSprite", magicCircleSprite);
+
+            var method = typeof(CombatWorldSpriteView).GetMethod(
+                "PlayEnemySkillPresentationEffect",
+                System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+            var lifetime = (float)method.Invoke(view, new object[] { buff, false });
+
+            var magicCircleArt = enemyRenderer.transform.Find("BuffAuraEffectArt")?.GetComponent<SpriteRenderer>();
+            Assert.That(lifetime, Is.GreaterThan(0f));
+            Assert.That(magicCircleArt, Is.Not.Null);
+            Assert.That(magicCircleArt.transform.localPosition.x, Is.LessThan(0f));
+            Assert.That(magicCircleArt.transform.position.x, Is.LessThan(enemyRenderer.transform.position.x));
+            Assert.That((magicCircleArt.transform.localRotation * Vector3.right).x, Is.LessThan(0f));
+            Assert.That(playerRenderer.transform.Find("BuffAuraEffectArt"), Is.Null);
         }
 
         [Test]

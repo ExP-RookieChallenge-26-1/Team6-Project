@@ -104,5 +104,6 @@ namespace Project2048.Combat
         public int Cost { get; set; }
         public int Power { get; set; }
         public bool RequiresEnemyTarget { get; set; }
+        public bool CanExecute { get; set; } = true;
     }
 }

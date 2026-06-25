@@ -40,7 +40,24 @@ Questions to answer:
 
 <!-- What level of testing is expected -->
 
-(To be filled by the team)
+### Combat Outcome Regression Tests
+
+When a player-initiated action can damage the player during its own resolution
+(for example enemy thorn retaliation during `CombatManager.RequestUseSkill` or a
+pending charged attack in `ResolvePendingChargedAttack`), resolve defeat before
+victory.
+
+Good case:
+- `RequestUseSkill_PlayerKilledByEnemyThornGuard_RaisesDefeat` asserts
+  `OnCombatDefeat` fires, `OnCombatVictory` does not fire, and the phase becomes
+  `CombatPhase.Defeat`.
+- `ChargeAttack_PlayerKilledByEnemyThornGuard_RaisesDefeat` covers the same
+  contract for automatic next-turn charged attacks.
+
+Bad case:
+- Checking only `CheckVictory()` after player skill execution leaves the combat
+  in action flow even when `PlayerCombatController.IsDead` is already true, or
+  can turn a simultaneous death into victory.
 
 ---
 

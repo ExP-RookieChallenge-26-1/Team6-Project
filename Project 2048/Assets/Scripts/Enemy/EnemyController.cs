@@ -24,6 +24,7 @@ namespace Project2048.Enemy
         public int Block { get; private set; }
         public int ShieldHp => Block;
         public int ThornRetaliationDamage { get; private set; }
+        public int ThornRetaliationShieldHp { get; private set; }
         public int AttackModifier { get; private set; }
         public int CriticalStage { get; private set; }
         public float CriticalChance => Mathf.Clamp01(baseCriticalChance + CriticalStage * CriticalChancePerStage);
@@ -69,6 +70,7 @@ namespace Project2048.Enemy
             DefenseModifier = 0;
             Block = 0;
             ThornRetaliationDamage = 0;
+            ThornRetaliationShieldHp = 0;
             AttackModifier = 0;
             baseCriticalChance = Mathf.Clamp01(data.criticalChance);
             CriticalStage = 0;
@@ -120,11 +122,9 @@ namespace Project2048.Enemy
             var piercingDamage = Mathf.CeilToInt(damage * Mathf.Clamp01(shieldPiercePercent));
             var blockableDamage = Mathf.Max(0, damage - piercingDamage);
             var remainingDamage = piercingDamage + Mathf.Max(0, blockableDamage - Block);
+            var shieldDamage = Mathf.Min(Block, blockableDamage);
             Block = Mathf.Max(0, Block - blockableDamage);
-            if (Block == 0)
-            {
-                ThornRetaliationDamage = 0;
-            }
+            ReduceThornRetaliationShield(shieldDamage);
             var hpBefore = CurrentHp;
             var lethalBeforeEndure = CurrentHp > 0 && CurrentHp - remainingDamage <= 0;
             var minimumHp = EndureTurns > 0 && CurrentHp > 0 ? 1 : 0;
@@ -225,7 +225,8 @@ namespace Project2048.Enemy
             }
 
             Block += shieldHp;
-            ThornRetaliationDamage = Mathf.Max(0, retaliationDamage);
+            ThornRetaliationShieldHp = Mathf.Max(ThornRetaliationShieldHp, shieldHp);
+            ThornRetaliationDamage = Mathf.Max(ThornRetaliationDamage, retaliationDamage);
             OnBlockChanged?.Invoke(Block);
         }
 
@@ -246,14 +247,35 @@ namespace Project2048.Enemy
 
         public void ClearBlock()
         {
-            if (Block == 0)
+            if (Block == 0 && ThornRetaliationDamage == 0 && ThornRetaliationShieldHp == 0)
             {
                 return;
             }
 
             Block = 0;
             ThornRetaliationDamage = 0;
+            ThornRetaliationShieldHp = 0;
             OnBlockChanged?.Invoke(Block);
+        }
+
+        private void ReduceThornRetaliationShield(int shieldDamage)
+        {
+            if (ThornRetaliationShieldHp <= 0)
+            {
+                if (Block == 0)
+                {
+                    ThornRetaliationDamage = 0;
+                }
+
+                return;
+            }
+
+            ThornRetaliationShieldHp = Mathf.Max(0, ThornRetaliationShieldHp - Mathf.Max(0, shieldDamage));
+            if (Block == 0 || ThornRetaliationShieldHp == 0)
+            {
+                ThornRetaliationDamage = 0;
+                ThornRetaliationShieldHp = 0;
+            }
         }
 
         public void SetIntent(EnemyIntent intent)

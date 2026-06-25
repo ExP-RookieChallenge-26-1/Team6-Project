@@ -218,6 +218,11 @@ namespace Project2048.Combat
                     BoardManager = BoardManager,
                 });
             player.RecordUsedSkill(skill);
+            if (CheckDefeat())
+            {
+                return true;
+            }
+
             if (!CheckVictory())
             {
                 if (skill.ResolveEffectKind() == SkillEffectKind.Taunt)
@@ -406,6 +411,11 @@ namespace Project2048.Combat
             lastActionDescription = $"{skillName} 발동";
             OnPlayerChargedAttackReleased?.Invoke(skillName, chargedPower, target);
             skillExecutor.ExecuteChargedAttack(player, target, chargedPower, statSource, damageCalculator);
+            if (CheckDefeat())
+            {
+                return true;
+            }
+
             NotifyStateChanged();
             return CheckVictory();
         }
@@ -1171,6 +1181,7 @@ namespace Project2048.Combat
                     Cost = skill.cost,
                     Power = skill.power,
                     RequiresEnemyTarget = skill.RequiresEnemyTarget,
+                    CanExecute = !player.IsSkillSealed(skill) && skillExecutor.CanExecute(skill, player),
                 });
             }
 

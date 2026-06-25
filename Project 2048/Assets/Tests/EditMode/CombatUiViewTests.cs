@@ -356,11 +356,82 @@ namespace Project2048.Tests
                 enemyDataList = new System.Collections.Generic.List<EnemySO> { enemyData },
                 boardMoveCount = 1,
             });
+            manager.BoardManager.SetBoardState(
+                new[,]
+                {
+                    { 0, 0, 0, 0 },
+                    { 0, 0, 0, 0 },
+                    { 0, 0, 0, 0 },
+                    { 0, 0, 0, 0 },
+                },
+                0);
             manager.ResolveBoardPhase();
             view.Initialize(bootstrap);
 
             Assert.That(skillButtons[0].interactable, Is.False);
             Assert.That(skillLabels[0].text, Does.Contain("부족"));
+        }
+
+        [Test]
+        public void ActionPhase_DisablesChargeSkillButtonWhileChargeIsPending()
+        {
+            var viewObject = CreateOwnedGameObject("CombatView");
+            var view = viewObject.AddComponent<CombatUiView>();
+            var boardPanel = CreateOwnedGameObject("BoardPanel");
+            var actionPanel = CreateOwnedGameObject("ActionPanel");
+            var skillsView = CreateOwnedGameObject("SkillsView");
+            boardPanel.transform.SetParent(viewObject.transform, false);
+            actionPanel.transform.SetParent(viewObject.transform, false);
+            skillsView.transform.SetParent(actionPanel.transform, false);
+
+            var costText = CreateTextChild(actionPanel.transform, "CostText");
+            var skillsHeader = CreateTextChild(skillsView.transform, "SkillsHeader");
+            var skillButtons = new System.Collections.Generic.List<Button>();
+            var skillLabels = new System.Collections.Generic.List<TMPro.TMP_Text>();
+            for (var index = 0; index < PlayerCombatController.MaxEquippedSkillSlots; index++)
+            {
+                var button = CreateButtonChild(skillsView.transform, $"SkillButton{index + 1}");
+                var label = CreateTextChild(button.transform, "Label");
+                skillButtons.Add(button);
+                skillLabels.Add(label);
+            }
+
+            SetPrivateField(view, "boardPanel", boardPanel);
+            SetPrivateField(view, "actionPanel", actionPanel);
+            SetPrivateField(view, "skillsView", skillsView);
+            SetPrivateField(view, "costText", costText);
+            SetPrivateField(view, "skillsHeaderText", skillsHeader);
+            SetPrivateField(view, "skillTierButtons", skillButtons);
+            SetPrivateField(view, "skillTierLabels", skillLabels);
+
+            var manager = CreateOwnedGameObject("CombatManager").AddComponent<CombatManager>();
+            var player = CreateOwnedGameObject("Player").AddComponent<PlayerCombatController>();
+            var enemy = CreateOwnedGameObject("Enemy").AddComponent<EnemyController>();
+            var bootstrap = CreateOwnedGameObject("Bootstrap").AddComponent<PrototypeCombatBootstrap>();
+            SetPrivateField(bootstrap, "combatManager", manager);
+
+            var charge = CreateSkill("gather-light", "Gather Light", SkillType.Attack, cost: 0, power: 0);
+            charge.effectKind = SkillEffectKind.ChargeAttack;
+            charge.chargedPower = 40;
+            var playerData = CreatePlayerData(20, 2, charge);
+            var enemyData = CreateEnemyData("Enemy", 100, 0);
+
+            manager.SetCombatants(player, new[] { enemy });
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new System.Collections.Generic.List<EnemySO> { enemyData },
+                boardMoveCount = 1,
+            });
+            manager.ResolveBoardPhase();
+            view.Initialize(bootstrap);
+
+            Assert.That(skillButtons[0].interactable, Is.True);
+
+            Assert.That(manager.RequestUseSkillById("gather-light"), Is.True);
+
+            Assert.That(skillButtons[0].interactable, Is.False);
+            Assert.That(manager.GetSnapshot().Skills[0].CanExecute, Is.False);
         }
 
         [UnityTest]

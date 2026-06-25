@@ -20015,13 +20015,6 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
-    "to_type": "AiProfileLabel",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
-    "from_class": "CombatUiView",
     "to_type": "Application",
     "relation_type": "uses",
     "strength": 1
@@ -20247,6 +20240,13 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
     "to_type": "ClearHpDamageTrailAnimations",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
+    "from_class": "CombatUiView",
+    "to_type": "ClearIntentIcons",
     "relation_type": "uses",
     "strength": 1
   },
@@ -20491,21 +20491,14 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
-    "to_type": "FormatEnemyHeader",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
-    "from_class": "CombatUiView",
-    "to_type": "FormatEnemyHp",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
-    "from_class": "CombatUiView",
     "to_type": "FormatIntents",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
+    "from_class": "CombatUiView",
+    "to_type": "FormatPlayerHp",
     "relation_type": "uses",
     "strength": 1
   },
@@ -20982,6 +20975,13 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
     "to_type": "RenderEnemyTurnPanel",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
+    "from_class": "CombatUiView",
+    "to_type": "RenderIntentIcons",
     "relation_type": "uses",
     "strength": 1
   },
@@ -25167,6 +25167,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
     "from_class": "CombatWorldSpriteView",
+    "to_type": "EnemyHp",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
+    "from_class": "CombatWorldSpriteView",
     "to_type": "EnemySprite",
     "relation_type": "uses",
     "strength": 1
@@ -25203,6 +25210,13 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
     "from_class": "CombatWorldSpriteView",
     "to_type": "EventSystems",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "FindTransformByName",
     "relation_type": "uses",
     "strength": 1
   },
@@ -25258,6 +25272,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
     "from_class": "CombatWorldSpriteView",
+    "to_type": "GetComponentInParent",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
+    "from_class": "CombatWorldSpriteView",
     "to_type": "GetComponentsInChildren",
     "relation_type": "uses",
     "strength": 1
@@ -25265,7 +25286,21 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
     "from_class": "CombatWorldSpriteView",
+    "to_type": "GetWorldCorners",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
+    "from_class": "CombatWorldSpriteView",
     "to_type": "HasValue",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "HP",
     "relation_type": "uses",
     "strength": 1
   },
@@ -25357,6 +25392,13 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
     "from_class": "CombatWorldSpriteView",
     "to_type": "Max",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "MinValue",
     "relation_type": "uses",
     "strength": 1
   },
@@ -25510,6 +25552,27 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
     "from_class": "CombatWorldSpriteView",
+    "to_type": "RectTransform",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "RectTransformUtility",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "RenderMode",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
+    "from_class": "CombatWorldSpriteView",
     "to_type": "ReparentRendererForWorldShake",
     "relation_type": "uses",
     "strength": 1
@@ -25573,6 +25636,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
     "from_class": "CombatWorldSpriteView",
+    "to_type": "ResolveEnemyGroundWorldY",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
+    "from_class": "CombatWorldSpriteView",
     "to_type": "ResolveEnemySprite",
     "relation_type": "uses",
     "strength": 1
@@ -25595,13 +25665,6 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
     "from_class": "CombatWorldSpriteView",
     "to_type": "ResolvePlayerAnchor",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
-    "from_class": "CombatWorldSpriteView",
-    "to_type": "ResolvePlayerFeetWorldY",
     "relation_type": "uses",
     "strength": 1
   },
@@ -25637,6 +25700,20 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
     "from_class": "CombatWorldSpriteView",
     "to_type": "Rigidbody2D",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "ScreenSpaceOverlay",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "ScreenToWorldPoint",
     "relation_type": "uses",
     "strength": 1
   },
@@ -25812,6 +25889,13 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
     "from_class": "CombatWorldSpriteView",
     "to_type": "WorldShake",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
+    "from_class": "CombatWorldSpriteView",
+    "to_type": "WorldToScreenPoint",
     "relation_type": "uses",
     "strength": 1
   },

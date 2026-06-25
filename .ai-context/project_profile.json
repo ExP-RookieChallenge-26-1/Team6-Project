@@ -80,10 +80,10 @@
       "referenced_type_count": 168
     },
     {
-      "class_name": "RewardManager",
-      "file_id": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
-      "relation_count": 164,
-      "referenced_type_count": 161
+      "class_name": "CombatWorldSpriteView",
+      "file_id": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.Enemy.cs",
+      "relation_count": 167,
+      "referenced_type_count": 162
     }
   ],
   "high_risk_classes": [

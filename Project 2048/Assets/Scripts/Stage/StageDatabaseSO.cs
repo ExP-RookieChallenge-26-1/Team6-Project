@@ -39,22 +39,57 @@ namespace Project2048.Stage
             return stageIndex >= TotalStageCount;
         }
 
-        private List<StageSO> ResolveStages(int stageIndex, out int stageIndexInFloor)
+        public static bool TryResolveStagePosition(
+            int stageIndex,
+            out StageFloor floor,
+            out int stageNumberInFloor)
         {
-            stageIndexInFloor = stageIndex - 1;
+            floor = StageFloor.Upper;
+            stageNumberInFloor = 0;
+
+            if (stageIndex < 1 || stageIndex > TotalStageCount)
+            {
+                return false;
+            }
+
             if (stageIndex <= UpperStageCount)
             {
-                return upperStages;
+                stageNumberInFloor = stageIndex;
+                return true;
             }
 
-            stageIndexInFloor = stageIndex - UpperStageCount - 1;
             if (stageIndex <= UpperStageCount + MiddleStageCount)
             {
-                return middleStages;
+                floor = StageFloor.Middle;
+                stageNumberInFloor = stageIndex - UpperStageCount;
+                return true;
             }
 
-            stageIndexInFloor = stageIndex - UpperStageCount - MiddleStageCount - 1;
-            return lowerStages;
+            floor = StageFloor.Lower;
+            stageNumberInFloor = stageIndex - UpperStageCount - MiddleStageCount;
+            return true;
+        }
+
+        private List<StageSO> ResolveStages(int stageIndex, out int stageIndexInFloor)
+        {
+            if (!TryResolveStagePosition(stageIndex, out var floor, out var stageNumberInFloor))
+            {
+                stageIndexInFloor = -1;
+                return null;
+            }
+
+            stageIndexInFloor = stageNumberInFloor - 1;
+            switch (floor)
+            {
+                case StageFloor.Upper:
+                    return upperStages;
+                case StageFloor.Middle:
+                    return middleStages;
+                case StageFloor.Lower:
+                    return lowerStages;
+                default:
+                    return null;
+            }
         }
 
         private void OnValidate()

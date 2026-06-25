@@ -48,5 +48,35 @@ namespace Project2048.Tests
             Assert.That(lowerStage.Floor, Is.EqualTo(StageFloor.Lower));
             Assert.That(lowerStage.StageNumberInFloor, Is.EqualTo(1));
         }
+
+        [TestCase(1, StageFloor.Upper, 1)]
+        [TestCase(6, StageFloor.Upper, 6)]
+        [TestCase(7, StageFloor.Middle, 1)]
+        [TestCase(14, StageFloor.Middle, 8)]
+        [TestCase(15, StageFloor.Lower, 1)]
+        [TestCase(20, StageFloor.Lower, 6)]
+        public void TryResolveStagePosition_MapsGlobalIndexToFloorPosition(
+            int stageIndex,
+            StageFloor expectedFloor,
+            int expectedStageNumber)
+        {
+            var result = StageDatabaseSO.TryResolveStagePosition(
+                stageIndex,
+                out var floor,
+                out var stageNumber);
+
+            Assert.That(result, Is.True);
+            Assert.That(floor, Is.EqualTo(expectedFloor));
+            Assert.That(stageNumber, Is.EqualTo(expectedStageNumber));
+        }
+
+        [TestCase(0)]
+        [TestCase(21)]
+        public void TryResolveStagePosition_RejectsOutOfRangeIndex(int stageIndex)
+        {
+            Assert.That(
+                StageDatabaseSO.TryResolveStagePosition(stageIndex, out _, out _),
+                Is.False);
+        }
     }
 }

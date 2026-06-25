@@ -16,5 +16,5 @@ MonoBehaviour:
   stageNumberInFloor: 4
   presentationBackgroundSprite: {fileID: 7476000714314097135, guid: 163faba4684ccae4d9db68d43ba672a9, type: 3}
   enemyCandidates:
-  - {fileID: 11400000, guid: aa9c8c7cdce3cbd4b9c2f022330851db, type: 2}
+  - {fileID: 11400000, guid: bc9047c32898cce46b25ea3f49d79a0c, type: 2}
   enemyData: {fileID: 0}

@@ -46,6 +46,7 @@ namespace Project2048.Audio
                 audioSource.clip = clip;
             }
 
+            Project2048AudioPreferences.ApplySavedVolumes(audioSettings);
             if (!audioSource.isPlaying)
             {
                 audioSource.Play();

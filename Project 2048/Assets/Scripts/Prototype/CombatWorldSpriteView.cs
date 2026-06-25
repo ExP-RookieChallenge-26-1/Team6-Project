@@ -94,6 +94,7 @@ namespace Project2048.Prototype
         private const string LayeredPlayerActorRootName = "player_all";
         private const string LayeredPlayerBodyRendererName = "Body";
         private static readonly int PlayerAttackStateHash = Animator.StringToHash("Attack");
+        private static readonly int PlayerAttackedStateHash = Animator.StringToHash("Attacked");
         private static readonly Vector3 ShieldArtLeftLocalOffset = new(ShieldArtLeftOffsetX, 0f, 0f);
         private static readonly Vector3 PlayerFrontAttackArtLocalOffset = new(0.68f, 0.16f, 0f);
         private static readonly Vector3 PlayerRightMagicCircleLocalOffset = new(0.76f, 0.1f, 0f);
@@ -132,6 +133,7 @@ namespace Project2048.Prototype
         [SerializeField] private Sprite middleStageBackgroundSprite;
         [SerializeField] private Sprite lowerStageBackgroundSprite;
         [SerializeField] private Sprite rewardMothSprite;
+        [SerializeField, Min(0.01f)] private float rewardMothScaleMultiplier = 0.45f;
         [SerializeField] private Sprite attackEffectSprite;
         [SerializeField] private Sprite hitEffectSprite;
         [SerializeField] private Sprite shieldEffectSprite;
@@ -167,6 +169,9 @@ namespace Project2048.Prototype
         private StageSO currentStage;
         private CombatSnapshot snapshot;
         private bool showingRewardPresenter;
+        private Coroutine rewardPresenterDelayCoroutine;
+        private GameObject activeEnemyBattleActor;
+        private EnemySO activeEnemyBattleActorData;
         private Material runtimeShieldImpactParticleMaterial;
         private Material runtimeChargedLightBeamMaterial;
         private FollowingShieldVfx activePlayerShieldArtVfx;
@@ -233,6 +238,7 @@ namespace Project2048.Prototype
             ClearEnemyDeathFade();
             ClearEnemyAppearIntro();
             ClearEnemyAttackLunge();
+            ClearActiveEnemyBattleActor();
             ClearPlayerCloseRangeAttackLunge();
             ClearPlayerAttackAnimationSpeed();
             ClearEnemyDirectAnimation();
@@ -1010,7 +1016,14 @@ namespace Project2048.Prototype
                 return;
             }
 
-            enemyRenderer.sprite = ResolveEnemySprite(currentSnapshot);
+            if (!TryRenderEnemyBattleActor(currentSnapshot))
+            {
+                enemyRenderer.enabled = true;
+                enemyRenderer.sprite = ResolveEnemySprite(currentSnapshot);
+            }
+
+            AlignActiveEnemyFeetToGround();
+
             var enemyIsAlive = !(currentSnapshot?.Enemies?.FirstOrDefault()?.IsDead ?? false);
             if (enemyIsAlive && enemyDeathFadeCoroutine == null && enemyAppearIntroCoroutine == null)
             {
@@ -1026,6 +1039,49 @@ namespace Project2048.Prototype
             }
 
             ResolveMissingReferences();
+            if (ShouldDelayRewardPresenterUntilEnemyHidden())
+            {
+                if (rewardPresenterDelayCoroutine != null)
+                {
+                    StopCoroutine(rewardPresenterDelayCoroutine);
+                }
+
+                rewardPresenterDelayCoroutine = StartCoroutine(ShowRewardPresenterAfterEnemyHiddenRoutine());
+                return;
+            }
+
+            ShowRewardPresenterNow();
+        }
+
+        private bool ShouldDelayRewardPresenterUntilEnemyHidden()
+        {
+            return Application.isPlaying &&
+                   isActiveAndEnabled &&
+                   enemyRenderer != null &&
+                   (snapshot?.Enemies?.FirstOrDefault()?.IsDead ?? false) &&
+                   enemyRenderer.color.a > 0.001f;
+        }
+
+        private IEnumerator ShowRewardPresenterAfterEnemyHiddenRoutine()
+        {
+            while (enemyDeathFadeDelayCoroutine != null || enemyDeathFadeCoroutine != null)
+            {
+                yield return null;
+            }
+
+            rewardPresenterDelayCoroutine = null;
+            if (rewardMothSprite == null ||
+                rewardManager?.HasUnclaimedReward != true ||
+                !(snapshot?.Enemies?.FirstOrDefault()?.IsDead ?? false))
+            {
+                yield break;
+            }
+
+            ShowRewardPresenterNow();
+        }
+
+        private void ShowRewardPresenterNow()
+        {
             showingRewardPresenter = true;
             if (enemyRenderer == null)
             {
@@ -1037,12 +1093,20 @@ namespace Project2048.Prototype
             ClearEnemyAppearIntro(restoreTransform: false);
             ClearEnemyAttackLunge(restoreTransform: false);
             delayEnemyDeathFadeUntilRealtime = 0f;
+            ClearActiveEnemyBattleActor();
             TryRenderRewardPresenter();
         }
 
         private void HideRewardPresenter()
         {
+            if (rewardPresenterDelayCoroutine != null)
+            {
+                StopCoroutine(rewardPresenterDelayCoroutine);
+                rewardPresenterDelayCoroutine = null;
+            }
+
             showingRewardPresenter = false;
+            RestoreEnemyRendererTransform();
         }
 
         private bool TryRenderRewardPresenter()
@@ -1053,9 +1117,67 @@ namespace Project2048.Prototype
             }
 
             ClearEnemyDirectAnimation(restoreCurrentSprite: false);
+            ClearActiveEnemyBattleActor();
+            enemyRenderer.enabled = true;
+            enemyRenderer.transform.localScale = enemyRendererRestLocalScale * Mathf.Max(0.01f, rewardMothScaleMultiplier);
             enemyRenderer.sprite = rewardMothSprite;
             SetEnemyRendererAlpha(1f);
             return true;
+        }
+
+        private bool TryRenderEnemyBattleActor(CombatSnapshot currentSnapshot)
+        {
+            var enemyData = ResolveEnemyData(currentSnapshot);
+            if (enemyData == null || enemyData.BattlePrefab == null)
+            {
+                ClearActiveEnemyBattleActor();
+                return false;
+            }
+
+            if (activeEnemyBattleActorData != enemyData || activeEnemyBattleActor == null)
+            {
+                ClearActiveEnemyBattleActor();
+                activeEnemyBattleActor = Instantiate(enemyData.BattlePrefab, enemyRenderer.transform);
+                activeEnemyBattleActor.name = enemyData.BattlePrefab.name;
+                activeEnemyBattleActor.transform.localPosition = Vector3.zero;
+                activeEnemyBattleActor.transform.localRotation = Quaternion.identity;
+                activeEnemyBattleActor.transform.localScale = Vector3.one;
+                activeEnemyBattleActorData = enemyData;
+            }
+
+            activeEnemyBattleActor.SetActive(true);
+            enemyRenderer.sprite = null;
+            enemyRenderer.enabled = false;
+            enemyAnimator = activeEnemyBattleActor.GetComponentInChildren<Animator>(includeInactive: true);
+            if (enemyAnimator == null)
+            {
+                enemyAnimator = activeEnemyBattleActor.AddComponent<Animator>();
+            }
+
+            return true;
+        }
+
+        private void ClearActiveEnemyBattleActor()
+        {
+            if (activeEnemyBattleActor != null)
+            {
+                if (Application.isPlaying)
+                {
+                    Destroy(activeEnemyBattleActor);
+                }
+                else
+                {
+                    DestroyImmediate(activeEnemyBattleActor);
+                }
+            }
+
+            activeEnemyBattleActor = null;
+            activeEnemyBattleActorData = null;
+            if (enemyRenderer != null)
+            {
+                enemyRenderer.enabled = true;
+                enemyAnimator = enemyRenderer.GetComponent<Animator>();
+            }
         }
 
         private void PlayPlayerActionEffectIfNeeded(bool playerWasHit)
@@ -1065,10 +1187,27 @@ namespace Project2048.Prototype
                 return;
             }
 
+            PlayPlayerAttackedAnimation();
             PlayCombatantActionEffect(
                 combatManager?.Player?.Data?.FindActionEffect(CombatActionIds.Hit),
                 ResolvePlayerAnchor() ?? transform,
                 playerAnimator);
+        }
+
+        private void PlayPlayerAttackedAnimation()
+        {
+            if (playerAnimator == null)
+            {
+                return;
+            }
+
+            if (playerAnimator.runtimeAnimatorController == null ||
+                !playerAnimator.HasState(0, PlayerAttackedStateHash))
+            {
+                return;
+            }
+
+            playerAnimator.Play(PlayerAttackedStateHash, 0, 0f);
         }
 
         private void PlayEnemyAttackEffectIfNeeded(bool enemyUsedAttack, EnemyIntent enemyAttackIntent)
@@ -4777,6 +4916,11 @@ namespace Project2048.Prototype
 
         private Sprite ResolveEnemySprite(CombatSnapshot currentSnapshot)
         {
+            return ResolveEnemyData(currentSnapshot)?.portrait;
+        }
+
+        private EnemySO ResolveEnemyData(CombatSnapshot currentSnapshot)
+        {
             var enemyIndex = currentSnapshot?.Enemies?.FirstOrDefault()?.EnemyIndex ?? 0;
             var enemies = combatManager?.Enemies;
             if (enemies == null || enemyIndex < 0 || enemyIndex >= enemies.Count)
@@ -4784,7 +4928,7 @@ namespace Project2048.Prototype
                 return null;
             }
 
-            return enemies[enemyIndex]?.Data?.portrait;
+            return enemies[enemyIndex]?.Data;
         }
 
 

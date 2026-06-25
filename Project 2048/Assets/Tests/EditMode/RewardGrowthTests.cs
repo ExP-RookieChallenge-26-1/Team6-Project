@@ -633,11 +633,13 @@ namespace Project2048.Tests
             var table = CreateRewardTable(reward);
             var enemyLocalPosition = new Vector3(1.5f, 2.25f, 0f);
             var rewardSpawnPosition = new Vector3(-0.75f, 1.25f, 0f);
+            var enemyLocalScale = new Vector3(2f, 2f, 1f);
 
             reward.rewardKind = RewardChoiceKind.TemporaryBoardMoveCount;
             reward.temporaryBoardMoveCountBonus = 2;
             enemyData.portrait = enemySprite;
             enemyRenderer.transform.localPosition = enemyLocalPosition;
+            enemyRenderer.transform.localScale = enemyLocalScale;
             SetPrivateField(view, "enemyRenderer", enemyRenderer);
             SetPrivateField(view, "rewardMothSprite", mothSprite);
             SetPrivateField(bootstrap, "combatManager", manager);
@@ -659,10 +661,60 @@ namespace Project2048.Tests
             Assert.That(enemyRenderer.sprite, Is.EqualTo(mothSprite));
             Assert.That(enemyRenderer.color.a, Is.EqualTo(1f).Within(0.001f));
             Assert.That(enemyRenderer.transform.localPosition, Is.EqualTo(rewardSpawnPosition));
+            Assert.That(enemyRenderer.transform.localScale.x, Is.LessThan(enemyLocalScale.x));
 
             rewardManager.ChooseReward(0, player);
 
             Assert.That(enemyRenderer.sprite, Is.EqualTo(enemySprite));
+            Assert.That(enemyRenderer.color.a, Is.EqualTo(1f).Within(0.001f));
+            Assert.That(enemyRenderer.transform.localScale, Is.EqualTo(enemyLocalScale));
+        }
+
+        [UnityTest]
+        public IEnumerator CombatWorldSpriteView_RewardChoices_WaitForEnemyDeathFadeBeforeMoth()
+        {
+            var viewObject = CreateOwnedGameObject("WorldSpriteView");
+            var view = viewObject.AddComponent<CombatWorldSpriteView>();
+            var enemyRenderer = CreateGameObject<SpriteRenderer>("EnemySprite");
+            var manager = CreateGameObject<CombatManager>("CombatManager");
+            var rewardManager = CreateGameObject<RewardManager>("RewardManager");
+            var player = CreateGameObject<PlayerCombatController>("Player");
+            var enemy = CreateGameObject<EnemyController>("Enemy");
+            var bootstrap = CreateGameObject<PrototypeCombatBootstrap>("Bootstrap");
+            var attack = CreateSkill("attack", SkillType.Attack, cost: 0, power: 99);
+            var playerData = CreatePlayerData(maxHp: 20, attackPower: 2);
+            var enemyData = CreateEnemyData(maxHp: 10, attackValue: 0);
+            var enemySprite = CreateSprite("Enemy");
+            var mothSprite = CreateSprite("RewardMoth");
+            var reward = CreateReward(healPercentOfMaxHp: 0.3f, extraBoardMoveCount: 1);
+            var table = CreateRewardTable(reward);
+
+            enemyData.portrait = enemySprite;
+            SetPrivateField(view, "enemyRenderer", enemyRenderer);
+            SetPrivateField(view, "rewardMothSprite", mothSprite);
+            SetPrivateField(bootstrap, "combatManager", manager);
+            SetPrivateField(bootstrap, "rewardManager", rewardManager);
+
+            manager.SetCombatants(player, new[] { enemy });
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new List<EnemySO> { enemyData },
+                boardMoveCount = 1,
+            });
+            manager.ResolveBoardPhase();
+            rewardManager.Initialize(new RunProgress(), table);
+            view.Initialize(bootstrap);
+
+            Assert.That(manager.RequestUseSkill(attack, enemy), Is.True);
+            rewardManager.OfferReward(new CombatResult(), player);
+
+            Assert.That(enemyRenderer.sprite, Is.EqualTo(enemySprite));
+            Assert.That(enemyRenderer.color.a, Is.GreaterThan(0.001f));
+
+            yield return new WaitForSecondsRealtime(CombatWorldSpriteView.EnemyDeathFadeDurationSeconds + 0.1f);
+
+            Assert.That(enemyRenderer.sprite, Is.EqualTo(mothSprite));
             Assert.That(enemyRenderer.color.a, Is.EqualTo(1f).Within(0.001f));
         }
 

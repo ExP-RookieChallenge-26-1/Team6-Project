@@ -7,9 +7,21 @@ namespace Project2048.Prototype
 {
     public class BoardCellView : MonoBehaviour
     {
+        private static readonly Color EmptyCellFixedColor = new(26f / 255f, 26f / 255f, 26f / 255f, 1f);
+        private static readonly int FaceColorId = Shader.PropertyToID("_FaceColor");
+
         [SerializeField] private Image background;
         [SerializeField] private TMP_Text valueText;
+        [SerializeField] private GameObject edge;
         [SerializeField] private GameObject obstacleMarker;
+
+        [Header("Tile Face HDR Bloom")]
+        [SerializeField] private int faceHdrStartValue = 8;
+        [SerializeField] private int maxTileValue = 2048;
+        [SerializeField] private float minFaceIntensity = 1f;
+        [SerializeField] private float maxFaceIntensity = 3f;
+        [SerializeField] private float minFaceAlpha = 0.9f;
+        [SerializeField] private float maxFaceAlpha = 1f;
 
         public Image Background => background;
         public TMP_Text ValueText => valueText;
@@ -17,54 +29,104 @@ namespace Project2048.Prototype
 
         private Coroutine mergePulseRoutine;
 
+        private void Awake()
+        {
+            ResolveEdge();
+        }
+
         public void SetValue(int value, Color emptyColor, Color filledColor, Color highlightColor, Color obstacleColor)
         {
+            ResolveEdge();
+            var hasValue = value > 0;
             if (valueText != null)
             {
-                if (value <= 0)
-                {
-                    valueText.text = string.Empty;
-                }
-                else
-                {
-                    valueText.text = value.ToString();
-                }
+                valueText.text = hasValue ? value.ToString() : string.Empty;
+                valueText.color = Color.white;
+                ApplyTextFace(hasValue ? value : 0);
             }
 
-            if (background == null)
+            if (edge != null)
             {
-                return;
+                edge.SetActive(hasValue);
             }
 
-            if (value < 0)
+            if (background != null)
             {
-                background.color = obstacleColor;
-            }
-            else if (value == 0)
-            {
-                background.color = emptyColor;
-            }
-            else if (value >= 64)
-            {
-                background.color = highlightColor;
-                if (valueText != null)
+                background.color = value switch
                 {
-                    valueText.color = Color.black;
-                }
-            }
-            else
-            {
-                background.color = filledColor;
-                if (valueText != null)
-                {
-                    valueText.color = Color.white;
-                }
+                    < 0 => obstacleColor,
+                    0 => EmptyCellFixedColor,
+                    _ => Color.black,
+                };
             }
 
             if (obstacleMarker != null)
             {
                 obstacleMarker.SetActive(value < 0);
             }
+        }
+
+        private void ResolveEdge()
+        {
+            if (edge != null)
+            {
+                return;
+            }
+
+            foreach (var rectTransform in GetComponentsInChildren<RectTransform>(true))
+            {
+                if (rectTransform != null && rectTransform.gameObject.name == "Edge")
+                {
+                    edge = rectTransform.gameObject;
+                    return;
+                }
+            }
+        }
+
+        private void ApplyTextFace(int value)
+        {
+            if (valueText == null)
+            {
+                return;
+            }
+
+            var material = valueText.fontMaterial;
+            if (material == null)
+            {
+                return;
+            }
+
+            material.SetColor(FaceColorId, GetFaceColor(value));
+        }
+
+        // 숫자가 클수록 face HDR 세기를 올려 흰 블룸이 비례해서 강해지게 함.
+        private Color GetFaceColor(int value)
+        {
+            if (value < faceHdrStartValue)
+            {
+                return Color.white;
+            }
+
+            var t = GetNormalizedValue(value, faceHdrStartValue, maxTileValue);
+            var intensity = Mathf.Lerp(minFaceIntensity, maxFaceIntensity, t);
+            var alpha = Mathf.Lerp(minFaceAlpha, maxFaceAlpha, t);
+            var color = Color.white * intensity;
+            color.a = alpha;
+            return color;
+        }
+
+        private static float GetNormalizedValue(int value, int start, int max)
+        {
+            if (max <= start)
+            {
+                return 1f;
+            }
+
+            var logStart = Mathf.Log(start, 2f);
+            var logMax = Mathf.Log(max, 2f);
+            var logValue = Mathf.Log(Mathf.Max(value, start), 2f);
+            var t = (logValue - logStart) / (logMax - logStart);
+            return Mathf.Clamp01(t);
         }
 
         public void PlayMergePulse()

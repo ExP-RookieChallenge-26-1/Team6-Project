@@ -23,4 +23,48 @@ MonoBehaviour:
   startingSkills:
   - {fileID: 11400000, guid: f4882f31e6dbe5d4a9bb1b51c44e2f03, type: 2}
   - {fileID: 11400000, guid: 00966bf157b01874e90775ed704b2b9b, type: 2}
-  actionEffects: []
+  actionEffects:
+  - actionId: hit
+    effect:
+      sfxClip: {fileID: 8300000, guid: 39c60786c3ee4fc45ba3f2a871121777, type: 3}
+      vfxPrefab: {fileID: 0}
+      animationClip: {fileID: 0}
+      particleEffect:
+        objectName:
+        particlePrefab: {fileID: 0}
+        particleMaterial: {fileID: 0}
+        useParticleColor: 0
+        particleColor: {r: 1, g: 1, b: 1, a: 1}
+        lifetimeSeconds: 0.8
+        burstCount: 16
+        startSpeed: 0.6
+        startSize: 0.12
+        swirl: 0
+      volumeScale: 1
+      minPitch: 1
+      maxPitch: 1
+      sfxDelaySeconds: 0
+      localOffset: {x: 0, y: 0, z: 0}
+      autoDestroySeconds: 1.25
+  - actionId: hit
+    effect:
+      sfxClip: {fileID: 8300000, guid: 70a53f1cbdd44c7395acabfa4783a24e, type: 3}
+      vfxPrefab: {fileID: 0}
+      animationClip: {fileID: 0}
+      particleEffect:
+        objectName:
+        particlePrefab: {fileID: 0}
+        particleMaterial: {fileID: 0}
+        useParticleColor: 0
+        particleColor: {r: 1, g: 1, b: 1, a: 1}
+        lifetimeSeconds: 0.8
+        burstCount: 16
+        startSpeed: 0.6
+        startSize: 0.12
+        swirl: 0
+      volumeScale: 1
+      minPitch: 1
+      maxPitch: 1
+      sfxDelaySeconds: 0
+      localOffset: {x: 0, y: 0, z: 0}
+      autoDestroySeconds: 1.25

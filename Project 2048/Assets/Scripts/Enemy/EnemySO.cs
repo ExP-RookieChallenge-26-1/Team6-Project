@@ -35,6 +35,7 @@ namespace Project2048.Enemy
         public int actionsPerTurn = 1;
         public List<SkillSO> skills = new();
         public Sprite portrait;
+        [SerializeField] private GameObject battlePrefab;
 
         [Header("애니메이션 (클립을 넣으면 전투 중 자동 재생, 비워두면 무시 — AnimatorController 불필요)")]
         [Tooltip("평상시 반복 재생. 임포트에서 Loop Time을 켠 클립을 권장.")]
@@ -96,6 +97,7 @@ namespace Project2048.Enemy
         }
 
         public bool HasMinimumSkillSlots => AssignedSkillCount >= MinEquippedSkillSlots;
+        public GameObject BattlePrefab => battlePrefab;
 
         public string GetAiProfileLabel()
         {

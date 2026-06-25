@@ -35,6 +35,98 @@ public class SettingPopup : MonoBehaviour
     private bool initialized;
     private bool wantsOpen;
 
+    public static SettingPopup CreateRuntime(Transform parent, Project2048AudioSettings settings = null)
+    {
+        var root = CreateRectObject("SettingPopup", parent);
+        root.SetActive(false);
+        var rootRect = root.GetComponent<RectTransform>();
+        rootRect.anchorMin = Vector2.zero;
+        rootRect.anchorMax = Vector2.one;
+        rootRect.offsetMin = Vector2.zero;
+        rootRect.offsetMax = Vector2.zero;
+
+        var backdropImage = root.AddComponent<Image>();
+        backdropImage.color = new Color(0f, 0f, 0f, 0.58f);
+        backdropImage.raycastTarget = true;
+        var backdropButton = root.AddComponent<Button>();
+        backdropButton.targetGraphic = backdropImage;
+
+        var panel = CreateRectObject("Panel", root.transform);
+        var panelRect = panel.GetComponent<RectTransform>();
+        panelRect.anchorMin = new Vector2(0.5f, 0.5f);
+        panelRect.anchorMax = new Vector2(0.5f, 0.5f);
+        panelRect.anchoredPosition = Vector2.zero;
+        panelRect.sizeDelta = new Vector2(640f, 430f);
+
+        var panelImage = panel.AddComponent<Image>();
+        panelImage.color = new Color(0.08f, 0.09f, 0.10f, 0.96f);
+        panelImage.raycastTarget = true;
+
+        var title = CreateRectObject("Title", panel.transform);
+        var titleRect = title.GetComponent<RectTransform>();
+        titleRect.anchorMin = new Vector2(0f, 1f);
+        titleRect.anchorMax = new Vector2(1f, 1f);
+        titleRect.anchoredPosition = new Vector2(0f, -54f);
+        titleRect.sizeDelta = new Vector2(-120f, 64f);
+
+        var titleText = title.AddComponent<TextMeshProUGUI>();
+        titleText.text = "OPTION";
+        titleText.fontSize = 34f;
+        titleText.color = Color.white;
+        titleText.alignment = TextAlignmentOptions.Center;
+        titleText.raycastTarget = false;
+
+        var closeObject = CreateRectObject("SettingQuitButton", panel.transform);
+        var closeRect = closeObject.GetComponent<RectTransform>();
+        closeRect.anchorMin = new Vector2(1f, 1f);
+        closeRect.anchorMax = new Vector2(1f, 1f);
+        closeRect.anchoredPosition = new Vector2(-42f, -42f);
+        closeRect.sizeDelta = new Vector2(54f, 54f);
+
+        var closeImage = closeObject.AddComponent<Image>();
+        closeImage.color = new Color(0.16f, 0.17f, 0.18f, 0.95f);
+        closeImage.raycastTarget = true;
+        var closeButton = closeObject.AddComponent<Button>();
+        closeButton.targetGraphic = closeImage;
+
+        var closeLabel = CreateRectObject("Label", closeObject.transform);
+        var closeLabelRect = closeLabel.GetComponent<RectTransform>();
+        closeLabelRect.anchorMin = Vector2.zero;
+        closeLabelRect.anchorMax = Vector2.one;
+        closeLabelRect.offsetMin = Vector2.zero;
+        closeLabelRect.offsetMax = Vector2.zero;
+
+        var closeText = closeLabel.AddComponent<TextMeshProUGUI>();
+        closeText.text = "X";
+        closeText.fontSize = 30f;
+        closeText.color = Color.white;
+        closeText.alignment = TextAlignmentOptions.Center;
+        closeText.raycastTarget = false;
+
+        var controls = CreateRectObject("VolumeControls", panel.transform);
+        var controlsRect = controls.GetComponent<RectTransform>();
+        controlsRect.anchorMin = new Vector2(0.5f, 0.5f);
+        controlsRect.anchorMax = new Vector2(0.5f, 0.5f);
+        controlsRect.anchoredPosition = new Vector2(0f, -22f);
+        controlsRect.sizeDelta = new Vector2(560f, 220f);
+
+        var layout = controls.AddComponent<VerticalLayoutGroup>();
+        layout.spacing = 10f;
+        layout.childAlignment = TextAnchor.MiddleCenter;
+        layout.childControlWidth = true;
+        layout.childControlHeight = true;
+        layout.childForceExpandWidth = true;
+        layout.childForceExpandHeight = false;
+
+        var popup = root.AddComponent<SettingPopup>();
+        popup.popupRoot = root;
+        popup.exitButton = closeButton;
+        popup.backgroundButton = backdropButton;
+        popup.audioSettings = settings;
+        popup.volumeControlsParent = controls.transform;
+        return popup;
+    }
+
     private void Awake()
     {
         InitializeIfNeeded();
@@ -51,6 +143,7 @@ public class SettingPopup : MonoBehaviour
         if (popupRoot != null)
         {
             popupRoot.SetActive(true);
+            popupRoot.transform.SetAsLastSibling();
         }
 
         Project2048AudioPreferences.ApplySavedVolumes(audioSettings);

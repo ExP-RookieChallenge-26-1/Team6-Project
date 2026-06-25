@@ -4,6 +4,7 @@ using System.Linq;
 using Project2048.Audio;
 using Project2048.Board2048;
 using Project2048.Combat;
+using Project2048.Core;
 using Project2048.Enemy;
 using Project2048.Presentation;
 using Project2048.Rewards;
@@ -11,6 +12,7 @@ using Project2048.Skills;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -93,8 +95,14 @@ namespace Project2048.Prototype
         [SerializeField] private GameObject resultOverlay;
         [SerializeField] private TMP_Text resultTitleText;
         [SerializeField] private TMP_Text resultDescriptionText;
+        [SerializeField] private Button pauseButton;
         [SerializeField] private Button restartButton;
         [SerializeField] private Button reloadSceneButton;
+
+        [Header("Settings")]
+        [SerializeField] private Button settingButton;
+        [SerializeField] private SettingPopup settingPopup;
+        [SerializeField] private ConfirmPopup confirmPopup;
 
         [Header("Reward overlay")]
         [SerializeField] private RewardManager rewardManager;
@@ -147,6 +155,8 @@ namespace Project2048.Prototype
         private readonly PrototypeCombatUiState uiState = new();
         private readonly PrototypeCombatAudioRouter audioRouter = new();
         private readonly List<SkillSnapshot> visibleSkills = new();
+        private readonly List<Image> intentIconSlots = new();
+        private RectTransform intentIconRow;
         private BoardTransition pendingBoardTransition;
         private Coroutine boardAnimationCoroutine;
         private Coroutine combatVfxCoroutine;
@@ -167,6 +177,9 @@ namespace Project2048.Prototype
 
         private void Awake()
         {
+            ResolveMissingReferences();
+            WireButtons();
+
             if (Application.isPlaying)
             {
                 HideRuntimeOverlays();
@@ -301,6 +314,9 @@ namespace Project2048.Prototype
 
             BindButton(restartButton, () => bootstrap?.RestartCombat());
             BindButton(reloadSceneButton, () => SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex));
+            BindButton(settingButton, OpenSettingPopup);
+            BindButton(pauseButton, OpenPauseConfirmPopup);
+            BindPauseButtonEventTrigger();
         }
 
         private void BindButton(Button button, System.Action handler)
@@ -310,6 +326,7 @@ namespace Project2048.Prototype
                 return;
             }
 
+            EnsureButtonRaycastable(button);
             button.onClick.RemoveAllListeners();
             var clickEmitter = button.GetComponent<ButtonClickAudioEmitter>();
             if (clickEmitter == null)
@@ -327,6 +344,44 @@ namespace Project2048.Prototype
                 }
                 Render();
             });
+        }
+
+        private static void EnsureButtonRaycastable(Button button)
+        {
+            if (button == null)
+            {
+                return;
+            }
+
+            button.interactable = true;
+            if (button.targetGraphic == null)
+            {
+                button.targetGraphic = button.GetComponent<Graphic>();
+            }
+
+            if (button.targetGraphic != null)
+            {
+                button.targetGraphic.raycastTarget = true;
+            }
+        }
+
+        private void BindPauseButtonEventTrigger()
+        {
+            if (pauseButton == null)
+            {
+                return;
+            }
+
+            var trigger = pauseButton.GetComponent<EventTrigger>();
+            if (trigger == null)
+            {
+                trigger = pauseButton.gameObject.AddComponent<EventTrigger>();
+            }
+
+            trigger.triggers.RemoveAll(entry => entry.eventID == EventTriggerType.PointerClick);
+            var clickEntry = new EventTrigger.Entry { eventID = EventTriggerType.PointerClick };
+            clickEntry.callback.AddListener(_ => OpenPauseConfirmPopup());
+            trigger.triggers.Add(clickEntry);
         }
 
         private void OnSkillSlotClicked(int slotIndex)
@@ -478,17 +533,11 @@ namespace Project2048.Prototype
             var enemyIsAlive = enemy != null && !enemy.IsDead;
             if (enemyNameText != null)
             {
-                var enemyStatusFallback = enemyHpText == null && enemy != null
-                    ? PrototypeCombatText.FormatEnemyHp(enemy.CurrentHp, enemy.MaxHp, enemy.Block)
-                    : null;
                 enemyNameText.enableAutoSizing = true;
                 enemyNameText.fontSizeMin = 18f;
                 enemyNameText.fontSizeMax = 32f;
                 enemyNameText.textWrappingMode = TextWrappingModes.Normal;
-                enemyNameText.text = PrototypeCombatText.FormatEnemyHeader(
-                    enemy?.DisplayName,
-                    enemy?.AiProfileLabel,
-                    enemyStatusFallback);
+                enemyNameText.text = enemy?.DisplayName ?? string.Empty;
             }
 
             if (intentBubble != null)
@@ -498,20 +547,42 @@ namespace Project2048.Prototype
                 var hasIntent = visibleIntents.Count > 0 && enemyIsAlive;
                 intentBubble.SetActive(hasIntent);
                 var primaryIntent = hasIntent ? visibleIntents[0] : null;
-                var intentIcon = ResolveIntentIcon(primaryIntent);
-                if (hasIntent && intentBubbleText != null)
-                {
-                    intentBubbleText.text = intentIcon != null
-                        ? string.Empty
-                        : PrototypeCombatText.FormatIntents(visibleIntents);
-                }
+                var useIcons = hasIntent && ResolveIntentIcon(primaryIntent) != null;
+                intentBubble.TryGetComponent<Image>(out var intentBubbleImage);
 
-                if (hasIntent && intentBubble.TryGetComponent<Image>(out var intentBubbleImage))
+                if (useIcons)
                 {
-                    intentBubbleImage.sprite = intentIcon;
-                    intentBubbleImage.preserveAspect = intentIcon != null;
-                    intentBubbleImage.type = Image.Type.Simple;
-                    intentBubbleImage.color = intentIcon != null ? Color.white : GetIntentBubbleColor(primaryIntent);
+                    // 인텐트가 여러 개면 아이콘을 가로로 나열해서 2번째 이후도 전부 보여준다.
+                    if (intentBubbleText != null)
+                    {
+                        intentBubbleText.text = string.Empty;
+                    }
+
+                    RenderIntentIcons(visibleIntents);
+
+                    if (intentBubbleImage != null)
+                    {
+                        // 아이콘은 row가 그리므로 버블 자체 이미지는 투명 배경으로 둔다.
+                        intentBubbleImage.sprite = null;
+                        intentBubbleImage.color = new Color(1f, 1f, 1f, 0f);
+                    }
+                }
+                else
+                {
+                    ClearIntentIcons();
+
+                    if (hasIntent && intentBubbleText != null)
+                    {
+                        intentBubbleText.text = PrototypeCombatText.FormatIntents(visibleIntents);
+                    }
+
+                    if (hasIntent && intentBubbleImage != null)
+                    {
+                        intentBubbleImage.sprite = null;
+                        intentBubbleImage.preserveAspect = false;
+                        intentBubbleImage.type = Image.Type.Simple;
+                        intentBubbleImage.color = GetIntentBubbleColor(primaryIntent);
+                    }
                 }
             }
 
@@ -864,17 +935,12 @@ namespace Project2048.Prototype
                 return GetObstacleCellColor();
             }
 
-            if (value == 0)
-            {
-                return emptyCellColor;
-            }
-
-            return value >= 64 ? highlightCellColor : filledCellColor;
+            return value == 0 ? new Color(26f / 255f, 26f / 255f, 26f / 255f, 1f) : Color.black;
         }
 
         private static Color GetCellTextColor(int value)
         {
-            return value >= 64 ? Color.black : Color.white;
+            return Color.white;
         }
 
         private void ClearBoardAnimationOverlay(bool stopRoutine = true)
@@ -1181,6 +1247,63 @@ namespace Project2048.Prototype
             skillsEndTurnButton ??= FindComponentInChildrenByName<Button>("TurnEndButton");
             actionDescriptionText ??= FindComponentInChildrenByName<TMP_Text>("ActionDescriptionText");
             enemyTurnText ??= FindComponentInChildrenByName<TMP_Text>("EnemyTurnText");
+            pauseButton ??= FindOrCreateButtonByName("pauseButton") ?? FindOrCreateButtonByName("PauseButton");
+            settingButton ??= FindOrCreateButtonByName("SettingButton");
+            settingPopup ??= FindAnyObjectByType<SettingPopup>(FindObjectsInactive.Include);
+            confirmPopup ??= FindAnyObjectByType<ConfirmPopup>(FindObjectsInactive.Include);
+        }
+
+        private Button FindOrCreateButtonByName(string childName)
+        {
+            var child = FindChildByName(childName);
+            if (child == null)
+            {
+                return null;
+            }
+
+            var button = child.GetComponent<Button>();
+            if (button != null)
+            {
+                return button;
+            }
+
+            button = child.gameObject.AddComponent<Button>();
+            button.targetGraphic = child.GetComponent<Graphic>();
+            return button;
+        }
+
+        private void OpenSettingPopup()
+        {
+            if (settingPopup == null)
+            {
+                var canvas = GetComponentInParent<Canvas>();
+                settingPopup = SettingPopup.CreateRuntime(canvas != null ? canvas.transform : transform.root);
+            }
+
+            settingPopup.Open();
+        }
+
+        private void OpenPauseConfirmPopup()
+        {
+            Debug.Log("Pause button clicked. Opening pause confirm popup.");
+            if (confirmPopup == null)
+            {
+                var canvas = GetComponentInParent<Canvas>();
+                confirmPopup = ConfirmPopup.CreateRuntime(canvas != null ? canvas.transform : transform.root);
+            }
+
+            confirmPopup.Show("종료하시겠습니까?", ReturnToMainMenu, null);
+        }
+
+        private static void ReturnToMainMenu()
+        {
+            if (GameManager.Instance != null && GameManager.Instance.FlowController != null)
+            {
+                GameManager.Instance.FlowController.RequestMainMenu();
+                return;
+            }
+
+            SceneManager.LoadScene("MainMenu");
         }
 
         private void ResolveEnemyHpRoot()
@@ -1242,6 +1365,107 @@ namespace Project2048.Prototype
             }
 
             textRect.anchoredPosition = Vector2.zero;
+        }
+
+        // 인텐트 아이콘을 버블 안에 가로로 깐다. 슬롯은 풀링해서 재사용한다.
+        private void RenderIntentIcons(List<EnemyIntent> intents)
+        {
+            EnsureIntentIconRow();
+            if (intentIconRow == null)
+            {
+                return;
+            }
+
+            intentIconRow.gameObject.SetActive(true);
+
+            var shown = 0;
+            if (intents != null)
+            {
+                for (var i = 0; i < intents.Count && shown < EnemySO.MaximumActionsPerTurn; i++)
+                {
+                    var icon = ResolveIntentIcon(intents[i]);
+                    if (icon == null)
+                    {
+                        continue;
+                    }
+
+                    var slot = GetOrCreateIntentIconSlot(shown);
+                    slot.sprite = icon;
+                    slot.preserveAspect = true;
+                    slot.color = Color.white;
+                    slot.gameObject.SetActive(true);
+                    shown++;
+                }
+            }
+
+            for (var i = shown; i < intentIconSlots.Count; i++)
+            {
+                if (intentIconSlots[i] != null)
+                {
+                    intentIconSlots[i].gameObject.SetActive(false);
+                }
+            }
+        }
+
+        private void ClearIntentIcons()
+        {
+            if (intentIconRow != null)
+            {
+                intentIconRow.gameObject.SetActive(false);
+            }
+
+            foreach (var slot in intentIconSlots)
+            {
+                if (slot != null)
+                {
+                    slot.gameObject.SetActive(false);
+                }
+            }
+        }
+
+        private void EnsureIntentIconRow()
+        {
+            if (intentIconRow != null || intentBubble == null)
+            {
+                return;
+            }
+
+            if (intentBubble.transform.Find("IntentIconRow") is RectTransform existing)
+            {
+                intentIconRow = existing;
+                return;
+            }
+
+            var rowObject = new GameObject("IntentIconRow");
+            intentIconRow = rowObject.AddComponent<RectTransform>();
+            intentIconRow.SetParent(intentBubble.transform, false);
+            intentIconRow.anchorMin = Vector2.zero;
+            intentIconRow.anchorMax = Vector2.one;
+            intentIconRow.offsetMin = Vector2.zero;
+            intentIconRow.offsetMax = Vector2.zero;
+
+            var layout = rowObject.AddComponent<HorizontalLayoutGroup>();
+            layout.childAlignment = TextAnchor.MiddleCenter;
+            layout.spacing = 4f;
+            layout.childControlWidth = true;
+            layout.childControlHeight = true;
+            layout.childForceExpandWidth = true;
+            layout.childForceExpandHeight = true;
+        }
+
+        private Image GetOrCreateIntentIconSlot(int index)
+        {
+            while (intentIconSlots.Count <= index)
+            {
+                var iconObject = new GameObject($"IntentIcon_{intentIconSlots.Count}");
+                var iconRect = iconObject.AddComponent<RectTransform>();
+                iconRect.SetParent(intentIconRow, false);
+                var iconImage = iconObject.AddComponent<Image>();
+                iconImage.raycastTarget = false;
+                intentIconSlots.Add(iconImage);
+            }
+
+            return intentIconSlots[index];
         }
 
         private void SetEnemyHpVisible(bool visible)

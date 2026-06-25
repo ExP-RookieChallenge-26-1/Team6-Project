@@ -30,6 +30,10 @@ namespace Project2048.Prototype
         private Vector3 enemyRendererRestLocalPosition;
         private Vector3 enemyRendererRestLocalScale = Vector3.one;
         private bool hasEnemyRendererRestTransform;
+        private Transform lastGroundedEnemyActor;
+
+        // 적 발이 EnemyHp 바 상단보다 몇 픽셀 위에 오게 할지. 인스펙터에서 미세조정.
+        [SerializeField] private float enemyFeetAboveHpBarPixels = 0f;
         private bool lastEnemyWasDead;
         private float delayEnemyDeathFadeUntilRealtime;
         private Coroutine enemyAnimationReturnToIdleCoroutine;
@@ -205,7 +209,10 @@ namespace Project2048.Prototype
             currentEnemyDirectAnimationClip = null;
             currentEnemyDirectAnimationLoops = false;
 
-            if (restoreCurrentSprite && enemyRenderer != null && !showingRewardPresenter)
+            if (restoreCurrentSprite &&
+                enemyRenderer != null &&
+                activeEnemyBattleActor == null &&
+                !showingRewardPresenter)
             {
                 enemyRenderer.sprite = ResolveEnemySprite(snapshot);
             }
@@ -714,6 +721,144 @@ namespace Project2048.Prototype
             hasEnemyRendererRestTransform = true;
         }
 
+        // 현재 활성화된 적 액터(몬스터 종류 무관)의 발 높이를 EnemyHp 바 기준선에 맞춘다.
+        // 적이 바뀔 때마다 한 번만 보정하므로 idle 애니메이션 흔들림과 충돌하지 않는다.
+        private void AlignActiveEnemyFeetToGround()
+        {
+            var actor = ResolveActiveEnemyActor();
+            if (actor == null)
+            {
+                lastGroundedEnemyActor = null;
+                return;
+            }
+
+            if (actor == lastGroundedEnemyActor)
+            {
+                return;
+            }
+
+            var groundWorldY = ResolveEnemyGroundWorldY(actor);
+            var enemyFeetWorldY = ResolveActorFeetWorldY(actor);
+            if (!groundWorldY.HasValue || !enemyFeetWorldY.HasValue)
+            {
+                return;
+            }
+
+            var deltaWorldY = groundWorldY.Value - enemyFeetWorldY.Value;
+            var localDeltaY = actor.parent != null
+                ? actor.parent.InverseTransformVector(new Vector3(0f, deltaWorldY, 0f)).y
+                : deltaWorldY;
+
+            var localPosition = actor.localPosition;
+            localPosition.y += localDeltaY;
+            actor.localPosition = localPosition;
+            lastGroundedEnemyActor = actor;
+        }
+
+        // EnemySprite 아래에서 활성화돼 있고 보이는 스프라이트를 가진, player_all이 아닌 자식을 찾는다.
+        private Transform ResolveActiveEnemyActor()
+        {
+            if (activeEnemyBattleActor != null && activeEnemyBattleActor.activeInHierarchy)
+            {
+                return activeEnemyBattleActor.transform;
+            }
+
+            if (enemyRenderer == null)
+            {
+                return null;
+            }
+
+            var parent = enemyRenderer.transform;
+            for (var i = 0; i < parent.childCount; i++)
+            {
+                var child = parent.GetChild(i);
+                if (!child.gameObject.activeInHierarchy)
+                {
+                    continue;
+                }
+
+                if (string.Equals(child.name, LayeredPlayerActorRootName, System.StringComparison.Ordinal))
+                {
+                    continue;
+                }
+
+                var hasVisibleSprite = child
+                    .GetComponentsInChildren<SpriteRenderer>(includeInactive: false)
+                    .Any(childRenderer => childRenderer != null && childRenderer.sprite != null && childRenderer.enabled);
+                if (hasVisibleSprite)
+                {
+                    return child;
+                }
+            }
+
+            return null;
+        }
+
+        private float? ResolveActorFeetWorldY(Transform actor)
+        {
+            if (actor == null)
+            {
+                return null;
+            }
+
+            var renderers = actor.GetComponentsInChildren<SpriteRenderer>(includeInactive: false)
+                .Where(childRenderer => childRenderer != null && childRenderer.sprite != null && childRenderer.enabled)
+                .ToArray();
+            if (renderers.Length == 0)
+            {
+                return null;
+            }
+
+            var bounds = renderers[0].bounds;
+            for (var i = 1; i < renderers.Length; i++)
+            {
+                bounds.Encapsulate(renderers[i].bounds);
+            }
+
+            return bounds.min.y;
+        }
+
+        // EnemyHp 바 상단보다 enemyFeetAboveHpBarPixels 만큼 위인 지점의 월드 Y를 구한다.
+        // HP바는 Canvas(스크린 공간), 적은 월드 공간이므로 카메라로 스크린↔월드 변환한다.
+        private float? ResolveEnemyGroundWorldY(Transform actor)
+        {
+            if (actor == null)
+            {
+                return null;
+            }
+
+            var camera = Camera.main;
+            var hpBar = FindTransformByName("EnemyHp") as RectTransform;
+            if (camera == null || hpBar == null)
+            {
+                return null;
+            }
+
+            var canvas = hpBar.GetComponentInParent<Canvas>();
+            var uiCamera = canvas != null && canvas.renderMode != RenderMode.ScreenSpaceOverlay
+                ? canvas.worldCamera
+                : null;
+
+            var corners = new Vector3[4];
+            hpBar.GetWorldCorners(corners);
+            var topScreenY = float.MinValue;
+            for (var i = 0; i < corners.Length; i++)
+            {
+                var screenPoint = RectTransformUtility.WorldToScreenPoint(uiCamera, corners[i]);
+                if (screenPoint.y > topScreenY)
+                {
+                    topScreenY = screenPoint.y;
+                }
+            }
+
+            var targetScreenY = topScreenY + enemyFeetAboveHpBarPixels;
+
+            // 적의 화면상 X / 카메라 깊이는 유지하고 목표 Y만 월드로 변환.
+            var actorScreen = camera.WorldToScreenPoint(actor.position);
+            var worldPoint = camera.ScreenToWorldPoint(new Vector3(actorScreen.x, targetScreenY, actorScreen.z));
+            return worldPoint.y;
+        }
+
         private void RestoreEnemyRendererTransform()
         {
             if (enemyRenderer == null || !hasEnemyRendererRestTransform)
@@ -727,6 +872,7 @@ namespace Project2048.Prototype
 
         private void SetEnemyRendererAlpha(float alpha)
         {
+            SetEnemyBattleActorAlpha(alpha);
             if (enemyRenderer == null)
             {
                 return;
@@ -735,6 +881,28 @@ namespace Project2048.Prototype
             var color = enemyRenderer.color;
             color.a = Mathf.Clamp01(alpha);
             enemyRenderer.color = color;
+        }
+
+        private void SetEnemyBattleActorAlpha(float alpha)
+        {
+            if (activeEnemyBattleActor == null)
+            {
+                return;
+            }
+
+            var renderers = activeEnemyBattleActor.GetComponentsInChildren<SpriteRenderer>(includeInactive: true);
+            for (var index = 0; index < renderers.Length; index++)
+            {
+                var renderer = renderers[index];
+                if (renderer == null)
+                {
+                    continue;
+                }
+
+                var color = renderer.color;
+                color.a = Mathf.Clamp01(alpha);
+                renderer.color = color;
+            }
         }
     }
 }

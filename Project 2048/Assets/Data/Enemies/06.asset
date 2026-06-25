@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6115ca39d511d049965aae02efc3f23, type: 3}
   m_Name: 06
   m_EditorClassIdentifier: Game.Core::Project2048.Enemy.EnemySO
-  enemyName: "\uD1A0\uB07C"
+  enemyName: "\uAC15\uD654 \uD1A0\uB07C"
   encounterRank: 0
   maxHp: 190
   attackPower: 7
@@ -28,7 +28,13 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 2b7d5be3dee84f6d9f19b9a9e2e9c6e1, type: 2}
   - {fileID: 11400000, guid: c1744bc96e754468b74f2e389042e23f, type: 2}
   - {fileID: 11400000, guid: 104fae93c7b64922bbaf09b45b586dc3, type: 2}
-  portrait: {fileID: 21300000, guid: fa492956cfce2564d9ace728be89a86b, type: 3}
+  portrait: {fileID: 0}
+  battlePrefab: {fileID: -8653719598885068355, guid: f50595cefbc32c3499e27d0d8ce20aed, type: 3}
+  idleAnimation: {fileID: 7400000, guid: 64471f7f462e41649979d7a473d89334, type: 2}
+  appearAnimation: {fileID: 0}
+  attackAnimation: {fileID: 7400000, guid: 39ae5d539ebefb24b82d2e89f72c794b, type: 2}
+  hitAnimation: {fileID: 7400000, guid: 9059719559d05594fb19f778128b4744, type: 2}
+  deathAnimation: {fileID: 0}
   actionEffects:
   - actionId: appear
     effect:
@@ -36,7 +42,7 @@ MonoBehaviour:
       vfxPrefab: {fileID: 0}
       animationClip: {fileID: 0}
       particleEffect:
-        objectName:
+        objectName: 
         particlePrefab: {fileID: 0}
         particleMaterial: {fileID: 0}
         useParticleColor: 0
@@ -58,7 +64,7 @@ MonoBehaviour:
       vfxPrefab: {fileID: 0}
       animationClip: {fileID: 0}
       particleEffect:
-        objectName:
+        objectName: 
         particlePrefab: {fileID: 0}
         particleMaterial: {fileID: 0}
         useParticleColor: 0
@@ -80,7 +86,7 @@ MonoBehaviour:
       vfxPrefab: {fileID: 0}
       animationClip: {fileID: 0}
       particleEffect:
-        objectName:
+        objectName: 
         particlePrefab: {fileID: 0}
         particleMaterial: {fileID: 0}
         useParticleColor: 0
@@ -102,7 +108,7 @@ MonoBehaviour:
       vfxPrefab: {fileID: 0}
       animationClip: {fileID: 0}
       particleEffect:
-        objectName:
+        objectName: 
         particlePrefab: {fileID: 0}
         particleMaterial: {fileID: 0}
         useParticleColor: 0

@@ -19,20 +19,28 @@ namespace Project2048.Presentation
                 return null;
             }
 
+            CombatEffectBinding selectedEffect = null;
+            var matchingEffectCount = 0;
             foreach (var binding in actionEffects)
             {
-                if (binding == null || string.IsNullOrWhiteSpace(binding.actionId))
+                if (binding == null ||
+                    binding.effect == null ||
+                    string.IsNullOrWhiteSpace(binding.actionId))
                 {
                     continue;
                 }
 
                 if (string.Equals(binding.actionId.Trim(), actionId.Trim(), StringComparison.OrdinalIgnoreCase))
                 {
-                    return binding.effect;
+                    matchingEffectCount++;
+                    if (matchingEffectCount == 1 || UnityEngine.Random.Range(0, matchingEffectCount) == 0)
+                    {
+                        selectedEffect = binding.effect;
+                    }
                 }
             }
 
-            return null;
+            return selectedEffect;
         }
     }
 }

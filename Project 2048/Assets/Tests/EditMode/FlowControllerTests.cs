@@ -22,7 +22,7 @@ namespace Project2048.Tests
         }
 
         [Test]
-        public void HandleStageCompleted_RunCompleted_DeletesSaveAndRequestsMainMenu()
+        public void HandleStageCompleted_RunCompleted_SavesEndedRunAndRequestsEndingStory()
         {
             owner = new GameObject("FlowController");
             var flowController = owner.AddComponent<FlowController>();
@@ -30,13 +30,13 @@ namespace Project2048.Tests
             var context = new GameContext();
             var saveRepository = new TrackingSaveRepository();
             var didRequestMainMenu = false;
-            var didStartLoading = false;
+            var didRequestEndingStory = false;
 
             context.SetRunActive(true);
             saveLoadManager.Initialize(context, saveRepository);
             flowController.Initialized(context, saveLoadManager);
             flowController.OnMainMenuSceneLoadRequested += () => didRequestMainMenu = true;
-            flowController.OnLoadingStarted += _ => didStartLoading = true;
+            flowController.OnEndingSceneLoadRequested += () => didRequestEndingStory = true;
 
             InvokePrivateMethod(
                 flowController,
@@ -49,10 +49,12 @@ namespace Project2048.Tests
                     default));
 
             Assert.That(context.IsRunActive, Is.False);
-            Assert.That(context.CurrentGameState, Is.EqualTo(GameContext.GameState.Loading));
-            Assert.That(saveRepository.WasDeleted, Is.True);
-            Assert.That(didStartLoading, Is.True);
-            Assert.That(didRequestMainMenu, Is.True);
+            Assert.That(context.CurrentGameState, Is.EqualTo(GameContext.GameState.Ending));
+            Assert.That(saveRepository.SavedData, Is.Not.Null);
+            Assert.That(saveRepository.SavedData.hasActiveRun, Is.False);
+            Assert.That(saveRepository.WasDeleted, Is.False);
+            Assert.That(didRequestEndingStory, Is.True);
+            Assert.That(didRequestMainMenu, Is.False);
         }
 
         private static void InvokePrivateMethod(object target, string methodName, params object[] args)
@@ -65,6 +67,7 @@ namespace Project2048.Tests
         private sealed class TrackingSaveRepository : ISaveRepository
         {
             public bool WasDeleted { get; private set; }
+            public GameSaveData SavedData { get; private set; }
 
             public bool Exists()
             {
@@ -73,6 +76,7 @@ namespace Project2048.Tests
 
             public void Save(GameSaveData data)
             {
+                SavedData = data;
             }
 
             public GameSaveData Load()

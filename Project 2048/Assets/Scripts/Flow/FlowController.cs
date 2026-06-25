@@ -18,6 +18,7 @@ namespace Project2048.Flow
         public event Action<LoadingPresentationMode> OnLoadingStarted;
         public event Action OnMainMenuSceneLoadRequested;
         public event Action OnStorySceneLoadRequested;
+        public event Action OnEndingSceneLoadRequested;
         public event Action OnBattleSceneLoadRequested;
         public event Action OnGameStarted;
 
@@ -210,8 +211,9 @@ namespace Project2048.Flow
             if (result.RunCompleted)
             {
                 gameContext.SetRunActive(false);
-                saveLoadManager?.DeleteSave();
-                RequestMainMenu();
+                gameContext.SetGameState(GameContext.GameState.Ending);
+                SaveCurrentRun();
+                OnEndingSceneLoadRequested?.Invoke();
                 return;
             }
 

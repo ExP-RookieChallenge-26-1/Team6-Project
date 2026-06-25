@@ -53,6 +53,7 @@ namespace Project2048.Tests
             var lightShot = skills["light-shot"];
             var lowStance = skills["low-stance"];
             var lightGuard = skills["light-guard"];
+            var bodyPress = skills["body-press"];
 
             Assert.That(fireball.skillName, Is.EqualTo("\uD654\uC5FC\uAD6C"));
             Assert.That(fireball.cost, Is.EqualTo(20));
@@ -84,6 +85,8 @@ namespace Project2048.Tests
             Assert.That(lightShot.power, Is.EqualTo(60));
             Assert.That(lowStance.power, Is.EqualTo(20));
             Assert.That(lightGuard.power, Is.EqualTo(40));
+            Assert.That(bodyPress.ResolveEffectKind(), Is.EqualTo(SkillEffectKind.DefenseScalingAttack));
+            Assert.That(bodyPress.damageStatSource, Is.EqualTo(DamageStatSource.DefensePower));
 
             var expectedCosts = new System.Collections.Generic.Dictionary<string, int>
             {
@@ -276,7 +279,7 @@ namespace Project2048.Tests
             var enemyGuids = AssetDatabase.FindAssets("t:EnemySO", new[] { "Assets/Data/Enemies" });
             var assignedSkillIds = new System.Collections.Generic.HashSet<string>();
 
-            Assert.That(enemyGuids.Length, Is.EqualTo(12));
+            Assert.That(enemyGuids.Length, Is.EqualTo(16));
             foreach (var guid in enemyGuids)
             {
                 var path = AssetDatabase.GUIDToAssetPath(guid);
@@ -297,6 +300,12 @@ namespace Project2048.Tests
                     Assert.That(intent, Is.Not.Null, path);
                     Assert.That(intent.skillId, Is.Not.Empty, path);
                     Assert.That(enemy.skills.Take(EnemySO.MaxEquippedSkillSlots).Any(skill => skill != null && skill.skillId == intent.skillId), Is.True, $"{path}:{intent.skillId}");
+                }
+
+                if (path.EndsWith("08.asset", System.StringComparison.Ordinal) ||
+                    path.EndsWith("08_Enhanced.asset", System.StringComparison.Ordinal))
+                {
+                    Assert.That(enemy.intentPattern.Any(intent => intent.intentType == EnemyIntentType.Attack), Is.True, path);
                 }
             }
 

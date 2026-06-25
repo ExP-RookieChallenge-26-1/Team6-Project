@@ -44,6 +44,7 @@ namespace Project2048.Combat
         private int vfxCueSequence;
         private Coroutine skillPresentationLockRoutine;
         private int skillPresentationLockSequence;
+        private readonly HashSet<SkillEffectKind> usedOncePerTurnSkillEffects = new();
 
         public CombatPhase CurrentPhase { get; private set; } = CombatPhase.None;
         public TurnController TurnController { get; } = new();
@@ -118,6 +119,7 @@ namespace Project2048.Combat
             lastVfxCue = null;
             vfxCueSequence = 0;
             activeNextCombatBoardMoveCountBonus = 0;
+            usedOncePerTurnSkillEffects.Clear();
             TurnController.Reset();
             CostWallet.Clear();
             UnbindEntityEvents();
@@ -201,6 +203,11 @@ namespace Project2048.Combat
                 return false;
             }
 
+            if (HasUsedOncePerTurnSkill(skill))
+            {
+                return false;
+            }
+
             if (!CostWallet.CanSpend(skill.cost))
             {
                 return false;
@@ -220,6 +227,7 @@ namespace Project2048.Combat
                     BoardManager = BoardManager,
                 });
             player.RecordUsedSkill(skill);
+            RecordOncePerTurnSkillUse(skill);
             if (CheckDefeat())
             {
                 return true;
@@ -376,6 +384,7 @@ namespace Project2048.Combat
         private void StartPlayerTurn()
         {
             // 방어도는 턴마다 사라지고, 방어 보너스/디버프는 별도 값으로 유지된다.
+            usedOncePerTurnSkillEffects.Clear();
             player.ClearBlock();
             player.ClearTurnLimitedSkillEffects();
             TurnController.StartPlayerTurn();
@@ -467,6 +476,11 @@ namespace Project2048.Combat
                 }
 
                 if (player.IsSkillSealed(skill) || !skillExecutor.CanExecute(skill, player))
+                {
+                    continue;
+                }
+
+                if (HasUsedOncePerTurnSkill(skill))
                 {
                     continue;
                 }
@@ -1183,7 +1197,9 @@ namespace Project2048.Combat
                     Cost = skill.cost,
                     Power = skill.power,
                     RequiresEnemyTarget = skill.RequiresEnemyTarget,
-                    CanExecute = !player.IsSkillSealed(skill) && skillExecutor.CanExecute(skill, player),
+                    CanExecute = !player.IsSkillSealed(skill) &&
+                                 !HasUsedOncePerTurnSkill(skill) &&
+                                 skillExecutor.CanExecute(skill, player),
                 });
             }
 
@@ -1198,6 +1214,27 @@ namespace Project2048.Combat
             }
 
             return string.IsNullOrWhiteSpace(skill.skillName) ? skill.skillId : skill.skillName;
+        }
+
+        private bool HasUsedOncePerTurnSkill(SkillSO skill)
+        {
+            return skill != null &&
+                   SkillSO.IsOncePerTurnEffect(skill.ResolveEffectKind()) &&
+                   usedOncePerTurnSkillEffects.Contains(skill.ResolveEffectKind());
+        }
+
+        private void RecordOncePerTurnSkillUse(SkillSO skill)
+        {
+            if (skill == null)
+            {
+                return;
+            }
+
+            var effectKind = skill.ResolveEffectKind();
+            if (SkillSO.IsOncePerTurnEffect(effectKind))
+            {
+                usedOncePerTurnSkillEffects.Add(effectKind);
+            }
         }
 
         private static string GetEnemyDisplayName(EnemyController enemy)

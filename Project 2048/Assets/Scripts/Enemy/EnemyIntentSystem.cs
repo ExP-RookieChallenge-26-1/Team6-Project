@@ -86,6 +86,7 @@ namespace Project2048.Enemy
             }
 
             var nextIntents = new List<EnemyIntent>(intentCount);
+            var usedOncePerTurnEffects = new HashSet<SkillEffectKind>();
             for (var index = 0; index < intentCount; index++)
             {
                 for (var attempts = 0; attempts < pattern.Count; attempts++)
@@ -93,9 +94,11 @@ namespace Project2048.Enemy
                     var patternIndex = intentIndexMap[enemy] % pattern.Count;
                     var nextIntent = pattern[patternIndex]?.Clone();
                     intentIndexMap[enemy]++;
-                    if (CanUsePatternIntent(enemy, nextIntent))
+                    if (CanUsePatternIntent(enemy, nextIntent) &&
+                        !HasUsedOncePerTurnEffect(nextIntent, usedOncePerTurnEffects))
                     {
                         nextIntents.Add(nextIntent);
+                        TrackOncePerTurnEffect(nextIntent, usedOncePerTurnEffects);
                         break;
                     }
                 }
@@ -112,6 +115,11 @@ namespace Project2048.Enemy
         private static bool CanUsePatternIntent(EnemyController enemy, EnemyIntent intent)
         {
             if (enemy == null || intent == null)
+            {
+                return false;
+            }
+
+            if (intent.skillEffectKind == SkillEffectKind.Endure && enemy.EndureTurns > 0)
             {
                 return false;
             }
@@ -174,6 +182,7 @@ namespace Project2048.Enemy
                     var retaliationPower = player.ThornRetaliationDamage;
                     var hpDamage = player.TakeDamage(damage, effectiveIntent.shieldPiercePercent / 100f);
                     player.TriggerOnAttackedStatusDamage();
+                    ApplyAttackModifiers(effectiveIntent, player);
                     ApplyAttackStatusEffects(effectiveIntent, player);
                     if (intent.lifeStealPercent > 0f && hpDamage > 0)
                     {
@@ -230,6 +239,28 @@ namespace Project2048.Enemy
                 case EnemyIntentType.Debuff:
                     ApplyDebuff(intent, player, boardManager);
                     break;
+            }
+        }
+
+        private static void ApplyAttackModifiers(EnemyIntent intent, PlayerCombatController player)
+        {
+            if (intent == null || player == null)
+            {
+                return;
+            }
+
+            if (intent.skillEffectKind == SkillEffectKind.AttackStageDown)
+            {
+                player.ApplyAttackPowerModifier(intent.targetAttackModifier != 0
+                    ? intent.targetAttackModifier
+                    : -Mathf.Max(0, intent.value));
+            }
+
+            if (intent.skillEffectKind == SkillEffectKind.DefenseStageDown)
+            {
+                player.ApplyDefensePowerModifier(intent.targetDefenseModifier != 0
+                    ? intent.targetDefenseModifier
+                    : -Mathf.Max(0, intent.value));
             }
         }
 
@@ -362,6 +393,30 @@ namespace Project2048.Enemy
         private static float ResolveStatusPercent(EnemyIntent intent, float fallback)
         {
             return intent != null && intent.statusMaxHpDamagePercent > 0f ? intent.statusMaxHpDamagePercent : fallback;
+        }
+
+        private static bool HasUsedOncePerTurnEffect(
+            EnemyIntent intent,
+            HashSet<SkillEffectKind> usedOncePerTurnEffects)
+        {
+            return intent != null &&
+                   usedOncePerTurnEffects != null &&
+                   SkillSO.IsOncePerTurnEffect(intent.skillEffectKind) &&
+                   usedOncePerTurnEffects.Contains(intent.skillEffectKind);
+        }
+
+        private static void TrackOncePerTurnEffect(
+            EnemyIntent intent,
+            HashSet<SkillEffectKind> usedOncePerTurnEffects)
+        {
+            if (intent == null ||
+                usedOncePerTurnEffects == null ||
+                !SkillSO.IsOncePerTurnEffect(intent.skillEffectKind))
+            {
+                return;
+            }
+
+            usedOncePerTurnEffects.Add(intent.skillEffectKind);
         }
     }
 }

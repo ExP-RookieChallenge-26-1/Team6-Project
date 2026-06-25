@@ -144,6 +144,12 @@ namespace Project2048.Skills
             };
         }
 
+        public static bool IsOncePerTurnEffect(SkillEffectKind effectKind)
+        {
+            return effectKind == SkillEffectKind.Endure ||
+                   effectKind == SkillEffectKind.NextAttackPowerMultiplier;
+        }
+
         private void OnValidate()
         {
             cost = Mathf.Max(0, cost);

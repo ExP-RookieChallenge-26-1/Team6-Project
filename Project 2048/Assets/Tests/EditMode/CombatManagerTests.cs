@@ -898,6 +898,48 @@ namespace Project2048.Tests
         }
 
         [Test]
+        public void OncePerTurnBuffSkills_CannotBeUsedTwiceInSamePlayerTurn()
+        {
+            var manager = CreateGameObject<CombatManager>("CombatManager");
+            var player = CreateGameObject<PlayerCombatController>("Player");
+            var enemy = CreateGameObject<EnemyController>("Enemy");
+            var endure = CreateSkill("endure", SkillType.Defense, cost: 0, power: 0);
+            endure.effectKind = SkillEffectKind.Endure;
+            endure.selfEndureTurns = 1;
+            var echo = CreateSkill("light-echo", SkillType.Defense, cost: 0, power: 0);
+            echo.effectKind = SkillEffectKind.NextAttackPowerMultiplier;
+            echo.nextAttackPowerMultiplier = 1.3f;
+            var attack = CreateSkill("strike", SkillType.Attack, cost: 0, power: 10);
+            var playerData = CreatePlayerData(maxHp: 20, attackPower: 2);
+            playerData.startingSkills = new List<SkillSO> { endure, echo, attack };
+            var enemyData = CreateEnemyData(maxHp: 100, attackValue: 0);
+
+            manager.SetCombatants(player, new[] { enemy });
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new List<EnemySO> { enemyData },
+                boardMoveCount = 1,
+            });
+            manager.ResolveBoardPhase();
+
+            Assert.That(manager.RequestUseSkillById("endure"), Is.True);
+            Assert.That(FindSkillSnapshot(manager, "endure").CanExecute, Is.False);
+            Assert.That(manager.RequestUseSkillById("endure"), Is.False);
+
+            Assert.That(manager.RequestUseSkillById("light-echo"), Is.True);
+            Assert.That(FindSkillSnapshot(manager, "light-echo").CanExecute, Is.False);
+            Assert.That(manager.RequestUseSkillById("strike", 0), Is.True);
+            Assert.That(player.EchoDamageBonus, Is.Zero);
+            Assert.That(manager.RequestUseSkillById("light-echo"), Is.False);
+
+            manager.RequestEndPlayerTurn();
+            manager.ResolveBoardPhase();
+
+            Assert.That(manager.RequestUseSkillById("light-echo"), Is.True);
+        }
+
+        [Test]
         public void RequestEndPlayerTurn_EnemyWithThreeActions_ExecutesInPreviewOrder()
         {
             var manager = CreateGameObject<CombatManager>("CombatManager");
@@ -1220,6 +1262,13 @@ namespace Project2048.Tests
             var field = typeof(EnemySO).GetField("actionsPerTurn");
             Assert.That(field, Is.Not.Null, "EnemySO should expose actionsPerTurn for per-enemy multi-action tuning.");
             field.SetValue(data, count);
+        }
+
+        private static SkillSnapshot FindSkillSnapshot(CombatManager manager, string skillId)
+        {
+            var skill = manager.GetSnapshot().Skills.Find(snapshot => snapshot.SkillId == skillId);
+            Assert.That(skill, Is.Not.Null, skillId);
+            return skill;
         }
     }
 }

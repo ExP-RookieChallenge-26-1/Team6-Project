@@ -265,6 +265,67 @@ namespace Project2048.Tests
         }
 
         [Test]
+        public void SetNextIntents_SkipsDuplicateOncePerTurnPatternSkills()
+        {
+            var enemy = CreateEnemy("OncePerTurnPatternEnemy");
+            var data = CreateEnemyData();
+            data.aiComplexity = EnemyAiComplexity.Complex;
+            data.actionsPerTurn = 1;
+            data.intentPattern = new List<EnemyIntent>
+            {
+                new() { skillId = "endure", skillEffectKind = SkillEffectKind.Endure, intentType = EnemyIntentType.Defense },
+                new() { skillId = "endure", skillEffectKind = SkillEffectKind.Endure, intentType = EnemyIntentType.Defense },
+                new() { skillId = "strike", skillEffectKind = SkillEffectKind.BasicAttack, intentType = EnemyIntentType.Attack, value = 5 },
+            };
+            enemy.Init(data);
+
+            new EnemyIntentSystem(new System.Random(1)).SetNextIntents(enemy, data.ActionsPerTurn);
+            var preview = GetCurrentIntents(enemy);
+
+            Assert.That(preview.Count, Is.EqualTo(3));
+            Assert.That(CountEffectKind(preview, SkillEffectKind.Endure), Is.EqualTo(1));
+            Assert.That(CountIntentType(preview, EnemyIntentType.Attack), Is.EqualTo(2));
+        }
+
+        [Test]
+        public void SetNextIntents_SkipsEndureWhenAlreadyActive()
+        {
+            var enemy = CreateEnemy("EnduringEnemy");
+            var player = CreatePlayer("Player", maxHp: 30, attackPower: 4, defensePower: 1);
+            var data = CreateEnemyData();
+            data.aiActionBias = EnemyAiActionBias.DefenseHeavy;
+            data.aiDebuffInterval = 0;
+            data.intentPattern = new List<EnemyIntent>
+            {
+                new() { skillId = "endure", skillEffectKind = SkillEffectKind.Endure, intentType = EnemyIntentType.Defense },
+                new() { skillId = "strike", skillEffectKind = SkillEffectKind.BasicAttack, intentType = EnemyIntentType.Attack, value = 5 },
+            };
+            enemy.Init(data);
+            enemy.ApplyEndure(1);
+
+            new EnemyIntentSystem(new System.Random(1)).SetNextIntents(enemy, 1, player);
+
+            Assert.That(enemy.CurrentIntent.skillId, Is.EqualTo("strike"));
+
+            var aiEnemy = CreateEnemy("GeneratedEnduringEnemy");
+            var aiData = CreateEnemyData();
+            aiData.aiActionBias = EnemyAiActionBias.DefenseHeavy;
+            aiData.aiDebuffInterval = 0;
+            aiData.intentPattern.Clear();
+            var endure = CreateSkill("endure", "Endure", SkillType.Defense, SkillEffectKind.Endure, power: 0);
+            endure.selfEndureTurns = 1;
+            var strike = CreateSkill("strike", "Strike", SkillType.Attack, SkillEffectKind.BasicAttack, power: 50);
+            aiData.skills = new List<SkillSO> { endure, strike };
+            aiEnemy.Init(aiData);
+            aiEnemy.ApplyEndure(1);
+
+            new EnemyIntentSystem(new System.Random(1)).SetNextIntents(aiEnemy, 2, player);
+            var generatedPreview = GetCurrentIntents(aiEnemy);
+
+            Assert.That(CountSkillId(generatedPreview, "endure"), Is.Zero);
+        }
+
+        [Test]
         public void ActionsPerTurn_UsesComplexityDefaultsUpToThreeActions()
         {
             var simple = CreateEnemyData();
@@ -600,6 +661,34 @@ namespace Project2048.Tests
             foreach (var intent in intents)
             {
                 if (intent != null && intent.intentType == intentType)
+                {
+                    count++;
+                }
+            }
+
+            return count;
+        }
+
+        private static int CountEffectKind(IReadOnlyList<EnemyIntent> intents, SkillEffectKind effectKind)
+        {
+            var count = 0;
+            foreach (var intent in intents)
+            {
+                if (intent != null && intent.skillEffectKind == effectKind)
+                {
+                    count++;
+                }
+            }
+
+            return count;
+        }
+
+        private static int CountSkillId(IReadOnlyList<EnemyIntent> intents, string skillId)
+        {
+            var count = 0;
+            foreach (var intent in intents)
+            {
+                if (intent != null && intent.skillId == skillId)
                 {
                     count++;
                 }

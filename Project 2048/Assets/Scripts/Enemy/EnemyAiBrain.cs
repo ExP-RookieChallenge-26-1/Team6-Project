@@ -52,6 +52,7 @@ namespace Project2048.Enemy
 
             var intentCount = Mathf.Clamp(count, 1, EnemySO.MaximumActionsPerTurn);
             var usedSignatures = new Dictionary<string, int>();
+            var usedOncePerTurnEffects = new HashSet<SkillEffectKind>();
             var plannedEnemyBlock = enemy?.Block ?? 0;
             var plannedThornGuard = enemy?.ThornRetaliationDamage > 0;
 
@@ -71,6 +72,7 @@ namespace Project2048.Enemy
                     player,
                     actionIndex,
                     usedSignatures,
+                    usedOncePerTurnEffects,
                     plannedEnemyBlock,
                     plannedThornGuard);
 
@@ -83,6 +85,7 @@ namespace Project2048.Enemy
                 var signature = GetIntentSignature(selected);
                 usedSignatures.TryGetValue(signature, out var usedCount);
                 usedSignatures[signature] = usedCount + 1;
+                TrackOncePerTurnEffect(selected, usedOncePerTurnEffects);
 
                 if (selected.intentType == EnemyIntentType.Defense)
                 {
@@ -153,6 +156,11 @@ namespace Project2048.Enemy
                     continue;
                 }
 
+                if (WouldRepeatIneffectiveEffect(enemy, skill.ResolveEffectKind()))
+                {
+                    continue;
+                }
+
                 candidates.Add(BuildSkillIntent(data, skill));
             }
         }
@@ -190,6 +198,7 @@ namespace Project2048.Enemy
             PlayerCombatController player,
             int actionIndex,
             Dictionary<string, int> usedSignatures,
+            HashSet<SkillEffectKind> usedOncePerTurnEffects,
             int plannedEnemyBlock,
             bool plannedThornGuard)
         {
@@ -210,6 +219,7 @@ namespace Project2048.Enemy
                     player,
                     actionIndex,
                     usedSignatures,
+                    usedOncePerTurnEffects,
                     plannedEnemyBlock,
                     plannedThornGuard);
 
@@ -231,9 +241,15 @@ namespace Project2048.Enemy
             PlayerCombatController player,
             int actionIndex,
             Dictionary<string, int> usedSignatures,
+            HashSet<SkillEffectKind> usedOncePerTurnEffects,
             int plannedEnemyBlock,
             bool plannedThornGuard)
         {
+            if (HasUsedOncePerTurnEffect(intent, usedOncePerTurnEffects))
+            {
+                return float.NegativeInfinity;
+            }
+
             var score = intent.intentType switch
             {
                 EnemyIntentType.Attack => ScoreAttack(intent, data, enemy, player),
@@ -450,14 +466,12 @@ namespace Project2048.Enemy
             switch (effectKind)
             {
                 case SkillEffectKind.AttackStageDown:
-                    intent.intentType = EnemyIntentType.Debuff;
                     intent.targetAttackModifier = ResolveStageModifier(skill.targetAttackStageModifier, skill.targetAttackModifier, -1);
-                    intent.value = Mathf.Abs(intent.targetAttackModifier);
+                    ApplyStageModifierIntentPower(intent, skill, data);
                     return intent;
                 case SkillEffectKind.DefenseStageDown:
-                    intent.intentType = EnemyIntentType.Debuff;
                     intent.targetDefenseModifier = ResolveStageModifier(skill.targetDefenseStageModifier, skill.targetDefenseModifier, -1);
-                    intent.value = Mathf.Abs(intent.targetDefenseModifier);
+                    ApplyStageModifierIntentPower(intent, skill, data);
                     return intent;
                 case SkillEffectKind.CostGainDown:
                     intent.intentType = EnemyIntentType.Debuff;
@@ -744,6 +758,58 @@ namespace Project2048.Enemy
         private static bool CanUseSpecialActions(EnemySO data)
         {
             return data.encounterRank != EnemyEncounterRank.Normal;
+        }
+
+        private static void ApplyStageModifierIntentPower(EnemyIntent intent, SkillSO skill, EnemySO data)
+        {
+            if (intent == null || skill == null)
+            {
+                return;
+            }
+
+            if (skill.power > 0 || skill.skillType == SkillType.Attack)
+            {
+                intent.intentType = EnemyIntentType.Attack;
+                intent.movePower = ScaleByStrength(skill.power, data.aiStrength);
+                intent.value = intent.movePower;
+                return;
+            }
+
+            intent.intentType = EnemyIntentType.Debuff;
+            intent.value = Mathf.Max(
+                Mathf.Abs(intent.targetAttackModifier),
+                Mathf.Abs(intent.targetDefenseModifier));
+        }
+
+        private static bool HasUsedOncePerTurnEffect(
+            EnemyIntent intent,
+            HashSet<SkillEffectKind> usedOncePerTurnEffects)
+        {
+            return intent != null &&
+                   usedOncePerTurnEffects != null &&
+                   SkillSO.IsOncePerTurnEffect(intent.skillEffectKind) &&
+                   usedOncePerTurnEffects.Contains(intent.skillEffectKind);
+        }
+
+        private static void TrackOncePerTurnEffect(
+            EnemyIntent intent,
+            HashSet<SkillEffectKind> usedOncePerTurnEffects)
+        {
+            if (intent == null ||
+                usedOncePerTurnEffects == null ||
+                !SkillSO.IsOncePerTurnEffect(intent.skillEffectKind))
+            {
+                return;
+            }
+
+            usedOncePerTurnEffects.Add(intent.skillEffectKind);
+        }
+
+        private static bool WouldRepeatIneffectiveEffect(EnemyController enemy, SkillEffectKind effectKind)
+        {
+            return enemy != null &&
+                   effectKind == SkillEffectKind.Endure &&
+                   enemy.EndureTurns > 0;
         }
     }
 }

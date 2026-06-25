@@ -41,6 +41,7 @@ namespace Project2048.Prototype
         public const float DarkShackleChainDurationSeconds = 0.84f;
 
         private const float DefinitionCueFallbackLifetimeSeconds = 0.8f;
+        private const float GatherLightVerticalBeamTargetYOffset = -0.7f;
         private const int ShieldImpactParticleCount = 22;
         private const float ReusableSkillParticleMaxStartSize = 0.24f;
         private const int ShieldCircleRingSegmentCount = 72;
@@ -989,7 +990,11 @@ namespace Project2048.Prototype
             ResolveMissingReferences();
             var targetTransform = target != null && enemyRenderer != null ? enemyRenderer.transform : transform;
             var chargedSkill = ResolvePlayerChargedLightSkill(skillName);
-            if (!TryPlayDefinitionCues(chargedSkill, SkillVfxTrigger.ChargeRelease))
+            if (IsGatherLightSkill(chargedSkill))
+            {
+                PlayGatherLightReleasedAttackEffect(chargedSkill, targetTransform, playAttackAnimation: true);
+            }
+            else if (!TryPlayDefinitionCues(chargedSkill, SkillVfxTrigger.ChargeRelease))
             {
                 PlayGatherLightReleasedAttackEffect(chargedSkill, targetTransform, playAttackAnimation: true);
             }
@@ -4303,8 +4308,8 @@ namespace Project2048.Prototype
                 return;
             }
 
-            // 버티컬 빔은 적의 머리가 아니라 발쪽(스프라이트 하단)에서 솟아오른다.
-            var position = ResolveAnchorVisualBottomWorldPosition(targetAnchor);
+            // Keep the follow-up beam anchored near the enemy's feet without depending on HP bar layout.
+            var position = ResolveGatherLightVerticalBeamWorldPosition(targetAnchor);
             var instance = Instantiate(prefab, position, Quaternion.identity, transform);
             instance.name = "GatherLightVerticalBeam";
             instance.transform.localScale = Vector3.one * Mathf.Clamp(
@@ -4332,6 +4337,13 @@ namespace Project2048.Prototype
             {
                 Destroy(instance, GatherLightVerticalBeamLifetimeSeconds + 0.2f);
             }
+        }
+
+        private Vector3 ResolveGatherLightVerticalBeamWorldPosition(Transform targetAnchor)
+        {
+            var position = targetAnchor.position;
+            position.y += GatherLightVerticalBeamTargetYOffset;
+            return position;
         }
 
         private static GameObject ResolveGatherLightVerticalBeamPrefab(SkillSO skill)

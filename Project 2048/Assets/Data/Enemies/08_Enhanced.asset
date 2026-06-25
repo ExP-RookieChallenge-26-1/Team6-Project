@@ -223,9 +223,9 @@ MonoBehaviour:
     skillType: 0
     skillEffectKind: 3
     damageStatSource: 0
-    intentType: 2
-    value: 1
-    movePower: 0
+    intentType: 0
+    value: 50
+    movePower: 50
     debuffType: 0
     isThornGuard: 0
     retaliationDamage: 0

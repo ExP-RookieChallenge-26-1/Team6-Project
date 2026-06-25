@@ -2330,15 +2330,29 @@ namespace Project2048.Tests
             var charge = CreateSkill("gather-light", SkillType.Attack, cost: 0, power: 0);
             var projectilePrefab = CreateOwnedGameObject("GatherLightProjectilePrefab");
             var verticalBeamPrefab = CreateOwnedGameObject("GatherLightVerticalBeamPrefab");
+            var wrongReleasePrefab = CreateOwnedGameObject("WrongShieldReleasePrefab");
             var attackSprite = CreateOwnedSprite("SkillVfx_AttackImpact");
             var bottomPivotPlayerSprite = CreateOwnedSprite("BottomPivotPlayerSprite", Vector2.zero);
             var centerPivotEnemySprite = CreateOwnedSprite("CenterPivotEnemySprite");
             projectilePrefab.AddComponent<CombatProjectileEffect>();
+            wrongReleasePrefab.AddComponent<ParticleSystem>();
             charge.effectKind = SkillEffectKind.ChargeAttack;
             charge.chargedPower = 120;
             charge.vfx = CreateOwnedVfxTuning(SkillVfxFamily.LightBeam);
             charge.vfx.secondaryPrefab = verticalBeamPrefab;
             charge.vfx.radiusMultiplier = 3.54f;
+            charge.vfxDefinition = new SkillVfxDefinition
+            {
+                cues = new[]
+                {
+                    new SkillVfxCue
+                    {
+                        trigger = SkillVfxTrigger.ChargeRelease,
+                        prefab = wrongReleasePrefab,
+                        spawnAt = new VfxEndpoint { actor = VfxActorRef.PrimaryTarget, socket = VfxSocket.Body },
+                    },
+                },
+            };
             charge.activationEffect = new CombatEffectBinding
             {
                 vfxPrefab = projectilePrefab,
@@ -2384,11 +2398,12 @@ namespace Project2048.Tests
 
             // 랜턴 발사 트레일도 제거되고, 화면에 남는 빔은 버티컬 빔뿐이다.
             Assert.That(viewObject.transform.Find("LightBeamLanternLaunchTrail"), Is.Null);
+            Assert.That(viewObject.transform.Find("WrongShieldReleasePrefab"), Is.Null);
             Assert.That(GameObject.Find("GatherLightProjectilePrefab(Clone)"), Is.Not.Null);
             var verticalBeam = viewObject.transform.Find("GatherLightVerticalBeam");
             Assert.That(verticalBeam, Is.Not.Null);
-            Assert.That(verticalBeam.position.x, Is.EqualTo(enemyRenderer.bounds.center.x).Within(0.001f));
-            Assert.That(verticalBeam.position.y, Is.EqualTo(enemyRenderer.bounds.min.y).Within(0.001f));
+            Assert.That(verticalBeam.position.x, Is.EqualTo(enemyRenderer.transform.position.x).Within(0.001f));
+            Assert.That(verticalBeam.position.y, Is.EqualTo(enemyRenderer.transform.position.y - 0.7f).Within(0.001f));
         }
 
         [Test]
@@ -2429,8 +2444,8 @@ namespace Project2048.Tests
             Assert.That(GameObject.Find("GatherLightProjectilePrefab(Clone)"), Is.Not.Null);
             var verticalBeam = viewObject.transform.Find("GatherLightVerticalBeam");
             Assert.That(verticalBeam, Is.Not.Null);
-            Assert.That(verticalBeam.position.x, Is.EqualTo(enemyRenderer.bounds.center.x).Within(0.001f));
-            Assert.That(verticalBeam.position.y, Is.EqualTo(enemyRenderer.bounds.min.y).Within(0.001f));
+            Assert.That(verticalBeam.position.x, Is.EqualTo(enemyRenderer.transform.position.x).Within(0.001f));
+            Assert.That(verticalBeam.position.y, Is.EqualTo(enemyRenderer.transform.position.y - 0.7f).Within(0.001f));
             Assert.That(playerRenderer.transform.Find("GatherLightBuffParticles"), Is.Not.Null);
         }
 

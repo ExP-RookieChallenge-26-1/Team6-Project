@@ -204,6 +204,7 @@ namespace Project2048.Prototype
             EnsureAudioDefaults();
             WireButtons();
             BindRewardEvents();
+            BindFlowEvents();
             HideRuntimeOverlays();
 
             if (combatManager == null)
@@ -246,6 +247,7 @@ namespace Project2048.Prototype
         private void UnbindCombatEvents()
         {
             UnbindRewardEvents();
+            UnbindFlowEvents();
 
             if (combatManager == null)
             {
@@ -481,6 +483,40 @@ namespace Project2048.Prototype
             rewardManager.OnRewardOffered -= HandleRewardOffered;
             rewardManager.OnRewardChoicesOffered -= HandleRewardChoicesOffered;
             rewardManager.OnRewardClaimed -= HandleRewardClaimed;
+        }
+
+        private void BindFlowEvents()
+        {
+            var flowController = GameManager.Instance != null ? GameManager.Instance.FlowController : null;
+            if (flowController == null)
+            {
+                return;
+            }
+
+            flowController.OnGameStateChanged -= HandleGameStateChanged;
+            flowController.OnGameStateChanged += HandleGameStateChanged;
+        }
+
+        private void UnbindFlowEvents()
+        {
+            var flowController = GameManager.Instance != null ? GameManager.Instance.FlowController : null;
+            if (flowController == null)
+            {
+                return;
+            }
+
+            flowController.OnGameStateChanged -= HandleGameStateChanged;
+        }
+
+        private void HandleGameStateChanged(GameContext.GameState state)
+        {
+            // 최종 스테이지 클리어 후 엔딩 씬으로 전환될 때, 전투씬의 결과 오버레이("이어 하기")가
+            // 로딩 페이드 동안 잠깐 보이는 문제를 막는다. RenderOverlay 가드와 함께 동작해
+            // 이벤트 호출 순서와 무관하게 오버레이가 다시 뜨지 않도록 한다.
+            if (state == GameContext.GameState.Ending)
+            {
+                HideRuntimeOverlays();
+            }
         }
 
         private void HandleRewardOffered(BattleRewardSO _)
@@ -2787,7 +2823,8 @@ namespace Project2048.Prototype
 
             var visible = snapshot != null &&
                 (snapshot.Phase == CombatPhase.Victory || snapshot.Phase == CombatPhase.Defeat) &&
-                !rewardVisible;
+                !rewardVisible &&
+                !IsRunEnding();
             resultOverlay.SetActive(visible);
 
             if (!visible)
@@ -2815,6 +2852,14 @@ namespace Project2048.Prototype
                 snapshot.Phase == CombatPhase.Victory &&
                 rewardManager != null &&
                 rewardManager.HasUnclaimedReward;
+        }
+
+        // 런이 끝나 엔딩 씬으로 넘어가는 중이면 전투 결과 오버레이("이어 하기")를 띄우지 않는다.
+        private static bool IsRunEnding()
+        {
+            var flowController = GameManager.Instance != null ? GameManager.Instance.FlowController : null;
+            return flowController != null &&
+                flowController.CurrentGameState == GameContext.GameState.Ending;
         }
 
         private void HideRuntimeOverlays()

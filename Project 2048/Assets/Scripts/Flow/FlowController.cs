@@ -21,14 +21,30 @@ namespace Project2048.Flow
         public event Action OnEndingSceneLoadRequested;
         public event Action OnBattleSceneLoadRequested;
         public event Action OnGameStarted;
+        public event Action<GameContext.GameState> OnGameStateChanged;
 
         public GameContext.GameState CurrentGameState =>
             gameContext != null ? gameContext.CurrentGameState : GameContext.GameState.MainMenu;
 
         public void Initialized(GameContext context, SaveLoadManager saveManager = null)
         {
+            if (gameContext != null)
+            {
+                gameContext.OnGameStateChanged -= HandleGameStateChanged;
+            }
+
             gameContext = context;
             saveLoadManager = saveManager;
+
+            if (gameContext != null)
+            {
+                gameContext.OnGameStateChanged += HandleGameStateChanged;
+            }
+        }
+
+        private void HandleGameStateChanged(GameContext.GameState state)
+        {
+            OnGameStateChanged?.Invoke(state);
         }
 
         public void SetNewGame()

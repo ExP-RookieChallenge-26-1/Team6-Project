@@ -5189,13 +5189,6 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "from_class": "CombatManager",
-    "to_type": "EnemyIntentType",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
-    "from_class": "CombatManager",
     "to_type": "EnemyTurn",
     "relation_type": "uses",
     "strength": 1
@@ -5722,6 +5715,13 @@
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "from_class": "CombatManager",
     "to_type": "RequestDebugKillEnemy",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
+    "from_class": "CombatManager",
+    "to_type": "RequestDebugKillPlayer",
     "relation_type": "uses",
     "strength": 1
   },
@@ -7597,6 +7597,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Combat/PlayerCombatController.cs",
     "from_class": "PlayerCombatController",
+    "to_type": "Endure",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/PlayerCombatController.cs",
+    "from_class": "PlayerCombatController",
     "to_type": "EndureTurns",
     "relation_type": "uses",
     "strength": 1
@@ -7640,6 +7647,13 @@
     "from_file": "Project 2048/Assets/Scripts/Combat/PlayerCombatController.cs",
     "from_class": "PlayerCombatController",
     "to_type": "FloorToInt",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/PlayerCombatController.cs",
+    "from_class": "PlayerCombatController",
+    "to_type": "ForceKill",
     "relation_type": "uses",
     "strength": 1
   },
@@ -21212,13 +21226,6 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
-    "to_type": "PrototypeCombatText",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
-    "from_class": "CombatUiView",
     "to_type": "PrototypeCombatUiState",
     "relation_type": "uses",
     "strength": 1
@@ -21325,6 +21332,13 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
     "to_type": "RequestDebugKillEnemy",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
+    "from_class": "CombatUiView",
+    "to_type": "RequestDebugKillPlayer",
     "relation_type": "uses",
     "strength": 1
   },

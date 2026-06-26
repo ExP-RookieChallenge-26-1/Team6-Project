@@ -316,6 +316,7 @@ namespace Project2048.Tests
             boardPanel.transform.SetParent(viewObject.transform, false);
             var actionPanel = CreateOwnedGameObject("ActionPanel");
             actionPanel.transform.SetParent(viewObject.transform, false);
+            var enemyNameText = CreateTextChild(viewObject.transform, "EnemyNameText");
             var rewardTitle = CreateTextChild(rewardOverlay.transform, "RewardTitle");
             var rewardDescription = CreateTextChild(rewardOverlay.transform, "RewardDescription");
             var restText = CreateTextChild(rewardOverlay.transform, "RestText");
@@ -329,6 +330,7 @@ namespace Project2048.Tests
             SetPrivateField(view, "resultOverlay", resultOverlay);
             SetPrivateField(view, "boardPanel", boardPanel);
             SetPrivateField(view, "actionPanel", actionPanel);
+            SetPrivateField(view, "enemyNameText", enemyNameText);
             SetPrivateField(view, "rewardTitleText", rewardTitle);
             SetPrivateField(view, "rewardDescriptionText", rewardDescription);
             SetPrivateField(view, "rewardRestText", restText);
@@ -369,6 +371,7 @@ namespace Project2048.Tests
 
             Assert.That(rewardOverlay.activeSelf, Is.False);
             Assert.That(resultOverlay.activeSelf, Is.False);
+            Assert.That(enemyNameText.gameObject.activeSelf, Is.True);
 
             manager.RequestUseSkill(attack, enemy);
             rewardManager.OfferReward(new CombatResult(), player);
@@ -377,6 +380,7 @@ namespace Project2048.Tests
             Assert.That(resultOverlay.activeSelf, Is.False);
             Assert.That(boardPanel.activeSelf, Is.False);
             Assert.That(actionPanel.activeSelf, Is.False);
+            Assert.That(enemyNameText.gameObject.activeSelf, Is.False);
             Assert.That(rewardManager.PendingChoices.Count, Is.EqualTo(3));
             Assert.That(rewardTitle.text, Is.EqualTo("보상 선택"));
             Assert.That(restText.text, Is.EqualTo("다음 전투 이동 횟수 +2"));
@@ -386,6 +390,7 @@ namespace Project2048.Tests
 
             Assert.That(rewardOverlay.activeSelf, Is.False);
             Assert.That(resultOverlay.activeSelf, Is.True);
+            Assert.That(enemyNameText.gameObject.activeSelf, Is.True);
             Assert.That(runProgress.NextCombatBoardMoveCountBonus, Is.EqualTo(2));
         }
 
@@ -493,6 +498,9 @@ namespace Project2048.Tests
             var enemyPortraitImage = GameObject.Find("EnemyPortrait")?.GetComponent<Image>();
             var intentBubble = GameObject.Find("IntentBubble")?.GetComponent<RectTransform>();
             var intentBubbleText = GameObject.Find("IntentBubbleText")?.GetComponent<TMP_Text>();
+            var rewardRestButton = GameObject.Find("RestButton")?.GetComponent<RectTransform>();
+            var rewardEnhanceButton = GameObject.Find("EnhanceButton")?.GetComponent<RectTransform>();
+            var rewardThirdButton = GameObject.Find("RewardChoiceButton_3")?.GetComponent<RectTransform>();
 
             Assert.That(view, Is.Not.Null);
             Assert.That(worldSpriteView, Is.Not.Null);
@@ -515,6 +523,9 @@ namespace Project2048.Tests
             Assert.That(enemyPortraitImage, Is.Not.Null);
             Assert.That(intentBubble, Is.Not.Null);
             Assert.That(intentBubbleText, Is.Not.Null);
+            Assert.That(rewardRestButton, Is.Not.Null);
+            Assert.That(rewardEnhanceButton, Is.Not.Null);
+            Assert.That(rewardThirdButton, Is.Not.Null);
             Assert.That(battleSceneBackground.enabled, Is.False);
             Assert.That(playerPortraitImage.enabled, Is.False);
             Assert.That(enemyPortraitImage.enabled, Is.False);
@@ -524,6 +535,15 @@ namespace Project2048.Tests
             Assert.That(intentBubbleText.fontSizeMax, Is.EqualTo(14f).Within(0.001f));
             Assert.That(intentBubbleText.raycastTarget, Is.False);
             Assert.That(intentBubbleText.rectTransform.sizeDelta, Is.EqualTo(new Vector2(-6f, -6f)));
+            Assert.That(rewardRestButton.anchoredPosition.y, Is.EqualTo(0f).Within(0.001f));
+            Assert.That(rewardEnhanceButton.anchoredPosition.y, Is.EqualTo(0f).Within(0.001f));
+            Assert.That(rewardThirdButton.anchoredPosition.y, Is.EqualTo(0f).Within(0.001f));
+            Assert.That(
+                rewardRestButton.anchorMin.y - rewardEnhanceButton.anchorMax.y,
+                Is.GreaterThanOrEqualTo(0.035f));
+            Assert.That(
+                rewardEnhanceButton.anchorMin.y - rewardThirdButton.anchorMax.y,
+                Is.GreaterThanOrEqualTo(0.035f));
 
             var serializedView = new SerializedObject(view);
             var rewardOverlay = serializedView.FindProperty("rewardOverlay").objectReferenceValue as GameObject;

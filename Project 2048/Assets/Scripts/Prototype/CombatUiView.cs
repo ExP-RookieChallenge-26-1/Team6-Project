@@ -553,6 +553,7 @@ namespace Project2048.Prototype
             var enemyIsAlive = enemy != null && !enemy.IsDead;
             if (enemyNameText != null)
             {
+                enemyNameText.gameObject.SetActive(!IsRewardReplacementVisible());
                 enemyNameText.enableAutoSizing = true;
                 enemyNameText.fontSizeMin = 18f;
                 enemyNameText.fontSizeMax = 32f;

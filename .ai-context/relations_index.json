@@ -20575,13 +20575,6 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
-    "to_type": "CurrentHp",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
-    "from_class": "CombatUiView",
     "to_type": "Direction",
     "relation_type": "uses",
     "strength": 1
@@ -20919,6 +20912,13 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "from_class": "CombatUiView",
     "to_type": "IsPlayerCommandScreenMode",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
+    "from_class": "CombatUiView",
+    "to_type": "IsRewardReplacementVisible",
     "relation_type": "uses",
     "strength": 1
   },
@@ -51774,13 +51774,6 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
     "from_class": "RewardGrowthTests",
-    "to_type": "CombatWorldSpriteView_Initialize_AssignsSpritesFromCombatData",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
-    "from_class": "RewardGrowthTests",
     "to_type": "Count",
     "relation_type": "uses",
     "strength": 1
@@ -51950,6 +51943,13 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
     "from_class": "RewardGrowthTests",
     "to_type": "EnemyController",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "EnemyNameText",
     "relation_type": "uses",
     "strength": 1
   },
@@ -52453,6 +52453,13 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
     "from_class": "RewardGrowthTests",
+    "to_type": "RewardChoiceButton_3",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
     "to_type": "RewardChoiceKind",
     "relation_type": "uses",
     "strength": 1
@@ -52839,13 +52846,6 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
     "from_class": "RewardGrowthTests",
     "to_type": "WorldSprites",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
-    "from_class": "RewardGrowthTests",
-    "to_type": "WorldSpriteView",
     "relation_type": "uses",
     "strength": 1
   },

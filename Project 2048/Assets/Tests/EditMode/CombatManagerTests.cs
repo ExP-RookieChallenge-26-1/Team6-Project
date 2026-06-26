@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using NUnit.Framework;
 using Project2048.Board2048;
@@ -5,6 +6,7 @@ using Project2048.Combat;
 using Project2048.Enemy;
 using Project2048.Skills;
 using UnityEngine;
+using UnityEngine.TestTools;
 
 namespace Project2048.Tests
 {
@@ -941,7 +943,7 @@ namespace Project2048.Tests
         }
 
         [Test]
-        public void ChargeAttack_FiresAtNextPlayerTurnStart()
+        public void ChargeAttack_FiresWhenNextActionPhaseStarts()
         {
             var manager = CreateGameObject<CombatManager>("CombatManager");
             var player = CreateGameObject<PlayerCombatController>("Player");
@@ -966,8 +968,24 @@ namespace Project2048.Tests
             Assert.That(enemy.CurrentHp, Is.EqualTo(50));
             manager.RequestEndPlayerTurn();
 
-            Assert.That(enemy.CurrentHp, Is.LessThan(50));
+            Assert.That(enemy.CurrentHp, Is.EqualTo(50));
+            Assert.That(player.HasPendingChargedAttack, Is.True);
             Assert.That(manager.CurrentPhase, Is.EqualTo(CombatPhase.BoardPhase));
+
+            manager.BoardManager.SetBoardState(
+                new[,]
+                {
+                    { 64, 0, 0, 0 },
+                    { 0, 0, 0, 0 },
+                    { 0, 0, 0, 0 },
+                    { 0, 0, 0, 0 },
+                },
+                0);
+            manager.ResolveBoardPhase();
+
+            Assert.That(enemy.CurrentHp, Is.LessThan(50));
+            Assert.That(player.HasPendingChargedAttack, Is.False);
+            Assert.That(manager.CurrentPhase, Is.EqualTo(CombatPhase.ActionPhase));
         }
 
         [Test]
@@ -1011,6 +1029,20 @@ namespace Project2048.Tests
             Assert.That(manager.RequestUseSkillById("gather-light"), Is.True);
             manager.RequestEndPlayerTurn();
 
+            Assert.That(player.IsDead, Is.False);
+            Assert.That(manager.CurrentPhase, Is.EqualTo(CombatPhase.BoardPhase));
+
+            manager.BoardManager.SetBoardState(
+                new[,]
+                {
+                    { 64, 0, 0, 0 },
+                    { 0, 0, 0, 0 },
+                    { 0, 0, 0, 0 },
+                    { 0, 0, 0, 0 },
+                },
+                0);
+            manager.ResolveBoardPhase();
+
             Assert.That(player.IsDead, Is.True);
             Assert.That(defeatRaised, Is.True);
             Assert.That(victoryRaised, Is.False);
@@ -1018,7 +1050,7 @@ namespace Project2048.Tests
         }
 
         [Test]
-        public void ChargeAttack_StacksQueuedUsesAndReleasesCountAtNextTurnStart()
+        public void ChargeAttack_StacksQueuedUsesAndReleasesCountAtNextActionPhase()
         {
             var manager = CreateGameObject<CombatManager>("CombatManager");
             var player = CreateGameObject<PlayerCombatController>("Player");
@@ -1052,8 +1084,22 @@ namespace Project2048.Tests
 
             manager.RequestEndPlayerTurn();
 
-            Assert.That(player.HasPendingChargedAttack, Is.False);
+            Assert.That(player.HasPendingChargedAttack, Is.True);
             Assert.That(manager.CurrentPhase, Is.EqualTo(CombatPhase.BoardPhase));
+
+            manager.BoardManager.SetBoardState(
+                new[,]
+                {
+                    { 64, 0, 0, 0 },
+                    { 0, 0, 0, 0 },
+                    { 0, 0, 0, 0 },
+                    { 0, 0, 0, 0 },
+                },
+                0);
+            manager.ResolveBoardPhase();
+
+            Assert.That(player.HasPendingChargedAttack, Is.False);
+            Assert.That(manager.CurrentPhase, Is.EqualTo(CombatPhase.ActionPhase));
             Assert.That(manager.GetSnapshot().Skills[0].CanExecute, Is.True);
         }
 
@@ -1068,9 +1114,9 @@ namespace Project2048.Tests
             charge.chargedPower = 40;
             var playerData = CreatePlayerData(maxHp: 20, attackPower: 2);
             playerData.startingSkills = new List<SkillSO> { charge };
-            var enemyData = CreateEnemyData(maxHp: 100, attackValue: 0);
+            var enemyData = CreateEnemyData(maxHp: 200, attackValue: 0);
             CombatSnapshot latestSnapshot = null;
-            var releasedAttackCount = 0;
+            var releaseEventCount = 0;
             var popupSnapshotCount = 0;
             var lastPopupSequence = 0;
 
@@ -1085,7 +1131,8 @@ namespace Project2048.Tests
 
             manager.OnPlayerChargedAttackReleased += (_, __, attackCount, ___) =>
             {
-                releasedAttackCount = attackCount;
+                releaseEventCount++;
+                Assert.That(attackCount, Is.EqualTo(1));
                 manager.BeginSkillPresentationLock(1f);
             };
             manager.OnCombatStateChanged += snapshot =>
@@ -1105,20 +1152,172 @@ namespace Project2048.Tests
 
             manager.RequestEndPlayerTurn();
 
-            Assert.That(releasedAttackCount, Is.EqualTo(2));
+            Assert.That(releaseEventCount, Is.Zero);
+            Assert.That(player.HasPendingChargedAttack, Is.True);
+            Assert.That(manager.IsSkillPresentationLocked, Is.False);
+            Assert.That(enemy.CurrentHp, Is.EqualTo(enemy.MaxHp));
+            Assert.That(manager.CurrentPhase, Is.EqualTo(CombatPhase.BoardPhase));
+
+            manager.BoardManager.SetBoardState(
+                new[,]
+                {
+                    { 64, 0, 0, 0 },
+                    { 0, 0, 0, 0 },
+                    { 0, 0, 0, 0 },
+                    { 0, 0, 0, 0 },
+                },
+                0);
+            manager.ResolveBoardPhase();
+
+            Assert.That(releaseEventCount, Is.EqualTo(1));
             Assert.That(manager.IsSkillPresentationLocked, Is.True);
             Assert.That(enemy.CurrentHp, Is.EqualTo(enemy.MaxHp));
-            Assert.That(manager.CurrentPhase, Is.EqualTo(CombatPhase.PlayerTurnStart));
+            Assert.That(manager.CurrentPhase, Is.EqualTo(CombatPhase.ActionPhase));
             Assert.That(popupSnapshotCount, Is.Zero);
+            Assert.That(manager.RequestUseSkillById("gather-light"), Is.False);
 
             manager.ClearSkillPresentationLock();
 
+            Assert.That(releaseEventCount, Is.EqualTo(2));
             Assert.That(player.HasPendingChargedAttack, Is.False);
             Assert.That(enemy.CurrentHp, Is.LessThan(enemy.MaxHp));
-            Assert.That(manager.CurrentPhase, Is.EqualTo(CombatPhase.BoardPhase));
+            Assert.That(manager.IsSkillPresentationLocked, Is.True);
+            Assert.That(manager.CurrentPhase, Is.EqualTo(CombatPhase.ActionPhase));
             Assert.That(latestSnapshot?.LastDamagePopupCue, Is.Not.Null);
             Assert.That(latestSnapshot.LastDamagePopupCue.Amount, Is.GreaterThan(0));
             Assert.That(popupSnapshotCount, Is.EqualTo(1));
+
+            manager.ClearSkillPresentationLock();
+
+            Assert.That(manager.IsSkillPresentationLocked, Is.False);
+            Assert.That(enemy.CurrentHp, Is.LessThan(enemy.MaxHp));
+            Assert.That(manager.CurrentPhase, Is.EqualTo(CombatPhase.ActionPhase));
+            Assert.That(popupSnapshotCount, Is.EqualTo(2));
+        }
+
+        [Test]
+        public void ChargeAttack_WithPresentationListener_DelaysVictoryUntilAllReleaseVfxComplete()
+        {
+            var manager = CreateGameObject<CombatManager>("CombatManager");
+            var player = CreateGameObject<PlayerCombatController>("Player");
+            var enemy = CreateGameObject<EnemyController>("Enemy");
+            var charge = CreateSkill("gather-light", SkillType.Attack, cost: 0, power: 0);
+            charge.effectKind = SkillEffectKind.ChargeAttack;
+            charge.chargedPower = 200;
+            var playerData = CreatePlayerData(maxHp: 20, attackPower: 100);
+            playerData.startingSkills = new List<SkillSO> { charge };
+            var enemyData = CreateEnemyData(maxHp: 50, attackValue: 0);
+            var releaseEventCount = 0;
+            var victoryRaised = false;
+
+            manager.SetCombatants(player, new[] { enemy });
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new List<EnemySO> { enemyData },
+                boardMoveCount = 1,
+            });
+            manager.ResolveBoardPhase();
+
+            manager.OnPlayerChargedAttackReleased += (_, __, attackCount, ___) =>
+            {
+                releaseEventCount++;
+                Assert.That(attackCount, Is.EqualTo(1));
+                manager.BeginSkillPresentationLock(1f);
+            };
+            manager.OnCombatVictory += _ => victoryRaised = true;
+
+            Assert.That(manager.RequestUseSkillById("gather-light"), Is.True);
+            Assert.That(manager.RequestUseSkillById("gather-light"), Is.True);
+            manager.RequestEndPlayerTurn();
+            manager.BoardManager.SetBoardState(
+                new[,]
+                {
+                    { 64, 0, 0, 0 },
+                    { 0, 0, 0, 0 },
+                    { 0, 0, 0, 0 },
+                    { 0, 0, 0, 0 },
+                },
+                0);
+            manager.ResolveBoardPhase();
+
+            Assert.That(releaseEventCount, Is.EqualTo(1));
+            Assert.That(victoryRaised, Is.False);
+
+            manager.ClearSkillPresentationLock();
+
+            Assert.That(enemy.IsDead, Is.True);
+            Assert.That(releaseEventCount, Is.EqualTo(2));
+            Assert.That(victoryRaised, Is.False);
+            Assert.That(manager.CurrentPhase, Is.EqualTo(CombatPhase.ActionPhase));
+            Assert.That(manager.IsSkillPresentationLocked, Is.True);
+
+            manager.ClearSkillPresentationLock();
+
+            Assert.That(victoryRaised, Is.True);
+            Assert.That(manager.CurrentPhase, Is.EqualTo(CombatPhase.Victory));
+            Assert.That(manager.IsSkillPresentationLocked, Is.False);
+        }
+
+        [UnityTest]
+        public IEnumerator PlayerSkill_PendingPresentationCompletesAfterFixedDelayBeforeUnlock()
+        {
+            var manager = CreateGameObject<CombatManager>("CombatManager");
+            var player = CreateGameObject<PlayerCombatController>("Player");
+            var enemy = CreateGameObject<EnemyController>("Enemy");
+            var strike = CreateSkill("strike", SkillType.Attack, cost: 0, power: 40);
+            var playerData = CreatePlayerData(maxHp: 20, attackPower: 2);
+            playerData.startingSkills = new List<SkillSO> { strike };
+            var enemyData = CreateEnemyData(maxHp: 100, attackValue: 0);
+            CombatSnapshot latestSnapshot = null;
+            var popupSnapshotCount = 0;
+            var lastPopupSequence = 0;
+
+            manager.SetCombatants(player, new[] { enemy });
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new List<EnemySO> { enemyData },
+                boardMoveCount = 1,
+            });
+            manager.ResolveBoardPhase();
+
+            manager.OnPlayerSkillUsed += (_, __) =>
+            {
+                var damageDelaySeconds = Project2048.Prototype.CombatWorldSpriteView.SkillDamageDelaySeconds;
+                manager.BeginSkillPresentationLock(damageDelaySeconds + 0.2f, damageDelaySeconds);
+            };
+            manager.OnCombatStateChanged += snapshot =>
+            {
+                latestSnapshot = snapshot;
+                var cue = snapshot.LastDamagePopupCue;
+                if (cue != null && cue.Sequence > lastPopupSequence)
+                {
+                    lastPopupSequence = cue.Sequence;
+                    popupSnapshotCount++;
+                }
+            };
+
+            Assert.That(manager.RequestUseSkillById("strike", 0), Is.True);
+
+            Assert.That(manager.IsSkillPresentationLocked, Is.True);
+            Assert.That(enemy.CurrentHp, Is.EqualTo(enemy.MaxHp));
+            Assert.That(popupSnapshotCount, Is.Zero);
+            Assert.That(
+                Project2048.Prototype.CombatWorldSpriteView.SkillDamageDelaySeconds,
+                Is.EqualTo(0.1f).Within(0.001f));
+
+            yield return new WaitForSeconds(Project2048.Prototype.CombatWorldSpriteView.SkillDamageDelaySeconds + 0.05f);
+
+            Assert.That(manager.IsSkillPresentationLocked, Is.True);
+            Assert.That(enemy.CurrentHp, Is.LessThan(enemy.MaxHp));
+            Assert.That(latestSnapshot?.LastDamagePopupCue, Is.Not.Null);
+            Assert.That(popupSnapshotCount, Is.EqualTo(1));
+            Assert.That(manager.RequestUseSkillById("strike", 0), Is.False);
+
+            yield return new WaitForSeconds(0.25f);
+
+            Assert.That(manager.IsSkillPresentationLocked, Is.False);
         }
 
         [Test]
@@ -1340,6 +1539,84 @@ namespace Project2048.Tests
 
             Assert.That(resolvedCost, Is.LessThan(strike.cost));
             Assert.That(manager.RequestUseSkillById("strike", 0), Is.False);
+        }
+
+        [Test]
+        public void RequestEndPlayerTurn_ClearsUnspentCostDuringNextBoardPhase()
+        {
+            var manager = CreateGameObject<CombatManager>("CombatManager");
+            var player = CreateGameObject<PlayerCombatController>("Player");
+            var enemy = CreateGameObject<EnemyController>("Enemy");
+            var playerData = CreatePlayerData(maxHp: 20, attackPower: 2);
+            var enemyData = CreateEnemyData(maxHp: 50, attackValue: 0);
+            var board = new[,]
+            {
+                { 64, 0, 0, 0 },
+                { 0, 0, 0, 0 },
+                { 0, 0, 0, 0 },
+                { 0, 0, 0, 0 },
+            };
+            var boardCost = new CostConverter().ConvertBoardToCost(board) * 10;
+
+            manager.SetCombatants(player, new[] { enemy });
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new List<EnemySO> { enemyData },
+                boardMoveCount = 1,
+            });
+            manager.BoardManager.SetBoardState(board, 0);
+            Assert.That(manager.ResolveBoardPhase(), Is.EqualTo(boardCost));
+
+            manager.RequestEndPlayerTurn();
+
+            Assert.That(manager.CurrentPhase, Is.EqualTo(CombatPhase.BoardPhase));
+            Assert.That(manager.CostWallet.CurrentCost, Is.Zero);
+            Assert.That(manager.GetSnapshot().CurrentCost, Is.Zero);
+        }
+
+        [Test]
+        public void CostCarrySkill_PreservesStoredCostEvenThoughVisibleCostResets()
+        {
+            var manager = CreateGameObject<CombatManager>("CombatManager");
+            var player = CreateGameObject<PlayerCombatController>("Player");
+            var enemy = CreateGameObject<EnemyController>("Enemy");
+            var carry = CreateSkill("afterglow-save", SkillType.Defense, cost: 0, power: 0);
+            carry.effectKind = SkillEffectKind.CostCarry;
+            carry.maxCostCarry = 4;
+            var playerData = CreatePlayerData(maxHp: 20, attackPower: 2);
+            playerData.startingSkills = new List<SkillSO> { carry };
+            var enemyData = CreateEnemyData(maxHp: 50, attackValue: 0);
+            var board = new[,]
+            {
+                { 64, 0, 0, 0 },
+                { 0, 0, 0, 0 },
+                { 0, 0, 0, 0 },
+                { 0, 0, 0, 0 },
+            };
+            var boardCost = new CostConverter().ConvertBoardToCost(board) * 10;
+
+            manager.SetCombatants(player, new[] { enemy });
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new List<EnemySO> { enemyData },
+                boardMoveCount = 1,
+            });
+            manager.BoardManager.SetBoardState(board, 0);
+            manager.ResolveBoardPhase();
+            Assert.That(manager.RequestUseSkillById("afterglow-save"), Is.True);
+
+            manager.RequestEndPlayerTurn();
+
+            Assert.That(manager.CostWallet.CurrentCost, Is.Zero);
+            Assert.That(player.CarriedCost, Is.EqualTo(4));
+
+            manager.BoardManager.SetBoardState(board, 0);
+            var resolvedCost = manager.ResolveBoardPhase();
+
+            Assert.That(resolvedCost, Is.EqualTo(boardCost + 4));
+            Assert.That(manager.CostWallet.CurrentCost, Is.EqualTo(boardCost + 4));
         }
 
         [Test]

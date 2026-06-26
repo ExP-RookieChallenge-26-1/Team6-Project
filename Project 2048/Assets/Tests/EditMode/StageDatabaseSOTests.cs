@@ -9,7 +9,7 @@ namespace Project2048.Tests
     public class StageDatabaseSOTests
     {
         [Test]
-        public void PrototypeStageDatabase_UsesTwentyStageRunWithFinalBullAtStageTwenty()
+        public void PrototypeStageDatabase_UsesTwentyStageRunWithFinalBossAtStageTwenty()
         {
             var database = AssetDatabase.LoadAssetAtPath<StageDatabaseSO>("Assets/Data/Stage/Stage Database SO.asset");
 
@@ -24,12 +24,50 @@ namespace Project2048.Tests
             Assert.That(database.TryGetStage(20, out var finalStage), Is.True);
             Assert.That(database.IsFinalStage(20), Is.True);
             Assert.That(finalStage.Floor, Is.EqualTo(StageFloor.Lower));
-            Assert.That(finalStage.StageNumberInFloor, Is.EqualTo(6));
+            Assert.That(finalStage.StageNumberInFloor, Is.EqualTo(7));
 
             var finalEnemy = finalStage.EnemyCandidates[0];
-            Assert.That(finalEnemy.enemyName, Is.EqualTo("\uD669\uC18C"));
+            Assert.That(finalEnemy.enemyName, Is.EqualTo("\uCD5C\uC885 \uBCF4\uC2A4"));
             Assert.That(finalEnemy.encounterRank, Is.EqualTo(EnemyEncounterRank.FinalBoss));
             Assert.That(database.TryGetStage(21, out _), Is.False);
+        }
+
+        [Test]
+        public void PrototypeStageDatabase_UsesStageSheetEnemyLineup()
+        {
+            var database = AssetDatabase.LoadAssetAtPath<StageDatabaseSO>("Assets/Data/Stage/Stage Database SO.asset");
+            var expectedNames = new[]
+            {
+                "\uACE0\uC2B4\uB3C4\uCE58",
+                "\uD1A0\uB07C",
+                "\uACE0\uC2B4\uB3C4\uCE58",
+                "\uD1A0\uB07C",
+                "\uAC15\uD654 \uACE0\uC2B4\uB3C4\uCE58",
+                "\uBCF4\uC2A4 \uC5EC\uC6B0",
+                "\uACE0\uC591\uC774",
+                "\uBD80\uC5C9\uC774",
+                "\uACE0\uC591\uC774",
+                "\uBD80\uC5C9\uC774",
+                "\uAC15\uD654 \uACE0\uC591\uC774",
+                "\uAC15\uD654 \uBD80\uC5C9\uC774",
+                "\uBCF4\uC2A4 \uC5EC\uC6B0",
+                "\uC5FC\uC18C",
+                "\uD669\uC18C",
+                "\uC5FC\uC18C",
+                "\uAC15\uD654 \uC5FC\uC18C",
+                "\uAC15\uD654 \uD669\uC18C",
+                "\uD669\uC18C",
+                "\uCD5C\uC885 \uBCF4\uC2A4",
+            };
+
+            Assert.That(database, Is.Not.Null);
+            Assert.That(expectedNames.Length, Is.EqualTo(StageDatabaseSO.TotalStageCount));
+            for (var stageIndex = 1; stageIndex <= expectedNames.Length; stageIndex++)
+            {
+                Assert.That(database.TryGetStage(stageIndex, out var stage), Is.True, stageIndex.ToString());
+                Assert.That(stage.EnemyCandidates.Count, Is.EqualTo(1), stageIndex.ToString());
+                Assert.That(stage.EnemyCandidates[0].enemyName, Is.EqualTo(expectedNames[stageIndex - 1]), stageIndex.ToString());
+            }
         }
 
         [Test]
@@ -45,7 +83,7 @@ namespace Project2048.Tests
             Assert.That(middleStage.Floor, Is.EqualTo(StageFloor.Middle));
             Assert.That(middleStage.StageNumberInFloor, Is.EqualTo(1));
 
-            Assert.That(database.TryGetStage(15, out var lowerStage), Is.True);
+            Assert.That(database.TryGetStage(14, out var lowerStage), Is.True);
             Assert.That(lowerStage.Floor, Is.EqualTo(StageFloor.Lower));
             Assert.That(lowerStage.StageNumberInFloor, Is.EqualTo(1));
         }
@@ -57,7 +95,7 @@ namespace Project2048.Tests
 
             Assert.That(database.TryGetStage(1, out var upperStage), Is.True);
             Assert.That(database.TryGetStage(7, out var middleStage), Is.True);
-            Assert.That(database.TryGetStage(15, out var lowerStage), Is.True);
+            Assert.That(database.TryGetStage(14, out var lowerStage), Is.True);
 
             var upperSize = ResolveBackgroundWorldSize(upperStage);
             var middleSize = ResolveBackgroundWorldSize(middleStage);
@@ -72,9 +110,9 @@ namespace Project2048.Tests
         [TestCase(1, StageFloor.Upper, 1)]
         [TestCase(6, StageFloor.Upper, 6)]
         [TestCase(7, StageFloor.Middle, 1)]
-        [TestCase(14, StageFloor.Middle, 8)]
-        [TestCase(15, StageFloor.Lower, 1)]
-        [TestCase(20, StageFloor.Lower, 6)]
+        [TestCase(13, StageFloor.Middle, 7)]
+        [TestCase(14, StageFloor.Lower, 1)]
+        [TestCase(20, StageFloor.Lower, 7)]
         public void TryResolveStagePosition_MapsGlobalIndexToFloorPosition(
             int stageIndex,
             StageFloor expectedFloor,

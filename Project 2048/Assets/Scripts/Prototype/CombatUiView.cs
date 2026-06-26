@@ -1213,7 +1213,10 @@ namespace Project2048.Prototype
                 return debuffStatusColor;
             }
 
-            if (effect.Id == "attack-up" || effect.Id == "attack-down")
+            if (effect.Id == "attack-up" ||
+                effect.Id == "attack-down" ||
+                effect.Id == "attack-rank-up" ||
+                effect.Id == "attack-rank-down")
             {
                 return WithAlpha(attackIntentColor, 0.95f);
             }
@@ -1360,7 +1363,7 @@ namespace Project2048.Prototype
                 confirmPopup = ConfirmPopup.CreateRuntime(canvas != null ? canvas.transform : transform.root);
             }
 
-            confirmPopup.Show("종료하시겠습니까?", ReturnToMainMenu, null);
+            confirmPopup.Show("메인 메뉴로 돌아가시겠습니까?", ReturnToMainMenu, null);
         }
 
         private static void ReturnToMainMenu()
@@ -1633,14 +1636,11 @@ namespace Project2048.Prototype
             NormalizeHpBarTheme();
             ConfigureHpText(playerBattleHpText);
             ConfigureHpText(enemyHpText);
-            ConfigureHpText(hpText);
             ConfigureHpBarFill(playerBattleHpBarFill, hpBarBackgroundColor);
             ConfigureHpBarFill(enemyHpBarFill, hpBarBackgroundColor);
-            ConfigureHpBarFill(hpBarFill, hpBarBackgroundColor);
             EnsureDamageTrailFill(playerBattleHpBarFill);
             EnsureDamageTrailFill(enemyHpBarFill);
-            EnsureDamageTrailFill(hpBarFill);
-            playerBoardStatusEffectsRoot = ResolveStatusEffectsRoot(hpBarFill, "PlayerBoardStatusEffects") ?? playerBoardStatusEffectsRoot;
+            HideBoardHpBar();
             playerBattleStatusEffectsRoot = ResolveStatusEffectsRoot(playerBattleHpBarFill, "PlayerBattleStatusEffects") ?? playerBattleStatusEffectsRoot;
             enemyStatusEffectsRoot = ResolveStatusEffectsRoot(enemyHpBarFill, "EnemyStatusEffects") ?? enemyStatusEffectsRoot;
             EnsureStatusTooltip();
@@ -1739,18 +1739,43 @@ namespace Project2048.Prototype
         private void RenderBoardPlayerStatus()
         {
             var player = snapshot?.Player;
-            if (hpBarFill != null && player != null && player.MaxHp > 0)
-            {
-                SetHpBarValue(hpBarFill, player.CurrentHp, player.MaxHp);
-            }
-
-            if (hpText != null && player != null)
-            {
-                hpText.text = PrototypeCombatText.FormatPlayerHp(player.CurrentHp, player.MaxHp, player.Block);
-            }
-
-            SetBlockIndicator(hpBarFill, player?.Block ?? 0);
+            HideBoardHpBar();
             RenderStatusEffects(playerBoardStatusEffectsRoot, player?.StatusEffects);
+        }
+
+        private void HideBoardHpBar()
+        {
+            var boardHpRoot = ResolveBoardHpRoot();
+            if (boardHpRoot != null)
+            {
+                boardHpRoot.gameObject.SetActive(false);
+            }
+
+            if (hpBarFill != null)
+            {
+                hpBarFill.gameObject.SetActive(false);
+            }
+
+            if (hpText != null)
+            {
+                hpText.gameObject.SetActive(false);
+            }
+        }
+
+        private RectTransform ResolveBoardHpRoot()
+        {
+            if (hpBarFill == null)
+            {
+                return null;
+            }
+
+            var root = hpBarFill.transform.parent as RectTransform;
+            if (root != null && (root.name == "HpBarBg" || root.name == "BoardHp"))
+            {
+                return root;
+            }
+
+            return hpBarFill.rectTransform;
         }
 
         private static void ConfigureHpBarContentRect(RectTransform rectTransform)

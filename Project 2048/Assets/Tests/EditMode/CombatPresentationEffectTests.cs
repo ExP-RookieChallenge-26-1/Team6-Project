@@ -2454,6 +2454,12 @@ namespace Project2048.Tests
             });
             manager.ResolveBoardPhase();
             view.Initialize(bootstrap);
+            Assert.That(
+                CombatWorldSpriteView.ChargedAttackReleaseBoardDelaySeconds,
+                Is.EqualTo(CombatUiView.BoardToActionPanelDelaySeconds).Within(0.001f));
+            Assert.That(
+                manager.PendingChargedAttackReleaseDelaySeconds,
+                Is.EqualTo(CombatWorldSpriteView.ChargedAttackReleaseBoardDelaySeconds).Within(0.001f));
 
             Assert.That(manager.RequestUseSkillById("gather-light"), Is.True);
             Assert.That(viewObject.transform.Find("ChargedLightBeam"), Is.Null);
@@ -2462,9 +2468,26 @@ namespace Project2048.Tests
             Assert.That(playerRenderer.transform.Find("ChargedLightAttackArt"), Is.Null);
             Assert.That(playerRenderer.transform.Find("GatherLightBuffParticles"), Is.Not.Null);
             Assert.That(GameObject.Find("GatherLightProjectilePrefab(Clone)"), Is.Null);
+            manager.ClearSkillPresentationLock();
+            Assert.That(player.HasPendingChargedAttack, Is.True);
 
             manager.RequestEndPlayerTurn();
 
+            Assert.That(manager.CurrentPhase, Is.EqualTo(CombatPhase.BoardPhase));
+            Assert.That(GameObject.Find("GatherLightProjectilePrefab(Clone)"), Is.Null);
+            manager.BoardManager.SetBoardState(
+                new[,]
+                {
+                    { 64, 0, 0, 0 },
+                    { 0, 0, 0, 0 },
+                    { 0, 0, 0, 0 },
+                    { 0, 0, 0, 0 },
+                },
+                0);
+            manager.ResolveBoardPhase();
+
+            Assert.That(manager.CurrentPhase, Is.EqualTo(CombatPhase.ActionPhase));
+            Assert.That(manager.IsSkillPresentationLocked, Is.True);
             // 수평 충전 빔 효과(빔 라인 + 글로우 + 머즐/임팩트 파티클 + 임팩트 아트)는 제거되었다.
             Assert.That(viewObject.transform.Find("ChargedLightBeam"), Is.Null);
             Assert.That(viewObject.transform.Find("ChargedLightBeamGlow"), Is.Null);
@@ -3442,6 +3465,30 @@ namespace Project2048.Tests
             Assert.That(profile.Resolve(PrototypeCombatEventSoundCue.Defeat).sfxClip, Is.Not.Null);
             Assert.That(profile.Resolve(PrototypeCombatEventSoundCue.RewardRest).sfxClip, Is.Not.Null);
             Assert.That(profile.Resolve(PrototypeCombatEventSoundCue.RewardEnhance).sfxClip, Is.Not.Null);
+        }
+
+        [Test]
+        public void PrototypeEnemyAssets_UseConsistentDisplayNames()
+        {
+            var enemyGuids = AssetDatabase.FindAssets("t:EnemySO", new[] { "Assets/Data/Enemies" });
+
+            Assert.That(enemyGuids.Length, Is.GreaterThanOrEqualTo(12));
+            foreach (var guid in enemyGuids)
+            {
+                var path = AssetDatabase.GUIDToAssetPath(guid);
+                var enemy = AssetDatabase.LoadAssetAtPath<EnemySO>(path);
+
+                Assert.That(enemy, Is.Not.Null, path);
+                Assert.That(enemy.enemyName, Is.Not.Null.And.Not.Empty, path);
+                Assert.That(enemy.enemyName, Is.Not.EqualTo("BOSS"), path);
+                Assert.That(enemy.enemyName, Does.Not.Contain(" 2"), path);
+                Assert.That(enemy.enemyName, Does.Not.Match(@"\d"), path);
+                Assert.That(enemy.enemyName, Does.Not.Contain("(강화)"), path);
+                if (enemy.enemyName.Contains("강화"))
+                {
+                    Assert.That(enemy.enemyName, Does.StartWith("강화 "), path);
+                }
+            }
         }
 
         [Test]

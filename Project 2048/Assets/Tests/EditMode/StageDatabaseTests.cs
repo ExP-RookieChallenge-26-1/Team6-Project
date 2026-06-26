@@ -26,20 +26,34 @@ namespace Project2048.Tests
         }
 
         [Test]
-        public void MapsUpperMiddleLowerStagesToThirtyStageRun()
+        public void MapsUpperMiddleLowerStagesToTwentyStageRun()
         {
             var stageDatabase = CreateScriptableObject<StageDatabaseSO>();
             var upperStage = CreateStage(StageFloor.Upper, 1, CreateEnemyData(maxHp: 10, attackValue: 1));
             var middleStage = CreateStage(StageFloor.Middle, 1, CreateEnemyData(maxHp: 20, attackValue: 2));
-            var lowerStage = CreateStage(StageFloor.Lower, 10, CreateEnemyData(maxHp: 30, attackValue: 3));
+            var lowerStage = CreateStage(StageFloor.Lower, 7, CreateEnemyData(maxHp: 30, attackValue: 3));
 
-            SetPrivateField(stageDatabase, "upperStages", new List<StageSO> { upperStage });
-            SetPrivateField(stageDatabase, "middleStages", new List<StageSO> { middleStage });
+            SetPrivateField(stageDatabase, "upperStages", new List<StageSO>
+            {
+                upperStage,
+                null,
+                null,
+                null,
+                null,
+                null,
+            });
+            SetPrivateField(stageDatabase, "middleStages", new List<StageSO>
+            {
+                middleStage,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+            });
             SetPrivateField(stageDatabase, "lowerStages", new List<StageSO>
             {
-                null,
-                null,
-                null,
                 null,
                 null,
                 null,
@@ -51,12 +65,12 @@ namespace Project2048.Tests
 
             Assert.That(stageDatabase.TryGetStage(1, out var resolvedUpper), Is.True);
             Assert.That(resolvedUpper, Is.SameAs(upperStage));
-            Assert.That(stageDatabase.TryGetStage(11, out var resolvedMiddle), Is.True);
+            Assert.That(stageDatabase.TryGetStage(7, out var resolvedMiddle), Is.True);
             Assert.That(resolvedMiddle, Is.SameAs(middleStage));
-            Assert.That(stageDatabase.TryGetStage(30, out var resolvedLower), Is.True);
+            Assert.That(stageDatabase.TryGetStage(20, out var resolvedLower), Is.True);
             Assert.That(resolvedLower, Is.SameAs(lowerStage));
-            Assert.That(stageDatabase.IsFinalStage(29), Is.False);
-            Assert.That(stageDatabase.IsFinalStage(30), Is.True);
+            Assert.That(stageDatabase.IsFinalStage(19), Is.False);
+            Assert.That(stageDatabase.IsFinalStage(20), Is.True);
         }
 
         [Test]

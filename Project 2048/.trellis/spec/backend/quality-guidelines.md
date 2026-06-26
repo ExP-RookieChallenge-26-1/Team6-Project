@@ -59,6 +59,24 @@ Bad case:
   in action flow even when `PlayerCombatController.IsDead` is already true, or
   can turn a simultaneous death into victory.
 
+### Coroutine Timing Regression Tests
+
+When a behavior contract depends on a coroutine delay, tests should exercise the
+public event/lock path and wait through the runtime timer. Do not call private
+completion methods through reflection just to make the test synchronous; that
+couples the test to implementation details and can miss broken timer wiring.
+
+Good case:
+- `PlayerSkill_PendingPresentationCompletesAfterFixedDelayBeforeUnlock` accepts
+  a skill through `RequestUseSkillById`, lets `OnPlayerSkillUsed` call
+  `BeginSkillPresentationLock(...)`, waits past the configured damage delay,
+  then asserts damage/popup completion while the presentation lock remains.
+
+Bad case:
+- Invoking `CompletePendingSkillPresentation()` with `BindingFlags.NonPublic`
+  proves only the private helper body, not that `StartCoroutine(...)`, sequence
+  guards, or lock release timing are wired correctly.
+
 ---
 
 ## Code Review Checklist

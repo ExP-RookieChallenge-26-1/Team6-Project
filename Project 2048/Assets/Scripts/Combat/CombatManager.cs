@@ -45,9 +45,13 @@ namespace Project2048.Combat
         private CombatDamagePopupCue lastDamagePopupCue;
         private int damagePopupCueSequence;
         private Coroutine skillPresentationLockRoutine;
+        private Coroutine skillPresentationCompletionRoutine;
+        private Coroutine pendingChargedAttackReleaseDelayRoutine;
         private int skillPresentationLockSequence;
+        private int pendingChargedAttackReleaseDelaySequence;
         private PendingPlayerSkillExecution pendingPlayerSkillExecution;
         private PendingChargedAttackRelease pendingChargedAttackRelease;
+        private bool isPendingChargedAttackReleaseQueued;
         private readonly HashSet<SkillEffectKind> usedOncePerTurnSkillEffects = new();
 
         public CombatPhase CurrentPhase { get; private set; } = CombatPhase.None;
@@ -57,6 +61,7 @@ namespace Project2048.Combat
         public IReadOnlyList<EnemyController> Enemies => enemies;
         public PlayerCombatController Player => player;
         public bool IsSkillPresentationLocked { get; private set; }
+        public float PendingChargedAttackReleaseDelaySeconds { get; set; }
 
         public event Action<CombatPhase> OnPhaseChanged;
         public event Action<CombatResult> OnCombatVictory;
@@ -119,6 +124,7 @@ namespace Project2048.Combat
             // 모든 초기화가 끝난 뒤 완성된 snapshot 하나만 발행한다.
             suppressStateNotifications = true;
             ResetSkillPresentationLock(stopRoutine: true);
+            ResetPendingChargedAttackReleaseDelay(stopRoutine: true);
             lastActionDescription = "2048 진행";
             lastVfxCue = null;
             vfxCueSequence = 0;
@@ -126,6 +132,7 @@ namespace Project2048.Combat
             damagePopupCueSequence = 0;
             pendingPlayerSkillExecution = null;
             pendingChargedAttackRelease = null;
+            isPendingChargedAttackReleaseQueued = false;
             activeNextCombatBoardMoveCountBonus = 0;
             usedOncePerTurnSkillEffects.Clear();
             TurnController.Reset();
@@ -186,6 +193,7 @@ namespace Project2048.Combat
             lastActionDescription = $"코스트 획득: {cost}";
             CostWallet.SetCost(cost);
             ChangePhase(CombatPhase.ActionPhase);
+            ResolveOrQueuePendingChargedAttack();
             return cost;
         }
 
@@ -196,6 +204,7 @@ namespace Project2048.Combat
                 IsSkillPresentationLocked ||
                 pendingPlayerSkillExecution != null ||
                 pendingChargedAttackRelease != null ||
+                isPendingChargedAttackReleaseQueued ||
                 skill == null)
             {
                 return false;
@@ -391,15 +400,16 @@ namespace Project2048.Combat
             return true;
         }
 
-        public void BeginSkillPresentationLock(float durationSeconds)
+        public void BeginSkillPresentationLock(float durationSeconds, float pendingCompletionDelaySeconds = 0f)
         {
             EnsureRuntimeState();
-            if (durationSeconds <= 0f)
+            if (durationSeconds <= 0f && pendingCompletionDelaySeconds <= 0f)
             {
                 CompletePendingSkillPresentation();
                 return;
             }
 
+            var lockDurationSeconds = Mathf.Max(0f, Mathf.Max(durationSeconds, pendingCompletionDelaySeconds));
             var sequence = ++skillPresentationLockSequence;
             IsSkillPresentationLocked = true;
             NotifyStateChanged();
@@ -410,16 +420,35 @@ namespace Project2048.Combat
                 skillPresentationLockRoutine = null;
             }
 
+            if (skillPresentationCompletionRoutine != null)
+            {
+                StopCoroutine(skillPresentationCompletionRoutine);
+                skillPresentationCompletionRoutine = null;
+            }
+
             if (isActiveAndEnabled)
             {
-                skillPresentationLockRoutine = StartCoroutine(ReleaseSkillPresentationLockAfterDelay(sequence, durationSeconds));
+                if (pendingCompletionDelaySeconds > 0f)
+                {
+                    skillPresentationCompletionRoutine = StartCoroutine(
+                        CompletePendingSkillPresentationAfterDelay(sequence, pendingCompletionDelaySeconds));
+                }
+
+                skillPresentationLockRoutine = StartCoroutine(ReleaseSkillPresentationLockAfterDelay(sequence, lockDurationSeconds));
             }
         }
 
         public void ClearSkillPresentationLock()
         {
             EnsureRuntimeState();
+            var hadQueuedChargedAttackRelease = isPendingChargedAttackReleaseQueued;
             ResetSkillPresentationLock(stopRoutine: true);
+            ResetPendingChargedAttackReleaseDelay(stopRoutine: true);
+            if (hadQueuedChargedAttackRelease && ResolvePendingChargedAttack())
+            {
+                return;
+            }
+
             if (!CompletePendingSkillPresentation())
             {
                 NotifyStateChanged();
@@ -483,7 +512,11 @@ namespace Project2048.Combat
         public void RequestEndPlayerTurn()
         {
             EnsureRuntimeState();
-            if (CurrentPhase != CombatPhase.ActionPhase)
+            if (CurrentPhase != CombatPhase.ActionPhase ||
+                IsSkillPresentationLocked ||
+                pendingPlayerSkillExecution != null ||
+                pendingChargedAttackRelease != null ||
+                isPendingChargedAttackReleaseQueued)
             {
                 return;
             }
@@ -497,6 +530,7 @@ namespace Project2048.Combat
             }
 
             player.CaptureCostCarry(CostWallet.CurrentCost);
+            CostWallet.Clear();
             player.ClearSkillSeal();
 
             if (enemyTurnDelaySeconds > 0f && isActiveAndEnabled)
@@ -519,11 +553,6 @@ namespace Project2048.Combat
             player.ClearTurnLimitedSkillEffects();
             TurnController.StartPlayerTurn();
             ChangePhase(CombatPhase.PlayerTurnStart);
-            if (ResolvePendingChargedAttack())
-            {
-                return;
-            }
-
             StartBoardPhaseForCurrentPlayerTurn();
         }
 
@@ -539,6 +568,34 @@ namespace Project2048.Combat
             var baseMoveCount = ResolveInitialBoardMoveCount();
             var moveCount = Mathf.Max(0, baseMoveCount + player.BoardMoveCountBonus + runMoveBonus + skillMoveModifier);
             BoardManager.InitBoard(moveCount);
+        }
+
+        private bool ResolveOrQueuePendingChargedAttack()
+        {
+            if (player == null || !player.HasPendingChargedAttack)
+            {
+                return false;
+            }
+
+            var delaySeconds = Mathf.Max(0f, PendingChargedAttackReleaseDelaySeconds);
+            if (delaySeconds <= 0f || !Application.isPlaying || !isActiveAndEnabled)
+            {
+                return ResolvePendingChargedAttack();
+            }
+
+            if (pendingChargedAttackReleaseDelayRoutine != null)
+            {
+                StopCoroutine(pendingChargedAttackReleaseDelayRoutine);
+                pendingChargedAttackReleaseDelayRoutine = null;
+            }
+
+            isPendingChargedAttackReleaseQueued = true;
+            IsSkillPresentationLocked = true;
+            var sequence = ++pendingChargedAttackReleaseDelaySequence;
+            pendingChargedAttackReleaseDelayRoutine = StartCoroutine(
+                ResolvePendingChargedAttackAfterDelay(sequence, delaySeconds));
+            NotifyStateChanged();
+            return true;
         }
 
         private bool ResolvePendingChargedAttack()
@@ -560,11 +617,24 @@ namespace Project2048.Combat
             if (OnPlayerChargedAttackReleased != null)
             {
                 pendingChargedAttackRelease = new PendingChargedAttackRelease(skillName, chargedPower, statSource, attackCount, target);
-                OnPlayerChargedAttackReleased.Invoke(skillName, chargedPower, attackCount, target);
-                return true;
+                return StartNextPendingChargedAttackRelease();
             }
 
             return ExecuteChargedAttackAfterPresentation(skillName, chargedPower, statSource, attackCount, target);
+        }
+
+        private IEnumerator ResolvePendingChargedAttackAfterDelay(int sequence, float delaySeconds)
+        {
+            yield return new WaitForSeconds(Mathf.Max(0f, delaySeconds));
+            if (sequence != pendingChargedAttackReleaseDelaySequence)
+            {
+                yield break;
+            }
+
+            pendingChargedAttackReleaseDelayRoutine = null;
+            isPendingChargedAttackReleaseQueued = false;
+            IsSkillPresentationLocked = false;
+            ResolvePendingChargedAttack();
         }
 
         private bool ExecuteChargedAttackAfterPresentation(
@@ -572,7 +642,8 @@ namespace Project2048.Combat
             int chargedPower,
             DamageStatSource statSource,
             int attackCount,
-            EnemyController initialTarget)
+            EnemyController initialTarget,
+            bool checkVictoryAfterHits = true)
         {
             EnemyController popupTarget = null;
             var totalPopupDamage = 0;
@@ -630,12 +701,96 @@ namespace Project2048.Combat
                 return true;
             }
 
+            if (checkVictoryAfterHits && CheckVictory())
+            {
+                return true;
+            }
+
+            NotifyStateChanged();
+            return true;
+        }
+
+        private bool StartNextPendingChargedAttackRelease()
+        {
+            if (pendingChargedAttackRelease == null || pendingChargedAttackRelease.RemainingAttackCount <= 0)
+            {
+                pendingChargedAttackRelease = null;
+                return false;
+            }
+
+            if (OnPlayerChargedAttackReleased == null)
+            {
+                var pending = pendingChargedAttackRelease;
+                pendingChargedAttackRelease = null;
+                return ExecuteChargedAttackAfterPresentation(
+                    pending.SkillName,
+                    pending.ChargedPower,
+                    pending.StatSource,
+                    pending.RemainingAttackCount,
+                    ResolveChargedAttackReleaseTarget(pending.Target));
+            }
+
+            var target = ResolveChargedAttackReleaseTarget(pendingChargedAttackRelease.Target);
+            OnPlayerChargedAttackReleased?.Invoke(
+                pendingChargedAttackRelease.SkillName,
+                pendingChargedAttackRelease.ChargedPower,
+                1,
+                target);
+            return true;
+        }
+
+        private EnemyController ResolveChargedAttackReleaseTarget(EnemyController preferredTarget)
+        {
+            if (preferredTarget != null && !preferredTarget.IsDead)
+            {
+                return preferredTarget;
+            }
+
+            return enemies.FirstOrDefault(enemy => enemy != null && !enemy.IsDead) ?? preferredTarget;
+        }
+
+        private bool ExecutePendingChargedAttackReleaseHit(PendingChargedAttackRelease pending)
+        {
+            if (pending == null)
+            {
+                return false;
+            }
+
+            var target = ResolveChargedAttackReleaseTarget(pending.Target);
+            if (target != null && !target.IsDead)
+            {
+                ExecuteChargedAttackAfterPresentation(
+                    pending.SkillName,
+                    pending.ChargedPower,
+                    pending.StatSource,
+                    1,
+                    target,
+                    checkVictoryAfterHits: false);
+            }
+            else
+            {
+                NotifyStateChanged();
+            }
+
+            pending.ConsumeOneAttack();
+            if (CheckDefeat())
+            {
+                pendingChargedAttackRelease = null;
+                return true;
+            }
+
+            if (pending.RemainingAttackCount > 0)
+            {
+                return StartNextPendingChargedAttackRelease();
+            }
+
+            pendingChargedAttackRelease = null;
             if (CheckVictory())
             {
                 return true;
             }
 
-            StartBoardPhaseForCurrentPlayerTurn();
+            NotifyStateChanged();
             return true;
         }
 
@@ -747,6 +902,18 @@ namespace Project2048.Combat
             }
         }
 
+        private IEnumerator CompletePendingSkillPresentationAfterDelay(int sequence, float durationSeconds)
+        {
+            yield return new WaitForSeconds(Mathf.Max(0f, durationSeconds));
+            if (sequence != skillPresentationLockSequence)
+            {
+                yield break;
+            }
+
+            skillPresentationCompletionRoutine = null;
+            CompletePendingSkillPresentation();
+        }
+
         private void ResetSkillPresentationLock(bool stopRoutine)
         {
             if (stopRoutine && skillPresentationLockRoutine != null)
@@ -755,8 +922,26 @@ namespace Project2048.Combat
                 skillPresentationLockRoutine = null;
             }
 
+            if (stopRoutine && skillPresentationCompletionRoutine != null)
+            {
+                StopCoroutine(skillPresentationCompletionRoutine);
+                skillPresentationCompletionRoutine = null;
+            }
+
             skillPresentationLockSequence++;
             IsSkillPresentationLocked = false;
+        }
+
+        private void ResetPendingChargedAttackReleaseDelay(bool stopRoutine)
+        {
+            if (stopRoutine && pendingChargedAttackReleaseDelayRoutine != null)
+            {
+                StopCoroutine(pendingChargedAttackReleaseDelayRoutine);
+                pendingChargedAttackReleaseDelayRoutine = null;
+            }
+
+            pendingChargedAttackReleaseDelaySequence++;
+            isPendingChargedAttackReleaseQueued = false;
         }
 
         private bool CompletePendingSkillPresentation()
@@ -771,13 +956,7 @@ namespace Project2048.Combat
             if (pendingChargedAttackRelease != null)
             {
                 var pending = pendingChargedAttackRelease;
-                pendingChargedAttackRelease = null;
-                return ExecuteChargedAttackAfterPresentation(
-                    pending.SkillName,
-                    pending.ChargedPower,
-                    pending.StatSource,
-                    pending.AttackCount,
-                    pending.Target);
+                return ExecutePendingChargedAttackReleaseHit(pending);
             }
 
             return false;
@@ -1305,7 +1484,7 @@ namespace Project2048.Combat
                 player.NextTurnCostGainMultiplier > 1f);
             if (player.HasPendingChargedAttack)
             {
-                AddStatusEffect(effects, "charged-attack", player.PendingChargedAttackCount, "빛 모으기", "다음 플레이어 턴 시작에 공격이 발동합니다.", "충", true);
+                AddStatusEffect(effects, "charged-attack", player.PendingChargedAttackCount, "빛 모으기", "다음 스킬 선택 단계에 공격이 발동합니다.", "충", true);
             }
 
             AddStatusEffect(effects, "poison", player.PoisonTurns, "독", $"턴 종료 시 최대 체력의 {Mathf.RoundToInt(player.PoisonMaxHpDamagePercent * 100f)}% 피해를 받습니다. 남은 턴: {{0}}", "독", false);
@@ -1576,15 +1755,20 @@ namespace Project2048.Combat
                 SkillName = skillName;
                 ChargedPower = chargedPower;
                 StatSource = statSource;
-                AttackCount = Mathf.Max(1, attackCount);
+                RemainingAttackCount = Mathf.Max(1, attackCount);
                 Target = target;
             }
 
             public string SkillName { get; }
             public int ChargedPower { get; }
             public DamageStatSource StatSource { get; }
-            public int AttackCount { get; }
+            public int RemainingAttackCount { get; private set; }
             public EnemyController Target { get; }
+
+            public void ConsumeOneAttack()
+            {
+                RemainingAttackCount = Mathf.Max(0, RemainingAttackCount - 1);
+            }
         }
     }
 }

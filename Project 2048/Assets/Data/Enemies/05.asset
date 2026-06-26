@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6115ca39d511d049965aae02efc3f23, type: 3}
   m_Name: 05
   m_EditorClassIdentifier: Game.Core::Project2048.Enemy.EnemySO
-  enemyName: "\uC5EC\uC6B0"
-  encounterRank: 1
+  enemyName: "\uBCF4\uC2A4 \uC5EC\uC6B0"
+  encounterRank: 2
   maxHp: 260
   attackPower: 7
   baseDefensePower: 0

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6115ca39d511d049965aae02efc3f23, type: 3}
   m_Name: 12
   m_EditorClassIdentifier: Game.Core::Project2048.Enemy.EnemySO
-  enemyName: BOSS
+  enemyName: "\uCD5C\uC885 \uBCF4\uC2A4"
   encounterRank: 3
   maxHp: 1100
   attackPower: 11

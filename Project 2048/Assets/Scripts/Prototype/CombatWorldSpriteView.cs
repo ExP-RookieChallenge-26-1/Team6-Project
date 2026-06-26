@@ -31,6 +31,8 @@ namespace Project2048.Prototype
         public const float ShieldBurstSkillDurationSeconds = 0.72f;
         public const float DamageNumberPopupDurationSeconds = 0.55f;
         public const float ChargedLightBeamDurationSeconds = 0.65f;
+        public const float SkillDamageDelaySeconds = 0.1f;
+        public const float ChargedAttackReleaseBoardDelaySeconds = CombatUiView.BoardToActionPanelDelaySeconds;
         public const float GatherLightPreviewReleaseDelaySeconds = 2f;
         public const float GatherLightVerticalBeamLifetimeSeconds = 0.95f;
         public const float TentacleStrikeDurationSeconds = 0.58f;
@@ -208,6 +210,7 @@ namespace Project2048.Prototype
                 return;
             }
 
+            combatManager.PendingChargedAttackReleaseDelaySeconds = ChargedAttackReleaseBoardDelaySeconds;
             combatManager.OnCombatStateChanged -= HandleCombatStateChanged;
             combatManager.OnCombatStateChanged += HandleCombatStateChanged;
             combatManager.OnPlayerSkillUsed -= HandlePlayerSkillUsed;
@@ -358,7 +361,7 @@ namespace Project2048.Prototype
             ResolveMissingReferences();
             ResolveWorldVfxProfile();
             var lifetimeSeconds = PlaySkillPresentationEffect(skill, delayEnemyDeathFade: true);
-            combatManager?.BeginSkillPresentationLock(lifetimeSeconds);
+            combatManager?.BeginSkillPresentationLock(lifetimeSeconds, SkillDamageDelaySeconds);
         }
 
         public void PreviewSkillEffect(SkillSO skill)
@@ -992,7 +995,7 @@ namespace Project2048.Prototype
             var targetTransform = target != null && enemyRenderer != null ? enemyRenderer.transform : transform;
             var chargedSkill = ResolvePlayerChargedLightSkill(skillName);
             var releaseCount = Mathf.Max(1, attackCount);
-            var releaseIntervalSeconds = Mathf.Max(ChargedLightBeamDurationSeconds, GatherLightVerticalBeamLifetimeSeconds);
+            var releaseIntervalSeconds = ResolveChargedAttackReleaseEffectDurationSeconds(chargedSkill);
             if (Application.isPlaying && isActiveAndEnabled && releaseCount > 1)
             {
                 StartCoroutine(PlayChargedAttackReleaseRepeatsRoutine(chargedSkill, targetTransform, releaseCount, releaseIntervalSeconds));
@@ -1008,6 +1011,23 @@ namespace Project2048.Prototype
             var totalDurationSeconds = releaseIntervalSeconds * releaseCount;
             DelayEnemyDeathFade(totalDurationSeconds);
             combatManager?.BeginSkillPresentationLock(totalDurationSeconds);
+        }
+
+        private static float ResolveChargedAttackReleaseEffectDurationSeconds(SkillSO chargedSkill)
+        {
+            var fallbackDurationSeconds = Mathf.Max(ChargedLightBeamDurationSeconds, GatherLightVerticalBeamLifetimeSeconds);
+            if (IsGatherLightSkill(chargedSkill))
+            {
+                return Mathf.Max(
+                    fallbackDurationSeconds,
+                    ResolveGatherLightProjectileTravelSeconds(chargedSkill) + GatherLightVerticalBeamLifetimeSeconds);
+            }
+
+            return Mathf.Max(
+                fallbackDurationSeconds,
+                Mathf.Max(
+                    ResolveDefinitionCueDurationSeconds(chargedSkill, SkillVfxTrigger.ChargeRelease),
+                    ResolveSkillEffectVisualDurationSeconds(chargedSkill, chargedSkill != null ? chargedSkill.activationEffect : null)));
         }
 
         private IEnumerator PlayChargedAttackReleaseRepeatsRoutine(

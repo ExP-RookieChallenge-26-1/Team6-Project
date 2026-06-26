@@ -3922,7 +3922,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 370, y: -196.40501}
-  m_SizeDelta: {x: 644, y: 45.73}
+  m_SizeDelta: {x: 540, y: 44}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &285634624
 CanvasRenderer:
@@ -16657,7 +16657,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 370, y: -294.27002}
-  m_SizeDelta: {x: 644, y: 98}
+  m_SizeDelta: {x: 540, y: 72}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1327430371
 MonoBehaviour:
@@ -16673,9 +16673,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.LayoutElement
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 86
+  m_MinHeight: 64
   m_PreferredWidth: -1
-  m_PreferredHeight: 98
+  m_PreferredHeight: 72
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
@@ -17606,7 +17606,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 370, y: -97.770004}
-  m_SizeDelta: {x: 644, y: 99.54}
+  m_SizeDelta: {x: 540, y: 74}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1409706764
 CanvasRenderer:
@@ -19958,7 +19958,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 370, y: -418.27002}
-  m_SizeDelta: {x: 644, y: 98}
+  m_SizeDelta: {x: 540, y: 72}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1572475984
 GameObject:
@@ -21293,9 +21293,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.LayoutElement
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 86
+  m_MinHeight: 64
   m_PreferredWidth: -1
-  m_PreferredHeight: 98
+  m_PreferredHeight: 72
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
@@ -23547,7 +23547,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1900672445
 RectTransform:
   m_ObjectHideFlags: 0
@@ -24411,7 +24411,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 740, y: 620}
+  m_SizeDelta: {x: 620, y: 400}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1952405817
 MonoBehaviour:
@@ -24426,12 +24426,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.VerticalLayoutGroup
   m_Padding:
-    m_Left: 48
-    m_Right: 48
-    m_Top: 48
-    m_Bottom: 48
+    m_Left: 40
+    m_Right: 40
+    m_Top: 36
+    m_Bottom: 36
   m_ChildAlignment: 0
-  m_Spacing: 26
+  m_Spacing: 14
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 1

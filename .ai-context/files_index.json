@@ -2415,9 +2415,9 @@
     "file_id": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "path": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "file_name": "CombatManager.cs",
-    "content_hash": "5a1ae06259ad4437982111a74828b069ab6f8bb0",
-    "size": 48201,
-    "line_count": 1376,
+    "content_hash": "a98bad8180ad800c276afe829275cc918933eb4c",
+    "size": 54091,
+    "line_count": 1551,
     "namespace": "Project2048.Combat",
     "using_list": [
       "System",
@@ -2443,6 +2443,26 @@
         "attributes": [],
         "is_partial": false,
         "is_generic": false
+      },
+      {
+        "name": "PendingPlayerSkillExecution",
+        "kind": "class",
+        "access": "internal",
+        "base_types": [],
+        "interfaces": [],
+        "attributes": [],
+        "is_partial": false,
+        "is_generic": false
+      },
+      {
+        "name": "PendingChargedAttackRelease",
+        "kind": "class",
+        "access": "internal",
+        "base_types": [],
+        "interfaces": [],
+        "attributes": [],
+        "is_partial": false,
+        "is_generic": false
       }
     ],
     "main_class_name": "CombatManager",
@@ -2457,6 +2477,8 @@
       "GetSnapshot",
       "ResolveBoardPhase",
       "RequestUseSkill",
+      "PendingPlayerSkillExecution",
+      "ExecutePlayerSkillAfterPresentation",
       "CreateSkillExecutionContext",
       "RequestUseSkillById",
       "RequestDebugKillEnemy",
@@ -2468,7 +2490,10 @@
       "RefreshCombatantDataFromScriptableObjects",
       "RequestEndPlayerTurn",
       "StartPlayerTurn",
+      "StartBoardPhaseForCurrentPlayerTurn",
       "ResolvePendingChargedAttack",
+      "PendingChargedAttackRelease",
+      "ExecuteChargedAttackAfterPresentation",
       "RecordEnemyDamagePopup",
       "ResolveInitialBoardMoveCount",
       "ApplyFirstTurnMinimumSkillCost",
@@ -2476,6 +2501,7 @@
       "ReleaseSkillPresentationLockAfterDelay",
       "WaitForSeconds",
       "ResetSkillPresentationLock",
+      "CompletePendingSkillPresentation",
       "StartEnemyTurn",
       "BeginEnemyTurn",
       "ResolveEnemyTurn",
@@ -2659,6 +2685,27 @@
         "is_static": false
       },
       {
+        "name": "pendingPlayerSkillExecution",
+        "type": "PendingPlayerSkillExecution",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "pendingChargedAttackRelease",
+        "type": "PendingChargedAttackRelease",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "wasSuppressing",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
         "name": "wasSuppressing",
         "type": "var",
         "access": "internal",
@@ -2687,6 +2734,34 @@
         "is_static": false
       },
       {
+        "name": "popupTarget",
+        "type": "EnemyController",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "totalPopupDamage",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "anyCritical",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "wasSuppressing",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
         "name": "minimumCost",
         "type": "var",
         "access": "internal",
@@ -2696,6 +2771,20 @@
       {
         "name": "break",
         "type": "yield",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "pending",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "pending",
+        "type": "var",
         "access": "internal",
         "serialized": false,
         "is_static": false
@@ -2761,6 +2850,41 @@
         "access": "public",
         "type": "bool",
         "name": "IsSkillPresentationLocked"
+      },
+      {
+        "access": "public",
+        "type": "SkillSO",
+        "name": "Skill"
+      },
+      {
+        "access": "public",
+        "type": "EnemyController",
+        "name": "Target"
+      },
+      {
+        "access": "public",
+        "type": "string",
+        "name": "SkillName"
+      },
+      {
+        "access": "public",
+        "type": "int",
+        "name": "ChargedPower"
+      },
+      {
+        "access": "public",
+        "type": "DamageStatSource",
+        "name": "StatSource"
+      },
+      {
+        "access": "public",
+        "type": "int",
+        "name": "AttackCount"
+      },
+      {
+        "access": "public",
+        "type": "EnemyController",
+        "name": "Target"
       }
     ],
     "events": [],
@@ -2779,7 +2903,7 @@
     "public_field_count": 0,
     "get_component_count": 0,
     "find_call_count": 0,
-    "new_keyword_count": 32,
+    "new_keyword_count": 34,
     "coroutine_count": 4,
     "singleton_candidate": false,
     "dont_destroy_on_load": false,
@@ -2795,10 +2919,13 @@
       "CombatVfxCue",
       "CombatDamagePopupCue",
       "Coroutine",
+      "EnemyController",
       "CombatPhase",
       "TurnController",
       "Board2048Manager",
       "ActionCostWallet",
+      "SkillSO",
+      "DamageStatSource",
       "System",
       "Collections",
       "Generic",
@@ -2814,7 +2941,6 @@
       "UI",
       "BoardCostGainMultiplier",
       "PlayerCombatController",
-      "EnemyController",
       "EnemyTurnDelaySeconds",
       "Max",
       "SkillEffectKind",
@@ -2831,7 +2957,6 @@
       "OnCombatVictory",
       "OnCombatDefeat",
       "OnCostChanged",
-      "SkillSO",
       "OnPlayerSkillUsed",
       "OnPlayerChargedAttackReleased",
       "CombatSnapshot",
@@ -2898,11 +3023,12 @@
       "CanSpend",
       "GetSkillDisplayName",
       "Spend",
-      "Invoke",
-      "Execute",
-      "CreateSkillExecutionContext",
       "RecordUsedSkill",
       "RecordOncePerTurnSkillUse",
+      "Invoke",
+      "ExecutePlayerSkillAfterPresentation",
+      "Execute",
+      "CreateSkillExecutionContext",
       "CheckDefeat",
       "CheckVictory",
       "ResolveEffectKind",
@@ -2921,6 +3047,7 @@
       "Amount",
       "IsCritical",
       "BeginSkillPresentationLock",
+      "CompletePendingSkillPresentation",
       "StopCoroutine",
       "StartCoroutine",
       "ReleaseSkillPresentationLockAfterDelay",
@@ -2949,22 +3076,30 @@
       "ClearTurnLimitedSkillEffects",
       "PlayerTurnStart",
       "ResolvePendingChargedAttack",
+      "StartBoardPhaseForCurrentPlayerTurn",
       "ConsumeNextTurnBoardMoveCountModifier",
       "ExtraBoardMoveCount",
       "ResolveInitialBoardMoveCount",
       "BoardMoveCountBonus",
       "InitBoard",
       "TryConsumePendingChargedAttack",
-      "ExecuteChargedAttack",
-      "SkillExecutionContext",
+      "ExecuteChargedAttackAfterPresentation",
       "EnemyDamagePopupReported",
+      "ExecuteChargedAttack",
       "RecordEnemyDamagePopup",
+      "SkillExecutionContext",
       "TurnCount",
       "ResolveCheapestUsableSkillCost",
       "MaxValue",
       "Any",
       "Min",
       "WaitForSeconds",
+      "Skill",
+      "Target",
+      "SkillName",
+      "ChargedPower",
+      "StatSource",
+      "AttackCount",
       "ResolveEnemyTurn",
       "EnemyTurn",
       "ResolveEnemyAction",
@@ -2972,24 +3107,15 @@
       "EnemyIntent",
       "ExecuteIntent",
       "RecordUsedIntent",
-      "EnemyIntentType",
-      "Debuff",
-      "DebuffType",
-      "Value",
-      "Fear",
-      "FearDefenseGainPenalty",
-      "SourceName",
-      "TargetName",
-      "GetExecutableIntents",
-      "FormatEnemyIntents",
-      "ConsumeTurnRestrictions",
-      "CloneEnemyIntents"
+      "EnemyIntentType"
     ],
     "component_access_types": [],
     "created_types": [
       "List",
       "ArgumentNullException",
       "InvalidOperationException",
+      "PendingPlayerSkillExecution",
+      "PendingChargedAttackRelease",
       "WaitForSeconds",
       "SkillExecutor",
       "EnemyIntentSystem",
@@ -3965,9 +4091,9 @@
     "file_id": "Project 2048/Assets/Scripts/Combat/PlayerCombatController.cs",
     "path": "Project 2048/Assets/Scripts/Combat/PlayerCombatController.cs",
     "file_name": "PlayerCombatController.cs",
-    "content_hash": "3ff374c574e3dcaa9c788df5540ac7876f0d4290",
-    "size": 30836,
-    "line_count": 977,
+    "content_hash": "80298658b966e5bc8d227fd70c9ed4c92f8025be",
+    "size": 31565,
+    "line_count": 992,
     "namespace": "Project2048.Combat",
     "using_list": [
       "System",
@@ -4107,6 +4233,13 @@
       },
       {
         "name": "pendingChargedAttackPower",
+        "type": "int",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "pendingChargedAttackCount",
         "type": "int",
         "access": "private",
         "serialized": false,
@@ -4512,6 +4645,7 @@
       "ExtraAttackHits",
       "Max",
       "HasPendingChargedAttack",
+      "PendingChargedAttackCount",
       "HasPoisonOrBleed",
       "IsDead",
       "IReadOnlyList",
@@ -13671,9 +13805,9 @@
     "file_id": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "path": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "file_name": "CombatWorldSpriteView.cs",
-    "content_hash": "20ce54b1d06258b55acd59168fc9d62c054084f2",
-    "size": 289765,
-    "line_count": 7533,
+    "content_hash": "2217cf89b1c0cd11419d8becff91eb371ea04a7c",
+    "size": 291239,
+    "line_count": 7568,
     "namespace": "Project2048.Prototype",
     "using_list": [
       "System.Collections",
@@ -13755,6 +13889,8 @@
       "DelayEnemyDeathFadeForSkillEffect",
       "DelayEnemyDeathFade",
       "HandlePlayerChargedAttackReleased",
+      "PlayChargedAttackReleaseRepeatsRoutine",
+      "PlayChargedAttackReleaseEffect",
       "Render",
       "ShowRewardPresenter",
       "ShouldDelayRewardPresenterUntilEnemyHidden",
@@ -13919,9 +14055,7 @@
       "SpawnParticleBurst",
       "ResolveDesignTimeParticlePrefab",
       "CreateFallbackParticleSystem",
-      "ConfigureParticleBurst",
-      "ConfigureSwirlBurst",
-      "AnimationCurve"
+      "ConfigureParticleBurst"
     ],
     "fields": [
       {
@@ -14619,6 +14753,13 @@
       },
       {
         "name": "targetTransform",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "totalDurationSeconds",
         "type": "var",
         "access": "internal",
         "serialized": false,
@@ -16016,13 +16157,6 @@
         "access": "internal",
         "serialized": false,
         "is_static": false
-      },
-      {
-        "name": "shieldHp",
-        "type": "var",
-        "access": "internal",
-        "serialized": false,
-        "is_static": false
       }
     ],
     "properties": [],
@@ -16041,8 +16175,8 @@
     "public_field_count": 13,
     "get_component_count": 26,
     "find_call_count": 3,
-    "new_keyword_count": 188,
-    "coroutine_count": 40,
+    "new_keyword_count": 189,
+    "coroutine_count": 42,
     "singleton_candidate": false,
     "dont_destroy_on_load": false,
     "referenced_types": [
@@ -21858,9 +21992,9 @@
     "file_id": "Project 2048/Assets/Scripts/Skills/SkillExecutor.cs",
     "path": "Project 2048/Assets/Scripts/Skills/SkillExecutor.cs",
     "file_name": "SkillExecutor.cs",
-    "content_hash": "0f8eda77e68d2019bc8228eb7b6ed9aba2b86feb",
-    "size": 14382,
-    "line_count": 336,
+    "content_hash": "fc8ee3497d76fb9301f1fcaa7964f81d378c055c",
+    "size": 14301,
+    "line_count": 335,
     "namespace": "Project2048.Skills",
     "using_list": [
       "Project2048.Combat",
@@ -22045,7 +22179,6 @@
       "ExecuteChargedAttack",
       "AttackPower",
       "CanExecute",
-      "HasPendingChargedAttack",
       "CeilToInt",
       "MaxHp",
       "Clamp01",
@@ -26425,9 +26558,9 @@
     "file_id": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
     "path": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
     "file_name": "CombatManagerTests.cs",
-    "content_hash": "713bce3a873302a2a778b5181803bb08a19ea7f0",
-    "size": 59986,
-    "line_count": 1374,
+    "content_hash": "019c5a4160cb8f0b84a9f213bec47d5f21a26425",
+    "size": 65805,
+    "line_count": 1499,
     "namespace": "Project2048.Tests",
     "using_list": [
       "System.Collections.Generic",
@@ -26462,6 +26595,7 @@
       "DamageCalculator_UsesPokemonStyleAttackTimesMovePower_WithVarianceAndCriticalMultiplier",
       "DamageCalculator",
       "RequestUseSkill_EmitsEnemyDamagePopupCueWithCriticalFlag",
+      "RequestUseSkill_WithPresentationListener_DelaysDamageVictoryAndPopupUntilPresentationCompletes",
       "ThornGuard_RetaliatesOnlyWhileShieldHpExists",
       "SkillExecutor",
       "RequestUseSkill_PlayerKilledByEnemyThornGuard_RaisesDefeat",
@@ -26486,7 +26620,8 @@
       "CostConverter",
       "ChargeAttack_FiresAtNextPlayerTurnStart",
       "ChargeAttack_PlayerKilledByEnemyThornGuard_RaisesDefeat",
-      "ChargeAttack_CannotBeQueuedAgainWhilePending",
+      "ChargeAttack_StacksQueuedUsesAndReleasesCountAtNextTurnStart",
+      "ChargeAttack_WithPresentationListener_DelaysReleaseDamageAndAggregatesPopup",
       "OncePerTurnBuffSkills_CannotBeUsedTwiceInSamePlayerTurn",
       "RequestEndPlayerTurn_EnemyWithThreeActions_ExecutesInPreviewOrder",
       "EnemySkillIntent_CanApplyPlayerDebuffAndSkillNameSnapshot",
@@ -26527,6 +26662,41 @@
       {
         "name": "latestSnapshot",
         "type": "CombatSnapshot",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "latestSnapshot",
+        "type": "CombatSnapshot",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "presentationStarted",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "popupSnapshotCount",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "lastPopupSequence",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "cue",
+        "type": "var",
         "access": "internal",
         "serialized": false,
         "is_static": false
@@ -26628,6 +26798,41 @@
         "access": "internal",
         "serialized": false,
         "is_static": false
+      },
+      {
+        "name": "latestSnapshot",
+        "type": "CombatSnapshot",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "releasedAttackCount",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "popupSnapshotCount",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "lastPopupSequence",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "cue",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
       }
     ],
     "properties": [],
@@ -26644,7 +26849,7 @@
     "public_field_count": 0,
     "get_component_count": 0,
     "find_call_count": 1,
-    "new_keyword_count": 126,
+    "new_keyword_count": 131,
     "coroutine_count": 0,
     "singleton_candidate": false,
     "dont_destroy_on_load": false,
@@ -26734,6 +26939,12 @@
       "RequestUseSkill_EmitsEnemyDamagePopupCueWithCriticalFlag",
       "Sequence",
       "Enemies",
+      "RequestUseSkill_WithPresentationListener_DelaysDamageVictoryAndPopupUntilPresentationCompletes",
+      "OnPlayerSkillUsed",
+      "BeginSkillPresentationLock",
+      "IsSkillPresentationLocked",
+      "IsDead",
+      "ClearSkillPresentationLock",
       "ThornGuard_RetaliatesOnlyWhileShieldHpExists",
       "ApplyThornGuard",
       "SkillExecutor",
@@ -26741,7 +26952,6 @@
       "ShieldHp",
       "RequestUseSkill_PlayerKilledByEnemyThornGuard_RaisesDefeat",
       "OnCombatDefeat",
-      "IsDead",
       "Defeat",
       "ThornGuard_RetaliationDoesNotScaleWithStackedShield",
       "SinglePlayer",
@@ -26806,9 +27016,13 @@
       "ChargeAttack",
       "ChargeAttack_PlayerKilledByEnemyThornGuard_RaisesDefeat",
       "ThornGuard",
-      "ChargeAttack_CannotBeQueuedAgainWhilePending",
+      "ChargeAttack_StacksQueuedUsesAndReleasesCountAtNextTurnStart",
       "HasPendingChargedAttack",
+      "PendingChargedAttackCount",
       "CanExecute",
+      "ChargeAttack_WithPresentationListener_DelaysReleaseDamageAndAggregatesPopup",
+      "OnPlayerChargedAttackReleased",
+      "PlayerTurnStart",
       "OncePerTurnBuffSkills_CannotBeUsedTwiceInSamePlayerTurn",
       "Endure",
       "NextAttackPowerMultiplier",
@@ -26833,22 +27047,13 @@
       "ResolveBoardPhase_FirstPlayerTurn_FloorsPositiveCostToCheapestEquippedSkill",
       "ResolveBoardPhase_AfterFirstPlayerTurn_DoesNotFloorLowCost",
       "RequestUseSkill_ReturnsFalseWhilePresentationLocked",
-      "BeginSkillPresentationLock",
-      "IsSkillPresentationLocked",
-      "ClearSkillPresentationLock",
       "SplitAndEcho_ModifyFutureAttackDamage",
       "NextAttackSplit",
       "BasicAttack",
       "ExtraAttackHits",
       "SacrificeAttack_SpendsHpButLeavesOne",
       "SacrificeAttack",
-      "Component",
-      "Add",
-      "AddComponent",
-      "PlayerSO",
-      "CreateInstance",
-      "GetField",
-      "SetValue"
+      "Component"
     ],
     "component_access_types": [],
     "created_types": [
@@ -26869,6 +27074,7 @@
       "targeted-strike",
       "strike",
       "critical-strike",
+      "delayed-strike",
       "SinglePlayer",
       "SingleEnemy",
       "StackedPlayer",
@@ -26878,8 +27084,7 @@
       "basic-defense",
       "fear",
       "flash-strike",
-      "life-drain",
-      "shield-bash"
+      "life-drain"
     ],
     "numeric_literals": [
       5,
@@ -27861,9 +28066,9 @@
     "file_id": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "path": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "file_name": "CombatUiViewTests.cs",
-    "content_hash": "db3a80e5b00777afe26ff97fde2188469a390b4d",
-    "size": 94912,
-    "line_count": 1820,
+    "content_hash": "90575ce0bcbfa627b54d0d1ce1f1dfee41b275cb",
+    "size": 94988,
+    "line_count": 1821,
     "namespace": "Project2048.Tests",
     "using_list": [
       "System.Collections",
@@ -27918,7 +28123,7 @@
       "RunProgress",
       "CombatResult",
       "ActionPhase_DisablesUnaffordableAuthoredSkillButtons",
-      "ActionPhase_DisablesChargeSkillButtonWhileChargeIsPending",
+      "ActionPhase_KeepsChargeSkillButtonEnabledWhileChargeIsPending",
       "HelpIcon_ShowsCurrentPlayerStatsOnClick",
       "Initialize_WithMissingSerializedBattleReferences_WiresEnemyHpAndIntentByName",
       "EnemyDeath_HidesEnemyHpRoot",
@@ -28280,7 +28485,7 @@
       "ActionPhase_DisablesUnaffordableAuthoredSkillButtons",
       "BoardManager",
       "SetBoardState",
-      "ActionPhase_DisablesChargeSkillButtonWhileChargeIsPending",
+      "ActionPhase_KeepsChargeSkillButtonEnabledWhileChargeIsPending",
       "Gather",
       "Light"
     ],

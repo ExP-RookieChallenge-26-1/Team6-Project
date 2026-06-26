@@ -4636,6 +4636,20 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "from_class": "CombatManager",
+    "to_type": "PendingChargedAttackRelease",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
+    "from_class": "CombatManager",
+    "to_type": "PendingPlayerSkillExecution",
+    "relation_type": "creates",
+    "strength": 2
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
+    "from_class": "CombatManager",
     "to_type": "SkillExecutor",
     "relation_type": "creates",
     "strength": 2
@@ -4707,6 +4721,13 @@
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "from_class": "CombatManager",
     "to_type": "ArgumentNullException",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
+    "from_class": "CombatManager",
+    "to_type": "AttackCount",
     "relation_type": "uses",
     "strength": 1
   },
@@ -4853,6 +4874,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "from_class": "CombatManager",
+    "to_type": "ChargedPower",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
+    "from_class": "CombatManager",
     "to_type": "CheckDefeat",
     "relation_type": "uses",
     "strength": 1
@@ -4910,13 +4938,6 @@
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "from_class": "CombatManager",
     "to_type": "Clone",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
-    "from_class": "CombatManager",
-    "to_type": "CloneEnemyIntents",
     "relation_type": "uses",
     "strength": 1
   },
@@ -4993,6 +5014,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "from_class": "CombatManager",
+    "to_type": "CompletePendingSkillPresentation",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
+    "from_class": "CombatManager",
     "to_type": "ConsumeCarriedCost",
     "relation_type": "uses",
     "strength": 1
@@ -5001,13 +5029,6 @@
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "from_class": "CombatManager",
     "to_type": "ConsumeNextTurnBoardMoveCountModifier",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
-    "from_class": "CombatManager",
-    "to_type": "ConsumeTurnRestrictions",
     "relation_type": "uses",
     "strength": 1
   },
@@ -5091,21 +5112,14 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "from_class": "CombatManager",
+    "to_type": "DamageStatSource",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
+    "from_class": "CombatManager",
     "to_type": "Data",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
-    "from_class": "CombatManager",
-    "to_type": "Debuff",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
-    "from_class": "CombatManager",
-    "to_type": "DebuffType",
     "relation_type": "uses",
     "strength": 1
   },
@@ -5217,6 +5231,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "from_class": "CombatManager",
+    "to_type": "ExecuteChargedAttackAfterPresentation",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
+    "from_class": "CombatManager",
     "to_type": "ExecuteEnemyIntent",
     "relation_type": "uses",
     "strength": 1
@@ -5231,21 +5252,14 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "from_class": "CombatManager",
+    "to_type": "ExecutePlayerSkillAfterPresentation",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
+    "from_class": "CombatManager",
     "to_type": "ExtraBoardMoveCount",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
-    "from_class": "CombatManager",
-    "to_type": "Fear",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
-    "from_class": "CombatManager",
-    "to_type": "FearDefenseGainPenalty",
     "relation_type": "uses",
     "strength": 1
   },
@@ -5260,13 +5274,6 @@
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "from_class": "CombatManager",
     "to_type": "ForceKill",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
-    "from_class": "CombatManager",
-    "to_type": "FormatEnemyIntents",
     "relation_type": "uses",
     "strength": 1
   },
@@ -5295,13 +5302,6 @@
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "from_class": "CombatManager",
     "to_type": "GetEnemyDisplayName",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
-    "from_class": "CombatManager",
-    "to_type": "GetExecutableIntents",
     "relation_type": "uses",
     "strength": 1
   },
@@ -5868,6 +5868,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "from_class": "CombatManager",
+    "to_type": "Skill",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
+    "from_class": "CombatManager",
     "to_type": "SkillEffectKind",
     "relation_type": "uses",
     "strength": 1
@@ -5889,6 +5896,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "from_class": "CombatManager",
+    "to_type": "SkillName",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
+    "from_class": "CombatManager",
     "to_type": "Skills",
     "relation_type": "uses",
     "strength": 1
@@ -5903,14 +5917,14 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "from_class": "CombatManager",
-    "to_type": "SourceName",
+    "to_type": "Spend",
     "relation_type": "uses",
     "strength": 1
   },
   {
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "from_class": "CombatManager",
-    "to_type": "Spend",
+    "to_type": "StartBoardPhaseForCurrentPlayerTurn",
     "relation_type": "uses",
     "strength": 1
   },
@@ -5945,6 +5959,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "from_class": "CombatManager",
+    "to_type": "StatSource",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
+    "from_class": "CombatManager",
     "to_type": "StopCoroutine",
     "relation_type": "uses",
     "strength": 1
@@ -5966,14 +5987,14 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "from_class": "CombatManager",
-    "to_type": "TargetEnemyIndex",
+    "to_type": "Target",
     "relation_type": "uses",
     "strength": 1
   },
   {
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "from_class": "CombatManager",
-    "to_type": "TargetName",
+    "to_type": "TargetEnemyIndex",
     "relation_type": "uses",
     "strength": 1
   },
@@ -6030,13 +6051,6 @@
     "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "from_class": "CombatManager",
     "to_type": "UnityEngine",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
-    "from_class": "CombatManager",
-    "to_type": "Value",
     "relation_type": "uses",
     "strength": 1
   },
@@ -7885,6 +7899,13 @@
     "from_file": "Project 2048/Assets/Scripts/Combat/PlayerCombatController.cs",
     "from_class": "PlayerCombatController",
     "to_type": "OnStatusEffectsChanged",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/PlayerCombatController.cs",
+    "from_class": "PlayerCombatController",
+    "to_type": "PendingChargedAttackCount",
     "relation_type": "uses",
     "strength": 1
   },
@@ -34302,13 +34323,6 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Skills/SkillExecutor.cs",
     "from_class": "SkillExecutor",
-    "to_type": "HasPendingChargedAttack",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Skills/SkillExecutor.cs",
-    "from_class": "SkillExecutor",
     "to_type": "Heal",
     "relation_type": "uses",
     "strength": 1
@@ -41400,21 +41414,7 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
     "from_class": "CombatManagerTests",
-    "to_type": "Add",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
-    "from_class": "CombatManagerTests",
     "to_type": "AddBlock",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
-    "from_class": "CombatManagerTests",
-    "to_type": "AddComponent",
     "relation_type": "uses",
     "strength": 1
   },
@@ -41596,13 +41596,6 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
     "from_class": "CombatManagerTests",
-    "to_type": "ChargeAttack_CannotBeQueuedAgainWhilePending",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
-    "from_class": "CombatManagerTests",
     "to_type": "ChargeAttack_FiresAtNextPlayerTurnStart",
     "relation_type": "uses",
     "strength": 1
@@ -41611,6 +41604,20 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
     "from_class": "CombatManagerTests",
     "to_type": "ChargeAttack_PlayerKilledByEnemyThornGuard_RaisesDefeat",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
+    "from_class": "CombatManagerTests",
+    "to_type": "ChargeAttack_StacksQueuedUsesAndReleasesCountAtNextTurnStart",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
+    "from_class": "CombatManagerTests",
+    "to_type": "ChargeAttack_WithPresentationListener_DelaysReleaseDamageAndAggregatesPopup",
     "relation_type": "uses",
     "strength": 1
   },
@@ -41730,13 +41737,6 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
     "from_class": "CombatManagerTests",
     "to_type": "CreateGameObject",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
-    "from_class": "CombatManagerTests",
-    "to_type": "CreateInstance",
     "relation_type": "uses",
     "strength": 1
   },
@@ -42100,13 +42100,6 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
     "from_class": "CombatManagerTests",
-    "to_type": "GetField",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
-    "from_class": "CombatManagerTests",
     "to_type": "GetSnapshot",
     "relation_type": "uses",
     "strength": 1
@@ -42296,6 +42289,27 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
     "from_class": "CombatManagerTests",
+    "to_type": "OnPlayerChargedAttackReleased",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
+    "from_class": "CombatManagerTests",
+    "to_type": "OnPlayerSkillUsed",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
+    "from_class": "CombatManagerTests",
+    "to_type": "PendingChargedAttackCount",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
+    "from_class": "CombatManagerTests",
     "to_type": "Player",
     "relation_type": "uses",
     "strength": 1
@@ -42310,7 +42324,7 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
     "from_class": "CombatManagerTests",
-    "to_type": "PlayerSO",
+    "to_type": "PlayerTurnStart",
     "relation_type": "uses",
     "strength": 1
   },
@@ -42443,6 +42457,13 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
     "from_class": "CombatManagerTests",
+    "to_type": "RequestUseSkill_WithPresentationListener_DelaysDamageVictoryAndPopupUntilPresentationCompletes",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
+    "from_class": "CombatManagerTests",
     "to_type": "RequestUseSkillById",
     "relation_type": "uses",
     "strength": 1
@@ -42521,13 +42542,6 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
     "from_class": "CombatManagerTests",
     "to_type": "SetEnemyActionsPerTurn",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
-    "from_class": "CombatManagerTests",
-    "to_type": "SetValue",
     "relation_type": "uses",
     "strength": 1
   },
@@ -45390,14 +45404,14 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
-    "to_type": "ActionPhase_DisablesChargeSkillButtonWhileChargeIsPending",
+    "to_type": "ActionPhase_DisablesUnaffordableAuthoredSkillButtons",
     "relation_type": "uses",
     "strength": 1
   },
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "from_class": "CombatUiViewTests",
-    "to_type": "ActionPhase_DisablesUnaffordableAuthoredSkillButtons",
+    "to_type": "ActionPhase_KeepsChargeSkillButtonEnabledWhileChargeIsPending",
     "relation_type": "uses",
     "strength": 1
   },

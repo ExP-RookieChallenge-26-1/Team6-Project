@@ -58,7 +58,7 @@
     {
       "class_name": "CombatManager",
       "file_id": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
-      "relation_count": 210,
+      "relation_count": 212,
       "referenced_type_count": 200
     },
     {

@@ -239,6 +239,15 @@ namespace Project2048.Flow
 
         private void HandleCombatVictory(CombatResult combatResult)
         {
+            // 보스(최종 스테이지)를 잡으면 보상 선택을 건너뛰고 곧바로 엔딩으로 진행한다.
+            if (stageDatabase != null && stageDatabase.IsFinalStage(currentStageIndex))
+            {
+                lastCombatResult = combatResult;
+                rewardManager?.ClearReward(combatManager != null ? combatManager.Player : null);
+                CompleteStage(default);
+                return;
+            }
+
             BeginReward(combatResult);
         }
 

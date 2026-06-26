@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace Project2048.Core
 {
+    [Serializable]
     public class GameContext
     {
         public enum GameState
@@ -17,6 +18,7 @@ namespace Project2048.Core
         }
 
         GameState currentGameState;
+        [SerializeField]
         int currentStageIndex = 1;
         bool isRunActive;
 

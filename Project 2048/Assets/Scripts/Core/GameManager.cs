@@ -8,6 +8,7 @@ namespace Project2048.Core
     {
         public static GameManager Instance { get; private set; }
 
+        [SerializeField]
         private GameContext gameContext;
 
         [SerializeField] private FlowController flowController;

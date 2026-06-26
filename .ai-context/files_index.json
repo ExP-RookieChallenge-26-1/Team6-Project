@@ -2415,9 +2415,9 @@
     "file_id": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "path": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "file_name": "CombatManager.cs",
-    "content_hash": "61642c01a6da21e0ecd959c03f1d82ceed639ebe",
-    "size": 55032,
-    "line_count": 1591,
+    "content_hash": "703d29551e789d3764b00e39f1db1c56c70baf48",
+    "size": 62082,
+    "line_count": 1775,
     "namespace": "Project2048.Combat",
     "using_list": [
       "System",
@@ -2492,16 +2492,23 @@
       "RequestEndPlayerTurn",
       "StartPlayerTurn",
       "StartBoardPhaseForCurrentPlayerTurn",
+      "ResolveOrQueuePendingChargedAttack",
       "ResolvePendingChargedAttack",
       "PendingChargedAttackRelease",
+      "ResolvePendingChargedAttackAfterDelay",
+      "WaitForSeconds",
       "ExecuteChargedAttackAfterPresentation",
+      "StartNextPendingChargedAttackRelease",
+      "ResolveChargedAttackReleaseTarget",
+      "ExecutePendingChargedAttackReleaseHit",
       "RecordEnemyDamagePopup",
       "ResolveInitialBoardMoveCount",
       "ApplyFirstTurnMinimumSkillCost",
       "ResolveCheapestUsableSkillCost",
       "ReleaseSkillPresentationLockAfterDelay",
-      "WaitForSeconds",
+      "CompletePendingSkillPresentationAfterDelay",
       "ResetSkillPresentationLock",
+      "ResetPendingChargedAttackReleaseDelay",
       "CompletePendingSkillPresentation",
       "StartEnemyTurn",
       "BeginEnemyTurn",
@@ -2556,7 +2563,8 @@
       "RecordOncePerTurnSkillUse",
       "GetEnemyDisplayName",
       "FormatEnemyIntent",
-      "FormatEnemyIntents"
+      "FormatEnemyIntents",
+      "ConsumeOneAttack"
     ],
     "fields": [
       {
@@ -2679,7 +2687,28 @@
         "is_static": false
       },
       {
+        "name": "skillPresentationCompletionRoutine",
+        "type": "Coroutine",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "pendingChargedAttackReleaseDelayRoutine",
+        "type": "Coroutine",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
         "name": "skillPresentationLockSequence",
+        "type": "int",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "pendingChargedAttackReleaseDelaySequence",
         "type": "int",
         "access": "private",
         "serialized": false,
@@ -2695,6 +2724,13 @@
       {
         "name": "pendingChargedAttackRelease",
         "type": "PendingChargedAttackRelease",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "isPendingChargedAttackReleaseQueued",
+        "type": "bool",
         "access": "private",
         "serialized": false,
         "is_static": false
@@ -2742,8 +2778,29 @@
         "is_static": false
       },
       {
+        "name": "hadQueuedChargedAttackRelease",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
         "name": "indexedTarget",
         "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "sequence",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "break",
+        "type": "yield",
         "access": "internal",
         "serialized": false,
         "is_static": false
@@ -2777,8 +2834,22 @@
         "is_static": false
       },
       {
+        "name": "pending",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
         "name": "minimumCost",
         "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "break",
+        "type": "yield",
         "access": "internal",
         "serialized": false,
         "is_static": false
@@ -2868,6 +2939,11 @@
       },
       {
         "access": "public",
+        "type": "float",
+        "name": "PendingChargedAttackReleaseDelaySeconds"
+      },
+      {
+        "access": "public",
         "type": "SkillSO",
         "name": "Skill"
       },
@@ -2894,7 +2970,7 @@
       {
         "access": "public",
         "type": "int",
-        "name": "AttackCount"
+        "name": "RemainingAttackCount"
       },
       {
         "access": "public",
@@ -2918,8 +2994,8 @@
     "public_field_count": 0,
     "get_component_count": 0,
     "find_call_count": 0,
-    "new_keyword_count": 34,
-    "coroutine_count": 4,
+    "new_keyword_count": 36,
+    "coroutine_count": 8,
     "singleton_candidate": false,
     "dont_destroy_on_load": false,
     "referenced_types": [
@@ -2939,6 +3015,7 @@
       "TurnController",
       "Board2048Manager",
       "ActionCostWallet",
+      "float",
       "SkillSO",
       "DamageStatSource",
       "System",
@@ -2967,6 +3044,7 @@
       "Enemies",
       "Player",
       "IsSkillPresentationLocked",
+      "PendingChargedAttackReleaseDelaySeconds",
       "OnPhaseChanged",
       "CombatResult",
       "OnCombatVictory",
@@ -2996,6 +3074,7 @@
       "Count",
       "HP",
       "ResetSkillPresentationLock",
+      "ResetPendingChargedAttackReleaseDelay",
       "Clear",
       "Reset",
       "Init",
@@ -3029,6 +3108,7 @@
       "ConsumeCarriedCost",
       "SetCost",
       "ActionPhase",
+      "ResolveOrQueuePendingChargedAttack",
       "RequestUseSkill",
       "RequiresEnemyTarget",
       "IsDead",
@@ -3066,8 +3146,10 @@
       "CompletePendingSkillPresentation",
       "StopCoroutine",
       "StartCoroutine",
+      "CompletePendingSkillPresentationAfterDelay",
       "ReleaseSkillPresentationLockAfterDelay",
       "ClearSkillPresentationLock",
+      "ResolvePendingChargedAttack",
       "RequestBoardMove",
       "Direction",
       "Move",
@@ -3091,38 +3173,32 @@
       "ClearBlock",
       "ClearTurnLimitedSkillEffects",
       "PlayerTurnStart",
-      "ResolvePendingChargedAttack",
       "StartBoardPhaseForCurrentPlayerTurn",
       "ConsumeNextTurnBoardMoveCountModifier",
       "ExtraBoardMoveCount",
       "ResolveInitialBoardMoveCount",
       "BoardMoveCountBonus",
       "InitBoard",
+      "HasPendingChargedAttack",
+      "Application",
+      "ResolvePendingChargedAttackAfterDelay",
       "TryConsumePendingChargedAttack",
+      "StartNextPendingChargedAttackRelease",
       "ExecuteChargedAttackAfterPresentation",
+      "WaitForSeconds",
       "EnemyDamagePopupReported",
       "ExecuteChargedAttack",
       "RecordEnemyDamagePopup",
-      "SkillExecutionContext",
-      "TurnCount",
-      "ResolveCheapestUsableSkillCost",
-      "MaxValue",
-      "Any",
-      "Min",
-      "WaitForSeconds",
-      "Skill",
-      "Target",
+      "RemainingAttackCount",
       "SkillName",
       "ChargedPower",
       "StatSource",
-      "AttackCount",
-      "ResolveEnemyTurn",
-      "EnemyTurn",
-      "ResolveEnemyAction",
-      "ExecuteEnemyIntent",
-      "EnemyIntent",
-      "ExecuteIntent",
-      "RecordUsedIntent"
+      "ResolveChargedAttackReleaseTarget",
+      "Target",
+      "ExecutePendingChargedAttackReleaseHit",
+      "ConsumeOneAttack",
+      "SkillExecutionContext",
+      "TurnCount"
     ],
     "component_access_types": [],
     "created_types": [
@@ -12151,9 +12227,9 @@
     "file_id": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "path": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "file_name": "CombatUiView.cs",
-    "content_hash": "3cbdb4f47df320062799a55984853c8b4623c95b",
-    "size": 120272,
-    "line_count": 3313,
+    "content_hash": "babe4317597fe8bd8003c6bc6a3d664005914e6b",
+    "size": 120632,
+    "line_count": 3338,
     "namespace": "Project2048.Prototype",
     "using_list": [
       "System.Collections",
@@ -12274,6 +12350,8 @@
       "ConfigureHpBarOutline",
       "ConfigureHpText",
       "RenderBoardPlayerStatus",
+      "HideBoardHpBar",
+      "ResolveBoardHpRoot",
       "ConfigureHpBarContentRect",
       "SetHpBarValue",
       "SetHpFillRatio",
@@ -12761,6 +12839,13 @@
       },
       {
         "name": "player",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "root",
         "type": "var",
         "access": "internal",
         "serialized": false,
@@ -13870,9 +13955,9 @@
     "file_id": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "path": "Project 2048/Assets/Scripts/Prototype/CombatWorldSpriteView.cs",
     "file_name": "CombatWorldSpriteView.cs",
-    "content_hash": "2217cf89b1c0cd11419d8becff91eb371ea04a7c",
-    "size": 291239,
-    "line_count": 7568,
+    "content_hash": "1044626692db49c185653d7229331552afa6f96a",
+    "size": 292384,
+    "line_count": 7588,
     "namespace": "Project2048.Prototype",
     "using_list": [
       "System.Collections",
@@ -13954,6 +14039,8 @@
       "DelayEnemyDeathFadeForSkillEffect",
       "DelayEnemyDeathFade",
       "HandlePlayerChargedAttackReleased",
+      "ResolveChargedAttackReleaseEffectDurationSeconds",
+      "ResolveGatherLightProjectileTravelSeconds",
       "PlayChargedAttackReleaseRepeatsRoutine",
       "PlayChargedAttackReleaseEffect",
       "Render",
@@ -14091,7 +14178,6 @@
       "PlayGatherLightPreviewReleaseRoutine",
       "ClearGatherLightPreviewRelease",
       "PlayGatherLightReleasedAttackEffect",
-      "ResolveGatherLightProjectileTravelSeconds",
       "PlayGatherLightVerticalBeamAfterDelay",
       "PlayGatherLightVerticalBeamAfterDelayRoutine",
       "ResolvePlayerChargedLightSkill",
@@ -14119,8 +14205,7 @@
       "ResolveEnemyData",
       "SpawnParticleBurst",
       "ResolveDesignTimeParticlePrefab",
-      "CreateFallbackParticleSystem",
-      "ConfigureParticleBurst"
+      "CreateFallbackParticleSystem"
     ],
     "fields": [
       {
@@ -14153,6 +14238,20 @@
       },
       {
         "name": "ChargedLightBeamDurationSeconds",
+        "type": "float",
+        "access": "public",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "SkillDamageDelaySeconds",
+        "type": "float",
+        "access": "public",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "ChargedAttackReleaseBoardDelaySeconds",
         "type": "float",
         "access": "public",
         "serialized": false,
@@ -16208,20 +16307,6 @@
         "access": "internal",
         "serialized": false,
         "is_static": false
-      },
-      {
-        "name": "bounds",
-        "type": "var",
-        "access": "internal",
-        "serialized": false,
-        "is_static": false
-      },
-      {
-        "name": "hasBounds",
-        "type": "var",
-        "access": "internal",
-        "serialized": false,
-        "is_static": false
       }
     ],
     "properties": [],
@@ -16237,7 +16322,7 @@
     "has_on_enable": false,
     "has_on_disable": false,
     "serialize_field_count": 0,
-    "public_field_count": 13,
+    "public_field_count": 15,
     "get_component_count": 26,
     "find_call_count": 3,
     "new_keyword_count": 189,
@@ -16284,6 +16369,10 @@
       "ShieldBurstSkillDurationSeconds",
       "DamageNumberPopupDurationSeconds",
       "ChargedLightBeamDurationSeconds",
+      "SkillDamageDelaySeconds",
+      "ChargedAttackReleaseBoardDelaySeconds",
+      "CombatUiView",
+      "BoardToActionPanelDelaySeconds",
       "GatherLightPreviewReleaseDelaySeconds",
       "GatherLightVerticalBeamLifetimeSeconds",
       "TentacleStrikeDurationSeconds",
@@ -16393,6 +16482,7 @@
       "ClearActivePlayerShieldArtVfx",
       "ClearActivePlayerThornGuardVfx",
       "BindRewardEvents",
+      "PendingChargedAttackReleaseDelaySeconds",
       "OnCombatStateChanged",
       "HandleCombatStateChanged",
       "OnPlayerSkillUsed",
@@ -16439,12 +16529,7 @@
       "PlayerWasHit",
       "EnemyWasHit",
       "PlayerShieldWasHit",
-      "EnemyUsedAttack",
-      "EnemyUsedDefense",
-      "ResolveEnemyUsedIntent",
-      "EnemyIntentType",
-      "Defense",
-      "EnemyAppeared"
+      "EnemyUsedAttack"
     ],
     "component_access_types": [
       "SkillVfxRunner",
@@ -16494,6 +16579,7 @@
       0.72,
       0.55,
       0.65,
+      0.1,
       2,
       0.95,
       0.62,
@@ -16507,8 +16593,7 @@
       0.08,
       1.2,
       2.45,
-      0.34,
-      3
+      0.34
     ],
     "guessed_roles": [
       "combat",
@@ -26625,18 +26710,20 @@
     "file_id": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
     "path": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
     "file_name": "CombatManagerTests.cs",
-    "content_hash": "019c5a4160cb8f0b84a9f213bec47d5f21a26425",
-    "size": 65805,
-    "line_count": 1499,
+    "content_hash": "cf287f43bdfdab7f89bdedcdd6f6181789503736",
+    "size": 77500,
+    "line_count": 1776,
     "namespace": "Project2048.Tests",
     "using_list": [
+      "System.Collections",
       "System.Collections.Generic",
       "NUnit.Framework",
       "Project2048.Board2048",
       "Project2048.Combat",
       "Project2048.Enemy",
       "Project2048.Skills",
-      "UnityEngine"
+      "UnityEngine",
+      "UnityEngine.TestTools"
     ],
     "classes": [
       {
@@ -26685,15 +26772,20 @@
       "BoardMovePenaltyAttack_ReducesNextPlayerTurnMoveCount",
       "EnemyCostGainDebuff_ReducesNextBoardPhaseCostOnce",
       "CostConverter",
-      "ChargeAttack_FiresAtNextPlayerTurnStart",
+      "ChargeAttack_FiresWhenNextActionPhaseStarts",
       "ChargeAttack_PlayerKilledByEnemyThornGuard_RaisesDefeat",
-      "ChargeAttack_StacksQueuedUsesAndReleasesCountAtNextTurnStart",
+      "ChargeAttack_StacksQueuedUsesAndReleasesCountAtNextActionPhase",
       "ChargeAttack_WithPresentationListener_DelaysReleaseDamageAndAggregatesPopup",
+      "ChargeAttack_WithPresentationListener_DelaysVictoryUntilAllReleaseVfxComplete",
+      "PlayerSkill_PendingPresentationCompletesAfterFixedDelayBeforeUnlock",
+      "WaitForSeconds",
       "OncePerTurnBuffSkills_CannotBeUsedTwiceInSamePlayerTurn",
       "RequestEndPlayerTurn_EnemyWithThreeActions_ExecutesInPreviewOrder",
       "EnemySkillIntent_CanApplyPlayerDebuffAndSkillNameSnapshot",
       "ResolveBoardPhase_FirstPlayerTurn_FloorsPositiveCostToCheapestEquippedSkill",
       "ResolveBoardPhase_AfterFirstPlayerTurn_DoesNotFloorLowCost",
+      "RequestEndPlayerTurn_ClearsUnspentCostDuringNextBoardPhase",
+      "CostCarrySkill_PreservesStoredCostEvenThoughVisibleCostResets",
       "RequestUseSkill_ReturnsFalseWhilePresentationLocked",
       "SplitAndEcho_ModifyFutureAttackDamage",
       "SacrificeAttack_SpendsHpButLeavesOne",
@@ -26874,7 +26966,7 @@
         "is_static": false
       },
       {
-        "name": "releasedAttackCount",
+        "name": "releaseEventCount",
         "type": "var",
         "access": "internal",
         "serialized": false,
@@ -26889,6 +26981,55 @@
       },
       {
         "name": "lastPopupSequence",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "cue",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "releaseEventCount",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "victoryRaised",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "latestSnapshot",
+        "type": "CombatSnapshot",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "popupSnapshotCount",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "lastPopupSequence",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "damageDelaySeconds",
         "type": "var",
         "access": "internal",
         "serialized": false,
@@ -26916,8 +27057,8 @@
     "public_field_count": 0,
     "get_component_count": 0,
     "find_call_count": 1,
-    "new_keyword_count": 131,
-    "coroutine_count": 0,
+    "new_keyword_count": 146,
+    "coroutine_count": 1,
     "singleton_candidate": false,
     "dont_destroy_on_load": false,
     "referenced_types": [
@@ -26933,6 +27074,7 @@
       "Enemy",
       "Skills",
       "UnityEngine",
+      "TestTools",
       "Tests",
       "Object",
       "TearDown",
@@ -27079,17 +27221,24 @@
       "CostGainDown",
       "CostConverter",
       "ConvertBoardToCost",
-      "ChargeAttack_FiresAtNextPlayerTurnStart",
+      "ChargeAttack_FiresWhenNextActionPhaseStarts",
       "ChargeAttack",
+      "HasPendingChargedAttack",
       "ChargeAttack_PlayerKilledByEnemyThornGuard_RaisesDefeat",
       "ThornGuard",
-      "ChargeAttack_StacksQueuedUsesAndReleasesCountAtNextTurnStart",
-      "HasPendingChargedAttack",
+      "ChargeAttack_StacksQueuedUsesAndReleasesCountAtNextActionPhase",
       "PendingChargedAttackCount",
       "CanExecute",
       "ChargeAttack_WithPresentationListener_DelaysReleaseDamageAndAggregatesPopup",
       "OnPlayerChargedAttackReleased",
-      "PlayerTurnStart",
+      "ChargeAttack_WithPresentationListener_DelaysVictoryUntilAllReleaseVfxComplete",
+      "UnityTest",
+      "PlayerSkill_PendingPresentationCompletesAfterFixedDelayBeforeUnlock",
+      "Prototype",
+      "CombatWorldSpriteView",
+      "SkillDamageDelaySeconds",
+      "Within",
+      "WaitForSeconds",
       "OncePerTurnBuffSkills_CannotBeUsedTwiceInSamePlayerTurn",
       "Endure",
       "NextAttackPowerMultiplier",
@@ -27112,15 +27261,7 @@
       "BasicDefense",
       "AttackPowerModifier",
       "ResolveBoardPhase_FirstPlayerTurn_FloorsPositiveCostToCheapestEquippedSkill",
-      "ResolveBoardPhase_AfterFirstPlayerTurn_DoesNotFloorLowCost",
-      "RequestUseSkill_ReturnsFalseWhilePresentationLocked",
-      "SplitAndEcho_ModifyFutureAttackDamage",
-      "NextAttackSplit",
-      "BasicAttack",
-      "ExtraAttackHits",
-      "SacrificeAttack_SpendsHpButLeavesOne",
-      "SacrificeAttack",
-      "Component"
+      "ResolveBoardPhase_AfterFirstPlayerTurn_DoesNotFloorLowCost"
     ],
     "component_access_types": [],
     "created_types": [
@@ -27128,6 +27269,7 @@
       "SkillExecutor",
       "EnemyIntentSystem",
       "CostConverter",
+      "WaitForSeconds",
       "GameObject"
     ],
     "singleton_access_types": [],
@@ -27192,9 +27334,9 @@
     "file_id": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
     "path": "Project 2048/Assets/Tests/EditMode/CombatPresentationEffectTests.cs",
     "file_name": "CombatPresentationEffectTests.cs",
-    "content_hash": "112a719eda85c59ed0d26563738cf71d8fa911ec",
-    "size": 215668,
-    "line_count": 3982,
+    "content_hash": "762adab734046f4ce6bd7d610892a3894bb2eeff",
+    "size": 217920,
+    "line_count": 4029,
     "namespace": "Project2048.Tests",
     "using_list": [
       "System.Collections",
@@ -27340,6 +27482,7 @@
       "AttackEffectShowcaseScene_GroupsSlotsByCurrentVisualCategory",
       "AttackEffectShowcaseScene_UsesCompactPreviewActorLayout",
       "PrototypeCombatEventAudioProfile_ContainsResultAndRewardClips",
+      "PrototypeEnemyAssets_UseConsistentDisplayNames",
       "PrototypeEnemyAssets_HaveAppearActionEffectClips",
       "PrototypeEnemyAssets_HaveDefendActionEffectClips",
       "PrototypeEnemyAssets_HaveAttackAndHitActionEffectClips",
@@ -27535,7 +27678,7 @@
     "serialize_field_count": 0,
     "public_field_count": 0,
     "get_component_count": 58,
-    "find_call_count": 10,
+    "find_call_count": 11,
     "new_keyword_count": 253,
     "coroutine_count": 11,
     "singleton_candidate": false,
@@ -28133,9 +28276,9 @@
     "file_id": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "path": "Project 2048/Assets/Tests/EditMode/CombatUiViewTests.cs",
     "file_name": "CombatUiViewTests.cs",
-    "content_hash": "90575ce0bcbfa627b54d0d1ce1f1dfee41b275cb",
-    "size": 94988,
-    "line_count": 1821,
+    "content_hash": "ceb7dc0d639d8e7ce71437039d331c8fa5fae328",
+    "size": 92757,
+    "line_count": 1794,
     "namespace": "Project2048.Tests",
     "using_list": [
       "System.Collections",
@@ -28196,13 +28339,13 @@
       "EnemyDeath_HidesEnemyHpRoot",
       "HpBarRender_ReappliesFixedThemeFillColor",
       "HpBarTheme_UsesOriginalTealPalette",
-      "PlayerDamage_UpdatesBoardHpWhileActionScreenIsVisible",
+      "PlayerDamage_UpdatesBattleHpAndKeepsBoardHpHidden",
       "HpBarDamageTrail_HoldsPreviousHpRatioWhenDamageLands",
       "HpBarDamageFeedback_FlashesDamagedSegmentAndUsesShortShake",
       "EnemyAppear_KeepsUiRootStill",
       "CellColor_UsesObstacleColorForObstacleValue",
       "Initialize_RendersThreeEnemyIntentsWhenEnemyCanActThreeTimes",
-      "Initialize_BuildsBlockAndStatusEffectUiAroundHpBars",
+      "Initialize_BuildsBlockAndStatusEffectUiAroundBattleHpBarsAndHidesBoardHp",
       "Initialize_PreservesSceneAuthoredPlayerBattleStatusEffectsRootPosition",
       "EnemyDebuffIntent_RendersDebuffOnPlayerSideOnly",
       "Initialize_ConfiguresAudioSourceForAudibleBoardEffects",
@@ -28213,6 +28356,7 @@
       "BattleScene_UsesAuthoredCombatBackgroundSprites",
       "BattleScene_UsesAuthoredIntentIconSprites",
       "BattleScene_CombatUiView_HasSceneAuthoredStatusAndBlockObjectsOnBottomHpBars",
+      "BattleScene_ResultOverlayCard_IsCloseToPausePopupPanelSize",
       "CreateOwnedGameObject",
       "CreateOwnedRectTransformObject",
       "CreateImageChild",
@@ -28348,10 +28492,10 @@
     "has_on_disable": false,
     "serialize_field_count": 0,
     "public_field_count": 0,
-    "get_component_count": 61,
+    "get_component_count": 51,
     "find_call_count": 6,
-    "new_keyword_count": 132,
-    "coroutine_count": 5,
+    "new_keyword_count": 131,
+    "coroutine_count": 4,
     "singleton_candidate": false,
     "dont_destroy_on_load": false,
     "referenced_types": [
@@ -28456,6 +28600,8 @@
       "BGMVolumeSlider",
       "SFXVolumeSlider",
       "PauseButton_ClickOpensRuntimeConfirmPopup",
+      "InvokePrivate",
+      "OpenPauseConfirmPopup",
       "ConfirmPopup",
       "Does",
       "Contain",
@@ -28552,9 +28698,7 @@
       "ActionPhase_DisablesUnaffordableAuthoredSkillButtons",
       "BoardManager",
       "SetBoardState",
-      "ActionPhase_KeepsChargeSkillButtonEnabledWhileChargeIsPending",
-      "Gather",
-      "Light"
+      "ActionPhase_KeepsChargeSkillButtonEnabledWhileChargeIsPending"
     ],
     "component_access_types": [
       "Button",
@@ -28600,7 +28744,7 @@
       "MasterVolumeSlider",
       "BGMVolumeSlider",
       "SFXVolumeSlider",
-      "pauseButton"
+      "OpenPauseConfirmPopup"
     ],
     "numeric_literals": [
       156,
@@ -31752,9 +31896,9 @@
     "file_id": "Project 2048/Assets/Tests/EditMode/StageDatabaseSOTests.cs",
     "path": "Project 2048/Assets/Tests/EditMode/StageDatabaseSOTests.cs",
     "file_name": "StageDatabaseSOTests.cs",
-    "content_hash": "ac703668302df128a681d3e9f0378784743c8851",
-    "size": 4775,
-    "line_count": 110,
+    "content_hash": "b88f3f732d1d1605ad634e2f934daf970a03363e",
+    "size": 6491,
+    "line_count": 148,
     "namespace": "Project2048.Tests",
     "using_list": [
       "Project2048.Enemy",
@@ -31778,7 +31922,8 @@
     "main_class_name": "StageDatabaseSOTests",
     "unity_type": "None",
     "methods": [
-      "PrototypeStageDatabase_UsesTwentyStageRunWithFinalBullAtStageTwenty",
+      "PrototypeStageDatabase_UsesTwentyStageRunWithFinalBossAtStageTwenty",
+      "PrototypeStageDatabase_UsesStageSheetEnemyLineup",
       "PrototypeStageDatabase_MapsDesignFloorsToStageRanges",
       "PrototypeStageBackgroundSprites_KeepConsistentWorldSizeAcrossFloors",
       "TryResolveStagePosition_MapsGlobalIndexToFloorPosition",
@@ -31830,7 +31975,7 @@
       "UnityEngine",
       "Tests",
       "Test",
-      "PrototypeStageDatabase_UsesTwentyStageRunWithFinalBullAtStageTwenty",
+      "PrototypeStageDatabase_UsesTwentyStageRunWithFinalBossAtStageTwenty",
       "AssetDatabase",
       "LoadAssetAtPath",
       "StageDatabaseSO",
@@ -31858,6 +32003,8 @@
       "EnemyEncounterRank",
       "FinalBoss",
       "False",
+      "PrototypeStageDatabase_UsesStageSheetEnemyLineup",
+      "Length",
       "PrototypeStageDatabase_MapsDesignFloorsToStageRanges",
       "Upper",
       "Middle",
@@ -31879,17 +32026,28 @@
     "singleton_access_types": [],
     "string_literals": [
       "Assets/Data/Stage/Stage Database SO.asset",
-      "\\uD669\\uC18C"
+      "\\uCD5C\\uC885 \\uBCF4\\uC2A4",
+      "\\uACE0\\uC2B4\\uB3C4\\uCE58",
+      "\\uD1A0\\uB07C",
+      "\\uAC15\\uD654 \\uACE0\\uC2B4\\uB3C4\\uCE58",
+      "\\uBCF4\\uC2A4 \\uC5EC\\uC6B0",
+      "\\uACE0\\uC591\\uC774",
+      "\\uBD80\\uC5C9\\uC774",
+      "\\uAC15\\uD654 \\uACE0\\uC591\\uC774",
+      "\\uAC15\\uD654 \\uBD80\\uC5C9\\uC774",
+      "\\uC5FC\\uC18C",
+      "\\uD669\\uC18C",
+      "\\uAC15\\uD654 \\uC5FC\\uC18C",
+      "\\uAC15\\uD654 \\uD669\\uC18C"
     ],
     "numeric_literals": [
       20,
-      6,
-      21,
       7,
-      15,
-      0.001,
+      21,
       14,
-      8
+      0.001,
+      6,
+      13
     ],
     "guessed_roles": [
       "combat",
@@ -31905,9 +32063,9 @@
     "file_id": "Project 2048/Assets/Tests/EditMode/StageDatabaseTests.cs",
     "path": "Project 2048/Assets/Tests/EditMode/StageDatabaseTests.cs",
     "file_name": "StageDatabaseTests.cs",
-    "content_hash": "02e8146ec81602ed1fb7502650ad2d76c5976eb1",
-    "size": 5043,
-    "line_count": 137,
+    "content_hash": "e21e874490c2188f4cf73adfa78c6da11b2ccdb7",
+    "size": 5299,
+    "line_count": 151,
     "namespace": "Project2048.Tests",
     "using_list": [
       "System.Collections.Generic",
@@ -31933,7 +32091,7 @@
     "unity_type": "None",
     "methods": [
       "TearDown",
-      "MapsUpperMiddleLowerStagesToThirtyStageRun",
+      "MapsUpperMiddleLowerStagesToTwentyStageRun",
       "StageSelectsOneConfiguredEnemyCandidate",
       "StageRejectsMissingEnemyCandidates",
       "StageExposesPresentationBackgroundSprite",
@@ -31981,7 +32139,7 @@
       "DestroyImmediate",
       "Clear",
       "Test",
-      "MapsUpperMiddleLowerStagesToThirtyStageRun",
+      "MapsUpperMiddleLowerStagesToTwentyStageRun",
       "CreateScriptableObject",
       "StageDatabaseSO",
       "CreateStage",
@@ -32051,10 +32209,10 @@
       10,
       20,
       2,
+      7,
       30,
       3,
-      11,
-      29,
+      19,
       0.5,
       100
     ],

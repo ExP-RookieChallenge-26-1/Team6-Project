@@ -544,7 +544,7 @@ namespace Project2048.Tests
             Assert.That(rewardMothRenderer.gameObject.scene.path, Is.EqualTo("Assets/Scenes/BattleScene.unity"));
             Assert.That(rewardMothRenderer.gameObject.activeSelf, Is.False);
             Assert.That(rewardMothRenderer.transform.parent.name, Is.EqualTo("WorldSprites"));
-            Assert.That(rewardMothRenderer.transform.localScale, Is.EqualTo(new Vector3(0.05f, 0.05f, 1f)));
+            Assert.That(rewardMothRenderer.transform.localScale, Is.EqualTo(new Vector3(0.105f, 0.105f, 1f)));
             Assert.That(AssetGuid(rewardMothRenderer.sprite), Is.EqualTo("1b1b8bc2583af9349b6cc5fb6673e155"));
             Assert.That(
                 AssetGuid(serializedWorldView.FindProperty("upperStageBackgroundSprite").objectReferenceValue),
@@ -644,7 +644,7 @@ namespace Project2048.Tests
             var enemyLocalPosition = new Vector3(1.5f, 2.25f, 0f);
             var rewardSpawnPosition = new Vector3(-0.75f, 1.25f, 0f);
             var enemyLocalScale = new Vector3(2f, 2f, 1f);
-            var mothLocalScale = new Vector3(0.05f, 0.05f, 1f);
+            var mothLocalScale = new Vector3(0.105f, 0.105f, 1f);
 
             reward.rewardKind = RewardChoiceKind.TemporaryBoardMoveCount;
             reward.temporaryBoardMoveCountBonus = 2;

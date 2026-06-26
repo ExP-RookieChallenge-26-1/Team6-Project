@@ -322,7 +322,6 @@ namespace Project2048.Prototype
             var playerWasHit = PlayerWasHit(snapshot, nextSnapshot);
             var enemyWasHit = EnemyWasHit(snapshot, nextSnapshot);
             var playerShieldWasHit = PlayerShieldWasHit(snapshot, nextSnapshot);
-            var enemyShieldWasHit = EnemyShieldWasHit(snapshot, nextSnapshot);
             var enemyUsedAttack = EnemyUsedAttack(snapshot, nextSnapshot, playerWasHit || playerShieldWasHit);
             var enemyUsedDefense = EnemyUsedDefense(snapshot, nextSnapshot);
             var enemyAttackIntent = ResolveEnemyUsedIntent(nextSnapshot, EnemyIntentType.Attack);
@@ -338,8 +337,6 @@ namespace Project2048.Prototype
             UpdatePlayerThornGuardVfx(nextSnapshot?.Player);
             PlayEnemyAppearEffectIfNeeded(enemyAppeared);
             PlayEnemyAttackEffectIfNeeded(enemyUsedAttack, enemyAttackIntent);
-            PlayShieldImpactEffectIfNeeded(playerShieldWasHit, ResolvePlayerAnchor() ?? transform);
-            PlayShieldImpactEffectIfNeeded(enemyShieldWasHit, enemyRenderer != null ? enemyRenderer.transform : transform);
             UpdatePlayerShieldArtVfx(nextSnapshot?.Player);
             PlayPlayerActionEffectIfNeeded(playerWasHit);
             PlayEnemyActionEffectIfNeeded(enemyWasHit, enemyJustDied);

@@ -10,7 +10,6 @@ namespace Project2048.Prototype
         private const float DamageNumberPopupRiseDistance = 0.62f;
         private const float DamageNumberPopupWorldRadius = 0.4f;
         private const float DamageNumberPopupWorldFontSize = 2.9f;
-        private const float DamageNumberPopupUiFontSize = 40f;
         private const float DamageNumberPopupOutlineWidth = 0.22f;
         private const float DamageNumberPopupGlowInner = 0.04f;
         private const float DamageNumberPopupGlowOuter = 0.36f;
@@ -24,7 +23,6 @@ namespace Project2048.Prototype
         private static readonly Color DamageNumberPopupNormalGlowColor = new(1f, 1f, 1f, 0.58f);
         private static readonly Color DamageNumberPopupCriticalGlowColor = new(1f, 0.72f, 0f, 0.82f);
 
-        private RectTransform damageNumberPopupLayer;
         private readonly List<GameObject> damageNumberPopups = new();
 
         private void PlayDamageNumberPopupIfNeeded(int damageAmount, SpriteRenderer targetRenderer, bool isCritical = false)
@@ -34,47 +32,15 @@ namespace Project2048.Prototype
                 return;
             }
 
-            var popupLayer = ResolveDamageNumberPopupLayer();
-            if (popupLayer != null)
-            {
-                PlayDamageNumberUiPopup(damageAmount, targetRenderer, popupLayer, isCritical);
-                return;
-            }
-
             PlayDamageNumberWorldPopup(damageAmount, targetRenderer, isCritical);
-        }
-
-        private void PlayDamageNumberUiPopup(int damageAmount, SpriteRenderer targetRenderer, RectTransform popupLayer, bool isCritical)
-        {
-            var popupObject = new GameObject("DamageNumberPopup", typeof(RectTransform), typeof(TextMeshProUGUI));
-            popupObject.transform.SetParent(popupLayer, false);
-            damageNumberPopups.Add(popupObject);
-
-            var rectTransform = popupObject.GetComponent<RectTransform>();
-            rectTransform.anchorMin = new Vector2(0.5f, 0.5f);
-            rectTransform.anchorMax = new Vector2(0.5f, 0.5f);
-            rectTransform.pivot = new Vector2(0.5f, 0.5f);
-            rectTransform.sizeDelta = new Vector2(196f, 84f);
-            rectTransform.anchoredPosition = ResolveDamageNumberCanvasPosition(targetRenderer, popupLayer);
-
-            var label = popupObject.GetComponent<TextMeshProUGUI>();
-            ConfigureDamageNumberLabel(label, damageAmount, DamageNumberPopupUiFontSize, isCritical);
-            label.raycastTarget = false;
-
-            if (!Application.isPlaying || !isActiveAndEnabled)
-            {
-                return;
-            }
-
-            StartCoroutine(DamageNumberPopupRoutine(rectTransform, label));
         }
 
         private void PlayDamageNumberWorldPopup(int damageAmount, SpriteRenderer targetRenderer, bool isCritical)
         {
             var popupObject = new GameObject("DamageNumberPopup", typeof(TextMeshPro));
-            popupObject.transform.SetParent(targetRenderer.transform, false);
-            popupObject.transform.localPosition = targetRenderer.transform.InverseTransformPoint(ResolveDamageNumberWorldPosition(targetRenderer));
-            popupObject.transform.localRotation = Quaternion.identity;
+            popupObject.transform.SetParent(transform, true);
+            popupObject.transform.position = ResolveDamageNumberWorldPosition(targetRenderer);
+            popupObject.transform.rotation = Quaternion.identity;
             popupObject.transform.localScale = Vector3.one;
             damageNumberPopups.Add(popupObject);
 
@@ -176,64 +142,6 @@ namespace Project2048.Prototype
             }
 
             return targetRenderer.bounds.center;
-        }
-
-        private static Vector2 ResolveDamageNumberCanvasPosition(SpriteRenderer targetRenderer, RectTransform popupLayer)
-        {
-            var worldPosition = ResolveDamageNumberWorldPosition(targetRenderer);
-            var canvas = popupLayer != null ? popupLayer.GetComponentInParent<Canvas>() : null;
-            var worldCamera = Camera.main;
-            if (worldCamera == null)
-            {
-                return new Vector2(worldPosition.x * 100f, worldPosition.y * 100f);
-            }
-
-            var screenPoint = RectTransformUtility.WorldToScreenPoint(worldCamera, worldPosition);
-            var eventCamera = canvas != null && canvas.renderMode != RenderMode.ScreenSpaceOverlay
-                ? canvas.worldCamera != null ? canvas.worldCamera : worldCamera
-                : null;
-
-            return RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                popupLayer,
-                screenPoint,
-                eventCamera,
-                out var localPoint)
-                ? localPoint
-                : Vector2.zero;
-        }
-
-        private RectTransform ResolveDamageNumberPopupLayer()
-        {
-            if (damageNumberPopupLayer != null)
-            {
-                damageNumberPopupLayer.SetAsLastSibling();
-                return damageNumberPopupLayer;
-            }
-
-            var canvas = GameObject.Find("CombatCanvas")?.GetComponent<Canvas>()
-                ?? FindAnyObjectByType<Canvas>(FindObjectsInactive.Include);
-            if (canvas == null)
-            {
-                return null;
-            }
-
-            var existing = canvas.transform.Find("DamageNumberPopupLayer") as RectTransform;
-            if (existing != null)
-            {
-                damageNumberPopupLayer = existing;
-                damageNumberPopupLayer.SetAsLastSibling();
-                return damageNumberPopupLayer;
-            }
-
-            var layerObject = new GameObject("DamageNumberPopupLayer", typeof(RectTransform));
-            layerObject.transform.SetParent(canvas.transform, false);
-            damageNumberPopupLayer = layerObject.GetComponent<RectTransform>();
-            damageNumberPopupLayer.anchorMin = Vector2.zero;
-            damageNumberPopupLayer.anchorMax = Vector2.one;
-            damageNumberPopupLayer.offsetMin = Vector2.zero;
-            damageNumberPopupLayer.offsetMax = Vector2.zero;
-            damageNumberPopupLayer.SetAsLastSibling();
-            return damageNumberPopupLayer;
         }
 
         private IEnumerator DamageNumberPopupRoutine(Transform popupTransform, TMP_Text label)

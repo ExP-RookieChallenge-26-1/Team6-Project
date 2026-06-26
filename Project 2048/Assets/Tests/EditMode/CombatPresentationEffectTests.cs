@@ -149,6 +149,15 @@ namespace Project2048.Tests
             Assert.That(distanceFromCenter, Is.LessThanOrEqualTo(radiusDistance + 1f));
         }
 
+        private static void AssertWorldPopupIsWithinDamageRadius(Transform popup, Vector3 targetWorldCenter, float radius)
+        {
+            var popupPosition = popup.position;
+            var distance = Vector2.Distance(
+                new Vector2(popupPosition.x, popupPosition.y),
+                new Vector2(targetWorldCenter.x, targetWorldCenter.y));
+            Assert.That(distance, Is.LessThanOrEqualTo(radius + 0.001f));
+        }
+
         private static void AssertDamageNumberPopupIsReadable(TMPro.TMP_Text text, bool isCritical)
         {
             if (isCritical)
@@ -589,7 +598,7 @@ namespace Project2048.Tests
         }
 
         [UnityTest]
-        public IEnumerator CombatWorldSpriteView_EnemyAttack_LungesTowardPlayerAndSpawnsPlayerShieldParticles()
+        public IEnumerator CombatWorldSpriteView_EnemyAttack_LungesTowardPlayerWithoutPlayerShieldHitEffect()
         {
             var viewObject = CreateOwnedGameObject("WorldSpriteView");
             var view = viewObject.AddComponent<CombatWorldSpriteView>();
@@ -622,7 +631,8 @@ namespace Project2048.Tests
             var restX = enemyRenderer.transform.localPosition.x;
             manager.RequestEndPlayerTurn();
 
-            Assert.That(playerRenderer.transform.Find("ShieldImpactParticles"), Is.Not.Null);
+            Assert.That(playerRenderer.transform.Find("ShieldImpactParticles"), Is.Null);
+            Assert.That(playerRenderer.transform.Find("ShieldImpactArt"), Is.Null);
             if (!Application.isPlaying)
             {
                 yield break;
@@ -686,7 +696,7 @@ namespace Project2048.Tests
         }
 
         [Test]
-        public void CombatWorldSpriteView_PlayerAttackAgainstEnemyBlock_SpawnsEnemyShieldParticles()
+        public void CombatWorldSpriteView_PlayerAttackAgainstEnemyBlock_DoesNotSpawnEnemyShieldHitEffect()
         {
             var viewObject = CreateOwnedGameObject("WorldSpriteView");
             var view = viewObject.AddComponent<CombatWorldSpriteView>();
@@ -715,14 +725,8 @@ namespace Project2048.Tests
 
             Assert.That(manager.RequestUseSkill(attack, enemy), Is.True);
 
-            var particles = enemyRenderer.transform.Find("ShieldImpactParticles")?.GetComponent<ParticleSystem>();
-            Assert.That(particles, Is.Not.Null);
-            Assert.That(particles.shape.shapeType, Is.EqualTo(ParticleSystemShapeType.Sphere));
-
-            var profile = Resources.Load<CombatWorldVfxProfileSO>("PrototypeCombatWorldVfxProfile");
-            Assert.That(profile, Is.Not.Null);
-            var renderer = particles.GetComponent<ParticleSystemRenderer>();
-            Assert.That(renderer.sharedMaterial, Is.EqualTo(profile.shieldImpactEffect.particleMaterial));
+            Assert.That(enemyRenderer.transform.Find("ShieldImpactParticles"), Is.Null);
+            Assert.That(enemyRenderer.transform.Find("ShieldImpactArt"), Is.Null);
         }
 
         [Test]
@@ -765,15 +769,16 @@ namespace Project2048.Tests
             manager.RequestEndPlayerTurn();
 
             var popupLayer = canvasObject.transform.Find("DamageNumberPopupLayer");
-            var popup = popupLayer?.Find("DamageNumberPopup");
-            var text = popup != null ? popup.GetComponent<TMPro.TextMeshProUGUI>() : null;
+            var popup = viewObject.transform.Find("DamageNumberPopup");
+            var text = popup != null ? popup.GetComponent<TMPro.TextMeshPro>() : null;
             Assert.That(playerRenderer.transform.Find("DamageNumberPopup"), Is.Null);
-            Assert.That(popupLayer, Is.Not.Null);
+            Assert.That(popupLayer, Is.Null);
+            Assert.That(popup, Is.Not.Null);
             Assert.That(text, Is.Not.Null);
             Assert.That(text.text, Is.EqualTo("3"));
             Assert.That(text.text, Does.Not.StartWith("-"));
             AssertDamageNumberPopupIsReadable(text, isCritical: false);
-            AssertPopupIsWithinDamageRadius((RectTransform)popup, (RectTransform)popupLayer, camera, playerRenderer.transform.position, 0.4f);
+            AssertWorldPopupIsWithinDamageRadius(popup, playerRenderer.transform.position, 0.4f);
         }
 
         [Test]
@@ -814,15 +819,16 @@ namespace Project2048.Tests
             Assert.That(manager.RequestUseSkill(attack, enemy), Is.True);
 
             var popupLayer = canvasObject.transform.Find("DamageNumberPopupLayer");
-            var popup = popupLayer?.Find("DamageNumberPopup");
-            var text = popup != null ? popup.GetComponent<TMPro.TextMeshProUGUI>() : null;
+            var popup = viewObject.transform.Find("DamageNumberPopup");
+            var text = popup != null ? popup.GetComponent<TMPro.TextMeshPro>() : null;
             Assert.That(enemyRenderer.transform.Find("DamageNumberPopup"), Is.Null);
-            Assert.That(popupLayer, Is.Not.Null);
+            Assert.That(popupLayer, Is.Null);
+            Assert.That(popup, Is.Not.Null);
             Assert.That(text, Is.Not.Null);
             Assert.That(text.text, Is.EqualTo("4"));
             Assert.That(text.text, Does.Not.StartWith("-"));
             AssertDamageNumberPopupIsReadable(text, isCritical: false);
-            AssertPopupIsWithinDamageRadius((RectTransform)popup, (RectTransform)popupLayer, camera, enemyRenderer.transform.position, 0.4f);
+            AssertWorldPopupIsWithinDamageRadius(popup, enemyRenderer.transform.position, 0.4f);
         }
 
         [Test]
@@ -866,12 +872,14 @@ namespace Project2048.Tests
             Assert.That(manager.RequestUseSkill(attack, enemy), Is.True);
 
             var popupLayer = canvasObject.transform.Find("DamageNumberPopupLayer");
-            var popup = popupLayer?.Find("DamageNumberPopup");
-            var text = popup != null ? popup.GetComponent<TMPro.TextMeshProUGUI>() : null;
+            var popup = viewObject.transform.Find("DamageNumberPopup");
+            var text = popup != null ? popup.GetComponent<TMPro.TextMeshPro>() : null;
+            Assert.That(popupLayer, Is.Null);
+            Assert.That(popup, Is.Not.Null);
             Assert.That(text, Is.Not.Null);
             Assert.That(int.Parse(text.text), Is.InRange(13, 15));
             AssertDamageNumberPopupIsReadable(text, isCritical: true);
-            AssertPopupIsWithinDamageRadius((RectTransform)popup, (RectTransform)popupLayer, camera, enemyRenderer.transform.position, 0.4f);
+            AssertWorldPopupIsWithinDamageRadius(popup, enemyRenderer.transform.position, 0.4f);
         }
 
         [UnityTest]

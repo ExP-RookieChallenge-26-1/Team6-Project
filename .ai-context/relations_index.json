@@ -13302,6 +13302,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Flow/FlowController.cs",
     "from_class": "FlowController",
+    "to_type": "RestartRun",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Flow/FlowController.cs",
+    "from_class": "FlowController",
     "to_type": "RestartStageNextFrame",
     "relation_type": "uses",
     "strength": 1
@@ -27743,6 +27750,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatBootstrap.cs",
     "from_class": "PrototypeCombatBootstrap",
+    "to_type": "RestartRun",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatBootstrap.cs",
+    "from_class": "PrototypeCombatBootstrap",
     "to_type": "RewardManager",
     "relation_type": "uses",
     "strength": 1
@@ -27793,6 +27807,13 @@
     "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatBootstrap.cs",
     "from_class": "PrototypeCombatBootstrap",
     "to_type": "SetParent",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatBootstrap.cs",
+    "from_class": "PrototypeCombatBootstrap",
+    "to_type": "StageFlowController",
     "relation_type": "uses",
     "strength": 1
   },

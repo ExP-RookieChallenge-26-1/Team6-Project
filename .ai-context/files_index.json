@@ -12120,9 +12120,9 @@
     "file_id": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "path": "Project 2048/Assets/Scripts/Prototype/CombatUiView.cs",
     "file_name": "CombatUiView.cs",
-    "content_hash": "82047907b65da9151d1962c10030db800bb751af",
-    "size": 115994,
-    "line_count": 3224,
+    "content_hash": "b7c30eff6a4678de1d31ff502272ecec7ebeaf8d",
+    "size": 118136,
+    "line_count": 3261,
     "namespace": "Project2048.Prototype",
     "using_list": [
       "System.Collections",
@@ -12226,6 +12226,7 @@
       "RenderIntentIcons",
       "ClearIntentIcons",
       "EnsureIntentIconRow",
+      "ConfigureIntentIconRowLayout",
       "GetOrCreateIntentIconSlot",
       "SetEnemyHpVisible",
       "ShowEnemyHp",
@@ -12682,6 +12683,13 @@
         "is_static": false
       },
       {
+        "name": "rowRect",
+        "type": "var",
+        "access": "internal",
+        "serialized": false,
+        "is_static": false
+      },
+      {
         "name": "delaySeconds",
         "type": "var",
         "access": "internal",
@@ -13069,9 +13077,9 @@
     "has_on_disable": false,
     "serialize_field_count": 1,
     "public_field_count": 8,
-    "get_component_count": 38,
+    "get_component_count": 40,
     "find_call_count": 9,
-    "new_keyword_count": 64,
+    "new_keyword_count": 67,
     "coroutine_count": 16,
     "singleton_candidate": false,
     "dont_destroy_on_load": false,
@@ -13287,6 +13295,7 @@
       "Outline",
       "Button",
       "HorizontalLayoutGroup",
+      "ContentSizeFitter",
       "StatusEffectTooltipTarget",
       "AudioSource",
       "T",
@@ -13316,15 +13325,15 @@
       "Reward overlay",
       "Board effects",
       "Theme",
+      "인텐트 아이콘 한 개의 크기(px). 개수가 늘어도 이 크기를 유지하고 컨테이너가 가로로 늘어난다.",
+      "인텐트 아이콘 사이의 가로 간격(px).",
       "적 턴에 할 행동",
       "AnimatedTile",
       "Value",
       "BoardAnimationOverlay",
       "attack-up",
       "attack-down",
-      "fear",
-      "darkness",
-      "TurnCounterText"
+      "fear"
     ],
     "numeric_literals": [
       0.14,

@@ -281,6 +281,20 @@ namespace Project2048.Combat
             return hpBefore - CurrentHp;
         }
 
+        // 테스트 치트용 즉사. Endure 등 생존 보정을 무시하고 체력을 0으로 만든다.
+        public int ForceKill()
+        {
+            if (CurrentHp <= 0)
+            {
+                return 0;
+            }
+
+            var hpBefore = CurrentHp;
+            CurrentHp = 0;
+            OnHpChanged?.Invoke(CurrentHp, MaxHp);
+            return hpBefore - CurrentHp;
+        }
+
         public int TakeStatusDamage(int damage)
         {
             damage = Mathf.Max(0, damage);

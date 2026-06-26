@@ -351,6 +351,46 @@ namespace Project2048.Combat
             return true;
         }
 
+        public bool RequestDebugKillPlayer()
+        {
+            EnsureRuntimeState();
+            if (!IsPlayerCommandPhase(CurrentPhase))
+            {
+                return false;
+            }
+
+            if (player == null || player.IsDead)
+            {
+                return false;
+            }
+
+            var wasSuppressing = suppressStateNotifications;
+            suppressStateNotifications = true;
+            int damage;
+            try
+            {
+                damage = player.ForceKill();
+            }
+            finally
+            {
+                suppressStateNotifications = wasSuppressing;
+            }
+
+            if (damage <= 0)
+            {
+                return false;
+            }
+
+            lastActionDescription = "테스트 치트: 플레이어 즉사";
+
+            if (!CheckDefeat())
+            {
+                NotifyStateChanged();
+            }
+
+            return true;
+        }
+
         public void BeginSkillPresentationLock(float durationSeconds)
         {
             EnsureRuntimeState();

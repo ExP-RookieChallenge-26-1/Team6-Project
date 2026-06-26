@@ -292,6 +292,14 @@ namespace Project2048.Prototype
                 return;
             }
 
+            if (Debug.isDebugBuild &&
+                keyboard.dKey.wasPressedThisFrame &&
+                IsPlayerCommandScreenMode(uiState.ScreenMode))
+            {
+                combatManager.RequestDebugKillPlayer();
+                return;
+            }
+
             if (uiState.ScreenMode != PrototypeCombatScreenMode.Board)
             {
                 return;

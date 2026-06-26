@@ -4757,9 +4757,9 @@
     "file_id": "Project 2048/Assets/Scripts/Core/GameContext.cs",
     "path": "Project 2048/Assets/Scripts/Core/GameContext.cs",
     "file_name": "GameContext.cs",
-    "content_hash": "d70fd49e2351a81af46482fec726ba60ba924403",
-    "size": 1340,
-    "line_count": 58,
+    "content_hash": "ebefaf26d01196b838ebc9143fce7eb8fd65c519",
+    "size": 1384,
+    "line_count": 60,
     "namespace": "Project2048.Core",
     "using_list": [
       "System",
@@ -4797,7 +4797,7 @@
         "name": "currentStageIndex",
         "type": "int",
         "access": "internal",
-        "serialized": false,
+        "serialized": true,
         "is_static": false
       },
       {
@@ -4818,7 +4818,7 @@
     "has_start": false,
     "has_on_enable": false,
     "has_on_disable": false,
-    "serialize_field_count": 0,
+    "serialize_field_count": 1,
     "public_field_count": 0,
     "get_component_count": 0,
     "find_call_count": 0,
@@ -4834,6 +4834,7 @@
       "UnityEngine",
       "Project2048",
       "Core",
+      "Serializable",
       "MainMenu",
       "Loading",
       "Story",
@@ -4862,6 +4863,7 @@
       "save-load"
     ],
     "summary_signals": [
+      "인스펙터 직렬화 필드 사용",
       "저장/불러오기 관련 로직 포함"
     ]
   },
@@ -4869,9 +4871,9 @@
     "file_id": "Project 2048/Assets/Scripts/Core/GameManager.cs",
     "path": "Project 2048/Assets/Scripts/Core/GameManager.cs",
     "file_name": "GameManager.cs",
-    "content_hash": "b004127529738f5c665c860d8016f132337d574b",
-    "size": 1929,
-    "line_count": 73,
+    "content_hash": "4f251b25eee2f59d421061d9cf5c6f6851ab217b",
+    "size": 1954,
+    "line_count": 74,
     "namespace": "Project2048.Core",
     "using_list": [
       "UnityEngine",
@@ -4905,7 +4907,7 @@
         "name": "gameContext",
         "type": "GameContext",
         "access": "private",
-        "serialized": false,
+        "serialized": true,
         "is_static": false
       }
     ],
@@ -4927,7 +4929,7 @@
     "has_start": false,
     "has_on_enable": false,
     "has_on_disable": false,
-    "serialize_field_count": 0,
+    "serialize_field_count": 1,
     "public_field_count": 0,
     "get_component_count": 2,
     "find_call_count": 0,
@@ -4977,6 +4979,7 @@
     ],
     "summary_signals": [
       "런타임 컴포넌트",
+      "인스펙터 직렬화 필드 사용",
       "싱글톤 후보",
       "저장/불러오기 관련 로직 포함",
       "컴포넌트 조회 사용"

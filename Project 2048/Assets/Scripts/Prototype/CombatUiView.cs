@@ -284,16 +284,15 @@ namespace Project2048.Prototype
                 return;
             }
 
-            if (Debug.isDebugBuild &&
-                keyboard.sKey.wasPressedThisFrame &&
+            // 시연/릴리스 빌드에서도 동작해야 하므로 Debug.isDebugBuild로 막지 않는다.
+            if (keyboard.sKey.wasPressedThisFrame &&
                 IsPlayerCommandScreenMode(uiState.ScreenMode))
             {
                 combatManager.RequestDebugKillEnemy();
                 return;
             }
 
-            if (Debug.isDebugBuild &&
-                keyboard.dKey.wasPressedThisFrame &&
+            if (keyboard.dKey.wasPressedThisFrame &&
                 IsPlayerCommandScreenMode(uiState.ScreenMode))
             {
                 combatManager.RequestDebugKillPlayer();

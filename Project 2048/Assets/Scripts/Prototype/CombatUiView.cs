@@ -137,6 +137,10 @@ namespace Project2048.Prototype
         [SerializeField] private Sprite attackIntentSprite;
         [SerializeField] private Sprite defenseIntentSprite;
         [SerializeField] private Sprite fearIntentSprite;
+        [Tooltip("인텐트 아이콘 한 개의 크기(px). 개수가 늘어도 이 크기를 유지하고 컨테이너가 가로로 늘어난다.")]
+        [SerializeField] private float intentIconSize = 48f;
+        [Tooltip("인텐트 아이콘 사이의 가로 간격(px).")]
+        [SerializeField] private float intentIconSpacing = 6f;
         [SerializeField] private Color playerHpFillColor = ThemeHpFillColor;
         [SerializeField] private Color enemyHpFillColor = ThemeHpFillColor;
         [SerializeField] private Color hpBarBackgroundColor = ThemeHpBarBackgroundColor;
@@ -1454,24 +1458,49 @@ namespace Project2048.Prototype
             if (intentBubble.transform.Find("IntentIconRow") is RectTransform existing)
             {
                 intentIconRow = existing;
+                ConfigureIntentIconRowLayout(existing.gameObject);
                 return;
             }
 
             var rowObject = new GameObject("IntentIconRow");
             intentIconRow = rowObject.AddComponent<RectTransform>();
             intentIconRow.SetParent(intentBubble.transform, false);
-            intentIconRow.anchorMin = Vector2.zero;
-            intentIconRow.anchorMax = Vector2.one;
-            intentIconRow.offsetMin = Vector2.zero;
-            intentIconRow.offsetMax = Vector2.zero;
+            ConfigureIntentIconRowLayout(rowObject);
+        }
 
-            var layout = rowObject.AddComponent<HorizontalLayoutGroup>();
+        // 컨테이너(Row)가 아이콘 개수에 맞춰 가로로 늘어나도록 설정한다.
+        // 고정 크기 버블에 강제로 채워 넣어 아이콘이 작아지거나 잘리던 문제를 막는다.
+        private void ConfigureIntentIconRowLayout(GameObject rowObject)
+        {
+            // 버블 중앙을 기준으로 좌우로 확장되도록 stretch 대신 중앙 앵커를 쓴다.
+            // (stretch 앵커는 ContentSizeFitter가 폭을 제어하지 못한다.)
+            var rowRect = intentIconRow;
+            rowRect.anchorMin = new Vector2(0.5f, 0.5f);
+            rowRect.anchorMax = new Vector2(0.5f, 0.5f);
+            rowRect.pivot = new Vector2(0.5f, 0.5f);
+            rowRect.anchoredPosition = Vector2.zero;
+
+            if (!rowObject.TryGetComponent<HorizontalLayoutGroup>(out var layout))
+            {
+                layout = rowObject.AddComponent<HorizontalLayoutGroup>();
+            }
+
             layout.childAlignment = TextAnchor.MiddleCenter;
-            layout.spacing = 4f;
+            layout.spacing = intentIconSpacing;
             layout.childControlWidth = true;
             layout.childControlHeight = true;
-            layout.childForceExpandWidth = true;
-            layout.childForceExpandHeight = true;
+            // 아이콘을 강제로 늘리지 않는다 → LayoutElement의 고정 크기를 그대로 유지한다.
+            layout.childForceExpandWidth = false;
+            layout.childForceExpandHeight = false;
+
+            if (!rowObject.TryGetComponent<ContentSizeFitter>(out var fitter))
+            {
+                fitter = rowObject.AddComponent<ContentSizeFitter>();
+            }
+
+            // 내용(아이콘 합계)에 맞춰 Row의 크기가 자동으로 늘어난다.
+            fitter.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
+            fitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
         }
 
         private Image GetOrCreateIntentIconSlot(int index)
@@ -1483,6 +1512,14 @@ namespace Project2048.Prototype
                 iconRect.SetParent(intentIconRow, false);
                 var iconImage = iconObject.AddComponent<Image>();
                 iconImage.raycastTarget = false;
+
+                // 아이콘마다 고정 크기를 지정한다. 개수가 늘어도 크기는 그대로 유지된다.
+                var layoutElement = iconObject.AddComponent<LayoutElement>();
+                layoutElement.preferredWidth = intentIconSize;
+                layoutElement.preferredHeight = intentIconSize;
+                layoutElement.minWidth = intentIconSize;
+                layoutElement.minHeight = intentIconSize;
+
                 intentIconSlots.Add(iconImage);
             }
 

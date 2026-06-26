@@ -60,13 +60,15 @@ namespace Project2048.Combat
         public bool LastUsedSkillWasBasic { get; private set; }
         public int EchoDamageBonus => NextAttackPowerMultiplier > 1f ? Mathf.RoundToInt((NextAttackPowerMultiplier - 1f) * 100f) : 0;
         public int ExtraAttackHits => Mathf.Max(0, NextAttackHitCount - 1);
-        public bool HasPendingChargedAttack => pendingChargedAttackPower > 0;
+        public bool HasPendingChargedAttack => pendingChargedAttackPower > 0 && pendingChargedAttackCount > 0;
+        public int PendingChargedAttackCount => HasPendingChargedAttack ? pendingChargedAttackCount : 0;
         public bool HasPoisonOrBleed => PoisonTurns > 0 || BleedTurns > 0;
         public bool IsDead => CurrentHp <= 0;
         public IReadOnlyList<SkillSO> Skills => skills;
 
         private string pendingChargedAttackName;
         private int pendingChargedAttackPower;
+        private int pendingChargedAttackCount;
         private DamageStatSource pendingChargedAttackStatSource;
         private float baseCriticalChance;
 
@@ -129,6 +131,7 @@ namespace Project2048.Combat
             LastUsedSkillWasBasic = false;
             pendingChargedAttackName = null;
             pendingChargedAttackPower = 0;
+            pendingChargedAttackCount = 0;
             pendingChargedAttackStatSource = DamageStatSource.AttackPower;
 
             SetSkills(data.startingSkills);
@@ -794,13 +797,14 @@ namespace Project2048.Combat
         public bool QueueChargedAttack(string displayName, int attackPower, DamageStatSource statSource)
         {
             attackPower = Mathf.Max(0, attackPower);
-            if (attackPower <= 0 || HasPendingChargedAttack)
+            if (attackPower <= 0)
             {
                 return false;
             }
 
             pendingChargedAttackName = displayName;
             pendingChargedAttackPower = attackPower;
+            pendingChargedAttackCount = Mathf.Max(1, pendingChargedAttackCount + 1);
             pendingChargedAttackStatSource = statSource;
             OnStatusEffectsChanged?.Invoke();
             return true;
@@ -816,14 +820,25 @@ namespace Project2048.Combat
             out int attackPower,
             out DamageStatSource statSource)
         {
+            return TryConsumePendingChargedAttack(out displayName, out attackPower, out statSource, out _);
+        }
+
+        public bool TryConsumePendingChargedAttack(
+            out string displayName,
+            out int attackPower,
+            out DamageStatSource statSource,
+            out int attackCount)
+        {
             displayName = pendingChargedAttackName;
             attackPower = pendingChargedAttackPower;
             statSource = pendingChargedAttackStatSource;
+            attackCount = pendingChargedAttackCount;
             pendingChargedAttackName = null;
             pendingChargedAttackPower = 0;
+            pendingChargedAttackCount = 0;
             pendingChargedAttackStatSource = DamageStatSource.AttackPower;
 
-            if (attackPower > 0)
+            if (attackPower > 0 && attackCount > 0)
             {
                 OnStatusEffectsChanged?.Invoke();
                 return true;

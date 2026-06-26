@@ -258,6 +258,64 @@ namespace Project2048.Tests
         }
 
         [Test]
+        public void RequestUseSkill_WithPresentationListener_DelaysDamageVictoryAndPopupUntilPresentationCompletes()
+        {
+            var manager = CreateGameObject<CombatManager>("CombatManager");
+            var player = CreateGameObject<PlayerCombatController>("Player");
+            var enemy = CreateGameObject<EnemyController>("Enemy");
+            var playerData = CreatePlayerData(maxHp: 20, attackPower: 10);
+            var enemyData = CreateEnemyData(maxHp: 10, attackValue: 0);
+            var skill = CreateSkill("delayed-strike", SkillType.Attack, cost: 0, power: 100);
+            CombatSnapshot latestSnapshot = null;
+            var presentationStarted = false;
+            var popupSnapshotCount = 0;
+            var lastPopupSequence = 0;
+
+            manager.SetCombatants(player, new[] { enemy });
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new List<EnemySO> { enemyData },
+                boardMoveCount = 1,
+            });
+            manager.ResolveBoardPhase();
+
+            manager.OnPlayerSkillUsed += (_, __) =>
+            {
+                presentationStarted = true;
+                manager.BeginSkillPresentationLock(1f);
+            };
+            manager.OnCombatStateChanged += snapshot =>
+            {
+                latestSnapshot = snapshot;
+                var cue = snapshot.LastDamagePopupCue;
+                if (cue != null && cue.Sequence > lastPopupSequence)
+                {
+                    lastPopupSequence = cue.Sequence;
+                    popupSnapshotCount++;
+                }
+            };
+
+            Assert.That(manager.RequestUseSkill(skill, enemy), Is.True);
+
+            Assert.That(presentationStarted, Is.True);
+            Assert.That(manager.IsSkillPresentationLocked, Is.True);
+            Assert.That(enemy.CurrentHp, Is.EqualTo(enemy.MaxHp));
+            Assert.That(enemy.IsDead, Is.False);
+            Assert.That(manager.CurrentPhase, Is.EqualTo(CombatPhase.ActionPhase));
+            Assert.That(popupSnapshotCount, Is.Zero);
+
+            manager.ClearSkillPresentationLock();
+
+            Assert.That(enemy.IsDead, Is.True);
+            Assert.That(manager.CurrentPhase, Is.EqualTo(CombatPhase.Victory));
+            Assert.That(latestSnapshot?.LastDamagePopupCue, Is.Not.Null);
+            Assert.That(latestSnapshot.LastDamagePopupCue.TargetEnemyIndex, Is.Zero);
+            Assert.That(latestSnapshot.LastDamagePopupCue.Amount, Is.EqualTo(10));
+            Assert.That(popupSnapshotCount, Is.EqualTo(1));
+        }
+
+        [Test]
         public void ThornGuard_RetaliatesOnlyWhileShieldHpExists()
         {
             var playerObject = CreateGameObject<PlayerCombatController>("Player");
@@ -960,7 +1018,7 @@ namespace Project2048.Tests
         }
 
         [Test]
-        public void ChargeAttack_CannotBeQueuedAgainWhilePending()
+        public void ChargeAttack_StacksQueuedUsesAndReleasesCountAtNextTurnStart()
         {
             var manager = CreateGameObject<CombatManager>("CombatManager");
             var player = CreateGameObject<PlayerCombatController>("Player");
@@ -983,10 +1041,13 @@ namespace Project2048.Tests
 
             Assert.That(manager.RequestUseSkillById("gather-light"), Is.True);
             Assert.That(player.HasPendingChargedAttack, Is.True);
-            Assert.That(manager.GetSnapshot().Skills[0].CanExecute, Is.False);
+            Assert.That(player.PendingChargedAttackCount, Is.EqualTo(1));
+            Assert.That(manager.GetSnapshot().Skills[0].CanExecute, Is.True);
 
-            Assert.That(manager.RequestUseSkillById("gather-light"), Is.False);
+            Assert.That(manager.RequestUseSkillById("gather-light"), Is.True);
             Assert.That(player.HasPendingChargedAttack, Is.True);
+            Assert.That(player.PendingChargedAttackCount, Is.EqualTo(2));
+            Assert.That(manager.GetSnapshot().Skills[0].CanExecute, Is.True);
             Assert.That(enemy.CurrentHp, Is.EqualTo(enemy.MaxHp));
 
             manager.RequestEndPlayerTurn();
@@ -994,6 +1055,70 @@ namespace Project2048.Tests
             Assert.That(player.HasPendingChargedAttack, Is.False);
             Assert.That(manager.CurrentPhase, Is.EqualTo(CombatPhase.BoardPhase));
             Assert.That(manager.GetSnapshot().Skills[0].CanExecute, Is.True);
+        }
+
+        [Test]
+        public void ChargeAttack_WithPresentationListener_DelaysReleaseDamageAndAggregatesPopup()
+        {
+            var manager = CreateGameObject<CombatManager>("CombatManager");
+            var player = CreateGameObject<PlayerCombatController>("Player");
+            var enemy = CreateGameObject<EnemyController>("Enemy");
+            var charge = CreateSkill("gather-light", SkillType.Attack, cost: 0, power: 0);
+            charge.effectKind = SkillEffectKind.ChargeAttack;
+            charge.chargedPower = 40;
+            var playerData = CreatePlayerData(maxHp: 20, attackPower: 2);
+            playerData.startingSkills = new List<SkillSO> { charge };
+            var enemyData = CreateEnemyData(maxHp: 100, attackValue: 0);
+            CombatSnapshot latestSnapshot = null;
+            var releasedAttackCount = 0;
+            var popupSnapshotCount = 0;
+            var lastPopupSequence = 0;
+
+            manager.SetCombatants(player, new[] { enemy });
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new List<EnemySO> { enemyData },
+                boardMoveCount = 1,
+            });
+            manager.ResolveBoardPhase();
+
+            manager.OnPlayerChargedAttackReleased += (_, __, attackCount, ___) =>
+            {
+                releasedAttackCount = attackCount;
+                manager.BeginSkillPresentationLock(1f);
+            };
+            manager.OnCombatStateChanged += snapshot =>
+            {
+                latestSnapshot = snapshot;
+                var cue = snapshot.LastDamagePopupCue;
+                if (cue != null && cue.Sequence > lastPopupSequence)
+                {
+                    lastPopupSequence = cue.Sequence;
+                    popupSnapshotCount++;
+                }
+            };
+
+            Assert.That(manager.RequestUseSkillById("gather-light"), Is.True);
+            Assert.That(manager.RequestUseSkillById("gather-light"), Is.True);
+            Assert.That(player.PendingChargedAttackCount, Is.EqualTo(2));
+
+            manager.RequestEndPlayerTurn();
+
+            Assert.That(releasedAttackCount, Is.EqualTo(2));
+            Assert.That(manager.IsSkillPresentationLocked, Is.True);
+            Assert.That(enemy.CurrentHp, Is.EqualTo(enemy.MaxHp));
+            Assert.That(manager.CurrentPhase, Is.EqualTo(CombatPhase.PlayerTurnStart));
+            Assert.That(popupSnapshotCount, Is.Zero);
+
+            manager.ClearSkillPresentationLock();
+
+            Assert.That(player.HasPendingChargedAttack, Is.False);
+            Assert.That(enemy.CurrentHp, Is.LessThan(enemy.MaxHp));
+            Assert.That(manager.CurrentPhase, Is.EqualTo(CombatPhase.BoardPhase));
+            Assert.That(latestSnapshot?.LastDamagePopupCue, Is.Not.Null);
+            Assert.That(latestSnapshot.LastDamagePopupCue.Amount, Is.GreaterThan(0));
+            Assert.That(popupSnapshotCount, Is.EqualTo(1));
         }
 
         [Test]

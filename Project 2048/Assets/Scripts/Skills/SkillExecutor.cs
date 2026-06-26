@@ -254,7 +254,6 @@ namespace Project2048.Skills
 
             return skill.ResolveEffectKind() switch
             {
-                SkillEffectKind.ChargeAttack => !player.HasPendingChargedAttack,
                 SkillEffectKind.ShieldScalingAttack => player.ShieldHp > 0,
                 SkillEffectKind.ShieldBurstAttack => player.ShieldHp > 0,
                 _ => true,

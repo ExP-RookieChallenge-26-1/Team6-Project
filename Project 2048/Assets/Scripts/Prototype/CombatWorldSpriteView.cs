@@ -986,11 +986,48 @@ namespace Project2048.Prototype
                 Time.realtimeSinceStartup + durationSeconds);
         }
 
-        private void HandlePlayerChargedAttackReleased(string skillName, int chargedPower, EnemyController target)
+        private void HandlePlayerChargedAttackReleased(string skillName, int chargedPower, int attackCount, EnemyController target)
         {
             ResolveMissingReferences();
             var targetTransform = target != null && enemyRenderer != null ? enemyRenderer.transform : transform;
             var chargedSkill = ResolvePlayerChargedLightSkill(skillName);
+            var releaseCount = Mathf.Max(1, attackCount);
+            var releaseIntervalSeconds = Mathf.Max(ChargedLightBeamDurationSeconds, GatherLightVerticalBeamLifetimeSeconds);
+            if (Application.isPlaying && isActiveAndEnabled && releaseCount > 1)
+            {
+                StartCoroutine(PlayChargedAttackReleaseRepeatsRoutine(chargedSkill, targetTransform, releaseCount, releaseIntervalSeconds));
+            }
+            else
+            {
+                for (var index = 0; index < releaseCount; index++)
+                {
+                    PlayChargedAttackReleaseEffect(chargedSkill, targetTransform);
+                }
+            }
+
+            var totalDurationSeconds = releaseIntervalSeconds * releaseCount;
+            DelayEnemyDeathFade(totalDurationSeconds);
+            combatManager?.BeginSkillPresentationLock(totalDurationSeconds);
+        }
+
+        private IEnumerator PlayChargedAttackReleaseRepeatsRoutine(
+            SkillSO chargedSkill,
+            Transform targetTransform,
+            int releaseCount,
+            float releaseIntervalSeconds)
+        {
+            for (var index = 0; index < releaseCount; index++)
+            {
+                PlayChargedAttackReleaseEffect(chargedSkill, targetTransform);
+                if (index < releaseCount - 1)
+                {
+                    yield return new WaitForSeconds(Mathf.Max(0f, releaseIntervalSeconds));
+                }
+            }
+        }
+
+        private void PlayChargedAttackReleaseEffect(SkillSO chargedSkill, Transform targetTransform)
+        {
             if (IsGatherLightSkill(chargedSkill))
             {
                 PlayGatherLightReleasedAttackEffect(chargedSkill, targetTransform, playAttackAnimation: true);
@@ -999,8 +1036,6 @@ namespace Project2048.Prototype
             {
                 PlayGatherLightReleasedAttackEffect(chargedSkill, targetTransform, playAttackAnimation: true);
             }
-
-            DelayEnemyDeathFade(Mathf.Max(ChargedLightBeamDurationSeconds, GatherLightVerticalBeamLifetimeSeconds));
         }
 
         private void Render(CombatSnapshot currentSnapshot)

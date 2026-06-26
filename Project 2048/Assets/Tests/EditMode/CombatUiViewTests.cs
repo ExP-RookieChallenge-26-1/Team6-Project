@@ -468,7 +468,7 @@ namespace Project2048.Tests
         }
 
         [Test]
-        public void ActionPhase_DisablesChargeSkillButtonWhileChargeIsPending()
+        public void ActionPhase_KeepsChargeSkillButtonEnabledWhileChargeIsPending()
         {
             var viewObject = CreateOwnedGameObject("CombatView");
             var view = viewObject.AddComponent<CombatUiView>();
@@ -525,8 +525,9 @@ namespace Project2048.Tests
 
             Assert.That(manager.RequestUseSkillById("gather-light"), Is.True);
 
-            Assert.That(skillButtons[0].interactable, Is.False);
-            Assert.That(manager.GetSnapshot().Skills[0].CanExecute, Is.False);
+            Assert.That(player.PendingChargedAttackCount, Is.EqualTo(1));
+            Assert.That(skillButtons[0].interactable, Is.True);
+            Assert.That(manager.GetSnapshot().Skills[0].CanExecute, Is.True);
         }
 
         [Test]

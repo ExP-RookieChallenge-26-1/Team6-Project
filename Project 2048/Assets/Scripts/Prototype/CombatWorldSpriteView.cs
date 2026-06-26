@@ -6903,12 +6903,12 @@ namespace Project2048.Prototype
         {
             if (backgroundRenderer == null)
             {
-                backgroundRenderer = FindRendererByName("BackgroundSprite");
+                backgroundRenderer = FindRendererByName(transform, "BackgroundSprite");
             }
 
             if (playerActorRoot == null)
             {
-                playerActorRoot = FindTransformByName(LayeredPlayerActorRootName);
+                playerActorRoot = FindTransformByName(transform, LayeredPlayerActorRootName);
             }
 
             if (playerActorRoot != null && IsLayeredPlayerActorRoot(playerActorRoot))
@@ -6921,7 +6921,7 @@ namespace Project2048.Prototype
             }
             else if (playerRenderer == null)
             {
-                playerRenderer = FindRendererByName("PlayerSprite");
+                playerRenderer = FindRendererByName(transform, "PlayerSprite");
             }
 
             if (playerActorRoot == null && playerRenderer != null)
@@ -6931,7 +6931,7 @@ namespace Project2048.Prototype
 
             if (enemyRenderer == null)
             {
-                enemyRenderer = FindRendererByName("EnemySprite");
+                enemyRenderer = FindRendererByName(transform, "EnemySprite");
             }
 
             if (rewardMothRenderer == null)
@@ -6964,8 +6964,14 @@ namespace Project2048.Prototype
         }
 
 
-        private static SpriteRenderer FindRendererByName(string objectName)
+        private static SpriteRenderer FindRendererByName(Transform root, string objectName)
         {
+            var localRenderer = FindRendererInChildrenByName(root, objectName);
+            if (localRenderer != null)
+            {
+                return localRenderer;
+            }
+
             var target = GameObject.Find(objectName);
             return target != null ? target.GetComponent<SpriteRenderer>() : null;
         }
@@ -6985,8 +6991,22 @@ namespace Project2048.Prototype
                     System.StringComparison.Ordinal));
         }
 
-        private static Transform FindTransformByName(string objectName)
+        private static Transform FindTransformByName(Transform root, string objectName)
         {
+            if (root != null && !string.IsNullOrWhiteSpace(objectName))
+            {
+                var localTransform = root
+                    .GetComponentsInChildren<Transform>(includeInactive: true)
+                    .FirstOrDefault(candidate => string.Equals(
+                        candidate.name,
+                        objectName,
+                        System.StringComparison.Ordinal));
+                if (localTransform != null)
+                {
+                    return localTransform;
+                }
+            }
+
             var target = GameObject.Find(objectName);
             return target != null ? target.transform : null;
         }

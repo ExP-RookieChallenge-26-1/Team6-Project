@@ -1356,7 +1356,6 @@ namespace Project2048.Prototype
 
         private void OpenPauseConfirmPopup()
         {
-            Debug.Log("Pause button clicked. Opening pause confirm popup.");
             if (confirmPopup == null)
             {
                 var canvas = GetComponentInParent<Canvas>();

@@ -828,7 +828,7 @@ namespace Project2048.Prototype
             }
 
             var camera = Camera.main;
-            var hpBar = FindTransformByName("EnemyHp") as RectTransform;
+            var hpBar = FindTransformByName(transform, "EnemyHp") as RectTransform;
             if (camera == null || hpBar == null)
             {
                 return null;

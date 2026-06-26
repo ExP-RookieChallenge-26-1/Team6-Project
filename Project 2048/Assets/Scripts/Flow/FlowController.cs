@@ -142,6 +142,27 @@ namespace Project2048.Flow
             OnMainMenuSceneLoadRequested?.Invoke();
         }
 
+        // 패배 후 "다시 하기": 런을 1스테이지부터 정상 스테이지 플로우로 재시작한다.
+        // 전투 씬을 다시 로드해 StageFlowController가 진행을 주도하도록 하여,
+        // 프로토타입 직접 시작 경로로 스테이지가 멈추던 문제를 피한다.
+        public void RestartRun()
+        {
+            if (gameContext == null)
+            {
+                Debug.LogError("GameContext is not initialized");
+                return;
+            }
+
+            OnLoadingStarted?.Invoke(LoadingPresentationMode.Progress);
+
+            saveLoadManager?.DeleteSave();
+            gameContext.SetStageIndex(FirstStageIndex);
+            gameContext.SetRunActive(true);
+            gameContext.SetGameState(GameContext.GameState.Loading);
+
+            OnBattleSceneLoadRequested?.Invoke();
+        }
+
         private void StartCurrentStageFlow()
         {
             if (!ResolveStageFlowController())

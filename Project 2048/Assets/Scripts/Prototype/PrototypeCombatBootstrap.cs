@@ -75,6 +75,15 @@ namespace Project2048.Prototype
 
         public void RestartCombat()
         {
+            // 통합 플로우(스테이지 진행)가 있으면 런을 1스테이지부터 정상 경로로 재시작한다.
+            // 프로토타입 직접 시작 경로는 StageFlowController를 우회해, 재시작 후 스테이지가
+            // 진행되지 않고 멈추는 문제가 있었다.
+            if (flowController != null)
+            {
+                flowController.RestartRun();
+                return;
+            }
+
             if (combatManager != null && combatManager.CurrentPhase == CombatPhase.Defeat)
             {
                 runProgress.Reset();

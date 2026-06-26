@@ -8486,6 +8486,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Core/GameContext.cs",
     "from_class": "GameContext",
+    "to_type": "Serializable",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Core/GameContext.cs",
+    "from_class": "GameContext",
     "to_type": "SetGameState",
     "relation_type": "uses",
     "strength": 1

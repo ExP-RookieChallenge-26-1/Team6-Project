@@ -103,4 +103,4 @@ MonoBehaviour:
   vfxScale: 1
   vfxIntensity: 1.1
   vfxRepeatCount: 2
-  description: ""
+  description: 다음 공격을 2회로 나누어 적중시킨다. 각 타격은 원래 위력의 60%로 적용된다.

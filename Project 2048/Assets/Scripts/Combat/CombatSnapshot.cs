@@ -18,6 +18,7 @@ namespace Project2048.Combat
         public bool IsSkillPresentationLocked { get; set; }
         public string LastActionDescription { get; set; }
         public CombatVfxCue LastVfxCue { get; set; }
+        public CombatDamagePopupCue LastDamagePopupCue { get; set; }
         public int[,] Board { get; set; }
         public PlayerCombatSnapshot Player { get; set; }
         public List<EnemyCombatSnapshot> Enemies { get; set; } = new();
@@ -42,6 +43,26 @@ namespace Project2048.Combat
                 Value = Value,
                 SourceName = SourceName,
                 TargetName = TargetName,
+            };
+        }
+    }
+
+    [Serializable]
+    public class CombatDamagePopupCue
+    {
+        public int Sequence { get; set; }
+        public int TargetEnemyIndex { get; set; }
+        public int Amount { get; set; }
+        public bool IsCritical { get; set; }
+
+        public CombatDamagePopupCue Clone()
+        {
+            return new CombatDamagePopupCue
+            {
+                Sequence = Sequence,
+                TargetEnemyIndex = TargetEnemyIndex,
+                Amount = Amount,
+                IsCritical = IsCritical,
             };
         }
     }

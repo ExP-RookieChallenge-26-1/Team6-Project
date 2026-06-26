@@ -2,6 +2,7 @@ using Project2048.Combat;
 using Project2048.Board2048;
 using Project2048.Cost;
 using Project2048.Enemy;
+using System;
 using UnityEngine;
 
 namespace Project2048.Skills
@@ -10,6 +11,17 @@ namespace Project2048.Skills
     {
         public ActionCostWallet CostWallet { get; set; }
         public Board2048Manager BoardManager { get; set; }
+        public Action<EnemyController, int, bool> EnemyDamagePopupReported { get; set; }
+
+        public void ReportEnemyDamagePopup(EnemyController target, int amount, bool isCritical)
+        {
+            if (target == null || amount <= 0)
+            {
+                return;
+            }
+
+            EnemyDamagePopupReported?.Invoke(target, amount, isCritical);
+        }
     }
 
     public class SkillExecutor
@@ -31,12 +43,12 @@ namespace Project2048.Skills
             switch (skill.ResolveEffectKind())
             {
                 case SkillEffectKind.BasicAttack:
-                    SkillAttackExecutor.ExecuteSkillAttack(skill, player, target, damageCalculator);
+                    SkillAttackExecutor.ExecuteSkillAttack(skill, player, target, damageCalculator, context: context);
                     ApplyTargetModifiers(skill, target);
                     break;
                 case SkillEffectKind.BoardMoveBonusAttack:
                 case SkillEffectKind.BoardMovePenaltyAttack:
-                    SkillAttackExecutor.ExecuteSkillAttack(skill, player, target, damageCalculator);
+                    SkillAttackExecutor.ExecuteSkillAttack(skill, player, target, damageCalculator, context: context);
                     player.ApplyNextTurnBoardMoveCountModifier(skill.nextBoardMoveCountModifier);
                     ApplyTargetModifiers(skill, target);
                     break;
@@ -46,24 +58,25 @@ namespace Project2048.Skills
                         player,
                         target,
                         damageCalculator,
-                        lifeStealPercentOverride: SkillAttackExecutor.ResolveLifeStealPercent(skill));
+                        lifeStealPercentOverride: SkillAttackExecutor.ResolveLifeStealPercent(skill),
+                        context: context);
                     ApplyTargetModifiers(skill, target);
                     break;
                 case SkillEffectKind.SacrificeAttack:
                     SpendSkillHpCost(skill, player);
-                    SkillAttackExecutor.ExecuteSkillAttack(skill, player, target, damageCalculator);
+                    SkillAttackExecutor.ExecuteSkillAttack(skill, player, target, damageCalculator, context: context);
                     ApplyTargetModifiers(skill, target);
                     break;
                 case SkillEffectKind.BleedAttack:
-                    SkillAttackExecutor.ExecuteSkillAttack(skill, player, target, damageCalculator);
+                    SkillAttackExecutor.ExecuteSkillAttack(skill, player, target, damageCalculator, context: context);
                     target?.ApplyBleed(ResolveStatusDuration(skill, 2), ResolveStatusDamage(skill, 20));
                     break;
                 case SkillEffectKind.PoisonAttack:
-                    SkillAttackExecutor.ExecuteSkillAttack(skill, player, target, damageCalculator);
+                    SkillAttackExecutor.ExecuteSkillAttack(skill, player, target, damageCalculator, context: context);
                     target?.ApplyPoison(ResolveStatusDuration(skill, 3), ResolveStatusPercent(skill, 0.05f));
                     break;
                 case SkillEffectKind.OpenWoundAttack:
-                    SkillAttackExecutor.ExecuteOpenWoundAttack(skill, player, target, damageCalculator);
+                    SkillAttackExecutor.ExecuteOpenWoundAttack(skill, player, target, damageCalculator, context);
                     break;
                 case SkillEffectKind.ExecuteAttack:
                     SkillAttackExecutor.ExecuteSkillAttack(
@@ -71,7 +84,8 @@ namespace Project2048.Skills
                         player,
                         target,
                         damageCalculator,
-                        powerOverride: SkillAttackExecutor.ResolveExecutePower(skill, target));
+                        powerOverride: SkillAttackExecutor.ResolveExecutePower(skill, target),
+                        context: context);
                     break;
                 case SkillEffectKind.OverburnAttack:
                     SkillAttackExecutor.ExecuteSkillAttack(
@@ -79,7 +93,8 @@ namespace Project2048.Skills
                         player,
                         target,
                         damageCalculator,
-                        powerOverride: SkillAttackExecutor.ResolveOverburnPower(skill, context));
+                        powerOverride: SkillAttackExecutor.ResolveOverburnPower(skill, context),
+                        context: context);
                     break;
                 case SkillEffectKind.ShieldScalingAttack:
                     SkillAttackExecutor.ExecuteSkillAttack(
@@ -87,7 +102,8 @@ namespace Project2048.Skills
                         player,
                         target,
                         damageCalculator,
-                        statSourceOverride: DamageStatSource.ShieldHp);
+                        statSourceOverride: DamageStatSource.ShieldHp,
+                        context: context);
                     break;
                 case SkillEffectKind.ShieldBurstAttack:
                     SkillAttackExecutor.ExecuteSkillAttack(
@@ -96,7 +112,8 @@ namespace Project2048.Skills
                         target,
                         damageCalculator,
                         statSourceOverride: DamageStatSource.ShieldHp,
-                        consumeAllShieldAfterAttack: true);
+                        consumeAllShieldAfterAttack: true,
+                        context: context);
                     break;
                 case SkillEffectKind.DefenseScalingAttack:
                     SkillAttackExecutor.ExecuteSkillAttack(
@@ -104,7 +121,8 @@ namespace Project2048.Skills
                         player,
                         target,
                         damageCalculator,
-                        statSourceOverride: DamageStatSource.DefensePower);
+                        statSourceOverride: DamageStatSource.DefensePower,
+                        context: context);
                     break;
                 case SkillEffectKind.BasicDefense:
                     player.AddBlock(skill.power);
@@ -113,14 +131,14 @@ namespace Project2048.Skills
                     player.ApplyThornGuard(ResolveDefenseGain(skill, player), skill.selfThornRetaliationDamage);
                     break;
                 case SkillEffectKind.AttackStageDown:
-                    SkillAttackExecutor.ExecuteHybridDamage(skill, player, target, damageCalculator);
+                    SkillAttackExecutor.ExecuteHybridDamage(skill, player, target, damageCalculator, context);
                     if (target != null)
                     {
                         target.ApplyAttackModifier(ResolveStageModifier(skill.targetAttackStageModifier, skill.targetAttackModifier, -1));
                     }
                     break;
                 case SkillEffectKind.DefenseStageDown:
-                    SkillAttackExecutor.ExecuteHybridDamage(skill, player, target, damageCalculator);
+                    SkillAttackExecutor.ExecuteHybridDamage(skill, player, target, damageCalculator, context);
                     if (target != null)
                     {
                         target.ApplyDefenseModifier(ResolveStageModifier(skill.targetDefenseStageModifier, skill.targetDefenseModifier, -1));
@@ -187,7 +205,7 @@ namespace Project2048.Skills
                 default:
                     if (skill.skillType == SkillType.Attack)
                     {
-                        SkillAttackExecutor.ExecuteSkillAttack(skill, player, target, damageCalculator);
+                        SkillAttackExecutor.ExecuteSkillAttack(skill, player, target, damageCalculator, context: context);
                     }
 
                     ApplyTargetModifiers(skill, target);
@@ -215,7 +233,8 @@ namespace Project2048.Skills
             EnemyController target,
             int skillPower,
             DamageStatSource statSource,
-            DamageCalculator damageCalculator)
+            DamageCalculator damageCalculator,
+            SkillExecutionContext context = null)
         {
             if (player == null || target == null)
             {
@@ -223,7 +242,7 @@ namespace Project2048.Skills
             }
 
             damageCalculator ??= new DamageCalculator();
-            return SkillAttackExecutor.ExecuteAttack(skillPower, 0, 0f, statSource, false, player, target, damageCalculator);
+            return SkillAttackExecutor.ExecuteAttack(skillPower, 0, 0f, statSource, false, player, target, damageCalculator, context: context);
         }
 
         public bool CanExecute(SkillSO skill, PlayerCombatController player)

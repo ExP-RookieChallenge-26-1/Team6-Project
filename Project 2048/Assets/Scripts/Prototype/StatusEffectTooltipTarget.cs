@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace Project2048.Prototype
 {
-    public class StatusEffectTooltipTarget : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerExitHandler
+    public class StatusEffectTooltipTarget : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerExitHandler, IPointerClickHandler
     {
         public const float LongPressDelaySeconds = 0.42f;
 
@@ -19,15 +19,18 @@ namespace Project2048.Prototype
         private bool isPressing;
         private bool isTooltipVisible;
         private bool wasSelectableInteractable;
+        private bool showOnClick;
 
         public void Initialize(
             string nextDescription,
             Action<string, RectTransform> nextShowTooltip,
-            Action nextHideTooltip)
+            Action nextHideTooltip,
+            bool nextShowOnClick = false)
         {
             description = nextDescription;
             showTooltip = nextShowTooltip;
             hideTooltip = nextHideTooltip;
+            showOnClick = nextShowOnClick;
         }
 
         private void OnDisable()
@@ -58,6 +61,17 @@ namespace Project2048.Prototype
         public void OnPointerExit(PointerEventData eventData)
         {
             CancelPress(hideVisibleTooltip: true, suppressClick: true);
+        }
+
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            if (!showOnClick || string.IsNullOrWhiteSpace(description))
+            {
+                return;
+            }
+
+            isTooltipVisible = true;
+            showTooltip?.Invoke(description, transform as RectTransform);
         }
 
         private IEnumerator ShowAfterLongPress()

@@ -115,4 +115,4 @@ MonoBehaviour:
   vfxScale: 1.1
   vfxIntensity: 1.15
   vfxRepeatCount: 1
-  description:
+  description: 대상의 다음 턴 AP 획득량을 70%로 낮춘다.

@@ -115,4 +115,4 @@ MonoBehaviour:
   vfxScale: 1.4
   vfxIntensity: 1.4
   vfxRepeatCount: 1
-  description:
+  description: 상대의 보드에 어둠 장애물 2개를 예약한다.

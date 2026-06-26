@@ -115,4 +115,4 @@ MonoBehaviour:
   vfxScale: 0.95
   vfxIntensity: 1
   vfxRepeatCount: 1
-  description: Target's next-turn cost gain is reduced by 10.
+  description: 대상의 다음 턴 AP 획득량을 10 감소시킨다.

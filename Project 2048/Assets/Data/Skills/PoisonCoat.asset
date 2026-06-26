@@ -61,48 +61,88 @@ MonoBehaviour:
   icon: {fileID: 0}
   activationEffect:
     sfxClip: {fileID: 8300000, guid: f14a9cc4988c4b30b9835d1967a70b92, type: 3}
-    vfxPrefab: {fileID: 899824043960030591, guid: 5f8cf79947e4ddf47aee451b2b9de40a, type: 3}
+    vfxPrefab: {fileID: 606586865368500582, guid: 52b247d76ed441a48b9daad11f4bfee3, type: 3}
     animationClip: {fileID: 0}
     particleEffect:
       objectName: PoisonCoatSkillParticles
-      particlePrefab: {fileID: 0}
-      particleMaterial: {fileID: 2100000, guid: 52db5297964ff1a019f11971b256efa6, type: 2}
+      particlePrefab: {fileID: 324601455755215356, guid: c3243e4d8d60bee48a9fd404003e25a7, type: 3}
+      particleMaterial: {fileID: 2100000, guid: 2f20f9c73072f6c4f9e016048cedd9ce, type: 2}
       useParticleColor: 1
-      particleColor: {r: 0.458119, g: 0.854119, b: 0.386119, a: 1}
-      lifetimeSeconds: 0.8
-      burstCount: 28
-      startSpeed: 0.402
-      startSize: 0.136
+      particleColor: {r: 0.58, g: 1, b: 0.24, a: 0.92}
+      lifetimeSeconds: 1.65
+      burstCount: 36
+      startSpeed: 0.36
+      startSize: 0.2
       swirl: 1
     volumeScale: 1
     minPitch: 1
     maxPitch: 1
     sfxDelaySeconds: 0
     localOffset: {x: 0, y: 0, z: 0}
-    autoDestroySeconds: 1.25
+    autoDestroySeconds: 2.25
   vfxDefinition:
-    cues: []
+    cues:
+    - trigger: 0
+      prefab: {fileID: 606586865368500582, guid: 52b247d76ed441a48b9daad11f4bfee3, type: 3}
+      spawnAt:
+        actor: 0
+        socket: 4
+        localOffset: {x: 0, y: 0, z: 0}
+        mirrorOffsetXWithCastDirection: 0
+      useDestination: 1
+      destination:
+        actor: 1
+        socket: 1
+        localOffset: {x: 0, y: 0.16, z: 0}
+        mirrorOffsetXWithCastDirection: 0
+      flipMode: 2
+      authoredFacing: 0
+      attachMode: 0
+      delaySeconds: 0
+      scale: 0.78
+      tint: {r: 0.58, g: 1, b: 0.24, a: 1}
+      lifetimeOverride: 1.1
+    - trigger: 3
+      prefab: {fileID: 324601455755215356, guid: c3243e4d8d60bee48a9fd404003e25a7, type: 3}
+      spawnAt:
+        actor: 1
+        socket: 1
+        localOffset: {x: 0, y: 0.08, z: 0}
+        mirrorOffsetXWithCastDirection: 0
+      useDestination: 0
+      destination:
+        actor: 0
+        socket: 0
+        localOffset: {x: 0, y: 0, z: 0}
+        mirrorOffsetXWithCastDirection: 0
+      flipMode: 0
+      authoredFacing: 0
+      attachMode: 0
+      delaySeconds: 0
+      scale: 0.68
+      tint: {r: 0.58, g: 1, b: 0.24, a: 0.92}
+      lifetimeOverride: 1.65
   vfx:
     family: 7
     primarySprite: {fileID: -6272862024312062455, guid: 0f723c449d8f40c44b1c7d85e4e722e3, type: 3}
-    primaryPrefab: {fileID: 3746632578855000458, guid: f5829cd5b554e58468ee6f5d098d1d94, type: 3}
-    projectilePrefab: {fileID: 0}
+    primaryPrefab: {fileID: 606586865368500582, guid: 52b247d76ed441a48b9daad11f4bfee3, type: 3}
+    projectilePrefab: {fileID: 606586865368500582, guid: 52b247d76ed441a48b9daad11f4bfee3, type: 3}
     secondarySprite: {fileID: 0}
-    secondaryPrefab: {fileID: 0}
-    particlePrefab: {fileID: 1716627213758565047, guid: e8080ff7393955142bd578c996c8be91, type: 3}
-    particleMaterial: {fileID: 2100000, guid: 52db5297964ff1a019f11971b256efa6, type: 2}
+    secondaryPrefab: {fileID: 324601455755215356, guid: c3243e4d8d60bee48a9fd404003e25a7, type: 3}
+    particlePrefab: {fileID: 324601455755215356, guid: c3243e4d8d60bee48a9fd404003e25a7, type: 3}
+    particleMaterial: {fileID: 2100000, guid: 2f20f9c73072f6c4f9e016048cedd9ce, type: 2}
     localOffset: {x: 0, y: 0.06, z: 0}
     radiusMultiplier: 0.95
-    lifetimeSeconds: -1
+    lifetimeSeconds: 1.65
     sortingOffset: 12
-    tintWhiteBlend: 0.18
-    alpha: 0.82
+    tintWhiteBlend: 0.08
+    alpha: 0.92
     rotationDegrees: -4
   vfxPackage: {fileID: 0}
   vfxFamily: 7
-  vfxPrimaryColor: {r: 0.458119, g: 0.854119, b: 0.386119, a: 1}
-  vfxSecondaryColor: {r: 0.14966, g: 0.32966, b: 0.13526, a: 1}
-  vfxScale: 0.8
+  vfxPrimaryColor: {r: 0.58, g: 1, b: 0.24, a: 1}
+  vfxSecondaryColor: {r: 0.28, g: 0.08, b: 0.48, a: 1}
+  vfxScale: 0.9
   vfxIntensity: 0.95
   vfxRepeatCount: 1
-  description:
+  description: 독을 묻힌 공격으로 적에게 위력 30 피해를 주고, 3턴 동안 턴 종료 시 최대 체력의 5% 독 피해를 받게 한다.

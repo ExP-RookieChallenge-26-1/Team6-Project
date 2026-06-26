@@ -170,6 +170,21 @@ namespace Project2048.Enemy
             return hpBefore - CurrentHp;
         }
 
+        public int ForceKill()
+        {
+            if (CurrentHp <= 0)
+            {
+                return 0;
+            }
+
+            var hpBefore = CurrentHp;
+            CurrentHp = 0;
+            EndureTurns = 0;
+            OnHpChanged?.Invoke(CurrentHp, MaxHp);
+            OnDead?.Invoke(this);
+            return hpBefore;
+        }
+
         public int RestoreHp(int amount)
         {
             if (amount <= 0 || MaxHp <= 0)

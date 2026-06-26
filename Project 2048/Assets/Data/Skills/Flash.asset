@@ -115,4 +115,4 @@ MonoBehaviour:
   vfxScale: 1
   vfxIntensity: 1.2
   vfxRepeatCount: 1
-  description:
+  description: 눈부신 섬광으로 대상의 공격력을 1단계 낮춘다.

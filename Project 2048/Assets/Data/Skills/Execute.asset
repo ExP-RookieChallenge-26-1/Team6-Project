@@ -103,4 +103,4 @@ MonoBehaviour:
   vfxScale: 0.95
   vfxIntensity: 1.1
   vfxRepeatCount: 1
-  description: ""
+  description: 적에게 위력 40 피해를 준다. 대상의 체력이 30% 이하라면 위력이 2배가 된다.

@@ -103,4 +103,4 @@ MonoBehaviour:
   vfxScale: 1
   vfxIntensity: 1.2
   vfxRepeatCount: 1
-  description: ""
+  description: 빛의 메아리를 남겨 다음 공격의 위력을 1.3배로 높인다.

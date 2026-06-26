@@ -133,8 +133,7 @@ namespace Project2048.Prototype
         [SerializeField] private Sprite upperStageBackgroundSprite;
         [SerializeField] private Sprite middleStageBackgroundSprite;
         [SerializeField] private Sprite lowerStageBackgroundSprite;
-        [SerializeField] private Sprite rewardMothSprite;
-        [SerializeField, Min(0.01f)] private float rewardMothScaleMultiplier = 0.45f;
+        [SerializeField] private SpriteRenderer rewardMothRenderer;
         [SerializeField] private Sprite attackEffectSprite;
         [SerializeField] private Sprite hitEffectSprite;
         [SerializeField] private Sprite shieldEffectSprite;
@@ -182,6 +181,7 @@ namespace Project2048.Prototype
         private Coroutine gatherLightPreviewReleaseCoroutine;
         private float playerAttackAnimationSpeedRestoreValue = 1f;
         private bool hasPlayerAttackAnimationSpeedRestoreValue;
+        private int lastPlayedDamagePopupSequence;
         private readonly System.Collections.Generic.Dictionary<string, Material> runtimeSkillParticleMaterials = new();
 
         public void Initialize(PrototypeCombatBootstrap owner)
@@ -218,6 +218,7 @@ namespace Project2048.Prototype
             snapshot = combatManager.GetSnapshot();
             lastEnemyWasDead = snapshot?.Enemies?.FirstOrDefault()?.IsDead ?? false;
             lastPlayedEnemyDebuffVfxSequence = 0;
+            lastPlayedDamagePopupSequence = 0;
             delayEnemyDeathFadeUntilRealtime = 0f;
             Render(snapshot);
             UpdatePlayerShieldArtVfx(snapshot?.Player);
@@ -315,6 +316,9 @@ namespace Project2048.Prototype
         {
             var playerHpDamage = ResolvePlayerHpDamage(snapshot, nextSnapshot);
             var enemyHpDamage = ResolveEnemyHpDamage(snapshot, nextSnapshot);
+            var enemyDamagePopupCue = ResolveEnemyDamagePopupCue(nextSnapshot);
+            var enemyPopupDamage = enemyDamagePopupCue != null ? enemyDamagePopupCue.Amount : enemyHpDamage;
+            var enemyPopupIsCritical = enemyDamagePopupCue?.IsCritical ?? false;
             var playerWasHit = PlayerWasHit(snapshot, nextSnapshot);
             var enemyWasHit = EnemyWasHit(snapshot, nextSnapshot);
             var playerShieldWasHit = PlayerShieldWasHit(snapshot, nextSnapshot);
@@ -340,7 +344,7 @@ namespace Project2048.Prototype
             PlayPlayerActionEffectIfNeeded(playerWasHit);
             PlayEnemyActionEffectIfNeeded(enemyWasHit, enemyJustDied);
             PlayDamageNumberPopupIfNeeded(playerHpDamage, playerRenderer);
-            PlayDamageNumberPopupIfNeeded(enemyHpDamage, enemyRenderer);
+            PlayDamageNumberPopupIfNeeded(enemyPopupDamage, enemyRenderer, enemyPopupIsCritical);
             PlayEnemyDebuffCastEffectIfNeeded(snapshot?.LastVfxCue);
             PlayEnemyDefenseEffectIfNeeded(enemyUsedDefense, enemyDefenseIntent);
             PlayEnemyDeathFadeIfNeeded(enemyJustDied, nextEnemyDead);
@@ -1038,12 +1042,12 @@ namespace Project2048.Prototype
 
         private void ShowRewardPresenter()
         {
-            if (rewardMothSprite == null)
+            ResolveMissingReferences();
+            if (rewardMothRenderer == null)
             {
                 return;
             }
 
-            ResolveMissingReferences();
             if (ShouldDelayRewardPresenterUntilEnemyHidden())
             {
                 if (rewardPresenterDelayCoroutine != null)
@@ -1075,7 +1079,7 @@ namespace Project2048.Prototype
             }
 
             rewardPresenterDelayCoroutine = null;
-            if (rewardMothSprite == null ||
+            if (rewardMothRenderer == null ||
                 rewardManager?.HasUnclaimedReward != true ||
                 !(snapshot?.Enemies?.FirstOrDefault()?.IsDead ?? false))
             {
@@ -1097,8 +1101,14 @@ namespace Project2048.Prototype
             ClearEnemyDeathFade();
             ClearEnemyAppearIntro(restoreTransform: false);
             ClearEnemyAttackLunge(restoreTransform: false);
+            ClearEnemyDirectAnimation(restoreCurrentSprite: false);
             delayEnemyDeathFadeUntilRealtime = 0f;
             ClearActiveEnemyBattleActor();
+            if (enemyRenderer != null)
+            {
+                SetEnemyRendererAlpha(0f);
+            }
+
             TryRenderRewardPresenter();
         }
 
@@ -1111,23 +1121,34 @@ namespace Project2048.Prototype
             }
 
             showingRewardPresenter = false;
+            SetRewardMothVisible(false);
             RestoreEnemyRendererTransform();
         }
 
         private bool TryRenderRewardPresenter()
         {
-            if (!showingRewardPresenter || rewardMothSprite == null || enemyRenderer == null)
+            if (!showingRewardPresenter || rewardMothRenderer == null)
             {
                 return false;
             }
 
-            ClearEnemyDirectAnimation(restoreCurrentSprite: false);
-            ClearActiveEnemyBattleActor();
-            enemyRenderer.enabled = true;
-            enemyRenderer.transform.localScale = enemyRendererRestLocalScale * Mathf.Max(0.01f, rewardMothScaleMultiplier);
-            enemyRenderer.sprite = rewardMothSprite;
-            SetEnemyRendererAlpha(1f);
+            SetRewardMothVisible(true);
             return true;
+        }
+
+        private void SetRewardMothVisible(bool visible)
+        {
+            if (rewardMothRenderer == null)
+            {
+                return;
+            }
+
+            rewardMothRenderer.gameObject.SetActive(visible);
+            rewardMothRenderer.enabled = visible;
+            if (visible)
+            {
+                rewardMothRenderer.color = Color.white;
+            }
         }
 
         private bool TryRenderEnemyBattleActor(CombatSnapshot currentSnapshot)
@@ -6861,6 +6882,11 @@ namespace Project2048.Prototype
                 enemyRenderer = FindRendererByName("EnemySprite");
             }
 
+            if (rewardMothRenderer == null)
+            {
+                rewardMothRenderer = FindRendererInChildrenByName(transform, "RewardMothSprite");
+            }
+
             if (playerAnimator == null && playerActorRoot != null)
             {
                 playerAnimator = playerActorRoot.GetComponentInChildren<Animator>(includeInactive: true);
@@ -6890,6 +6916,21 @@ namespace Project2048.Prototype
         {
             var target = GameObject.Find(objectName);
             return target != null ? target.GetComponent<SpriteRenderer>() : null;
+        }
+
+        private static SpriteRenderer FindRendererInChildrenByName(Transform root, string objectName)
+        {
+            if (root == null || string.IsNullOrWhiteSpace(objectName))
+            {
+                return null;
+            }
+
+            return root
+                .GetComponentsInChildren<SpriteRenderer>(includeInactive: true)
+                .FirstOrDefault(renderer => string.Equals(
+                    renderer.name,
+                    objectName,
+                    System.StringComparison.Ordinal));
         }
 
         private static Transform FindTransformByName(string objectName)
@@ -7291,6 +7332,23 @@ namespace Project2048.Prototype
             }
 
             return Mathf.Max(0, previousEnemy.CurrentHp - nextEnemy.CurrentHp);
+        }
+
+        private CombatDamagePopupCue ResolveEnemyDamagePopupCue(CombatSnapshot next)
+        {
+            var cue = next?.LastDamagePopupCue;
+            var enemy = next?.Enemies?.FirstOrDefault();
+            if (cue == null ||
+                enemy == null ||
+                cue.Amount <= 0 ||
+                cue.Sequence <= lastPlayedDamagePopupSequence ||
+                cue.TargetEnemyIndex != enemy.EnemyIndex)
+            {
+                return null;
+            }
+
+            lastPlayedDamagePopupSequence = cue.Sequence;
+            return cue;
         }
 
         private static bool EnemyShieldWasHit(CombatSnapshot previous, CombatSnapshot next)

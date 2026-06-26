@@ -103,4 +103,4 @@ MonoBehaviour:
   vfxScale: 1
   vfxIntensity: 1.05
   vfxRepeatCount: 1
-  description: ""
+  description: 현재 보호막을 기준으로 적에게 위력 60 피해를 준다.

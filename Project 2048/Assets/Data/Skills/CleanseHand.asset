@@ -103,4 +103,4 @@ MonoBehaviour:
   vfxScale: 0.8
   vfxIntensity: 1
   vfxRepeatCount: 1
-  description: "Removes one obstacle tile. If removed, refunds 10 cost."
+  description: 보드의 장애물 타일 하나를 제거한다. 제거에 성공하면 AP를 10 돌려받는다.

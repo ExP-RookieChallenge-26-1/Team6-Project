@@ -4,6 +4,18 @@ using UnityEngine;
 
 namespace Project2048.Combat
 {
+    public readonly struct DamageRollResult
+    {
+        public DamageRollResult(int amount, bool isCritical)
+        {
+            Amount = amount;
+            IsCritical = isCritical;
+        }
+
+        public int Amount { get; }
+        public bool IsCritical { get; }
+    }
+
     public class DamageCalculator
     {
         private const int MinimumDefenseStat = 1;
@@ -64,7 +76,22 @@ namespace Project2048.Combat
             float criticalChance,
             float criticalDamageMultiplier)
         {
-            return CalculateMoveDamage(
+            return CalculatePlayerSkillDamageResultFromStat(
+                attackStat,
+                skillPower,
+                target,
+                criticalChance,
+                criticalDamageMultiplier).Amount;
+        }
+
+        public DamageRollResult CalculatePlayerSkillDamageResultFromStat(
+            int attackStat,
+            int skillPower,
+            EnemyController target,
+            float criticalChance,
+            float criticalDamageMultiplier)
+        {
+            return CalculateMoveDamageResult(
                 attackStat,
                 skillPower,
                 target?.EffectiveDefensePower ?? 0,
@@ -99,22 +126,38 @@ namespace Project2048.Combat
             float criticalChance,
             float criticalDamageMultiplier)
         {
+            return CalculateMoveDamageResult(
+                attackPower,
+                movePower,
+                defensePower,
+                criticalChance,
+                criticalDamageMultiplier).Amount;
+        }
+
+        public DamageRollResult CalculateMoveDamageResult(
+            int attackPower,
+            int movePower,
+            int defensePower,
+            float criticalChance,
+            float criticalDamageMultiplier)
+        {
             movePower = Mathf.Max(0, movePower);
             attackPower = Mathf.Max(0, attackPower);
             if (attackPower == 0 || movePower == 0)
             {
-                return 0;
+                return new DamageRollResult(0, false);
             }
 
             var attackDefenseRatio = attackPower / (float)Mathf.Max(MinimumDefenseStat, defensePower);
             var baseDamage = (movePower / MovePowerScale) * attackDefenseRatio;
             var varied = baseDamage * RollDamageVariance();
-            if (RollCritical(criticalChance))
+            var isCritical = RollCritical(criticalChance);
+            if (isCritical)
             {
                 varied *= Mathf.Max(1f, criticalDamageMultiplier);
             }
 
-            return Mathf.Max(1, Mathf.CeilToInt(varied));
+            return new DamageRollResult(Mathf.Max(1, Mathf.CeilToInt(varied)), isCritical);
         }
 
         public int CalculateDamage(

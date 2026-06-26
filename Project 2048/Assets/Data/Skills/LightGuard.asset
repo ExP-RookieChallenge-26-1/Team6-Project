@@ -103,4 +103,4 @@ MonoBehaviour:
   vfxScale: 1.2
   vfxIntensity: 1.15
   vfxRepeatCount: 1
-  description: ""
+  description: 빛으로 몸을 감싸 방어도 40을 얻는다.

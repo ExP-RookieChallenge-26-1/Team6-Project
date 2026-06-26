@@ -103,4 +103,4 @@ MonoBehaviour:
   vfxScale: 1.1
   vfxIntensity: 1.15
   vfxRepeatCount: 1
-  description: ""
+  description: 방어도 40을 얻고, 보호막이 공격받으면 공격자에게 가시 반격 피해 40을 준다.

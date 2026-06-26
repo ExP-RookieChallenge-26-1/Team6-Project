@@ -485,6 +485,9 @@ namespace Project2048.Tests
             var backgroundSprite = GameObject.Find("BackgroundSprite")?.GetComponent<SpriteRenderer>();
             var playerSprite = GameObject.Find("PlayerSprite")?.GetComponent<SpriteRenderer>();
             var enemySprite = GameObject.Find("EnemySprite")?.GetComponent<SpriteRenderer>();
+            var rewardMothRenderer = Object
+                .FindObjectsByType<SpriteRenderer>(FindObjectsInactive.Include)
+                .FirstOrDefault(renderer => renderer.name == "RewardMothSprite");
             var battleSceneBackground = GameObject.Find("BattleScene")?.GetComponent<Image>();
             var playerPortraitImage = GameObject.Find("PlayerPortrait")?.GetComponent<Image>();
             var enemyPortraitImage = GameObject.Find("EnemyPortrait")?.GetComponent<Image>();
@@ -500,6 +503,7 @@ namespace Project2048.Tests
             Assert.That(backgroundSprite, Is.Not.Null);
             Assert.That(playerSprite, Is.Not.Null);
             Assert.That(enemySprite, Is.Not.Null);
+            Assert.That(rewardMothRenderer, Is.Not.Null);
             Assert.That(backgroundSprite.sprite, Is.Not.Null);
             Assert.That(
                 AssetDatabase.GetAssetPath(backgroundSprite.sprite),
@@ -537,6 +541,11 @@ namespace Project2048.Tests
             Assert.That(resultOverlay.transform.parent.name, Is.EqualTo("CombatCanvas"));
             Assert.That(rewardOverlay.activeSelf, Is.True);
             Assert.That(resultOverlay.activeSelf, Is.True);
+            Assert.That(rewardMothRenderer.gameObject.scene.path, Is.EqualTo("Assets/Scenes/BattleScene.unity"));
+            Assert.That(rewardMothRenderer.gameObject.activeSelf, Is.False);
+            Assert.That(rewardMothRenderer.transform.parent.name, Is.EqualTo("WorldSprites"));
+            Assert.That(rewardMothRenderer.transform.localScale, Is.EqualTo(new Vector3(0.05f, 0.05f, 1f)));
+            Assert.That(AssetGuid(rewardMothRenderer.sprite), Is.EqualTo("1b1b8bc2583af9349b6cc5fb6673e155"));
             Assert.That(
                 AssetGuid(serializedWorldView.FindProperty("upperStageBackgroundSprite").objectReferenceValue),
                 Is.EqualTo("163faba4684ccae4d9db68d43ba672a9"));
@@ -546,9 +555,9 @@ namespace Project2048.Tests
             Assert.That(
                 AssetGuid(serializedWorldView.FindProperty("lowerStageBackgroundSprite").objectReferenceValue),
                 Is.EqualTo("1fb74fbbb05439b46826312757f9664a"));
-            Assert.That(
-                AssetGuid(serializedWorldView.FindProperty("rewardMothSprite").objectReferenceValue),
-                Is.EqualTo("1b1b8bc2583af9349b6cc5fb6673e155"));
+            Assert.That(serializedWorldView.FindProperty("rewardMothRenderer").objectReferenceValue, Is.EqualTo(rewardMothRenderer));
+            Assert.That(serializedWorldView.FindProperty("rewardMothSprite"), Is.Null);
+            Assert.That(serializedWorldView.FindProperty("rewardMothScaleMultiplier"), Is.Null);
         }
 
         [Test]
@@ -620,6 +629,7 @@ namespace Project2048.Tests
             var viewObject = CreateOwnedGameObject("WorldSpriteView");
             var view = viewObject.AddComponent<CombatWorldSpriteView>();
             var enemyRenderer = CreateGameObject<SpriteRenderer>("EnemySprite");
+            var rewardMothRenderer = CreateGameObject<SpriteRenderer>("RewardMothSprite");
             var manager = CreateGameObject<CombatManager>("CombatManager");
             var rewardManager = CreateGameObject<RewardManager>("RewardManager");
             var player = CreateGameObject<PlayerCombatController>("Player");
@@ -634,14 +644,20 @@ namespace Project2048.Tests
             var enemyLocalPosition = new Vector3(1.5f, 2.25f, 0f);
             var rewardSpawnPosition = new Vector3(-0.75f, 1.25f, 0f);
             var enemyLocalScale = new Vector3(2f, 2f, 1f);
+            var mothLocalScale = new Vector3(0.05f, 0.05f, 1f);
 
             reward.rewardKind = RewardChoiceKind.TemporaryBoardMoveCount;
             reward.temporaryBoardMoveCountBonus = 2;
             enemyData.portrait = enemySprite;
             enemyRenderer.transform.localPosition = enemyLocalPosition;
             enemyRenderer.transform.localScale = enemyLocalScale;
+            rewardMothRenderer.sprite = mothSprite;
+            rewardMothRenderer.transform.SetParent(viewObject.transform, false);
+            rewardMothRenderer.transform.localPosition = rewardSpawnPosition;
+            rewardMothRenderer.transform.localScale = mothLocalScale;
+            rewardMothRenderer.gameObject.SetActive(false);
             SetPrivateField(view, "enemyRenderer", enemyRenderer);
-            SetPrivateField(view, "rewardMothSprite", mothSprite);
+            SetPrivateField(view, "rewardMothRenderer", rewardMothRenderer);
             SetPrivateField(bootstrap, "combatManager", manager);
             SetPrivateField(bootstrap, "rewardManager", rewardManager);
 
@@ -658,13 +674,25 @@ namespace Project2048.Tests
             enemyRenderer.transform.localPosition = rewardSpawnPosition;
             rewardManager.OfferReward(new CombatResult(), player);
 
-            Assert.That(enemyRenderer.sprite, Is.EqualTo(mothSprite));
-            Assert.That(enemyRenderer.color.a, Is.EqualTo(1f).Within(0.001f));
-            Assert.That(enemyRenderer.transform.localPosition, Is.EqualTo(rewardSpawnPosition));
-            Assert.That(enemyRenderer.transform.localScale.x, Is.LessThan(enemyLocalScale.x));
+            Assert.That(rewardMothRenderer.gameObject.activeSelf, Is.True);
+            Assert.That(rewardMothRenderer.enabled, Is.True);
+            Assert.That(rewardMothRenderer.sprite, Is.EqualTo(mothSprite));
+            Assert.That(rewardMothRenderer.transform.localPosition, Is.EqualTo(rewardSpawnPosition));
+            Assert.That(rewardMothRenderer.transform.localScale, Is.EqualTo(mothLocalScale));
+            Assert.That(enemyRenderer.sprite, Is.EqualTo(enemySprite));
+            Assert.That(enemyRenderer.transform.localScale, Is.EqualTo(enemyLocalScale));
+
+            var nextStage = ScriptableObject.CreateInstance<StageSO>();
+            ownedObjects.Add(nextStage);
+            view.SetStage(nextStage);
+            Assert.That(rewardMothRenderer.gameObject.activeSelf, Is.False);
+
+            rewardManager.OfferReward(new CombatResult(), player);
+            Assert.That(rewardMothRenderer.gameObject.activeSelf, Is.True);
 
             rewardManager.ChooseReward(0, player);
 
+            Assert.That(rewardMothRenderer.gameObject.activeSelf, Is.False);
             Assert.That(enemyRenderer.sprite, Is.EqualTo(enemySprite));
             Assert.That(enemyRenderer.color.a, Is.EqualTo(1f).Within(0.001f));
             Assert.That(enemyRenderer.transform.localScale, Is.EqualTo(enemyLocalScale));
@@ -676,6 +704,7 @@ namespace Project2048.Tests
             var viewObject = CreateOwnedGameObject("WorldSpriteView");
             var view = viewObject.AddComponent<CombatWorldSpriteView>();
             var enemyRenderer = CreateGameObject<SpriteRenderer>("EnemySprite");
+            var rewardMothRenderer = CreateGameObject<SpriteRenderer>("RewardMothSprite");
             var manager = CreateGameObject<CombatManager>("CombatManager");
             var rewardManager = CreateGameObject<RewardManager>("RewardManager");
             var player = CreateGameObject<PlayerCombatController>("Player");
@@ -690,8 +719,11 @@ namespace Project2048.Tests
             var table = CreateRewardTable(reward);
 
             enemyData.portrait = enemySprite;
+            rewardMothRenderer.sprite = mothSprite;
+            rewardMothRenderer.transform.SetParent(viewObject.transform, false);
+            rewardMothRenderer.gameObject.SetActive(false);
             SetPrivateField(view, "enemyRenderer", enemyRenderer);
-            SetPrivateField(view, "rewardMothSprite", mothSprite);
+            SetPrivateField(view, "rewardMothRenderer", rewardMothRenderer);
             SetPrivateField(bootstrap, "combatManager", manager);
             SetPrivateField(bootstrap, "rewardManager", rewardManager);
 
@@ -709,13 +741,16 @@ namespace Project2048.Tests
             Assert.That(manager.RequestUseSkill(attack, enemy), Is.True);
             rewardManager.OfferReward(new CombatResult(), player);
 
+            Assert.That(rewardMothRenderer.gameObject.activeSelf, Is.False);
             Assert.That(enemyRenderer.sprite, Is.EqualTo(enemySprite));
             Assert.That(enemyRenderer.color.a, Is.GreaterThan(0.001f));
 
             yield return new WaitForSecondsRealtime(CombatWorldSpriteView.EnemyDeathFadeDurationSeconds + 0.1f);
 
-            Assert.That(enemyRenderer.sprite, Is.EqualTo(mothSprite));
-            Assert.That(enemyRenderer.color.a, Is.EqualTo(1f).Within(0.001f));
+            Assert.That(rewardMothRenderer.gameObject.activeSelf, Is.True);
+            Assert.That(rewardMothRenderer.sprite, Is.EqualTo(mothSprite));
+            Assert.That(enemyRenderer.sprite, Is.EqualTo(enemySprite));
+            Assert.That(enemyRenderer.color.a, Is.LessThan(0.001f));
         }
 
         [UnityTest]

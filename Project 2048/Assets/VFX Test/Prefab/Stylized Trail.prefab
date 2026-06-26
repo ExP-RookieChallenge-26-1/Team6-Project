@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6216951665206577381}
+  - component: {fileID: 7312044003982039131}
   m_Layer: 0
   m_Name: Stylized Trail
   m_TagString: Untagged
@@ -35,6 +36,27 @@ Transform:
   - {fileID: 2625689549614256037}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7312044003982039131
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 606586865368500582}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8717abe26227d2a41bc3f97ce864346c, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Game.Core::Project2048.Presentation.CombatProjectileEffect
+  sourceLocalOffset: {x: 0.42, y: 0.28, z: 0}
+  targetLocalOffset: {x: -0.12, y: 0.34, z: 0}
+  travelSeconds: 0.5
+  arcHeight: 0
+  impactLifetimeSeconds: 0.18
+  travelParticles: []
+  impactParticles: []
+  travelVisualEffects: []
+  impactVisualEffects: []
 --- !u!1 &1652347130615141751
 GameObject:
   m_ObjectHideFlags: 0
@@ -138,8 +160,8 @@ TrailRenderer:
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 1, g: 1, b: 1, a: 1}
-      key1: {r: 1, g: 1, b: 1, a: 1}
+      key0: {r: 0.45, g: 1, b: 0.12, a: 1}
+      key1: {r: 0.12, g: 0.34, b: 0.02, a: 0.6}
       key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
@@ -283,8 +305,8 @@ TrailRenderer:
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 1, g: 1, b: 1, a: 1}
-      key1: {r: 1, g: 1, b: 1, a: 1}
+      key0: {r: 0.78, g: 1, b: 0.18, a: 1}
+      key1: {r: 0.35, g: 0.1, b: 0.55, a: 0.72}
       key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
@@ -389,7 +411,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 06c69a486ef3a7943a88b759e1aca215, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Trail2D
   reset: 0
   on: 1
@@ -455,7 +477,7 @@ Light:
   m_Enabled: 1
   serializedVersion: 13
   m_Type: 2
-  m_Color: {r: 1, g: 0.36209723, b: 0.15566039, a: 1}
+  m_Color: {r: 0.44, g: 1, b: 0.16, a: 1}
   m_Intensity: 2.5
   m_Range: 10
   m_SpotAngle: 30
@@ -520,7 +542,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalLightData
   m_UsePipelineSettings: 1
   m_AdditionalLightsShadowResolutionTier: 2
@@ -596,7 +618,7 @@ VisualEffect:
       m_Array: []
     m_Vector4f:
       m_Array:
-      - m_Value: {x: 6.9009237, y: 1.2569605, z: 1.1393033, w: 0}
+      - m_Value: {x: 1.6, y: 8.4, z: 0.55, w: 0}
         m_Name: Color
         m_Overridden: 1
     m_Uint:

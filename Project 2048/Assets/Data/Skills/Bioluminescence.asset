@@ -103,4 +103,4 @@ MonoBehaviour:
   vfxScale: 1.4
   vfxIntensity: 1.5
   vfxRepeatCount: 1
-  description: ""
+  description: 자신의 최대 체력 25%를 소모해 적에게 위력 120 피해를 준다. 이 비용으로 체력은 1 아래로 내려가지 않는다.

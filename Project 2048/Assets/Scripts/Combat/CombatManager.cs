@@ -42,6 +42,8 @@ namespace Project2048.Combat
         private string lastActionDescription = "대기";
         private CombatVfxCue lastVfxCue;
         private int vfxCueSequence;
+        private CombatDamagePopupCue lastDamagePopupCue;
+        private int damagePopupCueSequence;
         private Coroutine skillPresentationLockRoutine;
         private int skillPresentationLockSequence;
         private readonly HashSet<SkillEffectKind> usedOncePerTurnSkillEffects = new();
@@ -118,6 +120,8 @@ namespace Project2048.Combat
             lastActionDescription = "2048 진행";
             lastVfxCue = null;
             vfxCueSequence = 0;
+            lastDamagePopupCue = null;
+            damagePopupCueSequence = 0;
             activeNextCombatBoardMoveCountBonus = 0;
             usedOncePerTurnSkillEffects.Clear();
             TurnController.Reset();
@@ -152,6 +156,7 @@ namespace Project2048.Combat
                 IsSkillPresentationLocked = IsSkillPresentationLocked,
                 LastActionDescription = lastActionDescription,
                 LastVfxCue = lastVfxCue?.Clone(),
+                LastDamagePopupCue = lastDamagePopupCue?.Clone(),
                 Board = BoardManager.GetBoardSnapshot(),
                 Player = BuildPlayerSnapshot(),
                 Enemies = BuildEnemySnapshots(),
@@ -221,11 +226,7 @@ namespace Project2048.Combat
                 player,
                 target,
                 damageCalculator,
-                new SkillExecutionContext
-                {
-                    CostWallet = CostWallet,
-                    BoardManager = BoardManager,
-                });
+                CreateSkillExecutionContext());
             player.RecordUsedSkill(skill);
             RecordOncePerTurnSkillUse(skill);
             if (CheckDefeat())
@@ -268,6 +269,55 @@ namespace Project2048.Combat
             }
 
             return RequestUseSkill(skill, target);
+        }
+
+        public bool RequestDebugKillEnemy()
+        {
+            EnsureRuntimeState();
+            if (!IsPlayerCommandPhase(CurrentPhase))
+            {
+                return false;
+            }
+
+            var target = enemies.FirstOrDefault(enemy => enemy != null && !enemy.IsDead);
+            if (target == null)
+            {
+                return false;
+            }
+
+            var enemyIndex = enemies.IndexOf(target);
+            var wasSuppressing = suppressStateNotifications;
+            suppressStateNotifications = true;
+            int damage;
+            try
+            {
+                damage = target.ForceKill();
+            }
+            finally
+            {
+                suppressStateNotifications = wasSuppressing;
+            }
+
+            if (damage <= 0)
+            {
+                return false;
+            }
+
+            lastActionDescription = $"테스트 치트: {GetEnemyDisplayName(target)} 즉사";
+            lastDamagePopupCue = new CombatDamagePopupCue
+            {
+                Sequence = ++damagePopupCueSequence,
+                TargetEnemyIndex = enemyIndex,
+                Amount = damage,
+                IsCritical = false,
+            };
+
+            if (!CheckVictory())
+            {
+                NotifyStateChanged();
+            }
+
+            return true;
         }
 
         public void BeginSkillPresentationLock(float durationSeconds)
@@ -320,6 +370,11 @@ namespace Project2048.Combat
             }
 
             return enemies.FirstOrDefault(enemy => enemy != null && !enemy.IsDead);
+        }
+
+        private static bool IsPlayerCommandPhase(CombatPhase phase)
+        {
+            return phase == CombatPhase.BoardPhase || phase == CombatPhase.ActionPhase;
         }
 
         public bool RequestBoardMove(Direction direction)
@@ -421,7 +476,7 @@ namespace Project2048.Combat
 
             lastActionDescription = $"{skillName} 발동";
             OnPlayerChargedAttackReleased?.Invoke(skillName, chargedPower, target);
-            skillExecutor.ExecuteChargedAttack(player, target, chargedPower, statSource, damageCalculator);
+            skillExecutor.ExecuteChargedAttack(player, target, chargedPower, statSource, damageCalculator, CreateSkillExecutionContext());
             if (CheckDefeat())
             {
                 return true;
@@ -429,6 +484,38 @@ namespace Project2048.Combat
 
             NotifyStateChanged();
             return CheckVictory();
+        }
+
+        private SkillExecutionContext CreateSkillExecutionContext()
+        {
+            return new SkillExecutionContext
+            {
+                CostWallet = CostWallet,
+                BoardManager = BoardManager,
+                EnemyDamagePopupReported = RecordEnemyDamagePopup,
+            };
+        }
+
+        private void RecordEnemyDamagePopup(EnemyController target, int amount, bool isCritical)
+        {
+            if (target == null || amount <= 0)
+            {
+                return;
+            }
+
+            var enemyIndex = enemies.IndexOf(target);
+            if (enemyIndex < 0)
+            {
+                return;
+            }
+
+            lastDamagePopupCue = new CombatDamagePopupCue
+            {
+                Sequence = ++damagePopupCueSequence,
+                TargetEnemyIndex = enemyIndex,
+                Amount = amount,
+                IsCritical = isCritical,
+            };
         }
 
         private int ResolveInitialBoardMoveCount()

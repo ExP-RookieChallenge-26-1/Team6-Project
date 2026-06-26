@@ -103,4 +103,4 @@ MonoBehaviour:
   vfxScale: 0.7
   vfxIntensity: 0.8
   vfxRepeatCount: 1
-  description: ""
+  description: 적에게 위력 50 피해를 주고 다음 턴 보드 이동 횟수를 1 증가시킨다.

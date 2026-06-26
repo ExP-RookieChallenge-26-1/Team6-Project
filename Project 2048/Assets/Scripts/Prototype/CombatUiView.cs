@@ -267,13 +267,26 @@ namespace Project2048.Prototype
 
         private void Update()
         {
-            if (combatManager == null || snapshot == null || uiState.ScreenMode != PrototypeCombatScreenMode.Board)
+            if (combatManager == null || snapshot == null)
             {
                 return;
             }
 
             var keyboard = Keyboard.current;
             if (keyboard == null)
+            {
+                return;
+            }
+
+            if (Debug.isDebugBuild &&
+                keyboard.sKey.wasPressedThisFrame &&
+                IsPlayerCommandScreenMode(uiState.ScreenMode))
+            {
+                combatManager.RequestDebugKillEnemy();
+                return;
+            }
+
+            if (uiState.ScreenMode != PrototypeCombatScreenMode.Board)
             {
                 return;
             }
@@ -294,6 +307,12 @@ namespace Project2048.Prototype
             {
                 combatManager.RequestBoardMove(Direction.Down);
             }
+        }
+
+        private static bool IsPlayerCommandScreenMode(PrototypeCombatScreenMode screenMode)
+        {
+            return screenMode == PrototypeCombatScreenMode.Board ||
+                screenMode == PrototypeCombatScreenMode.ActionSkills;
         }
 
         private void WireButtons()
@@ -491,6 +510,7 @@ namespace Project2048.Prototype
                 return;
             }
 
+            ConfigureCostFormulaHelp();
             RenderTopBar();
             RenderBattleScene();
             RenderBoardPlayerStatus();
@@ -2312,11 +2332,12 @@ namespace Project2048.Prototype
 
         private void ConfigureCostFormulaHelp()
         {
-            ConfigureCostFormulaHelpIcon(costFormulaHelpIcon, ref costFormulaHelpLabel);
-            ConfigureCostFormulaHelpIcon(boardCostFormulaHelpIcon, ref boardCostFormulaHelpLabel);
+            var description = PrototypeCombatText.FormatPlayerStatsTooltip(snapshot);
+            ConfigureCostFormulaHelpIcon(costFormulaHelpIcon, ref costFormulaHelpLabel, description);
+            ConfigureCostFormulaHelpIcon(boardCostFormulaHelpIcon, ref boardCostFormulaHelpLabel, description);
         }
 
-        private void ConfigureCostFormulaHelpIcon(GameObject icon, ref TMP_Text label)
+        private void ConfigureCostFormulaHelpIcon(GameObject icon, ref TMP_Text label, string description)
         {
             if (icon == null)
             {
@@ -2336,10 +2357,9 @@ namespace Project2048.Prototype
                 label.raycastTarget = false;
             }
 
-            if (icon.TryGetComponent<StatusEffectTooltipTarget>(out var target))
-            {
-                target.Initialize(CostFormulaTooltipDescription, ShowStatusTooltip, HideStatusTooltip);
-            }
+            var target = icon.GetComponent<StatusEffectTooltipTarget>();
+            target ??= icon.AddComponent<StatusEffectTooltipTarget>();
+            target.Initialize(description, ShowStatusTooltip, HideStatusTooltip, nextShowOnClick: true);
         }
 
         private void BindTooltip(Button button, string description)

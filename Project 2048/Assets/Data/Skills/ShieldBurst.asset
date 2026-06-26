@@ -103,4 +103,4 @@ MonoBehaviour:
   vfxScale: 1.4
   vfxIntensity: 1.3
   vfxRepeatCount: 1
-  description: ""
+  description: 현재 보호막을 폭발시켜 적에게 위력 100 피해를 주고, 공격 후 보호막을 모두 소모한다.

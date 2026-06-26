@@ -105,4 +105,4 @@ MonoBehaviour:
   vfxScale: 1
   vfxIntensity: 1
   vfxRepeatCount: 1
-  description: ""
+  description: 1턴 동안 쓰러질 피해를 한 번 버티고 체력 1로 살아남는다.

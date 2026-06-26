@@ -122,11 +122,12 @@ namespace Project2048.Tests
             return new SkillVfxTuning { family = family };
         }
 
-        private static void AssertPopupIsNearButNotCentered(
+        private static void AssertPopupIsWithinDamageRadius(
             RectTransform popup,
             RectTransform popupLayer,
             Camera camera,
-            Vector3 targetWorldCenter)
+            Vector3 targetWorldCenter,
+            float radius)
         {
             var screenPoint = RectTransformUtility.WorldToScreenPoint(camera, targetWorldCenter);
             RectTransformUtility.ScreenPointToLocalPointInRectangle(
@@ -134,21 +135,39 @@ namespace Project2048.Tests
                 screenPoint,
                 null,
                 out var centerPoint);
+            var radiusScreenPoint = RectTransformUtility.WorldToScreenPoint(
+                camera,
+                targetWorldCenter + Vector3.right * radius);
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                popupLayer,
+                radiusScreenPoint,
+                null,
+                out var radiusPoint);
 
             var distanceFromCenter = Vector2.Distance(popup.anchoredPosition, centerPoint);
-            var offset = popup.anchoredPosition - centerPoint;
-            Assert.That(Mathf.Abs(offset.x), Is.GreaterThan(8f));
-            Assert.That(Mathf.Abs(offset.y), Is.GreaterThan(8f));
-            Assert.That(distanceFromCenter, Is.GreaterThan(40f));
-            Assert.That(distanceFromCenter, Is.LessThan(170f));
+            var radiusDistance = Vector2.Distance(radiusPoint, centerPoint);
+            Assert.That(distanceFromCenter, Is.LessThanOrEqualTo(radiusDistance + 1f));
         }
 
-        private static void AssertDamageNumberPopupIsReadable(TMPro.TMP_Text text)
+        private static void AssertDamageNumberPopupIsReadable(TMPro.TMP_Text text, bool isCritical)
         {
-            Assert.That(text.color.r, Is.GreaterThan(0.95f));
-            Assert.That(text.color.g, Is.GreaterThan(0.72f));
-            Assert.That(text.color.b, Is.LessThan(0.2f));
-            Assert.That(text.outlineColor, Is.EqualTo((Color32)Color.white));
+            if (isCritical)
+            {
+                Assert.That(text.color.r, Is.GreaterThan(0.95f));
+                Assert.That(text.color.g, Is.GreaterThan(0.72f));
+                Assert.That(text.color.b, Is.LessThan(0.2f));
+            }
+            else
+            {
+                Assert.That(text.color.r, Is.GreaterThan(0.95f));
+                Assert.That(text.color.g, Is.GreaterThan(0.95f));
+                Assert.That(text.color.b, Is.GreaterThan(0.95f));
+            }
+
+            var outlineColor = (Color)text.outlineColor;
+            Assert.That(outlineColor.r, Is.LessThan(0.08f));
+            Assert.That(outlineColor.g, Is.LessThan(0.08f));
+            Assert.That(outlineColor.b, Is.LessThan(0.08f));
             Assert.That(text.outlineWidth, Is.GreaterThanOrEqualTo(0.18f));
             Assert.That(text.fontMaterial.IsKeywordEnabled(TMPro.ShaderUtilities.Keyword_Glow), Is.True);
             Assert.That(text.fontMaterial.GetColor(TMPro.ShaderUtilities.ID_GlowColor).a, Is.GreaterThan(0.45f));
@@ -753,8 +772,8 @@ namespace Project2048.Tests
             Assert.That(text, Is.Not.Null);
             Assert.That(text.text, Is.EqualTo("3"));
             Assert.That(text.text, Does.Not.StartWith("-"));
-            AssertDamageNumberPopupIsReadable(text);
-            AssertPopupIsNearButNotCentered((RectTransform)popup, (RectTransform)popupLayer, camera, playerRenderer.transform.position);
+            AssertDamageNumberPopupIsReadable(text, isCritical: false);
+            AssertPopupIsWithinDamageRadius((RectTransform)popup, (RectTransform)popupLayer, camera, playerRenderer.transform.position, 0.4f);
         }
 
         [Test]
@@ -802,8 +821,57 @@ namespace Project2048.Tests
             Assert.That(text, Is.Not.Null);
             Assert.That(text.text, Is.EqualTo("4"));
             Assert.That(text.text, Does.Not.StartWith("-"));
-            AssertDamageNumberPopupIsReadable(text);
-            AssertPopupIsNearButNotCentered((RectTransform)popup, (RectTransform)popupLayer, camera, enemyRenderer.transform.position);
+            AssertDamageNumberPopupIsReadable(text, isCritical: false);
+            AssertPopupIsWithinDamageRadius((RectTransform)popup, (RectTransform)popupLayer, camera, enemyRenderer.transform.position, 0.4f);
+        }
+
+        [Test]
+        public void CombatWorldSpriteView_CriticalEnemyDamage_ShowsYellowDamageNumber()
+        {
+            Random.InitState(2048);
+            var canvasObject = CreateOwnedRectTransformObject("CombatCanvas");
+            canvasObject.AddComponent<Canvas>().renderMode = RenderMode.ScreenSpaceOverlay;
+            var camera = CreateOwnedGameObject("MainCamera").AddComponent<Camera>();
+            camera.tag = "MainCamera";
+            camera.orthographic = true;
+            camera.transform.position = new Vector3(0f, 0f, -10f);
+            var viewObject = CreateOwnedGameObject("WorldSpriteView");
+            var view = viewObject.AddComponent<CombatWorldSpriteView>();
+            var enemyRenderer = CreateOwnedGameObject("EnemySprite").AddComponent<SpriteRenderer>();
+            var manager = CreateOwnedGameObject("CombatManager").AddComponent<CombatManager>();
+            var player = CreateOwnedGameObject("Player").AddComponent<PlayerCombatController>();
+            var enemy = CreateOwnedGameObject("Enemy").AddComponent<EnemyController>();
+            var bootstrap = CreateOwnedGameObject("Bootstrap").AddComponent<PrototypeCombatBootstrap>();
+            var playerData = CreatePlayerData(maxHp: 20, attackPower: 10);
+            var enemyData = CreateEnemyData(maxHp: 40, attackValue: 0);
+            var attack = CreateSkill("critical-attack", SkillType.Attack, cost: 0, power: 100);
+            playerData.criticalChance = 1f;
+            playerData.criticalDamageMultiplier = 1.5f;
+            enemyData.baseDefensePower = 10;
+
+            enemyRenderer.transform.localPosition = new Vector3(1f, 0f, 0f);
+            SetPrivateField(view, "enemyRenderer", enemyRenderer);
+            SetPrivateField(bootstrap, "combatManager", manager);
+
+            manager.SetCombatants(player, new[] { enemy });
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new List<EnemySO> { enemyData },
+                boardMoveCount = 1,
+            });
+            manager.ResolveBoardPhase();
+            view.Initialize(bootstrap);
+
+            Assert.That(manager.RequestUseSkill(attack, enemy), Is.True);
+
+            var popupLayer = canvasObject.transform.Find("DamageNumberPopupLayer");
+            var popup = popupLayer?.Find("DamageNumberPopup");
+            var text = popup != null ? popup.GetComponent<TMPro.TextMeshProUGUI>() : null;
+            Assert.That(text, Is.Not.Null);
+            Assert.That(int.Parse(text.text), Is.InRange(13, 15));
+            AssertDamageNumberPopupIsReadable(text, isCritical: true);
+            AssertPopupIsWithinDamageRadius((RectTransform)popup, (RectTransform)popupLayer, camera, enemyRenderer.transform.position, 0.4f);
         }
 
         [UnityTest]

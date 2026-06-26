@@ -115,4 +115,4 @@ MonoBehaviour:
   vfxScale: 0.9
   vfxIntensity: 1.1
   vfxRepeatCount: 1
-  description:
+  description: 대상을 1턴 동안 도발해 다음 행동에서 비공격 스킬을 쓰지 못하게 한다. 대신 대상의 공격력이 2단계 오른다.

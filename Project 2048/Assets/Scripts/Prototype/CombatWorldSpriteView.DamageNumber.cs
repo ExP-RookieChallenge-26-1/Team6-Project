@@ -8,9 +8,7 @@ namespace Project2048.Prototype
     public partial class CombatWorldSpriteView
     {
         private const float DamageNumberPopupRiseDistance = 0.62f;
-        private const float DamageNumberPopupMinimumWorldOffset = 0.22f;
-        private const float DamageNumberPopupFallbackWorldRadius = 0.55f;
-        private const float DamageNumberPopupBoundsRadiusMultiplier = 0.65f;
+        private const float DamageNumberPopupWorldRadius = 0.4f;
         private const float DamageNumberPopupWorldFontSize = 2.9f;
         private const float DamageNumberPopupUiFontSize = 40f;
         private const float DamageNumberPopupOutlineWidth = 0.22f;
@@ -20,14 +18,16 @@ namespace Project2048.Prototype
         private const float DamageNumberPopupGlowOffset = 0f;
         private const int DamageNumberPopupSortingOrderOffset = 32;
 
-        private static readonly Color DamageNumberPopupTextColor = new(1f, 0.82f, 0.02f, 1f);
-        private static readonly Color DamageNumberPopupOutlineColor = Color.white;
-        private static readonly Color DamageNumberPopupGlowColor = new(1f, 0.72f, 0f, 0.82f);
+        private static readonly Color DamageNumberPopupNormalTextColor = Color.white;
+        private static readonly Color DamageNumberPopupCriticalTextColor = new(1f, 0.82f, 0.02f, 1f);
+        private static readonly Color DamageNumberPopupOutlineColor = new(0.04f, 0.04f, 0.04f, 1f);
+        private static readonly Color DamageNumberPopupNormalGlowColor = new(1f, 1f, 1f, 0.58f);
+        private static readonly Color DamageNumberPopupCriticalGlowColor = new(1f, 0.72f, 0f, 0.82f);
 
         private RectTransform damageNumberPopupLayer;
         private readonly List<GameObject> damageNumberPopups = new();
 
-        private void PlayDamageNumberPopupIfNeeded(int damageAmount, SpriteRenderer targetRenderer)
+        private void PlayDamageNumberPopupIfNeeded(int damageAmount, SpriteRenderer targetRenderer, bool isCritical = false)
         {
             if (damageAmount <= 0 || targetRenderer == null)
             {
@@ -37,14 +37,14 @@ namespace Project2048.Prototype
             var popupLayer = ResolveDamageNumberPopupLayer();
             if (popupLayer != null)
             {
-                PlayDamageNumberUiPopup(damageAmount, targetRenderer, popupLayer);
+                PlayDamageNumberUiPopup(damageAmount, targetRenderer, popupLayer, isCritical);
                 return;
             }
 
-            PlayDamageNumberWorldPopup(damageAmount, targetRenderer);
+            PlayDamageNumberWorldPopup(damageAmount, targetRenderer, isCritical);
         }
 
-        private void PlayDamageNumberUiPopup(int damageAmount, SpriteRenderer targetRenderer, RectTransform popupLayer)
+        private void PlayDamageNumberUiPopup(int damageAmount, SpriteRenderer targetRenderer, RectTransform popupLayer, bool isCritical)
         {
             var popupObject = new GameObject("DamageNumberPopup", typeof(RectTransform), typeof(TextMeshProUGUI));
             popupObject.transform.SetParent(popupLayer, false);
@@ -58,7 +58,7 @@ namespace Project2048.Prototype
             rectTransform.anchoredPosition = ResolveDamageNumberCanvasPosition(targetRenderer, popupLayer);
 
             var label = popupObject.GetComponent<TextMeshProUGUI>();
-            ConfigureDamageNumberLabel(label, damageAmount, DamageNumberPopupUiFontSize);
+            ConfigureDamageNumberLabel(label, damageAmount, DamageNumberPopupUiFontSize, isCritical);
             label.raycastTarget = false;
 
             if (!Application.isPlaying || !isActiveAndEnabled)
@@ -69,7 +69,7 @@ namespace Project2048.Prototype
             StartCoroutine(DamageNumberPopupRoutine(rectTransform, label));
         }
 
-        private void PlayDamageNumberWorldPopup(int damageAmount, SpriteRenderer targetRenderer)
+        private void PlayDamageNumberWorldPopup(int damageAmount, SpriteRenderer targetRenderer, bool isCritical)
         {
             var popupObject = new GameObject("DamageNumberPopup", typeof(TextMeshPro));
             popupObject.transform.SetParent(targetRenderer.transform, false);
@@ -79,7 +79,7 @@ namespace Project2048.Prototype
             damageNumberPopups.Add(popupObject);
 
             var label = popupObject.GetComponent<TextMeshPro>();
-            ConfigureDamageNumberLabel(label, damageAmount, DamageNumberPopupWorldFontSize);
+            ConfigureDamageNumberLabel(label, damageAmount, DamageNumberPopupWorldFontSize, isCritical);
 
             var meshRenderer = popupObject.GetComponent<MeshRenderer>();
             meshRenderer.sortingLayerID = targetRenderer.sortingLayerID;
@@ -93,19 +93,25 @@ namespace Project2048.Prototype
             StartCoroutine(DamageNumberPopupRoutine(popupObject.transform, label));
         }
 
-        private static void ConfigureDamageNumberLabel(TMP_Text label, int damageAmount, float fontSize)
+        private static void ConfigureDamageNumberLabel(TMP_Text label, int damageAmount, float fontSize, bool isCritical)
         {
+            var textColor = isCritical ? DamageNumberPopupCriticalTextColor : DamageNumberPopupNormalTextColor;
             label.text = damageAmount.ToString();
             label.alignment = TextAlignmentOptions.Center;
             label.fontSize = fontSize;
             label.fontStyle = FontStyles.Bold;
-            label.color = DamageNumberPopupTextColor;
+            label.color = textColor;
+            label.outlineColor = DamageNumberPopupOutlineColor;
+            label.outlineWidth = DamageNumberPopupOutlineWidth;
             label.textWrappingMode = TextWrappingModes.NoWrap;
             label.overflowMode = TextOverflowModes.Overflow;
-            ConfigureDamageNumberGlow(label);
+            ConfigureDamageNumberGlow(
+                label,
+                textColor,
+                isCritical ? DamageNumberPopupCriticalGlowColor : DamageNumberPopupNormalGlowColor);
         }
 
-        private static void ConfigureDamageNumberGlow(TMP_Text label)
+        private static void ConfigureDamageNumberGlow(TMP_Text label, Color textColor, Color glowColor)
         {
             var sourceMaterial = label.fontMaterial;
             if (sourceMaterial == null)
@@ -121,7 +127,7 @@ namespace Project2048.Prototype
             material.EnableKeyword(ShaderUtilities.Keyword_Outline);
             if (material.HasProperty(ShaderUtilities.ID_FaceColor))
             {
-                material.SetColor(ShaderUtilities.ID_FaceColor, DamageNumberPopupTextColor);
+                material.SetColor(ShaderUtilities.ID_FaceColor, textColor);
             }
 
             if (material.HasProperty(ShaderUtilities.ID_OutlineColor))
@@ -137,7 +143,7 @@ namespace Project2048.Prototype
             if (material.HasProperty(ShaderUtilities.ID_GlowColor))
             {
                 material.EnableKeyword(ShaderUtilities.Keyword_Glow);
-                material.SetColor(ShaderUtilities.ID_GlowColor, DamageNumberPopupGlowColor);
+                material.SetColor(ShaderUtilities.ID_GlowColor, glowColor);
                 material.SetFloat(ShaderUtilities.ID_GlowInner, DamageNumberPopupGlowInner);
                 material.SetFloat(ShaderUtilities.ID_GlowOuter, DamageNumberPopupGlowOuter);
                 material.SetFloat(ShaderUtilities.ID_GlowPower, DamageNumberPopupGlowPower);
@@ -151,14 +157,8 @@ namespace Project2048.Prototype
         private static Vector3 ResolveDamageNumberWorldPosition(SpriteRenderer targetRenderer)
         {
             var center = ResolveDamageNumberWorldCenter(targetRenderer);
-            var maxRadius = ResolveDamageNumberWorldOffsetRadius(targetRenderer);
-            var minRadius = Mathf.Min(DamageNumberPopupMinimumWorldOffset, maxRadius * 0.75f);
-            var angle = Random.Range(0f, Mathf.PI * 2f);
-            var distance = Random.Range(minRadius, maxRadius);
-            var offset = new Vector3(
-                Mathf.Cos(angle) * distance,
-                Mathf.Sin(angle) * distance,
-                0f);
+            var offset2D = Random.insideUnitCircle * DamageNumberPopupWorldRadius;
+            var offset = new Vector3(offset2D.x, offset2D.y, 0f);
 
             return center + offset;
         }
@@ -176,18 +176,6 @@ namespace Project2048.Prototype
             }
 
             return targetRenderer.bounds.center;
-        }
-
-        private static float ResolveDamageNumberWorldOffsetRadius(SpriteRenderer targetRenderer)
-        {
-            if (targetRenderer == null || targetRenderer.sprite == null)
-            {
-                return DamageNumberPopupFallbackWorldRadius;
-            }
-
-            var bounds = targetRenderer.bounds;
-            var boundsRadius = Mathf.Max(bounds.extents.x, bounds.extents.y) * DamageNumberPopupBoundsRadiusMultiplier;
-            return Mathf.Clamp(boundsRadius, DamageNumberPopupMinimumWorldOffset, DamageNumberPopupFallbackWorldRadius);
         }
 
         private static Vector2 ResolveDamageNumberCanvasPosition(SpriteRenderer targetRenderer, RectTransform popupLayer)

@@ -103,4 +103,4 @@ MonoBehaviour:
   vfxScale: 1.8
   vfxIntensity: 1.4
   vfxRepeatCount: 1
-  description:
+  description: 빛을 모아 다음 플레이어 턴 시작 시 가장 앞의 적에게 위력 120 피해를 주는 공격을 준비한다.

@@ -115,4 +115,4 @@ MonoBehaviour:
   vfxScale: 0.85
   vfxIntensity: 1
   vfxRepeatCount: 1
-  description:
+  description: 대상에게 낙인을 새긴다. 대상은 다음 공격을 받을 때 추가 피해 40을 받고 낙인이 해제된다.

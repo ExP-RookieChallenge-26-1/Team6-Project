@@ -150,4 +150,4 @@ MonoBehaviour:
   vfxScale: 1.2
   vfxIntensity: 1.45
   vfxRepeatCount: 1
-  description: 화염구를 발사해 적에게 위력 50 피해를 주고, 2턴 동안 턴 종료 시 20의 화상 피해를 준다.
+  description: 화염구로 적에게 위력 50 피해를 주고, 2턴 동안 턴 종료 시 화염 피해 20을 받게 한다.

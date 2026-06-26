@@ -103,4 +103,4 @@ MonoBehaviour:
   vfxScale: 1
   vfxIntensity: 1
   vfxRepeatCount: 1
-  description: ""
+  description: 철벽 태세를 취해 자신의 방어력을 2단계 올린다.

@@ -103,4 +103,4 @@ MonoBehaviour:
   vfxScale: 1
   vfxIntensity: 1.15
   vfxRepeatCount: 1
-  description: ""
+  description: 감각을 날카롭게 세워 자신의 치명타 단계를 2단계 올린다.

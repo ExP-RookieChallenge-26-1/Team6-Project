@@ -103,4 +103,4 @@ MonoBehaviour:
   vfxScale: 0.7
   vfxIntensity: 0.8
   vfxRepeatCount: 1
-  description: ""
+  description: 빈틈을 찔러 적에게 위력 40 피해를 준다.

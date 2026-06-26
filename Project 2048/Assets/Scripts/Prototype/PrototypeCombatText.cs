@@ -29,6 +29,25 @@ namespace Project2048.Prototype
             return FormatHp(currentHp, maxHp);
         }
 
+        public static string FormatPlayerStatsTooltip(CombatSnapshot snapshot)
+        {
+            if (snapshot?.Player == null)
+            {
+                return "현재 플레이어 스탯\n전투 정보 없음";
+            }
+
+            var player = snapshot.Player;
+            return string.Join(
+                "\n",
+                "현재 플레이어 스탯",
+                $"체력 {player.CurrentHp}/{player.MaxHp}",
+                $"공격력 {player.AttackPower} | 방어력 {player.DefensePower}",
+                $"방어막 {player.Block} | 보호막 {player.ShieldHp}",
+                $"AP {UnityEngine.Mathf.Max(0, snapshot.CurrentCost)} | 보드 이동 가능 {UnityEngine.Mathf.Max(0, snapshot.RemainingBoardMoves)}",
+                $"치명타 확률 {FormatPercent(player.CriticalChance)} | 치명타 피해 {UnityEngine.Mathf.Max(1f, player.CriticalDamageMultiplier):0.##}배",
+                $"상태 효과: {FormatStatusEffectSummary(player.StatusEffects)}");
+        }
+
         public static string FormatActionDescription(string description)
         {
             return string.IsNullOrWhiteSpace(description)
@@ -241,6 +260,34 @@ namespace Project2048.Prototype
         private static string FormatPower(int power)
         {
             return power > 0 ? power.ToString() : "-";
+        }
+
+        private static string FormatPercent(float value)
+        {
+            return $"{UnityEngine.Mathf.RoundToInt(UnityEngine.Mathf.Clamp01(value) * 100f)}%";
+        }
+
+        private static string FormatStatusEffectSummary(IEnumerable<CombatStatusEffectSnapshot> effects)
+        {
+            if (effects == null)
+            {
+                return "없음";
+            }
+
+            var names = effects
+                .Where(effect => effect != null && !string.IsNullOrWhiteSpace(effect.DisplayName))
+                .Select(effect => effect.DisplayName)
+                .Distinct()
+                .ToList();
+            if (names.Count == 0)
+            {
+                return "없음";
+            }
+
+            var shown = names.Take(3).ToList();
+            var summary = string.Join(", ", shown);
+            var hiddenCount = names.Count - shown.Count;
+            return hiddenCount > 0 ? $"{summary} 외 {hiddenCount}개" : summary;
         }
 
         public static string FormatIntent(EnemyIntent intent)

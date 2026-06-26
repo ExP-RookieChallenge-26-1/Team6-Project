@@ -103,4 +103,4 @@ MonoBehaviour:
   vfxScale: 1
   vfxIntensity: 1.1
   vfxRepeatCount: 1
-  description: ""
+  description: 위협 사격으로 적에게 위력 50 피해를 주고 공격력을 1단계 낮춘다.

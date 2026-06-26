@@ -14,7 +14,8 @@ namespace Project2048.Skills
             int? powerOverride = null,
             float? lifeStealPercentOverride = null,
             DamageStatSource? statSourceOverride = null,
-            bool consumeAllShieldAfterAttack = false)
+            bool consumeAllShieldAfterAttack = false,
+            SkillExecutionContext context = null)
         {
             if (skill == null)
             {
@@ -30,7 +31,8 @@ namespace Project2048.Skills
                 player,
                 target,
                 damageCalculator,
-                skill.shieldPiercePercent);
+                skill.shieldPiercePercent,
+                context);
         }
 
         internal static int ExecuteAttack(
@@ -42,7 +44,8 @@ namespace Project2048.Skills
             PlayerCombatController player,
             EnemyController target,
             DamageCalculator damageCalculator,
-            int shieldPiercePercent = 0)
+            int shieldPiercePercent = 0,
+            SkillExecutionContext context = null)
         {
             if (player == null || target == null)
             {
@@ -60,18 +63,21 @@ namespace Project2048.Skills
             var hitPowerMultiplier = hitCount > 1 ? nextAttackHitPowerMultiplier : 1f;
             var effectivePower = Mathf.Max(0, Mathf.RoundToInt(skillPower * powerMultiplier * hitPowerMultiplier));
             var totalHpDamage = 0;
+            var anyCriticalHpDamage = false;
             for (var hitIndex = 0; hitIndex < hitCount; hitIndex++)
             {
                 var targetThornShieldBeforeHit = target.ThornRetaliationShieldHp;
                 var shouldRetaliate = targetThornShieldBeforeHit > 0 && target.ThornRetaliationDamage > 0;
                 var retaliationDamage = target.ThornRetaliationDamage;
-                var damage = damageCalculator.CalculatePlayerSkillDamageFromStat(
+                var damageResult = damageCalculator.CalculatePlayerSkillDamageResultFromStat(
                     attackStat,
                     effectivePower,
                     target,
                     player.CriticalChance,
                     player.CriticalDamageMultiplier);
-                totalHpDamage += target.TakeDamage(damage, shieldPiercePercent / 100f);
+                var hpDamage = target.TakeDamage(damageResult.Amount, shieldPiercePercent / 100f);
+                totalHpDamage += hpDamage;
+                anyCriticalHpDamage |= hpDamage > 0 && damageResult.IsCritical;
                 target.TriggerOnAttackedStatusDamage();
                 if (shouldRetaliate && retaliationDamage > 0)
                 {
@@ -88,6 +94,8 @@ namespace Project2048.Skills
                     break;
                 }
             }
+
+            context?.ReportEnemyDamagePopup(target, totalHpDamage, anyCriticalHpDamage);
 
             if (consumeAllShieldAfterAttack)
             {
@@ -106,11 +114,12 @@ namespace Project2048.Skills
             SkillSO skill,
             PlayerCombatController player,
             EnemyController target,
-            DamageCalculator damageCalculator)
+            DamageCalculator damageCalculator,
+            SkillExecutionContext context = null)
         {
             var targetHasStatus = target != null && target.HasPoisonOrBleed;
             var power = skill.power + (targetHasStatus ? ResolveConditionalPowerBonus(skill, 50) : 0);
-            ExecuteSkillAttack(skill, player, target, damageCalculator, powerOverride: power);
+            ExecuteSkillAttack(skill, player, target, damageCalculator, powerOverride: power, context: context);
             if (targetHasStatus)
             {
                 target.ExtendPoisonAndBleed(1);
@@ -121,14 +130,15 @@ namespace Project2048.Skills
             SkillSO skill,
             PlayerCombatController player,
             EnemyController target,
-            DamageCalculator damageCalculator)
+            DamageCalculator damageCalculator,
+            SkillExecutionContext context = null)
         {
             if (skill == null || skill.power <= 0)
             {
                 return 0;
             }
 
-            return ExecuteSkillAttack(skill, player, target, damageCalculator);
+            return ExecuteSkillAttack(skill, player, target, damageCalculator, context: context);
         }
 
         internal static float ResolveLifeStealPercent(SkillSO skill)

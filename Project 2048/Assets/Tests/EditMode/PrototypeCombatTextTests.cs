@@ -128,6 +128,36 @@ namespace Project2048.Tests
         }
 
         [Test]
+        public void FormatPlayerStatsTooltip_ShowsCurrentCombatStats()
+        {
+            var snapshot = new CombatSnapshot
+            {
+                CurrentCost = 23,
+                RemainingBoardMoves = 4,
+                Player = new PlayerCombatSnapshot
+                {
+                    CurrentHp = 70,
+                    MaxHp = 120,
+                    AttackPower = 11,
+                    DefensePower = 5,
+                    Block = 8,
+                    ShieldHp = 3,
+                    CriticalChance = 0.34f,
+                    CriticalDamageMultiplier = 1.75f,
+                    StatusEffects = new System.Collections.Generic.List<CombatStatusEffectSnapshot>
+                    {
+                        new() { DisplayName = "독" },
+                        new() { DisplayName = "공격 강화" },
+                    },
+                },
+            };
+
+            Assert.That(
+                PrototypeCombatText.FormatPlayerStatsTooltip(snapshot),
+                Is.EqualTo("현재 플레이어 스탯\n체력 70/120\n공격력 11 | 방어력 5\n방어막 8 | 보호막 3\nAP 23 | 보드 이동 가능 4\n치명타 확률 34% | 치명타 피해 1.75배\n상태 효과: 독, 공격 강화"));
+        }
+
+        [Test]
         public void FormatEnemyHeader_CanIncludeHpWhenDedicatedEnemyHpTextIsMissing()
         {
             Assert.That(

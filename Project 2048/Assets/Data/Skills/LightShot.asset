@@ -103,4 +103,4 @@ MonoBehaviour:
   vfxScale: 1
   vfxIntensity: 1.1
   vfxRepeatCount: 1
-  description: ""
+  description: 응축한 빛을 발사해 적에게 위력 60 피해를 준다.

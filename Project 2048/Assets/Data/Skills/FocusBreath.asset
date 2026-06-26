@@ -115,4 +115,4 @@ MonoBehaviour:
   vfxScale: 0.8
   vfxIntensity: 0.9
   vfxRepeatCount: 1
-  description: ""
+  description: 호흡을 가다듬어 자신의 치명타 단계를 1단계 올린다.

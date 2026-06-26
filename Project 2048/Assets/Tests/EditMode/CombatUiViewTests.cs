@@ -529,8 +529,8 @@ namespace Project2048.Tests
             Assert.That(manager.GetSnapshot().Skills[0].CanExecute, Is.False);
         }
 
-        [UnityTest]
-        public IEnumerator CostFormulaHelpIcon_ShowsBoardCostFormulaOnLongPress()
+        [Test]
+        public void HelpIcon_ShowsCurrentPlayerStatsOnClick()
         {
             var viewObject = CreateOwnedRectTransformObject("CombatView");
             var view = viewObject.AddComponent<CombatUiView>();
@@ -547,6 +547,27 @@ namespace Project2048.Tests
             SetPrivateField(view, "boardCostFormulaHelpLabel", boardHelpLabel);
             SetPrivateField(view, "statusTooltip", tooltipRoot.gameObject);
             SetPrivateField(view, "statusTooltipText", tooltipRoot.GetComponentInChildren<TMPro.TMP_Text>(true));
+            SetPrivateField(view, "snapshot", new CombatSnapshot
+            {
+                CurrentCost = 27,
+                RemainingBoardMoves = 3,
+                Player = new PlayerCombatSnapshot
+                {
+                    CurrentHp = 72,
+                    MaxHp = 120,
+                    AttackPower = 14,
+                    DefensePower = 6,
+                    Block = 5,
+                    ShieldHp = 2,
+                    CriticalChance = 0.35f,
+                    CriticalDamageMultiplier = 1.75f,
+                    StatusEffects = new System.Collections.Generic.List<CombatStatusEffectSnapshot>
+                    {
+                        new() { DisplayName = "공격 강화" },
+                        new() { DisplayName = "독" },
+                    },
+                },
+            });
 
             InvokePrivate(view, "EnsureStatusTooltip");
             InvokePrivate(view, "ConfigureCostFormulaHelp");
@@ -556,17 +577,17 @@ namespace Project2048.Tests
             Assert.That(boardHelpIcon.GetComponent<StatusEffectTooltipTarget>(), Is.Not.Null);
             Assert.That(boardHelpLabel.text, Is.EqualTo("?"));
 
-            yield return ShowTooltipByLongPress(target);
+            ((IPointerClickHandler)target).OnPointerClick(new PointerEventData(null));
 
             var tooltip = GetPrivateField(view, "statusTooltip") as GameObject;
             var tooltipText = GetPrivateField(view, "statusTooltipText") as TMPro.TMP_Text;
             Assert.That(helpLabel.text, Is.EqualTo("?"));
             Assert.That(tooltip.activeSelf, Is.True);
-            Assert.That(tooltipText.text, Does.Contain("log2(전체 타일 합)"));
-            Assert.That(tooltipText.text, Does.Contain("2의 거듭제곱"));
-
-            ReleaseLongPressTooltip(target);
-            Assert.That(tooltip.activeSelf, Is.False);
+            Assert.That(tooltipText.text, Does.Contain("현재 플레이어 스탯"));
+            Assert.That(tooltipText.text, Does.Contain("공격력 14 | 방어력 6"));
+            Assert.That(tooltipText.text, Does.Contain("AP 27 | 보드 이동 가능 3"));
+            Assert.That(tooltipText.text, Does.Contain("치명타 확률 35% | 치명타 피해 1.75배"));
+            Assert.That(tooltipText.text, Does.Contain("상태 효과: 공격 강화, 독"));
         }
 
         [Test]

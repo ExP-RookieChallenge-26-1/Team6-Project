@@ -103,4 +103,4 @@ MonoBehaviour:
   vfxScale: 0.9
   vfxIntensity: 0.85
   vfxRepeatCount: 1
-  description: ""
+  description: 자세를 낮춰 방어도 20을 얻는다.

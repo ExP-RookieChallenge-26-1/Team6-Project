@@ -94,6 +94,71 @@ namespace Project2048.Tests
         }
 
         [Test]
+        public void RequestDebugKillEnemy_PlayerTurn_KillsFirstLivingEnemy()
+        {
+            var manager = CreateGameObject<CombatManager>("CombatManager");
+            var player = CreateGameObject<PlayerCombatController>("Player");
+            var firstEnemy = CreateGameObject<EnemyController>("FirstEnemy");
+            var secondEnemy = CreateGameObject<EnemyController>("SecondEnemy");
+            var playerData = CreatePlayerData(maxHp: 20, attackPower: 2);
+            var firstEnemyData = CreateEnemyData(maxHp: 30, attackValue: 0);
+            var secondEnemyData = CreateEnemyData(maxHp: 40, attackValue: 0);
+            CombatSnapshot latestSnapshot = null;
+            var stateChangedCount = 0;
+
+            manager.SetCombatants(player, new[] { firstEnemy, secondEnemy });
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new List<EnemySO> { firstEnemyData, secondEnemyData },
+                boardMoveCount = 1,
+            });
+            manager.ResolveBoardPhase();
+            firstEnemy.ApplyEndure(1);
+            manager.OnCombatStateChanged += snapshot =>
+            {
+                latestSnapshot = snapshot;
+                stateChangedCount++;
+            };
+
+            Assert.That(manager.RequestDebugKillEnemy(), Is.True);
+
+            Assert.That(stateChangedCount, Is.EqualTo(1));
+            Assert.That(firstEnemy.CurrentHp, Is.Zero);
+            Assert.That(secondEnemy.CurrentHp, Is.EqualTo(secondEnemy.MaxHp));
+            Assert.That(manager.CurrentPhase, Is.EqualTo(CombatPhase.ActionPhase));
+            Assert.That(latestSnapshot?.LastDamagePopupCue, Is.Not.Null);
+            Assert.That(latestSnapshot.LastDamagePopupCue.TargetEnemyIndex, Is.Zero);
+            Assert.That(latestSnapshot.LastDamagePopupCue.Amount, Is.EqualTo(30));
+            Assert.That(latestSnapshot.LastDamagePopupCue.IsCritical, Is.False);
+        }
+
+        [Test]
+        public void RequestDebugKillEnemy_EnemyTurn_ReturnsFalse()
+        {
+            var manager = CreateGameObject<CombatManager>("CombatManager");
+            var player = CreateGameObject<PlayerCombatController>("Player");
+            var enemy = CreateGameObject<EnemyController>("Enemy");
+            var playerData = CreatePlayerData(maxHp: 20, attackPower: 2);
+            var enemyData = CreateEnemyData(maxHp: 30, attackValue: 0);
+
+            manager.SetCombatants(player, new[] { enemy });
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new List<EnemySO> { enemyData },
+                boardMoveCount = 1,
+            });
+            manager.ResolveBoardPhase();
+            manager.EnemyTurnDelaySeconds = 1f;
+            manager.RequestEndPlayerTurn();
+
+            Assert.That(manager.CurrentPhase, Is.EqualTo(CombatPhase.EnemyTurn));
+            Assert.That(manager.RequestDebugKillEnemy(), Is.False);
+            Assert.That(enemy.CurrentHp, Is.EqualTo(enemy.MaxHp));
+        }
+
+        [Test]
         public void RequestEndPlayerTurn_ExecutesEnemyAttack_AndStartsNextPlayerTurn()
         {
             var manager = CreateGameObject<CombatManager>("CombatManager");
@@ -156,6 +221,40 @@ namespace Project2048.Tests
 
             Assert.That(damage, Is.InRange(13, 15));
             Assert.That(strongerMoveDamage, Is.GreaterThan(damage));
+        }
+
+        [Test]
+        public void RequestUseSkill_EmitsEnemyDamagePopupCueWithCriticalFlag()
+        {
+            var manager = CreateGameObject<CombatManager>("CombatManager");
+            var player = CreateGameObject<PlayerCombatController>("Player");
+            var enemy = CreateGameObject<EnemyController>("Enemy");
+            var playerData = CreatePlayerData(maxHp: 20, attackPower: 10);
+            var enemyData = CreateEnemyData(maxHp: 40, attackValue: 0);
+            var skill = CreateSkill("critical-strike", SkillType.Attack, cost: 0, power: 100);
+            CombatSnapshot latestSnapshot = null;
+            playerData.criticalChance = 1f;
+            playerData.criticalDamageMultiplier = 1.5f;
+            enemyData.baseDefensePower = 10;
+
+            manager.SetCombatants(player, new[] { enemy });
+            manager.StartCombat(new CombatSetup
+            {
+                playerData = playerData,
+                enemyDataList = new List<EnemySO> { enemyData },
+                boardMoveCount = 1,
+            });
+            manager.ResolveBoardPhase();
+
+            manager.OnCombatStateChanged += snapshot => latestSnapshot = snapshot;
+
+            Assert.That(manager.RequestUseSkill(skill, enemy), Is.True);
+            Assert.That(latestSnapshot?.LastDamagePopupCue, Is.Not.Null);
+            Assert.That(latestSnapshot.LastDamagePopupCue.TargetEnemyIndex, Is.Zero);
+            Assert.That(latestSnapshot.LastDamagePopupCue.Amount, Is.InRange(13, 15));
+            Assert.That(latestSnapshot.LastDamagePopupCue.IsCritical, Is.True);
+            Assert.That(latestSnapshot.LastDamagePopupCue.Sequence, Is.GreaterThan(0));
+            Assert.That(latestSnapshot.Enemies[0].CurrentHp, Is.EqualTo(40 - latestSnapshot.LastDamagePopupCue.Amount));
         }
 
         [Test]

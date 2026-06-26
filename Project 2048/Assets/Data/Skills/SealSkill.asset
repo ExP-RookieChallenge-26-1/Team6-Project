@@ -115,4 +115,4 @@ MonoBehaviour:
   vfxScale: 0.85
   vfxIntensity: 1
   vfxRepeatCount: 1
-  description:
+  description: 대상이 마지막으로 사용한 스킬을 1턴 동안 봉인한다.

@@ -283,7 +283,6 @@ namespace Project2048.Rewards
                 .Where(reward => !ContainsEquivalentReward(excludedRewards, reward))
                 .ToList();
 
-            ShuffleRewards(pool);
             return SelectDiverseChoices(pool, count);
         }
 
@@ -299,7 +298,6 @@ namespace Project2048.Rewards
                 .Where(reward => !ContainsEquivalentReward(excludedRewards, reward))
                 .ToList();
 
-            ShuffleRewards(pool);
             return SelectDiverseChoices(pool, count);
         }
 
@@ -329,9 +327,8 @@ namespace Project2048.Rewards
                 power: 0,
                 selfDefenseStageModifier: 2);
 
-            runtimeDefaultRewards.Add(CreateRuntimeReward("heal-2", "Heal II", RewardChoiceKind.HealTwo));
-            runtimeDefaultRewards.Add(CreateRuntimeReward("next-attack", "Next Combat Attack", RewardChoiceKind.TemporaryAttackPower, temporaryAttack: 1));
-            runtimeDefaultRewards.Add(CreateRuntimeReward("perm-attack", "Permanent Attack", RewardChoiceKind.PermanentAttackPower, permanentAttack: 1));
+            runtimeDefaultRewards.Add(CreateRuntimeReward("perm-defense", "Permanent Defense", RewardChoiceKind.PermanentDefensePower, permanentDefense: 1));
+            runtimeDefaultRewards.Add(CreateRuntimeReward("perm-attack", "Permanent Attack", RewardChoiceKind.PermanentAttackPower, permanentAttack: 2));
             runtimeDefaultRewards.Add(CreateRuntimeReward(
                 "learn-iron-wall",
                 "Learn Skill",
@@ -620,20 +617,6 @@ namespace Project2048.Rewards
                    IsSameSkill(left.skillToLearn, right.skillToLearn);
         }
 
-        private static void ShuffleRewards(List<BattleRewardSO> rewards)
-        {
-            if (rewards == null)
-            {
-                return;
-            }
-
-            for (var index = rewards.Count - 1; index > 0; index--)
-            {
-                var swapIndex = UnityEngine.Random.Range(0, index + 1);
-                (rewards[index], rewards[swapIndex]) = (rewards[swapIndex], rewards[index]);
-            }
-        }
-
         private SkillSO CreateRuntimeSkill(
             string skillId,
             string skillName,
@@ -665,6 +648,7 @@ namespace Project2048.Rewards
             int healAmount = 0,
             int temporaryAttack = 0,
             int permanentAttack = 0,
+            int permanentDefense = 0,
             SkillSO skillToLearn = null)
         {
             var reward = ScriptableObject.CreateInstance<BattleRewardSO>();
@@ -675,6 +659,7 @@ namespace Project2048.Rewards
             reward.healAmount = healAmount;
             reward.temporaryAttackPowerBonus = temporaryAttack;
             reward.permanentAttackPowerBonus = permanentAttack;
+            reward.permanentDefensePowerBonus = permanentDefense;
             reward.skillToLearn = skillToLearn;
             return reward;
         }

@@ -7,7 +7,8 @@ namespace Project2048.Enemy
 {
     public class EnemyAiBrain
     {
-        private const int MovePowerScale = 10;
+        private const int MovePowerScale = 5;
+        private const float DefenseReductionScale = 15f;
         private const float DuplicateActionPenalty = 35f;
 
         private readonly System.Random random;
@@ -609,8 +610,9 @@ namespace Project2048.Enemy
                 return 0;
             }
 
-            var defensePower = Mathf.Max(1, player?.EffectiveDefensePower ?? 1);
-            var baseDamage = (movePower / (float)MovePowerScale) * (attackStat / (float)defensePower);
+            var defensePower = Mathf.Max(0, player?.EffectiveDefensePower ?? 0);
+            var defenseMultiplier = 100f / (100f + defensePower * DefenseReductionScale);
+            var baseDamage = (movePower / (float)MovePowerScale) * attackStat * defenseMultiplier;
             return Mathf.Max(1, Mathf.CeilToInt(baseDamage * 0.925f));
         }
 

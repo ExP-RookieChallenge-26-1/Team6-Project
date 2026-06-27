@@ -17,8 +17,8 @@ MonoBehaviour:
   skillType: 0
   effectKind: 1
   damageStatSource: 0
-  cost: 20
-  power: 60
+  cost: 10
+  power: 20
   targetAttackStageModifier: 0
   targetDefenseStageModifier: 0
   selfDefenseStageModifier: 0
@@ -103,4 +103,4 @@ MonoBehaviour:
   vfxScale: 1
   vfxIntensity: 1.1
   vfxRepeatCount: 1
-  description: 응축한 빛을 발사해 적에게 위력 60 피해를 준다.
+  description: 응축한 빛을 발사해 적에게 위력 20 피해를 준다.

@@ -40,3 +40,6 @@ mono_crash.*
 
 .claude/
 .codex-backups/
+
+# Claude Code memory (local assistant notes, not project source)
+memory/

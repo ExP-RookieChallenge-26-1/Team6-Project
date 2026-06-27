@@ -66,7 +66,7 @@ namespace Project2048.Enemy
             MaxHp = Mathf.Max(1, data.maxHp);
             CurrentHp = MaxHp;
             AttackPower = Mathf.Max(0, data.attackPower);
-            BaseDefensePower = Mathf.Max(0, data.baseDefensePower);
+            BaseDefensePower = ResolveBaseDefensePower(data);
             DefenseModifier = 0;
             Block = 0;
             ThornRetaliationDamage = 0;
@@ -107,12 +107,22 @@ namespace Project2048.Enemy
             MaxHp = Mathf.Max(1, Data.maxHp);
             CurrentHp = Mathf.Clamp(CurrentHp, 0, MaxHp);
             AttackPower = Mathf.Max(0, Data.attackPower);
-            BaseDefensePower = Mathf.Max(0, Data.baseDefensePower);
+            BaseDefensePower = ResolveBaseDefensePower(Data);
             baseCriticalChance = Mathf.Clamp01(Data.criticalChance);
             CriticalDamageMultiplier = Mathf.Max(1f, Data.criticalDamageMultiplier);
 
             OnHpChanged?.Invoke(CurrentHp, MaxHp);
             RefreshIntentPreview();
+        }
+
+        private static int ResolveBaseDefensePower(EnemySO data)
+        {
+            if (data == null)
+            {
+                return 0;
+            }
+
+            return Mathf.Max(0, data.baseDefensePower > 0 ? data.baseDefensePower : data.defensePower);
         }
 
         public int TakeDamage(int damage, float shieldPiercePercent = 0f)

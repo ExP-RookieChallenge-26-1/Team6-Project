@@ -183,6 +183,62 @@ namespace Project2048.Tests
         }
 
         [Test]
+        public void RewardManager_DefaultBackfill_ReplacesThirdSlotHealWithPermanentDefense()
+        {
+            var player = CreateGameObject<PlayerCombatController>("Player");
+            var playerData = CreatePlayerData(maxHp: 20, attackPower: 2);
+            var skill = CreateSkill("new-skill", SkillType.Attack, cost: 1, power: 10);
+            var table = CreateRewardTable(
+                CreateRewardChoice("heal", RewardChoiceKind.HealTwo),
+                CreateRewardChoice("learn-new-skill", RewardChoiceKind.LearnSkill, skill));
+            var rewardManager = CreateGameObject<RewardManager>("RewardManager");
+
+            player.Init(playerData);
+            rewardManager.Initialize(new RunProgress(), table);
+            rewardManager.OfferReward(new CombatResult(), player);
+
+            Assert.That(rewardManager.PendingChoices.Count, Is.EqualTo(3));
+            Assert.That(
+                rewardManager.PendingChoices.Count(reward => reward.rewardKind == RewardChoiceKind.HealTwo),
+                Is.EqualTo(1));
+            Assert.That(
+                rewardManager.PendingChoices[2].rewardKind,
+                Is.EqualTo(RewardChoiceKind.PermanentDefensePower));
+            Assert.That(
+                rewardManager.PendingChoices[2].permanentDefensePowerBonus,
+                Is.EqualTo(1));
+        }
+
+        [Test]
+        public void RewardManager_DefaultBackfill_UsesOnlyPermanentAttackAndDefenseRewards()
+        {
+            var player = CreateGameObject<PlayerCombatController>("Player");
+            var playerData = CreatePlayerData(maxHp: 20, attackPower: 2);
+            var table = CreateRewardTable(CreateRewardChoice("heal", RewardChoiceKind.HealTwo));
+            var rewardManager = CreateGameObject<RewardManager>("RewardManager");
+
+            player.Init(playerData);
+            rewardManager.Initialize(new RunProgress(), table);
+            rewardManager.OfferReward(new CombatResult(), player);
+
+            Assert.That(rewardManager.PendingChoices.Count, Is.EqualTo(3));
+            Assert.That(
+                rewardManager.PendingChoices.Any(reward =>
+                    reward.rewardKind == RewardChoiceKind.TemporaryAttackPower),
+                Is.False);
+            Assert.That(
+                rewardManager.PendingChoices.Any(reward =>
+                    reward.rewardKind == RewardChoiceKind.PermanentDefensePower &&
+                    reward.permanentDefensePowerBonus == 1),
+                Is.True);
+            Assert.That(
+                rewardManager.PendingChoices.Any(reward =>
+                    reward.rewardKind == RewardChoiceKind.PermanentAttackPower &&
+                    reward.permanentAttackPowerBonus == 2),
+                Is.True);
+        }
+
+        [Test]
         public void RewardTable_SelectRewards_UsesSkillOfferChanceWeight()
         {
             var skill = CreateSkill("rare-skill", SkillType.Attack, cost: 1, power: 10);

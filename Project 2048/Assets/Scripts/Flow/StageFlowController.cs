@@ -23,7 +23,8 @@ namespace Project2048.Flow
         [SerializeField] private StageDatabaseSO stageDatabase;
         [SerializeField] private PlayerSO playerData;
         [SerializeField] private RewardTableSO rewardTable;
-        [SerializeField] private int boardMoveCount = 4;
+        // 한 턴 기본 이동 횟수는 "베이스 + 현재 스테이지"로 정한다. 베이스 15면 1스테이지에서 16이 된다.
+        [SerializeField] private int boardMoveCountStageBase = 15;
         [SerializeField] private float enemyTurnDelaySeconds = 1.2f;
         [SerializeField] private RunProgress runProgress = new();
 
@@ -82,7 +83,7 @@ namespace Project2048.Flow
             {
                 playerData = playerData,
                 enemyDataList = new List<EnemySO> { stageEnemyData },
-                boardMoveCount = boardMoveCount,
+                boardMoveCount = boardMoveCountStageBase + currentStageIndex,
                 runProgress = RunProgress,
             });
         }

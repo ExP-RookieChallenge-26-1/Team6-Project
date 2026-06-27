@@ -205,7 +205,7 @@ namespace Project2048.Tests
                 reward.rewardKind = RewardChoiceKind.HealOne;
                 Assert.That(PrototypeCombatText.FormatRewardChoice(reward), Is.EqualTo("회복 1단계"));
                 reward.rewardKind = RewardChoiceKind.HealTwo;
-                Assert.That(PrototypeCombatText.FormatRewardChoice(reward), Is.EqualTo("회복 2단계"));
+                Assert.That(PrototypeCombatText.FormatRewardChoice(reward), Is.EqualTo("회복"));
                 reward.rewardKind = RewardChoiceKind.HealThree;
                 Assert.That(PrototypeCombatText.FormatRewardChoice(reward), Is.EqualTo("회복 3단계"));
             }

@@ -391,7 +391,7 @@ namespace Project2048.Prototype
             return reward.rewardKind switch
             {
                 RewardChoiceKind.HealOne => "회복 1단계",
-                RewardChoiceKind.HealTwo => "회복 2단계",
+                RewardChoiceKind.HealTwo => "회복",
                 RewardChoiceKind.HealThree => "회복 3단계",
                 RewardChoiceKind.TemporaryAttackPower => $"다음 전투 공격 랭크 +{reward.temporaryAttackPowerBonus}",
                 RewardChoiceKind.TemporaryDefensePower => $"다음 전투 방어 랭크 +{reward.temporaryDefensePowerBonus}",

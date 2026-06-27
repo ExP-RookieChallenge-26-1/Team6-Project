@@ -18,7 +18,7 @@ MonoBehaviour:
   effectKind: 12
   damageStatSource: 0
   cost: 30
-  power: 40
+  power: 20
   targetAttackStageModifier: 0
   targetDefenseStageModifier: 0
   selfDefenseStageModifier: 0
@@ -29,7 +29,7 @@ MonoBehaviour:
   debuffValue: 0
   selfDefenseBonus: 0
   selfDefensePowerModifier: 0
-  selfThornRetaliationDamage: 40
+  selfThornRetaliationDamage: 30
   selfCounterPercent: 0
   selfEndureTurns: 0
   selfEchoDamageBonus: 0
@@ -103,4 +103,4 @@ MonoBehaviour:
   vfxScale: 1.1
   vfxIntensity: 1.15
   vfxRepeatCount: 1
-  description: 방어도 40을 얻고, 보호막이 공격받으면 공격자에게 가시 반격 피해 40을 준다.
+  description: 방어도 20을 얻고, 보호막이 공격받으면 공격자에게 가시 반격 피해 30을 준다.

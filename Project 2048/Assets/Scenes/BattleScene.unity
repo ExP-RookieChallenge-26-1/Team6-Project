@@ -18643,7 +18643,7 @@ MonoBehaviour:
   stageDatabase: {fileID: 11400000, guid: 7ff0a5e7d7cefc640b3a27c0596fda57, type: 2}
   playerData: {fileID: 11400000, guid: 032b4bdf9c2ffc847bd27ec8e3af0335, type: 2}
   rewardTable: {fileID: 11400000, guid: e82aa82acecfe504ab3cc5e0b5d7248c, type: 2}
-  boardMoveCount: 16
+  boardMoveCountStageBase: 15
   enemyTurnDelaySeconds: 1.2
   runProgress:
     hasCurrentHp: 0

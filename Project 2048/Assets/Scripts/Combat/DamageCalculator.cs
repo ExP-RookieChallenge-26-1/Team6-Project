@@ -18,8 +18,8 @@ namespace Project2048.Combat
 
     public class DamageCalculator
     {
-        private const int MinimumDefenseStat = 1;
-        private const float MovePowerScale = 10f;
+        private const float MovePowerScale = 5f;
+        private const float DefenseReductionScale = 15f;
         private const float MinimumDamageVariance = 0.85f;
         private const float MaximumDamageVariance = 1f;
 
@@ -148,8 +148,8 @@ namespace Project2048.Combat
                 return new DamageRollResult(0, false);
             }
 
-            var attackDefenseRatio = attackPower / (float)Mathf.Max(MinimumDefenseStat, defensePower);
-            var baseDamage = (movePower / MovePowerScale) * attackDefenseRatio;
+            var defenseMultiplier = 100f / (100f + Mathf.Max(0, defensePower) * DefenseReductionScale);
+            var baseDamage = (movePower / MovePowerScale) * attackPower * defenseMultiplier;
             var varied = baseDamage * RollDamageVariance();
             var isCritical = RollCritical(criticalChance);
             if (isCritical)

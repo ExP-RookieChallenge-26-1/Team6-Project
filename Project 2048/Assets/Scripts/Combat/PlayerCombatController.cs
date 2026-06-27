@@ -630,14 +630,15 @@ namespace Project2048.Combat
             OnStatusEffectsChanged?.Invoke();
         }
 
-        public int CaptureCostCarry(int currentCost)
+        public int CaptureCostCarry(int currentCost, int carryLimitMultiplier = 1)
         {
             if (PendingCostCarryLimit <= 0)
             {
                 return 0;
             }
 
-            CarriedCost = Mathf.Clamp(currentCost, 0, PendingCostCarryLimit);
+            var effectiveCarryLimit = PendingCostCarryLimit * Mathf.Max(1, carryLimitMultiplier);
+            CarriedCost = Mathf.Clamp(currentCost, 0, effectiveCarryLimit);
             PendingCostCarryLimit = 0;
             OnStatusEffectsChanged?.Invoke();
             return CarriedCost;

@@ -17,7 +17,7 @@ namespace Project2048.Combat
     /// </summary>
     public class CombatManager : MonoBehaviour
     {
-        private const int BoardCostGainMultiplier = 10;
+        private const int BoardCostGainMultiplier = 3;
 
         [SerializeField] private PlayerCombatController player;
         [SerializeField] private List<EnemyController> enemies = new();
@@ -529,7 +529,7 @@ namespace Project2048.Combat
                 return;
             }
 
-            player.CaptureCostCarry(CostWallet.CurrentCost);
+            player.CaptureCostCarry(CostWallet.CurrentCost, BoardCostGainMultiplier);
             CostWallet.Clear();
             player.ClearSkillSeal();
 

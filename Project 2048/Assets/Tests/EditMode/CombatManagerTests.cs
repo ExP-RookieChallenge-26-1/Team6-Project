@@ -196,7 +196,7 @@ namespace Project2048.Tests
         }
 
         [Test]
-        public void DamageCalculator_UsesPokemonStyleAttackTimesMovePower_WithVarianceAndCriticalMultiplier()
+        public void DamageCalculator_UsesScaledDefenseReduction_WithVarianceAndCriticalMultiplier()
         {
             var playerObject = CreateGameObject<PlayerCombatController>("Player");
             var enemyObject = CreateGameObject<EnemyController>("Enemy");
@@ -221,7 +221,7 @@ namespace Project2048.Tests
                     criticalChance: 1f,
                     criticalDamageMultiplier: 1.5f);
 
-            Assert.That(damage, Is.InRange(13, 15));
+            Assert.That(damage, Is.InRange(103, 120));
             Assert.That(strongerMoveDamage, Is.GreaterThan(damage));
         }
 
@@ -732,6 +732,40 @@ namespace Project2048.Tests
         }
 
         [Test]
+        public void EnemyInit_UsesDefensePowerAsFallbackCombatDefense()
+        {
+            var enemy = CreateGameObject<EnemyController>("Enemy");
+            var enemyData = CreateEnemyData(maxHp: 30, attackValue: 0);
+            enemyData.baseDefensePower = 0;
+            enemyData.defensePower = 4;
+
+            enemy.Init(enemyData);
+
+            Assert.That(enemy.BaseDefensePower, Is.EqualTo(4));
+            Assert.That(enemy.EffectiveDefensePower, Is.EqualTo(4));
+        }
+
+        [Test]
+        public void PlayerSkillDamage_UsesEnemyDefensePowerFallback()
+        {
+            var player = CreateGameObject<PlayerCombatController>("Player");
+            var enemy = CreateGameObject<EnemyController>("Enemy");
+            var playerData = CreatePlayerData(maxHp: 20, attackPower: 15);
+            var enemyData = CreateEnemyData(maxHp: 100, attackValue: 0);
+            var skill = CreateSkill("strike", SkillType.Attack, cost: 0, power: 20);
+            enemyData.baseDefensePower = 0;
+            enemyData.defensePower = 4;
+
+            player.Init(playerData);
+            enemy.Init(enemyData);
+
+            var damage = new DamageCalculator(new System.Random(1))
+                .CalculatePlayerSkillDamage(player, skill, enemy);
+
+            Assert.That(damage, Is.InRange(43, 47));
+        }
+
+        [Test]
         public void DebuffAttack_WithPower_DamagesEnemyAndAppliesModifier()
         {
             var player = CreateGameObject<PlayerCombatController>("Player");
@@ -919,7 +953,7 @@ namespace Project2048.Tests
                 { 0, 0, 0, 0 },
                 { 0, 0, 0, 0 },
             };
-            var fullCost = new CostConverter().ConvertBoardToCost(board) * 10;
+            var fullCost = new CostConverter().ConvertBoardToCost(board) * 3;
 
             manager.SetCombatants(player, new[] { enemy });
             manager.StartCombat(new CombatSetup
@@ -1556,7 +1590,7 @@ namespace Project2048.Tests
                 { 0, 0, 0, 0 },
                 { 0, 0, 0, 0 },
             };
-            var boardCost = new CostConverter().ConvertBoardToCost(board) * 10;
+            var boardCost = new CostConverter().ConvertBoardToCost(board) * 3;
 
             manager.SetCombatants(player, new[] { enemy });
             manager.StartCombat(new CombatSetup
@@ -1594,7 +1628,7 @@ namespace Project2048.Tests
                 { 0, 0, 0, 0 },
                 { 0, 0, 0, 0 },
             };
-            var boardCost = new CostConverter().ConvertBoardToCost(board) * 10;
+            var boardCost = new CostConverter().ConvertBoardToCost(board) * 3;
 
             manager.SetCombatants(player, new[] { enemy });
             manager.StartCombat(new CombatSetup
@@ -1610,13 +1644,13 @@ namespace Project2048.Tests
             manager.RequestEndPlayerTurn();
 
             Assert.That(manager.CostWallet.CurrentCost, Is.Zero);
-            Assert.That(player.CarriedCost, Is.EqualTo(4));
+            Assert.That(player.CarriedCost, Is.EqualTo(12));
 
             manager.BoardManager.SetBoardState(board, 0);
             var resolvedCost = manager.ResolveBoardPhase();
 
-            Assert.That(resolvedCost, Is.EqualTo(boardCost + 4));
-            Assert.That(manager.CostWallet.CurrentCost, Is.EqualTo(boardCost + 4));
+            Assert.That(resolvedCost, Is.EqualTo(boardCost + 12));
+            Assert.That(manager.CostWallet.CurrentCost, Is.EqualTo(boardCost + 12));
         }
 
         [Test]

@@ -6876,6 +6876,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Combat/DamageCalculator.cs",
     "from_class": "DamageCalculator",
+    "to_type": "DefenseReductionScale",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Combat/DamageCalculator.cs",
+    "from_class": "DamageCalculator",
     "to_type": "EffectiveAttackPower",
     "relation_type": "uses",
     "strength": 1
@@ -6954,13 +6961,6 @@
     "from_file": "Project 2048/Assets/Scripts/Combat/DamageCalculator.cs",
     "from_class": "DamageCalculator",
     "to_type": "MinimumDamageVariance",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Combat/DamageCalculator.cs",
-    "from_class": "DamageCalculator",
-    "to_type": "MinimumDefenseStat",
     "relation_type": "uses",
     "strength": 1
   },
@@ -9340,6 +9340,13 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyAiBrain.cs",
     "from_class": "EnemyAiBrain",
+    "to_type": "DefenseReductionScale",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyAiBrain.cs",
+    "from_class": "EnemyAiBrain",
     "to_type": "DefenseScalingAttack",
     "relation_type": "uses",
     "strength": 1
@@ -10804,6 +10811,13 @@
     "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyController.cs",
     "from_class": "EnemyController",
     "to_type": "RefreshIntentPreview",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Scripts/Enemy/EnemyController.cs",
+    "from_class": "EnemyController",
+    "to_type": "ResolveBaseDefensePower",
     "relation_type": "uses",
     "strength": 1
   },
@@ -31033,13 +31047,6 @@
   {
     "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
     "from_class": "RewardManager",
-    "to_type": "II",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
-    "from_class": "RewardManager",
     "to_type": "Initialize",
     "relation_type": "uses",
     "strength": 1
@@ -31195,13 +31202,6 @@
     "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
     "from_class": "RewardManager",
     "to_type": "MoveFirstCategoryReward",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
-    "from_class": "RewardManager",
-    "to_type": "Next",
     "relation_type": "uses",
     "strength": 1
   },
@@ -31503,13 +31503,6 @@
     "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
     "from_class": "RewardManager",
     "to_type": "Shot",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
-    "from_class": "RewardManager",
-    "to_type": "ShuffleRewards",
     "relation_type": "uses",
     "strength": 1
   },
@@ -41540,13 +41533,6 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
     "from_class": "CombatManagerTests",
-    "to_type": "AttackPowerModifier",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
-    "from_class": "CombatManagerTests",
     "to_type": "AttackStageDown",
     "relation_type": "uses",
     "strength": 1
@@ -41555,6 +41541,13 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
     "from_class": "CombatManagerTests",
     "to_type": "Balanced",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
+    "from_class": "CombatManagerTests",
+    "to_type": "BaseDefensePower",
     "relation_type": "uses",
     "strength": 1
   },
@@ -41841,7 +41834,7 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
     "from_class": "CombatManagerTests",
-    "to_type": "DamageCalculator_UsesPokemonStyleAttackTimesMovePower_WithVarianceAndCriticalMultiplier",
+    "to_type": "DamageCalculator_UsesScaledDefenseReduction_WithVarianceAndCriticalMultiplier",
     "relation_type": "uses",
     "strength": 1
   },
@@ -42024,6 +42017,13 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
     "from_class": "CombatManagerTests",
     "to_type": "EnemyCostGainDebuff_ReducesNextBoardPhaseCostOnce",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
+    "from_class": "CombatManagerTests",
+    "to_type": "EnemyInit_UsesDefensePowerAsFallbackCombatDefense",
     "relation_type": "uses",
     "strength": 1
   },
@@ -42380,6 +42380,13 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
     "from_class": "CombatManagerTests",
+    "to_type": "PlayerSkillDamage_UsesEnemyDefensePowerFallback",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
+    "from_class": "CombatManagerTests",
     "to_type": "Project2048",
     "relation_type": "uses",
     "strength": 1
@@ -42528,20 +42535,6 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
     "from_class": "CombatManagerTests",
     "to_type": "ResolveBoardPhase",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
-    "from_class": "CombatManagerTests",
-    "to_type": "ResolveBoardPhase_AfterFirstPlayerTurn_DoesNotFloorLowCost",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
-    "from_class": "CombatManagerTests",
-    "to_type": "ResolveBoardPhase_FirstPlayerTurn_FloorsPositiveCostToCheapestEquippedSkill",
     "relation_type": "uses",
     "strength": 1
   },
@@ -51592,13 +51585,6 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
     "from_class": "RewardGrowthTests",
-    "to_type": "AssetGuid",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
-    "from_class": "RewardGrowthTests",
     "to_type": "Assets",
     "relation_type": "uses",
     "strength": 1
@@ -51691,13 +51677,6 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
     "from_class": "RewardGrowthTests",
     "to_type": "Bootstrap_WithMissingRewardSceneReferences_DoesNotCreateRuntimeManagers",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
-    "from_class": "RewardGrowthTests",
-    "to_type": "BottomPanel",
     "relation_type": "uses",
     "strength": 1
   },
@@ -52418,6 +52397,20 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
     "from_class": "RewardGrowthTests",
+    "to_type": "PermanentAttackPower",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "PermanentDefensePower",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
     "to_type": "Player",
     "relation_type": "uses",
     "strength": 1
@@ -52552,6 +52545,20 @@
     "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
     "from_class": "RewardGrowthTests",
     "to_type": "RewardManager",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "RewardManager_DefaultBackfill_ReplacesThirdSlotHealWithPermanentDefense",
+    "relation_type": "uses",
+    "strength": 1
+  },
+  {
+    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
+    "from_class": "RewardGrowthTests",
+    "to_type": "RewardManager_DefaultBackfill_UsesOnlyPermanentAttackAndDefenseRewards",
     "relation_type": "uses",
     "strength": 1
   },
@@ -52908,21 +52915,7 @@
   {
     "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
     "from_class": "RewardGrowthTests",
-    "to_type": "Vector3",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
-    "from_class": "RewardGrowthTests",
     "to_type": "Within",
-    "relation_type": "uses",
-    "strength": 1
-  },
-  {
-    "from_file": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
-    "from_class": "RewardGrowthTests",
-    "to_type": "WorldSprites",
     "relation_type": "uses",
     "strength": 1
   },

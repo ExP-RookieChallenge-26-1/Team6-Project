@@ -2415,8 +2415,8 @@
     "file_id": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "path": "Project 2048/Assets/Scripts/Combat/CombatManager.cs",
     "file_name": "CombatManager.cs",
-    "content_hash": "703d29551e789d3764b00e39f1db1c56c70baf48",
-    "size": 62082,
+    "content_hash": "ad497797a5d82e33899ce2db94f1a85925011dad",
+    "size": 62106,
     "line_count": 1775,
     "namespace": "Project2048.Combat",
     "using_list": [
@@ -3238,7 +3238,7 @@
       "공포"
     ],
     "numeric_literals": [
-      10,
+      3,
       0,
       2048,
       1,
@@ -3998,8 +3998,8 @@
     "file_id": "Project 2048/Assets/Scripts/Combat/DamageCalculator.cs",
     "path": "Project 2048/Assets/Scripts/Combat/DamageCalculator.cs",
     "file_name": "DamageCalculator.cs",
-    "content_hash": "b263201a9b28c0b90a08bc47b83ae3eb47bce931",
-    "size": 7198,
+    "content_hash": "e277d047fe8fb1dfde28d6751f0a3dea87044593",
+    "size": 7218,
     "line_count": 229,
     "namespace": "Project2048.Combat",
     "using_list": [
@@ -4048,14 +4048,14 @@
     ],
     "fields": [
       {
-        "name": "MinimumDefenseStat",
-        "type": "int",
+        "name": "MovePowerScale",
+        "type": "float",
         "access": "private",
         "serialized": false,
         "is_static": false
       },
       {
-        "name": "MovePowerScale",
+        "name": "DefenseReductionScale",
         "type": "float",
         "access": "private",
         "serialized": false,
@@ -4113,9 +4113,9 @@
     "singleton_candidate": false,
     "dont_destroy_on_load": false,
     "referenced_types": [
-      "int",
       "float",
       "System.Random",
+      "int",
       "bool",
       "Project2048",
       "Enemy",
@@ -4124,8 +4124,8 @@
       "Combat",
       "Amount",
       "IsCritical",
-      "MinimumDefenseStat",
       "MovePowerScale",
+      "DefenseReductionScale",
       "MinimumDamageVariance",
       "MaximumDamageVariance",
       "System",
@@ -4165,10 +4165,12 @@
     "singleton_access_types": [],
     "string_literals": [],
     "numeric_literals": [
-      10,
+      5,
+      15,
       0.85,
       1,
-      0
+      0,
+      100
     ],
     "guessed_roles": [
       "combat",
@@ -4182,9 +4184,9 @@
     "file_id": "Project 2048/Assets/Scripts/Combat/PlayerCombatController.cs",
     "path": "Project 2048/Assets/Scripts/Combat/PlayerCombatController.cs",
     "file_name": "PlayerCombatController.cs",
-    "content_hash": "95a8d737839a5b07deebd780aadde2f545557322",
-    "size": 31970,
-    "line_count": 1006,
+    "content_hash": "b8343367ce49b2887823d9e75b085f82f83dc378",
+    "size": 32096,
+    "line_count": 1007,
     "namespace": "Project2048.Combat",
     "using_list": [
       "System",
@@ -5514,9 +5516,9 @@
     "file_id": "Project 2048/Assets/Scripts/Enemy/EnemyAiBrain.cs",
     "path": "Project 2048/Assets/Scripts/Enemy/EnemyAiBrain.cs",
     "file_name": "EnemyAiBrain.cs",
-    "content_hash": "e4075a4fd05b63a1bcc1a82829ba5ec4bfcc5c60",
-    "size": 30356,
-    "line_count": 816,
+    "content_hash": "3277598a871dc8e40970a46234663f2b2c0485b6",
+    "size": 30498,
+    "line_count": 818,
     "namespace": "Project2048.Enemy",
     "using_list": [
       "System.Collections.Generic",
@@ -5580,6 +5582,13 @@
       {
         "name": "MovePowerScale",
         "type": "int",
+        "access": "private",
+        "serialized": false,
+        "is_static": false
+      },
+      {
+        "name": "DefenseReductionScale",
+        "type": "float",
         "access": "private",
         "serialized": false,
         "is_static": false
@@ -5722,6 +5731,7 @@
       "UnityEngine",
       "Enemy",
       "MovePowerScale",
+      "DefenseReductionScale",
       "DuplicateActionPenalty",
       "ChooseIntent",
       "EnemySO",
@@ -5853,7 +5863,8 @@
       "황소 돌진"
     ],
     "numeric_literals": [
-      10,
+      5,
+      15,
       35,
       0.01,
       0,
@@ -5871,8 +5882,7 @@
       1,
       1.35,
       0.78,
-      25,
-      95
+      25
     ],
     "guessed_roles": [
       "combat",
@@ -6088,9 +6098,9 @@
     "file_id": "Project 2048/Assets/Scripts/Enemy/EnemyController.cs",
     "path": "Project 2048/Assets/Scripts/Enemy/EnemyController.cs",
     "file_name": "EnemyController.cs",
-    "content_hash": "33b110b88246e863f76e5e55bb721f6136b555db",
-    "size": 17754,
-    "line_count": 574,
+    "content_hash": "665a3a54cc360697836065ebf07263c496b5e6e6",
+    "size": 18017,
+    "line_count": 584,
     "namespace": "Project2048.Enemy",
     "using_list": [
       "System",
@@ -6119,6 +6129,7 @@
       "Init",
       "ArgumentNullException",
       "RefreshFromData",
+      "ResolveBaseDefensePower",
       "TakeDamage",
       "TakeStatusDamage",
       "ForceKill",
@@ -6512,6 +6523,7 @@
       "ArgumentNullException",
       "BindDataValidation",
       "Max",
+      "ResolveBaseDefensePower",
       "Attack",
       "Default",
       "Clear",
@@ -8407,9 +8419,9 @@
     "file_id": "Project 2048/Assets/Scripts/Flow/StageFlowController.cs",
     "path": "Project 2048/Assets/Scripts/Flow/StageFlowController.cs",
     "file_name": "StageFlowController.cs",
-    "content_hash": "5b098edeba0b554777310d6c8f029fee6b03fc38",
-    "size": 10128,
-    "line_count": 320,
+    "content_hash": "50fcec8fe798ea5949aaa45889658d1f5a3f56e4",
+    "size": 10308,
+    "line_count": 321,
     "namespace": "Project2048.Flow",
     "using_list": [
       "System",
@@ -8614,6 +8626,7 @@
     "singleton_access_types": [],
     "string_literals": [
       "Stage Data",
+      "베이스 + 현재 스테이지",
       "CombatManager is not assigned.",
       "PlayerCombatController is not assigned.",
       "At least one EnemyController is required.",
@@ -8624,7 +8637,8 @@
       "Stage {currentStageIndex} has no valid EnemySO candidate."
     ],
     "numeric_literals": [
-      4,
+      15,
+      16,
       1.2
     ],
     "guessed_roles": [
@@ -19228,8 +19242,8 @@
     "file_id": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatText.cs",
     "path": "Project 2048/Assets/Scripts/Prototype/PrototypeCombatText.cs",
     "file_name": "PrototypeCombatText.cs",
-    "content_hash": "f6ea791518696c57d620dfcdc34a5e1116cbdf69",
-    "size": 15237,
+    "content_hash": "50de2fbb216bb8a6647aeeb921f5b6e9161b9faf",
+    "size": 15229,
     "line_count": 425,
     "namespace": "Project2048.Prototype",
     "using_list": [
@@ -19510,8 +19524,7 @@
       100,
       100,
       3,
-      30,
-      2
+      30
     ],
     "guessed_roles": [
       "combat",
@@ -20385,9 +20398,9 @@
     "file_id": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
     "path": "Project 2048/Assets/Scripts/Rewards/RewardManager.cs",
     "file_name": "RewardManager.cs",
-    "content_hash": "6902741169773381b157c798ee0b9407741bcfbb",
-    "size": 26942,
-    "line_count": 732,
+    "content_hash": "4b60397a693c4db842c6f7085ad47cfde45d3671",
+    "size": 26432,
+    "line_count": 717,
     "namespace": "Project2048.Rewards",
     "using_list": [
       "System",
@@ -20442,7 +20455,6 @@
       "AddUniqueAllowedRewards",
       "ContainsEquivalentReward",
       "IsEquivalentReward",
-      "ShuffleRewards",
       "CreateRuntimeSkill",
       "CreateRuntimeReward",
       "ResolveHealAmount",
@@ -20683,7 +20695,6 @@
       "EnsureRuntimeDefaultRewards",
       "Where",
       "ContainsEquivalentReward",
-      "ShuffleRewards",
       "CreateRuntimeSkill",
       "Light",
       "Shot",
@@ -20704,8 +20715,6 @@
       "DefenseStageUp",
       "Add",
       "CreateRuntimeReward",
-      "II",
-      "Next",
       "Permanent",
       "Learn",
       "CanAppearAsReward",
@@ -20751,10 +20760,8 @@
       "Shield Bash",
       "iron-wall",
       "Iron Wall",
-      "heal-2",
-      "Heal II",
-      "next-attack",
-      "Next Combat Attack",
+      "perm-defense",
+      "Permanent Defense",
       "perm-attack",
       "Permanent Attack",
       "learn-iron-wall",
@@ -26710,9 +26717,9 @@
     "file_id": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
     "path": "Project 2048/Assets/Tests/EditMode/CombatManagerTests.cs",
     "file_name": "CombatManagerTests.cs",
-    "content_hash": "cf287f43bdfdab7f89bdedcdd6f6181789503736",
-    "size": 77500,
-    "line_count": 1776,
+    "content_hash": "80c06494fe372e0258dc549c422042ff2477b495",
+    "size": 78825,
+    "line_count": 1810,
     "namespace": "Project2048.Tests",
     "using_list": [
       "System.Collections",
@@ -26746,7 +26753,7 @@
       "RequestDebugKillEnemy_PlayerTurn_KillsFirstLivingEnemy",
       "RequestDebugKillEnemy_EnemyTurn_ReturnsFalse",
       "RequestEndPlayerTurn_ExecutesEnemyAttack_AndStartsNextPlayerTurn",
-      "DamageCalculator_UsesPokemonStyleAttackTimesMovePower_WithVarianceAndCriticalMultiplier",
+      "DamageCalculator_UsesScaledDefenseReduction_WithVarianceAndCriticalMultiplier",
       "DamageCalculator",
       "RequestUseSkill_EmitsEnemyDamagePopupCueWithCriticalFlag",
       "RequestUseSkill_WithPresentationListener_DelaysDamageVictoryAndPopupUntilPresentationCompletes",
@@ -26763,6 +26770,8 @@
       "RefreshCombatantDataFromScriptableObjects_ReappliesChangedSoStatsDuringCombat",
       "StartCombat_WithoutBoardMoveOverride_UsesPlayerInitialBoardMoveCount",
       "DebuffSkill_TargetsEnemyById_AndReducesEffectiveDefense",
+      "EnemyInit_UsesDefensePowerAsFallbackCombatDefense",
+      "PlayerSkillDamage_UsesEnemyDefensePowerFallback",
       "DebuffAttack_WithPower_DamagesEnemyAndAppliesModifier",
       "LifeStealSkill_RestoresHpFromActualHpDamage",
       "ShieldScalingAttack_UsesCurrentShieldAsAttackStatWithoutConsumingIt",
@@ -27057,7 +27066,7 @@
     "public_field_count": 0,
     "get_component_count": 0,
     "find_call_count": 1,
-    "new_keyword_count": 146,
+    "new_keyword_count": 148,
     "coroutine_count": 1,
     "singleton_candidate": false,
     "dont_destroy_on_load": false,
@@ -27139,7 +27148,7 @@
       "BoardPhase",
       "TurnController",
       "TurnCount",
-      "DamageCalculator_UsesPokemonStyleAttackTimesMovePower_WithVarianceAndCriticalMultiplier",
+      "DamageCalculator_UsesScaledDefenseReduction_WithVarianceAndCriticalMultiplier",
       "Init",
       "DamageCalculator",
       "CalculatePlayerSkillDamage",
@@ -27199,6 +27208,9 @@
       "DefenseModifier",
       "EffectiveDefensePower",
       "DefensePower",
+      "EnemyInit_UsesDefensePowerAsFallbackCombatDefense",
+      "BaseDefensePower",
+      "PlayerSkillDamage_UsesEnemyDefensePowerFallback",
       "DebuffAttack_WithPower_DamagesEnemyAndAppliesModifier",
       "AttackStageDown",
       "AttackModifier",
@@ -27258,10 +27270,7 @@
       "Shared",
       "EnemyAiActionBias",
       "Balanced",
-      "BasicDefense",
-      "AttackPowerModifier",
-      "ResolveBoardPhase_FirstPlayerTurn_FloorsPositiveCostToCheapestEquippedSkill",
-      "ResolveBoardPhase_AfterFirstPlayerTurn_DoesNotFloorLowCost"
+      "BasicDefense"
     ],
     "component_access_types": [],
     "created_types": [
@@ -27309,23 +27318,22 @@
       6,
       1.5,
       200,
+      103,
+      120,
       13,
       15,
       1000,
       500,
-      120,
-      128,
-      70
+      128
     ],
     "guessed_roles": [
       "combat",
       "data",
       "player",
       "manager",
-      "ui"
+      "runtime"
     ],
     "summary_signals": [
-      "UI 관련 로직 포함",
       "전투 계열 로직 포함",
       "Find 계열 탐색 사용"
     ]
@@ -30103,8 +30111,8 @@
     "file_id": "Project 2048/Assets/Tests/EditMode/PrototypeCombatTextTests.cs",
     "path": "Project 2048/Assets/Tests/EditMode/PrototypeCombatTextTests.cs",
     "file_name": "PrototypeCombatTextTests.cs",
-    "content_hash": "89d6f6647a528728551aa1a936fd4264a1fcfe59",
-    "size": 10901,
+    "content_hash": "fa947ab746ec023141d2899d81aae2c3896c7956",
+    "size": 10893,
     "line_count": 261,
     "namespace": "Project2048.Tests",
     "using_list": [
@@ -30466,9 +30474,9 @@
     "file_id": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
     "path": "Project 2048/Assets/Tests/EditMode/RewardGrowthTests.cs",
     "file_name": "RewardGrowthTests.cs",
-    "content_hash": "360d3b6acf1eb9520de9f2cea1732c3b49f249a8",
-    "size": 53697,
-    "line_count": 1066,
+    "content_hash": "d25da24d78216b76bd5d8493d3c3c70b5a3577f0",
+    "size": 56455,
+    "line_count": 1122,
     "namespace": "Project2048.Tests",
     "using_list": [
       "UnityEditor",
@@ -30513,6 +30521,8 @@
       "RewardManager_EnhanceChoice_AddsRunMoveCount_WithoutMutatingPlayerSo",
       "RewardManager_OfferReward_FillsThreeRogueliteChoices",
       "RewardManager_OfferReward_LimitsSkillChoicesAndBackfillsNonSkillDefaults",
+      "RewardManager_DefaultBackfill_ReplacesThirdSlotHealWithPermanentDefense",
+      "RewardManager_DefaultBackfill_UsesOnlyPermanentAttackAndDefenseRewards",
       "RewardTable_SelectRewards_UsesSkillOfferChanceWeight",
       "RewardManager_OfferReward_AddsSecondCategoryWhenTableRollsOneCategory",
       "TemporaryRewardBuff_AppliesRankBonusToNextCombatOnce",
@@ -30575,7 +30585,7 @@
     "public_field_count": 0,
     "get_component_count": 14,
     "find_call_count": 15,
-    "new_keyword_count": 73,
+    "new_keyword_count": 77,
     "coroutine_count": 4,
     "singleton_candidate": false,
     "dont_destroy_on_load": false,
@@ -30669,8 +30679,12 @@
       "Any",
       "True",
       "False",
-      "RewardTable_SelectRewards_UsesSkillOfferChanceWeight",
+      "RewardManager_DefaultBackfill_ReplacesThirdSlotHealWithPermanentDefense",
+      "PermanentDefensePower",
+      "RewardManager_DefaultBackfill_UsesOnlyPermanentAttackAndDefenseRewards",
       "TemporaryAttackPower",
+      "PermanentAttackPower",
+      "RewardTable_SelectRewards_UsesSkillOfferChanceWeight",
       "SelectRewards",
       "RewardManager_OfferReward_AddsSecondCategoryWhenTableRollsOneCategory",
       "CountRewardCategories",
@@ -30775,11 +30789,7 @@
       "Within",
       "Vector2",
       "SerializedObject",
-      "FindProperty",
-      "BottomPanel",
-      "WorldSprites",
-      "Vector3",
-      "AssetGuid"
+      "FindProperty"
     ],
     "component_access_types": [
       "Canvas",
@@ -30816,15 +30826,15 @@
       "learn-new-a",
       "learn-new-b",
       "heal",
+      "new-skill",
+      "learn-new-skill",
       "rare-skill",
       "learn-rare",
       "heal-a",
       "heal-b",
       "next-attack",
       "heal-c",
-      "light-shot",
-      "low-stance",
-      "flash"
+      "light-shot"
     ],
     "numeric_literals": [
       20,
@@ -30853,10 +30863,11 @@
       "combat",
       "data",
       "player",
-      "scene"
+      "inventory"
     ],
     "summary_signals": [
       "UI 관련 로직 포함",
+      "인벤토리 계열 로직 포함",
       "전투 계열 로직 포함",
       "컴포넌트 조회 사용",
       "Find 계열 탐색 사용"
